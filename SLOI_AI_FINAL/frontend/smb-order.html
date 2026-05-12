@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Order Materials — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-back{font-size:11px;color:var(--muted);text-decoration:none}
+.nav-back:hover{color:var(--violet)}
+.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:52px 20px 80px}
+
+/* STEP INDICATOR */
+.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:44px}
+.step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .3s}
+.step-dot.done{background:var(--green);color:#fff}
+.step-dot.active{background:var(--indigo);color:#fff;box-shadow:0 0 0 4px rgba(91,95,239,.2)}
+.step-dot.pending{background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
+.step-line{flex:1;height:1px;background:var(--border2);max-width:60px}
+.step-line.done{background:var(--green)}
+
+/* STEPS */
+.step{display:none}
+.step.active{display:block}
+
+/* QUESTION */
+.q-number{font-size:10px;color:var(--indigo);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.q-text{font-family:'Fraunces',serif;font-size:clamp(28px,5vw,40px);font-weight:900;color:var(--white);letter-spacing:-.02em;line-height:1.05;margin-bottom:8px}
+.q-text em{font-style:italic;color:var(--indigo)}
+.q-sub{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:28px}
+
+/* PRODUCT GRID */
+.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.product-card{background:var(--surface);border:2px solid var(--border);border-radius:8px;padding:16px;cursor:pointer;transition:all .15s;text-align:center}
+.product-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
+.product-card.selected{border-color:var(--indigo);background:rgba(91,95,239,.1)}
+.pc-emoji{font-size:32px;margin-bottom:8px}
+.pc-name{font-size:12px;font-weight:600;color:var(--white)}
+.pc-eg{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* INPUTS */
+.inp-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+.inp-label{font-size:11px;color:var(--muted);font-weight:600}
+.inp{background:var(--surface);border:2px solid var(--border2);border-radius:8px;padding:14px 16px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:15px;outline:none;width:100%;transition:border-color .15s}
+.inp:focus{border-color:var(--indigo)}
+.inp::placeholder{color:var(--muted);font-size:13px}
+select.inp option{background:var(--surface2)}
+.inp-hint{font-size:10px;color:var(--muted)}
+
+/* QUANTITY ROW */
+.qty-row{display:flex;gap:10px;margin-bottom:20px}
+.qty-row .inp{flex:1}
+.qty-row select{width:100px;flex-shrink:0}
+
+/* URGENCY */
+.urgency-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:28px}
+.urg-card{background:var(--surface);border:2px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:all .15s;text-align:center}
+.urg-card:hover{border-color:rgba(91,95,239,.4)}
+.urg-card.selected{border-color:var(--indigo);background:rgba(91,95,239,.1)}
+.urg-emoji{font-size:24px;margin-bottom:6px}
+.urg-title{font-size:11px;font-weight:600;color:var(--white);margin-bottom:2px}
+.urg-desc{font-size:10px;color:var(--muted)}
+
+/* SUMMARY */
+.summary-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:24px}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.summary-row:last-child{border-bottom:none}
+.sr-label{color:var(--muted)}
+.sr-val{color:var(--white);font-weight:600}
+
+/* BUTTONS */
+.btn-next{width:100%;background:var(--indigo);color:#fff;border:none;border-radius:8px;padding:16px;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:opacity .15s;margin-bottom:10px}
+.btn-next:hover{opacity:.85}
+.btn-back{width:100%;background:none;border:1px solid var(--border2);color:var(--muted);border-radius:8px;padding:12px;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
+.btn-back:hover{border-color:var(--border);color:var(--text)}
+
+/* SUCCESS */
+.success-wrap{text-align:center;padding:20px 0}
+.success-icon{font-size:64px;margin-bottom:20px}
+.success-title{font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:10px;line-height:1.05}
+.success-title em{font-style:italic;color:var(--green)}
+.success-sub{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:28px}
+.next-steps{display:flex;flex-direction:column;gap:8px;text-align:left;margin-bottom:28px}
+.ns{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:12px}
+.ns-n{width:22px;height:22px;border-radius:50%;background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+/* PROGRESS */
+.progress-bar{height:3px;background:var(--border2);border-radius:2px;margin-bottom:40px}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--indigo),var(--violet));border-radius:2px;transition:width .4s ease}
+.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+</style>
+
+<script src="/api-client.js"></script>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+
+<nav>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <a href="m2m-homepage.html" class="nav-back">← Back to home</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- STEP INDICATOR -->
+  <div class="steps" id="step-indicator">
+    <div class="step-dot active" id="dot-1">1</div>
+    <div class="step-line" id="line-1"></div>
+    <div class="step-dot pending" id="dot-2">2</div>
+    <div class="step-line" id="line-2"></div>
+    <div class="step-dot pending" id="dot-3">3</div>
+    <div class="step-line" id="line-3"></div>
+    <div class="step-dot pending" id="dot-4">✓</div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:25%"></div></div>
+
+  <!-- STEP 1 — WHAT DO YOU NEED? -->
+  <div class="step active" id="step-1">
+    <div class="q-number">Question 1 of 3</div>
+    <div class="q-text">What do you<br/><em>need to buy?</em></div>
+    <div class="q-sub">Choose a category. We'll find you the best verified supplier and negotiate the price for you.</div>
+
+    <div class="product-grid">
+      <div class="product-card" onclick="selectProduct(this,'Steel & Metals','steel rebar, coil, aluminum')">
+        <div class="pc-emoji">🔩</div>
+        <div class="pc-name">Steel & Metals</div>
+        <div class="pc-eg">Rebar · Coil · Aluminum</div>
+      </div>
+      <div class="product-card" onclick="selectProduct(this,'Building Materials','cement, tiles, pipes, concrete')">
+        <div class="pc-emoji">🏗️</div>
+        <div class="pc-name">Building Materials</div>
+        <div class="pc-eg">Cement · Tiles · Pipes</div>
+      </div>
+      <div class="product-card" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
+        <div class="pc-emoji">🌾</div>
+        <div class="pc-name">Agriculture</div>
+        <div class="pc-eg">Wheat · Corn · Grain</div>
+      </div>
+      <div class="product-card" onclick="selectProduct(this,'Energy','diesel, LPG, fuel')">
+        <div class="pc-emoji">⚡</div>
+        <div class="pc-name">Energy</div>
+        <div class="pc-eg">Diesel · LPG · Fuel</div>
+      </div>
+      <div class="product-card" onclick="selectProduct(this,'Chemicals','industrial chemicals')">
+        <div class="pc-emoji">🧪</div>
+        <div class="pc-name">Chemicals</div>
+        <div class="pc-eg">Industrial · Raw materials</div>
+      </div>
+      <div class="product-card" onclick="selectProduct(this,'Other','other materials')">
+        <div class="pc-emoji">📦</div>
+        <div class="pc-name">Other</div>
+        <div class="pc-eg">Tell us what you need</div>
+      </div>
+    </div>
+
+    <div class="inp-wrap">
+      <div class="inp-label">What exactly do you need? (optional)</div>
+      <input class="inp" id="product-detail" placeholder="e.g. Steel Rebar G60 12mm, 50 tons"/>
+    </div>
+
+    <button class="btn-next" onclick="goStep(2)">Next →</button>
+  </div>
+
+  <!-- STEP 2 — HOW MUCH? -->
+  <div class="step" id="step-2">
+    <div class="q-number">Question 2 of 3</div>
+    <div class="q-text">How much do<br/><em>you need?</em></div>
+    <div class="q-sub">Give us a rough quantity. Our AI agent will find the best price for you.</div>
+
+    <div class="qty-row">
+      <input class="inp" id="qty" type="number" placeholder="e.g. 50" min="1"/>
+      <select class="inp" id="unit">
+        <option>Tons</option><option>MT</option><option>kg</option>
+        <option>m²</option><option>m³</option><option>Liters</option>
+        <option>Units</option><option>m</option>
+      </select>
+    </div>
+
+    <div class="inp-wrap">
+      <div class="inp-label">What is your budget? (optional)</div>
+      <input class="inp" id="budget" placeholder="e.g. $50,000 or $2,800 per ton"/>
+      <div class="inp-hint">This helps the agent negotiate better. You are not committed to this price.</div>
+    </div>
+
+    <div class="inp-wrap">
+      <div class="inp-label">Delivery country</div>
+      <select class="inp" id="country">
+        <option>UAE</option><option>Saudi Arabia</option><option>Egypt</option>
+        <option>Jordan</option><option>Kuwait</option><option>Oman</option>
+        <option>Bahrain</option><option>Iraq</option><option>Germany</option>
+        <option>France</option><option>Italy</option><option>Other</option>
+      </select>
+    </div>
+
+    <button class="btn-next" onclick="goStep(3)">Next →</button>
+    <button class="btn-back" onclick="goStep(1)">← Back</button>
+  </div>
+
+  <!-- STEP 3 — WHEN DO YOU NEED IT? -->
+  <div class="step" id="step-3">
+    <div class="q-number">Question 3 of 3</div>
+    <div class="q-text">When do you<br/><em>need it?</em></div>
+    <div class="q-sub">This determines how aggressive the negotiation will be. Faster = we push harder.</div>
+
+    <div class="urgency-grid">
+      <div class="urg-card" onclick="selectUrgency(this,'ASAP — within 2 weeks')">
+        <div class="urg-emoji">🚨</div>
+        <div class="urg-title">ASAP</div>
+        <div class="urg-desc">Within 2 weeks</div>
+      </div>
+      <div class="urg-card" onclick="selectUrgency(this,'1–2 months')">
+        <div class="urg-emoji">📅</div>
+        <div class="urg-title">1–2 months</div>
+        <div class="urg-desc">Standard timeline</div>
+      </div>
+      <div class="urg-card" onclick="selectUrgency(this,'3+ months — flexible')">
+        <div class="urg-emoji">🌊</div>
+        <div class="urg-title">Flexible</div>
+        <div class="urg-desc">3+ months · no rush</div>
+      </div>
+    </div>
+
+    <div class="inp-wrap">
+      <div class="inp-label">Your name</div>
+      <input class="inp" id="contact-name" placeholder="Mohammed Al-Rashidi"/>
+    </div>
+
+    <div class="inp-wrap">
+      <div class="inp-label">WhatsApp number</div>
+      <input class="inp" id="contact-wa" placeholder="+971-5X-XXX-XXXX"/>
+      <div class="inp-hint">We will send you updates and the final price offer on WhatsApp.</div>
+    </div>
+
+    <button class="btn-next" onclick="goStep(4)">→ Find me the best price</button>
+    <button class="btn-back" onclick="goStep(2)">← Back</button>
+  </div>
+
+  <!-- STEP 4 — REVIEW + SUBMIT -->
+  <div class="step" id="step-4">
+    <div class="q-number">Almost done</div>
+    <div class="q-text">Here's your<br/><em>order summary.</em></div>
+    <div class="q-sub">Our AI agent will find the best verified supplier and negotiate the price for you. You approve before anything is signed.</div>
+
+    <div class="summary-card">
+      <div class="summary-row"><span class="sr-label">What you need</span><span class="sr-val" id="sum-product">—</span></div>
+      <div class="summary-row"><span class="sr-label">Quantity</span><span class="sr-val" id="sum-qty">—</span></div>
+      <div class="summary-row"><span class="sr-label">Budget</span><span class="sr-val" id="sum-budget">—</span></div>
+      <div class="summary-row"><span class="sr-label">Delivery country</span><span class="sr-val" id="sum-country">—</span></div>
+      <div class="summary-row"><span class="sr-label">Timeline</span><span class="sr-val" id="sum-urgency">—</span></div>
+      <div class="summary-row"><span class="sr-label">Your WhatsApp</span><span class="sr-val" id="sum-wa">—</span></div>
+    </div>
+
+    <div style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:11px;color:var(--teal);line-height:1.7">
+      ✓ Our AI agent will negotiate the best price with verified suppliers<br/>
+      ✓ You will receive price offers on WhatsApp within 24 hours<br/>
+      ✓ You approve before anything is signed — no commitment now<br/>
+      ✓ No credit card needed to get started
+    </div>
+
+    <button class="btn-next" onclick="submitOrder()">✓ Find me the best price →</button>
+    <button class="btn-back" onclick="goStep(3)">← Back</button>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="step" id="step-success">
+    <div class="success-wrap">
+      <div class="success-icon">🎉</div>
+      <div class="success-title">We're on it,<br/><em>right now.</em></div>
+      <div class="success-sub">Our AI agent is searching for the best verified supplier for your order. You'll receive a price offer on WhatsApp within 24 hours.</div>
+
+      <div class="next-steps">
+        <div class="ns"><div class="ns-n">1</div><div>Agent searches verified supplier network for your product and quantity</div></div>
+        <div class="ns"><div class="ns-n">2</div><div>Agent negotiates the best price — aiming for your budget</div></div>
+        <div class="ns"><div class="ns-n">3</div><div>We send you the price offer on WhatsApp — you approve or decline</div></div>
+        <div class="ns"><div class="ns-n">4</div><div>If you approve — we generate a professional Letter of Intent (LOI) and send it to both parties</div></div>
+        <div class="ns" style="border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.05)"><div class="ns-n" style="background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);color:var(--green)">✓</div><div style="color:var(--text)">You deal directly with the supplier — payment and delivery are between you and them</div></div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <a href="m2m-homepage.html" style="background:var(--indigo);color:#fff;padding:13px 24px;border-radius:5px;font-size:12px;font-weight:600;text-decoration:none">Back to SLOI AI →</a>
+        <a href="pricing.html" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:13px 24px;border-radius:5px;font-size:12px;text-decoration:none">See pricing</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var state = {product:'', detail:'', qty:'', unit:'', budget:'', country:'', urgency:'', name:'', wa:''};
+var currentStep = 1;
+
+function goStep(n){
+  // Validate
+  if(n > currentStep){
+    if(currentStep === 1 && !state.product){ alert('Please select a category.'); return; }
+    if(currentStep === 2){
+      if(!document.getElementById('qty').value){ alert('Please enter a quantity.'); return; }
+      state.qty = document.getElementById('qty').value;
+      state.unit = document.getElementById('unit').value;
+      state.budget = document.getElementById('budget').value || 'Not specified';
+      state.country = document.getElementById('country').value;
+    }
+    if(currentStep === 3){
+      if(!state.urgency){ alert('Please select a timeline.'); return; }
+      if(!document.getElementById('contact-name').value){ alert('Please enter your name.'); return; }
+      if(!document.getElementById('contact-wa').value){ alert('Please enter your WhatsApp number.'); return; }
+      state.name = document.getElementById('contact-name').value;
+      state.wa = document.getElementById('contact-wa').value;
+    }
+  }
+
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+  currentStep = n;
+
+  if(n === 4) populateSummary();
+  if(n <= 4) document.getElementById('step-'+n).classList.add('active');
+
+  // Update dots
+  for(var i=1;i<=4;i++){
+    var dot = document.getElementById('dot-'+i);
+    if(i < n){ dot.className='step-dot done'; dot.textContent='✓'; }
+    else if(i === n){ dot.className='step-dot active'; dot.textContent= i < 4 ? i : '✓'; }
+    else{ dot.className='step-dot pending'; dot.textContent= i < 4 ? i : '✓'; }
+  }
+  for(var j=1;j<=3;j++){
+    var line = document.getElementById('line-'+j);
+    line.className = 'step-line' + (j < n ? ' done' : '');
+  }
+
+  // Progress
+  var pct = {1:25,2:50,3:75,4:90}[n] || 25;
+  document.getElementById('progress').style.width = pct + '%';
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function selectProduct(el, name, eg){
+  document.querySelectorAll('.product-card').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  state.product = name;
+  state.detail = document.getElementById('product-detail').value;
+}
+
+function selectUrgency(el, val){
+  document.querySelectorAll('.urg-card').forEach(function(c){ c.classList.remove('selected'); });
+  el.classList.add('selected');
+  state.urgency = val;
+}
+
+function populateSummary(){
+  var detail = document.getElementById('product-detail').value;
+  document.getElementById('sum-product').textContent = state.product + (detail ? ' — ' + detail : '');
+  document.getElementById('sum-qty').textContent = state.qty + ' ' + state.unit;
+  document.getElementById('sum-budget').textContent = state.budget;
+  document.getElementById('sum-country').textContent = state.country;
+  document.getElementById('sum-urgency').textContent = state.urgency;
+  document.getElementById('sum-wa').textContent = state.wa;
+}
+
+function submitOrder(){
+  // Hide all steps, show success
+  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('step-success').classList.add('active');
+
+  // Update dots — all done
+  for(var i=1;i<=4;i++){
+    var dot = document.getElementById('dot-'+i);
+    dot.className = 'step-dot done';
+    dot.textContent = '✓';
+  }
+  document.querySelectorAll('.step-line').forEach(function(l){ l.classList.add('done'); });
+  document.getElementById('progress').style.width = '100%';
+
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

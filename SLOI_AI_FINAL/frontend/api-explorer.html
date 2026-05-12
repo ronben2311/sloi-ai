@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI — API Explorer</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:var(--surface);border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-links{display:flex;gap:16px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}
+.nav-links a:hover{color:var(--violet)}
+.live{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+.layout{display:grid;grid-template-columns:260px 1fr;height:calc(100vh - 52px);overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:16px 0}
+.sb-section{font-size:9px;color:var(--muted);letter-spacing:.1em;padding:12px 16px 6px;text-transform:uppercase}
+.ep-btn{display:flex;align-items:center;gap:10px;width:100%;padding:9px 16px;background:none;border:none;color:var(--muted);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12px;text-align:left;transition:all .12s}
+.ep-btn:hover{background:var(--surface2);color:var(--text)}
+.ep-btn.active{background:rgba(91,95,239,.1);color:var(--violet);border-right:2px solid var(--indigo)}
+.method{font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;flex-shrink:0}
+.get{background:rgba(34,197,94,.15);color:var(--green)}
+.post{background:rgba(91,95,239,.15);color:var(--violet)}
+
+/* MAIN */
+.main{overflow-y:auto;padding:28px 32px}
+.ep-title{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.ep-method{font-size:13px;font-weight:700;padding:4px 12px;border-radius:4px}
+.ep-path{font-size:18px;font-weight:600;color:var(--white)}
+.ep-desc{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6}
+
+/* PARAMS */
+.params-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:16px;overflow:hidden}
+.params-title{font-size:10px;color:var(--muted);letter-spacing:.08em;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.param-row{display:grid;grid-template-columns:140px 100px 1fr auto;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border);align-items:center;font-size:12px}
+.param-row:last-child{border-bottom:none}
+.param-name{color:var(--violet);font-weight:600}
+.param-type{color:var(--muted);font-size:10px}
+.param-inp{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:6px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;width:100%}
+.param-inp:focus{border-color:var(--indigo)}
+.param-req{font-size:9px;color:var(--red);font-weight:700}
+.param-opt{font-size:9px;color:var(--muted)}
+
+/* SEND */
+.send-row{display:flex;gap:10px;margin-bottom:16px;align-items:center}
+.send-btn{background:var(--indigo);color:#fff;border:none;padding:10px 24px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;gap:8px;transition:opacity .15s}
+.send-btn:hover{opacity:.85}
+.send-btn:disabled{opacity:.45;cursor:not-allowed}
+.url-display{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--muted);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.url-display em{color:var(--violet)}
+
+/* RESPONSE */
+.response-box{background:var(--bg);border:1px solid var(--border2);border-radius:6px;overflow:hidden}
+.response-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border)}
+.status-ok{color:var(--green);font-weight:700;font-size:12px}
+.status-err{color:var(--red);font-weight:700;font-size:12px}
+.response-time{font-size:10px;color:var(--muted)}
+.copy-btn{background:none;border:1px solid var(--border2);color:var(--muted);padding:3px 10px;border-radius:3px;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
+.copy-btn:hover{border-color:var(--indigo);color:var(--violet)}
+.response-body{padding:16px;font-size:12px;line-height:1.7;overflow-x:auto;max-height:480px;overflow-y:auto}
+pre{white-space:pre-wrap;word-break:break-word}
+.j-key{color:var(--violet)}
+.j-str{color:var(--green)}
+.j-num{color:var(--gold)}
+.j-bool{color:var(--teal)}
+.j-null{color:var(--muted)}
+
+/* LOADING */
+.loading{padding:32px;text-align:center;color:var(--muted)}
+.spin{width:24px;height:24px;border:2px solid var(--border2);border-top-color:var(--indigo);border-radius:50%;animation:spin .6s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* TABS */
+.res-tabs{display:flex;gap:0;border-bottom:1px solid var(--border)}
+.res-tab{padding:8px 16px;font-size:11px;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'IBM Plex Mono',monospace;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .12s}
+.res-tab.active{color:var(--violet);border-bottom-color:var(--indigo)}
+
+/* EMPTY */
+.empty-resp{padding:40px;text-align:center;color:var(--muted);font-size:12px}
+</style>
+</head>
+<body>
+<nav style="position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:50px;background:rgba(7,7,15,.96);border-bottom:1px solid #1c1c2e;backdrop-filter:blur(12px)">
+  <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#eeedf8;text-decoration:none;letter-spacing:-.02em;display:flex;align-items:baseline;gap:6px">SLOI <em style="font-style:italic;color:#5b5fef">AI</em><span style="font-size:9px;color:#52526e;font-weight:400;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em">Smart negotiation · LOI generation</span></a>
+  <a href="CommodEx_Admin.html" style="font-size:11px;color:#52526e;text-decoration:none">← Admin</a>
+</nav>
+
+<nav class="nav">
+  <div class="nav-logo">SLOI <em>AI</em> <span style="font-size:11px;color:var(--muted);font-weight:400">/ API Explorer</span></div>
+  <div class="nav-links">
+    <a href="m2m-homepage.html">Home</a>
+    <a href="docs.html">Suppliers</a>
+    <a href="about.html">About</a>
+    <a href="skill.md" target="_blank">skill.md</a>
+    <a href="negotiation-agent.html">Agent office</a>
+  </div>
+  <div class="live"><div class="live-dot"></div>API live · v2.1 · Mock mode</div>
+</nav>
+
+<div class="layout">
+
+<!-- SIDEBAR — ENDPOINTS -->
+<div class="sidebar">
+  <div class="sb-section">// Agent</div>
+  <button class="ep-btn active" onclick="loadEP('register')"><span class="method post">POST</span>/agents/register</button>
+  <button class="ep-btn" onclick="loadEP('me')"><span class="method get">GET</span>/agents/me</button>
+
+  <div class="sb-section">// Suppliers</div>
+  <button class="ep-btn" onclick="loadEP('suppliers')"><span class="method get">GET</span>/suppliers</button>
+  <button class="ep-btn" onclick="loadEP('supplier-one')"><span class="method get">GET</span>/suppliers/{id}</button>
+  <button class="ep-btn" onclick="loadEP('products')"><span class="method get">GET</span>/suppliers/{id}/products</button>
+  <button class="ep-btn" onclick="loadEP('availability')"><span class="method get">GET</span>/suppliers/{id}/availability</button>
+  <button class="ep-btn" onclick="loadEP('certs')"><span class="method get">GET</span>/suppliers/{id}/certs</button>
+
+  <div class="sb-section">// Discovery</div>
+  <button class="ep-btn" onclick="loadEP('prices')"><span class="method get">GET</span>/prices</button>
+  <button class="ep-btn" onclick="loadEP('compare')"><span class="method get">GET</span>/compare</button>
+  <button class="ep-btn" onclick="loadEP('search')"><span class="method get">GET</span>/products/search</button>
+
+  <div class="sb-section">// Trade</div>
+  <button class="ep-btn" onclick="loadEP('rfq')"><span class="method post">POST</span>/rfq</button>
+  <button class="ep-btn" onclick="loadEP('loi')"><span class="method post">POST</span>/loi</button>
+  <button class="ep-btn" onclick="loadEP('orders')"><span class="method post">POST</span>/orders</button>
+  <button class="ep-btn" onclick="loadEP('order-status')"><span class="method get">GET</span>/orders/{id}</button>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main-content">
+  <div style="max-width:820px">
+    <div class="ep-title">
+      <div class="ep-method post">POST</div>
+      <div class="ep-path">/v1/agents/register</div>
+    </div>
+    <div class="ep-desc">Register your AI agent and receive an API key. Required before any other API call. Save your api_key immediately — it is only shown once.</div>
+
+    <div class="params-box">
+      <div class="params-title">// BODY PARAMETERS</div>
+      <div class="param-row">
+        <span class="param-name">name</span><span class="param-type">string</span>
+        <input class="param-inp" id="p-name" placeholder="MyProcurementAgent" value="MyProcurementAgent"/>
+        <span class="param-req">required</span>
+      </div>
+      <div class="param-row">
+        <span class="param-name">description</span><span class="param-type">string</span>
+        <input class="param-inp" id="p-desc" placeholder="Buys steel and cement for construction projects" value="Buys steel and cement for construction projects"/>
+        <span class="param-opt">optional</span>
+      </div>
+      <div class="param-row">
+        <span class="param-name">capabilities</span><span class="param-type">array</span>
+        <input class="param-inp" id="p-caps" placeholder='["rfq","negotiate","order"]' value='["rfq","negotiate","order"]'/>
+        <span class="param-opt">optional</span>
+      </div>
+    </div>
+
+    <div class="send-row">
+      <button class="send-btn" id="send-btn" onclick="sendRequest()">▶ Send request</button>
+      <div class="url-display" id="url-display"><em>POST</em> https://api.sloiai.com/v1/agents/register</div>
+    </div>
+
+    <div class="response-box" id="response-box">
+      <div class="empty-resp">Hit "Send request" to see the API response</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /layout -->
+
+<script>
+// ── MOCK DATA ──────────────────────────────────────────────────────────────────
+var API_KEY = 'm2m_agt_' + Math.random().toString(36).slice(2,18);
+var AGENT_ID = 'AGT-' + Math.random().toString(36).slice(2,8).toUpperCase();
+
+var MOCK_RESPONSES = {
+
+register: {
+  method:'POST', path:'/v1/agents/register',
+  desc:'Register your AI agent and receive an API key. Required before any other API call. Save your api_key — shown only once.',
+  params:[
+    {name:'name',type:'string',id:'p-name',default:'MyProcurementAgent',req:true},
+    {name:'description',type:'string',id:'p-desc',default:'Buys steel and cement for construction projects',req:false},
+    {name:'capabilities',type:'array',id:'p-caps',default:'["rfq","negotiate","order"]',req:false},
+  ],
+  response: function(p){
+    return {
+      agent:{id:AGENT_ID,name:p.name||'MyProcurementAgent',description:p.description||'',
+        capabilities:['rfq','negotiate','order'],registered_at:new Date().toISOString(),status:'active'},
+      api_key:API_KEY,
+      message:'Agent registered. Save your api_key immediately — it will not be shown again.',
+      next_steps:['Use api_key as Authorization: Bearer header','GET /v1/suppliers to discover the network','GET /v1/prices for live commodity prices']
+    };
+  }
+},
+
+me: {
+  method:'GET', path:'/v1/agents/me',
+  desc:'Returns the authenticated agent profile. Use to verify your API key is working.',
+  params:[],
+  response: function(){
+    return {
+      agent:{id:AGENT_ID,name:'MyProcurementAgent',status:'active',
+        registered_at:'2026-04-20T09:00:00Z',
+        rfqs_sent:3,lois_submitted:1,orders_placed:1,
+        total_volume_usd:508000}
+    };
+  }
+},
+
+suppliers: {
+  method:'GET', path:'/v1/suppliers',
+  desc:'List all suppliers in the M2M network. Filter by sector, ai_ready status, or LOI support.',
+  params:[
+    {name:'sector',type:'string',id:'p-sector',default:'metals',req:false},
+    {name:'ai_ready',type:'boolean',id:'p-ai',default:'true',req:false},
+    {name:'loi_enabled',type:'boolean',id:'p-loi',default:'true',req:false},
+  ],
+  response: function(p){
+    var all=[
+      {id:'SUP-001',name:'Supplier REF-BLD-001',sector:'building-materials',location:'Verified supplier',ai_ready:true,loi_enabled:true,lead_time_days:3,payment_terms:'Net+30',sku_count:3},
+      {id:'SUP-002',name:'Supplier REF-BLD-002',sector:'building-materials',location:'Verified supplier',ai_ready:true,loi_enabled:true,lead_time_days:7,payment_terms:'Net+45',sku_count:2},
+      {id:'SUP-003',name:'Supplier REF-BLD-003',sector:'building-materials',location:'Verified supplier',ai_ready:false,loi_enabled:false,lead_time_days:5,payment_terms:'Net+30',sku_count:2},
+      {id:'SUP-004',name:'Supplier REF-MET-001',sector:'metals',location:'Verified supplier',ai_ready:true,loi_enabled:true,lead_time_days:5,payment_terms:'Net+30',sku_count:3},
+      {id:'SUP-005',name:'Supplier REF-MET-002',sector:'metals',location:'Verified supplier',ai_ready:true,loi_enabled:true,lead_time_days:8,payment_terms:'Net+45',sku_count:2},
+      {id:'SUP-006',name:'Supplier REF-ENE-001',sector:'energy',location:'Verified supplier',ai_ready:true,loi_enabled:true,lead_time_days:2,payment_terms:'Net+14',sku_count:2},
+      {id:'SUP-007',name:'Supplier REF-AGR-001',sector:'agriculture',location:'Verified supplier',ai_ready:true,loi_enabled:true,lead_time_days:4,payment_terms:'Net+30',sku_count:3},
+      {id:'SUP-008',name:'Supplier REF-CHM-001',sector:'chemicals',location:'Verified supplier',ai_ready:false,loi_enabled:false,lead_time_days:6,payment_terms:'Net+45',sku_count:2},
+    ];
+    var filtered=all;
+    if(p.sector) filtered=filtered.filter(function(s){return s.sector.includes(p.sector.toLowerCase())});
+    if(p.ai_ready==='true') filtered=filtered.filter(function(s){return s.ai_ready});
+    if(p.loi_enabled==='true') filtered=filtered.filter(function(s){return s.loi_enabled});
+    return {suppliers:filtered,total:filtered.length,filters_applied:{sector:p.sector||null,ai_ready:p.ai_ready||null}};
+  }
+},
+
+'supplier-one': {
+  method:'GET', path:'/v1/suppliers/{id}',
+  desc:'Get full profile for a specific supplier by ID.',
+  params:[{name:'id',type:'string',id:'p-sup-id',default:'SUP-004',req:true}],
+  response: function(p){
+    return {
+      id:p.id||'SUP-004',name:'Supplier REF-MET-001',sector:'metals',
+      location:'Verified supplier',ai_ready:true,loi_enabled:true,
+      lead_time_days:5,payment_terms:'Net+30',
+      certifications:['ISO 9001:2015','ISO 3834','CE Marking'],
+      incoterms_supported:['FOB','CIF','DAP','EXW'],
+      payment_methods:['TT','LC at sight','TT 30% + LC'],
+      currencies:['USD','ILS','EUR'],
+      contact:{email:'orders@northern-steel.trade',whatsapp:'+972-4-XXX-XXXX'},
+      api_endpoint:'https://api.sloiai.com/v1/suppliers/'+( p.id||'SUP-004')
+    };
+  }
+},
+
+products: {
+  method:'GET', path:'/v1/suppliers/{id}/products',
+  desc:'Get all products and current prices for a supplier. Prices update in real-time.',
+  params:[{name:'id',type:'string',id:'p-prod-id',default:'SUP-004',req:true}],
+  response: function(p){
+    return {
+      supplier_id:p.id||'SUP-004',supplier_name:'Supplier REF-MET-001',
+      last_updated:new Date().toISOString(),
+      products:[
+        {sku:'STL-RBR12',name:'Deformed Steel Bar 12mm',grade:'ASTM A615 G60',
+          price:2840,price_min:2600,price_max:3100,currency:'USD',unit:'Ton',
+          stock:480,moq:5,lead_time_days:5,
+          certifications:['ISO 9001','ISO 3834','CE'],
+          incoterms:['FOB','CIF','DAP']},
+        {sku:'STL-RBR16',name:'Deformed Steel Bar 16mm',grade:'ASTM A615 G60',
+          price:2890,price_min:2650,price_max:3150,currency:'USD',unit:'Ton',
+          stock:310,moq:5,lead_time_days:5,
+          certifications:['ISO 9001','ISO 3834','CE'],
+          incoterms:['FOB','CIF','DAP']},
+        {sku:'STL-PLT6',name:'Steel Sheet 6mm',grade:'SS400 / A36',
+          price:3100,price_min:2900,price_max:3400,currency:'USD',unit:'Ton',
+          stock:120,moq:2,lead_time_days:5,
+          certifications:['ISO 9001','CE'],
+          incoterms:['FOB','EXW']},
+      ]
+    };
+  }
+},
+
+availability: {
+  method:'GET', path:'/v1/suppliers/{id}/availability',
+  desc:'Check real-time stock availability for a specific SKU and quantity.',
+  params:[
+    {name:'id',type:'string',id:'p-av-id',default:'SUP-004',req:true},
+    {name:'sku',type:'string',id:'p-av-sku',default:'STL-RBR12',req:true},
+    {name:'qty',type:'number',id:'p-av-qty',default:'100',req:true},
+  ],
+  response: function(p){
+    var stock=480,qty=parseInt(p.qty)||100,available=stock>=qty;
+    return {
+      supplier_id:p.id||'SUP-004',sku:p.sku||'STL-RBR12',
+      requested_qty:qty,unit:'Ton',
+      available:available,stock_on_hand:stock,
+      can_fulfill:available,
+      lead_time_days:available?5:14,
+      price_for_qty:2840,
+      total_price_usd:2840*qty,
+      message:available?'In stock. Can ship within 5 days.':'Insufficient stock. Next batch in 14 days.',
+      checked_at:new Date().toISOString()
+    };
+  }
+},
+
+certs: {
+  method:'GET', path:'/v1/suppliers/{id}/certs',
+  desc:'Retrieve all certifications for a supplier, verified by SLOI AI.',
+  params:[{name:'id',type:'string',id:'p-cert-id',default:'SUP-004',req:true}],
+  response: function(p){
+    return {
+      supplier_id:p.id||'SUP-004',
+      certifications:[
+        {name:'ISO 9001:2015',issuer:'Bureau Veritas',cert_number:'BV-2024-IL-9001-0847',
+          valid_until:'2026-12-31',verified_by_m2m:true,verified_at:'2026-01-15'},
+        {name:'ISO 3834',issuer:'TÜV Rheinland',cert_number:'TUV-3834-IL-2023',
+          valid_until:'2027-03-31',verified_by_m2m:true,verified_at:'2026-01-15'},
+        {name:'CE Marking',issuer:'Intertek',cert_number:'CE-IL-2024-STEEL-0012',
+          valid_until:'2026-08-31',verified_by_m2m:true,verified_at:'2026-01-15'},
+      ],
+      compliance:{sanctions_clear:true,hs_code_valid:true,export_license:true}
+    };
+  }
+},
+
+prices: {
+  method:'GET', path:'/v1/prices',
+  desc:'Get live spot prices for all commodities on the M2M network. Updated every 60 seconds.',
+  params:[
+    {name:'sector',type:'string',id:'p-pr-sector',default:'',req:false},
+  ],
+  response: function(){
+    return {
+      prices:[
+        {commodity:'Steel Rebar G60 12mm',sector:'metals',sku:'STL-RBR12',supplier_id:'SUP-004',price:2840,unit:'Ton',currency:'USD',change_24h:+1.2,last_updated:new Date().toISOString()},
+        {commodity:'Aluminum 6061-T6',sector:'metals',sku:'ALU-6061',supplier_id:'SUP-005',price:9200,unit:'Ton',currency:'USD',change_24h:+2.3,last_updated:new Date().toISOString()},
+        {commodity:'Cement OPC 52.5',sector:'building-materials',sku:'CNC-B25',supplier_id:'SUP-001',price:63,unit:'Ton',currency:'USD',change_24h:-0.4,last_updated:new Date().toISOString()},
+        {commodity:'Industrial Diesel B2',sector:'energy',sku:'DSL-B2',supplier_id:'SUP-006',price:4.92,unit:'Liter',currency:'USD',change_24h:-0.4,last_updated:new Date().toISOString()},
+        {commodity:'Hard Wheat',sector:'agriculture',sku:'WHT-HRD',supplier_id:'SUP-007',price:1120,unit:'Ton',currency:'USD',change_24h:-0.7,last_updated:new Date().toISOString()},
+        {commodity:'PP Granules H030SG',sector:'chemicals',sku:'PP-H030',supplier_id:'SUP-008',price:985,unit:'Ton',currency:'USD',change_24h:+0.8,last_updated:new Date().toISOString()},
+      ],
+      updated_at:new Date().toISOString(),
+      next_update_in_seconds:47
+    };
+  }
+},
+
+compare: {
+  method:'GET', path:'/v1/compare',
+  desc:'Compare all suppliers for a specific product. Returns ranked list with recommended flag.',
+  params:[
+    {name:'product',type:'string',id:'p-cmp-product',default:'steel rebar',req:true},
+    {name:'qty',type:'number',id:'p-cmp-qty',default:'100',req:true},
+    {name:'sector',type:'string',id:'p-cmp-sector',default:'metals',req:false},
+  ],
+  response: function(p){
+    var qty=parseInt(p.qty)||100;
+    return {
+      query:{product:p.product||'steel rebar',qty:qty,sector:p.sector||'metals'},
+      results:[
+        {rank:1,recommended:true,supplier_id:'SUP-004',supplier_name:'Supplier REF-MET-001',
+          sku:'STL-RBR12',product_name:'Deformed Steel Bar 12mm',
+          unit_price:2840,total_price:2840*qty,currency:'USD',unit:'Ton',
+          lead_time_days:5,stock:480,ai_ready:true,loi_enabled:true,
+          certifications:3,score:94,
+          reasons:['Lowest price','AI-Ready','LOI enabled','In stock']},
+        {rank:2,recommended:false,supplier_id:'SUP-004',supplier_name:'Supplier REF-MET-001',
+          sku:'STL-RBR16',product_name:'Deformed Steel Bar 16mm',
+          unit_price:2890,total_price:2890*qty,currency:'USD',unit:'Ton',
+          lead_time_days:5,stock:310,ai_ready:true,loi_enabled:true,
+          certifications:3,score:88,
+          reasons:['1.8% more expensive than best']},
+      ],
+      best_price:{supplier:'Supplier REF-MET-001',price:2840,total:2840*qty},
+      average_price:2865,
+      checked_at:new Date().toISOString()
+    };
+  }
+},
+
+search: {
+  method:'GET', path:'/v1/products/search',
+  desc:'Full-text search across all supplier catalogues.',
+  params:[
+    {name:'q',type:'string',id:'p-srch-q',default:'rebar 12mm',req:true},
+    {name:'min_qty',type:'number',id:'p-srch-qty',default:'10',req:false},
+    {name:'sector',type:'string',id:'p-srch-sector',default:'',req:false},
+  ],
+  response: function(p){
+    return {
+      query:p.q||'rebar 12mm',results:[
+        {supplier_id:'SUP-004',supplier_name:'Supplier REF-MET-001',sku:'STL-RBR12',
+          name:'Deformed Steel Bar 12mm',price:2840,unit:'Ton',stock:480,match_score:0.97},
+        {supplier_id:'SUP-004',supplier_name:'Supplier REF-MET-001',sku:'STL-RBR16',
+          name:'Deformed Steel Bar 16mm',price:2890,unit:'Ton',stock:310,match_score:0.91},
+      ],total:2
+    };
+  }
+},
+
+rfq: {
+  method:'POST', path:'/v1/rfq',
+  desc:'Submit a Request for Quotation to a supplier. The supplier receives a notification via email and WhatsApp.',
+  params:[
+    {name:'supplier_id',type:'string',id:'p-rfq-sup',default:'SUP-004',req:true},
+    {name:'sku',type:'string',id:'p-rfq-sku',default:'STL-RBR12',req:true},
+    {name:'quantity',type:'number',id:'p-rfq-qty',default:'100',req:true},
+    {name:'incoterm',type:'string',id:'p-rfq-inco',default:'FOB',req:false},
+    {name:'payment_terms',type:'string',id:'p-rfq-pay',default:'LC at sight',req:false},
+  ],
+  response: function(p){
+    var ref='RFQ-'+Date.now().toString().slice(-8);
+    return {
+      rfq_ref:ref,status:'sent',
+      supplier_id:p.supplier_id||'SUP-004',
+      sku:p.sku||'STL-RBR12',quantity:parseInt(p.quantity)||100,
+      incoterm:p.incoterm||'FOB',payment_terms:p.payment_terms||'LC at sight',
+      submitted_at:new Date().toISOString(),
+      expected_response_by:new Date(Date.now()+86400000).toISOString(),
+      message:'RFQ sent to supplier. Response expected within 24 hours.',
+      track_at:'https://api.sloiai.com/v1/rfqs/'+ref
+    };
+  }
+},
+
+loi: {
+  method:'POST', path:'/v1/loi',
+  desc:'Submit a Letter of Intent to lock in an agreed deal. Triggers direct payment instructions.',
+  params:[
+    {name:'supplier_id',type:'string',id:'p-loi-sup',default:'SUP-004',req:true},
+    {name:'sku',type:'string',id:'p-loi-sku',default:'STL-RBR12',req:true},
+    {name:'quantity',type:'number',id:'p-loi-qty',default:'100',req:true},
+    {name:'agreed_price',type:'number',id:'p-loi-price',default:'2840',req:true},
+    {name:'currency',type:'string',id:'p-loi-cur',default:'USD',req:false},
+  ],
+  response: function(p){
+    var ref='LOI-'+new Date().toISOString().slice(0,10).replace(/-/g,'')+'-'+Math.floor(Math.random()*900+100);
+    var qty=parseInt(p.quantity)||100,price=parseFloat(p.agreed_price)||2840;
+    return {
+      loi_ref:ref,status:'submitted',
+      supplier_id:p.supplier_id||'SUP-004',sku:p.sku||'STL-RBR12',
+      quantity:qty,agreed_price:price,
+      total_value:qty*price,currency:p.currency||'USD',
+      submitted_at:new Date().toISOString(),
+      escrow_instructions:{
+        method:'SWIFT',bank:'SLOI AI direct payment Bank · Global',
+        iban:'XX00 0000 0000 0000 0000 00XX',
+        swift:'XXXXXXXXXXXXXX',
+        amount:qty*price,currency:p.currency||'USD',
+        reference:ref
+      },
+      message:'LOI submitted. pay supplier to activate the deal.',
+      next_step:'Transfer '+qty*price+' '+( p.currency||'USD')+' to payment (off-platform) with reference '+ref
+    };
+  }
+},
+
+orders: {
+  method:'POST', path:'/v1/orders',
+  desc:'Place a confirmed order after LOI is accepted and direct payment is funded.',
+  params:[
+    {name:'loi_ref',type:'string',id:'p-ord-loi',default:'LOI-20260420-001',req:true},
+    {name:'confirm',type:'boolean',id:'p-ord-confirm',default:'true',req:true},
+  ],
+  response: function(p){
+    var ref='ORD-'+Date.now().toString().slice(-8);
+    return {
+      order_id:ref,status:'confirmed',loi_ref:p.loi_ref||'LOI-20260420-001',
+      confirmed_at:new Date().toISOString(),
+      estimated_ship_date:new Date(Date.now()+5*86400000).toISOString().slice(0,10),
+      track_url:'https://api.sloiai.com/v1/orders/'+ref,
+      message:'Order confirmed. Supplier will ship within lead time. Track your order at the URL above.'
+    };
+  }
+},
+
+'order-status': {
+  method:'GET', path:'/v1/orders/{id}',
+  desc:'Track the status of an active order through the full fulfillment pipeline.',
+  params:[{name:'id',type:'string',id:'p-os-id',default:'ORD-12345678',req:true}],
+  response: function(p){
+    return {
+      order_id:p.id||'ORD-12345678',status:'shipped',
+      supplier:'Supplier REF-MET-001',product:'Deformed Steel Bar 12mm',
+      quantity:100,unit:'Ton',total_value:284000,currency:'USD',
+      timeline:[
+        {stage:'rfq_sent',completed:true,at:'2026-04-16T09:00:00Z'},
+        {stage:'quoted',completed:true,at:'2026-04-16T14:30:00Z'},
+        {stage:'loi_submitted',completed:true,at:'2026-04-17T10:00:00Z'},
+        {stage:'escrow_funded',completed:true,at:'2026-04-18T08:00:00Z'},
+        {stage:'shipped',completed:true,at:'2026-04-19T06:00:00Z'},
+        {stage:'docs_uploaded',completed:false,at:null},
+        {stage:'released',completed:false,at:null},
+        {stage:'completed',completed:false,at:null},
+      ],
+      documents:{bl:false,coo:false,sgs:true,mill_cert:true},
+      current_stage:'shipped',
+      next_action:'Supplier to upload B/L and COO. direct payment releases on merchant approval.'
+    };
+  }
+},
+
+};
+
+// ── RENDER ──────────────────────────────────────────────────────────────────────
+var currentEP = 'register';
+
+function loadEP(key){
+  currentEP = key;
+  document.querySelectorAll('.ep-btn').forEach(function(b){b.classList.remove('active')});
+  event.currentTarget.classList.add('active');
+  var ep = MOCK_RESPONSES[key];
+  if(!ep) return;
+
+  var html = '<div style="max-width:820px">';
+  html += '<div class="ep-title">';
+  html += '<div class="ep-method '+ep.method.toLowerCase()+'">'+ep.method+'</div>';
+  html += '<div class="ep-path">/v1'+ep.path+'</div>';
+  html += '</div>';
+  html += '<div class="ep-desc">'+ep.desc+'</div>';
+
+  if(ep.params.length){
+    html += '<div class="params-box">';
+    html += '<div class="params-title">// '+(ep.method==='POST'?'BODY':'QUERY')+' PARAMETERS</div>';
+    ep.params.forEach(function(p){
+      html += '<div class="param-row">';
+      html += '<span class="param-name">'+p.name+'</span>';
+      html += '<span class="param-type">'+p.type+'</span>';
+      html += '<input class="param-inp" id="'+p.id+'" value="'+p.default+'" placeholder="'+p.default+'"/>';
+      html += '<span class="'+(p.req?'param-req':'param-opt')+'">'+(p.req?'required':'optional')+'</span>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+
+  // Build URL
+  var urlPath = buildURL(ep);
+  html += '<div class="send-row">';
+  html += '<button class="send-btn" id="send-btn" onclick="sendRequest()">▶ Send request</button>';
+  html += '<div class="url-display" id="url-display"><em>'+ep.method+'</em> https://api.sloiai.com/v1'+ep.path+'</div>';
+  html += '</div>';
+
+  html += '<div class="response-box" id="response-box"><div class="empty-resp">Hit "Send request" to see the live API response</div></div>';
+  html += '</div>';
+
+  document.getElementById('main-content').innerHTML = html;
+}
+
+function buildURL(ep){
+  var path = '/v1'+ep.path;
+  ep.params.forEach(function(p){
+    var el = document.getElementById(p.id);
+    if(el) path = path.replace('{'+p.name.replace('_id','').replace('id',p.name)+'}', el.value||p.default);
+  });
+  return 'https://api.sloiai.com'+path;
+}
+
+function sendRequest(){
+  var ep = MOCK_RESPONSES[currentEP];
+  if(!ep) return;
+
+  // Collect params
+  var params = {};
+  ep.params.forEach(function(p){
+    var el = document.getElementById(p.id);
+    if(el) params[p.name] = el.value;
+  });
+
+  var btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spin" style="width:16px;height:16px;border-width:2px;margin:0"></div> Sending...';
+
+  document.getElementById('response-box').innerHTML = '<div class="loading"><div class="spin"></div>Querying SLOI AI API...</div>';
+
+  // Simulate realistic latency
+  var delay = ep.method==='POST' ? 600 : 320;
+  setTimeout(function(){
+    btn.disabled = false;
+    btn.innerHTML = '▶ Send request';
+
+    var result = ep.response(params);
+    var json = JSON.stringify(result, null, 2);
+    var ms = (delay + Math.floor(Math.random()*120)).toString();
+
+    document.getElementById('response-box').innerHTML =
+      '<div class="response-header">'+
+        '<div>'+
+          '<span class="status-ok">200 OK</span>'+
+          '<span style="font-size:11px;color:var(--muted);margin-left:12px">application/json</span>'+
+        '</div>'+
+        '<div style="display:flex;align-items:center;gap:10px">'+
+          '<span class="response-time">'+ms+'ms · Mock API</span>'+
+          '<button class="copy-btn" onclick="copyJSON()">Copy JSON</button>'+
+        '</div>'+
+      '</div>'+
+      '<div class="res-tabs">'+
+        '<button class="res-tab active">Response</button>'+
+        '<button class="res-tab" style="opacity:.5">Headers</button>'+
+        '<button class="res-tab" style="opacity:.5">Timeline</button>'+
+      '</div>'+
+      '<div class="response-body"><pre id="json-output">'+syntaxHL(json)+'</pre></div>';
+
+    // Store for copy
+    window._lastJSON = json;
+
+  }, delay);
+}
+
+function syntaxHL(json){
+  return json.replace(/("[\w_]+"):/g,'<span class="j-key">$1</span>:')
+    .replace(/: (".*?")/g,': <span class="j-str">$1</span>')
+    .replace(/: (\d+\.?\d*)/g,': <span class="j-num">$1</span>')
+    .replace(/: (true|false)/g,': <span class="j-bool">$1</span>')
+    .replace(/: (null)/g,': <span class="j-null">$1</span>');
+}
+
+function copyJSON(){
+  if(window._lastJSON){
+    navigator.clipboard && navigator.clipboard.writeText(window._lastJSON);
+    event.target.textContent='Copied!';
+    setTimeout(function(){event.target.textContent='Copy JSON';},1500);
+  }
+}
+
+// Init
+document.querySelector('.ep-btn').click();
+</script>
+</body>
+</html>

@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Payment Infrastructure — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--stripe:#635bff;--base:#0052ff;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-tag{font-size:9px;color:var(--muted);margin-left:6px;font-weight:400;font-family:'IBM Plex Mono',monospace}
+.nav-links{display:flex;gap:20px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--violet)}
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:48px 24px 80px}
+
+/* LAYOUT */
+.tabs-nav{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:28px}
+.tnav{flex:1;padding:12px 0;text-align:center;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);border:none;background:none;font-family:'IBM Plex Mono',monospace;transition:all .15s;border-right:1px solid var(--border)}
+.tnav:last-child{border-right:none}
+.tnav:hover{color:var(--white)}
+.tnav.active{background:var(--surface2);color:var(--white)}
+.tnav.stripe-tab.active{color:var(--stripe)}
+.tnav.base-tab.active{color:var(--base)}
+.tnav.both-tab.active{color:var(--teal)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* HERO */
+.hero{text-align:center;margin-bottom:40px}
+h1{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,52px);font-weight:900;line-height:.95;letter-spacing:-.03em;color:var(--white);margin-bottom:12px}
+h1 em{font-style:italic;color:var(--indigo)}
+.hero-sub{font-size:13px;color:var(--muted);line-height:1.85;max-width:560px;margin:0 auto 24px}
+
+/* COMPARISON */
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.compare-card{border-radius:8px;overflow:hidden}
+.cc-head{padding:16px 18px;display:flex;align-items:center;gap:10px}
+.cc-icon{font-size:24px}
+.cc-title{font-size:14px;font-weight:700;color:var(--white)}
+.cc-sub{font-size:10px;margin-top:2px}
+.cc-body{padding:14px 18px}
+.cc-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid;font-size:11px}
+.cc-row:last-child{border-bottom:none}
+.cc-label{color:var(--muted);flex:1}
+.cc-val{font-weight:600;color:var(--white)}
+.stripe-card{background:rgba(99,91,255,.07);border:1px solid rgba(99,91,255,.3)}
+.stripe-card .cc-head{background:rgba(99,91,255,.12)}
+.stripe-card .cc-row{border-color:rgba(99,91,255,.15)}
+.base-card{background:rgba(0,82,255,.07);border:1px solid rgba(0,82,255,.3)}
+.base-card .cc-head{background:rgba(0,82,255,.12)}
+.base-card .cc-row{border-color:rgba(0,82,255,.15)}
+
+/* CODE */
+.code-wrap{background:var(--bg);border:1px solid var(--border2);border-radius:6px;overflow:hidden;margin-bottom:14px}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-bottom:1px solid var(--border2);background:var(--surface2)}
+.code-lang{font-size:10px;color:var(--muted);letter-spacing:.06em}
+.code-copy{font-size:10px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:3px;padding:2px 8px;font-family:'IBM Plex Mono',monospace}
+.code-copy:hover{border-color:var(--indigo);color:var(--violet)}
+pre{padding:16px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--text);tab-size:2}
+.kw{color:var(--violet)}.str{color:var(--green)}.cm{color:var(--muted)}.num{color:var(--gold)}.fn{color:var(--teal)}.cls{color:#e8a94a}
+
+/* FLOW */
+.flow{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:14px}
+.fn{padding:10px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;text-align:center;font-size:10px;min-width:90px}
+.fn-icon{font-size:18px;margin-bottom:4px}
+.fn-label{color:var(--white);font-weight:600}
+.fn-sub{color:var(--muted);font-size:9px;margin-top:2px}
+.fa{font-size:18px;color:var(--border2);padding:0 6px;flex-shrink:0}
+
+/* SECTION */
+.sec-title{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.08em;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;text-transform:uppercase}
+.sec{margin-bottom:28px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:12px}
+
+/* ENV TABLE */
+.env-table{width:100%;border-collapse:collapse;margin-bottom:12px}
+.env-table th{font-size:9px;color:var(--muted);letter-spacing:.08em;text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--surface2);text-transform:uppercase}
+.env-table td{padding:7px 10px;font-size:11px;border-bottom:1px solid var(--border);vertical-align:top}
+.env-table tr:last-child td{border-bottom:none}
+.env-key{font-family:'IBM Plex Mono',monospace;color:var(--teal);font-size:10px}
+.env-val{color:var(--muted);font-size:10px}
+
+/* BADGE */
+.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.bt{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+.bb{background:rgba(0,82,255,.1);border:1px solid rgba(0,82,255,.25);color:var(--base)}
+
+/* BTN */
+.btn{padding:9px 18px;border-radius:5px;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;transition:all .15s;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.btn-p:hover{opacity:.85;color:#fff}
+</style>
+</head>
+<body>
+<nav>
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="docs.html">Docs</a>
+    <a href="agentkit.html">AgentKit</a>
+    <a href="telegram-bot.html">Telegram Bot</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Payment<br/><em>Infrastructure</em></h1>
+    <p class="hero-sub">Two payment systems. One credit model. Stripe for humans, Base/USDC for AI agents. Full backend implementation for the developer.</p>
+  </div>
+
+  <!-- COMPARISON -->
+  <div class="compare-grid" style="margin-bottom:28px">
+    <div class="compare-card stripe-card">
+      <div class="cc-head">
+        <div class="cc-icon">💳</div>
+        <div><div class="cc-title" style="color:var(--stripe)">Stripe</div><div class="cc-sub" style="color:rgba(99,91,255,.7)">Human buyers · card payment</div></div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-row"><span class="cc-label">Who pays</span><span class="cc-val">Human buyer</span></div>
+        <div class="cc-row"><span class="cc-label">Method</span><span class="cc-val">Credit / debit card</span></div>
+        <div class="cc-row"><span class="cc-label">Settlement</span><span class="cc-val">2–3 seconds</span></div>
+        <div class="cc-row"><span class="cc-label">Fee</span><span class="cc-val">2.9% + $0.30</span></div>
+        <div class="cc-row"><span class="cc-label">KYC</span><span class="cc-val">Stripe handles it</span></div>
+        <div class="cc-row"><span class="cc-label">Currency</span><span class="cc-val">USD (fiat)</span></div>
+        <div class="cc-row"><span class="cc-label">Model</span><span class="cc-val">Credit packs only</span></div>
+        <div class="cc-row"><span class="cc-label">Webhook</span><span class="cc-val">checkout.session.completed</span></div>
+      </div>
+    </div>
+    <div class="compare-card base-card">
+      <div class="cc-head">
+        <div class="cc-icon">⬡</div>
+        <div><div class="cc-title" style="color:var(--base)">Base + USDC</div><div class="cc-sub" style="color:rgba(0,82,255,.7)">AI agents · on-chain autonomous</div></div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-row"><span class="cc-label">Who pays</span><span class="cc-val">AI Agent (autonomous)</span></div>
+        <div class="cc-row"><span class="cc-label">Method</span><span class="cc-val">USDC on Base L2</span></div>
+        <div class="cc-row"><span class="cc-label">Settlement</span><span class="cc-val">~2 seconds (1 block)</span></div>
+        <div class="cc-row"><span class="cc-label">Fee</span><span class="cc-val">&lt;$0.01 gas</span></div>
+        <div class="cc-row"><span class="cc-label">KYC</span><span class="cc-val">On-chain address only</span></div>
+        <div class="cc-row"><span class="cc-label">Currency</span><span class="cc-val">USDC (stablecoin)</span></div>
+        <div class="cc-row"><span class="cc-label">Model</span><span class="cc-val">Packs + Per-action streaming</span></div>
+        <div class="cc-row"><span class="cc-label">Webhook</span><span class="cc-val">Base blockchain monitor</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-nav">
+    <button class="tnav stripe-tab active" onclick="showTab('stripe',this)">💳 Stripe Implementation</button>
+    <button class="tnav base-tab" onclick="showTab('base',this)">⬡ Base/USDC Implementation</button>
+    <button class="tnav both-tab" onclick="showTab('hybrid',this)">🔀 Hybrid Logic</button>
+    <button class="tnav" onclick="showTab('env',this)">⚙️ Config & ENV</button>
+  </div>
+
+  <!-- ══ STRIPE ══ -->
+  <div id="panel-stripe" class="tab-panel active">
+
+    <div class="sec">
+      <div class="sec-title">// FLOW — HUMAN BUYER → STRIPE → CREDITS</div>
+      <div class="flow">
+        <div class="fn"><div class="fn-icon">👤</div><div class="fn-label">Buyer</div><div class="fn-sub">clicks Buy</div></div>
+        <div class="fa">→</div>
+        <div class="fn"><div class="fn-icon">💳</div><div class="fn-label">Stripe Checkout</div><div class="fn-sub">hosted payment page</div></div>
+        <div class="fa">→</div>
+        <div class="fn"><div class="fn-icon">✅</div><div class="fn-label">Payment confirmed</div><div class="fn-sub">webhook fired</div></div>
+        <div class="fa">→</div>
+        <div class="fn"><div class="fn-icon">⚡</div><div class="fn-label">Credits added</div><div class="fn-sub">Supabase updated</div></div>
+        <div class="fa">→</div>
+        <div class="fn"><div class="fn-icon">📱</div><div class="fn-label">WhatsApp alert</div><div class="fn-sub">balance confirmed</div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// STRIPE SETUP — Node.js</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">BASH — Install</span></div>
+        <pre>npm install stripe</pre>
+      </div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — Create checkout session</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">// routes/credits.js</span>
+<span class="kw">const</span> stripe = <span class="fn">require</span>(<span class="str">'stripe'</span>)(process.env.<span class="cls">STRIPE_SECRET_KEY</span>);
+
+<span class="kw">const</span> CREDIT_PACKS = {
+  <span class="num">99</span>:  { credits: <span class="num">100</span>, price_id: <span class="str">'price_stripe_id_99'</span>  },
+  <span class="num">299</span>: { credits: <span class="num">350</span>, price_id: <span class="str">'price_stripe_id_299'</span> },
+  <span class="num">599</span>: { credits: <span class="num">800</span>, price_id: <span class="str">'price_stripe_id_599'</span> },
+  <span class="num">999</span>: { credits: <span class="num">1500</span>, price_id: <span class="str">'price_stripe_id_999'</span> },
+};
+
+<span class="cm">// POST /credits/purchase</span>
+app.<span class="fn">post</span>(<span class="str">'/credits/purchase'</span>, <span class="fn">authenticate</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> { pack } = req.body; <span class="cm">// 99 | 299 | 599 | 999</span>
+  <span class="kw">const</span> packInfo = CREDIT_PACKS[pack];
+  <span class="kw">if</span> (!packInfo) <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">json</span>({ error: <span class="str">'Invalid pack'</span> });
+
+  <span class="kw">const</span> session = <span class="kw">await</span> stripe.checkout.sessions.<span class="fn">create</span>({
+    mode: <span class="str">'payment'</span>,
+    line_items: [{ price: packInfo.price_id, quantity: <span class="num">1</span> }],
+    customer_email: req.user.email,
+    metadata: {
+      user_id: req.user.id,
+      credits: packInfo.credits,
+      pack_amount: pack,
+    },
+    success_url: <span class="str">`https://sloiai.com/credits/success?session={CHECKOUT_SESSION_ID}`</span>,
+    cancel_url:  <span class="str">'https://sloiai.com/credits'</span>,
+  });
+
+  res.<span class="fn">json</span>({ url: session.url }); <span class="cm">// redirect buyer to Stripe</span>
+});</pre>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — Stripe Webhook (credits on payment)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">// POST /webhooks/stripe</span>
+<span class="cm">// Stripe signs every webhook — always verify signature</span>
+app.<span class="fn">post</span>(<span class="str">'/webhooks/stripe'</span>,
+  express.<span class="fn">raw</span>({ type: <span class="str">'application/json'</span> }), <span class="cm">// raw body required</span>
+  <span class="kw">async</span> (req, res) => {
+
+  <span class="kw">const</span> sig = req.headers[<span class="str">'stripe-signature'</span>];
+  <span class="kw">let</span> event;
+
+  <span class="kw">try</span> {
+    event = stripe.webhooks.<span class="fn">constructEvent</span>(
+      req.body, sig, process.env.<span class="cls">STRIPE_WEBHOOK_SECRET</span>
+    );
+  } <span class="kw">catch</span> (err) {
+    <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">400</span>).<span class="fn">send</span>(<span class="str">`Webhook error: ${err.message}`</span>);
+  }
+
+  <span class="kw">if</span> (event.type === <span class="str">'checkout.session.completed'</span>) {
+    <span class="kw">const</span> session = event.data.object;
+    <span class="kw">const</span> { user_id, credits, pack_amount } = session.metadata;
+
+    <span class="cm">// Add credits to Supabase</span>
+    <span class="kw">await</span> <span class="fn">addCredits</span>({
+      user_id,
+      credits: <span class="fn">parseInt</span>(credits),
+      source: <span class="str">'stripe'</span>,
+      amount_usd: <span class="fn">parseInt</span>(pack_amount),
+      stripe_session_id: session.id,
+    });
+
+    <span class="cm">// Notify buyer via WhatsApp</span>
+    <span class="kw">await</span> <span class="fn">sendWhatsApp</span>(user_id,
+      <span class="str">`⚡ ${credits} credits added to your SLOI AI account.\nBalance: ${await getBalance(user_id)} credits.`</span>
+    );
+  }
+
+  res.<span class="fn">json</span>({ received: <span class="kw">true</span> });
+});</pre>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// SUPABASE — ADD CREDITS FUNCTION</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — addCredits() + getBalance()</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">// lib/credits.js</span>
+<span class="kw">const</span> { createClient } = <span class="fn">require</span>(<span class="str">'@supabase/supabase-js'</span>);
+<span class="kw">const</span> supabase = <span class="fn">createClient</span>(
+  process.env.<span class="cls">SUPABASE_URL</span>,
+  process.env.<span class="cls">SUPABASE_SERVICE_KEY</span> <span class="cm">// service role — bypasses RLS</span>
+);
+
+<span class="kw">async function</span> <span class="fn">addCredits</span>({ user_id, credits, source, amount_usd, stripe_session_id, tx_hash }) {
+  <span class="cm">// 1. Update balance</span>
+  <span class="kw">await</span> supabase.rpc(<span class="str">'increment_credits'</span>, { p_user_id: user_id, p_amount: credits });
+
+  <span class="cm">// 2. Log transaction</span>
+  <span class="kw">await</span> supabase.from(<span class="str">'credit_transactions'</span>).<span class="fn">insert</span>({
+    user_id, credits, source,
+    amount_usd: amount_usd || <span class="kw">null</span>,
+    stripe_session_id: stripe_session_id || <span class="kw">null</span>,
+    tx_hash: tx_hash || <span class="kw">null</span>, <span class="cm">// for Base/USDC payments</span>
+    created_at: <span class="kw">new</span> <span class="cls">Date</span>().<span class="fn">toISOString</span>(),
+  });
+}
+
+<span class="kw">async function</span> <span class="fn">getBalance</span>(user_id) {
+  <span class="kw">const</span> { data } = <span class="kw">await</span> supabase
+    .from(<span class="str">'credits'</span>)
+    .<span class="fn">select</span>(<span class="str">'balance'</span>)
+    .<span class="fn">eq</span>(<span class="str">'user_id'</span>, user_id)
+    .<span class="fn">single</span>();
+  <span class="kw">return</span> data?.balance || <span class="num">0</span>;
+}
+
+<span class="kw">async function</span> <span class="fn">deductCredits</span>(user_id, amount, action) {
+  <span class="kw">const</span> balance = <span class="kw">await</span> <span class="fn">getBalance</span>(user_id);
+  <span class="kw">if</span> (balance &lt; amount) <span class="kw">throw new</span> <span class="cls">Error</span>(<span class="str">'insufficient_credits'</span>);
+  <span class="kw">await</span> supabase.rpc(<span class="str">'decrement_credits'</span>, { p_user_id: user_id, p_amount: amount });
+  <span class="kw">await</span> supabase.from(<span class="str">'credit_transactions'</span>).<span class="fn">insert</span>({
+    user_id, credits: -amount, source: <span class="str">'usage'</span>, action
+  });
+}
+
+module.exports = { addCredits, getBalance, deductCredits };</pre>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// SUPABASE SQL — CREDITS TABLE + RPC</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">SQL — Supabase</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">-- Credits balance per user</span>
+<span class="kw">CREATE TABLE</span> credits (
+  user_id     UUID <span class="kw">PRIMARY KEY REFERENCES</span> users(id),
+  balance     INT <span class="kw">NOT NULL DEFAULT</span> <span class="num">0</span>,
+  total_purchased INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  total_spent INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  updated_at  TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- Transaction log</span>
+<span class="kw">CREATE TABLE</span> credit_transactions (
+  id                  UUID <span class="kw">DEFAULT</span> gen_random_uuid() <span class="kw">PRIMARY KEY</span>,
+  user_id             UUID <span class="kw">REFERENCES</span> users(id),
+  credits             INT <span class="kw">NOT NULL</span>,          <span class="cm">-- positive=purchase, negative=usage</span>
+  source              TEXT,                      <span class="cm">-- stripe | usdc | usage</span>
+  action              TEXT,                      <span class="cm">-- deal_hunter | loi | autopilot</span>
+  amount_usd          NUMERIC(<span class="num">10</span>,<span class="num">2</span>),
+  stripe_session_id   TEXT,
+  tx_hash             TEXT,                      <span class="cm">-- Base blockchain tx</span>
+  wallet_address      TEXT,                      <span class="cm">-- agent wallet</span>
+  created_at          TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- Atomic increment (thread-safe)</span>
+<span class="kw">CREATE OR REPLACE FUNCTION</span> increment_credits(p_user_id UUID, p_amount INT)
+<span class="kw">RETURNS VOID AS</span> $$
+  <span class="kw">INSERT INTO</span> credits (user_id, balance, total_purchased)
+  <span class="kw">VALUES</span> (p_user_id, p_amount, p_amount)
+  <span class="kw">ON CONFLICT</span> (user_id) <span class="kw">DO UPDATE SET</span>
+    balance = credits.balance + p_amount,
+    total_purchased = credits.total_purchased + p_amount,
+    updated_at = NOW();
+$$ <span class="kw">LANGUAGE</span> sql;
+
+<span class="cm">-- Atomic decrement</span>
+<span class="kw">CREATE OR REPLACE FUNCTION</span> decrement_credits(p_user_id UUID, p_amount INT)
+<span class="kw">RETURNS VOID AS</span> $$
+  <span class="kw">UPDATE</span> credits <span class="kw">SET</span>
+    balance = balance - p_amount,
+    total_spent = total_spent + p_amount,
+    updated_at = NOW()
+  <span class="kw">WHERE</span> user_id = p_user_id <span class="kw">AND</span> balance >= p_amount;
+$$ <span class="kw">LANGUAGE</span> sql;</pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ BASE / USDC ══ -->
+  <div id="panel-base" class="tab-panel">
+
+    <div class="sec">
+      <div class="sec-title">// FLOW — AI AGENT → BASE/USDC → CREDITS</div>
+      <div class="flow">
+        <div class="fn"><div class="fn-icon">🤖</div><div class="fn-label">AI Agent</div><div class="fn-sub">AgentKit wallet</div></div>
+        <div class="fa">→</div>
+        <div class="fn"><div class="fn-icon">💵</div><div class="fn-label">USDC transfer</div><div class="fn-sub">99/299/599/999</div></div>
+        <div class="fa">→</div>
+        <div class="fn"><div class="fn-icon">⬡</div><div class="fn-label">Base L2</div><div class="fn-sub">~2 seconds</div></div>
+        <div class="fa">→</div>
+        <div class="fn"><div class="fn-icon">🔍</div><div class="fn-label">Blockchain monitor</div><div class="fn-sub">Alchemy/Moralis</div></div>
+        <div class="fa">→</div>
+        <div class="fn"><div class="fn-icon">⚡</div><div class="fn-label">Credits added</div><div class="fn-sub">instant</div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// PACK MODEL — USDC</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — USDC Pack monitor (Alchemy webhook)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">// routes/webhooks/base.js</span>
+<span class="cm">// Alchemy sends this webhook on every USDC transfer to SLOI_AI_WALLET</span>
+
+<span class="kw">const</span> SLOI_AI_WALLET = process.env.<span class="cls">SLOI_AI_WALLET_ADDRESS</span>;
+<span class="kw">const</span> USDC_CONTRACT  = <span class="str">'0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'</span>; <span class="cm">// USDC on Base</span>
+
+<span class="kw">const</span> USDC_PACKS = {
+  <span class="str">'99'</span>:  <span class="num">100</span>,
+  <span class="str">'299'</span>: <span class="num">350</span>,
+  <span class="str">'599'</span>: <span class="num">800</span>,
+  <span class="str">'999'</span>: <span class="num">1500</span>,
+};
+
+<span class="cm">// POST /webhooks/base</span>
+app.<span class="fn">post</span>(<span class="str">'/webhooks/base'</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> { event } = req.body;
+
+  <span class="kw">for</span> (<span class="kw">const</span> activity <span class="kw">of</span> event.activity) {
+    <span class="kw">const</span> { fromAddress, toAddress, value, asset, hash } = activity;
+
+    <span class="cm">// Only USDC transfers to our wallet</span>
+    <span class="kw">if</span> (toAddress.toLowerCase() !== SLOI_AI_WALLET.toLowerCase()) <span class="kw">continue</span>;
+    <span class="kw">if</span> (asset !== <span class="str">'USDC'</span>) <span class="kw">continue</span>;
+
+    <span class="kw">const</span> amountUsdc = Math.<span class="fn">round</span>(value).toString();
+    <span class="kw">const</span> credits = USDC_PACKS[amountUsdc];
+
+    <span class="kw">if</span> (!credits) {
+      <span class="cm">// Non-standard amount — handle as streaming payment</span>
+      <span class="kw">await</span> <span class="fn">handleStreamingPayment</span>(fromAddress, value, hash);
+      <span class="kw">continue</span>;
+    }
+
+    <span class="cm">// Find agent by wallet address</span>
+    <span class="kw">const</span> agent = <span class="kw">await</span> <span class="fn">getAgentByWallet</span>(fromAddress);
+    <span class="kw">if</span> (!agent) {
+      console.<span class="fn">warn</span>(<span class="str">'Unknown wallet:'</span>, fromAddress);
+      <span class="kw">continue</span>;
+    }
+
+    <span class="cm">// Add credits</span>
+    <span class="kw">await</span> <span class="fn">addCredits</span>({
+      user_id: agent.user_id,
+      credits,
+      source: <span class="str">'usdc'</span>,
+      amount_usd: <span class="fn">parseInt</span>(amountUsdc),
+      tx_hash: hash,
+      wallet_address: fromAddress,
+    });
+
+    console.<span class="fn">log</span>(<span class="str">`✓ ${credits} credits → ${agent.name} (${amountUsdc} USDC, tx: ${hash})`</span>);
+  }
+
+  res.<span class="fn">json</span>({ ok: <span class="kw">true</span> });
+});</pre>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// STREAMING MODEL — PAY PER ACTION</div>
+      <div style="background:rgba(0,82,255,.05);border:1px solid rgba(0,82,255,.2);border-radius:6px;padding:12px 16px;margin-bottom:12px;font-size:11px;color:var(--text);line-height:1.7">
+        ⬡ <strong style="color:var(--white)">Credit streaming:</strong> Agent sends exact USDC amount for each action. No pack purchase needed. Agent can start with $0 balance and pay per-use. Ideal for low-frequency agents.
+        <div style="margin-top:6px;font-size:10px;color:var(--muted)">Pack pricing: $0.67–0.99/credit · Streaming pricing: $1.00/credit (10c premium for no commitment)</div>
+      </div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — Streaming payment handler</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">// Streaming: agent sends exact USDC for one action</span>
+<span class="kw">const</span> STREAMING_PRICES = {
+  watcher:    <span class="num">1.00</span>,  <span class="cm">// $1.00 USDC / day</span>
+  deal_hunter: <span class="num">10.00</span>, <span class="cm">// $10.00 USDC / session</span>
+  autopilot:  <span class="num">20.00</span>, <span class="cm">// $20.00 USDC / session</span>
+  loi:         <span class="num">5.00</span>,  <span class="cm">// $5.00 USDC / LOI</span>
+};
+
+<span class="kw">async function</span> <span class="fn">handleStreamingPayment</span>(fromAddress, value, txHash) {
+  <span class="kw">const</span> amount = Math.<span class="fn">round</span>(value * <span class="num">100</span>) / <span class="num">100</span>; <span class="cm">// 2 decimal precision</span>
+  <span class="kw">const</span> agent = <span class="kw">await</span> <span class="fn">getAgentByWallet</span>(fromAddress);
+  <span class="kw">if</span> (!agent) <span class="kw">return</span>;
+
+  <span class="cm">// Find matching action</span>
+  <span class="kw">const</span> action = Object.<span class="fn">entries</span>(STREAMING_PRICES)
+    .<span class="fn">find</span>(([_, price]) => Math.<span class="fn">abs</span>(price - amount) &lt; <span class="num">0.01</span>)?.[<span class="num">0</span>];
+
+  <span class="kw">if</span> (!action) <span class="kw">return</span>; <span class="cm">// unknown amount</span>
+
+  <span class="cm">// Issue one-time authorization token</span>
+  <span class="kw">const</span> token = <span class="kw">await</span> <span class="fn">createAuthToken</span>({
+    agent_id: agent.id,
+    action,
+    tx_hash: txHash,
+    expires_in: <span class="num">3600</span>, <span class="cm">// 1 hour to use</span>
+  });
+
+  <span class="cm">// Notify agent via webhook</span>
+  <span class="kw">await</span> <span class="fn">notifyAgent</span>(agent.id, {
+    type: <span class="str">'payment_confirmed'</span>,
+    action,
+    auth_token: token,
+    amount_usdc: amount,
+    tx_hash: txHash,
+  });
+}</pre>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// AGENT REGISTRATION — WALLET LINKING</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — POST /agents/register</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">// POST /v1/agents/register</span>
+app.<span class="fn">post</span>(<span class="str">'/v1/agents/register'</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> { name, email, framework, wallet_address } = req.body;
+
+  <span class="cm">// Create agent account</span>
+  <span class="kw">const</span> { data: agent } = <span class="kw">await</span> supabase
+    .from(<span class="str">'agents'</span>)
+    .<span class="fn">insert</span>({ name, email, framework, wallet_address, tier: <span class="str">'read'</span> })
+    .<span class="fn">select</span>().<span class="fn">single</span>();
+
+  <span class="cm">// Generate API key</span>
+  <span class="kw">const</span> api_key = <span class="str">'sk-sloi-'</span> + <span class="fn">generateSecureKey</span>(<span class="num">32</span>);
+  <span class="kw">await</span> supabase.from(<span class="str">'api_keys'</span>).<span class="fn">insert</span>({ agent_id: agent.id, key_hash: <span class="fn">hash</span>(api_key) });
+
+  res.<span class="fn">json</span>({
+    agent_id: agent.id,
+    api_key,
+    tier: <span class="str">'read'</span>,
+    sloi_wallet: process.env.<span class="cls">SLOI_AI_WALLET_ADDRESS</span>, <span class="cm">// agent sends USDC here</span>
+    payment_methods: {
+      usdc_on_base: {
+        address: process.env.<span class="cls">SLOI_AI_WALLET_ADDRESS</span>,
+        network: <span class="str">'base-mainnet'</span>,
+        token: <span class="str">'USDC'</span>,
+        pack_amounts: [<span class="num">99</span>, <span class="num">299</span>, <span class="num">599</span>, <span class="num">999</span>],
+        streaming_prices: STREAMING_PRICES,
+      }
+    }
+  });
+});</pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ HYBRID ══ -->
+  <div id="panel-hybrid" class="tab-panel">
+
+    <div class="sec">
+      <div class="sec-title">// HYBRID LOGIC — AUTO-SELECT PAYMENT METHOD</div>
+      <div style="background:rgba(45,212,191,.05);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:12px 16px;margin-bottom:14px;font-size:11px;color:var(--text);line-height:1.7">
+        The platform detects who is calling — human or agent — and routes to the right payment method automatically. Agents with a wallet address always use USDC. Humans always use Stripe. No manual selection needed.
+      </div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — Unified credit purchase endpoint</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">// POST /v1/credits/purchase</span>
+<span class="cm">// Works for both humans (Stripe) and agents (USDC)</span>
+app.<span class="fn">post</span>(<span class="str">'/v1/credits/purchase'</span>, <span class="fn">authenticate</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> { pack } = req.body; <span class="cm">// 99 | 299 | 599 | 999</span>
+  <span class="kw">const</span> caller = req.caller; <span class="cm">// set by authenticate middleware</span>
+
+  <span class="kw">if</span> (caller.type === <span class="str">'agent'</span> && caller.wallet_address) {
+    <span class="cm">// Agent → instruct to send USDC on Base</span>
+    <span class="kw">return</span> res.<span class="fn">json</span>({
+      method: <span class="str">'usdc_on_base'</span>,
+      instruction: <span class="str">`Send ${pack} USDC to ${process.env.SLOI_AI_WALLET_ADDRESS} on Base mainnet`</span>,
+      wallet: process.env.<span class="cls">SLOI_AI_WALLET_ADDRESS</span>,
+      amount_usdc: pack,
+      credits_to_receive: CREDIT_PACKS[pack].credits,
+      confirmation: <span class="str">'Credits added within 1 block (~2 seconds)'</span>,
+    });
+  }
+
+  <span class="cm">// Human buyer → Stripe checkout</span>
+  <span class="kw">const</span> session = <span class="kw">await</span> stripe.checkout.sessions.<span class="fn">create</span>({ <span class="cm">/* ... */</span> });
+  res.<span class="fn">json</span>({ method: <span class="str">'stripe'</span>, url: session.url });
+});
+
+<span class="cm">// Authenticate middleware — detects human vs agent</span>
+<span class="kw">async function</span> <span class="fn">authenticate</span>(req, res, next) {
+  <span class="kw">const</span> key = req.headers[<span class="str">'x-api-key'</span>];
+  <span class="kw">const</span> token = req.headers[<span class="str">'authorization'</span>]?.replace(<span class="str">'Bearer '</span>, <span class="str">''</span>);
+
+  <span class="kw">if</span> (key?.startsWith(<span class="str">'sk-sloi-'</span>)) {
+    <span class="cm">// API key → agent</span>
+    <span class="kw">const</span> agent = <span class="kw">await</span> <span class="fn">getAgentByKey</span>(key);
+    req.caller = { type: <span class="str">'agent'</span>, ...agent };
+  } <span class="kw">else if</span> (token) {
+    <span class="cm">// JWT → human (Supabase auth)</span>
+    <span class="kw">const</span> user = <span class="kw">await</span> supabase.auth.<span class="fn">getUser</span>(token);
+    req.caller = { type: <span class="str">'human'</span>, ...user.data.user };
+  } <span class="kw">else</span> {
+    <span class="kw">return</span> res.<span class="fn">status</span>(<span class="num">401</span>).<span class="fn">json</span>({ error: <span class="str">'unauthorized'</span> });
+  }
+  <span class="fn">next</span>();
+}</pre>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// AUTO-TOPUP — AGENT SELF-FUNDING</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">TYPESCRIPT — Agent side (runs before every session)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">// Agent calls this before every negotiation</span>
+<span class="kw">async function</span> <span class="fn">ensureCredits</span>(minCredits = <span class="num">15</span>) {
+  <span class="kw">const</span> { data } = <span class="kw">await</span> sloi.<span class="fn">get</span>(<span class="str">'/credits/balance'</span>);
+
+  <span class="kw">if</span> (data.balance >= minCredits) <span class="kw">return</span>; <span class="cm">// enough</span>
+
+  <span class="cm">// Choose pack — buy smallest that covers need</span>
+  <span class="kw">const</span> pack = data.balance &lt; <span class="num">15</span> ? <span class="num">99</span> : <span class="num">299</span>;
+
+  <span class="cm">// Check USDC balance on Base</span>
+  <span class="kw">const</span> usdcBalance = <span class="kw">await</span> agentkit.<span class="fn">getBalance</span>({ token: <span class="str">'usdc'</span> });
+
+  <span class="kw">if</span> (usdcBalance >= pack) {
+    <span class="cm">// Pay with USDC on Base</span>
+    <span class="kw">const</span> tx = <span class="kw">await</span> agentkit.<span class="fn">transfer</span>({
+      to: SLOI_AI_WALLET,
+      amount: pack.toString(),
+      token: <span class="str">'usdc'</span>,
+      network: <span class="str">'base-mainnet'</span>,
+    });
+    <span class="kw">await</span> tx.<span class="fn">wait</span>(); <span class="cm">// ~2 seconds</span>
+    console.<span class="fn">log</span>(<span class="str">`Paid ${pack} USDC on Base. Credits incoming.`</span>);
+
+  } <span class="kw">else</span> {
+    <span class="cm">// Fallback: request human top-up via Telegram Bot/WhatsApp</span>
+    <span class="kw">await</span> <span class="fn">notifyBoss</span>({
+      type: <span class="str">'low_credits'</span>,
+      message: <span class="str">`Agent needs top-up. Balance: ${data.balance}. Please add USDC to agent wallet or buy credits at sloiai.com/credits`</span>
+    });
+    <span class="kw">throw new</span> <span class="cls">Error</span>(<span class="str">'insufficient_funds'</span>);
+  }
+}</pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ ENV CONFIG ══ -->
+  <div id="panel-env" class="tab-panel">
+    <div class="sec">
+      <div class="sec-title">// ENVIRONMENT VARIABLES — Railway</div>
+      <table class="env-table">
+        <thead><tr><th>Variable</th><th>Value</th><th>Where to get it</th></tr></thead>
+        <tbody>
+          <tr><td><span class="env-key">STRIPE_SECRET_KEY</span></td><td><span class="env-val">sk_live_...</span></td><td>dashboard.stripe.com → API keys</td></tr>
+          <tr><td><span class="env-key">STRIPE_WEBHOOK_SECRET</span></td><td><span class="env-val">whsec_...</span></td><td>Stripe → Webhooks → signing secret</td></tr>
+          <tr><td><span class="env-key">STRIPE_PRICE_ID_99</span></td><td><span class="env-val">price_...</span></td><td>Stripe → Products → $99 pack</td></tr>
+          <tr><td><span class="env-key">STRIPE_PRICE_ID_299</span></td><td><span class="env-val">price_...</span></td><td>Stripe → Products → $299 pack</td></tr>
+          <tr><td><span class="env-key">STRIPE_PRICE_ID_599</span></td><td><span class="env-val">price_...</span></td><td>Stripe → Products → $599 pack</td></tr>
+          <tr><td><span class="env-key">STRIPE_PRICE_ID_999</span></td><td><span class="env-val">price_...</span></td><td>Stripe → Products → $999 pack</td></tr>
+          <tr><td><span class="env-key">SLOI_AI_WALLET_ADDRESS</span></td><td><span class="env-val">0x...</span></td><td>Coinbase CDP → create wallet on Base</td></tr>
+          <tr><td><span class="env-key">SLOI_AI_WALLET_PRIVATE_KEY</span></td><td><span class="env-val">0x...</span></td><td>Coinbase CDP → export key (keep secret)</td></tr>
+          <tr><td><span class="env-key">ALCHEMY_API_KEY</span></td><td><span class="env-val">alchemy_...</span></td><td>alchemy.com → Base mainnet app</td></tr>
+          <tr><td><span class="env-key">ALCHEMY_WEBHOOK_AUTH</span></td><td><span class="env-val">...</span></td><td>Alchemy → Notify → webhook auth token</td></tr>
+          <tr><td><span class="env-key">SUPABASE_URL</span></td><td><span class="env-val">https://xxx.supabase.co</span></td><td>Supabase → Project Settings → API</td></tr>
+          <tr><td><span class="env-key">SUPABASE_SERVICE_KEY</span></td><td><span class="env-val">eyJh...</span></td><td>Supabase → service_role key</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// STRIPE SETUP CHECKLIST</div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:11px">
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--stripe)"/> Create Stripe account + complete KYC</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--stripe)"/> Create 4 Products: $99 / $299 / $599 / $999 — one-time payment</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--stripe)"/> Copy Price IDs to ENV vars</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--stripe)"/> Register webhook: <code style="color:var(--teal)">https://api.sloiai.com/webhooks/stripe</code></div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--stripe)"/> Event to listen: <code style="color:var(--teal)">checkout.session.completed</code></div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--stripe)"/> Copy Webhook Secret to ENV</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--stripe)"/> Test with Stripe CLI: <code style="color:var(--teal)">stripe trigger checkout.session.completed</code></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// BASE/USDC SETUP CHECKLIST</div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:11px">
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--base)"/> Create Coinbase CDP account at portal.cdp.coinbase.com</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--base)"/> Create SLOI AI wallet on Base Mainnet</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--base)"/> Fund with small USDC for testing (~$10)</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--base)"/> Copy wallet address to ENV: <code style="color:var(--teal)">SLOI_AI_WALLET_ADDRESS</code></div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--base)"/> Create Alchemy account at alchemy.com</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--base)"/> Create Base Mainnet app → get API key</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--base)"/> Create Alchemy Notify webhook for USDC transfers to SLOI_AI_WALLET</div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--base)"/> Point webhook to: <code style="color:var(--teal)">https://api.sloiai.com/webhooks/base</code></div>
+          <div style="display:flex;align-items:center;gap:8px"><input type="checkbox" style="accent-color:var(--base)"/> Test: send 99 USDC from test wallet → verify credits added</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// WEBHOOK URLS — REGISTER THESE</div>
+      <div class="code-wrap"><div class="code-header"><span class="code-lang">URLs</span></div>
+<pre>Stripe webhook:   https://api.sloiai.com/webhooks/stripe
+Base webhook:     https://api.sloiai.com/webhooks/base
+Telegram Bot events:  https://api.sloiai.com/webhooks/telegram-bot</pre>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showTab(id, btn){
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  document.querySelectorAll('.tnav').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function copyCode(btn){
+  var pre = btn.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent.trim()).then(function(){
+    btn.textContent='Copied!';
+    setTimeout(function(){btn.textContent='Copy';},1500);
+  });
+}
+
+  <!-- ══ TON ══ -->
+  <div id="panel-ton" class="tab-panel">
+    <div class="sec">
+      <div class="sec-title">// TON — TELEGRAM NATIVE PAYMENTS</div>
+      <div style="background:rgba(45,212,191,.05);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:12px 16px;margin-bottom:14px;font-size:11px;line-height:1.7">
+        💎 <strong style="color:var(--white)">TON (The Open Network)</strong> is Telegram's native blockchain. Users pay directly inside Telegram Mini App — no external wallet, no browser redirect. TON and USDT on TON are both supported.
+      </div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — Telegram Bot + TON payments</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+        <pre><span class="cm">// Install: npm install telegraf @ton/ton</span>
+<span class="kw">const</span> { Telegraf } = <span class="fn">require</span>(<span class="str">'telegraf'</span>);
+<span class="kw">const</span> bot = <span class="kw">new</span> <span class="cls">Telegraf</span>(process.env.<span class="cls">TELEGRAM_BOT_TOKEN</span>);
+
+<span class="cm">// Telegram Stars payment (built-in Telegram payment)</span>
+bot.<span class="fn">command</span>(<span class="str">'buy'</span>, <span class="kw">async</span> (ctx) => {
+  <span class="kw">await</span> ctx.telegram.<span class="fn">sendInvoice</span>(ctx.chat.id, {
+    title: <span class="str">'SLOI AI Credits — 100 pack'</span>,
+    description: <span class="str">'100 credits for commodity negotiations'</span>,
+    payload: JSON.<span class="fn">stringify</span>({ pack: <span class="num">99</span>, user_id: ctx.from.id }),
+    provider_token: <span class="str">''</span>,  <span class="cm">// empty = Telegram Stars</span>
+    currency: <span class="str">'XTR'</span>,        <span class="cm">// Telegram Stars currency code</span>
+    prices: [{ label: <span class="str">'100 credits'</span>, amount: <span class="num">99</span> }],
+    start_parameter: <span class="str">'buy_credits'</span>,
+  });
+});
+
+<span class="cm">// Handle successful payment</span>
+bot.<span class="fn">on</span>(<span class="str">'pre_checkout_query'</span>, (ctx) => ctx.<span class="fn">answerPreCheckoutQuery</span>(<span class="kw">true</span>));
+bot.<span class="fn">on</span>(<span class="str">'successful_payment'</span>, <span class="kw">async</span> (ctx) => {
+  <span class="kw">const</span> { pack, user_id } = JSON.<span class="fn">parse</span>(ctx.message.successful_payment.invoice_payload);
+  <span class="kw">const</span> credits = { <span class="num">99</span>:<span class="num">100</span>, <span class="num">299</span>:<span class="num">350</span>, <span class="num">599</span>:<span class="num">800</span>, <span class="num">999</span>:<span class="num">1500</span> }[pack];
+  <span class="kw">await</span> <span class="fn">addCredits</span>({ user_id, credits, source: <span class="str">'telegram_stars'</span> });
+  <span class="kw">await</span> ctx.<span class="fn">reply</span>(<span class="str">`⚡ ${credits} credits added!`</span>);
+});
+
+<span class="cm">// TON wallet payment (direct blockchain)</span>
+<span class="cm">// User sends TON to SLOI_TON_WALLET → Tonhub webhook → credits</span>
+<span class="kw">const</span> SLOI_TON_WALLET = process.env.<span class="cls">SLOI_TON_WALLET</span>; <span class="cm">// EQ... address</span>
+<span class="kw">const</span> TON_PACKS = { <span class="str">'9.9'</span>:<span class="num">100</span>, <span class="str">'29.9'</span>:<span class="num">350</span>, <span class="str">'59.9'</span>:<span class="num">800</span>, <span class="str">'99.9'</span>:<span class="num">1500</span> };
+
+<span class="cm">// POST /webhooks/ton — from Tonhub/GetBlock monitor</span>
+app.<span class="fn">post</span>(<span class="str">'/webhooks/ton'</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> { from, amount, comment, hash } = req.body;
+  <span class="kw">const</span> tonAmount = (amount / <span class="num">1e9</span>).<span class="fn">toFixed</span>(<span class="num">1</span>); <span class="cm">// nanoTON → TON</span>
+  <span class="kw">const</span> credits = TON_PACKS[tonAmount];
+  <span class="kw">if</span> (!credits) <span class="kw">return</span> res.<span class="fn">json</span>({ ok: <span class="kw">true</span> });
+  <span class="kw">const</span> user = <span class="kw">await</span> <span class="fn">getUserByTonWallet</span>(from);
+  <span class="kw">if</span> (user) <span class="kw">await</span> <span class="fn">addCredits</span>({ user_id: user.id, credits, source: <span class="str">'ton'</span>, tx_hash: hash });
+  res.<span class="fn">json</span>({ ok: <span class="kw">true</span> });
+});</pre>
+      </div>
+      <div class="sec" style="margin-top:14px">// TON ENV VARIABLES</div>
+      <div class="code-wrap"><div class="code-header"><span class="code-lang">ENV — add to Railway</span></div>
+        <pre>TELEGRAM_BOT_TOKEN=&lt;from BotFather&gt;
+SLOI_TON_WALLET=EQ...    &lt;TON wallet address&gt;
+TONHUB_API_KEY=...       &lt;GetBlock or Tonhub webhook key&gt;</pre>
+      </div>
+    </div>
+  </div>
+</script>
+</body>
+</html>

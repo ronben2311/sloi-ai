@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>IMEC Corridor — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(7,7,15,.92);border-bottom:1px solid var(--border);backdrop-filter:blur(16px)}
+.logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-tag{font-size:9px;color:var(--muted);margin-left:7px;font-weight:400;font-family:'IBM Plex Mono',monospace}
+.nav-links{display:flex;gap:24px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
+.btn-cta{background:var(--indigo);color:#fff;padding:8px 18px;border-radius:4px;font-size:11px;font-weight:600;text-decoration:none}
+
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:72px 24px 80px}
+
+/* HERO */
+.hero{margin-bottom:64px}
+.eyebrow{font-size:10px;color:var(--gold);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:'';flex:1;height:1px;background:rgba(232,169,74,.3)}
+h1{font-family:'Fraunces',serif;font-size:clamp(44px,7vw,78px);font-weight:900;line-height:.93;letter-spacing:-.04em;color:var(--white);margin-bottom:20px}
+h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.85;max-width:600px;margin-bottom:32px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{padding:12px 22px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-gold{background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.4);color:var(--gold)}.btn-gold:hover{background:rgba(232,169,74,.2)}
+.btn-p{background:var(--indigo);color:#fff;border:none}.btn-p:hover{opacity:.85}
+.btn-sm{padding:8px 16px;font-size:11px}
+
+/* CORRIDOR MAP */
+.corridor{background:var(--surface);border:1px solid rgba(232,169,74,.2);border-radius:10px;padding:28px;margin-bottom:48px;overflow:hidden}
+.corridor-title{font-size:10px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;font-weight:600}
+.corridor-map{display:flex;align-items:center;justify-content:space-between;gap:0;flex-wrap:wrap;margin-bottom:20px}
+.corridor-node{text-align:center;flex:1;min-width:80px}
+.cn-dot{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 8px;border:2px solid}
+.cn-name{font-size:11px;font-weight:700;color:var(--white)}
+.cn-role{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.4}
+.corridor-line{flex:1;height:2px;background:linear-gradient(90deg,rgba(232,169,74,.3),rgba(232,169,74,.6),rgba(232,169,74,.3));min-width:20px;position:relative}
+.corridor-line::after{content:'→';position:absolute;top:-9px;left:50%;transform:translateX(-50%);color:var(--gold);font-size:14px}
+.sloi-badge{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.4);border-radius:6px;padding:12px 16px;text-align:center;margin-top:16px}
+.sb-label{font-size:10px;color:var(--muted);margin-bottom:4px}
+.sb-text{font-size:12px;color:var(--violet);font-weight:600}
+
+/* NUMBERS */
+.numbers-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:48px}
+.num-card{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;text-align:center}
+.nc-val{font-family:'Fraunces',serif;font-size:30px;font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:5px}
+.nc-label{font-size:10px;color:var(--muted);line-height:1.5}
+
+/* SECTIONS */
+.section{margin-bottom:52px}
+h2{font-family:'Fraunces',serif;font-size:clamp(26px,4vw,38px);font-weight:900;color:var(--white);letter-spacing:-.03em;margin-bottom:12px}
+h2 em{font-style:italic;color:var(--indigo)}
+p{font-size:12px;color:var(--text);line-height:1.9;margin-bottom:12px}
+.divider{border:none;border-top:1px solid var(--border);margin:48px 0}
+
+/* COMMODITIES */
+.commodity-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.commodity{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;transition:border-color .15s}
+.commodity:hover{border-color:rgba(91,95,239,.35)}
+.com-icon{font-size:26px;margin-bottom:8px}
+.com-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:4px}
+.com-vol{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:3px}
+.com-desc{font-size:10px;color:var(--muted);line-height:1.6}
+
+/* PROJECTS */
+.project-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:14px;transition:border-color .15s}
+.project-card:hover{border-color:rgba(232,169,74,.35)}
+.project-card.hot{border-color:rgba(239,68,68,.3)}
+.pj-icon{font-size:24px;flex-shrink:0;width:36px;text-align:center;margin-top:2px}
+.pj-body{flex:1}
+.pj-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.pj-meta{font-size:10px;color:var(--muted);margin-bottom:6px}
+.pj-commodities{display:flex;gap:5px;flex-wrap:wrap}
+.pj-com{font-size:9px;padding:2px 7px;border-radius:2px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.pj-val{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);flex-shrink:0;text-align:right}
+
+/* WHY SLOI */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.why-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px}
+.why-icon{font-size:22px;margin-bottom:8px}
+.why-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:5px}
+.why-desc{font-size:11px;color:var(--muted);line-height:1.65}
+
+/* CTA */
+.cta-box{background:linear-gradient(135deg,rgba(91,95,239,.08),rgba(232,169,74,.05));border:1px solid rgba(91,95,239,.3);border-radius:10px;padding:44px;text-align:center;margin-top:52px}
+
+/* BADGE */
+.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.br{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:11px}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:var(--muted);text-decoration:none}.footer-links a:hover{color:var(--white)}
+</style>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+
+<nav>
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="m2m-homepage.html">Home</a>
+    <a href="investor.html">Investors</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="smb-order.html" class="btn-cta">Start negotiating →</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">India — Middle East — Europe Economic Corridor</div>
+    <h1>The biggest trade<br/>corridor in history.<br/><em>We close the deals.</em></h1>
+    <p class="hero-sub">IMEC is a $300B+ infrastructure initiative connecting India, the Gulf, and Europe via a new multimodal trade corridor. Every project on that route needs steel, cement, energy, and agricultural commodities. Every purchase needs a signed LOI. That's where SLOI AI sits.</p>
+    <div class="hero-actions">
+      <a href="smb-order.html" class="btn btn-p">Start a negotiation →</a>
+      <a href="investor.html" class="btn btn-gold">Investor deck</a>
+      <a href="contact.html" class="btn btn-gold">Talk to us</a>
+    </div>
+  </div>
+
+  <!-- CORRIDOR MAP -->
+  <div class="corridor">
+    <div class="corridor-title">// The IMEC Route</div>
+    <div class="corridor-map">
+      <div class="corridor-node">
+        <div class="cn-dot" style="background:rgba(255,153,0,.12);border-color:rgba(255,153,0,.5)">🇮🇳</div>
+        <div class="cn-name">India</div>
+        <div class="cn-role">Manufacturing hub · Exports raw materials</div>
+      </div>
+      <div class="corridor-line"></div>
+      <div class="corridor-node">
+        <div class="cn-dot" style="background:rgba(0,82,255,.12);border-color:rgba(0,82,255,.4)">🌊</div>
+        <div class="cn-name">Arabian Sea</div>
+        <div class="cn-role">Maritime link</div>
+      </div>
+      <div class="corridor-line"></div>
+      <div class="corridor-node" style="transform:scale(1.08)">
+        <div class="cn-dot" style="background:rgba(91,95,239,.2);border-color:var(--indigo);box-shadow:0 0 16px rgba(91,95,239,.3)">🇦🇪</div>
+        <div class="cn-name" style="color:var(--violet)">UAE</div>
+        <div class="cn-role" style="color:var(--violet)">Central hub · SLOI AI HQ</div>
+      </div>
+      <div class="corridor-line"></div>
+      <div class="corridor-node">
+        <div class="cn-dot" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.4)">🇸🇦</div>
+        <div class="cn-name">Saudi Arabia</div>
+        <div class="cn-role">Energy · NEOM · Vision 2030</div>
+      </div>
+      <div class="corridor-line"></div>
+      <div class="corridor-node">
+        <div class="cn-dot" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.4)">🇯🇴</div>
+        <div class="cn-name">Jordan</div>
+        <div class="cn-role">Land bridge to Europe</div>
+      </div>
+      <div class="corridor-line"></div>
+      <div class="corridor-node">
+        <div class="cn-dot" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.4)">🇮🇱</div>
+        <div class="cn-name">Israel</div>
+        <div class="cn-role">Mediterranean access</div>
+      </div>
+      <div class="corridor-line"></div>
+      <div class="corridor-node">
+        <div class="cn-dot" style="background:rgba(0,82,200,.1);border-color:rgba(0,82,200,.4)">🇪🇺</div>
+        <div class="cn-name">Europe</div>
+        <div class="cn-role">End market · Germany · Italy · Greece</div>
+      </div>
+    </div>
+    <div class="sloi-badge">
+      <div class="sb-label">SLOI AI sits at the centre of every commodity transaction on this route</div>
+      <div class="sb-text">Buyer in Europe → SLOI AI negotiates → Supplier in UAE/India → Signed LOI → Deal closed</div>
+    </div>
+  </div>
+
+  <!-- NUMBERS -->
+  <div class="numbers-grid">
+    <div class="num-card">
+      <div class="nc-val" style="color:var(--gold)">$300B+</div>
+      <div class="nc-label">Planned IMEC infrastructure investment</div>
+    </div>
+    <div class="num-card">
+      <div class="nc-val" style="color:var(--indigo)">3.2B</div>
+      <div class="nc-label">People connected by the corridor</div>
+    </div>
+    <div class="num-card">
+      <div class="nc-val" style="color:var(--green)">40%</div>
+      <div class="nc-label">Reduction in EU-India transit time vs Suez</div>
+    </div>
+    <div class="num-card">
+      <div class="nc-val" style="color:var(--teal)">$10T+</div>
+      <div class="nc-label">Annual commodity trade volume in the region</div>
+    </div>
+  </div>
+
+  <!-- WHY NOW -->
+  <div class="section">
+    <h2>Why this corridor.<br/><em>Why now.</em></h2>
+    <p>The IMEC corridor was announced at the G20 summit in New Delhi in September 2023. It is the most significant trade infrastructure initiative since the Belt and Road. The corridor is designed to move goods — physical commodities — faster and cheaper between Asia, the Middle East, and Europe.</p>
+    <p>Every kilometre of rail, every port expansion, every logistics hub requires steel, cement, pipes, energy, and agricultural supply. Every one of those purchases needs a negotiated price and a signed agreement between buyer and supplier. That agreement is a Letter of Intent.</p>
+    <p>The region is awash with capital — Saudi Vision 2030, NEOM, UAE industrial expansion, Iraq reconstruction, Egypt's New Administrative Capital. All of it needs commodities. All of it needs procurement infrastructure. There is no AI-native procurement platform built for this corridor. Until now.</p>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- COMMODITIES -->
+  <div class="section">
+    <h2>The commodities<br/>moving through <em>IMEC.</em></h2>
+    <div class="commodity-grid">
+      <div class="commodity">
+        <div class="com-icon">🔩</div>
+        <div class="com-name">Steel & Metals</div>
+        <div class="com-vol" style="color:var(--violet)">$2.1T</div>
+        <div class="com-desc">Rebar, coil, aluminum for construction and infrastructure. Primary commodity of every NEOM-scale project.</div>
+      </div>
+      <div class="commodity">
+        <div class="com-icon">🏗️</div>
+        <div class="com-name">Building Materials</div>
+        <div class="com-vol" style="color:var(--teal)">$890B</div>
+        <div class="com-desc">Cement, concrete, tiles, pipes. Demand from UAE, KSA, Egypt, Iraq reconstruction projects.</div>
+      </div>
+      <div class="commodity">
+        <div class="com-icon">⚡</div>
+        <div class="com-name">Energy</div>
+        <div class="com-vol" style="color:var(--gold)">$3.8T</div>
+        <div class="com-desc">Diesel, LPG, industrial fuels for construction equipment and logistics along the corridor.</div>
+      </div>
+      <div class="commodity">
+        <div class="com-icon">🌾</div>
+        <div class="com-name">Agriculture</div>
+        <div class="com-vol" style="color:var(--green)">$1.2T</div>
+        <div class="com-desc">Wheat, corn, grain — India is a top exporter, Middle East imports 80%+ of its food. IMEC makes this trade faster.</div>
+      </div>
+      <div class="commodity">
+        <div class="com-icon">🧪</div>
+        <div class="com-name">Chemicals</div>
+        <div class="com-vol" style="color:var(--red)">$640B</div>
+        <div class="com-desc">Industrial chemicals for manufacturing, construction, and energy sectors moving through the corridor.</div>
+      </div>
+      <div class="commodity">
+        <div class="com-icon">📦</div>
+        <div class="com-name">Total addressable</div>
+        <div class="com-vol" style="color:var(--white)">$8.6T</div>
+        <div class="com-desc">Combined annual commodity trade in the IMEC footprint. SLOI AI targets the procurement negotiation layer.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- KEY PROJECTS -->
+  <div class="section">
+    <h2>Projects <em>buying now.</em></h2>
+    <p style="margin-bottom:18px">These are real, funded, active procurement opportunities across the IMEC corridor — all buying commodities through brokers today. SLOI AI's LeadFinder agent monitors these projects continuously.</p>
+
+    <div class="project-card hot">
+      <div class="pj-icon">🏙️</div>
+      <div class="pj-body">
+        <div class="pj-name">NEOM — The Line + Sindalah + Oxagon</div>
+        <div class="pj-meta">Saudi Arabia · Active construction · Multi-phase</div>
+        <div class="pj-commodities">
+          <span class="pj-com">🔩 Steel</span><span class="pj-com">🏗️ Cement</span><span class="pj-com">🔩 Aluminum</span><span class="pj-com">⚡ Energy</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:right">
+        <div class="pj-val" style="color:var(--red)">$500B</div>
+        <div style="font-size:9px;color:var(--muted)">total investment</div>
+        <span class="badge br" style="margin-top:4px">🔥 Active</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="pj-icon">🏛️</div>
+      <div class="pj-body">
+        <div class="pj-name">Egypt New Administrative Capital</div>
+        <div class="pj-meta">Egypt · Cairo · Phase 2 underway</div>
+        <div class="pj-commodities">
+          <span class="pj-com">🏗️ Cement</span><span class="pj-com">🔩 Steel</span><span class="pj-com">🏗️ Tiles</span><span class="pj-com">🏗️ Pipes</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:right">
+        <div class="pj-val" style="color:var(--gold)">$58B</div>
+        <div style="font-size:9px;color:var(--muted)">total budget</div>
+        <span class="badge ba" style="margin-top:4px">Ongoing</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="pj-icon">🚢</div>
+      <div class="pj-body">
+        <div class="pj-name">Oman Duqm Special Economic Zone</div>
+        <div class="pj-meta">Oman · Port + Industrial zone · IMEC node</div>
+        <div class="pj-commodities">
+          <span class="pj-com">🔩 Steel</span><span class="pj-com">🏗️ Pipes</span><span class="pj-com">⚡ Diesel</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:right">
+        <div class="pj-val" style="color:var(--green)">$30B</div>
+        <div style="font-size:9px;color:var(--muted)">development plan</div>
+        <span class="badge bg" style="margin-top:4px">Active</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="pj-icon">🏗️</div>
+      <div class="pj-body">
+        <div class="pj-name">Iraq Reconstruction — Baghdad + Basra</div>
+        <div class="pj-meta">Iraq · Post-conflict reconstruction · Restricted</div>
+        <div class="pj-commodities">
+          <span class="pj-com">🔩 Steel</span><span class="pj-com">🏗️ Cement</span><span class="pj-com">🏗️ Pipes</span><span class="pj-com">⚡ Energy</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:right">
+        <div class="pj-val" style="color:var(--teal)">$88B</div>
+        <div style="font-size:9px;color:var(--muted)">reconstruction plan</div>
+        <span class="badge ba" style="margin-top:4px">Enhanced KYC</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="pj-icon">🇩🇪</div>
+      <div class="pj-body">
+        <div class="pj-name">German manufacturing — MENA sourcing</div>
+        <div class="pj-meta">Germany · Importing aluminum, chemicals, energy via IMEC</div>
+        <div class="pj-commodities">
+          <span class="pj-com">🔩 Aluminum</span><span class="pj-com">🧪 Chemicals</span><span class="pj-com">⚡ LPG</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:right">
+        <div class="pj-val" style="color:var(--violet)">$200B+</div>
+        <div style="font-size:9px;color:var(--muted)">annual import vol.</div>
+        <span class="badge bv" style="margin-top:4px">EU buyers</span>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--muted);margin-top:10px;display:flex;align-items:center;gap:6px">
+      🔭 SLOI AI's LeadFinder agent monitors these projects continuously — alerting the Boss when new tenders are published.
+      <a href="negotiation-agent.html" style="color:var(--violet);text-decoration:none">Open LeadFinder →</a>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WHY SLOI AI -->
+  <div class="section">
+    <h2>Why SLOI AI is the<br/><em>procurement layer</em> of IMEC.</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">📍</div>
+        <div class="why-title">UAE — the hub of the corridor</div>
+        <div class="why-desc">SLOI AI operates from UAE, the central node of IMEC. All commodities flowing India → Europe pass through or are financed through UAE. Our broker network covers UAE, KSA, Egypt, Jordan — the full western half of the corridor.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🌐</div>
+        <div class="why-title">Arabic, English, Hebrew — one platform</div>
+        <div class="why-desc">Our AI agent negotiates in any language. The LOI is generated in English with ICC-compliant terms. Buyers in Germany can negotiate with suppliers in UAE or India without language or time-zone friction.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚡</div>
+        <div class="why-title">Speed matters at IMEC scale</div>
+        <div class="why-desc">NEOM buys 10,000 MT of steel a month. Every week of manual negotiation costs money. SLOI AI closes in minutes. At IMEC scale, faster procurement = lower project cost = competitive advantage for buyers.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤖</div>
+        <div class="why-title">AI agents connect to IMEC automatically</div>
+        <div class="why-desc">Via the Open Network API and skill.md, any AI procurement agent — including those built by IMEC member governments — can connect to SLOI AI, discover suppliers, and generate LOIs autonomously at scale.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🛡️</div>
+        <div class="why-title">Compliance for a complex region</div>
+        <div class="why-desc">IMEC crosses multiple compliance jurisdictions. SLOI AI screens every deal against OFAC, EU, and UN sanctions. Iraq and restricted territories handled with enhanced KYC. Built-in, not bolted-on.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">💰</div>
+        <div class="why-title">TradeFinex — financing on IMEC deals</div>
+        <div class="why-desc">Large IMEC infrastructure deals often need trade financing. When buyers request it, SLOI AI refers them to TradeFinex — the XDC Network trade finance platform — and earns a 0.5% finder's fee off-platform.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <div style="font-family:'Fraunces',serif;font-size:clamp(30px,5vw,48px);font-weight:900;color:var(--white);letter-spacing:-.03em;margin-bottom:12px;line-height:1">
+      IMEC is moving.<br/>Your deals should<br/><em style="font-style:italic;color:var(--gold)">move faster.</em>
+    </div>
+    <p style="color:var(--muted);max-width:480px;margin:0 auto 28px;font-size:13px;line-height:1.8">Whether you are buying steel for a NEOM subcontract, sourcing grain for Egypt, or procuring energy across the corridor — SLOI AI negotiates the best price and generates the LOI in minutes.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="smb-order.html" class="btn btn-p" style="padding:13px 26px;font-size:13px">Start negotiating →</a>
+      <a href="investor.html" class="btn btn-gold" style="padding:13px 26px;font-size:13px">Investor deck</a>
+      <a href="open-network.html" class="btn btn-gold" style="padding:13px 26px;font-size:13px">AI Agent API</a>
+    </div>
+    <div style="margin-top:16px;font-size:10px;color:var(--muted)">
+      No credit card needed · Boss approval on every deal · LOI in minutes
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white);text-decoration:none">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
+  <div class="footer-links">
+    <a href="m2m-homepage.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="investor.html">Investors</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div style="font-size:10px;color:var(--muted)">© 2026 SLOI AI Ltd.</div>
+</footer>
+</body>
+</html>

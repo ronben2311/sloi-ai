@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI — Price Discovery</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;
+  --border:#1c1c2e;--border2:#252538;
+  --indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;
+  --text:#d4d2f0;--white:#eeedf8;
+  --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;opacity:.28;pointer-events:none;z-index:0}
+
+/* NAV */
+.nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:52px;background:rgba(7,7,15,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(10px)}
+.nav-logo{display:flex;align-items:center;gap:8px;font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo-mark{width:26px;height:26px;background:var(--indigo);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;font-weight:600}
+.nav-links{display:flex;align-items:center;gap:16px;font-size:11px;color:var(--muted)}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--violet)}
+.nav-pill{background:var(--indigo);color:#fff;border:none;padding:5px 14px;border-radius:4px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none}
+
+/* HERO */
+.hero{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:52px 24px 36px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet);font-size:10px;padding:4px 14px;border-radius:20px;margin-bottom:20px;letter-spacing:.06em}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--indigo);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,56px);font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1.05;margin-bottom:12px}
+.hero h1 em{font-style:italic;color:var(--indigo)}
+.hero-sub{font-size:13px;color:var(--muted);line-height:1.7;max-width:520px;margin:0 auto 32px}
+
+/* SEARCH BOX */
+.search-card{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:24px;max-width:820px;margin:0 auto 12px;position:relative;z-index:1}
+.search-row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.main-input{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:12px 16px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:14px;outline:none;min-width:200px}
+.main-input:focus{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(91,95,239,.12)}
+.main-input::placeholder{color:var(--muted)}
+.qty-input{width:110px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:12px 14px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:14px;outline:none}
+.qty-input:focus{border-color:var(--indigo)}
+.unit-select{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:12px 12px;color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;cursor:pointer}
+.unit-select:focus{border-color:var(--indigo)}
+.search-btn{background:var(--indigo);color:#fff;border:none;padding:12px 28px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:opacity .15s;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.search-btn:hover{opacity:.85}
+.search-btn:disabled{opacity:.45;cursor:not-allowed}
+
+/* QUICK SEARCHES */
+.quick-label{font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:.06em}
+.quick-chips{display:flex;gap=6px;flex-wrap:wrap;gap:6px}
+.chip{background:var(--surface2);border:1px solid var(--border2);color:var(--muted);padding:5px 12px;border-radius:20px;font-size:11px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.chip:hover{border-color:var(--indigo);color:var(--violet)}
+
+/* FILTERS */
+.filters{display:flex;gap:8px;flex-wrap:wrap;max-width:820px;margin:0 auto 24px;padding:0 0px;position:relative;z-index:1}
+.filter-btn{background:none;border:1px solid var(--border2);color:var(--muted);padding:5px 14px;border-radius:4px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .12s}
+.filter-btn:hover{border-color:var(--indigo);color:var(--violet)}
+.filter-btn.active{background:rgba(91,95,239,.1);border-color:var(--indigo);color:var(--violet)}
+.sort-label{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px;margin-left:auto}
+.sort-select{background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:4px 10px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;outline:none;cursor:pointer}
+
+/* RESULTS */
+.results-wrap{max-width:820px;margin:0 auto;padding:0 0px 60px;position:relative;z-index:1}
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font-size:11px;color:var(--muted)}
+
+/* RESULT CARD */
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden;transition:all .15s}
+.result-card:hover{border-color:var(--border2);transform:translateY(-1px)}
+.result-card.best{border-color:var(--green)}
+.result-card.selected{border-color:var(--indigo)}
+
+.rc-header{display:grid;grid-template-columns:auto 1fr auto auto;gap:16px;padding:16px 18px;align-items:center;cursor:pointer}
+.rank-badge{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;font-family:'Fraunces',serif}
+.rank-1{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:var(--green)}
+.rank-2{background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.rank-3{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);color:var(--blue)}
+.rank-n{background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+
+.rc-name{font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px}
+.rc-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:10px;color:var(--muted)}
+.rc-sector{display:inline-flex;align-items:center;gap:3px;background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.18);color:var(--violet);padding:1px 8px;border-radius:3px;font-size:10px}
+
+.rc-price-block{text-align:right;flex-shrink:0}
+.rc-price{font-family:'Fraunces',serif;font-size:22px;font-weight:700;letter-spacing:-.02em}
+.rc-total{font-size:11px;color:var(--muted);margin-top:2px}
+.rc-saving{font-size:11px;margin-top:3px;font-weight:600}
+
+.rc-actions{display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.btn-rfq{background:var(--indigo);color:#fff;border:none;padding:7px 16px;border-radius:4px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:opacity .15s;white-space:nowrap}
+.btn-rfq:hover{opacity:.85}
+.btn-compare{background:none;border:1px solid var(--border2);color:var(--muted);padding:6px 16px;border-radius:4px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s;white-space:nowrap}
+.btn-compare:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-compare.added{background:rgba(91,95,239,.1);border-color:var(--indigo);color:var(--violet)}
+
+/* EXPANDED DETAIL */
+.rc-detail{border-top:1px solid var(--border);padding:16px 18px;background:var(--surface2);display:none}
+.rc-detail.open{display:block}
+.detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.detail-box{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:10px 12px}
+.detail-lbl{font-size:9px;color:var(--muted);margin-bottom:3px;letter-spacing:.05em}
+.detail-val{font-size:12px;font-weight:600;color:var(--text)}
+.cert-row{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+.cert{font-size:9px;padding:2px 8px;border-radius:3px;border:1px solid}
+.trilingual{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.lang-box{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:10px}
+.lang-lbl{font-size:9px;color:var(--muted);margin-bottom:5px;letter-spacing:.05em}
+.lang-val{font-size:12px;color:var(--white);line-height:1.7}
+
+/* COMPARE BAR */
+.compare-bar{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border2);padding:12px 24px;display:none;align-items:center;gap:16px;z-index:200;animation:slideUp .2s ease}
+.compare-bar.visible{display:flex}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.compare-items{display:flex;gap:10px;flex:1}
+.compare-item{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:6px 12px;font-size:11px;color:var(--text);display:flex;align-items:center;gap:8px}
+.compare-item button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;padding:0}
+.compare-item button:hover{color:var(--red)}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-icon{font-size:48px;margin-bottom:16px}
+.empty-title{font-size:16px;color:var(--white);font-weight:600;margin-bottom:8px}
+.empty-sub{font-size:12px;line-height:1.7}
+
+/* LOADING */
+.loading-state{text-align:center;padding:48px 20px}
+.loading-bar{height:3px;background:var(--border2);border-radius:2px;overflow:hidden;width:280px;margin:16px auto 0}
+.loading-fill{height:100%;background:var(--indigo);border-radius:2px;animation:load 1.2s ease forwards}
+@keyframes load{from{width:0}to{width:100%}}
+
+/* RFQ MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:28px;max-width:520px;width:90%;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:4px}
+.modal-sub{font-size:11px;color:var(--muted);margin-bottom:20px;line-height:1.7}
+.form-field{margin-bottom:12px}
+.form-label{font-size:10px;color:var(--muted);margin-bottom:4px;display:block;letter-spacing:.05em}
+.inp{width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:5px;background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none}
+.inp:focus{border-color:var(--indigo)}
+.inp-select{width:100%;padding:9px 12px;border:1px solid var(--border2);border-radius:5px;background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;cursor:pointer}
+textarea.inp{resize:vertical;min-height:80px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modal-actions{display:flex;gap:8px;margin-top:20px}
+.btn-primary{background:var(--indigo);color:#fff;border:none;padding:10px 20px;border-radius:5px;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
+.btn-ghost{background:none;border:1px solid var(--border2);color:var(--muted);padding:10px 20px;border-radius:5px;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
+
+/* BADGES */
+.badge{display:inline-flex;font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+
+/* LANG TOGGLE */
+.lang-toggle{display:flex;gap:4px}
+.lang-btn{background:none;border:1px solid var(--border2);color:var(--muted);padding:4px 10px;border-radius:4px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .12s}
+.lang-btn.active{background:rgba(91,95,239,.1);border-color:var(--indigo);color:var(--violet)}
+.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:"IBM Plex Mono",monospace;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="login.html" class="nav-logo"><div class="logo-mark">M2</div>
+    SLOI AI<span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en',this)">EN</button>
+      <button class="lang-btn" onclick="setLang('ar',this)">عر</button>
+      <button class="lang-btn" onclick="setLang('he',this)">עב</button>
+    </div>
+    <a href="m2m-homepage.html">Home</a>
+    <a href="docs.html">Suppliers</a>
+    <a href="about.html">About</a>
+    <a href="negotiation-agent.html">Agent office</a>
+    <a href="login.html" class="nav-pill">Dashboard →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><div class="pulse"></div><span id="badge-text">8 SUPPLIERS · 5 SECTORS · REAL-TIME PRICES</span></div>
+  <h1 id="hero-title">Find the <em>cheapest supplier</em><br/>in seconds</h1>
+  <p class="hero-sub" id="hero-sub">Type any commodity — steel, cement, wheat, diesel. Get ranked results by price across all verified SLOI AI suppliers.</p>
+</div>
+
+<!-- SEARCH -->
+<div style="padding:0 24px;position:relative;z-index:1">
+  <div class="search-card">
+    <div class="search-row">
+      <input class="main-input" id="product-input" placeholder="e.g. steel rebar, cement, diesel, wheat..." onkeydown="if(event.key==='Enter')doSearch()"/>
+      <input class="qty-input" id="qty-input" type="number" placeholder="Qty" min="1" value="100"/>
+      <select class="unit-select" id="unit-select">
+        <option>Ton</option><option>MT</option><option>m³</option><option>m²</option><option>Liter</option><option>kg</option><option>Unit</option>
+      </select>
+      <button class="search-btn" id="search-btn" onclick="doSearch()">
+        <span>⚡</span><span id="btn-text">Find best price</span>
+      </button>
+    </div>
+    <div class="quick-label" id="quick-label">// QUICK SEARCH</div>
+    <div class="quick-chips">
+      <div class="chip" onclick="quickSearch('Steel Rebar G60',100,'Ton')">🔩 Steel Rebar · 100T</div>
+      <div class="chip" onclick="quickSearch('Cement OPC 52.5',500,'Ton')">🏗️ Cement · 500T</div>
+      <div class="chip" onclick="quickSearch('Aluminum 6061',10,'Ton')">🔩 Aluminum · 10T</div>
+      <div class="chip" onclick="quickSearch('Industrial Diesel',10000,'Liter')">⚡ Diesel · 10,000L</div>
+      <div class="chip" onclick="quickSearch('Hard Wheat',50,'Ton')">🌾 Wheat · 50T</div>
+      <div class="chip" onclick="quickSearch('PVC Pipe 110mm',500,'Unit')">🏗️ PVC Pipe · 500 units</div>
+      <div class="chip" onclick="quickSearch('Sulfuric Acid 98%',5,'Ton')">🧪 Sulfuric Acid · 5T</div>
+      <div class="chip" onclick="quickSearch('PP Granules',20,'Ton')">🧪 PP Granules · 20T</div>
+    </div>
+  </div>
+</div>
+
+<!-- FILTERS -->
+<div class="filters" style="padding:0 24px;max-width:868px;margin:0 auto 20px" id="filter-bar" style="display:none">
+  <button class="filter-btn active" onclick="setSort('price',this)" id="sort-price">💰 Cheapest first</button>
+  <button class="filter-btn" onclick="setSort('lead',this)" id="sort-lead">⚡ Fastest delivery</button>
+  <button class="filter-btn" onclick="setSort('certs',this)" id="sort-certs">🏆 Most certified</button>
+  <button class="filter-btn" id="filter-ai-btn" onclick="toggleAIFilter()">🤖 AI-Ready only</button>
+  <button class="filter-btn" id="filter-loi-btn" onclick="toggleLOIFilter()">📋 LOI enabled</button>
+  <div class="sort-label">
+    <span id="result-summary"></span>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results-wrap" id="results-wrap" style="padding:0 24px;max-width:868px;margin:0 auto 60px">
+  <!-- Initial empty state -->
+  <div class="empty" id="empty-state">
+    <div class="empty-icon">🔍</div>
+    <div class="empty-title" id="empty-title">Search for any commodity</div>
+    <div class="empty-sub" id="empty-sub">Type a product name above — steel, cement, diesel, wheat, chemicals.<br/>Get ranked suppliers with real prices in seconds.</div>
+  </div>
+  <div id="results-list"></div>
+</div>
+
+<!-- COMPARE BAR -->
+<div class="compare-bar" id="compare-bar">
+  <div style="font-size:11px;color:var(--muted);white-space:nowrap">Compare:</div>
+  <div class="compare-items" id="compare-items"></div>
+  <button class="btn-rfq" onclick="showCompare()" style="white-space:nowrap">Compare <span id="compare-count">0</span> suppliers →</button>
+  <button onclick="clearCompare()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px">×</button>
+</div>
+
+<!-- RFQ MODAL -->
+<div class="modal" id="rfq-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="rfq-title">Send RFQ</div>
+    <div class="modal-sub" id="rfq-sub">Request a formal quote from this supplier via SLOI AI</div>
+    <div class="form-row">
+      <div class="form-field"><label class="form-label">PRODUCT</label><input class="inp" id="rfq-product" readonly/></div>
+      <div class="form-field"><label class="form-label">SUPPLIER</label><input class="inp" id="rfq-supplier" readonly/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label class="form-label">QUANTITY</label><input class="inp" id="rfq-qty" type="number"/></div>
+      <div class="form-field"><label class="form-label">UNIT</label><input class="inp" id="rfq-unit" readonly/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field"><label class="form-label">INCOTERM</label>
+        <select class="inp-select" id="rfq-inco"><option>FOB</option><option>CIF</option><option>DAP</option><option>EXW</option></select>
+      </div>
+      <div class="form-field"><label class="form-label">PAYMENT TERMS</label>
+        <select class="inp-select" id="rfq-payment"><option>TT (bank transfer)</option><option>LC at sight</option><option>TT 30% + LC</option></select>
+      </div>
+    </div>
+    <div class="form-field"><label class="form-label">DELIVERY REQUIRED BY</label><input class="inp" id="rfq-date" type="date"/></div>
+    <div class="form-field"><label class="form-label">MESSAGE (optional)</label>
+      <textarea class="inp" id="rfq-msg" placeholder="Any special requirements, certifications needed, delivery port..."></textarea>
+    </div>
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px 12px;font-size:11px;color:var(--muted);margin-bottom:4px">
+      ⚡ RFQ sent via SLOI AI · Supplier notified by email + WhatsApp · Response within 24h
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeRFQ()">Cancel</button>
+      <button class="btn-primary" style="flex:1" onclick="submitRFQ()">Send RFQ to supplier →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+var SUPPLIERS = [
+  {id:'SUP-001',name:'Supplier REF-BLD-001',sector:'building-materials',emoji:'🏗️',location:'Verified supplier',lead:3,payment:'Net+30',ai:true,loi:true,certs:['ISO 9001','Israeli Standard','CE'],
+    products:[
+      {keywords:['concrete block','block','concrete','בלוק','بلوك'],name:'Concrete Block 20cm',sku:'BLK-200',price:4.8,unit:'Unit',stock:12000,moq:500},
+      {keywords:['concrete block','block 15','בלוק','بلوك'],name:'Concrete Block 15cm',sku:'BLK-150',price:3.9,unit:'Unit',stock:8500,moq:500},
+      {keywords:['ready mix','ready-mix','concrete','בטון','بيتون','خرسانة'],name:'Ready-Mix Concrete B25',sku:'CNC-B25',price:380,unit:'m³',stock:200,moq:5},
+    ]},
+  {id:'SUP-002',name:'Supplier REF-BLD-002',sector:'building-materials',emoji:'🏗️',location:'Verified supplier',lead:7,payment:'Net+45',ai:true,loi:true,certs:['ISO 9001','Israeli Standard'],
+    products:[
+      {keywords:['tile','porcelain','ceramic','floor','אריח','بلاط','سيراميك'],name:'Porcelain Tile 60x60cm',sku:'TLE-6060',price:62,unit:'m²',stock:3200,moq:50},
+      {keywords:['wall tile','tile','ceramic','אריח','بلاط'],name:'Wall Tile 30x60cm',sku:'TLE-3060',price:48,unit:'m²',stock:1800,moq:30},
+    ]},
+  {id:'SUP-003',name:'Supplier REF-BLD-003',sector:'building-materials',emoji:'🏗️',location:'Verified supplier',lead:5,payment:'Net+30',ai:false,loi:false,certs:['ISO 9001','ISO 14001','CE'],
+    products:[
+      {keywords:['pvc','pipe','110','צינור','أنابيب','بولي'],name:'PVC Pipe 110mm',sku:'PVC-110',price:28,unit:'m',stock:5000,moq:100},
+      {keywords:['pvc','pipe','160','צינור','أنابيب'],name:'PVC Pipe 160mm',sku:'PVC-160',price:52,unit:'m',stock:2200,moq:100},
+    ]},
+  {id:'SUP-004',name:'Supplier REF-MET-001',sector:'metals',emoji:'🔩',location:'Verified supplier',lead:5,payment:'Net+30',ai:true,loi:true,certs:['ISO 9001','ISO 3834','CE'],
+    products:[
+      {keywords:['steel','rebar','bar','iron','12mm','12','פלדה','حديد','حديد تسليح'],name:'Steel Rebar G60 12mm',sku:'STL-RBR12',price:2840,unit:'Ton',stock:480,moq:5},
+      {keywords:['steel','rebar','bar','iron','16mm','16','פלדה','حديد'],name:'Steel Rebar G60 16mm',sku:'STL-RBR16',price:2890,unit:'Ton',stock:310,moq:5},
+      {keywords:['steel sheet','plate','coil','sheet','פח','صفائح'],name:'Steel Sheet 6mm',sku:'STL-PLT6',price:3100,unit:'Ton',stock:120,moq:2},
+    ]},
+  {id:'SUP-005',name:'Supplier REF-MET-002',sector:'metals',emoji:'🔩',location:'Verified supplier',lead:8,payment:'Net+45',ai:true,loi:true,certs:['ISO 9001','CE'],
+    products:[
+      {keywords:['aluminum','aluminium','6061','alloy','אלומיניום','ألمنيوم'],name:'Aluminum 6061-T6',sku:'ALU-6061',price:9200,unit:'Ton',stock:85,moq:1},
+      {keywords:['aluminum profile','profile','extrusion','aluminum','פרופיל','ألمنيوم'],name:'Aluminum Profile 40x40mm',sku:'ALU-PRF',price:38,unit:'m',stock:8000,moq:200},
+    ]},
+  {id:'SUP-006',name:'Supplier REF-ENE-001',sector:'energy',emoji:'⚡',location:'Verified supplier',lead:2,payment:'Net+14',ai:true,loi:true,certs:['ISO 14001','ISO 45001'],
+    products:[
+      {keywords:['diesel','fuel','gasoil','סולר','ديزل','وقود','دیزل'],name:'Industrial Diesel B2',sku:'DSL-B2',price:4.92,unit:'Liter',stock:500000,moq:5000},
+      {keywords:['lpg','gas','propane','butane','גז','غاز'],name:'LPG Gas Bulk',sku:'LPG-BLK',price:3.85,unit:'kg',stock:120000,moq:1000},
+    ]},
+  {id:'SUP-007',name:'Supplier REF-AGR-001',sector:'agriculture',emoji:'🌾',location:'Verified supplier',lead:4,payment:'Net+30',ai:true,loi:true,certs:['ISO 22000','Green Label'],
+    products:[
+      {keywords:['wheat','grain','hard wheat','חיטה','قمح','گندم'],name:'Hard Wheat',sku:'WHT-HRD',price:1120,unit:'Ton',stock:2400,moq:20},
+      {keywords:['corn','maize','yellow corn','תירס','ذرة','ذرت'],name:'Yellow Corn',sku:'CRN-YLW',price:980,unit:'Ton',stock:1800,moq:20},
+      {keywords:['soy','soybean','soya','crushed soy','סויה','فول الصويا'],name:'Crushed Soy',sku:'SOY-GRD',price:2100,unit:'Ton',stock:600,moq:10},
+    ]},
+  {id:'SUP-008',name:'Supplier REF-CHM-001',sector:'chemicals',emoji:'🧪',location:'Verified supplier',lead:6,payment:'Net+45',ai:false,loi:false,certs:['ISO 9001','ISO 14001','REACH'],
+    products:[
+      {keywords:['sulfuric acid','acid','h2so4','חומצה','حمض كبريتيك','حمض'],name:'Sulfuric Acid 98%',sku:'CHM-H2SO4',price:580,unit:'Ton',stock:200,moq:5},
+      {keywords:['caustic soda','naoh','soda','sodium hydroxide','סודה','صودا كاوية'],name:'Caustic Soda 50%',sku:'CHM-NaOH',price:420,unit:'Ton',stock:150,moq:5},
+    ]},
+];
+
+var CERT_COLORS={'ISO 9001':'#5b5fef','ISO 14001':'#22c55e','ISO 45001':'#f59e0b','ISO 22000':'#22c55e','ISO 3834':'#2dd4bf','CE':'#e8a94a','REACH':'#ef4444','Israeli Standard':'#8b8ff8','Green Label':'#22c55e'};
+
+var lang = 'en';
+var sortBy = 'price';
+var filterAI = false;
+var filterLOI = false;
+var compareList = [];
+var expandedId = null;
+var lastResults = [];
+var currentQuery = '';
+var currentQty = 100;
+var currentUnit = 'Ton';
+var rfqSupplier = null;
+
+// ── TRANSLATIONS ──────────────────────────────────────────────────────────────
+var T = {
+  en:{
+    badge:'8 SUPPLIERS · 5 SECTORS · REAL-TIME PRICES',
+    title:'Find the cheapest supplier in seconds',
+    sub:'Type any commodity — steel, cement, wheat, diesel. Get ranked results by price.',
+    quick:'// QUICK SEARCH',
+    btn:'Find best price',
+    empty_title:'Search for any commodity',
+    empty_sub:'Type a product name above — steel, cement, diesel, wheat, chemicals.\nGet ranked suppliers with real prices in seconds.',
+    cheapest:'Cheapest first',fastest:'Fastest delivery',certified:'Most certified',
+    ai_ready:'AI-Ready only',loi_only:'LOI enabled',
+    best_price:'BEST PRICE',save:'Save vs avg',
+    lead_time:'Lead time',payment:'Payment',stock:'In stock',moq:'MOQ',
+    certs:'Certifications',send_rfq:'Send RFQ',compare:'+ Compare',
+    ai_badge:'🤖 AI-Ready',loi_badge:'📋 LOI',
+    summary_found:'suppliers found for',
+    trilingual_en:'English',trilingual_ar:'Arabic',trilingual_he:'Hebrew',
+    rfq_title:'Send RFQ',rfq_sub:'Request a formal quote via SLOI AI',
+    product:'PRODUCT',supplier:'SUPPLIER',quantity:'QUANTITY',unit:'UNIT',
+    incoterm:'INCOTERM',payment_terms:'PAYMENT TERMS',delivery:'DELIVERY BY',message:'MESSAGE',
+    send:'Send RFQ to supplier →',cancel:'Cancel',
+    success:'RFQ sent successfully! Supplier will respond within 24h.',
+    pending:'Pending M2M',
+  },
+  ar:{
+    badge:'٨ موردون · ٥ قطاعات · أسعار لحظية',
+    title:'ابحث عن أرخص مورد في ثوانٍ',
+    sub:'اكتب أي سلعة — حديد، إسمنت، قمح، ديزل. احصل على نتائج مرتبة حسب السعر.',
+    quick:'// بحث سريع',
+    btn:'ابحث عن أفضل سعر',
+    empty_title:'ابحث عن أي سلعة',
+    empty_sub:'اكتب اسم المنتج أعلاه — حديد، إسمنت، ديزل، قمح، مواد كيميائية.\nاحصل على موردين مرتبين بأسعار حقيقية في ثوانٍ.',
+    cheapest:'الأرخص أولاً',fastest:'أسرع تسليم',certified:'الأكثر شهادات',
+    ai_ready:'متوافق مع الذكاء الاصطناعي',loi_only:'يدعم خطاب النوايا',
+    best_price:'أفضل سعر',save:'وفر مقارنة بالمتوسط',
+    lead_time:'مدة التسليم',payment:'الدفع',stock:'في المخزن',moq:'الحد الأدنى',
+    certs:'الشهادات',send_rfq:'إرسال طلب عرض',compare:'+ مقارنة',
+    ai_badge:'🤖 ذكاء اصطناعي',loi_badge:'📋 خطاب نوايا',
+    summary_found:'موردون لـ',
+    trilingual_en:'الإنجليزية',trilingual_ar:'العربية',trilingual_he:'العبرية',
+    rfq_title:'إرسال طلب عرض سعر',rfq_sub:'اطلب عرض سعر رسمي عبر بروتوكول M2M',
+    product:'المنتج',supplier:'المورد',quantity:'الكمية',unit:'الوحدة',
+    incoterm:'شروط التسليم',payment_terms:'شروط الدفع',delivery:'موعد التسليم',message:'رسالة',
+    send:'إرسال طلب العرض للمورد →',cancel:'إلغاء',
+    success:'تم إرسال طلب العرض! سيرد المورد خلال 24 ساعة.',
+    pending:'قيد المعالجة',
+  },
+  he:{
+    badge:'8 ספקים · 5 סקטורים · מחירים בזמן אמת',
+    title:'מצא את הספק הזול ביותר בשניות',
+    sub:'הקלד כל מוצר — פלדה, מלט, חיטה, סולר. קבל תוצאות ממוינות לפי מחיר.',
+    quick:'// חיפוש מהיר',
+    btn:'מצא מחיר הכי טוב',
+    empty_title:'חפש כל קומודיטי',
+    empty_sub:'הקלד שם מוצר למעלה — פלדה, מלט, סולר, חיטה, כימיקלים.\nקבל ספקים מדורגים עם מחירים אמיתיים בשניות.',
+    cheapest:'הזול ביותר קודם',fastest:'משלוח מהיר ביותר',certified:'הכי מוסמך',
+    ai_ready:'AI-Ready בלבד',loi_only:'LOI מופעל',
+    best_price:'מחיר הכי טוב',save:'חסכון ביחס לממוצע',
+    lead_time:'זמן אספקה',payment:'תשלום',stock:'במלאי',moq:'מינימום הזמנה',
+    certs:'אישורים',send_rfq:'שלח RFQ',compare:'+ השווה',
+    ai_badge:'🤖 AI-Ready',loi_badge:'📋 LOI',
+    summary_found:'ספקים נמצאו עבור',
+    trilingual_en:'אנגלית',trilingual_ar:'ערבית',trilingual_he:'עברית',
+    rfq_title:'שלח RFQ',rfq_sub:'בקש הצעת מחיר רשמית דרך SLOI AI',
+    product:'מוצר',supplier:'ספק',quantity:'כמות',unit:'יחידה',
+    incoterm:'אינקוטרם',payment_terms:'תנאי תשלום',delivery:'תאריך אספקה',message:'הודעה',
+    send:'שלח RFQ לספק →',cancel:'ביטול',
+    success:'RFQ נשלח! הספק יגיב תוך 24 שעות.',
+    pending:'ממתין ל-M2M',
+  }
+};
+
+function t(key){ return (T[lang]&&T[lang][key]) || T.en[key] || key; }
+
+function setLang(l, btn){
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.remove('active')});
+  if(btn) btn.classList.add('active');
+  document.dir = (l==='ar'||l==='he') ? 'rtl' : 'ltr';
+  updateUI();
+  if(lastResults.length) renderResults(lastResults);
+}
+
+function updateUI(){
+  document.getElementById('badge-text').textContent = t('badge');
+  document.getElementById('hero-title').innerHTML = lang==='en'?'Find the <em>cheapest supplier</em><br/>in seconds':
+    lang==='ar'?'ابحث عن <em>أرخص مورد</em><br/>في ثوانٍ':
+    'מצא את <em>הספק הזול ביותר</em><br/>בשניות';
+  document.getElementById('hero-sub').textContent = t('sub');
+  document.getElementById('quick-label').textContent = t('quick');
+  document.getElementById('btn-text').textContent = t('btn');
+  var ei = document.getElementById('empty-title');
+  var es = document.getElementById('empty-sub');
+  if(ei) ei.textContent = t('empty_title');
+  if(es) es.textContent = t('empty_sub');
+  document.getElementById('sort-price').textContent = '💰 '+t('cheapest');
+  var sl = document.getElementById('sort-lead');
+  var sc = document.getElementById('sort-certs');
+  var fa = document.getElementById('filter-ai-btn');
+  var fl = document.getElementById('filter-loi-btn');
+  if(sl) sl.textContent = '⚡ '+t('fastest');
+  if(sc) sc.textContent = '🏆 '+t('certified');
+  if(fa) fa.textContent = '🤖 '+t('ai_ready');
+  if(fl) fl.textContent = '📋 '+t('loi_only');
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+function quickSearch(product, qty, unit){
+  document.getElementById('product-input').value = product;
+  document.getElementById('qty-input').value = qty;
+  document.getElementById('unit-select').value = unit;
+  doSearch();
+}
+
+function doSearch(){
+  var q = document.getElementById('product-input').value.trim().toLowerCase();
+  var qty = parseFloat(document.getElementById('qty-input').value)||1;
+  var unit = document.getElementById('unit-select').value;
+  if(!q) return;
+  currentQuery = q; currentQty = qty; currentUnit = unit;
+
+  // Loading state
+  document.getElementById('empty-state').style.display='none';
+  document.getElementById('results-list').innerHTML =
+    '<div class="loading-state"><div style="font-size:13px;color:var(--muted)">⚡ Querying SLOI AI suppliers...</div><div class="loading-bar"><div class="loading-fill"></div></div></div>';
+  document.getElementById('filter-bar').style.display='flex';
+  document.getElementById('search-btn').disabled=true;
+
+  setTimeout(function(){
+    document.getElementById('search-btn').disabled=false;
+    var results = findMatches(q, qty);
+    lastResults = results;
+    renderResults(results);
+  }, 900);
+}
+
+function findMatches(q, qty){
+  var matches = [];
+  SUPPLIERS.forEach(function(s){
+    s.products.forEach(function(p){
+      var score = 0;
+      p.keywords.forEach(function(kw){ if(q.includes(kw)||kw.includes(q)) score+=kw.length; });
+      // also match product name words
+      p.name.toLowerCase().split(' ').forEach(function(w){ if(q.includes(w)||w.includes(q)) score+=w.length; });
+      if(score>0){
+        matches.push({
+          supplier: s,
+          product: p,
+          score: score,
+          total_price: p.price * qty,
+          in_stock: p.stock >= (p.moq||1),
+        });
+      }
+    });
+  });
+
+  // Remove duplicate products, keep best match per supplier
+  var seen = {};
+  matches = matches.filter(function(m){
+    var key = m.supplier.id+'-'+m.product.sku;
+    if(seen[key]) return false;
+    seen[key]=true; return true;
+  });
+
+  // Sort
+  matches.sort(function(a,b){
+    if(sortBy==='price') return a.product.price - b.product.price;
+    if(sortBy==='lead') return a.supplier.lead - b.supplier.lead;
+    if(sortBy==='certs') return b.supplier.certs.length - a.supplier.certs.length;
+    return a.product.price - b.product.price;
+  });
+
+  // Apply filters
+  if(filterAI) matches = matches.filter(function(m){return m.supplier.ai;});
+  if(filterLOI) matches = matches.filter(function(m){return m.supplier.loi;});
+
+  return matches;
+}
+
+function renderResults(results){
+  document.getElementById('empty-state').style.display='none';
+  if(!results.length){
+    document.getElementById('results-list').innerHTML =
+      '<div class="empty"><div class="empty-icon">🔍</div><div class="empty-title">No suppliers found</div><div class="empty-sub">Try a different product name or remove filters.</div></div>';
+    document.getElementById('result-summary').textContent = '0 results';
+    return;
+  }
+
+  var avgPrice = results.reduce(function(a,m){return a+m.product.price},0)/results.length;
+  document.getElementById('result-summary').textContent = results.length+' '+t('summary_found')+' "'+currentQuery+'"';
+
+  var html='';
+  results.forEach(function(m,i){
+    var s=m.supplier, p=m.product;
+    var isOpen = expandedId===(s.id+'-'+p.sku);
+    var isBest = i===0;
+    var saving = ((avgPrice-p.price)/avgPrice*100).toFixed(1);
+    var savingAmt = ((avgPrice-p.price)*currentQty).toFixed(0);
+    var inCompare = compareList.some(function(c){return c.id===s.id+'-'+p.sku});
+
+    html += '<div class="result-card'+(isBest?' best':'')+(isOpen?' selected':'')+'" id="rc-'+s.id+'-'+p.sku+'">';
+
+    // HEADER
+    html += '<div class="rc-header" onclick="toggleExpand(\''+s.id+'-'+p.sku+'\')">';
+    // Rank
+    var rankClass = i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':'rank-n';
+    html += '<div class="rank-badge '+rankClass+'">'+(i+1)+'</div>';
+    // Supplier info
+    html += '<div>';
+    html += '<div class="rc-name">'+s.name+'</div>';
+    html += '<div class="rc-meta">';
+    html += '<span class="rc-sector">'+s.emoji+' '+s.sector.replace('-',' ')+'</span>';
+    html += '<span>📍 '+s.location+'</span>';
+    html += '<span>⏱ '+s.lead+'d '+t('lead_time')+'</span>';
+    html += '<span>📦 '+p.name+'</span>';
+    if(s.ai) html+='<span class="badge bg" style="font-size:9px">'+t('ai_badge')+'</span>';
+    if(s.loi) html+='<span class="badge bv" style="font-size:9px">'+t('loi_badge')+'</span>';
+    if(isBest) html+='<span class="badge bg" style="font-size:9px">✓ '+t('best_price')+'</span>';
+    html += '</div></div>';
+    // Price block
+    html += '<div class="rc-price-block">';
+    html += '<div class="rc-price" style="color:'+(isBest?'var(--green)':i===1?'var(--gold)':'var(--white)')+'">$'+p.price.toLocaleString()+'<span style="font-size:12px;font-weight:400;color:var(--muted);">/'+p.unit+'</span></div>';
+    html += '<div class="rc-total">Total: <strong>$'+Math.round(p.price*currentQty).toLocaleString()+'</strong> ('+currentQty+' '+currentUnit+')</div>';
+    if(i>0 && saving>0) html += '<div class="rc-saving" style="color:var(--red)">↑ +'+saving+'% vs best</div>';
+    if(i===0 && results.length>1) html += '<div class="rc-saving" style="color:var(--green)">✓ Cheapest — save ~$'+Math.abs(savingAmt).toLocaleString()+'</div>';
+    html += '</div>';
+    // Actions
+    html += '<div class="rc-actions">';
+    html += '<button class="btn-rfq" onclick="event.stopPropagation();openRFQ(\''+s.id+'\',\''+p.sku+'\',\''+p.name+'\',\''+s.name+'\','+p.price+')">'+t('send_rfq')+'</button>';
+    html += '<button class="btn-compare'+(inCompare?' added':'')+'" onclick="event.stopPropagation();toggleCompare(\''+s.id+'-'+p.sku+'\',\''+s.name+'\','+p.price+',\''+p.unit+'\')">'+
+      (inCompare?'✓ Added':t('compare'))+'</button>';
+    html += '</div>';
+    html += '</div>'; // rc-header
+
+    // EXPANDED DETAIL
+    html += '<div class="rc-detail'+(isOpen?' open':'')+'" id="rd-'+s.id+'-'+p.sku+'">';
+    // Detail grid
+    html += '<div class="detail-grid">';
+    html += '<div class="detail-box"><div class="detail-lbl">'+t('lead_time').toUpperCase()+'</div><div class="detail-val">'+s.lead+' days</div></div>';
+    html += '<div class="detail-box"><div class="detail-lbl">'+t('payment').toUpperCase()+'</div><div class="detail-val">'+s.payment+'</div></div>';
+    html += '<div class="detail-box"><div class="detail-lbl">'+t('stock').toUpperCase()+'</div><div class="detail-val" style="color:'+(p.stock>500?'var(--green)':'var(--gold)')+'">'+p.stock.toLocaleString()+' '+p.unit+'</div></div>';
+    html += '<div class="detail-box"><div class="detail-lbl">'+t('moq').toUpperCase()+'</div><div class="detail-val">'+p.moq+' '+p.unit+'</div></div>';
+    html += '</div>';
+    // Certs
+    html += '<div class="detail-lbl" style="margin-bottom:6px">'+t('certs').toUpperCase()+'</div>';
+    html += '<div class="cert-row" style="margin-bottom:14px">';
+    s.certs.forEach(function(c){
+      var col=CERT_COLORS[c]||'#666';
+      html+='<span class="cert" style="border-color:'+col+'44;color:'+col+'">'+c+'</span>';
+    });
+    html += '</div>';
+    // Trilingual summary
+    html += '<div class="detail-lbl" style="margin-bottom:6px">PRICE SUMMARY · 3 LANGUAGES</div>';
+    html += '<div class="trilingual">';
+    html += '<div class="lang-box"><div class="lang-lbl">'+t('trilingual_en').toUpperCase()+' 🇬🇧</div><div class="lang-val"><strong>'+p.name+'</strong><br/>$'+p.price+' / '+p.unit+'<br/>'+s.name+'<br/>'+s.location+'<br/>Lead: '+s.lead+' days</div></div>';
+    html += '<div class="lang-box" dir="rtl"><div class="lang-lbl">'+t('trilingual_ar').toUpperCase()+' 🇸🇦</div><div class="lang-val" style="font-size:12px"><strong>'+getArabicName(p)+'</strong><br/>$'+p.price+' / '+p.unit+'<br/>'+s.name+'<br/>إسرائيل<br/>التسليم: '+s.lead+' أيام</div></div>';
+    html += '<div class="lang-box" dir="rtl"><div class="lang-lbl">'+t('trilingual_he').toUpperCase()+' 🇮🇱</div><div class="lang-val"><strong>'+getHebrewName(p)+'</strong><br/>$'+p.price+' / '+p.unit+'<br/>'+s.name+'<br/>ישראל<br/>אספקה: '+s.lead+' ימים</div></div>';
+    html += '</div>';
+    // API endpoint
+    html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px 12px;font-size:10px;color:var(--muted);margin-top:4px">';
+    html += '<span style="color:#2a2a4a">// M2M agent access · </span>';
+    html += '<span style="color:var(--teal)">GET </span><span style="color:var(--violet)">/api/v1/suppliers/'+s.id+'/products?sku='+p.sku+'</span>';
+    html += '</div>';
+    html += '</div>'; // rc-detail
+    html += '</div>'; // result-card
+  });
+
+  document.getElementById('results-list').innerHTML = html;
+}
+
+function getArabicName(p){
+  var map = {
+    'STL-RBR12':'حديد تسليح 12مم','STL-RBR16':'حديد تسليح 16مم','STL-PLT6':'صفائح حديد 6مم',
+    'BLK-200':'بلوك خرساني 20سم','BLK-150':'بلوك خرساني 15سم','CNC-B25':'خرسانة جاهزة B25',
+    'TLE-6060':'بلاط بورسلان 60×60','TLE-3060':'بلاط حائط 30×60',
+    'PVC-110':'أنابيب PVC 110مم','PVC-160':'أنابيب PVC 160مم',
+    'ALU-6061':'ألمنيوم 6061-T6','ALU-PRF':'بروفيل ألمنيوم 40×40',
+    'DSL-B2':'ديزل صناعي B2','LPG-BLK':'غاز LPG سائل',
+    'WHT-HRD':'قمح صلب','CRN-YLW':'ذرة صفراء','SOY-GRD':'صويا مطحونة',
+    'CHM-H2SO4':'حمض كبريتيك 98%','CHM-NaOH':'صودا كاوية 50%',
+  };
+  return map[p.sku] || p.name;
+}
+
+function getHebrewName(p){
+  var map = {
+    'STL-RBR12':'פלדה מצולעת 12מ"מ','STL-RBR16':'פלדה מצולעת 16מ"מ','STL-PLT6':'פח פלדה 6מ"מ',
+    'BLK-200':'בלוק בטון 20 ס"מ','BLK-150':'בלוק בטון 15 ס"מ','CNC-B25':'בטון מוכן B25',
+    'TLE-6060':'אריח פורצלן 60×60','TLE-3060':'אריח קיר 30×60',
+    'PVC-110':'צינור PVC 110מ"מ','PVC-160':'צינור PVC 160מ"מ',
+    'ALU-6061':'אלומיניום 6061-T6','ALU-PRF':'פרופיל אלומיניום 40×40',
+    'DSL-B2':'סולר תעשייתי B2','LPG-BLK':'גז LPG',
+    'WHT-HRD':'חיטה קשה','CRN-YLW':'תירס צהוב','SOY-GRD':'סויה גרוסה',
+    'CHM-H2SO4':'חומצה גופרתית 98%','CHM-NaOH':'סודה קאוסטית 50%',
+  };
+  return map[p.sku] || p.name;
+}
+
+function toggleExpand(id){
+  expandedId = (expandedId===id)?null:id;
+  if(lastResults.length) renderResults(lastResults);
+}
+
+// ── SORT / FILTER ──────────────────────────────────────────────────────────────
+function setSort(s,btn){
+  sortBy=s;
+  document.querySelectorAll('.filter-btn').forEach(function(b){if(['sort-price','sort-lead','sort-certs'].includes(b.id))b.classList.remove('active')});
+  btn.classList.add('active');
+  if(lastResults.length){lastResults=findMatches(currentQuery,currentQty);renderResults(lastResults);}
+}
+function toggleAIFilter(){
+  filterAI=!filterAI;
+  document.getElementById('filter-ai-btn').classList.toggle('active',filterAI);
+  if(lastResults.length){lastResults=findMatches(currentQuery,currentQty);renderResults(lastResults);}
+}
+function toggleLOIFilter(){
+  filterLOI=!filterLOI;
+  document.getElementById('filter-loi-btn').classList.toggle('active',filterLOI);
+  if(lastResults.length){lastResults=findMatches(currentQuery,currentQty);renderResults(lastResults);}
+}
+
+// ── COMPARE ───────────────────────────────────────────────────────────────────
+function toggleCompare(id,name,price,unit){
+  var idx=compareList.findIndex(function(c){return c.id===id});
+  if(idx>=0){ compareList.splice(idx,1); }
+  else if(compareList.length<4){ compareList.push({id,name,price,unit}); }
+  else{ alert('Max 4 suppliers to compare.'); return; }
+  updateCompareBar();
+  if(lastResults.length) renderResults(lastResults);
+}
+function updateCompareBar(){
+  var bar=document.getElementById('compare-bar');
+  if(compareList.length===0){bar.classList.remove('visible');return;}
+  bar.classList.add('visible');
+  document.getElementById('compare-count').textContent=compareList.length;
+  var html='';
+  compareList.forEach(function(c){
+    html+='<div class="compare-item">'+c.name+' <strong style="color:var(--violet)">$'+c.price+'/'+c.unit+'</strong><button onclick="toggleCompare(\''+c.id+'\',\''+c.name+'\','+c.price+',\''+c.unit+'\')">×</button></div>';
+  });
+  document.getElementById('compare-items').innerHTML=html;
+}
+function clearCompare(){ compareList=[]; updateCompareBar(); if(lastResults.length) renderResults(lastResults); }
+function showCompare(){
+  if(compareList.length<2){alert('Select at least 2 suppliers to compare.');return;}
+  var best=compareList.reduce(function(a,b){return a.price<b.price?a:b});
+  var msg='PRICE COMPARISON\n\n';
+  compareList.sort(function(a,b){return a.price-b.price}).forEach(function(c,i){
+    msg+=(i===0?'✓ CHEAPEST: ':'  ')+'$'+c.price+'/'+c.unit+' — '+c.name+'\n';
+  });
+  msg+='\nBest deal: '+best.name+' at $'+best.price+'/'+best.unit;
+  alert(msg);
+}
+
+// ── RFQ MODAL ──────────────────────────────────────────────────────────────────
+function openRFQ(supplierId,sku,productName,supplierName,price){
+  rfqSupplier={supplierId,sku,productName,supplierName,price};
+  document.getElementById('rfq-title').textContent=t('rfq_title')+' — '+supplierName;
+  document.getElementById('rfq-sub').textContent=t('rfq_sub');
+  document.getElementById('rfq-product').value=productName;
+  document.getElementById('rfq-supplier').value=supplierName;
+  document.getElementById('rfq-qty').value=currentQty;
+  document.getElementById('rfq-unit').value=currentUnit;
+  // set default date 30 days from now
+  var d=new Date();d.setDate(d.getDate()+30);
+  document.getElementById('rfq-date').value=d.toISOString().split('T')[0];
+  document.getElementById('rfq-modal').classList.add('open');
+}
+function closeRFQ(){ document.getElementById('rfq-modal').classList.remove('open'); }
+function submitRFQ(){
+  var qty=document.getElementById('rfq-qty').value;
+  var inco=document.getElementById('rfq-inco').value;
+  var pay=document.getElementById('rfq-payment').value;
+  var date=document.getElementById('rfq-date').value;
+  var msg=document.getElementById('rfq-msg').value;
+  if(!qty){alert('Enter quantity.');return;}
+  closeRFQ();
+  alert('✓ '+t('success')+'\n\nSupplier: '+rfqSupplier.supplierName+'\nProduct: '+rfqSupplier.productName+'\nQty: '+qty+' '+currentUnit+'\nIncoterm: '+inco+'\nPayment: '+pay+'\nDelivery by: '+date+'\n\nRef: RFQ-'+Date.now().toString().slice(-8));
+}
+
+// Init
+updateUI();
+</script>
+</body>
+</html>

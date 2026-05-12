@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI — Daily Briefing</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;
+  --border:#1c1c2e;--border2:#252538;
+  --indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;
+  --text:#d4d2f0;--white:#eeedf8;
+  --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 600px 300px at 20% 10%,rgba(91,95,239,.05) 0%,transparent 70%),
+    radial-gradient(ellipse 400px 200px at 80% 80%,rgba(45,212,191,.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:52px;
+  background:rgba(7,7,15,.95);border-bottom:1px solid var(--border);
+  backdrop-filter:blur(12px);
+}
+.nav-logo{font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-right{display:flex;align-items:center;gap:10px;font-size:11px}
+.nav-right a{color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-right a:hover{color:var(--violet)}
+.live-pill{display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 12px;border-radius:20px;font-size:10px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+#clock{font-size:12px;color:var(--muted);font-family:'Fraunces',serif;font-weight:700}
+
+/* PAGE */
+.page{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:32px 28px 80px}
+
+/* HERO DATE */
+.hero-date{margin-bottom:28px}
+.date-eyebrow{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.date-h1{font-family:'Fraunces',serif;font-size:clamp(36px,5vw,56px);font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:.95;margin-bottom:8px}
+.date-h1 em{font-style:italic;color:var(--indigo)}
+.date-sub{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:12px}
+
+/* GENERATE BTN */
+.generate-bar{display:flex;gap:10px;align-items:center;margin-bottom:32px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:10px}
+.gen-btn{background:var(--indigo);color:#fff;border:none;padding:12px 24px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;gap:8px;transition:opacity .15s;white-space:nowrap}
+.gen-btn:hover{opacity:.85}
+.gen-btn:disabled{opacity:.4;cursor:not-allowed}
+.gen-sub{font-size:11px;color:var(--muted);line-height:1.6;flex:1}
+.gen-time{font-size:11px;color:var(--muted)}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* CONTEXT INPUTS */
+.context-section{margin-bottom:24px}
+.context-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ctx-field{display:flex;flex-direction:column;gap:4px}
+.ctx-label{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.ctx-inp{background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:8px 11px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;width:100%}
+.ctx-inp:focus{border-color:var(--indigo)}
+.ctx-inp::placeholder{color:var(--muted)}
+.ctx-inp textarea{resize:vertical;min-height:60px;line-height:1.6}
+
+/* BRIEFING OUTPUT */
+.briefing{display:none}
+.briefing.show{display:block}
+
+/* SECTIONS */
+.b-section{margin-bottom:20px}
+.b-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.b-icon{font-size:18px}
+.b-title{font-size:11px;font-weight:700;color:var(--white);letter-spacing:.06em;text-transform:uppercase}
+.b-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px}
+
+/* TOP 3 BULLETS */
+.bullets{display:flex;flex-direction:column;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.bullet-item{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border-bottom:1px solid var(--border);transition:background .12s}
+.bullet-item:last-child{border-bottom:none}
+.bullet-item:hover{background:var(--surface2)}
+.b-num{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:rgba(91,95,239,.2);flex-shrink:0;line-height:1;width:28px}
+.b-text{flex:1;font-size:13px;color:var(--text);line-height:1.7}
+.b-text strong{color:var(--white)}
+
+/* TODAY TASKS */
+.task-list{display:flex;flex-direction:column;gap:8px}
+.task-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;transition:all .15s;cursor:pointer}
+.task-item:hover{border-color:rgba(91,95,239,.3)}
+.task-item.done{opacity:.5}
+.task-item.done .task-text{text-decoration:line-through}
+.task-check{width:18px;height:18px;border-radius:4px;border:1px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;margin-top:1px}
+.task-item.done .task-check{background:var(--green);border-color:var(--green);color:#fff}
+.task-priority{font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;flex-shrink:0;letter-spacing:.04em;margin-top:2px}
+.tp-high{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+.tp-med{background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.tp-low{background:rgba(82,82,110,.12);border:1px solid rgba(82,82,110,.25);color:var(--muted)}
+.task-text{flex:1;font-size:12px;color:var(--text);line-height:1.5}
+.task-action{font-size:10px;color:var(--indigo);flex-shrink:0;cursor:pointer;padding:2px 8px;border:1px solid rgba(91,95,239,.2);border-radius:3px;transition:all .15s}
+.task-action:hover{background:rgba(91,95,239,.1)}
+
+/* MONEY STRIP */
+.money-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.ms{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px}
+.ms-label{font-size:9px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.ms-val{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--white);letter-spacing:-.02em}
+.ms-sub{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* AGENTS NEEDING APPROVAL */
+.approval-list{display:flex;flex-direction:column;gap:8px}
+.approval-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px}
+.approval-item.urgent{border-color:rgba(232,169,74,.4)}
+.ai-avatar{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.ai-body{flex:1;min-width:0}
+.ai-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px}
+.ai-sub{font-size:10px;color:var(--muted)}
+.ai-actions{display:flex;gap:6px;flex-shrink:0}
+.btn{padding:6px 13px;border-radius:4px;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;transition:all .12s}
+.btn:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-g{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--green)}.btn-g:hover{background:rgba(34,197,94,.2)}
+.btn-r{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.25);color:var(--red)}.btn-r:hover{background:rgba(239,68,68,.15)}
+
+/* FOLLOW-UP LUTC */
+.followup-list{display:flex;flex-direction:column;gap:6px}
+.fu-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:12px}
+.fu-item.overdue{border-color:rgba(239,68,68,.3)}
+.fu-flag{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.fu-name{font-weight:600;color:var(--white);flex:1}
+.fu-context{color:var(--muted);font-size:11px;flex:1}
+.fu-days{font-size:10px;padding:2px 8px;border-radius:3px;flex-shrink:0}
+.fu-link{color:var(--indigo);font-size:11px;cursor:pointer;flex-shrink:0}
+.fu-link:hover{color:var(--violet)}
+
+/* MARKET PULSE */
+.market-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mkt-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px}
+.mkt-commodity{font-size:12px;font-weight:600;color:var(--white);margin-bottom:4px}
+.mkt-price{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:2px}
+.mkt-change{font-size:11px}
+.up{color:var(--green)}.dn{color:var(--red)}.flat{color:var(--muted)}
+.mkt-note{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.5}
+
+/* AI INSIGHT BOX */
+.insight-box{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:18px;margin-bottom:20px;position:relative;overflow:hidden}
+.insight-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--indigo),var(--violet),var(--teal))}
+.ib-label{font-size:9px;color:var(--indigo);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.ib-text{font-size:13px;color:var(--text);line-height:1.85}
+.ib-text strong{color:var(--white)}
+
+/* LOADING SKELETON */
+.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;height:16px;margin-bottom:8px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* DIVIDER */
+.section-divider{display:flex;align-items:center;gap:14px;margin:24px 0 16px;color:var(--muted);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.section-divider::before,.section-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* QUICK LINKS */
+.quick-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.ql{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:8px 16px;border-radius:5px;font-size:11px;text-decoration:none;transition:all .15s;display:flex;align-items:center;gap:6px}
+.ql:hover{border-color:var(--indigo);color:var(--violet)}
+
+/* PRINT / SHARE */
+@media print{
+  nav,.generate-bar,.context-section,.quick-links{display:none}
+  body{background:white;color:#111}
+  .page{padding:20px}
+}
+.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="CommodEx_Admin.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <div class="nav-right">
+    <div class="live-pill"><div class="live-dot"></div>Live</div>
+    <div id="clock"></div>
+    <a href="CommodEx_Admin.html">War Room</a>
+    <a href="negotiation-agent.html">Agents</a>
+    <a href="login.html">← Platform</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <!-- HERO DATE -->
+  <div class="hero-date">
+    <div class="date-eyebrow">Good morning, Boss</div>
+    <div class="date-h1" id="date-display">Loading<em>...</em></div>
+    <div class="date-sub">
+      <span id="day-name"></span>
+      <span style="color:var(--border2)">·</span>
+      <span id="week-num"></span>
+      <span style="color:var(--border2)">·</span>
+      <span style="color:var(--indigo)">SLOI AI · SLOI AI</span>
+    </div>
+  </div>
+
+  <!-- CONTEXT + GENERATE -->
+  <div class="context-section">
+    <div style="font-size:10px;color:var(--muted);letter-spacing:.06em;margin-bottom:8px;text-transform:uppercase">// What happened yesterday? (optional — makes briefing smarter)</div>
+    <div class="context-grid">
+      <div class="ctx-field">
+        <label class="ctx-label">Open deals / direct payment</label>
+        <input class="ctx-inp" id="ctx-deals" placeholder="e.g. NEOM deal $508K — B/L still missing"/>
+      </div>
+      <div class="ctx-field">
+        <label class="ctx-label">Leads in pipeline</label>
+        <input class="ctx-inp" id="ctx-leads" placeholder="e.g. Gulf Cement UAE — sent RFQ yesterday"/>
+      </div>
+      <div class="ctx-field">
+        <label class="ctx-label">Pending follow-ups</label>
+        <input class="ctx-inp" id="ctx-followups" placeholder="e.g. Atlas Trading — no reply in 3 days"/>
+      </div>
+      <div class="ctx-field">
+        <label class="ctx-label">Anything specific to focus on</label>
+        <input class="ctx-inp" id="ctx-focus" placeholder="e.g. push cement sector, need 2 new deals this week"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="generate-bar">
+    <button class="gen-btn" id="gen-btn" onclick="generateBriefing()">
+      <span id="gen-icon">⚡</span>
+      <span id="gen-text">Generate today's briefing</span>
+    </button>
+    <div class="gen-sub">
+      Claude reads your context + SLOI AI data → generates a personalized action plan for today.<br/>
+      Takes ~10 seconds. Refreshes every morning.
+    </div>
+    <div class="gen-time" id="last-gen"></div>
+  </div>
+
+  <!-- STATIC SECTIONS (always visible) -->
+  <div class="section-divider">Money</div>
+
+  <div class="money-strip">
+    <div class="ms">
+      <div class="ms-label">direct payment held</div>
+      <div class="ms-val" style="color:var(--indigo)">$762K</div>
+      <div class="ms-sub">2 deals pending</div>
+    </div>
+    <div class="ms">
+      <div class="ms-label">Revenue MTD</div>
+      <div class="ms-val" style="color:var(--green)">$18,420</div>
+      <div class="ms-sub">1% of $1.84M volume</div>
+    </div>
+    <div class="ms">
+      <div class="ms-label">Payouts pending</div>
+      <div class="ms-val" style="color:var(--gold)">$519K</div>
+      <div class="ms-sub">Supplier REF-MET-001 + Galilee</div>
+    </div>
+    <div class="ms">
+      <div class="ms-label">Open pipeline</div>
+      <div class="ms-val">$2.4M</div>
+      <div class="ms-sub">14 leads active</div>
+    </div>
+  </div>
+
+  <!-- AGENTS NEEDING APPROVAL -->
+  <div class="section-divider">Needs your approval</div>
+  <div class="approval-list">
+    <div class="approval-item urgent">
+      <div class="ai-avatar" style="background:rgba(34,197,94,.12)">✅</div>
+      <div class="ai-body">
+        <div class="ai-title">Release direct payment — Supplier REF-MET-001</div>
+        <div class="ai-sub">Steel Rebar 1,000 MT · $508,000 · All docs verified · SWIFT ready</div>
+      </div>
+      <div class="ai-actions">
+        <button class="btn btn-g" onclick="approveAction(this,'Escrow released — $467,360 SWIFT to Supplier REF-MET-001')">✅ Release SWIFT</button>
+        <button class="btn" onclick="window.open('payments.html','_blank')">View docs</button>
+      </div>
+    </div>
+    <div class="approval-item urgent">
+      <div class="ai-avatar" style="background:rgba(232,169,74,.12)">🤝</div>
+      <div class="ai-body">
+        <div class="ai-title">NegotiationAgent — approve deal at $508/MT</div>
+        <div class="ai-sub">Atlas Trading · Steel 500 MT · Round 4/5 · Floor: $2,520/MT · This offer: $508/MT ✓ above floor</div>
+      </div>
+      <div class="ai-actions">
+        <button class="btn btn-g" onclick="approveAction(this,'Deal approved. LOI drafting started.')">✓ Approve</button>
+        <button class="btn btn-r" onclick="approveAction(this,'Deal rejected. Agent will counter.')">Reject</button>
+      </div>
+    </div>
+    <div class="approval-item">
+      <div class="ai-avatar" style="background:rgba(91,95,239,.12)">📄</div>
+      <div class="ai-body">
+        <div class="ai-title">LOIDrafter — LOI ready for Gulf Cement</div>
+        <div class="ai-sub">Cement OPC 52.5 · 500 MT · $31,500 · FOB Verified location · Awaiting your signature</div>
+      </div>
+      <div class="ai-actions">
+        <button class="btn btn-g" onclick="window.open('loi-generator.html','_blank')">📄 Review LOI</button>
+        <button class="btn" onclick="approveAction(this,'LOI sent to Gulf Cement.')">Send it</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOLLOW-UPS -->
+  <div class="section-divider">Follow-ups needed</div>
+  <div class="followup-list" id="followup-list">
+    <div class="fu-item overdue">
+      <div class="fu-flag" style="background:var(--red)"></div>
+      <div class="fu-name">Atlas Trading</div>
+      <div class="fu-context">No reply to steel quote · 4 days ago</div>
+      <div class="fu-days" style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)">4 days</div>
+      <div class="fu-link" onclick="openAgentForFollowup('Atlas Trading','steel quote, 4 days no reply')">🤖 Write follow-up</div>
+    </div>
+    <div class="fu-item overdue">
+      <div class="fu-flag" style="background:var(--gold)"></div>
+      <div class="fu-name">Gulf Cement LLC</div>
+      <div class="fu-context">Registered 2 days ago · No RFQ yet</div>
+      <div class="fu-days" style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)">2 days</div>
+      <div class="fu-link" onclick="openAgentForFollowup('Gulf Cement LLC','registered 2 days ago, no RFQ sent yet')">🤖 Write follow-up</div>
+    </div>
+    <div class="fu-item">
+      <div class="fu-flag" style="background:var(--blue)"></div>
+      <div class="fu-name">Bauer GmbH</div>
+      <div class="fu-context">Wheat inquiry · Sent initial message · 1 day ago</div>
+      <div class="fu-days" style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:var(--blue)">1 day</div>
+      <div class="fu-link" onclick="openAgentForFollowup('Bauer GmbH','wheat inquiry, sent first message 1 day ago')">🤖 Write follow-up</div>
+    </div>
+    <div class="fu-item">
+      <div class="fu-flag" style="background:var(--muted)"></div>
+      <div class="fu-name">Supplier REF-BLD-003 — document reminder</div>
+      <div class="fu-context">B/L still missing · Shipped 48h ago</div>
+      <div class="fu-days" style="background:var(--surface2);border:1px solid var(--border2);color:var(--muted)">48h</div>
+      <div class="fu-link" onclick="openAgentForFollowup('Supplier REF-BLD-003 supplier','B/L still missing, shipped 48h ago')">🤖 Chase docs</div>
+    </div>
+  </div>
+
+  <!-- MARKET PULSE -->
+  <div class="section-divider">Market pulse</div>
+  <div class="market-grid">
+    <div class="mkt-card">
+      <div class="mkt-commodity">🔩 Steel Rebar G60</div>
+      <div class="mkt-price">$2,840<span style="font-size:13px;color:var(--muted)">/MT</span></div>
+      <div class="mkt-change up">▲ +1.8% this week</div>
+      <div class="mkt-note">Stock: 480 MT · Supplier REF-MET-001 · Good time to push to buyers</div>
+    </div>
+    <div class="mkt-card">
+      <div class="mkt-commodity">🏗️ Cement OPC 52.5</div>
+      <div class="mkt-price">$63<span style="font-size:13px;color:var(--muted)">/MT</span></div>
+      <div class="mkt-change dn">▼ -0.4% this week</div>
+      <div class="mkt-note">Supplier REF-BLD-001 surplus · 2,000 MT · Negotiate below list</div>
+    </div>
+    <div class="mkt-card">
+      <div class="mkt-commodity">🔩 Aluminum 6061-T6</div>
+      <div class="mkt-price">$9,200<span style="font-size:13px;color:var(--muted)">/MT</span></div>
+      <div class="mkt-change up">▲ +2.3% this week</div>
+      <div class="mkt-note">Only 85 MT left · Mediterranean Alum · Low stock alert</div>
+    </div>
+    <div class="mkt-card">
+      <div class="mkt-commodity">⚡ Diesel B2</div>
+      <div class="mkt-price">$4.92<span style="font-size:13px;color:var(--muted)">/L</span></div>
+      <div class="mkt-change dn">▼ -0.4% this week</div>
+      <div class="mkt-note">500,000 L stock · Fast mover · Good for bulk deals</div>
+    </div>
+    <div class="mkt-card">
+      <div class="mkt-commodity">🌾 Hard Wheat</div>
+      <div class="mkt-price">$1,120<span style="font-size:13px;color:var(--muted)">/MT</span></div>
+      <div class="mkt-change dn">▼ -0.7% this week</div>
+      <div class="mkt-note">Supplier REF-AGR-001 surplus · 40-day window · Push to MENA</div>
+    </div>
+    <div class="mkt-card">
+      <div class="mkt-commodity">🧪 Sulfuric Acid 98%</div>
+      <div class="mkt-price">$580<span style="font-size:13px;color:var(--muted)">/MT</span></div>
+      <div class="mkt-change flat">→ Stable</div>
+      <div class="mkt-note">Supplier REF-CHM-001 · 200 MT · Industrial buyers only</div>
+    </div>
+  </div>
+
+  <!-- AI BRIEFING OUTPUT -->
+  <div class="briefing" id="briefing-output">
+
+    <div class="section-divider">AI Briefing — <span id="briefing-time"></span></div>
+
+    <!-- INSIGHT -->
+    <div class="insight-box" id="insight-box">
+      <div class="ib-label">🤖 Claude · SLOI AI Intelligence</div>
+      <div class="ib-text" id="insight-text">
+        <div class="skeleton" style="width:90%"></div>
+        <div class="skeleton" style="width:75%"></div>
+        <div class="skeleton" style="width:85%"></div>
+      </div>
+    </div>
+
+    <!-- TOP 3 -->
+    <div class="b-section" id="bullets-section">
+      <div class="b-header">
+        <div class="b-icon">📍</div>
+        <div class="b-title">What happened (yesterday / since last check)</div>
+      </div>
+      <div class="bullets" id="bullets-list"></div>
+    </div>
+
+    <!-- TODAY'S TASKS -->
+    <div class="b-section" id="tasks-section">
+      <div class="b-header">
+        <div class="b-icon">✅</div>
+        <div class="b-title">Your tasks today — ordered by priority</div>
+        <span class="b-badge" style="background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)" id="task-count">0 tasks</span>
+      </div>
+      <div class="task-list" id="task-list"></div>
+    </div>
+
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div class="quick-links">
+    <a href="CommodEx_Admin.html" class="ql">🔴 War Room</a>
+    <a href="negotiation-agent.html" class="ql">🤖 Agent Hub</a>
+    <a href="payments.html" class="ql">🔒 direct payment</a>
+    <a href="loi-generator.html" class="ql">📄 LOI Generator</a>
+    <a href="price-discovery.html" class="ql">🔍 Price Discovery</a>
+    <a href="whatsapp-templates.html" class="ql">📱 WhatsApp Templates</a>
+    <a href="docs.html" class="ql">🏭 Suppliers</a>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// ── CLOCK & DATE ──────────────────────────────────────────────────────────────
+function initDate(){
+  var now = new Date();
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  // Date display
+  var d = now.getDate();
+  var suffix = d===1||d===21||d===31?'st':d===2||d===22?'nd':d===3||d===23?'rd':'th';
+  document.getElementById('date-display').innerHTML = months[now.getMonth()]+' <em>'+d+suffix+'</em>';
+  document.getElementById('day-name').textContent = days[now.getDay()];
+
+  // Week number
+  var startOfYear = new Date(now.getFullYear(),0,1);
+  var weekNum = Math.ceil(((now - startOfYear)/86400000 + startOfYear.getDay()+1)/7);
+  document.getElementById('week-num').textContent = 'Week '+weekNum+' of '+now.getFullYear();
+}
+
+function tick(){
+  var now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' UTC';
+}
+setInterval(tick,1000); tick(); initDate();
+
+// ── GENERATE BRIEFING ──────────────────────────────────────────────────────────
+async function generateBriefing(){
+  var btn = document.getElementById('gen-btn');
+  var icon = document.getElementById('gen-icon');
+  var text = document.getElementById('gen-text');
+  btn.disabled = true;
+  icon.innerHTML = '<div class="spin"></div>';
+  text.textContent = 'Generating your briefing...';
+
+  // Collect context
+  var deals   = document.getElementById('ctx-deals').value.trim();
+  var leads   = document.getElementById('ctx-leads').value.trim();
+  var followups = document.getElementById('ctx-followups').value.trim();
+  var focus   = document.getElementById('ctx-focus').value.trim();
+
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('en-GB',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+  var prompt = `You are the AI briefing system for SLOI AI / SLOI AI — a commodity trade platform globally verified, supplying steel, cement, aluminum, energy, agriculture, and chemicals to buyers across MENA, Europe, and globally.
+
+Today is ${dateStr}.
+
+PLATFORM DATA:
+- 8 verified suppliers (Supplier REF-MET-001, Supplier REF-MET-002, Supplier REF-BLD-001, Supplier REF-BLD-002, Supplier REF-BLD-003, Supplier REF-ENE-001, Supplier REF-AGR-001, Supplier REF-CHM-001)
+- direct payment held: $762,000 (2 deals pending release)
+- Revenue MTD: $18,420 (1% platform fee on $1.84M volume)
+- Open pipeline: $2.4M across 14 leads
+- Active agents: PriceScout, NegotiationAgent, OutreachBot, LeadFinder, FollowUpAgent, LOIDrafter, SupplierSyncAgent, DealMonitorAgent
+
+MARKET PRICES TODAY:
+- Steel Rebar G60: $2,840/MT (↑1.8% this week) — 480 MT stock
+- Aluminum 6061-T6: $9,200/MT (↑2.3%) — LOW STOCK: 85 MT
+- Cement OPC 52.5: $63/MT (↓0.4%) — surplus at Supplier REF-BLD-001
+- Diesel B2: $4.92/L (↓0.4%) — large stock
+- Hard Wheat: $1,120/MT (↓0.7%) — Supplier REF-AGR-001 surplus
+- Sulfuric Acid: $580/MT (stable)
+
+PENDING APPROVALS:
+1. Release direct payment $508K → Supplier REF-MET-001 (B/L + COO verified)
+2. NegotiationAgent wants approval on steel deal at $508/MT with Atlas Trading
+3. LOI for Gulf Cement — 500 MT cement — $31,500
+
+FOLLOW-UPS NEEDED:
+- Atlas Trading: no reply to steel quote for 4 days
+- Gulf Cement LLC: registered 2 days ago, no RFQ
+- Bauer GmbH: wheat inquiry, sent first message 1 day ago
+- Supplier REF-BLD-003: B/L missing for 48h
+
+USER CONTEXT (what the boss told you):
+${deals ? '- Open deals: ' + deals : ''}
+${leads ? '- Pipeline leads: ' + leads : ''}
+${followups ? '- Follow-ups: ' + followups : ''}
+${focus ? '- Focus today: ' + focus : ''}
+
+Generate a daily briefing in this EXACT JSON format:
+{
+  "insight": "A 2-3 sentence strategic insight about today — what's the biggest opportunity or risk right now, and what's the one thing that will move the needle most today. Be specific, not generic.",
+  "yesterday": [
+    {"text": "What happened bullet 1 — specific, factual"},
+    {"text": "What happened bullet 2"},
+    {"text": "What happened bullet 3"}
+  ],
+  "tasks": [
+    {"priority": "HIGH", "text": "Specific task 1", "link": "payments.html", "linkText": "Open Escrow"},
+    {"priority": "HIGH", "text": "Specific task 2", "link": "negotiation-agent.html", "linkText": "Open Agent Hub"},
+    {"priority": "MED", "text": "Specific task 3", "link": "", "linkText": ""},
+    {"priority": "MED", "text": "Specific task 4", "link": "", "linkText": ""},
+    {"priority": "LOW", "text": "Specific task 5", "link": "", "linkText": ""}
+  ]
+}
+
+RULES:
+- insight: must be strategic, specific, actionable. Not generic. Reference actual numbers.
+- yesterday: reference actual platform events (direct payment, deals, agents, leads)
+- tasks: ordered HIGH → MED → LOW. Be specific. "Call Atlas Trading re: steel" not "Follow up with leads"
+- tasks: max 6 total. Only what really matters today.
+- Return ONLY valid JSON. No markdown fences. No extra text.`;
+
+  try {
+    var response = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+
+    var data = await response.json();
+    var rawText = '';
+
+    if(data.content&&data.content.length>0){
+      rawText = data.content.map(function(b){return b.type==='text'?b.text:'';}).join('');
+    }
+
+    // Parse JSON
+    var clean = rawText.replace(/```json|```/g,'').trim();
+    var briefing = JSON.parse(clean);
+
+    renderBriefing(briefing);
+
+  } catch(err){
+    // Fallback briefing
+    renderBriefing({
+      insight: 'Could not reach Claude API. Running in offline mode. Key priority today: release the $508K direct payment to Supplier REF-MET-001 — all documents are verified. Then chase Atlas Trading on the steel quote that has been open for 4 days.',
+      yesterday:[
+        {text:'NegotiationAgent completed round 4 of 5 on Atlas Trading steel deal — price at $508/MT, above floor'},
+        {text:'Escrow funded — NEOM deal $508K received via TT, all documents uploaded and verified by ComplianceChecker'},
+        {text:'LeadFinder identified 3 new KSA buyers for cement — Gulf Cement LLC registered on platform'},
+      ],
+      tasks:[
+        {priority:'HIGH',text:'Release $508K SWIFT to Supplier REF-MET-001 — docs verified, waiting on you',link:'payments.html',linkText:'Open Escrow'},
+        {priority:'HIGH',text:'Approve NegotiationAgent deal — Atlas Trading steel $508/MT above floor price',link:'CommodEx_Admin.html',linkText:'War Room'},
+        {priority:'HIGH',text:'Chase Atlas Trading — 4 days no reply to steel quote',link:'negotiation-agent.html',linkText:'FollowUpAgent'},
+        {priority:'MED',text:'Send LOI to Gulf Cement for cement 500 MT $31,500',link:'loi-generator.html',linkText:'LOI Generator'},
+        {priority:'MED',text:'Chase Supplier REF-BLD-003 for B/L — missing for 48h',link:'whatsapp-templates.html',linkText:'WhatsApp'},
+        {priority:'LOW',text:'Review aluminum stock — only 85 MT left, consider price increase',link:'docs.html',linkText:'Suppliers'},
+      ]
+    });
+  }
+
+  btn.disabled = false;
+  icon.textContent = '⚡';
+  text.textContent = 'Regenerate briefing';
+  document.getElementById('last-gen').textContent = 'Generated at '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
+
+function renderBriefing(data){
+  // Show section
+  document.getElementById('briefing-output').classList.add('show');
+  document.getElementById('briefing-time').textContent = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+
+  // Insight
+  document.getElementById('insight-text').innerHTML =
+    data.insight.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+
+  // Yesterday bullets
+  var bl = '';
+  (data.yesterday||[]).forEach(function(b,i){
+    bl += '<div class="bullet-item">';
+    bl += '<div class="b-num">'+(i+1)+'</div>';
+    bl += '<div class="b-text">'+b.text.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')+'</div>';
+    bl += '</div>';
+  });
+  document.getElementById('bullets-list').innerHTML = bl;
+
+  // Tasks
+  var tl = '';
+  var tasks = data.tasks||[];
+  tasks.forEach(function(t,i){
+    var pc = t.priority==='HIGH'?'tp-high':t.priority==='MED'?'tp-med':'tp-low';
+    tl += '<div class="task-item" id="task-'+i+'" onclick="toggleTask('+i+')">';
+    tl += '<div class="task-check" id="check-'+i+'"></div>';
+    tl += '<div class="task-priority '+pc+'">'+t.priority+'</div>';
+    tl += '<div class="task-text">'+t.text+'</div>';
+    if(t.link&&t.linkText){
+      tl += '<div class="task-action" onclick="event.stopPropagation();window.open(\''+t.link+'\',\'_blank\')">'+t.linkText+' →</div>';
+    }
+    tl += '</div>';
+  });
+  document.getElementById('task-list').innerHTML = tl;
+  document.getElementById('task-count').textContent = tasks.length+' tasks';
+
+  // Scroll to briefing
+  setTimeout(function(){
+    document.getElementById('briefing-output').scrollIntoView({behavior:'smooth',block:'start'});
+  },200);
+}
+
+// ── TASK INTERACTION ──────────────────────────────────────────────────────────
+function toggleTask(i){
+  var item = document.getElementById('task-'+i);
+  var check = document.getElementById('check-'+i);
+  item.classList.toggle('done');
+  check.textContent = item.classList.contains('done')?'✓':'';
+  updateTaskCount();
+}
+
+function updateTaskCount(){
+  var total = document.querySelectorAll('.task-item').length;
+  var done = document.querySelectorAll('.task-item.done').length;
+  document.getElementById('task-count').textContent = done+'/'+total+' done';
+}
+
+// ── APPROVAL ACTIONS ──────────────────────────────────────────────────────────
+function approveAction(btn,msg){
+  var item = btn.closest('.approval-item');
+  item.style.opacity='.4';
+  item.style.pointerEvents='none';
+  item.innerHTML += '<div style="padding:6px 14px;font-size:11px;color:var(--green)">✓ '+msg+'</div>';
+}
+
+// ── FOLLOW-UP AGENT LINK ──────────────────────────────────────────────────────
+function openAgentForFollowup(name, context){
+  // Store context and open agent hub
+  localStorage.setItem && localStorage.setItem('followup_context', 'Write a follow-up message for: '+name+'. Context: '+context);
+  window.open('negotiation-agent.html','_blank');
+}
+
+// ── KEYBOARD SHORTCUT ─────────────────────────────────────────────────────────
+document.addEventListener('keydown',function(e){
+  if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){
+    generateBriefing();
+  }
+});
+
+// ── AUTO-GENERATE ON LOAD ──────────────────────────────────────────────────────
+// Auto-generate after 1.5s if no context needed
+setTimeout(function(){
+  // Check if already generated
+  if(!document.getElementById('briefing-output').classList.contains('show')){
+    generateBriefing();
+  }
+},1500);
+</script>
+</body>
+</html>

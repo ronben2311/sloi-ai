@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI — Deal Risk Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,300&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-right{display:flex;align-items:center;gap:12px;font-size:11px}
+.nav-right a{color:var(--muted);text-decoration:none}
+.nav-right a:hover{color:var(--violet)}
+
+.page{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:32px 24px 80px}
+
+/* HEADER */
+.page-header{margin-bottom:28px}
+.ph-eyebrow{font-size:10px;color:var(--red);letter-spacing:.16em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ph-eyebrow::before{content:'';width:20px;height:1px;background:var(--red)}
+.ph-title{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,48px);font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1;margin-bottom:10px}
+.ph-title em{font-style:italic;color:var(--indigo)}
+.ph-sub{font-size:12px;color:var(--muted);line-height:1.75;max-width:560px}
+
+/* DEAL INFO BAR */
+.deal-bar{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:24px;display:grid;grid-template-columns:repeat(4,1fr) auto;gap:12px;align-items:end}
+.db-field{display:flex;flex-direction:column;gap:4px}
+.db-label{font-size:9px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.db-inp{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:8px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
+.db-inp:focus{border-color:var(--indigo)}
+.db-inp::placeholder{color:var(--muted)}
+.db-inp select{cursor:pointer}
+.new-btn{background:var(--indigo);color:#fff;border:none;padding:9px 18px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;white-space:nowrap;transition:opacity .15s}
+.new-btn:hover{opacity:.85}
+
+/* PROGRESS BAR */
+.progress-bar{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:24px;display:flex;align-items:center;gap:16px}
+.pb-label{font-size:10px;color:var(--muted);white-space:nowrap}
+.pb-track{flex:1;height:6px;background:var(--border2);border-radius:3px;overflow:hidden}
+.pb-fill{height:100%;border-radius:3px;background:var(--indigo);transition:width .4s,background .3s}
+.pb-count{font-size:12px;font-weight:600;color:var(--white);white-space:nowrap}
+.pb-score{font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;white-space:nowrap}
+
+/* SECTION */
+.section{margin-bottom:16px}
+.section-header{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px 6px 0 0;cursor:pointer;user-select:none;transition:background .12s}
+.section-header:hover{background:var(--surface2)}
+.sh-icon{font-size:18px;flex-shrink:0}
+.sh-title{font-size:12px;font-weight:700;color:var(--white);flex:1;letter-spacing:.02em}
+.sh-count{font-size:10px;color:var(--muted)}
+.sh-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;flex-shrink:0}
+.sb-ok{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.sb-warn{background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.sb-err{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+.sb-neu{background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.sh-arrow{color:var(--muted);font-size:14px;transition:transform .2s;flex-shrink:0}
+.section.collapsed .sh-arrow{transform:rotate(-90deg)}
+
+/* CHECKS */
+.checks{border:1px solid var(--border);border-top:none;border-radius:0 0 6px 6px;overflow:hidden}
+.section.collapsed .checks{display:none}
+.check-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface);transition:background .12s;cursor:pointer}
+.check-item:last-child{border-bottom:none}
+.check-item:hover{background:var(--surface2)}
+.check-item.checked{background:rgba(34,197,94,.03)}
+.check-item.flagged{background:rgba(239,68,68,.04)}
+.check-item.na{opacity:.55}
+.ci-box{width:20px;height:20px;border-radius:4px;border:1px solid var(--border2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .15s;margin-top:1px;cursor:pointer}
+.check-item.checked .ci-box{background:var(--green);border-color:var(--green);color:#fff}
+.check-item.flagged .ci-box{background:var(--red);border-color:var(--red);color:#fff}
+.check-item.na .ci-box{background:var(--surface2);border-color:var(--border2);color:var(--muted)}
+.ci-body{flex:1;min-width:0}
+.ci-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px;line-height:1.4}
+.check-item.checked .ci-title{color:var(--muted);text-decoration:line-through;font-weight:400}
+.ci-sub{font-size:11px;color:var(--muted);line-height:1.6}
+.ci-risk{font-size:9px;font-weight:700;padding:1px 7px;border-radius:3px;flex-shrink:0;margin-top:2px;white-space:nowrap}
+.risk-critical{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+.risk-high{background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.risk-med{background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.25);color:var(--blue)}
+.risk-low{background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.ci-note{display:none;margin-top:8px}
+.check-item.expanded .ci-note{display:block}
+.ci-note-inp{width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:4px;padding:7px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:11px;outline:none;resize:none;min-height:50px;line-height:1.6}
+.ci-note-inp:focus{border-color:var(--indigo)}
+.ci-actions{display:flex;gap:5px;margin-top:6px}
+.ci-btn{padding:3px 10px;border-radius:3px;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace;border:1px solid var(--border2);background:var(--surface2);color:var(--muted);transition:all .12s}
+.ci-btn:hover{border-color:var(--indigo);color:var(--violet)}
+.ci-btn.flag{border-color:rgba(239,68,68,.3);color:var(--red)}
+.ci-btn.flag:hover{background:rgba(239,68,68,.1)}
+.ci-btn.na-btn{border-color:var(--border2);color:var(--muted)}
+
+/* SCORE PANEL */
+.score-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px;position:sticky;top:60px;z-index:50}
+.sp-title{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px}
+.sp-score{font-family:'Fraunces',serif;font-size:48px;font-weight:900;line-height:1;margin-bottom:4px}
+.sp-label{font-size:11px;color:var(--muted);margin-bottom:14px}
+.sp-breakdown{display:flex;flex-direction:column;gap:5px}
+.spb-row{display:flex;align-items:center;gap:8px;font-size:11px}
+.spb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.spb-label{color:var(--muted);flex:1}
+.spb-val{font-weight:600}
+.sp-verdict{margin-top:14px;padding:10px 12px;border-radius:5px;font-size:11px;font-weight:600;text-align:center;line-height:1.5}
+.sp-actions{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.sp-btn{padding:9px;border-radius:5px;font-size:11px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;border:none;text-align:center;transition:opacity .15s;text-decoration:none;display:block}
+.sp-btn:hover{opacity:.85}
+
+/* FINAL SUMMARY */
+.final-summary{display:none;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:16px}
+.final-summary.show{display:block}
+.fs-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:12px}
+.flag-list{display:flex;flex-direction:column;gap:6px}
+.flag-item{display:flex;align-items:flex-start;gap:8px;padding:9px 12px;border-radius:5px;font-size:11px;line-height:1.5}
+.flag-item.critical{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2)}
+.flag-item.high{background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.2)}
+
+/* LAYOUT WITH STICKY SCORE */
+.layout{display:grid;grid-template-columns:1fr 220px;gap:16px;align-items:start}
+.checks-col{min-width:0}
+.score-col{position:sticky;top:60px}
+
+@media(max-width:720px){
+  .layout{grid-template-columns:1fr}
+  .score-col{position:static}
+  .deal-bar{grid-template-columns:1fr 1fr;gap:8px}
+}
+.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="CommodEx_Admin.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <div class="nav-right">
+    <a href="loi-generator.html">LOI Generator</a>
+    <a href="payments.html">direct payment</a>
+    <a href="CommodEx_Admin.html">War Room</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="page-header">
+    <div class="ph-eyebrow">Pre-deal verification</div>
+    <div class="ph-title">Risk <em>Checklist</em></div>
+    <p class="ph-sub">Complete before every deal. Every unchecked critical item is a potential loss. Takes 5 minutes. Saves you from disasters.</p>
+  </div>
+
+  <!-- DEAL INFO -->
+  <div class="deal-bar">
+    <div class="db-field"><div class="db-label">Deal ref</div><input class="db-inp" id="deal-ref" placeholder="CEX-2026-0427-001" oninput="updateRef()"/></div>
+    <div class="db-field"><div class="db-label">Buyer</div><input class="db-inp" id="deal-buyer" placeholder="NEOM Procurement LLC"/></div>
+    <div class="db-field"><div class="db-label">Supplier</div>
+      <select class="db-inp" id="deal-supplier">
+        <option value="">Select supplier...</option>
+        <option>Supplier REF-MET-001</option>
+        <option>Supplier REF-MET-002</option>
+        <option>Supplier REF-BLD-001</option>
+        <option>Supplier REF-BLD-002</option>
+        <option>Supplier REF-BLD-003</option>
+        <option>Supplier REF-ENE-001</option>
+        <option>Supplier REF-AGR-001</option>
+        <option>Supplier REF-CHM-001</option>
+      </select>
+    </div>
+    <div class="db-field"><div class="db-label">Deal value (USD)</div><input class="db-inp" id="deal-value" type="number" placeholder="508000" oninput="updateValue()"/></div>
+    <button class="new-btn" onclick="resetAll()">↺ New deal</button>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar">
+    <div class="pb-label">Progress</div>
+    <div class="pb-track"><div class="pb-fill" id="pb-fill" style="width:0%"></div></div>
+    <div class="pb-count" id="pb-count">0 / 0</div>
+    <div class="pb-score" id="pb-score" style="background:var(--surface2);border:1px solid var(--border2);color:var(--muted)">Not started</div>
+  </div>
+
+  <div class="layout">
+  <div class="checks-col">
+
+  <!-- ══ SECTION 1: BUYER ══ -->
+  <div class="section" id="sec-buyer">
+    <div class="section-header" onclick="toggleSection('sec-buyer')">
+      <div class="sh-icon">🏢</div>
+      <div class="sh-title">Buyer verification</div>
+      <div class="sh-count" id="sec-buyer-count">0/6</div>
+      <div class="sh-badge sb-neu" id="sec-buyer-badge">Pending</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+    <div class="checks" id="checks-sec-buyer">
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Buyer KYC verified on platform</div>
+          <div class="ci-sub">Check SLOI AI Users — status must be "Verified", not Pending or Expired</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Note: KYC date, verifying agent..."></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Buyer country — not sanctioned</div>
+          <div class="ci-sub">UAE ✓ · KSA ✓ · Iraq — verify per deal · Syria ✗ · Iran ✗ · Russia ✗ · North Korea ✗</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Country: ___ · Status: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Buyer is the actual decision maker</div>
+          <div class="ci-sub">Not an intermediary who will "check with management". Procurement authority confirmed.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Contact name & title: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Deal value within buyer's capacity</div>
+          <div class="ci-sub">No red flags on deal size vs company size. A $5M order from a 2-person company is a red flag.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Company size estimate, previous deal history..."></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Buyer communication is professional</div>
+          <div class="ci-sub">No pressure to skip escrow. No request to pay outside platform. No urgency without reason.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Any red flags in communication?"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Buyer has dealt with commodity imports before</div>
+          <div class="ci-sub">They know what B/L, COO, SGS means. First-time importers need more hand-holding and longer timelines.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Import experience: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-med">MED</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECTION 2: SUPPLIER ══ -->
+  <div class="section" id="sec-supplier">
+    <div class="section-header" onclick="toggleSection('sec-supplier')">
+      <div class="sh-icon">🏭</div>
+      <div class="sh-title">Supplier verification</div>
+      <div class="sh-count" id="sec-supplier-count">0/5</div>
+      <div class="sh-badge sb-neu" id="sec-supplier-badge">Pending</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+    <div class="checks" id="checks-sec-supplier">
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Supplier confirmed availability & price</div>
+          <div class="ci-sub">Price in this LOI matches what supplier confirmed TODAY. Not last week's price.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Confirmed via: WhatsApp / Email / Call · Date: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Stock quantity confirmed ≥ deal quantity</div>
+          <div class="ci-sub">If deal is 100 MT, supplier has ≥ 100 MT in stock NOW. Not "we can produce it".</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Confirmed stock: ___ units · Date confirmed: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Supplier ISO / certification valid for this product</div>
+          <div class="ci-sub">Check cert expiry date. ISO 9001 · ISO 3834 · CE · SGS. Expired cert = deal risk.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Cert type: ___ · Expiry: ___ · Valid: Y/N"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Supplier can meet the delivery deadline</div>
+          <div class="ci-sub">Lead time + buffer ≤ LOI delivery date. Account for port congestion, customs, Jewish holidays.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Lead time: ___ days · LOI date: ___ · Buffer: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Supplier bank details verified (2 channels)</div>
+          <div class="ci-sub">IBAN confirmed via: (1) supplier portal AND (2) WhatsApp/email directly. Never trust one source for wire transfers.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="IBAN: ___ · Source 1: ___ · Source 2: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECTION 3: DEAL STRUCTURE ══ -->
+  <div class="section" id="sec-deal">
+    <div class="section-header" onclick="toggleSection('sec-deal')">
+      <div class="sh-icon">📄</div>
+      <div class="sh-title">Deal structure & LOI</div>
+      <div class="sh-count" id="sec-deal-count">0/6</div>
+      <div class="sh-badge sb-neu" id="sec-deal-badge">Pending</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+    <div class="checks" id="checks-sec-deal">
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">LOI signed by all 3 parties before direct payment</div>
+          <div class="ci-sub">Buyer ✓ · Merchant (you) ✓ · Supplier ✓ — all three before any money moves. No exceptions.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Signed by: Buyer ___ · Supplier ___ · Date: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Incoterm is clear and agreed by both parties</div>
+          <div class="ci-sub">FOB = supplier's risk ends at port. CIF = includes freight + insurance. DAP = door delivery. Must match LOI exactly.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Incoterm: ___ · Port: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Document checklist agreed in LOI</div>
+          <div class="ci-sub">LOI explicitly lists required docs: B/L · COO · SGS Inspection · Mill Cert (metals) · Packing List · Commercial Invoice</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Required docs listed in LOI: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Currency is USD throughout (no FX risk)</div>
+          <div class="ci-sub">All amounts in USD. If buyer pays in AED or SAR — convert to USD at LOI signing date, lock the rate.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Currency: ___ · If non-USD, rate locked at: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-med">MED</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">LOI has cancellation penalty clause</div>
+          <div class="ci-sub">If buyer cancels after direct payment is funded: they forfeit X%. Typically 5-10% of deal value. Protects supplier costs.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Penalty clause: ___% if cancelled after escrow"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-med">MED</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Governing law: State of the network, International HQ courts</div>
+          <div class="ci-sub">Must be in the LOI. Without this, dispute resolution is unclear and expensive.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Confirmed in LOI: Y/N · Section: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-med">MED</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECTION 4: direct payment & PAYMENT ══ -->
+  <div class="section" id="sec-escrow">
+    <div class="section-header" onclick="toggleSection('sec-escrow')">
+      <div class="sh-icon">🔒</div>
+      <div class="sh-title">direct payment & payment</div>
+      <div class="sh-count" id="sec-escrow-count">0/5</div>
+      <div class="sh-badge sb-neu" id="sec-escrow-badge">Pending</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+    <div class="checks" id="checks-sec-escrow">
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Payment Terms sent with correct IBAN</div>
+          <div class="ci-sub">SLOI AI Bank · SWIFT: XXXXXXXXXXXXXX · IBAN: XX00 0000 0000 0000 0000 00XX · Reference = LOI ref exactly</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Sent to buyer: Y · Reference used: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">direct payment amount matches LOI total exactly</div>
+          <div class="ci-sub">TT received = LOI value to the dollar. Partial payments → do not release to supplier until full amount received.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="LOI value: $___ · Received: $___ · Match: Y/N"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Payment method matches LOI (TT / LC / Stripe)</div>
+          <div class="ci-sub">If LOI says LC at sight — accept only LC. If buyer wants to switch to TT last minute, update LOI first.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="LOI payment: ___ · Actual payment: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Fee split calculated and confirmed</div>
+          <div class="ci-sub">Platform 1% · Broker 5% (if applicable) · Sub-broker 2% (if applicable). Net to supplier calculated before release.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Total: $___ · Platform: $___ · Broker: $___ · Net to supplier: $___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-med">MED</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">payment release is YOUR decision only</div>
+          <div class="ci-sub">No agent, no broker, no buyer can release escrow. Only you (merchant) after manual document verification.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Confirmed: I am the only release authority"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECTION 5: DOCUMENTS ══ -->
+  <div class="section" id="sec-docs">
+    <div class="section-header" onclick="toggleSection('sec-docs')">
+      <div class="sh-icon">📋</div>
+      <div class="sh-title">Document verification (before SWIFT)</div>
+      <div class="sh-count" id="sec-docs-count">0/5</div>
+      <div class="sh-badge sb-neu" id="sec-docs-badge">Pending</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+    <div class="checks" id="checks-sec-docs">
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Bill of Lading (B/L) — uploaded and verified</div>
+          <div class="ci-sub">Shipper = supplier · Consignee = buyer · Port of loading matches LOI · Quantity matches LOI exactly · Signed by carrier</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="B/L number: ___ · Carrier: ___ · Qty match: Y/N"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Certificate of Origin (COO) — uploaded and verified</div>
+          <div class="ci-sub">Issued by: Global Chamber of Commerce or equivalent · Country of origin: Global · Product description matches LOI</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="COO number: ___ · Issuing body: ___ · Match: Y/N"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">SGS Pre-shipment Inspection Certificate</div>
+          <div class="ci-sub">Third-party inspection by SGS, Bureau Veritas, or Intertek. Quality + quantity verified BEFORE shipment. Not forged.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Inspection company: ___ · Date: ___ · Result: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Mill Certificate / Quality Certificate (metals only)</div>
+          <div class="ci-sub">Chemical composition + mechanical properties. Grade matches what was ordered (G60, 6061-T6 etc). Issued by manufacturer.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Grade: ___ · Mill cert match: Y/N · N/A if non-metals"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">All documents cross-referenced — no discrepancies</div>
+          <div class="ci-sub">Product name · Quantity · LOI ref · Buyer/Supplier names — must be identical across ALL documents. One mismatch = hold release.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Cross-check result: All match Y/N · Any discrepancy: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ SECTION 6: FINAL RELEASE ══ -->
+  <div class="section" id="sec-release">
+    <div class="section-header" onclick="toggleSection('sec-release')">
+      <div class="sh-icon">✅</div>
+      <div class="sh-title">Final release checklist</div>
+      <div class="sh-count" id="sec-release-count">0/4</div>
+      <div class="sh-badge sb-neu" id="sec-release-badge">Pending</div>
+      <div class="sh-arrow">▾</div>
+    </div>
+    <div class="checks" id="checks-sec-release">
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Supplier IBAN re-confirmed before SWIFT</div>
+          <div class="ci-sub">Even if you confirmed before — re-confirm the IBAN directly with supplier via WhatsApp/call RIGHT BEFORE sending SWIFT.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Re-confirmed via: ___ at ___ (time/date)"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Net amount to supplier calculated correctly</div>
+          <div class="ci-sub">Deal value − platform fee (1%) − broker fee (%) = net to supplier. Recalculate manually. Do not trust the UI alone.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Deal: $___ − Platform: $___ − Broker: $___ = Net: $___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-critical">CRITICAL</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">SWIFT reference includes LOI reference number</div>
+          <div class="ci-sub">Wire transfer must include the LOI ref as payment reference (e.g. "CEX-2026-0427-001"). Creates paper trail.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="SWIFT reference set to: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-high">HIGH</div>
+      </div>
+
+      <div class="check-item" onclick="handleCheck(this)">
+        <div class="ci-box"></div>
+        <div class="ci-body">
+          <div class="ci-title">Deal recorded in Airtable / CRM before closing</div>
+          <div class="ci-sub">All deal details, parties, amounts, and documents logged. This is your paper trail for accounting, disputes, and growth.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Airtable record ID: ___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+        </div>
+        <div class="ci-risk risk-med">MED</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FLAGS SUMMARY -->
+  <div class="final-summary" id="flags-summary">
+    <div class="fs-title" style="color:var(--red)">⚑ Flagged items — resolve before proceeding</div>
+    <div class="flag-list" id="flag-list"></div>
+  </div>
+
+  </div><!-- /checks-col -->
+
+  <!-- SCORE PANEL -->
+  <div class="score-col">
+    <div class="score-panel">
+      <div class="sp-title">// Deal risk score</div>
+      <div class="sp-score" id="score-num" style="color:var(--muted)">—</div>
+      <div class="sp-label" id="score-label">Complete checks to see score</div>
+      <div class="sp-breakdown">
+        <div class="spb-row"><div class="spb-dot" style="background:var(--red)"></div><div class="spb-label">Critical</div><div class="spb-val" id="sc-critical">0/10</div></div>
+        <div class="spb-row"><div class="spb-dot" style="background:var(--gold)"></div><div class="spb-label">High</div><div class="spb-val" id="sc-high">0/9</div></div>
+        <div class="spb-row"><div class="spb-dot" style="background:var(--blue)"></div><div class="spb-label">Medium</div><div class="spb-val" id="sc-med">0/6</div></div>
+        <div class="spb-row"><div class="spb-dot" style="background:var(--muted)"></div><div class="spb-label">Low</div><div class="spb-val" id="sc-low">0/1</div></div>
+      </div>
+      <div class="sp-verdict" id="sp-verdict" style="background:var(--surface2);border:1px solid var(--border);color:var(--muted)">
+        Start checking items above
+      </div>
+      <div class="sp-actions">
+        <a href="loi-generator.html" class="sp-btn" style="background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.25);color:var(--violet)">📄 Open LOI Generator</a>
+        <a href="payments.html" class="sp-btn" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)">🔒 Open direct payment</a>
+        <button class="sp-btn" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:var(--red)" onclick="exportChecklist()">📋 Export report</button>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /layout -->
+</div><!-- /page -->
+
+<script>
+// ── STATE ──────────────────────────────────────────────────────────────────────
+var SECTIONS = ['sec-buyer','sec-supplier','sec-deal','sec-escrow','sec-docs','sec-release'];
+var flags = [];
+
+// ── SECTION TOGGLE ──────────────────────────────────────────────────────────
+function toggleSection(id){
+  var sec = document.getElementById(id);
+  sec.classList.toggle('collapsed');
+}
+
+// ── CHECK ITEM ──────────────────────────────────────────────────────────────
+function handleCheck(item){
+  if(item.classList.contains('flagged')||item.classList.contains('na')) return;
+  item.classList.toggle('checked');
+  item.classList.toggle('expanded');
+  updateAll();
+}
+
+function flagItem(e, btn){
+  e.stopPropagation();
+  var item = btn.closest('.check-item');
+  item.classList.remove('checked');
+  item.classList.add('flagged');
+  item.querySelector('.ci-box').textContent = '⚑';
+  updateAll();
+  updateFlagSummary();
+}
+
+function markNA(e, btn){
+  e.stopPropagation();
+  var item = btn.closest('.check-item');
+  item.classList.remove('checked','flagged');
+  item.classList.add('na');
+  item.querySelector('.ci-box').textContent = 'N/A';
+  updateAll();
+}
+
+// ── UPDATE ALL ──────────────────────────────────────────────────────────────
+function updateAll(){
+  updateSectionBadges();
+  updateScore();
+  updateProgress();
+  updateFlagSummary();
+}
+
+function updateSectionBadges(){
+  SECTIONS.forEach(function(secId){
+    var sec = document.getElementById(secId);
+    var items = sec.querySelectorAll('.check-item:not(.na)');
+    var checked = sec.querySelectorAll('.check-item.checked');
+    var flagged = sec.querySelectorAll('.check-item.flagged');
+    var total = items.length;
+    var done = checked.length;
+    var countEl = document.getElementById(secId+'-count');
+    var badgeEl = document.getElementById(secId+'-badge');
+    if(countEl) countEl.textContent = done+'/'+total;
+    if(badgeEl){
+      if(flagged.length > 0){
+        badgeEl.textContent = '⚑ Flagged';
+        badgeEl.className = 'sh-badge sb-err';
+      } else if(done === total && total > 0){
+        badgeEl.textContent = '✓ Clear';
+        badgeEl.className = 'sh-badge sb-ok';
+      } else if(done > 0){
+        badgeEl.textContent = 'In progress';
+        badgeEl.className = 'sh-badge sb-warn';
+      } else {
+        badgeEl.textContent = 'Pending';
+        badgeEl.className = 'sh-badge sb-neu';
+      }
+    }
+  });
+}
+
+function updateProgress(){
+  var allItems = document.querySelectorAll('.check-item:not(.na)');
+  var checked = document.querySelectorAll('.check-item.checked');
+  var total = allItems.length;
+  var done = checked.length;
+  var pct = total > 0 ? Math.round(done/total*100) : 0;
+
+  document.getElementById('pb-fill').style.width = pct+'%';
+  document.getElementById('pb-count').textContent = done+' / '+total;
+
+  var fill = document.getElementById('pb-fill');
+  fill.style.background = pct < 40 ? 'var(--red)' : pct < 75 ? 'var(--gold)' : 'var(--green)';
+
+  var scoreEl = document.getElementById('pb-score');
+  if(pct === 0){ scoreEl.textContent='Not started'; scoreEl.style.cssText='background:var(--surface2);border:1px solid var(--border2);color:var(--muted)'; }
+  else if(pct < 40){ scoreEl.textContent='⚠ At risk'; scoreEl.style.cssText='background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)'; }
+  else if(pct < 75){ scoreEl.textContent='In progress'; scoreEl.style.cssText='background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)'; }
+  else if(pct < 100){ scoreEl.textContent='Almost clear'; scoreEl.style.cssText='background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:var(--blue)'; }
+  else{ scoreEl.textContent='✓ Deal cleared'; scoreEl.style.cssText='background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)'; }
+}
+
+function updateScore(){
+  var critical = document.querySelectorAll('.check-item .ci-risk.risk-critical');
+  var high     = document.querySelectorAll('.check-item .ci-risk.risk-high');
+  var med      = document.querySelectorAll('.check-item .ci-risk.risk-med');
+  var low      = document.querySelectorAll('.check-item .ci-risk.risk-low');
+
+  var critTotal=0,critDone=0,highTotal=0,highDone=0,medTotal=0,medDone=0,lowTotal=0,lowDone=0;
+  critical.forEach(function(r){ var item=r.closest('.check-item'); if(!item.classList.contains('na')){ critTotal++; if(item.classList.contains('checked')) critDone++; }});
+  high.forEach(function(r){ var item=r.closest('.check-item'); if(!item.classList.contains('na')){ highTotal++; if(item.classList.contains('checked')) highDone++; }});
+  med.forEach(function(r){ var item=r.closest('.check-item'); if(!item.classList.contains('na')){ medTotal++; if(item.classList.contains('checked')) medDone++; }});
+  low.forEach(function(r){ var item=r.closest('.check-item'); if(!item.classList.contains('na')){ lowTotal++; if(item.classList.contains('checked')) lowDone++; }});
+
+  document.getElementById('sc-critical').textContent = critDone+'/'+critTotal;
+  document.getElementById('sc-high').textContent = highDone+'/'+highTotal;
+  document.getElementById('sc-med').textContent = medDone+'/'+medTotal;
+  document.getElementById('sc-low').textContent = lowDone+'/'+lowTotal;
+
+  var score = 0;
+  if(critTotal>0) score += (critDone/critTotal)*60;
+  if(highTotal>0) score += (highDone/highTotal)*25;
+  if(medTotal>0)  score += (medDone/medTotal)*12;
+  if(lowTotal>0)  score += (lowDone/lowTotal)*3;
+  score = Math.round(score);
+
+  var flagged = document.querySelectorAll('.check-item.flagged').length;
+  if(flagged > 0) score = Math.max(0, score - flagged*8);
+
+  var scoreEl = document.getElementById('score-num');
+  var labelEl = document.getElementById('score-label');
+  var verdict = document.getElementById('sp-verdict');
+
+  scoreEl.textContent = score;
+
+  if(critDone === 0 && critTotal > 0){
+    scoreEl.style.color = 'var(--muted)';
+    labelEl.textContent = 'Complete critical items first';
+    verdict.style.cssText = 'margin-top:14px;padding:10px 12px;border-radius:5px;font-size:11px;font-weight:600;text-align:center;line-height:1.5;background:var(--surface2);border:1px solid var(--border);color:var(--muted)';
+    verdict.textContent = 'Start with critical checks';
+  } else if(flagged > 0){
+    scoreEl.style.color = 'var(--red)';
+    labelEl.textContent = flagged+' flagged item'+(flagged>1?'s':'')+' — resolve first';
+    verdict.style.cssText = 'margin-top:14px;padding:10px 12px;border-radius:5px;font-size:11px;font-weight:600;text-align:center;line-height:1.5;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--red)';
+    verdict.textContent = '⚑ Do not proceed — resolve flagged items';
+  } else if(score >= 95){
+    scoreEl.style.color = 'var(--green)';
+    labelEl.textContent = 'Deal cleared for execution';
+    verdict.style.cssText = 'margin-top:14px;padding:10px 12px;border-radius:5px;font-size:11px;font-weight:600;text-align:center;line-height:1.5;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green)';
+    verdict.textContent = '✓ Clear to proceed. Release escrow.';
+  } else if(score >= 75){
+    scoreEl.style.color = 'var(--blue)';
+    labelEl.textContent = 'Almost ready';
+    verdict.style.cssText = 'margin-top:14px;padding:10px 12px;border-radius:5px;font-size:11px;font-weight:600;text-align:center;line-height:1.5;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--blue)';
+    verdict.textContent = 'Complete remaining checks before release';
+  } else if(score >= 40){
+    scoreEl.style.color = 'var(--gold)';
+    labelEl.textContent = 'Work in progress';
+    verdict.style.cssText = 'margin-top:14px;padding:10px 12px;border-radius:5px;font-size:11px;font-weight:600;text-align:center;line-height:1.5;background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.3);color:var(--gold)';
+    verdict.textContent = '⚠ Not ready — continue checking';
+  } else {
+    scoreEl.style.color = 'var(--red)';
+    labelEl.textContent = 'High risk — incomplete';
+    verdict.style.cssText = 'margin-top:14px;padding:10px 12px;border-radius:5px;font-size:11px;font-weight:600;text-align:center;line-height:1.5;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:var(--red)';
+    verdict.textContent = '✗ Do not proceed yet';
+  }
+}
+
+function updateFlagSummary(){
+  var flagged = document.querySelectorAll('.check-item.flagged');
+  var summary = document.getElementById('flags-summary');
+  var list = document.getElementById('flag-list');
+  if(flagged.length === 0){ summary.classList.remove('show'); return; }
+  summary.classList.add('show');
+  var html = '';
+  flagged.forEach(function(item){
+    var title = item.querySelector('.ci-title').textContent;
+    var risk = item.querySelector('.ci-risk');
+    var riskLevel = risk ? (risk.classList.contains('risk-critical')?'critical':'high') : 'high';
+    html += '<div class="flag-item '+riskLevel+'">';
+    html += '<span style="color:'+(riskLevel==='critical'?'var(--red)':'var(--gold)')+'">⚑</span>';
+    html += '<span>'+title+'</span></div>';
+  });
+  list.innerHTML = html;
+}
+
+// ── DEAL INFO ──────────────────────────────────────────────────────────────
+function updateRef(){
+  var ref = document.getElementById('deal-ref').value;
+  document.title = 'Risk Checklist — '+ref;
+}
+
+function updateValue(){
+  var val = parseFloat(document.getElementById('deal-value').value)||0;
+  var platform = Math.round(val*0.01);
+  var broker = Math.round(val*0.05);
+  var net = val - platform - broker;
+  if(val > 0){
+    document.getElementById('deal-value').title =
+      'Platform: $'+platform.toLocaleString()+' | Broker: $'+broker.toLocaleString()+' | Net to supplier: $'+net.toLocaleString();
+  }
+}
+
+// ── RESET ──────────────────────────────────────────────────────────────────
+function resetAll(){
+  if(!confirm('Start a new checklist? All progress will be lost.')) return;
+  document.querySelectorAll('.check-item').forEach(function(item){
+    item.classList.remove('checked','flagged','na','expanded');
+    item.querySelector('.ci-box').textContent = '';
+  });
+  document.getElementById('deal-ref').value = '';
+  document.getElementById('deal-buyer').value = '';
+  document.getElementById('deal-supplier').value = '';
+  document.getElementById('deal-value').value = '';
+  document.querySelectorAll('.ci-note-inp').forEach(function(inp){ inp.value=''; });
+  updateAll();
+}
+
+// ── EXPORT ──────────────────────────────────────────────────────────────────
+function exportChecklist(){
+  var ref = document.getElementById('deal-ref').value || 'NO-REF';
+  var buyer = document.getElementById('deal-buyer').value || 'Unknown';
+  var supplier = document.getElementById('deal-supplier').value || 'Unknown';
+  var value = document.getElementById('deal-value').value || '0';
+  var checked = document.querySelectorAll('.check-item.checked').length;
+  var flagged = document.querySelectorAll('.check-item.flagged').length;
+  var total = document.querySelectorAll('.check-item:not(.na)').length;
+  var score = document.getElementById('score-num').textContent;
+
+  var report = 'COMMODEX DEAL RISK CHECKLUTC\n';
+  report += '================================\n';
+  report += 'Deal Ref: '+ref+'\n';
+  report += 'Buyer: '+buyer+'\n';
+  report += 'Supplier: '+supplier+'\n';
+  report += 'Value: $'+parseInt(value).toLocaleString()+'\n';
+  report += 'Date: '+new Date().toLocaleDateString('en-GB')+'\n';
+  report += '================================\n';
+  report += 'Score: '+score+'/100\n';
+  report += 'Checks: '+checked+'/'+total+' completed\n';
+  report += 'Flagged: '+flagged+' items\n';
+  report += '================================\n\n';
+
+  document.querySelectorAll('.section').forEach(function(sec){
+    var title = sec.querySelector('.sh-title');
+    if(title){ report += '\n['+title.textContent.toUpperCase()+']\n'; }
+    sec.querySelectorAll('.check-item').forEach(function(item){
+      var status = item.classList.contains('checked')?'[✓]':item.classList.contains('flagged')?'[⚑]':item.classList.contains('na')?'[N/A]':'[ ]';
+      var t = item.querySelector('.ci-title');
+      if(t) report += status+' '+t.textContent+'\n';
+      var note = item.querySelector('.ci-note-inp');
+      if(note&&note.value) report += '    Note: '+note.value+'\n';
+    });
+  });
+
+  var blob = new Blob([report], {type:'text/plain'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'risk-checklist-'+ref+'.txt';
+  a.click();
+}
+
+// Init
+updateAll();
+</script>
+</body>
+</html>

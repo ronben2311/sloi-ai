@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI Exchange — Live Commodity Market</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#050509;--surface:#0c0c14;--surface2:#10101a;--border:#1a1a2a;--border2:#222234;--indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);--muted:#52526e;--text:#c8c6e0;--white:#f0eff8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--green-dim:rgba(34,197,94,.08);--red-dim:rgba(239,68,68,.08);}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg);overflow:hidden}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes flash-green{0%{background:rgba(34,197,94,.2)}100%{background:transparent}}
+@keyframes flash-red{0%{background:rgba(239,68,68,.2)}100%{background:transparent}}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes slide-in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CHROME ── */
+.app{display:grid;grid-template-rows:44px 32px 28px 1fr;height:100vh;overflow:hidden}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.tb-logo{font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;display:flex;align-items:center;gap:6px}
+.tb-logo em{font-style:italic;color:var(--indigo)}
+.tb-tag{font-size:9px;color:var(--muted);font-weight:400;letter-spacing:.04em}
+.tb-center{display:flex;align-items:center;gap:8px}
+.live-badge{display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 10px;border-radius:10px;font-size:10px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+.tb-right{display:flex;align-items:center;gap:6px}
+.btn{padding:5px 12px;border-radius:3px;font-size:10px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .12s;display:inline-flex;align-items:center;gap:4px;border:1px solid var(--border2);background:var(--surface2);color:var(--text)}
+.btn:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.btn-p:hover{opacity:.85;color:#fff}
+.btn-g{background:var(--green-dim);border-color:rgba(34,197,94,.3);color:var(--green)}
+
+/* Stats bar */
+.stats-bar{display:flex;align-items:center;gap:0;background:var(--surface);border-bottom:1px solid var(--border);overflow:hidden}
+.sb{display:flex;align-items:center;gap:6px;padding:0 14px;border-right:1px solid var(--border);height:100%;font-size:10px;white-space:nowrap}
+.sb-val{font-weight:700;font-size:11px}
+.sb-label{color:var(--muted)}
+.sb-clock{margin-left:auto;padding:0 14px;font-size:11px;color:var(--muted)}
+
+/* Ticker */
+.ticker-bar{overflow:hidden;border-bottom:1px solid var(--border);background:rgba(10,10,18,.8)}
+.ticker-track{display:flex;gap:28px;animation:ticker 50s linear infinite;white-space:nowrap;padding:6px 0}
+.ti{font-size:10px;color:var(--muted);flex-shrink:0;display:flex;align-items:center;gap:5px}
+.ti b{color:var(--white)}.ti-up{color:var(--green);font-weight:600}.ti-down{color:var(--red);font-weight:600}.ti-flat{color:var(--muted)}
+
+/* ── MAIN LAYOUT ── */
+.main{display:grid;grid-template-columns:260px 1fr 320px;height:100%;overflow:hidden}
+
+/* ── LEFT: PRODUCT LIST ── */
+.product-list-panel{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.plp-head{padding:8px 10px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.search-inp{background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:5px 8px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:10px;outline:none;width:100%;transition:border-color .15s}
+.search-inp:focus{border-color:var(--indigo)}
+.search-inp::placeholder{color:var(--muted)}
+.sector-filters{display:flex;gap:3px;flex-wrap:wrap}
+.sf-btn{padding:2px 7px;border-radius:2px;font-size:9px;font-weight:600;cursor:pointer;border:1px solid var(--border2);background:none;color:var(--muted);font-family:'IBM Plex Mono',monospace;transition:all .1s}
+.sf-btn:hover,.sf-btn.active{background:var(--indigo-dim);border-color:rgba(91,95,239,.4);color:var(--violet)}
+.product-list{flex:1;overflow-y:auto}
+.pl-sector{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:8px 10px 3px;font-weight:600;background:var(--surface2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+.pl-item{display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;transition:background .1s;border-bottom:1px solid var(--border)}
+.pl-item:hover{background:rgba(91,95,239,.06)}
+.pl-item.selected{background:var(--indigo-dim);border-left:2px solid var(--indigo)}
+.pl-icon{font-size:16px;flex-shrink:0;width:22px;text-align:center}
+.pl-name{flex:1;min-width:0}
+.pl-product{font-size:11px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-sku{font-size:9px;color:var(--muted)}
+.pl-right{text-align:right;flex-shrink:0}
+.pl-price{font-size:11px;font-weight:700;color:var(--white)}
+.pl-chg{font-size:9px;font-weight:600}
+.pl-deals{font-size:9px;color:var(--green)}
+.up{color:var(--green)}.down{color:var(--red)}.flat{color:var(--muted)}
+.flash-up{animation:flash-green .5s ease}
+.flash-down{animation:flash-red .5s ease}
+
+/* ── CENTER: DETAIL + ORDER BOOK ── */
+.center-panel{display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;background:var(--bg)}
+.product-header{padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.ph-left{}
+.ph-name{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:3px}
+.ph-meta{font-size:10px;color:var(--muted)}
+.ph-price{font-family:'Fraunces',serif;font-size:38px;font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1}
+.ph-change-row{display:flex;align-items:center;gap:8px;margin-top:4px;font-size:12px}
+.ph-stats{display:flex;gap:14px;font-size:10px;margin-top:6px}
+.ph-stat{display:flex;flex-direction:column;gap:1px}
+.ph-stat-val{font-weight:600;color:var(--white);font-size:11px}
+.ph-stat-label{color:var(--muted)}
+.ph-actions{display:flex;flex-direction:column;gap:5px;flex-shrink:0}
+
+/* ORDER BOOK */
+.order-book{overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid var(--border)}
+.ob-side{display:flex;flex-direction:column;overflow:hidden}
+.ob-side:first-child{border-right:1px solid var(--border)}
+.ob-header{padding:7px 10px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;position:sticky;top:0}
+.ob-row{display:flex;align-items:center;padding:4px 10px;font-size:10px;position:relative;cursor:default;transition:background .1s}
+.ob-row:hover{background:rgba(91,95,239,.06)}
+.ob-bar{position:absolute;top:0;bottom:0;opacity:.15;pointer-events:none}
+.ob-bid-bar{right:0;background:var(--green)}
+.ob-ask-bar{left:0;background:var(--red)}
+.ob-price{font-weight:700;width:80px}
+.ob-qty{color:var(--muted);flex:1;text-align:right}
+.ob-total{color:var(--muted);width:70px;text-align:right}
+.ob-spread{padding:6px 10px;text-align:center;font-size:10px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+.ob-spread-val{font-weight:700;color:var(--gold)}
+
+/* SPARK */
+.spark-section{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface)}
+.spark-title{font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.spark-wrap{height:60px;position:relative}
+.spark-wrap svg{width:100%;height:100%}
+
+/* TRADES */
+.trades-section{padding:0;overflow-y:auto;flex:1;background:var(--surface)}
+.trades-header{padding:7px 12px;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--surface2);border-bottom:1px solid var(--border);position:sticky;top:0;display:flex;justify-content:space-between}
+.trade-row{display:flex;align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid var(--border);font-size:10px;animation:slide-in .3s ease}
+.tr-time{color:var(--muted);width:42px;flex-shrink:0}
+.tr-ref{color:var(--indigo);width:110px;flex-shrink:0;font-size:9px}
+.tr-qty{color:var(--text);flex:1}
+.tr-price{font-weight:700;width:80px;text-align:right}
+.tr-loi{width:50px;text-align:right}
+
+/* ── RIGHT: NEGOTIATE PANEL ── */
+.right-panel{background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.rp-head{padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0}
+.rp-title{font-size:11px;font-weight:600;color:var(--white);margin-bottom:1px}
+.rp-sub{font-size:10px;color:var(--muted)}
+.rp-body{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+.field{display:flex;flex-direction:column;gap:3px}
+.flabel{font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.inp{background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:7px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:11px;outline:none;width:100%;transition:border-color .15s}
+.inp:focus{border-color:var(--indigo)}
+.inp::placeholder{color:var(--muted)}
+select.inp option{background:var(--surface)}
+.strategy-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.strat{padding:7px 5px;border:1px solid var(--border2);border-radius:3px;cursor:pointer;text-align:center;transition:all .1s;font-size:9px}
+.strat:hover{border-color:rgba(91,95,239,.4)}
+.strat.sel{background:var(--indigo-dim);border-color:var(--indigo)}
+.strat-icon{font-size:14px;margin-bottom:2px}
+.strat-name{font-weight:600;color:var(--white)}
+.strat-cost{color:var(--teal);font-size:9px}
+.cost-bar{background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:3px;padding:8px 10px;display:flex;justify-content:space-between;font-size:10px}
+.rp-foot{padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0;display:flex;flex-direction:column;gap:5px}
+.btn-neg{width:100%;background:var(--indigo);color:#fff;border:none;border-radius:4px;padding:11px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:opacity .15s}
+.btn-neg:hover{opacity:.85}
+.btn-watch-full{width:100%;background:none;border:1px solid var(--border2);color:var(--muted);border-radius:4px;padding:8px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.btn-watch-full:hover{border-color:var(--teal);color:var(--teal)}
+.rp-note{font-size:9px;color:var(--muted);text-align:center;line-height:1.5}
+
+/* EMPTY STATE */
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--muted);padding:24px;text-align:center}
+.es-icon{font-size:36px}
+.es-text{font-size:11px;line-height:1.6}
+
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+
+<script src="/api-client.js"></script>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+<div class="app">
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a href="m2m-homepage.html" class="tb-logo">SLOI <em>AI</em> <span class="tb-tag">/ Exchange</span></a>
+  <div class="tb-center">
+    <div class="live-badge"><div class="live-dot"></div>Live Market</div>
+    <span style="font-size:10px;color:var(--muted)">13 products · verified suppliers · MENA corridor</span>
+  </div>
+  <div class="tb-right">
+    <span id="clock" style="font-size:10px;color:var(--muted)"></span>
+    <a href="m2m-homepage.html" class="btn">← Home</a>
+    <a href="login.html" class="btn">Sign in</a>
+    <a href="login.html" class="btn btn-p">🤖 Start negotiating →</a>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="sb"><span class="sb-val" style="color:var(--green)" id="s-lois">24</span><span class="sb-label">LOIs today</span></div>
+  <div class="sb"><span class="sb-val" style="color:var(--violet)" id="s-vol">$1.84M</span><span class="sb-label">Volume today</span></div>
+  <div class="sb"><span class="sb-val" id="s-suppliers">8</span><span class="sb-label">Verified suppliers</span></div>
+  <div class="sb"><span class="sb-val" id="s-products">13</span><span class="sb-label">Products</span></div>
+  <div class="sb"><span class="sb-val" style="color:var(--gold)">3.2</span><span class="sb-label">Avg rounds/deal</span></div>
+  <div class="sb"><span class="sb-val" style="color:var(--teal)">&lt;10m</span><span class="sb-label">Mandate to LOI</span></div>
+  <div class="sb-clock" id="mtime">Market open</div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-bar"><div class="ticker-track" id="ticker"></div></div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- LEFT: PRODUCT LIST -->
+<div class="product-list-panel">
+  <div class="plp-head">
+    <input class="search-inp" id="search" placeholder="Search product, SKU..." oninput="renderList()"/>
+    <div class="sector-filters">
+      <button class="sf-btn active" onclick="setFilter('all',this)">All</button>
+      <button class="sf-btn" onclick="setFilter('metals',this)">🔩</button>
+      <button class="sf-btn" onclick="setFilter('building',this)">🏗️</button>
+      <button class="sf-btn" onclick="setFilter('energy',this)">⚡</button>
+      <button class="sf-btn" onclick="setFilter('agriculture',this)">🌾</button>
+      <button class="sf-btn" onclick="setFilter('chemicals',this)">🧪</button>
+    </div>
+  </div>
+  <div class="product-list" id="product-list"></div>
+</div>
+
+<!-- CENTER -->
+<div class="center-panel">
+
+  <!-- PRODUCT HEADER -->
+  <div class="product-header" id="product-header">
+    <div style="flex:1">
+      <div class="ph-name" id="ph-name">Select a product</div>
+      <div class="ph-meta" id="ph-meta">Click any product on the left to view the order book</div>
+    </div>
+    <div style="text-align:right">
+      <div class="ph-price" id="ph-price" style="color:var(--muted)">—</div>
+      <div class="ph-change-row" id="ph-change"></div>
+      <div class="ph-stats" id="ph-stats"></div>
+    </div>
+    <div class="ph-actions" id="ph-actions"></div>
+  </div>
+
+  <!-- SPARK + ORDER BOOK split -->
+  <div style="display:grid;grid-template-rows:80px 1fr;overflow:hidden">
+
+    <!-- SPARK -->
+    <div class="spark-section">
+      <div class="spark-title">Price chart — 7 days</div>
+      <div class="spark-wrap"><svg id="spark-svg" viewBox="0 0 400 50" preserveAspectRatio="none"><polyline id="spark-line" fill="none" stroke="var(--muted)" stroke-width="1.5" points=""/><polyline id="spark-fill" fill="rgba(91,95,239,.08)" stroke="none" points=""/></svg></div>
+    </div>
+
+    <!-- ORDER BOOK -->
+    <div class="order-book" id="order-book">
+      <div class="ob-side">
+        <div class="ob-header"><span style="color:var(--green)">BIDS</span><span style="color:var(--muted)">Buyers wanting to buy</span></div>
+        <div id="bids-list"></div>
+      </div>
+      <div class="ob-side">
+        <div class="ob-header"><span style="color:var(--red)">ASKS</span><span style="color:var(--muted)">Sellers offering to sell</span></div>
+        <div id="asks-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECENT TRADES -->
+  <div class="trades-section" style="max-height:180px">
+    <div class="trades-header">
+      <span>Recent Deals</span>
+      <span style="color:var(--muted);font-weight:400">LOIs signed today</span>
+    </div>
+    <div id="trades-list"></div>
+  </div>
+
+</div>
+
+<!-- RIGHT: NEGOTIATE -->
+<div class="right-panel">
+  <div class="rp-head">
+    <div class="rp-title">🤖 Start Negotiation</div>
+    <div class="rp-sub">Set mandate · Agent negotiates · You approve</div>
+  </div>
+  <div class="rp-body" id="rp-body">
+    <div class="empty-state">
+      <div class="es-icon">←</div>
+      <div class="es-text">Select a product<br/>to configure your<br/>negotiation mandate</div>
+    </div>
+  </div>
+  <div class="rp-foot" id="rp-foot" style="display:none">
+    <button class="btn-neg" onclick="startNeg()">🤖 Start agent →</button>
+    <button class="btn-watch-full" onclick="watchIt()">👁️ Watch this price — 1 credit/day</button>
+    <div class="rp-note">Boss approval required before LOI · Credits never expire</div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+var PRODUCTS = [
+  {id:1,emoji:'🔩',sector:'metals',name:'Steel Rebar G60 12mm',sku:'STL-12',ref:'REF-MET-001',price:2840,prev:2775,unit:'MT',moq:10,lead:7,certs:['ISO 3834','CE'],deals:7,volume:284000,history:[2680,2710,2730,2750,2775,2800,2820,2840]},
+  {id:2,emoji:'🔩',sector:'metals',name:'Steel HR Coil SS400',sku:'STL-HRC',ref:'REF-MET-001',price:3100,prev:3100,unit:'MT',moq:20,lead:10,certs:['ISO 3834'],deals:2,volume:62000,history:[3050,3060,3070,3080,3095,3100,3100,3100]},
+  {id:3,emoji:'🔩',sector:'metals',name:'Aluminum 6061-T6',sku:'ALU-6061',ref:'REF-MET-002',price:9200,prev:9380,unit:'MT',moq:5,lead:8,certs:['CE','REACH'],deals:4,volume:184000,history:[9500,9450,9400,9380,9350,9300,9250,9200]},
+  {id:4,emoji:'🔩',sector:'metals',name:'Aluminum Profiles',sku:'ALU-PRF',ref:'REF-MET-002',price:38,prev:38,unit:'m',moq:500,lead:8,certs:['CE'],deals:1,volume:19000,history:[38,38,38.5,38,38,38,38,38]},
+  {id:5,emoji:'🏗️',sector:'building',name:'Concrete Block 20cm',sku:'BLK-200',ref:'REF-BLD-001',price:4.8,prev:4.75,unit:'Unit',moq:1000,lead:3,certs:['ISO 9001'],deals:3,volume:14400,history:[4.6,4.65,4.7,4.72,4.75,4.75,4.78,4.8]},
+  {id:6,emoji:'🏗️',sector:'building',name:'Ready-Mix Concrete B25',sku:'CNC-B25',ref:'REF-BLD-001',price:380,prev:385,unit:'m³',moq:10,lead:2,certs:['ISO 9001'],deals:2,volume:7600,history:[390,388,386,385,385,383,381,380]},
+  {id:7,emoji:'🏗️',sector:'building',name:'Porcelain Tile 60×60',sku:'TLE-6060',ref:'REF-BLD-002',price:62,prev:64,unit:'m²',moq:100,lead:5,certs:['ISO 9001'],deals:1,volume:6200,history:[65,65,64.5,64,64,63,62.5,62]},
+  {id:8,emoji:'🏗️',sector:'building',name:'PVC Pipe 110mm',sku:'PVC-110',ref:'REF-BLD-003',price:28,prev:28,unit:'m',moq:500,lead:4,certs:['CE'],deals:0,volume:0,history:[28,28,28,28,28,28,28,28]},
+  {id:9,emoji:'⚡',sector:'energy',name:'Industrial Diesel B2',sku:'DSL-B2',ref:'REF-ENE-001',price:4.92,prev:4.90,unit:'Liter',moq:5000,lead:2,certs:['ISO 14001'],deals:2,volume:49200,history:[4.85,4.86,4.87,4.88,4.90,4.90,4.91,4.92]},
+  {id:10,emoji:'🌾',sector:'agriculture',name:'Hard Wheat',sku:'WHT-HRD',ref:'REF-AGR-001',price:1120,prev:1129,unit:'MT',moq:50,lead:14,certs:['ISO 22000'],deals:3,volume:168000,history:[1140,1138,1135,1132,1130,1128,1124,1120]},
+  {id:11,emoji:'🌾',sector:'agriculture',name:'Yellow Corn',sku:'CRN-YLW',ref:'REF-AGR-001',price:980,prev:992,unit:'MT',moq:50,lead:14,certs:['ISO 22000'],deals:1,volume:49000,history:[1000,998,996,994,992,990,985,980]},
+  {id:12,emoji:'🧪',sector:'chemicals',name:'Sulfuric Acid 98%',sku:'H2SO4',ref:'REF-CHM-001',price:580,prev:580,unit:'MT',moq:5,lead:7,certs:['REACH'],deals:1,volume:29000,history:[578,579,580,580,580,580,580,580]},
+  {id:13,emoji:'🧪',sector:'chemicals',name:'Caustic Soda 50%',sku:'NaOH',ref:'REF-CHM-001',price:420,prev:415,unit:'MT',moq:5,lead:7,certs:['REACH'],deals:0,volume:0,history:[410,411,412,413,415,416,418,420]},
+];
+
+var RECENT_DEALS = [
+  {time:'14:38',ref:'SL-LOI-20260501-003',product:'Steel Rebar G60',qty:'100 MT',price:2840,loi:true,id:1},
+  {time:'14:22',ref:'SL-LOI-20260501-004',product:'Hard Wheat',qty:'50 MT',price:1120,loi:true,id:10},
+  {time:'13:55',ref:'SL-LOI-20260501-002',product:'Aluminum 6061-T6',qty:'5 MT',price:9200,loi:true,id:3},
+  {time:'13:22',ref:'RFQ-20260427-001',product:'Steel Rebar G60',qty:'200 MT',price:null,loi:false,id:1},
+  {time:'12:44',ref:'SL-LOI-20260501-001',product:'Yellow Corn',qty:'50 MT',price:980,loi:true,id:11},
+  {time:'12:10',ref:'SL-LOI-20260430-009',product:'Industrial Diesel',qty:'10,000 L',price:4.92,loi:true,id:9},
+];
+
+var SECTOR_ORDER=['metals','building','energy','agriculture','chemicals'];
+var SECTOR_LABELS={metals:'🔩 Metals',building:'🏗️ Building',energy:'⚡ Energy',agriculture:'🌾 Agriculture',chemicals:'🧪 Chemicals'};
+var currentFilter='all';
+var selectedId=null;
+var selectedStrat='standard';
+
+// ── ORDER BOOK GENERATOR ──────────────────────────────────────────────────────
+function generateOrderBook(p){
+  var price = p.price;
+  var spread = price * 0.005; // 0.5% spread
+  var bids=[], asks=[];
+  var bidBase = price - spread/2;
+  var askBase = price + spread/2;
+  for(var i=0;i<8;i++){
+    var bidPrice = Math.round((bidBase - i*price*0.002)*100)/100;
+    var askPrice = Math.round((askBase + i*price*0.002)*100)/100;
+    var bidQty = Math.round((Math.random()*200+20)/p.moq)*p.moq;
+    var askQty = Math.round((Math.random()*200+20)/p.moq)*p.moq;
+    bids.push({price:bidPrice, qty:bidQty, total:Math.round(bidPrice*bidQty)});
+    asks.push({price:askPrice, qty:askQty, total:Math.round(askPrice*askQty)});
+  }
+  return {bids:bids, asks:asks, spread:Math.round((askBase-bidBase)*100)/100};
+}
+
+// ── PRODUCT LIST ──────────────────────────────────────────────────────────────
+function renderList(){
+  var q = document.getElementById('search').value.toLowerCase();
+  var filtered = PRODUCTS.filter(function(p){
+    return (currentFilter==='all'||p.sector===currentFilter) &&
+      (!q||p.name.toLowerCase().includes(q)||p.sku.toLowerCase().includes(q));
+  });
+
+  var html='';
+  var lastSec='';
+  SECTOR_ORDER.forEach(function(sec){
+    var items=filtered.filter(function(p){return p.sector===sec});
+    if(!items.length) return;
+    html+='<div class="pl-sector">'+SECTOR_LABELS[sec]+'</div>';
+    items.forEach(function(p){
+      var chg=((p.price-p.prev)/p.prev)*100;
+      var dir=chg>0.05?'up':chg<-0.05?'down':'flat';
+      var arrow=dir==='up'?'↑':dir==='down'?'↓':'→';
+      html+='<div class="pl-item'+(p.id===selectedId?' selected':'')+'" id="li-'+p.id+'" onclick="selectProduct('+p.id+')">';
+      html+='<div class="pl-icon">'+p.emoji+'</div>';
+      html+='<div class="pl-name"><div class="pl-product">'+p.name+'</div><div class="pl-sku">'+p.sku+'</div></div>';
+      html+='<div class="pl-right"><div class="pl-price">$'+p.price.toLocaleString()+'</div>';
+      html+='<div class="pl-chg '+dir+'">'+arrow+' '+Math.abs(chg).toFixed(1)+'%</div>';
+      if(p.deals>0) html+='<div class="pl-deals">'+p.deals+' LOIs</div>';
+      html+='</div></div>';
+    });
+  });
+
+  document.getElementById('product-list').innerHTML=html||'<div style="padding:20px;text-align:center;color:var(--muted);font-size:11px">No products found</div>';
+}
+
+// ── SELECT PRODUCT ────────────────────────────────────────────────────────────
+function selectProduct(id){
+  selectedId=id;
+  var p=PRODUCTS.find(function(x){return x.id===id});
+  if(!p) return;
+
+  renderList();
+
+  var chg=((p.price-p.prev)/p.prev)*100;
+  var chgAbs=p.price-p.prev;
+  var dir=chg>0.05?'up':chg<-0.05?'down':'flat';
+  var arrow=dir==='up'?'↑':dir==='down'?'↓':'→';
+
+  // Header
+  document.getElementById('ph-name').textContent=p.emoji+' '+p.name;
+  document.getElementById('ph-meta').textContent=p.sku+' · '+p.ref+' · MOQ: '+p.moq.toLocaleString()+' '+p.unit+' · Lead: '+p.lead+' days · '+p.certs.join(' · ');
+  document.getElementById('ph-price').style.color=dir==='up'?'var(--green)':dir==='down'?'var(--red)':'var(--white)';
+  document.getElementById('ph-price').textContent='$'+p.price.toLocaleString()+'/'+p.unit;
+  document.getElementById('ph-change').innerHTML='<span class="'+dir+'" style="font-size:14px;font-weight:700">'+arrow+' '+(chgAbs>=0?'+':'')+chgAbs.toFixed(2)+'</span><span class="'+dir+'" style="font-weight:600">('+chg.toFixed(2)+'%)</span><span style="color:var(--muted);font-size:10px">vs yesterday</span>';
+  document.getElementById('ph-stats').innerHTML=
+    '<div class="ph-stat"><div class="ph-stat-val" style="color:var(--green)">'+p.deals+'</div><div class="ph-stat-label">LOIs today</div></div>'+
+    '<div class="ph-stat"><div class="ph-stat-val" style="color:var(--violet)">'+(p.volume?'$'+(p.volume/1000).toFixed(0)+'K':'—')+'</div><div class="ph-stat-label">Volume today</div></div>'+
+    '<div class="ph-stat"><div class="ph-stat-val">'+p.lead+' days</div><div class="ph-stat-label">Lead time</div></div>'+
+    '<div class="ph-stat"><div class="ph-stat-val">'+p.moq.toLocaleString()+' '+p.unit+'</div><div class="ph-stat-label">Min order</div></div>';
+  document.getElementById('ph-actions').innerHTML=
+    '<button class="btn btn-p btn-p" onclick="window.location.href=\'login.html\'" style="padding:8px 16px;font-size:11px">🤖 Negotiate</button>';
+
+  // Spark
+  renderSpark(p, dir);
+
+  // Order book
+  renderOrderBook(p);
+
+  // Trades
+  renderTrades(id);
+
+  // Negotiate panel
+  renderNegPanel(p);
+}
+
+function renderSpark(p, dir){
+  var h=p.history;
+  var min=Math.min.apply(null,h), max=Math.max.apply(null,h);
+  var range=max-min||1;
+  var pts=h.map(function(v,i){
+    var x=(i/(h.length-1))*400;
+    var y=50-((v-min)/range)*44;
+    return x+','+y;
+  });
+  var color=dir==='up'?'var(--green)':dir==='down'?'var(--red)':'var(--muted)';
+  document.getElementById('spark-line').setAttribute('points',pts.join(' '));
+  document.getElementById('spark-line').setAttribute('stroke',color);
+  var fillPts=pts.slice();
+  fillPts.push('400,50');fillPts.push('0,50');
+  document.getElementById('spark-fill').setAttribute('points',fillPts.join(' '));
+  document.getElementById('spark-fill').setAttribute('fill',dir==='up'?'rgba(34,197,94,.06)':dir==='down'?'rgba(239,68,68,.06)':'rgba(91,95,239,.06)');
+}
+
+function renderOrderBook(p){
+  var ob=generateOrderBook(p);
+  var maxTotal=Math.max.apply(null,ob.bids.concat(ob.asks).map(function(r){return r.total}));
+
+  var bidsHtml='';
+  ob.bids.forEach(function(b){
+    var pct=(b.total/maxTotal)*100;
+    bidsHtml+='<div class="ob-row"><div class="ob-bar ob-bid-bar" style="width:'+pct+'%"></div>'+
+      '<span class="ob-price up">$'+b.price.toLocaleString()+'</span>'+
+      '<span class="ob-qty">'+b.qty.toLocaleString()+' '+p.unit+'</span>'+
+      '<span class="ob-total">$'+(b.total/1000).toFixed(0)+'K</span></div>';
+  });
+
+  var asksHtml='';
+  ob.asks.forEach(function(a){
+    var pct=(a.total/maxTotal)*100;
+    asksHtml+='<div class="ob-row"><div class="ob-bar ob-ask-bar" style="width:'+pct+'%"></div>'+
+      '<span class="ob-price down">$'+a.price.toLocaleString()+'</span>'+
+      '<span class="ob-qty">'+a.qty.toLocaleString()+' '+p.unit+'</span>'+
+      '<span class="ob-total">$'+(a.total/1000).toFixed(0)+'K</span></div>';
+  });
+
+  document.getElementById('bids-list').innerHTML=bidsHtml;
+  document.getElementById('asks-list').innerHTML=asksHtml;
+
+  // Spread label between the two sides
+  var spread = ob.spread;
+  var spreadPct = (spread/p.price*100).toFixed(2);
+}
+
+function renderTrades(id){
+  var deals=RECENT_DEALS.filter(function(d){return d.id===id||!id});
+  var html='';
+  deals.forEach(function(d){
+    var priceStr=d.price?'<span class="tr-price '+(d.loi?'up':'flat')+'">$'+d.price.toLocaleString()+'/'+( PRODUCTS.find(function(p){return p.id===d.id})||{unit:'MT'}).unit+'</span>':'<span class="tr-price flat">—</span>';
+    html+='<div class="trade-row"><span class="tr-time">'+d.time+'</span><span class="tr-ref">'+d.ref+'</span><span class="tr-qty">'+d.qty+'</span>'+priceStr+'<span class="tr-loi">'+(d.loi?'<span style="color:var(--green);font-weight:600">✓ LOI</span>':'<span style="color:var(--muted)">RFQ</span>')+'</span></div>';
+  });
+  document.getElementById('trades-list').innerHTML=html||'<div style="padding:12px;color:var(--muted);font-size:10px;text-align:center">No deals today — be the first.</div>';
+}
+
+function renderNegPanel(p){
+  document.getElementById('rp-body').innerHTML=`
+    <div class="field"><label class="flabel">Product</label><input class="inp" value="${p.name}" readonly style="opacity:.7"/></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div class="field"><label class="flabel">Quantity (${p.unit})</label><input class="inp" id="neg-qty" type="number" value="${p.moq}" placeholder="${p.moq}"/></div>
+      <div class="field"><label class="flabel">Incoterm</label><select class="inp" id="neg-inco"><option>FOB</option><option>CIF</option><option>DAP</option></select></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div class="field"><label class="flabel">Target $/${p.unit}</label><input class="inp" id="neg-target" type="number" value="${Math.round(p.price*0.97)}" placeholder="Target price"/></div>
+      <div class="field"><label class="flabel">Max $/${p.unit}</label><input class="inp" id="neg-max" type="number" value="${Math.round(p.price*1.02)}" placeholder="Walk-away price"/></div>
+    </div>
+    <div class="field">
+      <label class="flabel">Strategy</label>
+      <div class="strategy-row">
+        <div class="strat" id="s-watcher" onclick="setSt('watcher')"><div class="strat-icon">👁️</div><div class="strat-name">Watcher</div><div class="strat-cost">1cr/day</div></div>
+        <div class="strat sel" id="s-standard" onclick="setSt('standard')"><div class="strat-icon">🎯</div><div class="strat-name">Standard</div><div class="strat-cost">10 credits</div></div>
+        <div class="strat" id="s-aggressive" onclick="setSt('aggressive')"><div class="strat-icon">⚡</div><div class="strat-name">Autopilot</div><div class="strat-cost">20 credits</div></div>
+      </div>
+    </div>
+    <div class="cost-bar">
+      <div><div style="font-size:10px;color:var(--white);font-weight:600">Est. cost</div><div style="font-size:9px;color:var(--muted)">session + LOI</div></div>
+      <div style="text-align:right"><div id="cost-display" style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--teal)">15 credits</div><div style="font-size:9px;color:var(--muted)">~$0.50 per credit</div></div>
+    </div>
+  `;
+  selectedStrat='standard';
+  document.getElementById('rp-foot').style.display='flex';
+}
+
+var STRAT_COSTS={watcher:1,standard:10,aggressive:20};
+function setSt(s){
+  selectedStrat=s;
+  ['watcher','standard','aggressive'].forEach(function(x){document.getElementById('s-'+x)?.classList.remove('sel')});
+  document.getElementById('s-'+s)?.classList.add('sel');
+  var cost=STRAT_COSTS[s]+(s==='watcher'?0:5);
+  var d=document.getElementById('cost-display');
+  if(d) d.textContent=cost+' credits'+(s==='watcher'?'/day':'');
+}
+
+function startNeg(){window.location.href='login.html';}
+function watchIt(){window.location.href='login.html';}
+function setFilter(f,btn){
+  currentFilter=f;
+  document.querySelectorAll('.sf-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  renderList();
+}
+
+// ── TICKER ────────────────────────────────────────────────────────────────────
+function buildTicker(){
+  var items=PRODUCTS.map(function(p){
+    var chg=((p.price-p.prev)/p.prev)*100;
+    var dir=chg>0.05?'up':chg<-0.05?'down':'flat';
+    var arrow=dir==='up'?'↑':dir==='down'?'↓':'→';
+    return '<div class="ti">'+p.emoji+' <b>'+p.name+'</b> $'+p.price.toLocaleString()+'/'+p.unit+' <span class="ti-'+dir+'">'+arrow+' '+Math.abs(chg).toFixed(1)+'%</span></div>';
+  }).join('');
+  document.getElementById('ticker').innerHTML=items+items;
+}
+
+// ── LIVE UPDATES ──────────────────────────────────────────────────────────────
+function liveUpdate(){
+  PRODUCTS.forEach(function(p){
+    var vol={metals:.004,building:.002,energy:.003,agriculture:.005,chemicals:.003}[p.sector]||.003;
+    p.prev=p.price;
+    p.price=Math.round(p.price*(1+(Math.random()-.48)*vol)*100)/100;
+    p.history.push(p.price);
+    if(p.history.length>8) p.history.shift();
+
+    // Flash list item
+    var li=document.getElementById('li-'+p.id);
+    if(li){
+      li.classList.remove('flash-up','flash-down');
+      void li.offsetWidth;
+      if(Math.abs(p.price-p.prev)/p.prev>0.001)
+        li.classList.add(p.price>p.prev?'flash-up':'flash-down');
+    }
+  });
+
+  renderList();
+  buildTicker();
+  if(selectedId){
+    var p=PRODUCTS.find(function(x){return x.id===selectedId});
+    if(p){
+      var chg=((p.price-p.prev)/p.prev)*100;
+      var dir=chg>0.05?'up':chg<-0.05?'down':'flat';
+      var arrow=dir==='up'?'↑':dir==='down'?'↓':'→';
+      var el=document.getElementById('ph-price');
+      if(el){el.textContent='$'+p.price.toLocaleString()+'/'+p.unit;el.style.color=dir==='up'?'var(--green)':dir==='down'?'var(--red)':'var(--white)';}
+      var chgEl=document.getElementById('ph-change');
+      if(chgEl){var chgAbs=p.price-p.prev;chgEl.innerHTML='<span class="'+dir+'" style="font-size:14px;font-weight:700">'+arrow+' '+(chgAbs>=0?'+':'')+chgAbs.toFixed(2)+'</span><span class="'+dir+'" style="font-weight:600">('+chg.toFixed(2)+'%)</span><span style="color:var(--muted);font-size:10px"> vs yesterday</span>';}
+      renderOrderBook(p);
+      renderSpark(p,dir);
+    }
+  }
+}
+
+// ── CLOCK ─────────────────────────────────────────────────────────────────────
+function tick(){
+  var d=new Date();
+  document.getElementById('clock').textContent=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' UTC';
+  var h=d.getUTCHours();
+  var open=h>=6&&h<18;
+  document.getElementById('mtime').textContent=open?'Market open — Dubai time':'After hours';
+  document.getElementById('mtime').style.color=open?'var(--green)':'var(--muted)';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+buildTicker();
+renderList();
+renderTrades(null);
+tick();
+setInterval(tick,1000);
+setInterval(liveUpdate,20000);
+
+// Select first product on load
+setTimeout(function(){selectProduct(1)},100);
+</script>
+</body>
+</html>

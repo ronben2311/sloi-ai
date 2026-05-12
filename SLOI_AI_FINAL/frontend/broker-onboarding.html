@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Join as Broker — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-links{display:flex;gap:20px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}
+.nav-links a:hover{color:var(--violet)}
+
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:52px 24px 80px}
+
+/* HERO */
+.hero{text-align:center;margin-bottom:52px}
+.eyebrow{font-size:10px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;justify-content:center}
+.eyebrow::before,.eyebrow::after{content:'';width:24px;height:1px;background:var(--indigo)}
+h1{font-family:'Fraunces',serif;font-size:clamp(36px,6vw,58px);font-weight:900;line-height:.95;letter-spacing:-.03em;color:var(--white);margin-bottom:16px}
+h1 em{font-style:italic;color:var(--indigo)}
+.hero-sub{font-size:13px;color:var(--muted);line-height:1.85;max-width:520px;margin:0 auto 32px}
+
+/* BENEFITS */
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:48px}
+.benefit{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;transition:border-color .2s}
+.benefit:hover{border-color:rgba(91,95,239,.3)}
+.benefit-icon{font-size:24px;margin-bottom:10px}
+.benefit-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:5px}
+.benefit-desc{font-size:11px;color:var(--muted);line-height:1.6}
+
+/* STEP INDICATOR */
+.steps-bar{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:36px}
+.step-pill{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:20px;font-size:11px;font-weight:600;transition:all .2s;cursor:default}
+.step-pill.active{background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.4);color:var(--violet)}
+.step-pill.done{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.step-pill.pending{background:var(--surface);border:1px solid var(--border);color:var(--muted)}
+.step-pill .sn{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.active .sn{background:var(--indigo);color:#fff}
+.done .sn{background:var(--green);color:#fff}
+.pending .sn{background:var(--border2);color:var(--muted)}
+.step-arrow{color:var(--border2);font-size:16px;padding:0 4px}
+
+/* FORM */
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.fc-header{padding:16px 22px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
+.fc-icon{font-size:20px}
+.fc-title{font-size:13px;font-weight:600;color:var(--white)}
+.fc-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.fc-body{padding:22px;display:flex;flex-direction:column;gap:14px}
+
+.field-group{display:grid;gap:14px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.field .req{color:var(--indigo);margin-left:2px}
+.inp{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:10px 13px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
+.inp:focus{border-color:var(--indigo)}
+.inp::placeholder{color:var(--muted)}
+select.inp option{background:var(--surface2)}
+.inp.error{border-color:var(--red)}
+.field-hint{font-size:10px;color:var(--muted);margin-top:2px}
+.field-error{font-size:10px;color:var(--red);margin-top:2px;display:none}
+
+/* SECTOR CHECKBOXES */
+.sector-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sector-cb{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;cursor:pointer;transition:all .15s;user-select:none}
+.sector-cb:hover{border-color:rgba(91,95,239,.4)}
+.sector-cb.checked{background:rgba(91,95,239,.1);border-color:rgba(91,95,239,.4)}
+.sector-cb input{display:none}
+.sector-check{width:16px;height:16px;border-radius:3px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;transition:all .15s}
+.sector-cb.checked .sector-check{background:var(--indigo);border-color:var(--indigo);color:#fff}
+.sector-label{font-size:11px;color:var(--text)}
+
+/* TERRITORY MAP */
+.territory-note{background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:12px 16px;font-size:11px;color:var(--teal);line-height:1.7;margin-top:4px}
+
+/* REVIEW SECTION */
+.review-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:12px}
+.review-title{font-size:11px;font-weight:600;color:var(--white);letter-spacing:.04em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rv{display:flex;flex-direction:column;gap:2px}
+.rv-label{font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.rv-val{font-size:12px;color:var(--white)}
+
+/* TERMS */
+.terms-box{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:16px;max-height:160px;overflow-y:auto;font-size:11px;color:var(--muted);line-height:1.8;margin-bottom:12px}
+.terms-box h4{color:var(--white);font-size:11px;margin-bottom:6px;margin-top:12px}
+.terms-box h4:first-child{margin-top:0}
+.check-row{display:flex;align-items:flex-start;gap:10px;font-size:11px;color:var(--text);cursor:pointer;line-height:1.5}
+.check-row input{margin-top:2px;accent-color:var(--indigo);width:14px;height:14px;flex-shrink:0}
+
+/* SUCCESS */
+.success-card{display:none;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.3);border-radius:10px;padding:40px;text-align:center}
+.success-card.show{display:block}
+.success-icon{font-size:52px;margin-bottom:16px}
+.success-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white);margin-bottom:8px;letter-spacing:-.02em}
+.success-title em{font-style:italic;color:var(--green)}
+.success-sub{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:24px}
+.next-steps{display:flex;flex-direction:column;gap:8px;text-align:left;max-width:420px;margin:0 auto 24px}
+.ns-item{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--text);padding:10px 14px;background:var(--surface2);border-radius:5px}
+.ns-n{width:20px;height:20px;border-radius:50%;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.25);color:var(--green);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+
+/* BUTTONS */
+.btn{padding:10px 20px;border-radius:5px;font-size:12px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.btn-p:hover{opacity:.85;color:#fff}
+.btn-lg{padding:14px 32px;font-size:13px;font-weight:600}
+
+/* WHO WE LOOK FOR */
+.criteria{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:48px}
+.crit{display:flex;align-items:flex-start;gap:10px;padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:6px}
+.crit-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.crit-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px}
+.crit-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* HOW IT WORKS */
+.how-list{display:flex;flex-direction:column;gap:0;margin-bottom:48px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.how-item{display:flex;align-items:flex-start;gap:16px;padding:18px 22px;border-bottom:1px solid var(--border);transition:background .15s}
+.how-item:last-child{border-bottom:none}
+.how-item:hover{background:var(--surface2)}
+.how-n{width:32px;height:32px;border-radius:50%;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.25);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--violet);flex-shrink:0;margin-top:2px}
+.how-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px}
+.how-desc{font-size:11px;color:var(--muted);line-height:1.65}
+
+/* PROGRESS */
+.progress-bar{height:3px;background:var(--border);border-radius:2px;margin-bottom:28px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--indigo),var(--violet));border-radius:2px;transition:width .4s ease}
+
+/* NAV BUTTONS */
+.form-nav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="about.html">About</a>
+    <a href="docs.html">Docs</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">Broker Network</div>
+    <h1>Become a SLOI AI<br/><em>broker partner.</em></h1>
+    <p class="hero-sub">You source from factories in your region. We connect you to verified buyers globally. AI handles the negotiation. You get paid per signed LOI.</p>
+  </div>
+
+  <!-- BENEFITS -->
+  <div class="benefits">
+    <div class="benefit">
+      <div class="benefit-icon">🌐</div>
+      <div class="benefit-title">Global buyer access</div>
+      <div class="benefit-desc">Buyers from UAE, KSA, Europe, and beyond discover your products through SLOI AI's network and AI agents.</div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-icon">🤖</div>
+      <div class="benefit-title">AI negotiates for you</div>
+      <div class="benefit-desc">SLOI AI's negotiation agent handles back-and-forth with buyers. You just confirm your price floor and approve.</div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-icon">📄</div>
+      <div class="benefit-title">LOI auto-generated</div>
+      <div class="benefit-desc">When deal is agreed, a professional LOI PDF is generated and sent to all parties instantly. No lawyers needed.</div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-icon">🔒</div>
+      <div class="benefit-title">Your factories stay private</div>
+      <div class="benefit-desc">Buyers never see factory names or locations. Your supplier relationships are fully protected.</div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-icon">💰</div>
+      <div class="benefit-title">Your margin is yours</div>
+      <div class="benefit-desc">You set your sell price. SLOI AI charges a fixed LOI fee from you per signed deal — not a % of your margin.</div>
+    </div>
+    <div class="benefit">
+      <div class="benefit-icon">⚡</div>
+      <div class="benefit-title">Fast onboarding</div>
+      <div class="benefit-desc">Apply today. KYC review in 48 hours. First deal within days of approval. No technical setup required.</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div style="font-size:10px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:12px">// HOW IT WORKS FOR YOU AS BROKER</div>
+  <div class="how-list">
+    <div class="how-item">
+      <div class="how-n">1</div>
+      <div><div class="how-title">You join and list your suppliers</div><div class="how-desc">Submit your application below. After KYC approval you add your factory network — products, prices, availability. All anonymous to buyers.</div></div>
+    </div>
+    <div class="how-item">
+      <div class="how-n">2</div>
+      <div><div class="how-title">Buyer submits RFQ</div><div class="how-desc">A buyer or AI agent finds your products and submits a Request for Quote. You receive a WhatsApp notification immediately.</div></div>
+    </div>
+    <div class="how-item">
+      <div class="how-n">3</div>
+      <div><div class="how-title">SLOI AI negotiates</div><div class="how-desc">The AI agent negotiates price with the buyer over 3-7 rounds. You set your floor price — the agent never goes below it.</div></div>
+    </div>
+    <div class="how-item">
+      <div class="how-n">4</div>
+      <div><div class="how-title">LOI signed — you pay a fixed fee</div><div class="how-desc">When deal is agreed and Boss approves, a LOI PDF is generated. You pay SLOI AI the LOI fee (default $500, negotiable). You keep everything else.</div></div>
+    </div>
+    <div class="how-item">
+      <div class="how-n">5</div>
+      <div><div class="how-title">You deliver — buyer pays you directly</div><div class="how-desc">Payment flows directly between buyer and you. SLOI AI does not handle money or escrow. Your factory delivers, buyer pays via SWIFT/TT.</div></div>
+    </div>
+  </div>
+
+  <!-- WHO WE LOOK FOR -->
+  <div style="font-size:10px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:12px">// WHO WE LOOK FOR</div>
+  <div class="criteria">
+    <div class="crit"><div class="crit-icon">🏭</div><div><div class="crit-title">Direct factory access</div><div class="crit-desc">You buy directly from manufacturers — not from other traders or wholesalers.</div></div></div>
+    <div class="crit"><div class="crit-icon">🌍</div><div><div class="crit-title">Clear territory</div><div class="crit-desc">You operate in a specific country or region and know the local market well.</div></div></div>
+    <div class="crit"><div class="crit-icon">📋</div><div><div class="crit-title">Export capability</div><div class="crit-desc">You can handle export documentation, customs, and international logistics.</div></div></div>
+    <div class="crit"><div class="crit-icon">✅</div><div><div class="crit-title">Clean compliance record</div><div class="crit-desc">No sanctions exposure. Company is registered and KYC-clearable. Bank account in a non-sanctioned jurisdiction.</div></div></div>
+    <div class="crit"><div class="crit-icon">💬</div><div><div class="crit-title">WhatsApp active</div><div class="crit-desc">You respond to deal alerts on WhatsApp. This is our primary communication channel for time-sensitive RFQs.</div></div></div>
+    <div class="crit"><div class="crit-icon">📦</div><div><div class="crit-title">Real stock or firm supply</div><div class="crit-desc">You have confirmed supply lines — not spot market speculation. Buyers need reliable delivery commitments.</div></div></div>
+  </div>
+
+  <!-- STEP INDICATOR -->
+  <div class="steps-bar">
+    <div class="step-pill active" id="pill-1"><div class="sn">1</div>Company</div>
+    <div class="step-arrow">›</div>
+    <div class="step-pill pending" id="pill-2"><div class="sn">2</div>Territory</div>
+    <div class="step-arrow">›</div>
+    <div class="step-pill pending" id="pill-3"><div class="sn">3</div>Products</div>
+    <div class="step-arrow">›</div>
+    <div class="step-pill pending" id="pill-4"><div class="sn">4</div>Commercial</div>
+    <div class="step-arrow">›</div>
+    <div class="step-pill pending" id="pill-5"><div class="sn">5</div>Review</div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:20%"></div></div>
+
+  <!-- ══ STEP 1 — COMPANY ══ -->
+  <div id="step-1">
+    <div class="form-card">
+      <div class="fc-header"><div class="fc-icon">🏢</div><div><div class="fc-title">Company Information</div><div class="fc-sub">Your legal entity and primary contact</div></div></div>
+      <div class="fc-body">
+        <div class="field-group g2">
+          <div class="field"><label>Company name <span class="req">*</span></label><input class="inp" id="b-company" placeholder="Gulf Trading LLC"/></div>
+          <div class="field"><label>Legal entity type <span class="req">*</span></label>
+            <select class="inp" id="b-entity">
+              <option value="">— Select —</option>
+              <option>LLC / Ltd.</option><option>PLC / Corp</option>
+              <option>Partnership</option><option>Sole trader</option><option>Government / SOE</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group g2">
+          <div class="field"><label>Country of registration <span class="req">*</span></label>
+            <select class="inp" id="b-country">
+              <option value="">— Select —</option>
+              <option>UAE</option><option>Saudi Arabia</option><option>Egypt</option>
+              <option>Jordan</option><option>Iraq</option><option>Morocco</option>
+              <option>Kuwait</option><option>Oman</option><option>Bahrain</option>
+              <option>Turkey</option><option>Germany</option><option>France</option>
+              <option>Italy</option><option>United Kingdom</option><option>Other</option>
+            </select>
+          </div>
+          <div class="field"><label>Year established <span class="req">*</span></label><input class="inp" id="b-year" type="number" placeholder="2018" min="1900" max="2026"/></div>
+        </div>
+        <div class="field"><label>Company website</label><input class="inp" id="b-website" placeholder="https://yourcompany.com"/></div>
+        <div class="field"><label>Company registration number</label><input class="inp" id="b-regno" placeholder="CR-12345678"/><div class="field-hint">Trade license, commercial registration, or equivalent</div></div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="fc-header"><div class="fc-icon">👤</div><div><div class="fc-title">Primary Contact</div><div class="fc-sub">Person SLOI AI will deal with directly</div></div></div>
+      <div class="fc-body">
+        <div class="field-group g2">
+          <div class="field"><label>Full name <span class="req">*</span></label><input class="inp" id="b-name" placeholder="Mohammed Al-Rashidi"/></div>
+          <div class="field"><label>Title / Role <span class="req">*</span></label><input class="inp" id="b-title" placeholder="CEO / Managing Director"/></div>
+        </div>
+        <div class="field-group g2">
+          <div class="field"><label>Email address <span class="req">*</span></label><input class="inp" id="b-email" type="email" placeholder="mohammed@yourcompany.com"/></div>
+          <div class="field"><label>WhatsApp number <span class="req">*</span></label><input class="inp" id="b-whatsapp" placeholder="+971-5X-XXX-XXXX"/><div class="field-hint">Include country code. This is your deal alert channel.</div></div>
+        </div>
+        <div class="field"><label>Secondary contact (optional)</label><input class="inp" id="b-contact2" placeholder="Name · Email · WhatsApp"/></div>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <div style="font-size:11px;color:var(--muted)">Step 1 of 5</div>
+      <button class="btn btn-p btn-lg" onclick="goStep(2)">Next — Territory →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2 — TERRITORY ══ -->
+  <div id="step-2" style="display:none">
+    <div class="form-card">
+      <div class="fc-header"><div class="fc-icon">🌍</div><div><div class="fc-title">Territory & Market</div><div class="fc-sub">Where you operate and which markets you serve</div></div></div>
+      <div class="fc-body">
+        <div class="field"><label>Primary territory <span class="req">*</span></label><input class="inp" id="b-territory" placeholder="UAE / Saudi Arabia / Gulf region"/><div class="field-hint">Countries or regions you primarily source and supply from</div></div>
+        <div class="field"><label>Countries you can export to <span class="req">*</span></label>
+          <select class="inp" id="b-export" multiple style="min-height:90px">
+            <option>UAE</option><option>Saudi Arabia</option><option>Egypt</option>
+            <option>Jordan</option><option>Kuwait</option><option>Oman</option>
+            <option>Bahrain</option><option>Iraq</option><option>Morocco</option>
+            <option>Turkey</option><option>Germany</option><option>France</option>
+            <option>Italy</option><option>UK</option><option>Other EU</option><option>Other</option>
+          </select>
+          <div class="field-hint">Hold Ctrl / Cmd to select multiple</div>
+        </div>
+
+        <div class="territory-note">
+          ⚡ SLOI AI compliance note: we do not accept brokers who trade with sanctioned countries. Blocked jurisdictions: Iran, Russia, Belarus, North Korea, Syria, Cuba, Venezuela, Myanmar, Sudan. Iraq and Libya require enhanced KYC.
+        </div>
+
+        <div class="field"><label>Incoterms you support <span class="req">*</span></label>
+          <div class="sector-grid" style="grid-template-columns:repeat(4,1fr)">
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="FOB"/><div class="sector-check">✓</div><div class="sector-label">FOB</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="CIF"/><div class="sector-check">✓</div><div class="sector-label">CIF</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="DAP"/><div class="sector-check">✓</div><div class="sector-label">DAP</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="EXW"/><div class="sector-check">✓</div><div class="sector-label">EXW</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="CFR"/><div class="sector-check">✓</div><div class="sector-label">CFR</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="DDP"/><div class="sector-check">✓</div><div class="sector-label">DDP</div></div>
+          </div>
+        </div>
+
+        <div class="field"><label>Port(s) of loading <span class="req">*</span></label><input class="inp" id="b-ports" placeholder="e.g. Port Rashid Dubai · Jeddah · Haifa"/></div>
+        <div class="field"><label>Typical lead time (days)</label><input class="inp" id="b-leadtime" type="number" placeholder="7"/><div class="field-hint">Average days from order confirmation to shipment ready</div></div>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn" onclick="goStep(1)">← Back</button>
+      <button class="btn btn-p btn-lg" onclick="goStep(3)">Next — Products →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 3 — PRODUCTS ══ -->
+  <div id="step-3" style="display:none">
+    <div class="form-card">
+      <div class="fc-header"><div class="fc-icon">📦</div><div><div class="fc-title">Products & Sectors</div><div class="fc-sub">What you supply — this determines where you appear in search</div></div></div>
+      <div class="fc-body">
+        <div class="field">
+          <label>Sectors you cover <span class="req">*</span></label>
+          <div class="sector-grid" id="sector-grid">
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="metals"/><div class="sector-check">✓</div><div class="sector-label">🔩 Metals</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="building"/><div class="sector-check">✓</div><div class="sector-label">🏗️ Building</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="energy"/><div class="sector-check">✓</div><div class="sector-label">⚡ Energy</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="agriculture"/><div class="sector-check">✓</div><div class="sector-label">🌾 Agriculture</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="chemicals"/><div class="sector-check">✓</div><div class="sector-label">🧪 Chemicals</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="other"/><div class="sector-check">✓</div><div class="sector-label">📦 Other</div></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>List your main products <span class="req">*</span></label>
+          <textarea class="inp" id="b-products" style="min-height:100px;resize:vertical;line-height:1.7" placeholder="e.g.&#10;Steel Rebar G60 12mm — 500 MT available — $2,840/MT FOB&#10;Aluminum 6061-T6 — 50 MT available — $9,200/MT FOB&#10;Hard Wheat — 2,000 MT — $1,100/MT CIF"></textarea>
+          <div class="field-hint">One product per line. Include: name, quantity, price (optional), incoterm. You can add more products after approval.</div>
+        </div>
+
+        <div class="field-group g2">
+          <div class="field">
+            <label>Minimum order value (USD)</label>
+            <select class="inp" id="b-minorder">
+              <option>No minimum</option>
+              <option>$5,000+</option><option>$10,000+</option>
+              <option>$25,000+</option><option>$50,000+</option>
+              <option>$100,000+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Monthly supply capacity (USD)</label>
+            <select class="inp" id="b-capacity">
+              <option>— Select —</option>
+              <option>Under $100K</option><option>$100K – $500K</option>
+              <option>$500K – $2M</option><option>$2M – $10M</option>
+              <option>$10M+</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Certifications you hold</label>
+          <div class="sector-grid" style="grid-template-columns:repeat(4,1fr)">
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="ISO 9001"/><div class="sector-check">✓</div><div class="sector-label">ISO 9001</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="ISO 14001"/><div class="sector-check">✓</div><div class="sector-label">ISO 14001</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="ISO 22000"/><div class="sector-check">✓</div><div class="sector-label">ISO 22000</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="CE"/><div class="sector-check">✓</div><div class="sector-label">CE</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="SGS"/><div class="sector-check">✓</div><div class="sector-label">SGS</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="REACH"/><div class="sector-check">✓</div><div class="sector-label">REACH</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="SASO"/><div class="sector-check">✓</div><div class="sector-label">SASO</div></div>
+            <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="Other"/><div class="sector-check">✓</div><div class="sector-label">Other</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn" onclick="goStep(2)">← Back</button>
+      <button class="btn btn-p btn-lg" onclick="goStep(4)">Next — Commercial →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 4 — COMMERCIAL ══ -->
+  <div id="step-4" style="display:none">
+    <div class="form-card">
+      <div class="fc-header"><div class="fc-icon">💰</div><div><div class="fc-title">Commercial Terms</div><div class="fc-sub">How you get paid and what you agree to</div></div></div>
+      <div class="fc-body">
+        <div class="field-group g2">
+          <div class="field"><label>Accepted payment methods <span class="req">*</span></label>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+              <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="TT/SWIFT"/><div class="sector-check">✓</div><div class="sector-label">SWIFT / TT bank transfer</div></div>
+              <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="LC"/><div class="sector-check">✓</div><div class="sector-label">Letter of Credit (LC)</div></div>
+              <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="TT+LC"/><div class="sector-check">✓</div><div class="sector-label">TT 30% + LC 70%</div></div>
+            </div>
+          </div>
+          <div class="field"><label>Currencies accepted <span class="req">*</span></label>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+              <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="USD"/><div class="sector-check">✓</div><div class="sector-label">USD</div></div>
+              <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="EUR"/><div class="sector-check">✓</div><div class="sector-label">EUR</div></div>
+              <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="AED"/><div class="sector-check">✓</div><div class="sector-label">AED</div></div>
+              <div class="sector-cb" onclick="toggleCb(this)"><input type="checkbox" value="SAR"/><div class="sector-check">✓</div><div class="sector-label">SAR</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field-group g2">
+          <div class="field"><label>Payment terms</label>
+            <select class="inp" id="b-payterms">
+              <option>Prepayment 100%</option>
+              <option>TT 30% advance + 70% BL</option>
+              <option>LC at sight</option>
+              <option>Net 30 (existing clients only)</option>
+            </select>
+          </div>
+          <div class="field"><label>LOI fee agreement</label>
+            <select class="inp" id="b-loifee">
+              <option>$500 per signed LOI (default)</option>
+              <option>Negotiate per deal size</option>
+              <option>Monthly flat fee</option>
+            </select>
+            <div class="field-hint">This is what you pay SLOI AI per LOI. Your margin is separate.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="fc-header"><div class="fc-icon">🏦</div><div><div class="fc-title">Bank Details</div><div class="fc-sub">For LOI fee invoicing — not shared with buyers</div></div></div>
+      <div class="fc-body">
+        <div class="field-group g2">
+          <div class="field"><label>Bank name <span class="req">*</span></label><input class="inp" id="b-bank" placeholder="Emirates NBD"/></div>
+          <div class="field"><label>Bank country</label><input class="inp" id="b-bankcountry" placeholder="UAE"/></div>
+        </div>
+        <div class="field-group g2">
+          <div class="field"><label>SWIFT / BIC <span class="req">*</span></label><input class="inp" id="b-swift" placeholder="EBILAEAD"/></div>
+          <div class="field"><label>IBAN / Account number <span class="req">*</span></label><input class="inp" id="b-iban" placeholder="AE07 0331 2345 6789 0123 456"/></div>
+        </div>
+        <div class="field"><label>Account holder name <span class="req">*</span></label><input class="inp" id="b-bankname" placeholder="Gulf Trading LLC"/></div>
+        <div class="territory-note" style="background:rgba(91,95,239,.06);border-color:rgba(91,95,239,.2);color:var(--violet)">
+          🔒 Bank details are encrypted and used only for LOI fee invoicing. They are never shared with buyers or visible on the platform.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <div class="fc-header"><div class="fc-icon">📝</div><div><div class="fc-title">Additional Information</div><div class="fc-sub">Help us understand your business better</div></div></div>
+      <div class="fc-body">
+        <div class="field">
+          <label>How did you hear about SLOI AI?</label>
+          <select class="inp" id="b-source">
+            <option>— Select —</option>
+            <option>Referral from existing broker</option>
+            <option>LinkedIn / social media</option>
+            <option>Google search</option>
+            <option>Trade conference</option>
+            <option>Direct contact from SLOI AI</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Tell us about your business and why you want to join</label>
+          <textarea class="inp" id="b-about" style="min-height:90px;resize:vertical;line-height:1.7" placeholder="e.g. We have been operating in the UAE steel market for 8 years with direct relationships with 5 major mills. We export to 12 countries and process 2,000 MT/month..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn" onclick="goStep(3)">← Back</button>
+      <button class="btn btn-p btn-lg" onclick="goStep(5)">Review application →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 5 — REVIEW ══ -->
+  <div id="step-5" style="display:none">
+    <div class="review-card">
+      <div class="review-title">// COMPANY</div>
+      <div class="review-grid" id="rv-company"></div>
+    </div>
+    <div class="review-card">
+      <div class="review-title">// TERRITORY & PRODUCTS</div>
+      <div class="review-grid" id="rv-territory"></div>
+    </div>
+    <div class="review-card">
+      <div class="review-title">// COMMERCIAL</div>
+      <div class="review-grid" id="rv-commercial"></div>
+    </div>
+
+    <div class="form-card">
+      <div class="fc-header"><div class="fc-icon">📋</div><div><div class="fc-title">Broker Agreement</div><div class="fc-sub">Please read and confirm before submitting</div></div></div>
+      <div class="fc-body">
+        <div class="terms-box">
+          <h4>1. Broker Obligations</h4>
+          You agree to supply verified, genuine products as listed. You will respond to RFQ alerts within 24 hours. You will not contact buyers directly outside of SLOI AI for any deal originated on the platform for a period of 24 months.
+
+          <h4>2. Non-Circumvention</h4>
+          You agree not to circumvent SLOI AI and deal directly with buyers introduced through the platform. Violation results in immediate termination and a penalty equal to 10% of the circumvented deal value.
+
+          <h4>3. LOI Fee</h4>
+          You agree to pay the agreed LOI fee per signed LOI. The default rate is $500 USD. This can be renegotiated annually. Fees are invoiced monthly.
+
+          <h4>4. Supplier Anonymization</h4>
+          You agree that SLOI AI will not disclose your factory names, cities, or contact details to buyers. Products are listed anonymously with only origin country visible.
+
+          <h4>5. Compliance</h4>
+          You confirm you do not trade with sanctioned entities or countries as defined by OFAC, EU, and UN sanctions lists. You will immediately notify SLOI AI of any compliance concern.
+
+          <h4>6. Termination</h4>
+          Either party may terminate with 30 days written notice. Pending LOIs remain binding after termination.
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <label class="check-row">
+            <input type="checkbox" id="agree-terms"/>
+            I have read and agree to the SLOI AI Broker Agreement
+          </label>
+          <label class="check-row">
+            <input type="checkbox" id="agree-sanctions"/>
+            I confirm that my company and all suppliers I represent are not subject to OFAC, EU, or UN sanctions
+          </label>
+          <label class="check-row">
+            <input type="checkbox" id="agree-accurate"/>
+            I confirm that all information provided in this application is accurate and complete
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn" onclick="goStep(4)">← Back</button>
+      <button class="btn btn-p btn-lg" onclick="submitApplication()">✓ Submit application →</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-card" id="success-card">
+    <div class="success-icon">🎉</div>
+    <div class="success-title">Application <em>submitted.</em></div>
+    <div class="success-sub">Thank you for applying to join the SLOI AI broker network.<br/>We will review your application and contact you within 48 hours.</div>
+    <div class="next-steps">
+      <div class="ns-item"><div class="ns-n">1</div>KYC review — we verify your company registration and compliance status (24-48h)</div>
+      <div class="ns-item"><div class="ns-n">2</div>Introduction call — a brief call to confirm your product range and territory</div>
+      <div class="ns-item"><div class="ns-n">3</div>Broker agreement signed — countersigned by SLOI AI</div>
+      <div class="ns-item"><div class="ns-n">4</div>Account activated — you add your suppliers and go live</div>
+      <div class="ns-item"><div class="ns-n">5</div>First RFQ — usually within days of activation</div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <a href="m2m-homepage.html" class="btn btn-p">Back to SLOI AI →</a>
+      <a href="contact.html" class="btn">Contact us</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var currentStep = 1;
+
+function goStep(n){
+  // Basic validation
+  if(n > currentStep){
+    if(currentStep === 1){
+      if(!document.getElementById('b-company').value.trim()){ alert('Please enter your company name.'); return; }
+      if(!document.getElementById('b-name').value.trim()){ alert('Please enter your contact name.'); return; }
+      if(!document.getElementById('b-email').value.trim()){ alert('Please enter your email.'); return; }
+      if(!document.getElementById('b-whatsapp').value.trim()){ alert('Please enter your WhatsApp number.'); return; }
+    }
+    if(currentStep === 2){
+      if(!document.getElementById('b-territory').value.trim()){ alert('Please enter your territory.'); return; }
+    }
+    if(currentStep === 3){
+      if(!document.getElementById('b-products').value.trim()){ alert('Please list your main products.'); return; }
+    }
+    if(currentStep === 4){
+      if(!document.getElementById('b-bank').value.trim()){ alert('Please enter your bank name.'); return; }
+      if(!document.getElementById('b-swift').value.trim()){ alert('Please enter your SWIFT code.'); return; }
+      if(!document.getElementById('b-iban').value.trim()){ alert('Please enter your IBAN.'); return; }
+    }
+  }
+
+  // Hide current, show next
+  document.getElementById('step-' + currentStep).style.display = 'none';
+  currentStep = n;
+  document.getElementById('step-' + currentStep).style.display = 'block';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+
+  // Update pills
+  for(var i = 1; i <= 5; i++){
+    var pill = document.getElementById('pill-' + i);
+    pill.className = 'step-pill ' + (i < n ? 'done' : i === n ? 'active' : 'pending');
+  }
+
+  // Update progress
+  document.getElementById('progress').style.width = (n * 20) + '%';
+
+  // Populate review
+  if(n === 5) populateReview();
+}
+
+function toggleCb(el){
+  el.classList.toggle('checked');
+  el.querySelector('input').checked = el.classList.contains('checked');
+}
+
+function getChecked(container){
+  return Array.from(container.querySelectorAll('.sector-cb.checked'))
+    .map(function(el){ return el.querySelector('input').value; }).join(', ');
+}
+
+function populateReview(){
+  var rv = function(label, val){
+    return '<div class="rv"><div class="rv-label">' + label + '</div><div class="rv-val">' + (val||'—') + '</div></div>';
+  };
+
+  document.getElementById('rv-company').innerHTML =
+    rv('Company', document.getElementById('b-company').value) +
+    rv('Entity type', document.getElementById('b-entity').value) +
+    rv('Country', document.getElementById('b-country').value) +
+    rv('Est.', document.getElementById('b-year').value) +
+    rv('Contact', document.getElementById('b-name').value) +
+    rv('Email', document.getElementById('b-email').value) +
+    rv('WhatsApp', document.getElementById('b-whatsapp').value) +
+    rv('Website', document.getElementById('b-website').value||'—');
+
+  document.getElementById('rv-territory').innerHTML =
+    rv('Territory', document.getElementById('b-territory').value) +
+    rv('Incoterms', getChecked(document.querySelector('#step-2'))) +
+    rv('Ports', document.getElementById('b-ports').value) +
+    rv('Lead time', document.getElementById('b-leadtime').value + ' days') +
+    rv('Sectors', getChecked(document.getElementById('sector-grid'))) +
+    rv('Min order', document.getElementById('b-minorder').value) +
+    rv('Capacity/month', document.getElementById('b-capacity').value) +
+    rv('Products', document.getElementById('b-products').value.split('\n')[0] + '...');
+
+  document.getElementById('rv-commercial').innerHTML =
+    rv('Payment methods', getChecked(document.querySelector('#step-4'))) +
+    rv('Payment terms', document.getElementById('b-payterms').value) +
+    rv('LOI fee', document.getElementById('b-loifee').value) +
+    rv('Bank', document.getElementById('b-bank').value) +
+    rv('SWIFT', document.getElementById('b-swift').value) +
+    rv('IBAN', document.getElementById('b-iban').value.slice(0,8) + '••••••••') +
+    rv('Account name', document.getElementById('b-bankname').value);
+}
+
+function submitApplication(){
+  if(!document.getElementById('agree-terms').checked){
+    alert('Please agree to the Broker Agreement.'); return;
+  }
+  if(!document.getElementById('agree-sanctions').checked){
+    alert('Please confirm your sanctions compliance.'); return;
+  }
+  if(!document.getElementById('agree-accurate').checked){
+    alert('Please confirm your information is accurate.'); return;
+  }
+
+  // Hide steps
+  for(var i = 1; i <= 5; i++){
+    document.getElementById('step-' + i).style.display = 'none';
+  }
+  document.querySelectorAll('.steps-bar,.progress-bar').forEach(function(el){ el.style.display = 'none'; });
+  document.getElementById('success-card').classList.add('show');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

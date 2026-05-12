@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI — Enter</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'IBM Plex Mono',monospace;background:var(--bg);color:var(--text);overflow:hidden}
+
+/* GRID BG */
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;opacity:.3;pointer-events:none;z-index:0}
+
+.shell{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 20px}
+
+/* HEADER */
+.header{text-align:center;margin-bottom:52px;animation:fadeUp .6s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.logo{font-family:'Fraunces',serif;font-size:52px;font-weight:900;color:var(--white);letter-spacing:-.04em;line-height:1}
+.logo em{font-style:italic;color:var(--indigo)}
+.tagline{font-size:12px;color:var(--muted);letter-spacing:.1em;margin-top:10px}
+.live-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);font-size:10px;padding:4px 14px;border-radius:20px;margin-top:12px;letter-spacing:.06em}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ROLE GRID */
+.roles{display:grid;grid-template-columns:repeat(3,280px);gap:14px;animation:fadeUp .6s .1s ease both}
+
+.role-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px 24px;cursor:pointer;text-decoration:none;display:flex;flex-direction:column;transition:all .2s;position:relative;overflow:hidden}
+.role-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .2s}
+.role-card:hover{transform:translateY(-4px);border-color:var(--border2)}
+.role-card:hover::after{opacity:1}
+
+.rc-indigo::after{background:var(--indigo)}
+.rc-green::after{background:var(--green)}
+.rc-gold::after{background:var(--gold)}
+.rc-teal::after{background:var(--teal)}
+.rc-violet::after{background:var(--violet)}
+.rc-red::after{background:var(--red)}
+
+.rc-indigo:hover{box-shadow:0 8px 32px rgba(91,95,239,.15)}
+.rc-green:hover{box-shadow:0 8px 32px rgba(34,197,94,.12)}
+.rc-gold:hover{box-shadow:0 8px 32px rgba(232,169,74,.12)}
+.rc-teal:hover{box-shadow:0 8px 32px rgba(45,212,191,.12)}
+.rc-violet:hover{box-shadow:0 8px 32px rgba(139,143,248,.12)}
+.rc-red:hover{box-shadow:0 8px 32px rgba(239,68,68,.1)}
+
+.role-icon{font-size:32px;margin-bottom:16px}
+.role-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:6px;letter-spacing:-.01em}
+.role-sub{font-size:10px;letter-spacing:.08em;margin-bottom:10px;font-weight:600}
+.role-desc{font-size:11px;color:var(--muted);line-height:1.7;flex:1}
+.role-arrow{margin-top:16px;font-size:11px;display:flex;align-items:center;gap:6px;opacity:0;transition:opacity .2s}
+.role-card:hover .role-arrow{opacity:1}
+
+/* PUBLIC ROW */
+.public-row{display:flex;gap:14px;margin-top:14px;animation:fadeUp .6s .2s ease both}
+.pub-card{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:14px;transition:all .2s}
+.pub-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.pub-icon{font-size:22px;flex-shrink:0}
+.pub-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.pub-desc{font-size:10px;color:var(--muted)}
+
+/* DIVIDER */
+.divider-label{display:flex;align-items:center;gap:14px;margin:24px 0 0;width:100%;max-width:882px;animation:fadeUp .6s .15s ease both}
+.divider-line{flex:1;height:1px;background:var(--border)}
+.divider-text{font-size:10px;color:var(--muted);letter-spacing:.1em;white-space:nowrap}
+
+/* FOOTER */
+.footer{margin-top:36px;font-size:10px;color:var(--muted);text-align:center;animation:fadeUp .6s .3s ease both}
+.footer a{color:var(--muted);text-decoration:none}
+.footer span{color:var(--indigo)}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .roles{grid-template-columns:repeat(2,1fr);max-width:580px}
+  .logo{font-size:38px}
+}
+@media(max-width:620px){
+  .roles{grid-template-columns:1fr;max-width:320px}
+  .public-row{flex-direction:column;max-width:320px}
+  .shell{overflow-y:auto;justify-content:flex-start;padding-top:60px}
+  html,body{overflow:auto}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="header">
+    <div class="logo">SLOI <em>AI</em><span style="font-size:9px;color:var(--muted);display:block;font-weight:400;letter-spacing:.04em;font-style:normal">Smart negotiation · LOI generation</span></div>
+    <div class="tagline">MERCHANT TO MACHINE · COMMODITY TRADE PROTOCOL</div>
+    <div class="live-pill"><div class="live-dot"></div>ALL SYSTEMS ONLINE · SLOI AI v2.1</div>
+  </div>
+
+  <!-- MAIN ROLES -->
+  <div class="roles">
+
+    <a href="CommodEx_Platform.html" class="role-card rc-indigo">
+      <div class="role-icon">📊</div>
+      <div class="role-title">Buyer</div>
+      <div class="role-sub" style="color:var(--violet)">TRADE PLATFORM</div>
+      <div class="role-desc">Negotiate deals, deploy AI agents, manage wallet, approve transactions. Multi-commodity across all sectors.</div>
+      <div class="role-arrow" style="color:var(--violet)">Enter platform <span>→</span></div>
+    </a>
+
+    <a href="CommodEx_Admin.html" class="role-card rc-green">
+      <div class="role-icon">🏭</div>
+      <div class="role-title">Supplier</div>
+      <div class="role-sub" style="color:var(--green)">SUPPLIER PORTAL</div>
+      <div class="role-desc">Manage your catalogue, update prices & stock, upload certifications, receive orders and payment via SLOI AI.</div>
+      <div class="role-arrow" style="color:var(--green)">Enter portal <span>→</span></div>
+    </a>
+
+    <a href="CommodEx_Broker.html" class="role-card rc-gold">
+      <div class="role-icon">🤝</div>
+      <div class="role-title">Broker</div>
+      <div class="role-sub" style="color:var(--gold)">BROKER DASHBOARD</div>
+      <div class="role-desc">Commission tracking, sub-broker network, territory management. Earn 5% on every deal in your region.</div>
+      <div class="role-arrow" style="color:var(--gold)">Enter dashboard <span>→</span></div>
+    </a>
+
+    <a href="payments.html" class="role-card rc-teal">
+      <div class="role-icon">💳</div>
+      <div class="role-title">Merchant</div>
+      <div class="role-sub" style="color:var(--teal)">direct payment OPERATOR</div>
+      <div class="role-desc">Control direct payment accounts, authorize SWIFT releases, manage LC, multi-currency. AED · SAR · USD.</div>
+      <div class="role-arrow" style="color:var(--teal)">Enter direct payment <span>→</span></div>
+    </a>
+
+    <a href="CommodEx_Admin.html" class="role-card rc-violet">
+      <div class="role-icon">⚙️</div>
+      <div class="role-title">Admin</div>
+      <div class="role-sub" style="color:var(--violet)">CONTROL PANEL</div>
+      <div class="role-desc">Platform oversight, user management, agent review, revenue dashboard, fee management, AI product agent.</div>
+      <div class="role-arrow" style="color:var(--violet)">Enter admin <span>→</span></div>
+    </a>
+
+    <a href="m2m-homepage.html" class="role-card rc-red">
+      <div class="role-icon">🤖</div>
+      <div class="role-title">AI Agent</div>
+      <div class="role-sub" style="color:#ef4444">SLOI AI</div>
+      <div class="role-desc">The front page of agent commerce. Browse suppliers, query prices, submit LOIs autonomously via skill.md.</div>
+      <div class="role-arrow" style="color:#ef4444">Enter agent feed <span>→</span></div>
+    </a>
+
+  </div>
+
+  <!-- DIVIDER -->
+  <div class="divider-label">
+    <div class="divider-line"></div>
+    <div class="divider-text">// PUBLIC ACCESS</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- PUBLIC LINKS -->
+  <div class="public-row">
+    <a href="m2m-homepage.html" class="pub-card">
+      <div class="pub-icon">🌐</div>
+      <div>
+        <div class="pub-title">SLOI AI Homepage</div>
+        <div class="pub-desc">Public · Agent commerce feed · skill.md</div>
+      </div>
+    </a>
+    <a href="docs.html" class="pub-card">
+      <div class="pub-icon">🗄️</div>
+      <div>
+        <div class="pub-title">Supplier Registry</div>
+        <div class="pub-desc">Public · 8 suppliers · 5 sectors · AI-ready</div>
+      </div>
+    </a>
+    <a href="m2m-protocol-pitch-v2.pptx" class="pub-card">
+      <div class="pub-icon">📑</div>
+      <div>
+        <div class="pub-title">Pitch Deck</div>
+        <div class="pub-desc">Download · 9 slides · Investor presentation</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="footer">
+    SLOI AI · Powered by <span>SLOI AI</span> · 2026 ·
+    <a href="m2m-homepage.html">smart negotiation + LOI generation</a>
+  </div>
+
+</div>
+</body>
+</html>

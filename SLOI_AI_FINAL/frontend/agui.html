@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AG-UI Integration — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-tag{font-size:9px;color:var(--muted);margin-left:6px;font-weight:400}
+.nav-links{display:flex;gap:20px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:48px 24px 80px}
+
+/* TABS */
+.tabs-nav{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:28px}
+.tnav{flex:1;padding:11px 0;text-align:center;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);border:none;background:none;font-family:'IBM Plex Mono',monospace;transition:all .15s;border-right:1px solid var(--border)}
+.tnav:last-child{border-right:none}
+.tnav:hover{color:var(--white)}
+.tnav.active{background:var(--surface2);color:var(--white)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* HERO */
+.hero{margin-bottom:40px}
+.eyebrow{font-size:10px;color:var(--indigo);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:'';flex:1;height:1px;background:rgba(91,95,239,.3)}
+h1{font-family:'Fraunces',serif;font-size:clamp(36px,5vw,56px);font-weight:900;line-height:.93;letter-spacing:-.03em;color:var(--white);margin-bottom:14px}
+h1 em{font-style:italic;color:var(--indigo)}
+.hero-sub{font-size:13px;color:var(--muted);line-height:1.85;max-width:620px}
+
+/* ARCHITECTURE */
+.arch{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:28px}
+.arch-title{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.arch-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:center}
+.af-node{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:10px;text-align:center}
+.af-icon{font-size:20px;margin-bottom:5px}
+.af-label{font-size:10px;font-weight:600;color:var(--white)}
+.af-sub{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.4}
+.af-arrow{text-align:center;font-size:18px;color:var(--border2)}
+.af-node.highlight{border-color:rgba(91,95,239,.5);background:rgba(91,95,239,.08)}
+
+/* EVENTS TABLE */
+.events-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.event-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:11px}
+.ev-name{font-family:'IBM Plex Mono',monospace;font-weight:700;width:180px;flex-shrink:0}
+.ev-dir{width:80px;flex-shrink:0;font-size:9px;font-weight:700;padding:2px 6px;border-radius:2px;text-align:center;align-self:flex-start}
+.ev-desc{flex:1;color:var(--muted);line-height:1.5}
+.ev-portal{font-size:9px;color:var(--muted);margin-top:4px}
+.dir-s2c{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.dir-c2s{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.dir-both{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+
+/* PORTAL CARDS */
+.portal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.portal-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px}
+.pc-icon{font-size:24px;margin-bottom:8px}
+.pc-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.pc-role{font-size:10px;color:var(--muted);margin-bottom:8px}
+.pc-events{display:flex;flex-direction:column;gap:3px}
+.pc-event{font-size:10px;display:flex;align-items:center;gap:5px}
+.pc-event::before{content:'→';color:var(--indigo);font-size:10px}
+
+/* CODE */
+.code-wrap{background:var(--bg);border:1px solid var(--border2);border-radius:6px;overflow:hidden;margin-bottom:14px}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-bottom:1px solid var(--border2);background:var(--surface2)}
+.code-lang{font-size:10px;color:var(--muted);letter-spacing:.06em}
+.code-copy{font-size:10px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:3px;padding:2px 8px;font-family:'IBM Plex Mono',monospace}
+.code-copy:hover{border-color:var(--indigo);color:var(--violet)}
+pre{padding:16px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--text);tab-size:2}
+.kw{color:var(--violet)}.str{color:var(--green)}.cm{color:var(--muted)}.num{color:var(--gold)}.fn{color:var(--teal)}.cls{color:#e8a94a}
+.sec-title{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.08em;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;text-transform:uppercase}
+.sec{margin-bottom:28px}
+
+/* CHECKLIST */
+.checklist{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px}
+.cl-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px}
+.cl-item:last-child{border-bottom:none}
+.cl-item input{accent-color:var(--indigo);margin-top:2px;flex-shrink:0}
+.cl-text{color:var(--text);line-height:1.5}
+.cl-tag{font-size:9px;padding:1px 6px;border-radius:2px;margin-left:4px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);flex-shrink:0}
+
+/* BADGE */
+.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.bt{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:11px}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:var(--muted);text-decoration:none}.footer-links a:hover{color:var(--white)}
+</style>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+<nav>
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="docs.html">API Docs</a>
+    <a href="payments.html">Payments</a>
+    <a href="telegram-bot.html">Telegram Bot</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">AG-UI · Agent-User Interaction Protocol</div>
+    <h1>Real-time agent<br/>events across <em>all portals.</em></h1>
+    <p class="hero-sub">AG-UI replaces one-shot API calls with a live event stream — negotiation rounds, price updates, LOI status, and boss approvals flow to every portal in real time. One backend, four frontends, zero polling.</p>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <div class="arch">
+    <div class="arch-title">// Architecture — AG-UI event flow across SLOI AI</div>
+    <div class="arch-flow">
+      <div class="af-node">
+        <div class="af-icon">🤖</div>
+        <div class="af-label">Claude API</div>
+        <div class="af-sub">Negotiation · LeadFinder · PriceScout</div>
+      </div>
+      <div class="af-arrow">→</div>
+      <div class="af-node highlight">
+        <div class="af-icon">⚡</div>
+        <div class="af-label">AG-UI Backend</div>
+        <div class="af-sub">Railway · Node.js · SSE endpoint</div>
+      </div>
+      <div class="af-arrow">→</div>
+      <div style="display:flex;flex-direction:column;gap:5px">
+        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">⚡ Admin</div><div style="color:var(--muted)">All sessions</div></div>
+        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">👤 Buyer</div><div style="color:var(--muted)">Own deals</div></div>
+        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">🌍 Broker</div><div style="color:var(--muted)">Assigned</div></div>
+        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">🏭 Supplier</div><div style="color:var(--muted)">RFQ only</div></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:10px;color:var(--muted)">
+      <span class="badge bv">SSE stream</span>
+      Events: TEXT_CHUNK · ROUND_COMPLETE · AWAIT_HUMAN · LOI_GENERATED · PRICE_UPDATE · LEAD_FOUND · STATE_PATCH
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs-nav">
+    <button class="tnav active" onclick="showTab('events',this)">📋 Event Types</button>
+    <button class="tnav" onclick="showTab('backend',this)">🚂 Backend (Node.js)</button>
+    <button class="tnav" onclick="showTab('frontend',this)">🖥️ Frontend (All portals)</button>
+    <button class="tnav" onclick="showTab('portals',this)">🔐 Per-portal logic</button>
+    <button class="tnav" onclick="showTab('setup',this)">⚙️ Setup checklist</button>
+  </div>
+
+  <!-- ══ EVENTS ══ -->
+  <div id="panel-events" class="tab-panel active">
+    <div class="sec">
+      <div class="sec-title">// AG-UI EVENT TYPES — SLOI AI</div>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:14px">All events are JSON objects streamed over SSE. S→C = server to client. C→S = client to server (via POST).</p>
+
+      <div class="events-grid">
+        <!-- Negotiation events -->
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:4px 0;margin-top:4px">Negotiation</div>
+
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--violet)">NEGOTIATION_STARTED</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">Negotiation session opened. Contains: neg_id, product, qty, buyer, strategy, max_rounds.</div><div class="ev-portal">All portals with access to this deal</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--violet)">TEXT_CHUNK</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">Streaming token from Claude. Append to current bubble. Contains: text, role (agent|broker), round.</div><div class="ev-portal">Agent Console · Buyer Platform (read-only)</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--violet)">ROUND_COMPLETE</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">A full negotiation round finished. Contains: round, agent_price, broker_price, gap_pct, next_action.</div><div class="ev-portal">All portals</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--gold)">AWAIT_HUMAN</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">Agent stopped — Boss approval required. Contains: deal_price, total_value, loi_fee, credits_used. UI must show approval box.</div><div class="ev-portal">Admin · Agent Console · Boss WhatsApp (via Telegram Bot)</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--gold)">HUMAN_RESPONSE</div>
+          <div class="ev-dir dir-c2s">C→S</div>
+          <div><div class="ev-desc">Boss decision. Contains: action (approve|reject|override), override_price (optional).</div><div class="ev-portal">Admin · Agent Console · Telegram Bot</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--green)">LOI_GENERATED</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">LOI created after approval. Contains: loi_ref, deal_price, total_value, pdf_url, buyer_email, broker_phone.</div><div class="ev-portal">All portals</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--red)">NEGOTIATION_FAILED</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">Max rounds reached without deal, or rejected. Contains: reason, last_agent_price, last_broker_price.</div><div class="ev-portal">All portals</div></div>
+        </div>
+
+        <!-- Price events -->
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:4px 0;margin-top:8px">Prices & Leads</div>
+
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--teal)">PRICE_UPDATE</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">Live price change for a commodity. Contains: sku, price, prev_price, change_pct, unit, timestamp.</div><div class="ev-portal">Exchange · Buyer Platform · Agent Console PriceScout</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--teal)">PRICE_ALERT</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">A watched price hit its target. Contains: sku, product, target_price, current_price, user_id.</div><div class="ev-portal">Buyer Platform · Admin · Telegram Bot</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--green)">LEAD_FOUND</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">LeadFinder found a new opportunity. Contains: name, country, value, sector, relevance, reason.</div><div class="ev-portal">Agent Console · Admin · Telegram Bot</div></div>
+        </div>
+
+        <!-- System events -->
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:4px 0;margin-top:8px">System</div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--muted)">STATE_PATCH</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">Partial state update (JSON Patch RFC 6902). Use to sync credit balance, session list, pipeline.</div><div class="ev-portal">All portals</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--muted)">HEARTBEAT</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">Keep-alive every 15s. Contains: timestamp, active_sessions count.</div><div class="ev-portal">All portals</div></div>
+        </div>
+        <div class="event-row">
+          <div class="ev-name" style="color:var(--muted)">COMPLIANCE_RESULT</div>
+          <div class="ev-dir dir-s2c">S→C</div>
+          <div><div class="ev-desc">Compliance screening result. Contains: entity, country, verdict (cleared|review|blocked), lists_matched.</div><div class="ev-portal">Admin · Agent Console</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// EVENT ENVELOPE — JSON FORMAT</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">JSON — every AG-UI event</span></div>
+<pre>{
+  <span class="str">"type"</span>: <span class="str">"ROUND_COMPLETE"</span>,       <span class="cm">// event type</span>
+  <span class="str">"ts"</span>: <span class="num">1746518400000</span>,          <span class="cm">// Unix ms timestamp</span>
+  <span class="str">"session_id"</span>: <span class="str">"NEG-001"</span>,      <span class="cm">// negotiation session ID</span>
+  <span class="str">"user_id"</span>: <span class="str">"usr_abc123"</span>,      <span class="cm">// who this is for (RLS)</span>
+  <span class="str">"data"</span>: {                       <span class="cm">// event-specific payload</span>
+    <span class="str">"round"</span>: <span class="num">3</span>,
+    <span class="str">"agent_price"</span>: <span class="num">2780</span>,
+    <span class="str">"broker_price"</span>: <span class="num">2860</span>,
+    <span class="str">"gap_pct"</span>: <span class="num">2.88</span>,
+    <span class="str">"next_action"</span>: <span class="str">"continue"</span>
+  }
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ BACKEND ══ -->
+  <div id="panel-backend" class="tab-panel">
+
+    <div class="sec">
+      <div class="sec-title">// SSE ENDPOINT — POST /v1/negotiate</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — Railway · routes/negotiate.js</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">const</span> Anthropic = <span class="fn">require</span>(<span class="str">'@anthropic-ai/sdk'</span>);
+<span class="kw">const</span> anthropic = <span class="kw">new</span> Anthropic();
+
+<span class="cm">// POST /v1/negotiate — returns SSE stream</span>
+app.<span class="fn">post</span>(<span class="str">'/v1/negotiate'</span>, <span class="fn">authenticate</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> { neg_id, product, qty, unit, target, max, buyer, strategy } = req.body;
+
+  <span class="cm">// Set SSE headers</span>
+  res.<span class="fn">setHeader</span>(<span class="str">'Content-Type'</span>, <span class="str">'text/event-stream'</span>);
+  res.<span class="fn">setHeader</span>(<span class="str">'Cache-Control'</span>, <span class="str">'no-cache'</span>);
+  res.<span class="fn">setHeader</span>(<span class="str">'Connection'</span>, <span class="str">'keep-alive'</span>);
+  res.<span class="fn">setHeader</span>(<span class="str">'X-Accel-Buffering'</span>, <span class="str">'no'</span>); <span class="cm">// disable nginx buffering</span>
+
+  <span class="kw">const</span> <span class="fn">emit</span> = (type, data) => {
+    res.<span class="fn">write</span>(<span class="str">`data: ${JSON.stringify({ type, ts: Date.now(), session_id: neg_id, data })}\n\n`</span>);
+  };
+
+  <span class="kw">const</span> maxRounds = strategy === <span class="str">'aggressive'</span> ? <span class="num">7</span> : <span class="num">5</span>;
+  <span class="kw">let</span> history = [];
+  <span class="kw">let</span> agentPrice = <span class="kw">null</span>, brokerPrice = <span class="kw">null</span>;
+
+  <span class="fn">emit</span>(<span class="str">'NEGOTIATION_STARTED'</span>, { neg_id, product, qty, unit, buyer, strategy, maxRounds });
+
+  <span class="kw">for</span> (<span class="kw">let</span> round = <span class="num">1</span>; round <= maxRounds; round++) {
+
+    <span class="cm">// ── AGENT TURN (streaming) ─────────────────────</span>
+    <span class="kw">const</span> agentStream = <span class="kw">await</span> anthropic.messages.<span class="fn">stream</span>({
+      model: <span class="str">'claude-sonnet-4-20250514'</span>,
+      max_tokens: <span class="num">300</span>,
+      system: <span class="fn">buildAgentSystem</span>(product, qty, unit, target, max, buyer, strategy, round, maxRounds),
+      messages: [...history, { role: <span class="str">'user'</span>, content: round === <span class="num">1</span> ? <span class="str">'Start. Make opening offer.'</span> : <span class="str">'Make your counter-offer.'</span> }],
+    });
+
+    <span class="kw">let</span> agentMsg = <span class="str">''</span>;
+    <span class="kw">for await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> agentStream) {
+      <span class="kw">if</span> (chunk.type === <span class="str">'content_block_delta'</span> && chunk.delta.type === <span class="str">'text_delta'</span>) {
+        agentMsg += chunk.delta.text;
+        <span class="fn">emit</span>(<span class="str">'TEXT_CHUNK'</span>, { text: chunk.delta.text, role: <span class="str">'agent'</span>, round });
+      }
+    }
+
+    agentPrice = <span class="fn">extractPrice</span>(agentMsg);
+    history.<span class="fn">push</span>({ role: <span class="str">'assistant'</span>, content: agentMsg });
+
+    <span class="cm">// ── BROKER TURN (streaming) ────────────────────</span>
+    <span class="kw">const</span> brokerHistory = history.<span class="fn">map</span>(m => ({ role: m.role === <span class="str">'assistant'</span> ? <span class="str">'user'</span> : <span class="str">'assistant'</span>, content: m.content }));
+    <span class="kw">const</span> brokerStream = <span class="kw">await</span> anthropic.messages.<span class="fn">stream</span>({
+      model: <span class="str">'claude-sonnet-4-20250514'</span>,
+      max_tokens: <span class="num">300</span>,
+      system: <span class="fn">buildBrokerSystem</span>(product, target, max, round),
+      messages: [...brokerHistory, { role: <span class="str">'user'</span>, content: <span class="str">'Respond to the offer.'</span> }],
+    });
+
+    <span class="kw">let</span> brokerMsg = <span class="str">''</span>;
+    <span class="kw">for await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> brokerStream) {
+      <span class="kw">if</span> (chunk.type === <span class="str">'content_block_delta'</span> && chunk.delta.type === <span class="str">'text_delta'</span>) {
+        brokerMsg += chunk.delta.text;
+        <span class="fn">emit</span>(<span class="str">'TEXT_CHUNK'</span>, { text: chunk.delta.text, role: <span class="str">'broker'</span>, round });
+      }
+    }
+
+    brokerPrice = <span class="fn">extractPrice</span>(brokerMsg);
+    history.<span class="fn">push</span>({ role: <span class="str">'user'</span>, content: brokerMsg });
+
+    <span class="kw">const</span> gapPct = agentPrice && brokerPrice ? ((brokerPrice - agentPrice) / agentPrice * <span class="num">100</span>) : <span class="num">99</span>;
+    <span class="fn">emit</span>(<span class="str">'ROUND_COMPLETE'</span>, { round, agent_price: agentPrice, broker_price: brokerPrice, gap_pct: gapPct });
+
+    <span class="cm">// ── CHECK DEAL ────────────────────────────────</span>
+    <span class="kw">if</span> (agentPrice && brokerPrice && brokerPrice <= max && gapPct < <span class="num">2.5</span>) {
+      <span class="kw">const</span> dealPrice = Math.<span class="fn">round</span>((agentPrice + brokerPrice) / <span class="num">2</span>);
+
+      <span class="cm">// AWAIT_HUMAN — stop and wait for Boss</span>
+      <span class="fn">emit</span>(<span class="str">'AWAIT_HUMAN'</span>, {
+        deal_price: dealPrice,
+        total_value: dealPrice * qty,
+        loi_fee: <span class="num">500</span>,
+        credits_used: strategy === <span class="str">'aggressive'</span> ? <span class="num">25</span> : <span class="num">15</span>,
+        round,
+      });
+
+      <span class="cm">// Wait for boss decision (stored in DB by approval endpoint)</span>
+      <span class="kw">const</span> decision = <span class="kw">await</span> <span class="fn">waitForBossDecision</span>(neg_id); <span class="cm">// polls Supabase</span>
+
+      <span class="kw">if</span> (decision.action === <span class="str">'approve'</span>) {
+        <span class="kw">const</span> loiRef = <span class="kw">await</span> <span class="fn">generateLOI</span>({ neg_id, product, qty, unit, buyer, dealPrice });
+        <span class="fn">emit</span>(<span class="str">'LOI_GENERATED'</span>, { loi_ref: loiRef, deal_price: dealPrice, total_value: dealPrice * qty, pdf_url: <span class="str">`/loi/${loiRef}.pdf`</span> });
+      } <span class="kw">else</span> {
+        <span class="fn">emit</span>(<span class="str">'NEGOTIATION_FAILED'</span>, { reason: <span class="str">'boss_rejected'</span> });
+      }
+      <span class="kw">break</span>;
+    }
+
+    <span class="kw">if</span> (round === maxRounds) {
+      <span class="fn">emit</span>(<span class="str">'NEGOTIATION_FAILED'</span>, { reason: <span class="str">'max_rounds'</span>, last_agent_price: agentPrice, last_broker_price: brokerPrice });
+    }
+  }
+
+  res.<span class="fn">end</span>();
+});
+
+<span class="cm">// Boss approval endpoint</span>
+app.<span class="fn">post</span>(<span class="str">'/v1/negotiations/:id/approve'</span>, <span class="fn">authenticate</span>, <span class="fn">requireBoss</span>, <span class="kw">async</span> (req, res) => {
+  <span class="kw">const</span> { action, override_price } = req.body;
+  <span class="kw">await</span> supabase.from(<span class="str">'negotiations'</span>).<span class="fn">update</span>({ boss_decision: action, override_price }).<span class="fn">eq</span>(<span class="str">'id'</span>, req.params.id);
+  res.<span class="fn">json</span>({ ok: <span class="kw">true</span> });
+});</pre>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// GLOBAL SSE STREAM — GET /v1/stream</div>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:12px">All portals connect to a single personal stream filtered by role/user_id. One connection, all events.</p>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">NODE.JS — Global event stream with RLS filtering</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="cm">// GET /v1/stream — persistent SSE connection per authenticated user</span>
+app.<span class="fn">get</span>(<span class="str">'/v1/stream'</span>, <span class="fn">authenticate</span>, (req, res) => {
+  res.<span class="fn">setHeader</span>(<span class="str">'Content-Type'</span>, <span class="str">'text/event-stream'</span>);
+  res.<span class="fn">setHeader</span>(<span class="str">'Cache-Control'</span>, <span class="str">'no-cache'</span>);
+  res.<span class="fn">setHeader</span>(<span class="str">'Connection'</span>, <span class="str">'keep-alive'</span>);
+  res.<span class="fn">setHeader</span>(<span class="str">'X-Accel-Buffering'</span>, <span class="str">'no'</span>);
+
+  <span class="kw">const</span> userId = req.caller.id;
+  <span class="kw">const</span> role = req.caller.role; <span class="cm">// boss|buyer|broker|supplier</span>
+
+  <span class="cm">// Register this connection in event bus</span>
+  <span class="kw">const</span> unsubscribe = eventBus.<span class="fn">subscribe</span>(userId, role, (event) => {
+    res.<span class="fn">write</span>(<span class="str">`data: ${JSON.stringify(event)}\n\n`</span>);
+  });
+
+  <span class="cm">// Heartbeat every 15s</span>
+  <span class="kw">const</span> hb = <span class="fn">setInterval</span>(() => {
+    res.<span class="fn">write</span>(<span class="str">`data: ${JSON.stringify({ type: 'HEARTBEAT', ts: Date.now() })}\n\n`</span>);
+  }, <span class="num">15000</span>);
+
+  req.<span class="fn">on</span>(<span class="str">'close'</span>, () => { <span class="fn">unsubscribe</span>(); <span class="fn">clearInterval</span>(hb); });
+});
+
+<span class="cm">// Event bus — pub/sub with role-based routing</span>
+<span class="kw">const</span> eventBus = {
+  subscribers: <span class="kw">new</span> Map(),
+
+  <span class="fn">subscribe</span>(userId, role, cb) {
+    <span class="kw">this</span>.subscribers.<span class="fn">set</span>(userId, { role, cb });
+    <span class="kw">return</span> () => <span class="kw">this</span>.subscribers.<span class="fn">delete</span>(userId);
+  },
+
+  <span class="fn">publish</span>(event, targetRoles) {
+    <span class="kw">this</span>.subscribers.<span class="fn">forEach</span>(({ role, cb }, userId) => {
+      <span class="cm">// Boss sees everything. Others see their own events only.</span>
+      <span class="kw">if</span> (role === <span class="str">'boss'</span> || targetRoles.<span class="fn">includes</span>(role) || event.user_id === userId) {
+        <span class="fn">cb</span>(event);
+      }
+    });
+  }
+};</pre>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// SUPABASE — NEGOTIATIONS TABLE</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">SQL — Supabase schema</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">CREATE TABLE</span> negotiations (
+  id              TEXT <span class="kw">PRIMARY KEY</span>,         <span class="cm">-- NEG-001</span>
+  product         TEXT <span class="kw">NOT NULL</span>,
+  qty             INT <span class="kw">NOT NULL</span>,
+  unit            TEXT <span class="kw">DEFAULT</span> <span class="str">'MT'</span>,
+  buyer_id        UUID <span class="kw">REFERENCES</span> users(id),
+  buyer_name      TEXT,
+  broker_id       UUID <span class="kw">REFERENCES</span> users(id),
+  target_price    NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  max_price       NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  strategy        TEXT <span class="kw">DEFAULT</span> <span class="str">'standard'</span>,
+  status          TEXT <span class="kw">DEFAULT</span> <span class="str">'running'</span>,  <span class="cm">-- running|awaiting_boss|completed|failed</span>
+  current_round   INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  max_rounds      INT <span class="kw">DEFAULT</span> <span class="num">5</span>,
+  agent_price     NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  broker_price    NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  deal_price      NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  boss_decision   TEXT,                      <span class="cm">-- approve|reject</span>
+  override_price  NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  loi_ref         TEXT,
+  credits_used    INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  created_at      TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>(),
+  updated_at      TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- RLS: buyers see own deals, brokers see assigned, boss sees all</span>
+<span class="kw">ALTER TABLE</span> negotiations <span class="kw">ENABLE ROW LEVEL SECURITY</span>;
+<span class="kw">CREATE POLICY</span> buyer_own <span class="kw">ON</span> negotiations <span class="kw">FOR SELECT USING</span> (buyer_id = auth.<span class="fn">uid</span>());
+<span class="kw">CREATE POLICY</span> broker_assigned <span class="kw">ON</span> negotiations <span class="kw">FOR SELECT USING</span> (broker_id = auth.<span class="fn">uid</span>());
+<span class="kw">CREATE POLICY</span> boss_all <span class="kw">ON</span> negotiations <span class="kw">FOR ALL USING</span> (<span class="fn">is_boss</span>(auth.<span class="fn">uid</span>()));</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FRONTEND ══ -->
+  <div id="panel-frontend" class="tab-panel">
+    <div class="sec">
+      <div class="sec-title">// AG-UI CLIENT — shared across all portals</div>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:12px">One JS class. Each portal imports it and registers handlers for the events it cares about.</p>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">JAVASCRIPT — agui-client.js (shared)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="cm">// agui-client.js — include in every portal</span>
+<span class="kw">class</span> <span class="cls">SloiAGUI</span> {
+  <span class="fn">constructor</span>(authToken) {
+    <span class="kw">this</span>.token = authToken;
+    <span class="kw">this</span>.handlers = {};
+    <span class="kw">this</span>.es = <span class="kw">null</span>;
+    <span class="kw">this</span>.reconnectDelay = <span class="num">1000</span>;
+  }
+
+  <span class="fn">on</span>(eventType, handler) {
+    <span class="kw">if</span> (!<span class="kw">this</span>.handlers[eventType]) <span class="kw">this</span>.handlers[eventType] = [];
+    <span class="kw">this</span>.handlers[eventType].<span class="fn">push</span>(handler);
+    <span class="kw">return this</span>; <span class="cm">// chainable</span>
+  }
+
+  <span class="fn">connect</span>() {
+    <span class="kw">this</span>.es = <span class="kw">new</span> <span class="cls">EventSource</span>(<span class="str">`/v1/stream?token=${this.token}`</span>);
+
+    <span class="kw">this</span>.es.onmessage = (e) => {
+      <span class="kw">try</span> {
+        <span class="kw">const</span> event = JSON.<span class="fn">parse</span>(e.data);
+        <span class="kw">const</span> handlers = <span class="kw">this</span>.handlers[event.type] || [];
+        handlers.<span class="fn">forEach</span>(h => <span class="fn">h</span>(event.data, event));
+      } <span class="kw">catch</span>(err) { console.<span class="fn">error</span>(<span class="str">'AG-UI parse error'</span>, err); }
+    };
+
+    <span class="kw">this</span>.es.onerror = () => {
+      <span class="kw">this</span>.es.<span class="fn">close</span>();
+      <span class="fn">setTimeout</span>(() => <span class="kw">this</span>.<span class="fn">connect</span>(), <span class="kw">this</span>.reconnectDelay = Math.<span class="fn">min</span>(<span class="kw">this</span>.reconnectDelay * <span class="num">2</span>, <span class="num">30000</span>));
+    };
+
+    <span class="kw">this</span>.es.onopen = () => { <span class="kw">this</span>.reconnectDelay = <span class="num">1000</span>; };
+    <span class="kw">return this</span>;
+  }
+
+  <span class="kw">async</span> <span class="fn">humanResponse</span>(negId, action, overridePrice = <span class="kw">null</span>) {
+    <span class="kw">return</span> <span class="fn">fetch</span>(<span class="str">`/v1/negotiations/${negId}/approve`</span>, {
+      method: <span class="str">'POST'</span>,
+      headers: { <span class="str">'Authorization'</span>: <span class="str">`Bearer ${this.token}`</span>, <span class="str">'Content-Type'</span>: <span class="str">'application/json'</span> },
+      body: JSON.<span class="fn">stringify</span>({ action, override_price: overridePrice }),
+    });
+  }
+
+  <span class="fn">disconnect</span>() { <span class="kw">if</span> (<span class="kw">this</span>.es) <span class="kw">this</span>.es.<span class="fn">close</span>(); }
+}
+
+<span class="cm">// Export for use in each portal</span>
+<span class="kw">window</span>.SloiAGUI = <span class="cls">SloiAGUI</span>;</pre>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// USAGE IN AGENT CONSOLE</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">JAVASCRIPT — Agent Console (negotiation-agent.html)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">const</span> agui = <span class="kw">new</span> <span class="cls">SloiAGUI</span>(AUTH_TOKEN)
+  .<span class="fn">on</span>(<span class="str">'TEXT_CHUNK'</span>, ({ text, role, round }) => {
+    <span class="cm">// Stream tokens into the correct bubble</span>
+    <span class="kw">let</span> bubble = document.<span class="fn">getElementById</span>(<span class="str">'bubble-r'</span> + round + <span class="str">'-'</span> + role);
+    <span class="kw">if</span> (!bubble) bubble = <span class="fn">addBubble</span>(role, <span class="str">''</span>, role.toUpperCase() + <span class="str">' Round '</span> + round);
+    bubble.innerHTML += text;
+    chatArea.scrollTop = chatArea.scrollHeight;
+  })
+  .<span class="fn">on</span>(<span class="str">'ROUND_COMPLETE'</span>, ({ round, agent_price, broker_price, gap_pct }) => {
+    <span class="fn">updateRoundsBar</span>(round, maxRounds);
+    <span class="fn">updatePriceDisplay</span>(agent_price, broker_price);
+    <span class="fn">addBubble</span>(<span class="str">'system'</span>, <span class="str">`Round ${round} complete · Gap: ${gap_pct.toFixed(1)}%`</span>);
+  })
+  .<span class="fn">on</span>(<span class="str">'AWAIT_HUMAN'</span>, ({ deal_price, total_value, loi_fee, credits_used }) => {
+    <span class="fn">showApprovalBox</span>(deal_price, total_value, loi_fee, credits_used);
+    <span class="cm">// Boss clicks → agui.humanResponse(negId, 'approve')</span>
+  })
+  .<span class="fn">on</span>(<span class="str">'LOI_GENERATED'</span>, ({ loi_ref, deal_price, pdf_url }) => {
+    <span class="fn">addBubble</span>(<span class="str">'loi'</span>, <span class="str">`✅ LOI ${loi_ref} · $${deal_price.toLocaleString()} · `</span>
+      + <span class="str">`<a href="${pdf_url}">📄 Download</a>`</span>);
+  })
+  .<span class="fn">on</span>(<span class="str">'LEAD_FOUND'</span>, ({ name, country, value, relevance, reason }) => {
+    <span class="fn">appendLeadCard</span>({ name, country, value, relevance, reason });
+    document.<span class="fn">getElementById</span>(<span class="str">'tc-lead'</span>).textContent = ++leadCount + <span class="str">' new'</span>;
+  })
+  .<span class="fn">on</span>(<span class="str">'PRICE_UPDATE'</span>, ({ sku, price, change_pct }) => {
+    <span class="fn">updatePriceRow</span>(sku, price, change_pct);
+  })
+  .<span class="fn">connect</span>();</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PORTALS ══ -->
+  <div id="panel-portals" class="tab-panel">
+    <div class="sec">
+      <div class="sec-title">// EVENTS PER PORTAL — what each one listens to</div>
+      <div class="portal-grid">
+
+        <div class="portal-card">
+          <div class="pc-icon">⚡</div>
+          <div class="pc-title">Boss Admin</div>
+          <div class="pc-role">Sees everything · Full control</div>
+          <div class="pc-events">
+            <div class="pc-event">All NEGOTIATION_* events · all sessions</div>
+            <div class="pc-event">AWAIT_HUMAN → shows approval popup</div>
+            <div class="pc-event">LOI_GENERATED → updates revenue counter</div>
+            <div class="pc-event">LEAD_FOUND → adds to pipeline</div>
+            <div class="pc-event">PRICE_UPDATE → updates war room</div>
+            <div class="pc-event">COMPLIANCE_RESULT → updates log</div>
+            <div class="pc-event">STATE_PATCH → credit balance, counters</div>
+          </div>
+        </div>
+
+        <div class="portal-card">
+          <div class="pc-icon">👤</div>
+          <div class="pc-title">Buyer Platform</div>
+          <div class="pc-role">Own deals only · Read-only stream</div>
+          <div class="pc-events">
+            <div class="pc-event">ROUND_COMPLETE → updates status badge</div>
+            <div class="pc-event">AWAIT_HUMAN → "Pending boss approval" UI</div>
+            <div class="pc-event">LOI_GENERATED → shows download link</div>
+            <div class="pc-event">PRICE_UPDATE → Exchange live prices</div>
+            <div class="pc-event">PRICE_ALERT → toast notification</div>
+            <div class="pc-event">STATE_PATCH → credit balance</div>
+          </div>
+        </div>
+
+        <div class="portal-card">
+          <div class="pc-icon">🌍</div>
+          <div class="pc-title">Broker Portal</div>
+          <div class="pc-role">Assigned deals only</div>
+          <div class="pc-events">
+            <div class="pc-event">NEGOTIATION_STARTED → new RFQ alert</div>
+            <div class="pc-event">ROUND_COMPLETE → round status</div>
+            <div class="pc-event">LOI_GENERATED → LOI notification</div>
+            <div class="pc-event">PRICE_UPDATE → market prices</div>
+            <div class="pc-event">STATE_PATCH → revenue tracker</div>
+          </div>
+        </div>
+
+        <div class="portal-card">
+          <div class="pc-icon">🏭</div>
+          <div class="pc-title">Supplier Portal</div>
+          <div class="pc-role">RFQ and LOI events only</div>
+          <div class="pc-events">
+            <div class="pc-event">NEGOTIATION_STARTED → new RFQ badge</div>
+            <div class="pc-event">LOI_GENERATED → LOI to acknowledge</div>
+            <div class="pc-event">PRICE_UPDATE → own product prices</div>
+            <div class="pc-event">No deal prices, no agent messages</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// AWAIT_HUMAN IN ADMIN — inline approval</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">JAVASCRIPT — Admin War Room (CommodEx_Admin.html)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre>agui.<span class="fn">on</span>(<span class="str">'AWAIT_HUMAN'</span>, (data, event) => {
+  <span class="cm">// Show approval popup in War Room — top priority</span>
+  <span class="kw">const</span> popup = document.<span class="fn">getElementById</span>(<span class="str">'approval-popup'</span>);
+  popup.innerHTML = <span class="str">`
+    &lt;div class="approval-overlay"&gt;
+      &lt;div class="approval-box"&gt;
+        &lt;div class="ab-title"&gt;⚡ Boss approval required&lt;/div&gt;
+        &lt;div class="ab-neg"&gt;${event.session_id}&lt;/div&gt;
+        &lt;div class="ab-price"&gt;$${data.deal_price.toLocaleString()}/MT&lt;/div&gt;
+        &lt;div class="ab-total"&gt;Total: $${data.total_value.toLocaleString()}&lt;/div&gt;
+        &lt;div class="ab-actions"&gt;
+          &lt;button onclick="agui.humanResponse('${event.session_id}','approve')"&gt;✅ Approve&lt;/button&gt;
+          &lt;button onclick="agui.humanResponse('${event.session_id}','reject')"&gt;✗ Reject&lt;/button&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;`</span>;
+  popup.style.display = <span class="str">'block'</span>;
+
+  <span class="cm">// Also notify via Telegram Bot → WhatsApp</span>
+  <span class="fn">fetch</span>(<span class="str">'/v1/telegram-bot/notify'</span>, { method: <span class="str">'POST'</span>, body: JSON.<span class="fn">stringify</span>({ type: <span class="str">'AWAIT_HUMAN'</span>, ...data }) });
+});
+
+<span class="cm">// Hide popup after decision</span>
+agui.<span class="fn">on</span>(<span class="str">'LOI_GENERATED'</span>, () => {
+  document.<span class="fn">getElementById</span>(<span class="str">'approval-popup'</span>).style.display = <span class="str">'none'</span>;
+  <span class="fn">incrementLOICounter</span>();
+});</pre>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// BUYER PLATFORM — read-only negotiation status</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">JAVASCRIPT — Buyer Platform (CommodEx_Platform.html)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre>agui
+  .<span class="fn">on</span>(<span class="str">'ROUND_COMPLETE'</span>, ({ round, agent_price, broker_price }) => {
+    <span class="cm">// Update negotiate tab status — buyer sees round progress</span>
+    document.<span class="fn">getElementById</span>(<span class="str">'neg-status'</span>).textContent = <span class="str">`Round ${round} · Agent: $${agent_price?.toLocaleString()} · Supplier: $${broker_price?.toLocaleString()}`</span>;
+    document.<span class="fn">getElementById</span>(<span class="str">'neg-badge'</span>).textContent = <span class="str">`● R${round}`</span>;
+  })
+  .<span class="fn">on</span>(<span class="str">'AWAIT_HUMAN'</span>, ({ deal_price, total_value }) => {
+    <span class="cm">// Buyer sees "Pending boss approval" — cannot approve themselves</span>
+    document.<span class="fn">getElementById</span>(<span class="str">'neg-status'</span>).innerHTML =
+      <span class="str">`⏳ Pending boss approval · Deal at $${deal_price.toLocaleString()}/MT`</span>;
+  })
+  .<span class="fn">on</span>(<span class="str">'LOI_GENERATED'</span>, ({ loi_ref, pdf_url }) => {
+    <span class="cm">// Switch to LOIs tab and show download</span>
+    <span class="fn">show</span>(<span class="str">'lois'</span>);
+    <span class="fn">prependLOI</span>({ ref: loi_ref, pdf_url });
+    <span class="fn">showToast</span>(<span class="str">'✅ LOI generated! '</span> + loi_ref);
+  })
+  .<span class="fn">on</span>(<span class="str">'PRICE_UPDATE'</span>, ({ sku, price, change_pct }) => {
+    <span class="fn">exUpdatePrice</span>(sku, price, change_pct); <span class="cm">// update Exchange tab</span>
+  })
+  .<span class="fn">connect</span>();</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SETUP ══ -->
+  <div id="panel-setup" class="tab-panel">
+    <div class="sec">
+      <div class="sec-title">// SETUP CHECKLIST — developer</div>
+      <div class="checklist">
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:4px 0;text-transform:uppercase">Backend (Railway)</div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div><div class="cl-text">Install Anthropic SDK: <code style="color:var(--teal)">npm install @anthropic-ai/sdk</code></div></div>
+          <span class="cl-tag">Phase 1</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Create <code style="color:var(--teal)">routes/negotiate.js</code> with SSE endpoint + streaming Claude calls</div>
+          <span class="cl-tag">Phase 1</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Create <code style="color:var(--teal)">routes/stream.js</code> — global SSE stream with eventBus + role filtering</div>
+          <span class="cl-tag">Phase 1</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Add <code style="color:var(--teal)">POST /v1/negotiations/:id/approve</code> — writes boss decision to Supabase</div>
+          <span class="cl-tag">Phase 1</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Create Supabase <code style="color:var(--teal)">negotiations</code> table with RLS policies</div>
+          <span class="cl-tag">Phase 1</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Add <code style="color:var(--teal)">waitForBossDecision(negId)</code> — polls Supabase realtime subscription</div>
+          <span class="cl-tag">Phase 1</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Set <code style="color:var(--teal)">X-Accel-Buffering: no</code> header on Railway (disables nginx buffering for SSE)</div>
+          <span class="cl-tag">Required</span>
+        </div>
+
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:8px 0 4px;text-transform:uppercase">Frontend (Vercel)</div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Create <code style="color:var(--teal)">agui-client.js</code> — shared SloiAGUI class</div>
+          <span class="cl-tag">Phase 2</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Import agui-client.js in all 4 portals: Admin, Buyer, Broker, Supplier</div>
+          <span class="cl-tag">Phase 2</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Replace direct Claude API calls in Agent Console with backend SSE stream</div>
+          <span class="cl-tag">Phase 2</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Add AWAIT_HUMAN approval popup to Admin War Room</div>
+          <span class="cl-tag">Phase 2</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Add read-only negotiation status to Buyer Platform Negotiate tab</div>
+          <span class="cl-tag">Phase 2</span>
+        </div>
+
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:8px 0 4px;text-transform:uppercase">Telegram Bot integration</div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Add <code style="color:var(--teal)">POST /v1/telegram-bot/notify</code> — forwards AWAIT_HUMAN to Telegram Bot webhook → WhatsApp</div>
+          <span class="cl-tag">Phase 3</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Telegram Bot "approve" command → calls <code style="color:var(--teal)">POST /v1/negotiations/:id/approve</code></div>
+          <span class="cl-tag">Phase 3</span>
+        </div>
+        <div class="cl-item"><input type="checkbox"/>
+          <div class="cl-text">Add <code style="color:var(--teal)">TELEGRAM_BOT_TOKEN</code> to Railway ENV</div>
+          <span class="cl-tag">Phase 3</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-title">// ENV VARIABLES — add to Railway</div>
+      <div class="code-wrap">
+        <div class="code-header"><span class="code-lang">ENV</span></div>
+<pre>ANTHROPIC_API_KEY=sk-ant-xxxx          <span class="cm"># Claude API — streaming enabled</span>
+SUPABASE_URL=https://xxx.supabase.co
+SUPABASE_SERVICE_KEY=eyJh...
+TELEGRAM_BOT_TOKEN=https://...       <span class="cm"># from Telegram Bot VPS setup</span>
+AG_UI_HEARTBEAT_INTERVAL=15000         <span class="cm"># ms between heartbeats</span></pre>
+      </div>
+    </div>
+
+    <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:20px;text-align:center">
+      <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">Result: one stream.<br/><em style="font-style:italic;color:var(--indigo)">Four portals. Real time.</em></div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Boss approves on WhatsApp → Admin popup closes → Buyer sees LOI → Broker gets notification → all from a single SSE stream.</p>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <a href="telegram-bot.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Telegram Bot setup →</a>
+        <a href="payments.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Payment infra →</a>
+        <a href="docs.html" style="background:var(--indigo);color:#fff;padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Full API docs →</a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white);text-decoration:none">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
+  <div class="footer-links">
+    <a href="docs.html">Docs</a>
+    <a href="payments.html">Payments</a>
+    <a href="telegram-bot.html">Telegram Bot</a>
+    <a href="agentkit.html">AgentKit</a>
+    <a href="terms.html">Terms</a>
+  </div>
+  <div style="font-size:10px;color:var(--muted)">© 2026 SLOI AI Ltd.</div>
+</footer>
+
+<script>
+function showTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tnav').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function copyCode(btn){
+  var pre=btn.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent.trim()).then(()=>{
+    btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1500);
+  });
+}
+</script>
+</body>
+</html>

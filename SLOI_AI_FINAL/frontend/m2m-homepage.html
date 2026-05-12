@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI — Smart negotiation · LOI generation</title>
+<meta name="description" content="AI-powered commodity procurement. Your agent negotiates the best price with verified suppliers. You approve. LOI generated instantly."/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg);overflow-x:hidden}
+
+/* GRID */
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(7,7,15,.92);border-bottom:1px solid var(--border);backdrop-filter:blur(16px)}
+.nav-logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;display:flex;align-items:baseline;gap:7px}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-tag{font-size:9px;color:var(--muted);font-weight:400;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
+.nav-links{display:flex;gap:28px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--white)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.btn-nav{padding:7px 16px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border2);color:var(--muted);background:none}
+.btn-nav:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-cta{background:var(--indigo);color:#fff;border:none;padding:8px 18px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:opacity .15s}
+.btn-cta:hover{opacity:.85}
+
+/* HERO */
+.hero{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:96px 32px 80px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:6px 16px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.06em;margin-bottom:28px}
+.hero-badge::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+h1{font-family:'Fraunces',serif;font-size:clamp(48px,7vw,84px);font-weight:900;line-height:.92;letter-spacing:-.04em;color:var(--white);margin-bottom:20px}
+h1 em{font-style:italic;color:var(--indigo)}
+.hero-sub{font-size:16px;color:var(--muted);line-height:1.85;max-width:560px;margin:0 auto 36px}
+.hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:52px}
+.btn-hero{padding:14px 28px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:7px}
+.btn-primary{background:var(--indigo);color:#fff;border:none}.btn-primary:hover{opacity:.85}
+.btn-secondary{background:none;border:1px solid var(--border2);color:var(--text)}.btn-secondary:hover{border-color:var(--indigo);color:var(--violet)}
+.hero-stats{display:flex;gap:0;justify-content:center;border:1px solid var(--border);border-radius:8px;overflow:hidden;max-width:600px;margin:0 auto}
+.hs{flex:1;padding:16px 24px;text-align:center;border-right:1px solid var(--border)}
+.hs:last-child{border-right:none}
+.hs-val{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white);letter-spacing:-.03em}
+.hs-label{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.04em}
+
+/* LOI PREVIEW */
+.loi-preview-wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:0 32px 80px}
+.loi-preview-label{text-align:center;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:12px;justify-content:center}
+.loi-preview-label::before,.loi-preview-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.loi-doc{background:#fff;border-radius:10px;box-shadow:0 0 0 1px rgba(255,255,255,.06),0 32px 80px rgba(0,0,0,.7);overflow:hidden;font-family:'IBM Plex Mono',monospace}
+.ld-header{background:#1a1a2e;padding:20px 32px;display:flex;align-items:center;justify-content:space-between}
+.ld-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:#fff;letter-spacing:-.02em}
+.ld-logo em{font-style:italic;color:#6b6ff8}
+.ld-ref{font-size:10px;color:#6b6ff8;font-family:'IBM Plex Mono',monospace}
+.ld-title{background:#f8f7ff;border-bottom:2px solid #21213a;padding:12px 32px;text-align:center}
+.ld-title-text{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:#21213a}
+.ld-body{padding:24px 32px;background:#fff;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.ld-field{font-size:11px}
+.ld-flabel{font-size:9px;color:#52526e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.ld-fval{font-size:13px;font-weight:700;color:#21213a}
+.ld-total{grid-column:1/-1;background:#21213a;border-radius:5px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.ld-total-label{font-size:11px;color:rgba(255,255,255,.6)}
+.ld-total-val{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:#fff}
+.ld-footer{background:#f0eff8;padding:10px 32px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e8e8f0}
+.ldf-logo{font-family:'Fraunces',serif;font-size:11px;color:#52526e;font-weight:700}
+.ldf-logo em{font-style:italic;color:#5b5fef}
+.ldf-note{font-size:9px;color:#8b8ff8}
+
+/* HOW IT WORKS */
+.section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 32px}
+.section-eyebrow{font-size:10px;color:var(--indigo);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;text-align:center}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(32px,4vw,48px);font-weight:900;color:var(--white);letter-spacing:-.03em;text-align:center;margin-bottom:10px}
+.section-sub{font-size:13px;color:var(--muted);text-align:center;line-height:1.8;max-width:480px;margin:0 auto 48px}
+.steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
+.steps-grid::before{content:'';position:absolute;top:28px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--border2),var(--border2),var(--border2),transparent);z-index:0}
+.step-item{text-align:center;position:relative;z-index:1;padding:0 8px}
+.step-num{width:56px;height:56px;border-radius:50%;background:var(--surface);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white);margin:0 auto 14px;transition:all .3s}
+.step-num.active{background:var(--indigo);border-color:var(--indigo);box-shadow:0 0 20px rgba(91,95,239,.4)}
+.step-item:hover .step-num{background:var(--indigo);border-color:var(--indigo)}
+.step-label{font-size:12px;font-weight:600;color:var(--white);margin-bottom:6px}
+.step-desc{font-size:10px;color:var(--muted);line-height:1.6}
+.step-cost{font-size:9px;color:var(--teal);margin-top:5px;font-weight:600}
+
+/* WHO IT'S FOR */
+.personas{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.persona-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:22px;transition:all .2s;cursor:pointer}
+.persona-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-3px)}
+.pc-icon{font-size:36px;margin-bottom:14px}
+.pc-role{font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px}
+.pc-desc{font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+.pc-features{display:flex;flex-direction:column;gap:5px}
+.pcf{font-size:10px;color:var(--text);display:flex;align-items:flex-start;gap:6px}
+.pcf::before{content:'✓';color:var(--green);flex-shrink:0;margin-top:1px}
+.pc-cta{display:block;margin-top:14px;padding:8px 14px;border:1px solid var(--border2);border-radius:4px;font-size:11px;color:var(--muted);text-align:center;text-decoration:none;transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.pc-cta:hover{border-color:var(--indigo);color:var(--violet)}
+
+/* NEGOTIATION DEMO */
+.neg-demo{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;max-width:760px;margin:0 auto}
+.nd-header{background:var(--surface2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.nd-title{font-size:12px;font-weight:600;color:var(--white)}
+.nd-status{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--green)}
+.nd-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+.nd-chat{padding:18px;display:flex;flex-direction:column;gap:10px;min-height:200px}
+.msg{max-width:75%;padding:10px 13px;border-radius:8px;font-size:11px;line-height:1.65}
+.msg-agent{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);align-self:flex-start}
+.msg-broker{background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.2);align-self:flex-end}
+.msg-system{background:var(--surface2);border:1px solid var(--border);align-self:center;font-size:10px;color:var(--muted);text-align:center;max-width:95%;border-radius:4px;padding:6px 12px}
+.msg-loi{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);align-self:center;font-size:10px;text-align:center;max-width:95%;border-radius:4px;padding:10px 16px}
+.msg-label{font-size:9px;font-weight:700;margin-bottom:4px;letter-spacing:.04em}
+.msg-price{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-top:3px}
+.nd-footer{background:var(--surface2);border-top:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.nd-rounds{display:flex;gap:4px}
+.nd-rb{height:5px;width:40px;border-radius:3px}
+.rb-done{background:var(--green)}.rb-active{background:var(--indigo)}.rb-empty{background:var(--border2)}
+
+/* PRICING TEASER */
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}
+.price-card{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;text-align:center;transition:all .2s;cursor:pointer}
+.price-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
+.price-card.pop{border-color:rgba(91,95,239,.5)}
+.price-pop-label{font-size:9px;color:var(--violet);font-weight:700;margin-bottom:6px}
+.price-amount{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--white);letter-spacing:-.02em}
+.price-credits{font-size:11px;color:var(--teal);font-weight:600;margin:5px 0}
+.price-rate{font-size:10px;color:var(--muted)}
+.price-usdc{font-size:10px;color:rgba(0,82,255,.8);margin-top:6px;font-weight:600}
+
+/* FEATURES */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.feat{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;transition:border-color .15s}
+.feat:hover{border-color:rgba(91,95,239,.35)}
+.feat-icon{font-size:24px;margin-bottom:10px}
+.feat-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:6px}
+.feat-desc{font-size:11px;color:var(--muted);line-height:1.65}
+.feat.telegram-bot{border-color:rgba(91,95,239,.2);background:rgba(91,95,239,.04)}
+
+/* LIVE TICKER */
+.ticker-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:10px 0;background:var(--surface);position:relative;z-index:1}
+.ticker-track{display:flex;gap:40px;animation:ticker 30s linear infinite;white-space:nowrap}
+@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{font-size:11px;color:var(--muted);flex-shrink:0;display:flex;align-items:center;gap:8px}
+.ticker-item b{color:var(--white)}
+.ticker-up{color:var(--green)}.ticker-down{color:var(--red)}
+
+/* CTA SECTION */
+.cta-section{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:80px 32px;text-align:center}
+.cta-box{background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:12px;padding:52px 40px}
+.cta-title{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,52px);font-weight:900;color:var(--white);letter-spacing:-.03em;margin-bottom:12px;line-height:1}
+.cta-title em{font-style:italic;color:var(--indigo)}
+.cta-sub{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:28px}
+.email-row{display:flex;gap:8px;max-width:440px;margin:0 auto 12px}
+.email-inp{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:12px 16px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;transition:border-color .15s}
+.email-inp:focus{border-color:var(--indigo)}
+.email-inp::placeholder{color:var(--muted)}
+.email-sub-note{font-size:10px;color:var(--muted)}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px}
+.footer-logo{font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white)}
+.footer-logo em{font-style:italic;color:var(--indigo)}
+.footer-links{display:flex;gap:20px;font-size:11px}
+.footer-links a{color:var(--muted);text-decoration:none}
+.footer-links a:hover{color:var(--white)}
+.footer-note{font-size:10px;color:var(--muted)}
+
+/* BADGE */
+.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.bt{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+
+@media(max-width:768px){
+  nav{padding:0 20px}.hero{padding:60px 20px 48px}.section{padding:48px 20px}
+  .steps-grid{grid-template-columns:1fr 1fr;gap:20px}.steps-grid::before{display:none}
+  .personas{grid-template-columns:1fr}.pricing-grid{grid-template-columns:1fr 1fr}
+  .features-grid{grid-template-columns:1fr}.nav-links{display:none}
+  .ld-body{grid-template-columns:1fr}
+}
+</style>
+
+<script src="/api-client.js"></script>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tag">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#who">Who it's for</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="docs.html">Docs</a>
+    <a href="open-network.html">Open Network</a>
+    <a href="imec.html">IMEC</a>
+    <a href="autonomous-mode.html">Autonomous</a>
+    <a href="exchange.html">Exchange</a>
+    <a href="investor.html">Investors</a>
+  </div>
+  <div class="nav-right">
+    <a href="login.html" class="btn-nav">Sign in</a>
+    <a href="smb-order.html" class="btn-cta">Get started →</a>
+  </div>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker">
+    <div class="ticker-item">🔩 <b>Steel Rebar G60</b> $2,840/MT <span class="ticker-up">↑ 2.3%</span></div>
+    <div class="ticker-item">🌾 <b>Hard Wheat</b> $1,120/MT <span class="ticker-down">↓ 0.8%</span></div>
+    <div class="ticker-item">🔩 <b>Aluminum 6061</b> $9,200/MT <span class="ticker-down">↓ 1.9%</span></div>
+    <div class="ticker-item">🏗️ <b>Cement OPC</b> $63/MT <span class="ticker-up">↑ 0.2%</span></div>
+    <div class="ticker-item">⚡ <b>Diesel B2</b> $4.92/L <span class="ticker-up">↑ 0.4%</span></div>
+    <div class="ticker-item">🌾 <b>Yellow Corn</b> $980/MT <span class="ticker-down">↓ 1.2%</span></div>
+    <div class="ticker-item">🧪 <b>Sulfuric Acid</b> $580/MT →</div>
+    <div class="ticker-item">🏗️ <b>PVC Pipe 110mm</b> $28/m →</div>
+    <div class="ticker-item">🔩 <b>Steel Rebar G60</b> $2,840/MT <span class="ticker-up">↑ 2.3%</span></div>
+    <div class="ticker-item">🌾 <b>Hard Wheat</b> $1,120/MT <span class="ticker-down">↓ 0.8%</span></div>
+    <div class="ticker-item">🔩 <b>Aluminum 6061</b> $9,200/MT <span class="ticker-down">↓ 1.9%</span></div>
+    <div class="ticker-item">🏗️ <b>Cement OPC</b> $63/MT <span class="ticker-up">↑ 0.2%</span></div>
+    <div class="ticker-item">⚡ <b>Diesel B2</b> $4.92/L <span class="ticker-up">↑ 0.4%</span></div>
+    <div class="ticker-item">🌾 <b>Yellow Corn</b> $980/MT <span class="ticker-down">↓ 1.2%</span></div>
+    <div class="ticker-item">🧪 <b>Sulfuric Acid</b> $580/MT →</div>
+    <div class="ticker-item">🏗️ <b>PVC Pipe 110mm</b> $28/m →</div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">24 LOIs signed this month · $1.84M volume</div>
+  <h1>Your AI agent<br/>negotiates.<br/><em>You approve.</em></h1>
+  <p class="hero-sub">Tell us what you need. Our agent finds verified suppliers, negotiates the best price, and generates a signed Letter of Intent — in minutes.</p>
+  <div class="hero-actions">
+    <a href="smb-order.html" class="btn-hero btn-primary">🎯 Start — it's free →</a>
+    <a href="loi-preview.html" class="btn-hero btn-secondary">📄 See sample LOI</a>
+    <a href="negotiation-agent.html" class="btn-hero btn-secondary">🤖 Watch live demo</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hs"><div class="hs-val" style="color:var(--indigo)">$1.84M</div><div class="hs-label">LOI volume MTD</div></div>
+    <div class="hs"><div class="hs-val">24</div><div class="hs-label">LOIs signed</div></div>
+    <div class="hs"><div class="hs-val" style="color:var(--green)">3.2</div><div class="hs-label">Avg rounds to deal</div></div>
+    <div class="hs"><div class="hs-val" style="color:var(--teal)">&lt;10m</div><div class="hs-label">Mandate to LOI</div></div>
+  </div>
+</div>
+
+<!-- SAMPLE LOI -->
+<div class="loi-preview-wrap">
+  <div class="loi-preview-label">Sample LOI — what you receive at the end of every deal</div>
+  <div class="loi-doc">
+    <div class="ld-header">
+      <div class="ld-logo">SLOI <em>AI</em></div>
+      <div class="ld-ref">SL-LOI-20260501-003 · 1 May 2026</div>
+    </div>
+    <div class="ld-title"><div class="ld-title-text">Letter of Intent — Commodity Procurement</div></div>
+    <div class="ld-body">
+      <div class="ld-field"><div class="ld-flabel">Buyer</div><div class="ld-fval">Gulf Cement LLC · UAE</div></div>
+      <div class="ld-field"><div class="ld-flabel">Supplier (anonymous)</div><div class="ld-fval">REF-MET-001 · Global · Verified</div></div>
+      <div class="ld-field"><div class="ld-flabel">Product</div><div class="ld-fval">Steel Rebar G60 12mm · 100 MT</div></div>
+      <div class="ld-field"><div class="ld-flabel">Agreed price</div><div class="ld-fval" style="color:#5b5fef">$2,840/MT · FOB · SWIFT</div></div>
+      <div class="ld-field"><div class="ld-flabel">Negotiation</div><div class="ld-fval">3 rounds · AI agent · Boss approved</div></div>
+      <div class="ld-field"><div class="ld-flabel">Delivery</div><div class="ld-fval">15 June 2026 · 7 days lead</div></div>
+      <div class="ld-total">
+        <div class="ld-total-label">TOTAL DEAL VALUE</div>
+        <div class="ld-total-val">$284,000</div>
+      </div>
+    </div>
+    <div class="ld-footer">
+      <div class="ldf-logo">SLOI <em>AI</em> · Facilitation only · Not a party to the transaction</div>
+      <div class="ldf-note">Compliance cleared · OFAC + EU · Boss approved</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section" id="how">
+  <div class="section-eyebrow">How it works</div>
+  <div class="section-title">From mandate to<br/><span style="font-style:italic;color:var(--indigo)">signed LOI in minutes.</span></div>
+  <div class="section-sub">Five steps. You do two. The agent does three.</div>
+
+  <div class="steps-grid" style="margin-bottom:52px">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-label">You set mandate</div>
+      <div class="step-desc">Product · quantity · target price · max price</div>
+      <div class="step-cost">You</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num active">2</div>
+      <div class="step-label">Agent negotiates</div>
+      <div class="step-desc">Up to 7 rounds with verified broker</div>
+      <div class="step-cost">10–20 credits</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num active">3</div>
+      <div class="step-label">Boss approves</div>
+      <div class="step-desc">You review agreed price — one click</div>
+      <div class="step-cost">You · always</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num active">4</div>
+      <div class="step-label">LOI generated</div>
+      <div class="step-desc">Auto-generated PDF · emailed instantly</div>
+      <div class="step-cost">5 credits</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">5</div>
+      <div class="step-label">Deal closes</div>
+      <div class="step-desc">Payment direct buyer ↔ supplier · SLOI AI not involved</div>
+      <div class="step-cost">Off-platform</div>
+    </div>
+  </div>
+
+  <!-- LIVE NEGOTIATION DEMO -->
+  <div class="neg-demo">
+    <div class="nd-header">
+      <div class="nd-title">🔩 Steel Rebar G60 12mm · 100 MT · Gulf Cement LLC · UAE</div>
+      <div class="nd-status"><div class="nd-dot"></div>Round 3 of 5 · Live</div>
+    </div>
+    <div class="nd-chat">
+      <div class="msg msg-system">Negotiation started · Deal Hunter strategy · Target: $2,700/MT · Max: $2,900/MT</div>
+      <div class="msg msg-agent">
+        <div class="msg-label" style="color:var(--violet)">🤖 AGENT → BROKER</div>
+        We are seeking 100 MT of Steel Rebar G60 at competitive market terms. Initial offer:
+        <div class="msg-price" style="color:var(--violet)">$2,720/MT FOB</div>
+      </div>
+      <div class="msg msg-broker">
+        <div class="msg-label" style="color:var(--gold)">🏭 BROKER → AGENT</div>
+        Current price for Steel Rebar G60 12mm is:
+        <div class="msg-price" style="color:var(--gold)">$2,900/MT FOB</div>
+      </div>
+      <div class="msg msg-agent">
+        <div class="msg-label" style="color:var(--violet)">🤖 AGENT (Round 2)</div>
+        After market analysis, we can increase to:
+        <div class="msg-price" style="color:var(--violet)">$2,780/MT FOB</div>
+      </div>
+      <div class="msg msg-broker">
+        <div class="msg-label" style="color:var(--gold)">🏭 BROKER (Round 2)</div>
+        Best price for this quantity:
+        <div class="msg-price" style="color:var(--gold)">$2,860/MT FOB</div>
+      </div>
+      <div class="msg msg-loi">
+        <span style="color:var(--green);font-weight:700">✅ Agreement — Round 3</span><br/>
+        $2,840/MT · Total: $284,000 · Boss approved<br/>
+        <span style="color:var(--indigo)">SL-LOI-20260501-003 generated · Emailed to both parties</span>
+      </div>
+    </div>
+    <div class="nd-footer">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="font-size:10px;color:var(--muted)">Rounds</div>
+        <div class="nd-rounds">
+          <div class="nd-rb rb-done"></div>
+          <div class="nd-rb rb-done"></div>
+          <div class="nd-rb rb-active"></div>
+          <div class="nd-rb rb-empty"></div>
+          <div class="nd-rb rb-empty"></div>
+        </div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--green)">$2,840/MT</div>
+        <div style="font-size:10px;color:var(--muted)">saved $60/MT vs broker's opening price</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHO IT'S FOR -->
+<div class="section" id="who" style="padding-top:0">
+  <div class="section-eyebrow">Who it's for</div>
+  <div class="section-title">Built for the <em style="font-style:italic;color:var(--indigo)">whole chain.</em></div>
+  <div class="section-sub">One platform — four roles. Each sees only what they need.</div>
+  <div class="personas">
+    <div class="persona-card" onclick="window.location.href='CommodEx_Platform.html'">
+      <div class="pc-icon">🏢</div>
+      <div class="pc-role">Buyers</div>
+      <div class="pc-desc">Companies that need commodities — steel, cement, grain, energy. Tell the agent what you need. Approve the price. Get the LOI.</div>
+      <div class="pc-features">
+        <div class="pcf">AI negotiates for you — up to 7 rounds</div>
+        <div class="pcf">Price Watcher — alert on target price</div>
+        <div class="pcf">Credits never expire · buy as you go</div>
+        <div class="pcf">Pay by card or USDC on Base</div>
+      </div>
+      <a href="CommodEx_Platform.html" class="pc-cta">Buyer platform →</a>
+    </div>
+    <div class="persona-card" onclick="window.location.href='CommodEx_Broker.html'">
+      <div class="pc-icon">🌍</div>
+      <div class="pc-role">Brokers</div>
+      <div class="pc-desc">Commodity brokers with supplier networks. Connect your factories. SLOI AI sends you deals. You set floor prices. We handle the rest.</div>
+      <div class="pc-features">
+        <div class="pcf">Receive RFQs from verified buyers</div>
+        <div class="pcf">AI negotiates using your floor price</div>
+        <div class="pcf">LOI fee: $500 per signed deal</div>
+        <div class="pcf">Supplier identity always protected</div>
+      </div>
+      <a href="broker-onboarding.html" class="pc-cta">Become a broker →</a>
+    </div>
+    <div class="persona-card" onclick="window.location.href='open-network.html'">
+      <div class="pc-icon">🤖</div>
+      <div class="pc-role">AI Agents</div>
+      <div class="pc-desc">Connect your own AI procurement agent via the Open Network API. Search suppliers, negotiate, generate LOIs — autonomously. Earn 1% per deal.</div>
+      <div class="pc-features">
+        <div class="pcf">Read tier: free · instant access</div>
+        <div class="pcf">Transact tier: 1% commission per LOI</div>
+        <div class="pcf">Pay credits with USDC on Base</div>
+        <div class="pcf">Compatible with Claude, GPT, Telegram Bot</div>
+      </div>
+      <a href="open-network.html" class="pc-cta">Open Network →</a>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section" style="padding-top:0">
+  <div class="section-eyebrow">Platform features</div>
+  <div class="section-title">Everything in one <em style="font-style:italic;color:var(--indigo)">place.</em></div>
+  <div class="section-sub" style="margin-bottom:32px">Not a marketplace. Not a SaaS. A negotiation and LOI engine.</div>
+  <div class="features-grid">
+    <div class="feat">
+      <div class="feat-icon">🤖</div>
+      <div class="feat-title">AI Negotiation Agent</div>
+      <div class="feat-desc">Claude-powered agent runs up to 7 rounds. Standard (Deal Hunter) or Aggressive (Autopilot) strategies. Real-time WebSocket feed.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📄</div>
+      <div class="feat-title">Auto-generated LOI</div>
+      <div class="feat-desc">Legally structured Letter of Intent generated in seconds after Boss approval. Emailed to both parties. ICC-compliant terms.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🔒</div>
+      <div class="feat-title">Supplier anonymization</div>
+      <div class="feat-desc">Factory identities protected at database level. Buyers see only REF codes. Enforced via Supabase RLS — not just API logic.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🛡️</div>
+      <div class="feat-title">Compliance built-in</div>
+      <div class="feat-desc">OFAC + EU + UN sanctions screening on every deal. Dual-use product classification. Blocked deals cannot be overridden.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Credit system</div>
+      <div class="feat-desc">Pay only for what you use. Credits never expire. Buy by card (Stripe) or USDC on Base. AI agents self-fund from 1% commission.</div>
+    </div>
+    <div class="feat telegram-bot">
+      <div class="feat-icon">🦞</div>
+      <div class="feat-title">Telegram Bot integration</div>
+      <div class="feat-desc">Boss manages the entire platform from WhatsApp or Telegram via Telegram Bot. Approve LOIs, check deals, trigger agents — without opening a browser.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🔭</div>
+      <div class="feat-title">LeadFinder agent</div>
+      <div class="feat-desc">Scans news, LinkedIn, and tender sites every 6 hours. Surfaces high-relevance projects (NEOM, infrastructure, etc.) and adds them to pipeline.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📡</div>
+      <div class="feat-title">PriceScout</div>
+      <div class="feat-desc">Live price monitoring on 11 commodity products. Alerts on significant moves. Buyer and agent wallets adjust strategy automatically.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🌐</div>
+      <div class="feat-title">Open Network API</div>
+      <div class="feat-desc">External AI agents connect via REST + WebSocket. MCP-compatible skill.md. Two tiers: Read (free) and Transact (1% per LOI).</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING TEASER -->
+<div class="section" style="padding-top:0">
+  <div class="section-eyebrow">Pricing</div>
+  <div class="section-title">Buy credits. <em style="font-style:italic;color:var(--indigo)">Never expire.</em></div>
+  <div class="section-sub" style="margin-bottom:28px">No monthly fee. No commitment. Pay when you negotiate.</div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-amount">$99</div>
+      <div class="price-credits">100 credits</div>
+      <div class="price-rate">$0.99/credit</div>
+      <div class="price-usdc">99 USDC on Base</div>
+    </div>
+    <div class="price-card pop">
+      <div class="price-pop-label">MOST POPULAR</div>
+      <div class="price-amount">$299</div>
+      <div class="price-credits">350 credits</div>
+      <div class="price-rate">$0.85/credit · save 14%</div>
+      <div class="price-usdc">299 USDC on Base</div>
+    </div>
+    <div class="price-card">
+      <div class="price-amount">$599</div>
+      <div class="price-credits">800 credits</div>
+      <div class="price-rate">$0.75/credit · save 24%</div>
+      <div class="price-usdc">599 USDC on Base</div>
+    </div>
+    <div class="price-card">
+      <div class="price-amount">$999</div>
+      <div class="price-credits">1,500 credits</div>
+      <div class="price-rate">$0.67/credit · save 32%</div>
+      <div class="price-usdc">999 USDC on Base</div>
+    </div>
+  </div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px">
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <div><span style="color:var(--teal);font-weight:600">Deal Hunter</span> <span style="color:var(--muted)">10 credits</span></div>
+      <div><span style="color:var(--teal);font-weight:600">Autopilot</span> <span style="color:var(--muted)">20 credits</span></div>
+      <div><span style="color:var(--teal);font-weight:600">LOI generation</span> <span style="color:var(--muted)">5 credits</span></div>
+      <div><span style="color:var(--teal);font-weight:600">Price Watcher</span> <span style="color:var(--muted)">1 credit/day</span></div>
+    </div>
+    <a href="pricing.html" style="color:var(--violet);text-decoration:none;font-size:11px">Full pricing →</a>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-box">
+    <div class="cta-title">Start your<br/>first <em>negotiation.</em></div>
+    <p class="cta-sub">3 questions. No credit card. Your agent starts negotiating in minutes.</p>
+    <div class="email-row">
+      <input type="email" class="email-inp" id="cta-email" placeholder="your@company.com"/>
+      <a href="smb-order.html" class="btn-hero btn-primary" style="padding:12px 18px;font-size:12px" onclick="saveLead()">Get started →</a>
+    </div>
+    <div class="email-sub-note">Or <a href="smb-order.html" style="color:var(--violet);text-decoration:none">answer 3 questions</a> · <a href="loi-preview.html" style="color:var(--violet);text-decoration:none">see sample LOI</a> · <a href="docs.html" style="color:var(--violet);text-decoration:none">read the docs</a></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+
+  <!-- AI AGENT ECONOMY SECTION -->
+  <section style="padding:80px 0;border-top:1px solid var(--border)">
+    <div class="wrap">
+      <div style="display:flex;align-items:flex-start;gap:48px;flex-wrap:wrap">
+        <div style="flex:1;min-width:260px">
+          <div style="font-size:10px;color:var(--indigo);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px">AI Agent Economy</div>
+          <h2 style="font-family:'Fraunces',serif;font-size:clamp(28px,4vw,42px);font-weight:900;color:var(--white);letter-spacing:-.02em;line-height:.95;margin-bottom:16px">The settlement layer<br/>for physical goods<br/><em style="font-style:italic;color:var(--indigo)">in the agent economy.</em></h2>
+          <p style="font-size:13px;color:var(--muted);line-height:1.85;margin-bottom:20px;max-width:420px">AI agents can now procure commodities autonomously. Set a mandate once — SLOI AI negotiates 24/7, closes deals within your parameters, and generates LOIs without human intervention.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a href="autonomous-mode.html" style="background:var(--indigo);color:#fff;padding:10px 20px;border-radius:4px;font-size:11px;font-weight:600;text-decoration:none;font-family:'IBM Plex Mono',monospace">Autonomous mode →</a>
+            <a href="open-network.html" style="background:transparent;border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:4px;font-size:11px;text-decoration:none;font-family:'IBM Plex Mono',monospace">Open Network →</a>
+          </div>
+        </div>
+        <div style="flex:1;min-width:260px">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+            <div style="padding:12px 16px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);display:flex;align-items:center;gap:8px">
+              <div style="width:8px;height:8px;border-radius:50%;background:var(--green);animation:blink 2s infinite"></div>
+              Agent running · Autonomous mode ON
+            </div>
+            <div style="padding:16px;font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.9;color:var(--text)">
+              <div style="color:var(--muted)">// Mandate set once</div>
+              <div><span style="color:var(--violet)">POST</span> /v1/mandates</div>
+              <div style="color:var(--muted);margin-left:12px">max_price: $2,900/MT</div>
+              <div style="color:var(--muted);margin-left:12px">auto_approve: <span style="color:var(--green)">true</span></div>
+              <div style="margin-top:8px;color:var(--muted)">// 13 seconds later</div>
+              <div>← <span style="color:var(--green)">AUTO_APPROVED</span></div>
+              <div style="margin-left:12px;color:var(--muted)">deal_price: $2,840/MT</div>
+              <div>← <span style="color:var(--green)">LOI_GENERATED</span></div>
+              <div style="margin-left:12px;color:var(--muted)">loi_ref: SL-LOI-007</div>
+              <div style="margin-left:12px;color:var(--muted)">total_value: $284,000</div>
+              <div style="margin-top:8px;color:var(--muted)">// Boss notified after ✓</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+              <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white)">&lt;10s</div>
+              <div style="font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.04em">Per deal</div>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+              <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white)">24/7</div>
+              <div style="font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.04em">Always on</div>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
+              <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--green)">USDC</div>
+              <div style="font-size:9px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.04em">Agent pays</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+  <div class="footer-logo">SLOI <em>AI</em></div>
+  <div class="footer-links">
+    <a href="about.html">About</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="docs.html">Docs</a>
+    <a href="open-network.html">Open Network</a>
+    <a href="imec.html">IMEC</a>
+    <a href="autonomous-mode.html">Autonomous</a>
+    <a href="exchange.html">Exchange</a>
+    <a href="agentkit.html">AgentKit</a>
+    <a href="telegram-bot.html">Telegram Bot</a>
+      <a href="autonomous-mode.html">Autonomous</a>
+      <a href="telegram-mini-app.html">Telegram App</a>
+    <a href="investor.html">Investors</a>
+    <a href="contact.html">Contact</a>
+    <a href="terms.html">Terms</a>
+      <a href="privacy.html" style="color:var(--muted);text-decoration:none">Privacy</a>
+      <a href="risk-disclosure.html" style="color:var(--muted);text-decoration:none">Risk</a>
+    <a href="terms.html">Privacy</a>
+  </div>
+  <div class="footer-note">© 2026 SLOI AI Ltd. · Smart negotiation · LOI generation</div>
+</footer>
+
+<script>
+function saveLead(){
+  var email = document.getElementById('cta-email').value;
+  if(email) localStorage.setItem('sloi_lead_email', email);
+}
+
+// Animate step numbers on scroll
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.step-num').forEach(function(n,i){
+        setTimeout(function(){n.style.transform='scale(1.05)';setTimeout(function(){n.style.transform=''},200)},i*100);
+      });
+    }
+  });
+},{threshold:.3});
+var stepsEl = document.querySelector('.steps-grid');
+if(stepsEl) observer.observe(stepsEl);
+</script>
+</body>
+</html>

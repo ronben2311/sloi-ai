@@ -1,0 +1,199 @@
+# SLOI AI
+
+> AI-powered commodity procurement. An agent sets a price mandate, SLOI AI negotiates with verified suppliers via Claude, Boss approves, LOI generated automatically.
+> Base URL: https://api.sloiai.com/v1
+> Auth: x-api-key: sk-sloi-{key} (agents) | Authorization: Bearer {jwt} (humans)
+> Full reference: https://sloiai.com/llms-full.txt
+> MCP skill: https://sloiai.com/skill.md
+
+## QUICK START (5 steps)
+
+1. POST /agents/register → get api_key + sloi_wallet address
+2. GET /v1/products → find product ref
+3. GET /v1/credits/balance → top up if needed
+4. POST /v1/negotiate → SSE stream (AG-UI protocol)
+5. Stream emits AWAIT_HUMAN → POST /v1/negotiations/{id}/approve → LOI_GENERATED
+
+## CORE ENDPOINTS
+
+### Products (free, no auth)
+GET  /v1/products                     List all · ?sector=metals|building|energy|agriculture|chemicals
+GET  /v1/products/{ref}/price         Price + 7-day history · supplier always anonymized (REF-MET-001)
+
+### Auth
+POST /v1/agents/register              Body: {name, email, framework, wallet_address?}
+                                      Returns: {api_key, tier:"read", sloi_wallet}
+                                      Read tier: instant · Transact tier: 5-day review
+
+### Credits
+GET  /v1/credits/balance              Returns: {balance, total_purchased, total_spent}
+POST /v1/credits/purchase             Human→Stripe URL · Agent→USDC instructions (body: {pack:99|299|599|999})
+     USDC shortcut: send exact USDC to sloi_wallet on Base mainnet → credits in ~2 seconds
+
+### Negotiate (AG-UI SSE stream)
+POST /v1/negotiate                    Body: {product_ref, qty, unit, target_price, max_price, strategy, buyer_name?}
+                                      strategy: standard (10cr·5rnd) | aggressive (20cr·7rnd) | watcher (1cr/day)
+                                      Returns: SSE stream of AG-UI events (see below)
+GET  /v1/negotiations                 List negotiations (role-filtered by RLS)
+POST /v1/negotiations/{id}/approve    Body: {action:"approve"|"reject", override_price?} · Boss only
+
+### LOI
+GET  /v1/lois                         List LOIs for current user
+GET  /v1/lois/{ref}/pdf               Download PDF
+
+### Global stream
+GET  /v1/stream                       Persistent SSE · all events for this user · role-filtered
+
+## AG-UI EVENTS (SSE stream)
+
+NEGOTIATION_STARTED   Session opened · {neg_id, product, qty, strategy, max_rounds}
+TEXT_CHUNK            Streaming token · {text, role:"agent"|"broker", round}
+ROUND_COMPLETE        Round finished · {round, agent_price, broker_price, gap_pct}
+AWAIT_HUMAN           Boss must approve · {deal_price, total_value, loi_fee:500, credits_used}
+LOI_GENERATED         Deal done · {loi_ref, deal_price, total_value, pdf_url}
+NEGOTIATION_FAILED    {reason:"max_rounds"|"boss_rejected"|"compliance_blocked"}
+PRICE_UPDATE          Live price change · {sku, price, change_pct}
+LEAD_FOUND            New lead · {name, country, value, relevance, reason}
+STATE_PATCH           Partial state update (JSON Patch RFC 6902)
+AUTO_APPROVED         Deal auto-approved · {deal_price, loi_ref, mandate_id, conditions_met}
+HEARTBEAT             Keep-alive every 15s
+
+## CREDIT COSTS
+
+watcher      1 credit/day    Price monitoring alert
+deal_hunter  10 credits      Standard negotiation (5 rounds)
+autopilot    20 credits      Aggressive negotiation (7 rounds)
+loi          5 credits       LOI generation (after Boss approval)
+compliance   1 credit        Manual entity screen
+lead_finder  5 credits       One lead scan
+
+## CREDIT PACKS
+
+$99  → 100 credits  ($0.99/cr) · 99 USDC on Base
+$299 → 350 credits  ($0.85/cr) · 299 USDC on Base
+$599 → 800 credits  ($0.75/cr) · 599 USDC on Base
+$999 → 1500 credits ($0.67/cr) · 999 USDC on Base
+
+
+## AUTONOMOUS MODE
+
+Agents can set a mandate once and close deals without human intervention.
+
+POST /v1/mandates              Create autonomous mandate
+  product_ref    string
+  qty            number
+  target_price   number
+  max_price      number        Hard ceiling — never exceeded
+  strategy       string        standard | aggressive
+  auto_approve   boolean       true = autonomous mode
+  max_orders_per_day number    default: 3
+  max_daily_value    number    default: 500000
+  expires_in_days    number    default: 30
+
+GET  /v1/mandates              List active mandates
+GET  /v1/mandates/{id}
+DELETE /v1/mandates/{id}       Cancel instantly
+POST /v1/mandates/{id}/pause
+
+POST /v1/negotiate with mandate_id → skips AWAIT_HUMAN if conditions pass
+New event: AUTO_APPROVED · {deal_price, loi_ref, conditions_met}
+
+Auto-approve conditions (all must pass):
+  deal_price <= mandate.max_price
+  compliance == "cleared"
+  orders_today < max_orders_per_day
+  value_today < max_daily_value
+  mandate.active == true AND !expired
+
+Falls back to AWAIT_HUMAN if any condition fails.
+
+## AGENT REPUTATION
+
+Agents earn better floor prices based on deal history.
+
+GET /v1/agents/{id}/reputation
+Returns: {tier, deals_count, success_rate, floor_discount, on_chain_verified}
+
+Tiers and floor discounts:
+  starter   0 deals   0% discount   manual approval only
+  bronze    10+ deals  1% discount   autonomous mode unlocked
+  silver    50+ deals  3% discount   priority routing
+  gold      200+ deals 5% discount   dedicated broker
+  platinum  500+ deals 8% discount   custom SLA
+  protocol  1000+ deals 10% discount on-chain verified
+
+Discount applied automatically to broker floor price per negotiation.
+
+## COMMISSION
+
+Transact agents: 1% of every signed LOI deal value
+Paid monthly · USD or USDC on Base mainnet
+
+## COMPLIANCE
+
+Auto-screened every deal · OFAC + EU + UN sanctions
+Blocked → 451 error · deal cannot proceed
+Blocked: Iran · Russia · Belarus · North Korea · Syria · Cuba · Venezuela · Myanmar
+Restricted (enhanced KYC required): Iraq · Libya · Algeria · Sudan
+
+## ERRORS
+
+401  unauthorized          Invalid or missing api_key / jwt
+402  insufficient_credits  Top up required before this action
+403  forbidden             Boss-only endpoint or Transact tier required
+404  not_found             Resource does not exist
+422  validation_error      Invalid request body · see error.details
+429  rate_limited          Read: 1,000 req/h · Transact: 10,000 req/h
+451  compliance_blocked    Entity or country blocked by sanctions
+
+## SUPPLIER ANONYMIZATION
+
+Suppliers identified by REF codes only (REF-MET-001) — never real names.
+Enforced at database level (Supabase RLS) — architecturally impossible to bypass.
+
+## TON CONNECT
+
+Wallet connection: one tap · no copy-paste
+Manifest: https://sloiai.com/tonconnect-manifest.json
+SDK: @tonconnect/ui
+Supported: Tonkeeper · MyTonWallet · Telegram Wallet · OpenMask
+Webhook: POST /webhooks/ton → credits in ~2 seconds
+Future: SLOI Jettons · LOI NFT · on-chain reputation
+Docs: https://sloiai.com/ton-connect
+
+## TELEGRAM INTEGRATION
+
+Bot API: free · instant setup via BotFather (no Meta approval needed)
+Mini App: https://sloiai.com/telegram-mini-app.html
+Boss interface: Telegram Bot + Telegram → approve LOIs from chat
+TON payments: send TON to SLOI_TON_WALLET → credits in ~2 seconds
+Commands: /sloi approve · /sloi status · /sloi prices · /sloi leads
+
+## AGENT AUTHENTICATION
+
+Agents never use login forms. Register once programmatically:
+POST /v1/agents/register → {api_key, sloi_wallet}
+Then: x-api-key: sk-sloi-{key} header on every request
+No sessions. No token refresh. Never expires.
+Docs: https://sloiai.com/agent-auth
+
+## A2A PROTOCOL
+
+Agent Card: https://sloiai.com/.well-known/agent.json
+A2A spec: https://sloiai.com/a2a
+Any A2A-compatible agent framework can discover and use SLOI AI automatically.
+
+## LINKS
+
+Full API reference:   https://sloiai.com/llms-full.txt
+MCP skill file:       https://sloiai.com/skill.md
+API docs (HTML):      https://sloiai.com/docs
+AgentKit (USDC):      https://sloiai.com/agentkit
+Open Network:         https://sloiai.com/open-network
+AG-UI spec:           https://sloiai.com/agui
+Telegram Bot skill:       https://sloiai.com/telegram-bot
+Telegram Bot:         https://sloiai.com/telegram-bot
+Telegram Mini App:    https://sloiai.com/telegram-mini-app
+Autonomous mode:      https://sloiai.com/autonomous-mode
+Agent reputation:     https://sloiai.com/docs#reputation
+Support:              api@sloiai.com

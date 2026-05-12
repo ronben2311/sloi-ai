@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI — Buyer WhatsApp Pitch</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--wa:#25D366;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:52px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-links{display:flex;gap:16px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--violet)}
+
+.layout{display:grid;grid-template-columns:260px 1fr 300px;height:calc(100vh - 52px);overflow:hidden}
+
+/* LEFT */
+.left{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:14px 0}
+.lb-label{font-size:9px;color:var(--muted);letter-spacing:.1em;padding:10px 16px 6px;text-transform:uppercase}
+.variant-btn{display:flex;align-items:flex-start;gap:10px;width:100%;padding:10px 16px;background:none;border:none;cursor:pointer;text-align:left;transition:background .12s;border-left:2px solid transparent;font-family:'IBM Plex Mono',monospace}
+.variant-btn:hover{background:var(--surface2)}
+.variant-btn.active{background:rgba(91,95,239,.08);border-left-color:var(--indigo)}
+.vb-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.vb-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px}
+.vb-sub{font-size:10px;color:var(--muted);line-height:1.4}
+.vb-lang{display:flex;gap:4px;margin-top:5px}
+.lang-pip{font-size:9px;padding:1px 5px;border-radius:2px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.lang-pip.active{background:rgba(91,95,239,.1);border-color:rgba(91,95,239,.3);color:var(--violet)}
+
+/* MAIN */
+.main{overflow-y:auto;padding:24px 28px}
+.page-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:4px}
+.page-sub{font-size:12px;color:var(--muted);margin-bottom:24px;line-height:1.7}
+
+/* LANG TABS */
+.lang-tabs{display:flex;gap:6px;margin-bottom:20px}
+.lang-tab{background:none;border:1px solid var(--border2);color:var(--muted);padding:6px 16px;border-radius:4px;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .12s}
+.lang-tab.active{background:rgba(91,95,239,.1);border-color:var(--indigo);color:var(--violet)}
+
+/* VARIABLES */
+.vars-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:16px;overflow:hidden}
+.vars-header{padding:10px 16px;border-bottom:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:.06em;background:var(--surface2)}
+.vars-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:14px}
+.var-field{display:flex;flex-direction:column;gap:4px}
+.var-label{font-size:10px;color:var(--muted)}
+.var-inp{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:7px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;width:100%}
+.var-inp:focus{border-color:var(--indigo)}
+
+/* WA PREVIEW */
+.wa-card{background:#0b141a;border-radius:10px;overflow:hidden;margin-bottom:16px}
+.wa-header{background:#1f2c33;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.wa-avatar{width:38px;height:38px;border-radius:50%;background:var(--indigo);display:flex;align-items:center;justify-content:center;font-size:16px}
+.wa-name{font-size:13px;font-weight:600;color:#e9edef}
+.wa-status{font-size:11px;color:#8696a0}
+.wa-body{padding:20px 16px;min-height:120px}
+.wa-bubble{
+  background:#1f2c33;border-radius:8px 8px 8px 2px;
+  padding:12px 14px;max-width:85%;
+  position:relative;display:inline-block;
+  box-shadow:0 1px 3px rgba(0,0,0,.4);
+}
+.wa-bubble.rtl{border-radius:8px 8px 2px 8px;float:right}
+.wa-text{font-size:13px;color:#e9edef;white-space:pre-wrap;line-height:1.6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.wa-time{font-size:10px;color:#8696a0;text-align:right;margin-top:6px}
+.wa-bubble::after{
+  content:'';position:absolute;bottom:0;left:-7px;
+  width:0;height:0;border-style:solid;
+  border-width:0 0 10px 10px;
+  border-color:transparent transparent #1f2c33 transparent;
+}
+.wa-bubble.rtl::after{left:auto;right:-7px;border-width:0 10px 10px 0;border-color:transparent #1f2c33 transparent transparent}
+.clearfix::after{content:'';display:table;clear:both}
+
+/* ACTION ROW */
+.action-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.btn{padding:8px 16px;border-radius:5px;font-size:12px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;transition:all .12s;display:flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-wa{background:#075e54;color:#fff;border-color:#075e54}
+.btn-wa:hover{background:#128c7e;border-color:#128c7e;color:#fff}
+.btn-copy{background:var(--surface2)}
+.btn-sm{padding:4px 10px;font-size:11px}
+
+/* TIPS */
+.tip-box{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:10px}
+.tip-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.tip-text{font-size:11px;color:var(--muted);line-height:1.7}
+
+/* RIGHT */
+.right{border-left:1px solid var(--border);padding:16px;overflow-y:auto;background:var(--surface)}
+.rs-title{font-size:10px;color:var(--muted);letter-spacing:.08em;margin-bottom:12px}
+.stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;margin-bottom:8px;text-align:center}
+.stat-v{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white)}
+.stat-k{font-size:9px;color:var(--muted);margin-top:2px}
+.divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+.follow-up-box{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:12px;margin-bottom:8px;cursor:pointer;transition:border-color .15s}
+.follow-up-box:hover{border-color:var(--indigo)}
+.fu-step{font-size:10px;color:var(--indigo);letter-spacing:.06em;margin-bottom:3px}
+.fu-text{font-size:11px;color:var(--text);line-height:1.5}
+</style>
+</head>
+<body>
+<nav style="position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:50px;background:rgba(7,7,15,.96);border-bottom:1px solid #1c1c2e;backdrop-filter:blur(12px)">
+  <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#eeedf8;text-decoration:none;letter-spacing:-.02em;display:flex;align-items:baseline;gap:6px">SLOI <em style="font-style:italic;color:#5b5fef">AI</em><span style="font-size:9px;color:#52526e;font-weight:400;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em">Smart negotiation · LOI generation</span></a>
+  <a href="CommodEx_Admin.html" style="font-size:11px;color:#52526e;text-decoration:none">← Admin</a>
+</nav>
+
+<nav class="nav">
+  <div class="nav-logo">SLOI <em>AI</em> <span style="font-size:11px;color:var(--muted);font-weight:400">/ Buyer Pitch</span></div>
+  <div class="nav-links">
+    <a href="whatsapp-templates.html">Supplier templates</a>
+    <a href="login.html">Platform →</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+<!-- LEFT — VARIANTS -->
+<div class="left">
+  <div class="lb-label">// MESSAGE TYPE</div>
+
+  <button class="variant-btn active" onclick="loadVariant('intro',this)">
+    <div class="vb-icon">👋</div>
+    <div>
+      <div class="vb-title">First contact</div>
+      <div class="vb-sub">Cold intro · never heard of you</div>
+      <div class="vb-lang"><span class="lang-pip active">EN</span><span class="lang-pip active">AR</span><span class="lang-pip active">HE</span></div>
+    </div>
+  </button>
+
+  <button class="variant-btn" onclick="loadVariant('price',this)">
+    <div class="vb-icon">💰</div>
+    <div>
+      <div class="vb-title">Price hook</div>
+      <div class="vb-sub">Lead with cheapest price they can get</div>
+      <div class="vb-lang"><span class="lang-pip active">EN</span><span class="lang-pip active">AR</span><span class="lang-pip active">HE</span></div>
+    </div>
+  </button>
+
+  <button class="variant-btn" onclick="loadVariant('urgent',this)">
+    <div class="vb-icon">⚡</div>
+    <div>
+      <div class="vb-title">Urgency / limited stock</div>
+      <div class="vb-sub">Price moving · stock running low</div>
+      <div class="vb-lang"><span class="lang-pip active">EN</span><span class="lang-pip active">AR</span><span class="lang-pip active">HE</span></div>
+    </div>
+  </button>
+
+  <button class="variant-btn" onclick="loadVariant('ai',this)">
+    <div class="vb-icon">🤖</div>
+    <div>
+      <div class="vb-title">AI agent pitch</div>
+      <div class="vb-sub">For tech-savvy buyers / procurement teams</div>
+      <div class="vb-lang"><span class="lang-pip active">EN</span><span class="lang-pip active">AR</span></div>
+    </div>
+  </button>
+
+  <button class="variant-btn" onclick="loadVariant('followup',this)">
+    <div class="vb-icon">🔄</div>
+    <div>
+      <div class="vb-title">Follow-up (no reply)</div>
+      <div class="vb-sub">Second message after 48h silence</div>
+      <div class="vb-lang"><span class="lang-pip active">EN</span><span class="lang-pip active">AR</span><span class="lang-pip active">HE</span></div>
+    </div>
+  </button>
+
+  <button class="variant-btn" onclick="loadVariant('closing',this)">
+    <div class="vb-icon">🤝</div>
+    <div>
+      <div class="vb-title">Closing / deal ready</div>
+      <div class="vb-sub">They're interested, push to RFQ</div>
+      <div class="vb-lang"><span class="lang-pip active">EN</span><span class="lang-pip active">AR</span><span class="lang-pip active">HE</span></div>
+    </div>
+  </button>
+
+  <div class="lb-label" style="margin-top:8px">// BY SECTOR</div>
+
+  <button class="variant-btn" onclick="loadVariant('steel',this)">
+    <div class="vb-icon">🔩</div>
+    <div>
+      <div class="vb-title">Steel buyers</div>
+      <div class="vb-sub">Construction · NEOM · Gulf projects</div>
+    </div>
+  </button>
+
+  <button class="variant-btn" onclick="loadVariant('cement',this)">
+    <div class="vb-icon">🏗️</div>
+    <div>
+      <div class="vb-title">Cement buyers</div>
+      <div class="vb-sub">Developers · contractors · importers</div>
+    </div>
+  </button>
+
+  <button class="variant-btn" onclick="loadVariant('agri',this)">
+    <div class="vb-icon">🌾</div>
+    <div>
+      <div class="vb-title">Agriculture buyers</div>
+      <div class="vb-sub">Food importers · MENA distributors</div>
+    </div>
+  </button>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="page-title">Buyer WhatsApp Pitch</div>
+  <div class="page-sub">Edit the variables → preview → copy and send. Works for cold outreach, warm leads, and follow-ups.</div>
+
+  <div class="lang-tabs">
+    <button class="lang-tab active" onclick="setLang('en',this)">🇬🇧 English</button>
+    <button class="lang-tab" onclick="setLang('ar',this)">🇸🇦 Arabic</button>
+    <button class="lang-tab" onclick="setLang('he',this)">🇮🇱 Hebrew</button>
+  </div>
+
+  <!-- VARIABLES -->
+  <div class="vars-card">
+    <div class="vars-header">// FILL IN YOUR DETAILS</div>
+    <div class="vars-grid" id="vars-grid"></div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="wa-card">
+    <div class="wa-header">
+      <div class="wa-avatar">⚡</div>
+      <div>
+        <div class="wa-name" id="wa-sender-name">You</div>
+        <div class="wa-status">WhatsApp Business</div>
+      </div>
+    </div>
+    <div class="wa-body">
+      <div class="clearfix">
+        <div class="wa-bubble" id="wa-bubble">
+          <div class="wa-text" id="wa-text">Loading...</div>
+          <div class="wa-time" id="wa-time">now ✓✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="action-row">
+    <button class="btn btn-copy" onclick="copyMsg()">📋 Copy message</button>
+    <button class="btn btn-wa" onclick="openWA()">📱 Open in WhatsApp</button>
+    <button class="btn" onclick="openWAto()">📞 Send to number</button>
+    <button class="btn btn-sm" onclick="copyLink()">🔗 Copy wa.me link</button>
+  </div>
+
+  <!-- TIPS -->
+  <div class="tip-box">
+    <div class="tip-title">💡 Sending tips</div>
+    <div class="tip-text">
+      • Send between <strong style="color:var(--white)">09:00–11:00 GST</strong> for highest open rates in MENA<br/>
+      • Use their <strong style="color:var(--white)">first name</strong> — never "Dear Sir"<br/>
+      • Include the <strong style="color:var(--white)">specific product</strong> they buy — don't be generic<br/>
+      • <strong style="color:var(--white)">One link only</strong> — price-discovery.html<br/>
+      • Follow up after <strong style="color:var(--white)">48h</strong> if no reply, then once more after 72h
+    </div>
+  </div>
+</main>
+
+<!-- RIGHT -->
+<div class="right">
+  <div class="rs-title">// SEQUENCE</div>
+  <div class="follow-up-box" onclick="loadVariant('intro',document.querySelectorAll('.variant-btn')[0])">
+    <div class="fu-step">DAY 1</div>
+    <div class="fu-text">👋 First contact — intro + price hook</div>
+  </div>
+  <div style="text-align:center;font-size:16px;color:var(--muted);margin:4px 0">↓</div>
+  <div class="follow-up-box" onclick="loadVariant('followup',document.querySelectorAll('.variant-btn')[4])">
+    <div class="fu-step">DAY 3 (if no reply)</div>
+    <div class="fu-text">🔄 Follow-up — short, value-first</div>
+  </div>
+  <div style="text-align:center;font-size:16px;color:var(--muted);margin:4px 0">↓</div>
+  <div class="follow-up-box" onclick="loadVariant('price',document.querySelectorAll('.variant-btn')[1])">
+    <div class="fu-step">DAY 5 (if no reply)</div>
+    <div class="fu-text">💰 Price hook — specific product + price</div>
+  </div>
+  <div style="text-align:center;font-size:16px;color:var(--muted);margin:4px 0">↓</div>
+  <div class="follow-up-box" onclick="loadVariant('closing',document.querySelectorAll('.variant-btn')[5])">
+    <div class="fu-step">If interested</div>
+    <div class="fu-text">🤝 Closing — push to RFQ</div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="rs-title">// OPEN RATE STATS</div>
+  <div class="stat-box"><div class="stat-v" style="color:var(--green)">94%</div><div class="stat-k">WhatsApp open rate</div></div>
+  <div class="stat-box"><div class="stat-v">~4 min</div><div class="stat-k">Avg. response time</div></div>
+  <div class="stat-box"><div class="stat-v" style="color:var(--violet)">5×</div><div class="stat-k">vs email open rate</div></div>
+
+  <div class="divider"></div>
+  <div class="rs-title">// PHONE FORMAT</div>
+  <div style="font-size:11px;color:var(--muted);line-height:2">
+    <div>🇦🇪 UAE: <strong style="color:var(--text)">+971 5X XXX XXXX</strong></div>
+    <div>🇸🇦 KSA: <strong style="color:var(--text)">+966 5X XXX XXXX</strong></div>
+    <div>🇮🇶 Iraq: <strong style="color:var(--text)">+964 7XX XXX XXXX</strong></div>
+    <div>🇮🇱 Global: <strong style="color:var(--text)">+972 5X XXX XXXX</strong></div>
+    <div>🇩🇪 Germany: <strong style="color:var(--text)">+49 1XX XXX XXXX</strong></div>
+  </div>
+
+  <div class="divider"></div>
+  <div style="font-size:10px;color:var(--muted);line-height:1.8">
+    <strong style="color:var(--text)">Do:</strong> Specific product · real price · one link<br/>
+    <strong style="color:var(--text)">Don't:</strong> Multiple links · long paragraphs · formal salutations
+  </div>
+</div>
+
+</div><!-- /layout -->
+
+<script>
+var lang='en';
+var currentVariant='intro';
+
+// ── MESSAGE TEMPLATES ──────────────────────────────────────────────────────────
+var VARIANTS={
+
+intro:{
+  title:'First contact',
+  vars:[
+    {key:'buyer_name',label:'Buyer name',default:'Ahmed'},
+    {key:'buyer_company',label:'Company',default:'Al Mansour Trading'},
+    {key:'product',label:'Their product',default:'steel rebar'},
+    {key:'your_name',label:'Your name',default:'Yoni'},
+    {key:'link',label:'Your link',default:'sloiai.com/price'},
+  ],
+  en:`👋 Hi {{buyer_name}},
+
+I'm {{your_name}} from SLOI AI — we connect MENA trading companies with verified Globali suppliers for {{product}} and other commodities.
+
+Quick question: are you currently sourcing {{product}}? We have 8 verified suppliers with live prices, certified stock, and escrow-protected payment.
+
+Takes 2 minutes to check prices 👇
+{{link}}
+
+No registration needed.`,
+
+  ar:`👋 مرحباً {{buyer_name}}،
+
+أنا {{your_name}} من SLOI AI — نربط شركات التداول في منطقة الشرق الأوسط وشمال أفريقيا بموردين إسرائيليين موثوقين لـ {{product}} والسلع الأخرى.
+
+سؤال سريع: هل تقوم حالياً باستيراد {{product}}؟ لدينا 8 موردين موثقين بأسعار مباشرة ومخزون معتمد ودفع مؤمَّن بالضمان.
+
+يستغرق 2 دقيقة فقط للتحقق من الأسعار 👇
+{{link}}
+
+لا يلزم التسجيل.`,
+
+  he:`👋 היי {{buyer_name}},
+
+אני {{your_name}} מ-SLOI AI — אנחנו מחברים בין חברות סחר ל-8 ספקים Globalים מאומתים לאספקת {{product}} וסחורות נוספות.
+
+שאלה קצרה: אתה כרגע מייבא {{product}}? יש לנו מחירים חיים, מלאי מוסמך ותשלום מאובטח ב-Escrow.
+
+2 דקות לבדוק מחירים 👇
+{{link}}
+
+אין צורך בהרשמה.`,
+},
+
+price:{
+  title:'Price hook',
+  vars:[
+    {key:'buyer_name',label:'Buyer name',default:'Ahmed'},
+    {key:'product',label:'Product',default:'steel rebar G60'},
+    {key:'price',label:'Best price',default:'$508/ton'},
+    {key:'supplier',label:'Supplier location',default:'Global'},
+    {key:'link',label:'Your link',default:'sloiai.com/price'},
+  ],
+  en:`💰 {{buyer_name}} — quick one.
+
+Best price I found today for {{product}}:
+
+*${{price}}* — FOB · verified supplier · {{supplier}}
+✅ ISO 9001 certified
+✅ Stock available now
+✅ Direct payment
+
+Check all suppliers ranked by price 👇
+{{link}}`,
+
+  ar:`💰 {{buyer_name}} — سؤال سريع.
+
+أفضل سعر وجدته اليوم لـ {{product}}:
+
+*{{price}}* — FOB · مورد موثق · {{supplier}}
+✅ معتمد ISO 9001
+✅ المخزون متوفر الآن
+✅ دفع بالضمان
+
+تحقق من جميع الموردين مرتبين حسب السعر 👇
+{{link}}`,
+
+  he:`💰 {{buyer_name}} — שנייה.
+
+המחיר הכי טוב שמצאתי היום ל-{{product}}:
+
+*{{price}}* — FOB · ספק מאומת · {{supplier}}
+✅ מוסמך ISO 9001
+✅ מלאי זמין עכשיו
+✅ תשלום direct payment מאובטח
+
+בדוק את כל הספקים לפי מחיר 👇
+{{link}}`,
+},
+
+urgent:{
+  title:'Urgency / limited stock',
+  vars:[
+    {key:'buyer_name',label:'Buyer name',default:'Ahmed'},
+    {key:'product',label:'Product',default:'steel rebar'},
+    {key:'stock',label:'Stock level',default:'480 MT'},
+    {key:'price',label:'Current price',default:'$508/ton'},
+    {key:'movement',label:'Price movement',default:'↑1.8% this week'},
+    {key:'link',label:'Your link',default:'sloiai.com/price'},
+  ],
+  en:`⚡ {{buyer_name}} — heads up.
+
+*{{product}}* prices moved {{movement}}.
+
+Current best: *{{price}}*
+Stock remaining: *{{stock}}*
+
+Once this stock goes, next batch is 2 weeks out.
+
+Lock your price now 👇
+{{link}}`,
+
+  ar:`⚡ {{buyer_name}} — تنبيه مهم.
+
+تحركت أسعار *{{product}}* {{movement}}.
+
+أفضل سعر حالي: *{{price}}*
+المخزون المتبقي: *{{stock}}*
+
+بمجرد نفاد هذا المخزون، الدفعة التالية بعد أسبوعين.
+
+احجز سعرك الآن 👇
+{{link}}`,
+
+  he:`⚡ {{buyer_name}} — שים לב.
+
+מחירי *{{product}}* זזו {{movement}}.
+
+המחיר הכי טוב עכשיו: *{{price}}*
+מלאי שנשאר: *{{stock}}*
+
+אחרי שזה נגמר — המשלוח הבא בעוד שבועיים.
+
+נעל את המחיר עכשיו 👇
+{{link}}`,
+},
+
+ai:{
+  title:'AI agent pitch',
+  vars:[
+    {key:'buyer_name',label:'Buyer name',default:'Ahmed'},
+    {key:'buyer_company',label:'Company',default:'Gulf Procurement'},
+    {key:'product',label:'Their product',default:'steel and cement'},
+    {key:'link',label:'Your link',default:'sloiai.com/price'},
+  ],
+  en:`👋 {{buyer_name}},
+
+Quick question for {{buyer_company}}: does your team still source {{product}} manually?
+
+We built a platform where an AI agent queries 8 verified suppliers simultaneously, compares prices in real-time, and submits RFQs — in seconds. Payment is escrow-protected. Docs auto-verified.
+
+Some procurement teams cut sourcing time from days to minutes.
+
+Worth 2 minutes? 👇
+{{link}}`,
+
+  ar:`👋 {{buyer_name}}،
+
+سؤال سريع لـ {{buyer_company}}: هل لا يزال فريقك يشتري {{product}} بشكل يدوي؟
+
+بنينا منصة حيث يقوم وكيل ذكاء اصطناعي باستعلام 8 موردين موثقين في نفس الوقت، ومقارنة الأسعار فوراً، وإرسال طلبات عروض الأسعار — في ثوانٍ. الدفع مؤمَّن بالضمان. المستندات تُتحقق منها تلقائياً.
+
+بعض فرق المشتريات خفضت وقت التوريد من أيام إلى دقائق.
+
+يستحق دقيقتين؟ 👇
+{{link}}`,
+
+  he:``,
+},
+
+followup:{
+  title:'Follow-up (no reply)',
+  vars:[
+    {key:'buyer_name',label:'Buyer name',default:'Ahmed'},
+    {key:'product',label:'Product',default:'steel rebar'},
+    {key:'link',label:'Your link',default:'sloiai.com/price'},
+  ],
+  en:`{{buyer_name}} — just checking if you saw my message.
+
+Still looking for the best {{product}} price in the market?
+
+Takes 30 seconds 👇
+{{link}}
+
+If not relevant, just say so — no problem 🙏`,
+
+  ar:`{{buyer_name}} — فقط أتحقق إذا كنت قد رأيت رسالتي.
+
+لا تزال تبحث عن أفضل سعر لـ {{product}} في السوق؟
+
+يستغرق 30 ثانية 👇
+{{link}}
+
+إذا لم يكن الأمر مناسباً، فقط أخبرني — لا مشكلة 🙏`,
+
+  he:`{{buyer_name}} — רק בודק אם ראית את ההודעה שלי.
+
+עדיין מחפש את המחיר הכי טוב ל-{{product}} בשוק?
+
+30 שניות 👇
+{{link}}
+
+אם לא רלוונטי — תגיד לי בלי בעיה 🙏`,
+},
+
+closing:{
+  title:'Closing / push to RFQ',
+  vars:[
+    {key:'buyer_name',label:'Buyer name',default:'Ahmed'},
+    {key:'product',label:'Product',default:'steel rebar G60'},
+    {key:'quantity',label:'Their quantity',default:'100 tons'},
+    {key:'price',label:'Best price',default:'$508/ton'},
+    {key:'link',label:'Your link',default:'sloiai.com/price'},
+  ],
+  en:`{{buyer_name}},
+
+Based on what you told me — {{quantity}} of {{product}} — best available right now is *{{price}}*.
+
+To lock this price, all I need is a quick RFQ from you (2 fields). direct payment protects your payment until shipment confirmed.
+
+Ready to send it? 👇
+{{link}}
+
+I'll personally make sure it moves fast.`,
+
+  ar:`{{buyer_name}}،
+
+بناءً على ما أخبرتني به — {{quantity}} من {{product}} — أفضل سعر متاح الآن هو *{{price}}*.
+
+لتثبيت هذا السعر، كل ما أحتاجه منك هو طلب عرض سعر سريع (حقلين فقط). الضمان يحمي دفعتك حتى تأكيد الشحن.
+
+جاهز لإرساله؟ 👇
+{{link}}
+
+سأتأكد شخصياً من أنه يتحرك بسرعة.`,
+
+  he:`{{buyer_name}},
+
+על סמך מה שסיפרת לי — {{quantity}} של {{product}} — המחיר הכי טוב שיש עכשיו הוא *{{price}}*.
+
+כדי לנעול את המחיר הזה, כל מה שאני צריך ממך זה RFQ מהיר (2 שדות). direct payment מגן על התשלום שלך עד אישור המשלוח.
+
+מוכן לשלוח? 👇
+{{link}}
+
+אני אוודא אישית שזה זז מהר.`,
+},
+
+steel:{
+  title:'Steel buyers',
+  vars:[
+    {key:'buyer_name',label:'Buyer name',default:'Ahmed'},
+    {key:'project',label:'Project type',default:'NEOM infrastructure'},
+    {key:'quantity',label:'Quantity needed',default:'500 tons'},
+    {key:'link',label:'Your link',default:'sloiai.com/price'},
+  ],
+  en:`👋 {{buyer_name}},
+
+Supplying steel for {{project}}?
+
+We have 3 certified Globali steel suppliers with live prices:
+
+🔩 Rebar G60 12mm — from *$480/ton*
+🔩 Rebar G60 16mm — from *$490/ton*
+⚙️ HR Coil SS400 — from *$510/ton*
+
+All FOB · ISO 9001 + ISO 3834 · SGS inspection · direct payment payment.
+
+For {{quantity}} — check exact pricing in 30 seconds 👇
+{{link}}`,
+
+  ar:`👋 {{buyer_name}}،
+
+توريد الحديد لـ {{project}}؟
+
+لدينا 3 موردي حديد إسرائيليين معتمدين بأسعار مباشرة:
+
+🔩 حديد تسليح G60 12مم — من *$480/طن*
+🔩 حديد تسليح G60 16مم — من *$490/طن*
+⚙️ ملفات HR SS400 — من *$510/طن*
+
+جميعها FOB · ISO 9001 + ISO 3834 · فحص SGS · دفع بالضمان.
+
+لـ {{quantity}} — تحقق من الأسعار الدقيقة في 30 ثانية 👇
+{{link}}`,
+
+  he:`👋 {{buyer_name}},
+
+מייבא פלדה ל-{{project}}?
+
+יש לנו 3 ספקי פלדה Globalים מוסמכים עם מחירים חיים:
+
+🔩 פלדה מצולעת G60 12מ"מ — מ-*$480/טון*
+🔩 פלדה מצולעת G60 16מ"מ — מ-*$490/טון*
+⚙️ פח HR SS400 — מ-*$510/טון*
+
+הכל FOB · ISO 9001 + ISO 3834 · בדיקת SGS · תשלום Escrow.
+
+ל-{{quantity}} — בדוק מחיר מדויק ב-30 שניות 👇
+{{link}}`,
+},
+
+cement:{
+  title:'Cement buyers',
+  vars:[
+    {key:'buyer_name',label:'Buyer name',default:'Mohammed'},
+    {key:'grade',label:'Grade needed',default:'OPC 52.5'},
+    {key:'quantity',label:'Quantity',default:'500 tons'},
+    {key:'destination',label:'Destination',default:'Dubai'},
+    {key:'link',label:'Your link',default:'sloiai.com/price'},
+  ],
+  en:`👋 {{buyer_name}},
+
+Looking for *{{grade}}* cement for {{destination}}?
+
+We have verified Globali suppliers:
+
+🏗️ {{grade}} — from *$55/ton* FOB
+✅ SASO certified · CE marked · SGS inspection
+📦 Min order: 500 tons · Lead time: 3–5 days
+💳 Payment: direct payment protected
+
+Current best for {{quantity}} 👇
+{{link}}`,
+
+  ar:`👋 {{buyer_name}}،
+
+تبحث عن إسمنت *{{grade}}* لـ {{destination}}؟
+
+لدينا موردون إسرائيليون موثقون:
+
+🏗️ {{grade}} — من *$55/طن* FOB
+✅ معتمد SASO · علامة CE · فحص SGS
+📦 الحد الأدنى للطلب: 500 طن · وقت التسليم: 3–5 أيام
+💳 الدفع: مؤمَّن بالضمان
+
+أفضل سعر حالي لـ {{quantity}} 👇
+{{link}}`,
+
+  he:`👋 {{buyer_name}},
+
+מחפש מלט *{{grade}}* ל-{{destination}}?
+
+יש לנו ספקים Globalים מאומתים:
+
+🏗️ {{grade}} — מ-*$55/טון* FOB
+✅ מוסמך SASO · סימון CE · בדיקת SGS
+📦 הזמנה מינימלית: 500 טון · זמן אספקה: 3–5 ימים
+💳 תשלום: מאובטח ב-Escrow
+
+המחיר הכי טוב ל-{{quantity}} 👇
+{{link}}`,
+},
+
+agri:{
+  title:'Agriculture buyers',
+  vars:[
+    {key:'buyer_name',label:'Buyer name',default:'Omar'},
+    {key:'product',label:'Product',default:'hard wheat'},
+    {key:'quantity',label:'Quantity',default:'50 tons'},
+    {key:'destination',label:'Destination',default:'Saudi Arabia'},
+    {key:'link',label:'Your link',default:'sloiai.com/price'},
+  ],
+  en:`👋 {{buyer_name}},
+
+Importing {{product}} to {{destination}}?
+
+We work with Supplier REF-AGR-001 — verified Globali supplier:
+
+🌾 Hard Wheat — from *$1,120/ton*
+🌾 Yellow Corn — from *$980/ton*
+🌽 Crushed Soy — from *$2,100/ton*
+
+✅ ISO 22000 · Phytosanitary cert · COO included
+📦 Min: 20 tons · Lead time: 4 days
+💳 Direct payment
+
+For {{quantity}} 👇
+{{link}}`,
+
+  ar:`👋 {{buyer_name}}،
+
+تستورد {{product}} إلى {{destination}}؟
+
+نتعامل مع Supplier REF-AGR-001 — مورد إسرائيلي موثق:
+
+🌾 قمح صلب — من *$1,120/طن*
+🌾 ذرة صفراء — من *$980/طن*
+🌽 صويا مطحونة — من *$2,100/طن*
+
+✅ ISO 22000 · شهادة صحة نباتية · شهادة منشأ مشمولة
+📦 الحد الأدنى: 20 طن · وقت التسليم: 4 أيام
+💳 دفع بالضمان
+
+لـ {{quantity}} 👇
+{{link}}`,
+
+  he:`👋 {{buyer_name}},
+
+מייבא {{product}} ל-{{destination}}?
+
+אנחנו עובדים עם דגן הגליל — ספק Globalי מאומת:
+
+🌾 חיטה קשה — מ-*$1,120/טון*
+🌾 תירס צהוב — מ-*$980/טון*
+🌽 סויה גרוסה — מ-*$2,100/טון*
+
+✅ ISO 22000 · תעודה פיטוסניטרית · COO כלול
+📦 מינימום: 20 טון · זמן אספקה: 4 ימים
+💳 תשלום direct payment
+
+ל-{{quantity}} 👇
+{{link}}`,
+},
+
+};
+
+// ── RENDER ──────────────────────────────────────────────────────────────────────
+function loadVariant(key,btn){
+  currentVariant=key;
+  if(btn){
+    document.querySelectorAll('.variant-btn').forEach(function(b){b.classList.remove('active')});
+    btn.classList.add('active');
+  }
+  renderVars();
+  updatePreview();
+}
+
+function renderVars(){
+  var v=VARIANTS[currentVariant];
+  if(!v)return;
+  var html='';
+  v.vars.forEach(function(vr){
+    html+='<div class="var-field"><label class="var-label">{{'+vr.key+'}}</label>';
+    html+='<input class="var-inp" id="var-'+vr.key+'" value="'+vr.default+'" oninput="updatePreview()"/></div>';
+  });
+  document.getElementById('vars-grid').innerHTML=html;
+}
+
+function getVarValues(){
+  var v=VARIANTS[currentVariant];
+  var vals={};
+  v.vars.forEach(function(vr){
+    var el=document.getElementById('var-'+vr.key);
+    vals[vr.key]=el?el.value:vr.default;
+  });
+  return vals;
+}
+
+function buildMessage(){
+  var v=VARIANTS[currentVariant];
+  var tmpl=v[lang]||v.en;
+  if(!tmpl)return'(No '+lang+' version for this template)';
+  var vals=getVarValues();
+  Object.keys(vals).forEach(function(k){
+    tmpl=tmpl.split('{{'+k+'}}').join(vals[k]);
+  });
+  return tmpl;
+}
+
+function updatePreview(){
+  var msg=buildMessage();
+  var isRTL=(lang==='ar'||lang==='he');
+  // Render *bold* → <strong>
+  var html=msg
+    .replace(/\*(.*?)\*/g,'<strong style="color:#e9edef">$1</strong>')
+    .replace(/\n/g,'<br/>');
+  document.getElementById('wa-text').innerHTML=html;
+  var bubble=document.getElementById('wa-bubble');
+  bubble.classList.toggle('rtl',isRTL);
+  var d=new Date();
+  document.getElementById('wa-time').textContent=d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})+' ✓✓';
+  window._currentMsg=msg;
+}
+
+function setLang(l,btn){
+  lang=l;
+  document.querySelectorAll('.lang-tab').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  updatePreview();
+}
+
+function copyMsg(){
+  if(window._currentMsg){
+    navigator.clipboard&&navigator.clipboard.writeText(window._currentMsg);
+    event.target.textContent='✓ Copied!';
+    setTimeout(function(){event.target.textContent='📋 Copy message';},2000);
+  }
+}
+
+function openWA(){
+  var msg=buildMessage();
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+}
+
+function openWAto(){
+  var phone=prompt('Enter phone number with country code (e.g. +971501234567):');
+  if(!phone)return;
+  var msg=buildMessage();
+  var clean=phone.replace(/[^0-9+]/g,'');
+  window.open('https://wa.me/'+clean+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+function copyLink(){
+  var msg=buildMessage();
+  var link='https://wa.me/?text='+encodeURIComponent(msg);
+  navigator.clipboard&&navigator.clipboard.writeText(link);
+  event.target.textContent='✓ Copied!';
+  setTimeout(function(){event.target.textContent='🔗 Copy wa.me link';},2000);
+}
+
+// Init
+loadVariant('intro',document.querySelector('.variant-btn'));
+</script>
+</body>
+</html>

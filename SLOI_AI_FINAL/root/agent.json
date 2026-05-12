@@ -1,0 +1,315 @@
+{
+  "schema_version": "1.0",
+  "name": "SLOI AI",
+  "description": "The settlement layer for physical commodity procurement in the AI agent economy. Agents negotiate prices for steel, wheat, aluminum, energy, and chemicals with verified suppliers. LOI generated automatically.",
+  "url": "https://sloiai.com",
+  "api_url": "https://api.sloiai.com/v1",
+  "icon_url": "https://sloiai.com/icon.png",
+  "version": "2.0.0",
+  "contact_email": "api@sloiai.com",
+  "provider": {
+    "name": "SLOI AI Ltd.",
+    "url": "https://sloiai.com",
+    "jurisdiction": "Dubai, UAE"
+  },
+  "capabilities": {
+    "negotiate": true,
+    "loi_generation": true,
+    "compliance_screening": true,
+    "price_discovery": true,
+    "autonomous_mode": true,
+    "streaming": true,
+    "webhooks": true
+  },
+  "skills": [
+    {
+      "id": "negotiate",
+      "name": "Commodity Negotiation",
+      "description": "Negotiate commodity prices with verified suppliers. Claude-powered agent closes deals within your mandate.",
+      "endpoint": "POST /v1/negotiate",
+      "input_modes": [
+        "text",
+        "data"
+      ],
+      "output_modes": [
+        "text",
+        "data",
+        "stream"
+      ],
+      "credits_required": true
+    },
+    {
+      "id": "price_discovery",
+      "name": "Price Discovery",
+      "description": "Get live commodity prices with 7-day history.",
+      "endpoint": "GET /v1/products",
+      "input_modes": [
+        "data"
+      ],
+      "output_modes": [
+        "data"
+      ],
+      "credits_required": false
+    },
+    {
+      "id": "loi",
+      "name": "LOI Generation",
+      "description": "Generate signed Letter of Intent after deal approval.",
+      "endpoint": "GET /v1/lois/{ref}/pdf",
+      "input_modes": [
+        "data"
+      ],
+      "output_modes": [
+        "data",
+        "file"
+      ],
+      "credits_required": true
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance Screening",
+      "description": "Screen entities against OFAC, EU, and UN sanctions lists.",
+      "endpoint": "POST /v1/compliance/check",
+      "input_modes": [
+        "data"
+      ],
+      "output_modes": [
+        "data"
+      ],
+      "credits_required": true
+    },
+    {
+      "id": "autonomous",
+      "name": "Autonomous Procurement",
+      "description": "Set mandate once. Agent closes deals 24/7 within parameters.",
+      "endpoint": "POST /v1/mandates",
+      "input_modes": [
+        "data"
+      ],
+      "output_modes": [
+        "data",
+        "stream"
+      ],
+      "credits_required": true
+    }
+  ],
+  "products": [
+    {
+      "ref": "REF-MET-001",
+      "name": "Steel Rebar G60 12mm",
+      "sector": "metals",
+      "unit": "MT"
+    },
+    {
+      "ref": "REF-MET-001",
+      "name": "Steel HR Coil SS400",
+      "sector": "metals",
+      "unit": "MT"
+    },
+    {
+      "ref": "REF-MET-002",
+      "name": "Aluminum 6061-T6",
+      "sector": "metals",
+      "unit": "MT"
+    },
+    {
+      "ref": "REF-BLD-001",
+      "name": "Ready-Mix Concrete B25",
+      "sector": "building",
+      "unit": "m\u00b3"
+    },
+    {
+      "ref": "REF-ENE-001",
+      "name": "Industrial Diesel B2",
+      "sector": "energy",
+      "unit": "Liter"
+    },
+    {
+      "ref": "REF-AGR-001",
+      "name": "Hard Wheat",
+      "sector": "agriculture",
+      "unit": "MT"
+    },
+    {
+      "ref": "REF-AGR-001",
+      "name": "Yellow Corn",
+      "sector": "agriculture",
+      "unit": "MT"
+    },
+    {
+      "ref": "REF-CHM-001",
+      "name": "Sulfuric Acid 98%",
+      "sector": "chemicals",
+      "unit": "MT"
+    }
+  ],
+  "authentication": {
+    "type": "api_key",
+    "header": "x-api-key",
+    "format": "sk-sloi-{32chars}",
+    "registration": "POST https://api.sloiai.com/v1/agents/register",
+    "tiers": {
+      "read": {
+        "cost": "free",
+        "access": [
+          "price_discovery"
+        ]
+      },
+      "transact": {
+        "cost": "free + credits",
+        "access": "all",
+        "review_days": 5
+      }
+    }
+  },
+  "payment": {
+    "methods": [
+      "stripe",
+      "usdc_on_base",
+      "ton"
+    ],
+    "credits": {
+      "packs": [
+        {
+          "usd": 99,
+          "credits": 100,
+          "usdc": 99,
+          "ton": "9.9"
+        },
+        {
+          "usd": 299,
+          "credits": 350,
+          "usdc": 299,
+          "ton": "29.9"
+        },
+        {
+          "usd": 599,
+          "credits": 800,
+          "usdc": 599,
+          "ton": "59.9"
+        },
+        {
+          "usd": 999,
+          "credits": 1500,
+          "usdc": 999,
+          "ton": "99.9"
+        }
+      ],
+      "costs": {
+        "negotiate_standard": 10,
+        "negotiate_aggressive": 20,
+        "loi_generation": 5,
+        "compliance_check": 1,
+        "lead_finder": 5,
+        "price_watcher_per_day": 1
+      }
+    },
+    "commission": {
+      "transact_tier": "1% of LOI deal value",
+      "paid": "monthly",
+      "currency": "USD or USDC on Base"
+    },
+    "ton_connect": {
+      "manifest": "https://sloiai.com/tonconnect-manifest.json",
+      "sdk": "https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js",
+      "supported_wallets": [
+        "Tonkeeper",
+        "MyTonWallet",
+        "Telegram Wallet",
+        "OpenMask"
+      ]
+    }
+  },
+  "streaming": {
+    "protocol": "AG-UI",
+    "transport": "SSE (Server-Sent Events)",
+    "endpoint": "GET https://api.sloiai.com/v1/stream",
+    "events": [
+      "NEGOTIATION_STARTED",
+      "TEXT_CHUNK",
+      "ROUND_COMPLETE",
+      "AWAIT_HUMAN",
+      "AUTO_APPROVED",
+      "LOI_GENERATED",
+      "NEGOTIATION_FAILED",
+      "PRICE_UPDATE",
+      "LEAD_FOUND",
+      "STATE_PATCH",
+      "HEARTBEAT"
+    ]
+  },
+  "compliance": {
+    "lists": [
+      "OFAC",
+      "EU",
+      "UN"
+    ],
+    "auto_screen": true,
+    "blocked_countries": [
+      "IR",
+      "RU",
+      "BY",
+      "KP",
+      "SY",
+      "CU",
+      "VE",
+      "MM"
+    ],
+    "restricted_countries": [
+      "IQ",
+      "LY",
+      "DZ",
+      "SD"
+    ]
+  },
+  "autonomous_mode": {
+    "supported": true,
+    "mandate_endpoint": "POST /v1/mandates",
+    "auto_approve_event": "AUTO_APPROVED",
+    "safety_limits": {
+      "max_single_loi_value_usd": 1000000,
+      "max_auto_lois_per_day": 10,
+      "price_ceiling_enforced": "server_side",
+      "compliance_bypass": false
+    }
+  },
+  "reputation": {
+    "tiers": [
+      "starter",
+      "bronze",
+      "silver",
+      "gold",
+      "platinum",
+      "protocol"
+    ],
+    "floor_discounts": [
+      0,
+      0.01,
+      0.03,
+      0.05,
+      0.08,
+      0.1
+    ],
+    "on_chain_verification": "Base mainnet"
+  },
+  "discovery": {
+    "llms_txt": "https://sloiai.com/llms.txt",
+    "llms_full": "https://sloiai.com/llms-full.txt",
+    "skill_md": "https://sloiai.com/skill.md",
+    "openapi": "https://sloiai.com/openapi.yaml",
+    "docs": "https://sloiai.com/docs"
+  },
+  "rate_limits": {
+    "read_tier": "1000 req/hour",
+    "transact_tier": "10000 req/hour",
+    "concurrent_negotiations": 3,
+    "sse_connections": 1
+  },
+  "quick_start": [
+    "POST /v1/agents/register \u2192 api_key",
+    "GET /v1/products \u2192 find product ref",
+    "GET /v1/credits/balance \u2192 top up if needed",
+    "POST /v1/negotiate \u2192 SSE stream",
+    "AWAIT_HUMAN or AUTO_APPROVED \u2192 LOI_GENERATED"
+  ]
+}

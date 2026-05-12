@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Sign in — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+.shell{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.logo-wrap{text-align:center;margin-bottom:40px}
+.logo{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-tag{font-size:10px;color:var(--muted);display:block;margin-top:4px;font-weight:400;letter-spacing:.04em}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;width:100%;max-width:400px;padding:32px}
+.card-title{font-size:16px;font-weight:600;color:var(--white);margin-bottom:6px}
+.card-sub{font-size:11px;color:var(--muted);margin-bottom:28px}
+.field{margin-bottom:16px}
+.flabel{font-size:10px;color:var(--muted);letter-spacing:.06em;display:block;margin-bottom:6px;text-transform:uppercase}
+.inp{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:11px 14px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;width:100%;transition:border-color .15s}
+.inp:focus{border-color:var(--indigo)}
+.inp::placeholder{color:var(--muted)}
+.btn-signin{width:100%;background:var(--indigo);color:#fff;border:none;border-radius:5px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:opacity .15s;margin-top:4px}
+.btn-signin:hover{opacity:.85}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;font-size:10px;color:var(--muted)}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px}
+.role-card{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:14px;cursor:pointer;transition:all .15s;text-align:center;text-decoration:none}
+.role-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-1px)}
+.role-card.active{background:var(--indigo);border-color:var(--indigo)}
+.rc-icon{font-size:22px;margin-bottom:6px}
+.rc-label{font-size:11px;font-weight:600;color:var(--white)}
+.rc-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.role-card.active .rc-sub{color:rgba(255,255,255,.7)}
+.error{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:var(--red);padding:10px 14px;border-radius:4px;font-size:11px;margin-bottom:14px;display:none}
+.error.show{display:block}
+.footer-note{margin-top:20px;text-align:center;font-size:10px;color:var(--muted)}
+.footer-note a{color:var(--violet);text-decoration:none}
+.back-link{position:fixed;top:20px;left:24px;font-size:11px;color:var(--muted);text-decoration:none;z-index:10}
+.back-link:hover{color:var(--white)}
+</style>
+
+<script src="/api-client.js"></script>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+
+<a href="m2m-homepage.html" class="back-link">← SLOI AI</a>
+
+<div class="shell">
+  <div class="logo-wrap">
+    <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em></a>
+    <span class="logo-tag">Smart negotiation · LOI generation</span>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Sign in</div>
+    <div class="card-sub">Choose your role to continue</div>
+
+    <!-- ROLE SELECTOR -->
+    <div class="role-grid" id="role-grid">
+      <div class="role-card active" onclick="selectRole('buyer',this)">
+        <div class="rc-icon">🏢</div>
+        <div class="rc-label">Buyer</div>
+        <div class="rc-sub">Procure commodities</div>
+      </div>
+      <div class="role-card" onclick="selectRole('broker',this)">
+        <div class="rc-icon">🌍</div>
+        <div class="rc-label">Broker</div>
+        <div class="rc-sub">Manage deals</div>
+      </div>
+      <div class="role-card" onclick="selectRole('supplier',this)">
+        <div class="rc-icon">🏭</div>
+        <div class="rc-label">Supplier</div>
+        <div class="rc-sub">Receive RFQs</div>
+      </div>
+      <div class="role-card" onclick="selectRole('boss',this)">
+        <div class="rc-icon">⚡</div>
+        <div class="rc-label">Boss</div>
+        <div class="rc-sub">Admin · Full access</div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="error" id="error-msg">Invalid email or password. Please try again.</div>
+
+    <div class="field">
+      <label class="flabel">Email</label>
+      <input class="inp" id="email" type="email" placeholder="you@company.com" autocomplete="email"/>
+    </div>
+    <div class="field">
+      <label class="flabel">Password</label>
+      <input class="inp" id="password" type="password" placeholder="••••••••" autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')signin()"/>
+    </div>
+
+    <button class="btn-signin" onclick="signin()" id="signin-btn">Sign in →</button>
+
+    <div class="divider">or</div>
+
+    <a href="smb-order.html" style="display:block;text-align:center;background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:11px;border-radius:5px;font-size:12px;text-decoration:none;transition:border-color .15s"
+       onmouseover="this.style.borderColor='rgba(91,95,239,.4)'" onmouseout="this.style.borderColor='var(--border2)'">
+      📝 Place an order without an account →
+    </a>
+
+    <div class="footer-note">
+      New broker? <a href="broker-onboarding.html">Apply here</a> · 
+      New supplier? <a href="CommodEx_Admin.html">Apply here</a><br/>
+      <a href="terms.html">Terms</a> · <a href="terms.html">Privacy</a>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const api = initLogin();
+var selectedRole = 'buyer';
+
+var ROLE_DESTINATIONS = {
+  buyer:    'CommodEx_Platform.html',
+  broker:   'CommodEx_Broker.html',
+  supplier: 'CommodEx_Admin.html',
+  boss:     'CommodEx_Admin.html',
+};
+
+var DEMO_CREDENTIALS = {
+  buyer:    { email: 'buyer@demo.sloiai.com',    pass: 'demo' },
+  broker:   { email: 'broker@demo.sloiai.com',   pass: 'demo' },
+  supplier: { email: 'supplier@demo.sloiai.com', pass: 'demo' },
+  boss:     { email: 'admin@sloiai.com',         pass: 'demo' },
+};
+
+function selectRole(role, el){
+  selectedRole = role;
+  document.querySelectorAll('.role-card').forEach(function(c){ c.classList.remove('active'); });
+  el.classList.add('active');
+  // Pre-fill demo email
+  document.getElementById('email').value = '';
+  document.getElementById('password').value = '';
+  document.getElementById('error-msg').classList.remove('show');
+}
+
+function signin(){
+  var email = document.getElementById('email').value.trim();
+  var pass  = document.getElementById('password').value;
+  var btn   = document.getElementById('signin-btn');
+  var err   = document.getElementById('error-msg');
+
+  if(!email || !pass){ err.textContent = 'Please enter your email and password.'; err.classList.add('show'); return; }
+
+  btn.textContent = 'Signing in...';
+  btn.disabled = true;
+  err.classList.remove('show');
+
+  // Simulate auth (demo mode)
+  setTimeout(function(){
+    var demo = DEMO_CREDENTIALS[selectedRole];
+    // Accept demo credentials OR any valid email format
+    var emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if(emailValid){
+      window.location.href = ROLE_DESTINATIONS[selectedRole];
+    } else {
+      err.textContent = 'Invalid email format.';
+      err.classList.add('show');
+      btn.textContent = 'Sign in →';
+      btn.disabled = false;
+    }
+  }, 800);
+}
+
+// Focus email on load
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('email').focus();
+});
+</script>
+</body>
+</html>

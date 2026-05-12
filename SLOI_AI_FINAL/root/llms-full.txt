@@ -1,0 +1,465 @@
+# SLOI AI — Full API Reference (llms-full.txt)
+
+> This is the extended reference for AI agents that need full implementation details.
+> For a quick overview see: https://sloiai.com/llms.txt
+> Base URL: https://api.sloiai.com/v1
+> Auth: x-api-key: sk-sloi-{key} header (agents) | Authorization: Bearer {jwt} (humans)
+
+---
+
+## 1. AUTHENTICATION
+
+### Register agent
+POST /v1/agents/register
+Body:
+  name           string    Agent or system name
+  email          string    Contact email
+  framework      string    e.g. "claude" | "openai" | "telegram-bot" | "custom"
+  wallet_address string?   Base mainnet wallet for USDC payments
+
+Returns:
+  api_key        string    sk-sloi-{32 chars} — store securely
+  agent_id       string    Internal agent UUID
+  tier           string    "read" (instant) | "transact" (5-day review)
+  sloi_wallet    string    0x... — send USDC here to buy credits
+
+Tiers:
+  Read tier:      Free · instant · search products + prices only
+  Transact tier:  Negotiate + LOI + Open Network commission (1% per deal)
+                  Requires 5-day compliance review + wallet verification
+
+### How authentication works
+Human users:  POST /auth/register → JWT → use as Bearer token
+AI agents:    POST /v1/agents/register → api_key → use as x-api-key header
+Middleware detects caller type automatically — same endpoints work for both.
+
+---
+
+## 2. PRODUCTS & PRICES
+
+### List all products
+GET /v1/products
+Query: sector=metals|building|energy|agriculture|chemicals
+       active=true (default)
+Returns: array of {ref, emoji, name, sku, sector, price, unit, moq, lead_time_days, certs}
+Note: supplier_id is NEVER included — REF code only.
+
+### Get product price + history
+GET /v1/products/{ref}/price
+Returns:
+  ref            string    REF-MET-001
+  price          number    Current price (USD)
+  prev_price     number    Yesterday's price
+  change_pct     number    % change
+  unit           string    MT | m | m² | Liter | Unit
+  history_7d     array     Last 7 days closing prices
+  last_updated   string    ISO timestamp
+
+### Products reference (as of May 2026)
+REF-MET-001  Steel Rebar G60 12mm    $2,840/MT
+REF-MET-001  Steel HR Coil SS400     $3,100/MT
+REF-MET-002  Aluminum 6061-T6        $9,200/MT
+REF-MET-002  Aluminum Profiles       $38/m
+REF-BLD-001  Concrete Block 20cm     $4.80/Unit
+REF-BLD-001  Ready-Mix Concrete B25  $380/m³
+REF-BLD-002  Porcelain Tile 60x60    $62/m²
+REF-BLD-003  PVC Pipe 110mm          $28/m
+REF-ENE-001  Industrial Diesel B2    $4.92/Liter
+REF-AGR-001  Hard Wheat              $1,120/MT
+REF-AGR-001  Yellow Corn             $980/MT
+REF-CHM-001  Sulfuric Acid 98%       $580/MT
+REF-CHM-001  Caustic Soda 50%        $420/MT
+
+---
+
+## 3. CREDITS
+
+### Check balance
+GET /v1/credits/balance
+Returns: {balance, total_purchased, total_spent, updated_at}
+
+### Purchase credits
+POST /v1/credits/purchase
+Body: {pack: 99 | 299 | 599 | 999}
+
+If caller is human → returns {method:"stripe", url:"https://checkout.stripe.com/..."}
+If caller is agent → returns:
+  {
+    method: "usdc_on_base",
+    instruction: "Send 99 USDC to 0x... on Base mainnet",
+    wallet: "0x...",
+    amount_usdc: 99,
+    credits_to_receive: 100,
+    confirmation: "Credits added within 1 block (~2 seconds)"
+  }
+
+### USDC direct payment (no API call needed)
+Send exact USDC amount to sloi_wallet on Base mainnet:
+  99  USDC → 100 credits
+  299 USDC → 350 credits
+  599 USDC → 800 credits
+  999 USDC → 1,500 credits
+Alchemy monitors the wallet → credits added in ~2 seconds.
+
+### Streaming payment (pay per action, no pack)
+For agents that don't want to pre-purchase:
+  Send $10 USDC → receive auth_token for one Deal Hunter session
+  Send $20 USDC → receive auth_token for one Autopilot session
+  Send $5  USDC → receive auth_token for one LOI generation
+Token expires in 1 hour if unused.
+
+### Credit costs
+watcher      1/day    Price monitoring
+deal_hunter  10       Standard negotiation (5 rounds max)
+autopilot    20       Aggressive negotiation (7 rounds max)
+loi          5        LOI PDF generation (after Boss approval)
+compliance   1        One entity compliance check
+lead_finder  5        One LeadFinder scan
+
+---
+
+## 4. NEGOTIATION (AG-UI SSE STREAM)
+
+### Start negotiation
+POST /v1/negotiate
+Headers: x-api-key: sk-sloi-{key} | Authorization: Bearer {jwt}
+Body:
+  product_ref    string    From GET /v1/products (e.g. "REF-MET-001")
+  product_name   string    e.g. "Steel Rebar G60 12mm"
+  qty            number    Quantity
+  unit           string    MT | m | m² | Liter | Unit
+  target_price   number    Ideal price (USD per unit)
+  max_price      number    Walk-away price — agent never exceeds this
+  strategy       string    "standard" | "aggressive" | "watcher"
+  buyer_name     string?   For LOI document
+  incoterm       string?   FOB (default) | CIF | DAP
+  broker_id      string?   Assign specific broker (default: auto-assign)
+
+Returns: SSE stream with Content-Type: text/event-stream
+
+### AG-UI Event format (every event)
+data: {"type":"EVENT_TYPE","ts":1746518400000,"session_id":"NEG-001","data":{...}}
+
+### AG-UI Events (full spec)
+
+NEGOTIATION_STARTED
+  neg_id, product, qty, unit, buyer_name, strategy, max_rounds, broker_ref
+
+TEXT_CHUNK
+  text        string    One streaming token from Claude
+  role        string    "agent" | "broker"
+  round       number    Current round number
+  → Append to current message bubble
+
+ROUND_COMPLETE
+  round       number
+  agent_price number    Agent's latest offer
+  broker_price number   Broker's latest counter
+  gap_pct     number    % gap between offers
+  gap_abs     number    Absolute gap (USD)
+  next_action string    "continue" | "await_human" | "failed"
+
+AWAIT_HUMAN             ← Agent stopped. Boss must act.
+  deal_price  number    Midpoint price agreed
+  total_value number    deal_price × qty
+  loi_fee     number    Always 500 (USD)
+  credits_used number
+  round       number
+  → POST /v1/negotiations/{id}/approve to unblock
+
+LOI_GENERATED           ← Deal approved and LOI created
+  loi_ref     string    SL-LOI-20260501-001
+  deal_price  number
+  total_value number
+  pdf_url     string    /v1/lois/{ref}/pdf
+  buyer_email string    (if available)
+
+NEGOTIATION_FAILED
+  reason      string    "max_rounds" | "boss_rejected" | "compliance_blocked" | "insufficient_credits"
+  last_agent_price number?
+  last_broker_price number?
+
+PRICE_UPDATE
+  sku         string
+  price       number    New price
+  prev_price  number
+  change_pct  number
+
+LEAD_FOUND
+  name        string
+  country     string
+  value       string    e.g. "$12B"
+  sector      string
+  relevance   string    "very-high" | "high" | "medium"
+  reason      string
+
+STATE_PATCH             JSON Patch RFC 6902
+  ops         array     [{op, path, value}]
+
+HEARTBEAT
+  ts          number    Unix ms
+  active_sessions number
+
+COMPLIANCE_RESULT
+  entity      string
+  country     string
+  verdict     string    "cleared" | "review" | "blocked"
+  lists_matched array   Which sanction lists matched (if blocked)
+
+### Boss approval
+POST /v1/negotiations/{id}/approve
+Auth: Boss JWT only (role="boss")
+Body:
+  action          string    "approve" | "reject"
+  override_price  number?   Set a different deal price before approving
+
+Returns: {ok: true}
+Effect: Unblocks the SSE stream → LOI_GENERATED event fires within seconds.
+
+### Global event stream
+GET /v1/stream
+Returns: persistent SSE connection
+Events: all of the above, filtered by caller's role:
+  boss     → sees all events, all sessions
+  buyer    → sees own negotiations only
+  broker   → sees assigned negotiations only
+  agent    → sees sessions it started
+
+Reconnects automatically on disconnect. Client should implement exponential backoff.
+
+### Sample AG-UI client (JavaScript)
+class SloiAGUI {
+  constructor(apiKey) {
+    this.apiKey = apiKey;
+    this.handlers = {};
+  }
+  on(type, fn) { (this.handlers[type] = this.handlers[type] || []).push(fn); return this; }
+  connect() {
+    this.es = new EventSource(`/v1/stream?key=${this.apiKey}`);
+    this.es.onmessage = (e) => {
+      const event = JSON.parse(e.data);
+      (this.handlers[event.type] || []).forEach(h => h(event.data, event));
+    };
+    return this;
+  }
+  async approve(negId, action, overridePrice) {
+    return fetch(`/v1/negotiations/${negId}/approve`, {
+      method: 'POST',
+      headers: {'x-api-key': this.apiKey, 'Content-Type': 'application/json'},
+      body: JSON.stringify({action, override_price: overridePrice})
+    });
+  }
+}
+
+// Usage
+const agui = new SloiAGUI('sk-sloi-...')
+  .on('AWAIT_HUMAN', async (data, ev) => {
+    // Auto-approve if deal_price <= max_price
+    if (data.deal_price <= mandate.max_price) {
+      await agui.approve(ev.session_id, 'approve');
+    }
+  })
+  .on('LOI_GENERATED', (data) => {
+    console.log('LOI ready:', data.loi_ref, data.pdf_url);
+  })
+  .connect();
+
+---
+
+## 5. LOI
+
+GET /v1/lois
+Returns: array of {ref, product, qty, deal_price, total_value, buyer_name, supplier_ref, signed_at, pdf_url}
+
+GET /v1/lois/{ref}/pdf
+Returns: PDF binary (application/pdf)
+Note: Requires auth. Buyer sees own LOIs. Boss sees all.
+
+LOI structure:
+  - SLOI AI header + reference number
+  - Buyer name (real)
+  - Supplier: REF code only (anonymous)
+  - Product, quantity, agreed price, incoterm
+  - Total deal value
+  - Boss-approved timestamp
+  - Compliance cleared stamp
+  - Not a financial instrument — facilitation only
+
+---
+
+## 6. COMPLIANCE
+
+### Auto-screening
+Every negotiation is auto-screened before it starts.
+Blocked → NEGOTIATION_FAILED with reason "compliance_blocked"
+No credits charged if blocked.
+
+### Manual check
+POST /v1/compliance/check
+Body: {entity: string, country: string, product_category?: string}
+Returns: {verdict: "cleared"|"review"|"blocked", lists_matched: [...], checked_at: string}
+Cost: 1 credit
+
+Blocked countries (deal cannot proceed):
+Iran, Russia, Belarus, North Korea, Syria, Cuba, Venezuela, Myanmar, Sudan
+
+Restricted (enhanced KYC, Boss approval required):
+Iraq, Libya, Algeria, Tunisia, Pakistan, Nigeria
+
+---
+
+## 7. OPEN NETWORK (Transact tier)
+
+Agents on Transact tier earn 1% commission on every LOI they generate.
+Commission paid monthly in USD or USDC on Base.
+
+Agent workflow:
+1. Register with wallet_address
+2. Pass 5-day compliance review
+3. Start generating LOIs via POST /v1/negotiate
+4. Commission tracked automatically per api_key
+5. Monthly payout to wallet or bank
+
+---
+
+## 8. OPENCLAW INTEGRATION
+
+Boss controls SLOI AI from Telegram/WhatsApp via Telegram Bot.
+skill.md at: https://sloiai.com/skill.md
+
+Telegram Bot commands (natural language supported):
+  "approve" or "approve NEG-001"  → POST /v1/negotiations/{id}/approve {action:"approve"}
+  "reject"                        → POST /v1/negotiations/{id}/approve {action:"reject"}
+  "status" or "מה הסטטוס"         → GET /v1/negotiations (summary)
+  "prices"                        → GET /v1/products
+  "leads"                         → GET /v1/leads (latest LeadFinder results)
+  "balance"                       → GET /v1/credits/balance
+
+AWAIT_HUMAN event → Telegram Bot forwards to WhatsApp automatically.
+Boss replies "approve" → Telegram Bot calls approve endpoint → LOI generated.
+
+---
+
+## 9. COMPLETE EXAMPLE FLOW
+
+// 1. Register
+const reg = await fetch('/v1/agents/register', {
+  method: 'POST',
+  body: JSON.stringify({name:'MyAgent', email:'agent@co.com', framework:'claude', wallet_address:'0x...'})
+}).then(r => r.json());
+const {api_key, sloi_wallet} = reg;
+
+// 2. Top up with USDC (send 99 USDC to sloi_wallet on Base mainnet)
+// Credits appear in ~2 seconds. Or use POST /v1/credits/purchase.
+
+// 3. Find product
+const products = await fetch('/v1/products?sector=metals', {
+  headers: {'x-api-key': api_key}
+}).then(r => r.json());
+const rebar = products.find(p => p.sku === 'STL-12');
+
+// 4. Negotiate (SSE stream)
+const agui = new SloiAGUI(api_key)
+  .on('TEXT_CHUNK', ({text, role, round}) => {
+    process.stdout.write(text); // stream tokens
+  })
+  .on('ROUND_COMPLETE', ({round, agent_price, broker_price, gap_pct}) => {
+    console.log(`Round ${round}: Agent $${agent_price} | Broker $${broker_price} | Gap ${gap_pct}%`);
+  })
+  .on('AWAIT_HUMAN', async (data, ev) => {
+    console.log(`Deal: $${data.deal_price}/MT · Total: $${data.total_value}`);
+    // Auto-approve if within mandate
+    await agui.approve(ev.session_id, 'approve');
+  })
+  .on('LOI_GENERATED', (data) => {
+    console.log(`LOI: ${data.loi_ref} · PDF: ${data.pdf_url}`);
+  })
+  .connect();
+
+// Start the negotiation
+await fetch('/v1/negotiate', {
+  method: 'POST',
+  headers: {'x-api-key': api_key, 'Content-Type': 'application/json'},
+  body: JSON.stringify({
+    product_ref: 'REF-MET-001',
+    product_name: 'Steel Rebar G60 12mm',
+    qty: 100,
+    unit: 'MT',
+    target_price: 2700,
+    max_price: 2900,
+    strategy: 'standard',
+    buyer_name: 'Gulf Cement LLC'
+  })
+});
+
+// 5. Download LOI
+// GET /v1/lois/{ref}/pdf → PDF binary
+
+---
+
+## 10. RATE LIMITS
+
+Read tier:     1,000 requests/hour
+Transact tier: 10,000 requests/hour
+SSE streams:   1 persistent connection per api_key (use /v1/stream for all events)
+Negotiate:     3 concurrent negotiations per api_key
+
+---
+
+
+## 11. AUTONOMOUS MODE
+
+### Create mandate
+POST /v1/mandates
+Body: {product_ref, qty, target_price, max_price, strategy, auto_approve:true,
+       max_orders_per_day:3, max_daily_value:500000, expires_in_days:30,
+       allowed_broker_ids?:[], allowed_countries?:[]}
+Returns: {mandate_id, status:"active", expires_at}
+
+### Negotiation with mandate
+POST /v1/negotiate
+Body: {..., mandate_id:"MND-001"}
+If conditions pass → AUTO_APPROVED event fires (no AWAIT_HUMAN)
+If conditions fail → falls back to AWAIT_HUMAN
+
+### AUTO_APPROVED event
+{type:"AUTO_APPROVED", data:{deal_price, total_value, loi_ref, mandate_id,
+ conditions_met:["price_ok","compliance_cleared","order_cap_ok","value_cap_ok","mandate_active"]}}
+
+### Safety: what cannot be bypassed in autonomous mode
+- deal_price ALWAYS <= max_price (server-enforced)
+- compliance "blocked" ALWAYS stops the deal
+- Max $1M per single auto-approved LOI
+- Boss can cancel mandate instantly at any time
+
+## 12. AGENT REPUTATION
+
+GET /v1/agents/{id}/reputation
+Returns: {tier, deals_count, success_rate, floor_discount, on_chain_verified, wallet_address}
+
+Tiers: starter(0%) bronze(1%) silver(3%) gold(5%) platinum(8%) protocol(10%)
+Discount applied automatically to broker floor_price before negotiation starts.
+floor_price_for_agent = product.broker_floor * (1 - floor_discount)
+
+On-chain verification: submit wallet_address → SLOI AI verifies deal history on Base.
+
+
+## FRONTEND CLIENT
+
+api-client.js: https://sloiai.com/api-client.js
+Shared JS class for all portals.
+Usage: <script src="/api-client.js"></script>
+const api = new SloiAPI();
+await api.negotiate({...}).on("LOI_GENERATED", handler).start();
+
+## LINKS
+
+Summary (llms.txt):   https://sloiai.com/llms.txt
+MCP skill:            https://sloiai.com/skill.md
+HTML docs:            https://sloiai.com/docs
+AG-UI spec:           https://sloiai.com/agui
+AgentKit (USDC):      https://sloiai.com/agentkit
+Open Network:         https://sloiai.com/open-network
+Telegram Bot:             https://sloiai.com/telegram-bot
+Technical spec:       https://sloiai.com/tech-spec
+Support:              api@sloiai.com

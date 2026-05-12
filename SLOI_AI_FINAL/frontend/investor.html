@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Investors — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(7,7,15,.92);border-bottom:1px solid var(--border);backdrop-filter:blur(16px)}
+.logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-tag{font-size:9px;color:var(--muted);margin-left:7px;font-weight:400;font-family:'IBM Plex Mono',monospace}
+.nav-links{display:flex;gap:24px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
+.btn-cta{background:var(--indigo);color:#fff;padding:8px 18px;border-radius:4px;font-size:11px;font-weight:600;text-decoration:none}
+.wrap{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:72px 24px 80px}
+.confidential{display:inline-flex;align-items:center;gap:6px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:var(--red);padding:5px 14px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.06em;margin-bottom:28px}
+h1{font-family:'Fraunces',serif;font-size:clamp(40px,6vw,64px);font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:.95;margin-bottom:16px}
+h1 em{font-style:italic;color:var(--indigo)}
+.lead{font-size:15px;color:var(--muted);line-height:1.85;max-width:640px;margin-bottom:52px}
+h2{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--white);letter-spacing:-.02em;margin-bottom:14px}
+p{font-size:12px;color:var(--text);line-height:1.9;margin-bottom:12px}
+.divider{border:none;border-top:1px solid var(--border);margin:48px 0}
+.section{margin-bottom:48px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+/* STATS */
+.big-stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center}
+.bs-val{font-family:'Fraunces',serif;font-size:36px;font-weight:900;letter-spacing:-.03em;line-height:1}
+.bs-label{font-size:10px;color:var(--muted);margin-top:6px;letter-spacing:.04em}
+.bs-sub{font-size:11px;margin-top:4px}
+
+/* REVENUE MODEL */
+.rev-stream{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;transition:border-color .15s}
+.rev-stream:hover{border-color:rgba(91,95,239,.3)}
+.rs-icon{font-size:24px;margin-bottom:10px}
+.rs-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:6px}
+.rs-desc{font-size:11px;color:var(--muted);line-height:1.65;margin-bottom:8px}
+.rs-rate{font-family:'Fraunces',serif;font-size:20px;font-weight:700}
+
+/* ROADMAP */
+.roadmap{display:flex;flex-direction:column;gap:0}
+.rm-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--border)}
+.rm-item:last-child{border-bottom:none}
+.rm-phase{width:80px;flex-shrink:0}
+.rm-phase-label{font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px}
+.rm-phase-name{font-size:11px;font-weight:600}
+.rm-body{flex:1}
+.rm-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:5px}
+.rm-items{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--muted)}
+.rm-status{margin-left:auto;flex-shrink:0}
+
+/* UNIT ECONOMICS */
+.econ-table{width:100%;border-collapse:collapse}
+.econ-table th{font-size:9px;color:var(--muted);letter-spacing:.08em;text-align:left;padding:7px 12px;border-bottom:1px solid var(--border);background:var(--surface2);text-transform:uppercase}
+.econ-table td{padding:9px 12px;font-size:12px;border-bottom:1px solid var(--border)}
+.econ-table tr:last-child td{border-bottom:none;font-weight:700;color:var(--white)}
+.econ-table tr:hover td{background:rgba(91,95,239,.03)}
+
+/* BADGE */
+.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.bt{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+
+/* CTA */
+.contact-box{background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:8px;padding:40px;text-align:center;margin-top:52px}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:11px}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:var(--muted);text-decoration:none}.footer-links a:hover{color:var(--white)}
+</style>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+<nav>
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="m2m-homepage.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="docs.html">Docs</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="contact.html" class="btn-cta">Get in touch →</a>
+</nav>
+
+<div class="wrap">
+  <div class="confidential">🔒 Confidential — for accredited investors only</div>
+
+  <h1>The AI that closes<br/>commodity <em>deals.</em></h1>
+  <p class="lead">SLOI AI is an AI-powered negotiation and LOI generation platform for commodity procurement. We replace manual broker negotiations with an autonomous agent that closes deals in minutes — not days.</p>
+
+  <!-- KEY METRICS -->
+  <div class="g4" style="margin-bottom:48px">
+    <div class="big-stat">
+      <div class="bs-val" style="color:var(--indigo)">$1.84M</div>
+      <div class="bs-label">LOI Volume MTD</div>
+      <div class="bs-sub" style="color:var(--green)">↑ 23% vs last month</div>
+    </div>
+    <div class="big-stat">
+      <div class="bs-val" style="color:var(--green)">$18,420</div>
+      <div class="bs-label">Revenue MTD</div>
+      <div class="bs-sub" style="color:var(--muted)">LOI fees + credits</div>
+    </div>
+    <div class="big-stat">
+      <div class="bs-val">98%</div>
+      <div class="bs-label">Gross Margin</div>
+      <div class="bs-sub" style="color:var(--muted)">at 10 LOIs/month</div>
+    </div>
+    <div class="big-stat">
+      <div class="bs-val" style="color:var(--teal)">&lt;10m</div>
+      <div class="bs-label">Mandate → LOI</div>
+      <div class="bs-sub" style="color:var(--muted)">avg 3.2 rounds</div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- THE PROBLEM -->
+  <div class="section">
+    <h2>The problem</h2>
+    <p>Commodity procurement — steel, cement, grain, energy — is a $10T+ annual market. The deal flow is still largely manual: buyers call brokers, brokers call suppliers, 3–5 days of WhatsApp negotiation, a Word document, a PDF scan. The LOI arrives a week later.</p>
+    <p>The bottleneck is negotiation. There is no software that negotiates on behalf of a buyer with a live supplier — in real time, within a mandate, with a signed output at the end.</p>
+    <p>We built that software.</p>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- REVENUE MODEL -->
+  <div class="section">
+    <h2>Revenue model</h2>
+    <div class="g2" style="margin-bottom:12px">
+      <div class="rev-stream">
+        <div class="rs-icon">📄</div>
+        <div class="rs-title">LOI fee — per signed deal</div>
+        <div class="rs-desc">Broker pays a fixed fee per LOI signed on the platform. Invoiced monthly.</div>
+        <div class="rs-rate" style="color:var(--violet)">$500 <span style="font-size:13px;font-weight:400;color:var(--muted)">per LOI (current rate)</span></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px">⚠ Current rate underpriced — likely 10× too low</div>
+      </div>
+      <div class="rev-stream">
+        <div class="rs-icon">⚡</div>
+        <div class="rs-title">Credits — usage-based</div>
+        <div class="rs-desc">Buyers and AI agents purchase credit packs. Used per negotiation session and LOI.</div>
+        <div class="rs-rate" style="color:var(--teal)">$99–$999 <span style="font-size:13px;font-weight:400;color:var(--muted)">per pack</span></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px">Never expire · card or USDC on Base</div>
+      </div>
+      <div class="rev-stream">
+        <div class="rs-icon">🌐</div>
+        <div class="rs-title">Open Network — agent commission</div>
+        <div class="rs-desc">External AI agents earn 1% per LOI. SLOI AI takes a cut of that commission on Transact tier.</div>
+        <div class="rs-rate" style="color:var(--gold)">1% <span style="font-size:13px;font-weight:400;color:var(--muted)">of deal value</span></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px">Scales with Open Network adoption</div>
+      </div>
+      <div class="rev-stream">
+        <div class="rs-icon">💰</div>
+        <div class="rs-title">TradeFinex finder's fee</div>
+        <div class="rs-desc">When buyers request trade financing, SLOI AI refers them to TradeFinex and earns a finder's fee off-platform.</div>
+        <div class="rs-rate" style="color:var(--green)">0.5% <span style="font-size:13px;font-weight:400;color:var(--muted)">of funded deal</span></div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px">Integration pending</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- UNIT ECONOMICS -->
+  <div class="section">
+    <h2>Unit economics</h2>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:7px;overflow:hidden;margin-bottom:14px">
+      <table class="econ-table">
+        <thead><tr><th>Scenario</th><th>LOIs/month</th><th>Avg deal size</th><th>LOI fee revenue</th><th>Infra cost</th><th>Gross margin</th></tr></thead>
+        <tbody>
+          <tr><td>Today</td><td>24</td><td>$76,600</td><td><span style="color:var(--green)">$12,000</span></td><td>$90</td><td style="color:var(--green)">99.3%</td></tr>
+          <tr><td>Break-even</td><td>1</td><td>any</td><td><span style="color:var(--green)">$500</span></td><td>$90</td><td style="color:var(--green)">82%</td></tr>
+          <tr><td>Conservative (10 LOIs)</td><td>10</td><td>$100K</td><td><span style="color:var(--green)">$5,000</span></td><td>$90</td><td style="color:var(--green)">98.2%</td></tr>
+          <tr><td>Scale (100 LOIs)</td><td>100</td><td>$150K</td><td><span style="color:var(--green)">$50,000</span></td><td>$500</td><td style="color:var(--green)">99%</td></tr>
+          <tr><td>Repriced (10× LOI fee)</td><td>10</td><td>$150K</td><td><span style="color:var(--violet)">$50,000</span></td><td>$90</td><td style="color:var(--violet)">99.8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.7">Production infra: ~$90/mo (Supabase + Railway + Vercel). All variable costs are API calls (Claude) — ~$0.10–$0.40 per negotiation session. Break-even at 1 LOI/month.</div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- MARKET -->
+  <div class="section">
+    <h2>Market</h2>
+    <div class="g3">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;text-align:center">
+        <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--white)">$10T+</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Global commodity procurement annual volume</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;text-align:center">
+        <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--indigo)">2–5%</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Typical broker margin per deal (we charge $500 flat)</div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;text-align:center">
+        <div style="font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--green)">MENA</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px">Primary focus — UAE, KSA, Egypt, Iraq, Germany</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ROADMAP -->
+  <div class="section">
+    <h2>Roadmap</h2>
+    <div class="roadmap">
+      <div class="rm-item">
+        <div class="rm-phase">
+          <div class="rm-phase-label">Phase 1</div>
+          <div class="rm-phase-name" style="color:var(--green)">Now</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-title">Foundation — DB + Auth + Core API</div>
+          <div class="rm-items">
+            <div>Supabase schema · 14 tables · RLS policies</div>
+            <div>Node.js API on Railway · Auth · Credits</div>
+            <div>Stripe + Base/USDC payment webhooks</div>
+            <div>Claude negotiation agent · WebSocket rounds</div>
+          </div>
+        </div>
+        <div class="rm-status"><span class="badge bg">In dev</span></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-phase">
+          <div class="rm-phase-label">Phase 2</div>
+          <div class="rm-phase-name" style="color:var(--gold)">Month 3</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-title">First live deals</div>
+          <div class="rm-items">
+            <div>First LOI signed on platform</div>
+            <div>3 brokers onboarded · 2 buyer accounts</div>
+            <div>WhatsApp integration via Twilio live</div>
+            <div>OpenClaw Boss interface active</div>
+          </div>
+        </div>
+        <div class="rm-status"><span class="badge ba">Planned</span></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-phase">
+          <div class="rm-phase-label">Phase 3</div>
+          <div class="rm-phase-name" style="color:var(--violet)">Month 6</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-title">Open Network launch</div>
+          <div class="rm-items">
+            <div>External AI agents on Transact tier</div>
+            <div>AgentKit USDC payments live</div>
+            <div>10 LOIs/month run rate</div>
+            <div>LOI fee repriced to market rate</div>
+          </div>
+        </div>
+        <div class="rm-status"><span class="badge bv">Roadmap</span></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-phase">
+          <div class="rm-phase-label">Phase 4</div>
+          <div class="rm-phase-name" style="color:var(--teal)">Month 12</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-title">Scale</div>
+          <div class="rm-items">
+            <div>100 LOIs/month · multiple sectors</div>
+            <div>TradeFinex financing integration</div>
+            <div>Mobile app (iOS/Android)</div>
+            <div>Series A fundraise</div>
+          </div>
+        </div>
+        <div class="rm-status"><span class="badge bt">Vision</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- ASK -->
+  <div class="section">
+    <h2>What we're looking for</h2>
+    <p>SLOI AI is positioned at the intersection of AI and the $300B+ IMEC corridor — the new India-Middle East-Europe trade route. See our <a href="imec.html" style="color:var(--violet);text-decoration:none">IMEC opportunity page →</a></p>
+    <p>We are raising a pre-seed round to fund the engineering sprint (Phase 1) and the first 6 months of operations. The platform UI, product architecture, API spec, and technical documentation are complete. We need the backend built and the first deals closed.</p>
+    <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:16px 20px;margin-top:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;font-size:12px">
+        <div><div style="color:var(--muted);margin-bottom:4px">Engineering (60 days)</div><div style="color:var(--white);font-weight:600">$4,000 – $9,000</div></div>
+        <div><div style="color:var(--muted);margin-bottom:4px">Infra (12 months)</div><div style="color:var(--white);font-weight:600">~$1,080/yr</div></div>
+        <div><div style="color:var(--muted);margin-bottom:4px">Break-even</div><div style="color:var(--green);font-weight:600">1 LOI/month</div></div>
+        <div><div style="color:var(--muted);margin-bottom:4px">Target run rate (M6)</div><div style="color:var(--violet);font-weight:600">10 LOIs/mo · $5K revenue</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-box">
+    <div style="font-family:'Fraunces',serif;font-size:30px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:10px">Interested?<br/><em style="font-style:italic;color:var(--indigo)">Let's talk.</em></div>
+    <p style="color:var(--muted);margin-bottom:22px;font-size:12px;max-width:400px;margin-left:auto;margin-right:auto">This deck is confidential. NDA available on request. Full technical spec available for qualified investors.</p>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <a href="mailto:invest@sloiai.com" style="background:var(--indigo);color:#fff;padding:12px 24px;border-radius:5px;font-size:12px;font-weight:600;text-decoration:none">invest@sloiai.com</a>
+      <a href="contact.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:12px 24px;border-radius:5px;font-size:12px;text-decoration:none">Contact form</a>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white);text-decoration:none">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
+  <div class="footer-links">
+    <a href="about.html">About</a>
+    <a href="docs.html">Docs</a>
+    <a href="terms.html">Terms</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div style="font-size:10px;color:var(--muted)">Confidential · © 2026 SLOI AI Ltd.</div>
+</footer>
+</body>
+</html>

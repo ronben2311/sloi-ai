@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Technical Spec — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-tag{font-size:9px;color:var(--muted);margin-left:6px;font-weight:400}
+.nav-links{display:flex;gap:20px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 52px);position:relative;z-index:1}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:20px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
+.sb-section{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:12px 16px 4px;font-weight:700}
+.sb-link{display:block;padding:6px 16px;font-size:11px;color:var(--muted);text-decoration:none;transition:all .1s;border-left:2px solid transparent}
+.sb-link:hover{color:var(--white);border-left-color:var(--border2)}
+.sb-link.active{color:var(--violet);border-left-color:var(--indigo);background:rgba(91,95,239,.06)}
+.content{padding:40px 40px 80px;max-width:760px}
+
+/* PHASE HEADERS */
+.phase{margin-bottom:48px}
+.phase-header{display:flex;align-items:flex-start;gap:16px;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--border)}
+.phase-num{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;font-weight:900;flex-shrink:0}
+.phase-1 .phase-num{background:rgba(91,95,239,.15);border:2px solid var(--indigo);color:var(--violet)}
+.phase-2 .phase-num{background:rgba(34,197,94,.1);border:2px solid rgba(34,197,94,.4);color:var(--green)}
+.phase-3 .phase-num{background:rgba(232,169,74,.1);border:2px solid rgba(232,169,74,.4);color:var(--gold)}
+.phase-4 .phase-num{background:rgba(45,212,191,.1);border:2px solid rgba(45,212,191,.4);color:var(--teal)}
+.phase-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white);letter-spacing:-.02em;margin-bottom:3px}
+.phase-subtitle{font-size:11px;color:var(--muted)}
+.phase-meta{display:flex;gap:8px;margin-top:6px}
+
+/* TASKS */
+.task-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.task{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px}
+.task-check{width:18px;height:18px;border:2px solid var(--border2);border-radius:3px;flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:var(--indigo)}
+.task-body{flex:1}
+.task-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px}
+.task-desc{font-size:10px;color:var(--muted);line-height:1.6}
+.task-file{font-size:9px;color:var(--indigo);margin-top:3px}
+.task-pri{font-size:9px;font-weight:700;padding:1px 6px;border-radius:2px;flex-shrink:0;align-self:flex-start}
+.pri-1{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--red)}
+.pri-2{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.3);color:var(--gold)}
+.pri-3{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+
+/* CODE */
+.code-wrap{background:var(--bg);border:1px solid var(--border2);border-radius:5px;overflow:hidden;margin-bottom:12px}
+.code-header{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--border2);background:var(--surface2)}
+.code-lang{font-size:9px;color:var(--muted);letter-spacing:.06em}
+.code-copy{font-size:9px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:2px;padding:2px 7px;font-family:'IBM Plex Mono',monospace}
+.code-copy:hover{border-color:var(--indigo);color:var(--violet)}
+pre{padding:14px;font-size:11px;line-height:1.8;overflow-x:auto;color:var(--text)}
+.kw{color:var(--violet)}.str{color:var(--green)}.cm{color:var(--muted)}.num{color:var(--gold)}.fn{color:var(--teal)}
+
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px}
+.tbl th{font-size:9px;color:var(--muted);letter-spacing:.08em;text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--surface2);text-transform:uppercase}
+.tbl td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(91,95,239,.03)}
+.tbl-key{font-family:'IBM Plex Mono',monospace;color:var(--teal);font-size:10px}
+.tbl-type{color:var(--gold);font-size:10px}
+.tbl-desc{color:var(--muted)}
+
+/* MISC */
+.sec-title{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.08em;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);text-transform:uppercase}
+.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.bt{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+.br{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+.note{background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.warn{background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.25);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--text);line-height:1.7;margin-bottom:14px}
+h2{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px;letter-spacing:-.01em}
+p{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+</style>
+</head>
+<body>
+<nav>
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Technical Spec · Developer Handoff</span></a>
+  <div class="nav-links">
+    <a href="sitemap.html">Sitemap</a>
+    <a href="payments.html">Payments</a>
+    <a href="agui.html">AG-UI</a>
+    <a href="telegram-bot.html">Telegram Bot</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-section">Overview</div>
+  <a class="sb-link active" href="#overview">Stack & scope</a>
+  <a class="sb-link" href="#architecture">Architecture</a>
+  <a class="sb-link" href="#rules">Non-negotiables</a>
+
+  <div class="sb-section">Phase 1 — Foundation</div>
+  <a class="sb-link" href="#p1-db">DB schema</a>
+  <a class="sb-link" href="#p1-auth">Auth</a>
+  <a class="sb-link" href="#p1-api">Core API</a>
+  <a class="sb-link" href="#p1-credits">Credits</a>
+
+  <div class="sb-section">Phase 2 — Agents</div>
+  <a class="sb-link" href="#p2-neg">Negotiation (AG-UI)</a>
+  <a class="sb-link" href="#p2-loi">LOI generator</a>
+  <a class="sb-link" href="#p2-payments">Payments</a>
+
+  <div class="sb-section">Phase 3 — Channels</div>
+  <a class="sb-link" href="#p3-telegram">WhatsApp</a>
+  <a class="sb-link" href="#p3-telegram-bot">Telegram Bot</a>
+  <a class="sb-link" href="#p3-open-network">Open Network</a>
+
+  <div class="sb-section">Phase 4 — Scale</div>
+  <a class="sb-link" href="#p4-compliance">Compliance</a>
+  <a class="sb-link" href="#p4-mobile">Mobile PWA</a>
+  <a class="sb-link" href="#p4-tradefinex">TradeFinex</a>
+
+  <div class="sb-section">Reference</div>
+  <a class="sb-link" href="#env">ENV variables</a>
+  <a class="sb-link" href="#files">All files</a>
+  <a class="sb-link" href="#timeline">Timeline</a>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ── OVERVIEW ─────────────────────────────────────────────────────────────── -->
+<div id="overview" class="phase">
+  <h2>SLOI AI — Technical Spec v1.0</h2>
+  <p>This document is the complete developer handoff for SLOI AI — an AI-powered commodity procurement platform. The frontend (42 HTML files) is complete. The backend needs to be built.</p>
+
+  <div class="sec-title">Tech Stack</div>
+  <table class="tbl">
+    <thead><tr><th>Layer</th><th>Technology</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Frontend</td><td class="tbl-key">Vercel</td><td class="tbl-desc">42 static HTML/CSS/JS files · no framework · deploy as-is</td></tr>
+      <tr><td>Backend</td><td class="tbl-key">Railway · Node.js 20</td><td class="tbl-desc">Express · REST API + SSE stream</td></tr>
+      <tr><td>Database</td><td class="tbl-key">Supabase</td><td class="tbl-desc">PostgreSQL · RLS · Auth · Realtime</td></tr>
+      <tr><td>AI</td><td class="tbl-key">Claude API (Anthropic)</td><td class="tbl-desc">claude-sonnet-4-20250514 · streaming enabled</td></tr>
+      <tr><td>Agent protocol</td><td class="tbl-key">AG-UI (SSE)</td><td class="tbl-desc">See agui.html for full spec</td></tr>
+      <tr><td>Payments (humans)</td><td class="tbl-key">Stripe</td><td class="tbl-desc">Checkout + webhook · See payments.html</td></tr>
+      <tr><td>Payments (agents)</td><td class="tbl-key">Base + USDC (Coinbase)</td><td class="tbl-desc">Alchemy webhook · See payments.html</td></tr>
+      <tr><td>WhatsApp</td><td class="tbl-key">Twilio</td><td class="tbl-desc">Business API · Meta-approved templates</td></tr>
+      <tr><td>Email</td><td class="tbl-key">Resend</td><td class="tbl-desc">LOI delivery + credit receipts</td></tr>
+      <tr><td>Boss interface</td><td class="tbl-key">Telegram Bot</td><td class="tbl-desc">VPS · Telegram/WhatsApp control</td></tr>
+      <tr><td>Compliance</td><td class="tbl-key">OpenSanctions</td><td class="tbl-desc">OFAC + EU + UN screening API</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-title" id="architecture">Architecture</div>
+  <div class="code-wrap">
+    <div class="code-header"><span class="code-lang">SYSTEM DIAGRAM</span></div>
+<pre>
+Buyer / Broker / Supplier / Boss (browser)
+         ↓ HTTPS / SSE (AG-UI stream)
+    api.sloiai.com  ←→  Railway (Node.js)
+         ↓                    ↓
+    Supabase DB          Claude API
+    (PostgreSQL)         (claude-sonnet-4)
+         ↓
+    Event bus ──→ Admin portal (real-time)
+                ──→ Buyer portal (own deals)
+                ──→ Broker portal (assigned)
+                ──→ Telegram Bot → Telegram/WhatsApp
+
+Payments:
+    Human  → Stripe checkout → webhook → credits
+    Agent  → USDC on Base → Alchemy webhook → credits
+</pre>
+  </div>
+
+  <div class="sec-title" id="rules">Non-negotiables</div>
+  <div class="task-list">
+    <div class="task"><div class="task-body"><div class="task-title">⚡ Boss approval on every LOI</div><div class="task-desc">No LOI is ever generated without explicit Boss action. The agent stops at AWAIT_HUMAN and waits. This is hardcoded — cannot be bypassed by any role or agent.</div></div><div class="task-pri pri-1">CRITICAL</div></div>
+    <div class="task"><div class="task-body"><div class="task-title">🔒 Supplier anonymization via RLS</div><div class="task-desc">Factory identity is never exposed to buyers. Enforced at DB level (Supabase RLS). Buyers see REF-MET-001 etc. only. Never expose real supplier names in any API response to buyers.</div></div><div class="task-pri pri-1">CRITICAL</div></div>
+    <div class="task"><div class="task-body"><div class="task-title">🛡️ Compliance screening on every deal</div><div class="task-desc">Every buyer, supplier, and entity is screened before negotiation starts. Blocked deals (OFAC etc.) cannot proceed. Not optional — runs automatically on deal creation.</div></div><div class="task-pri pri-1">CRITICAL</div></div>
+    <div class="task"><div class="task-body"><div class="task-title">💳 Credits checked before every agent action</div><div class="task-desc">Deduct credits atomically before running agent. Use Supabase RPC decrement_credits — never plain UPDATE. Fail the action if balance insufficient.</div></div><div class="task-pri pri-2">HIGH</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Deploy /.well-known/agent.json before launch</div><div class="task-desc">A2A-compatible buyer agents discover SLOI AI via this file. Deploy to Vercel as static file in .well-known/ folder. See agent.json + a2a.html.</div></div><div class="task-pri pri-2">HIGH</div></div>
+  </div>
+</div>
+
+<!-- ── PHASE 1 ────────────────────────────────────────────────────────────────── -->
+<div id="p1-db" class="phase phase-1">
+  <div class="phase-header">
+    <div class="phase-num">1</div>
+    <div>
+      <div class="phase-title">Phase 1 — Foundation</div>
+      <div class="phase-subtitle">DB · Auth · Core API · Credits · ~2 weeks</div>
+      <div class="phase-meta"><span class="badge bv">Start here</span><span class="badge" style="background:var(--surface2);border:1px solid var(--border2);color:var(--muted)">No frontend changes needed</span></div>
+    </div>
+  </div>
+
+  <div class="sec-title">1.1 — Database Schema (Supabase)</div>
+  <div class="note">Create all tables in order. Foreign keys require users → organizations → then all others. Enable RLS on every table.</div>
+
+  <div class="code-wrap"><div class="code-header"><span class="code-lang">SQL — run in Supabase SQL editor</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="cm">-- 1. Organizations</span>
+<span class="kw">CREATE TABLE</span> organizations (
+  id          UUID <span class="kw">DEFAULT</span> gen_random_uuid() <span class="kw">PRIMARY KEY</span>,
+  name        TEXT <span class="kw">NOT NULL</span>,
+  type        TEXT <span class="kw">CHECK</span>(type <span class="kw">IN</span> (<span class="str">'buyer','broker','supplier','boss'</span>)),
+  country     TEXT,
+  created_at  TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- 2. Users (extends Supabase auth.users)</span>
+<span class="kw">CREATE TABLE</span> users (
+  id          UUID <span class="kw">REFERENCES</span> auth.users(id) <span class="kw">PRIMARY KEY</span>,
+  org_id      UUID <span class="kw">REFERENCES</span> organizations(id),
+  role        TEXT <span class="kw">CHECK</span>(role <span class="kw">IN</span> (<span class="str">'buyer','broker','supplier','boss'</span>)),
+  name        TEXT,
+  email       TEXT,
+  phone       TEXT,
+  wallet_address TEXT,  <span class="cm">-- Base wallet for USDC</span>
+  created_at  TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- 3. Credits</span>
+<span class="kw">CREATE TABLE</span> credits (
+  user_id         UUID <span class="kw">PRIMARY KEY REFERENCES</span> users(id),
+  balance         INT <span class="kw">NOT NULL DEFAULT</span> <span class="num">0</span>,
+  total_purchased INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  total_spent     INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  updated_at      TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="kw">CREATE TABLE</span> credit_transactions (
+  id                UUID <span class="kw">DEFAULT</span> gen_random_uuid() <span class="kw">PRIMARY KEY</span>,
+  user_id           UUID <span class="kw">REFERENCES</span> users(id),
+  credits           INT <span class="kw">NOT NULL</span>,  <span class="cm">-- positive=purchase, negative=usage</span>
+  source            TEXT,            <span class="cm">-- stripe|usdc|usage</span>
+  action            TEXT,            <span class="cm">-- deal_hunter|loi|autopilot|watcher</span>
+  amount_usd        NUMERIC(<span class="num">10</span>,<span class="num">2</span>),
+  stripe_session_id TEXT,
+  tx_hash           TEXT,
+  wallet_address    TEXT,
+  created_at        TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- Atomic credit operations</span>
+<span class="kw">CREATE OR REPLACE FUNCTION</span> increment_credits(p_user_id UUID, p_amount INT)
+<span class="kw">RETURNS VOID AS</span> $$
+  <span class="kw">INSERT INTO</span> credits(user_id, balance, total_purchased)
+  <span class="kw">VALUES</span>(p_user_id, p_amount, p_amount)
+  <span class="kw">ON CONFLICT</span>(user_id) <span class="kw">DO UPDATE SET</span>
+    balance=credits.balance+p_amount, total_purchased=credits.total_purchased+p_amount, updated_at=NOW();
+$$ <span class="kw">LANGUAGE</span> sql;
+
+<span class="kw">CREATE OR REPLACE FUNCTION</span> decrement_credits(p_user_id UUID, p_amount INT)
+<span class="kw">RETURNS VOID AS</span> $$
+  <span class="kw">UPDATE</span> credits <span class="kw">SET</span> balance=balance-p_amount, total_spent=total_spent+p_amount, updated_at=NOW()
+  <span class="kw">WHERE</span> user_id=p_user_id <span class="kw">AND</span> balance>=p_amount;
+  <span class="kw">IF NOT FOUND THEN RAISE EXCEPTION</span> <span class="str">'insufficient_credits'</span>; <span class="kw">END IF</span>;
+$$ <span class="kw">LANGUAGE</span> plpgsql;
+
+<span class="cm">-- 4. Negotiations</span>
+<span class="kw">CREATE TABLE</span> negotiations (
+  id              TEXT <span class="kw">PRIMARY KEY</span>,        <span class="cm">-- NEG-001</span>
+  product         TEXT <span class="kw">NOT NULL</span>,
+  qty             NUMERIC(<span class="num">12</span>,<span class="num">2</span>) <span class="kw">NOT NULL</span>,
+  unit            TEXT <span class="kw">DEFAULT</span> <span class="str">'MT'</span>,
+  buyer_id        UUID <span class="kw">REFERENCES</span> users(id),
+  buyer_name      TEXT,
+  broker_id       UUID <span class="kw">REFERENCES</span> users(id),
+  supplier_ref    TEXT,              <span class="cm">-- REF-MET-001 (never real name)</span>
+  target_price    NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  max_price       NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  strategy        TEXT <span class="kw">DEFAULT</span> <span class="str">'standard'</span>,
+  status          TEXT <span class="kw">DEFAULT</span> <span class="str">'running'</span>,
+  current_round   INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  max_rounds      INT <span class="kw">DEFAULT</span> <span class="num">5</span>,
+  agent_price     NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  broker_price    NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  deal_price      NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  boss_decision   TEXT,
+  override_price  NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  loi_ref         TEXT,
+  credits_used    INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  created_at      TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>(),
+  updated_at      TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- 5. LOIs</span>
+<span class="kw">CREATE TABLE</span> lois (
+  ref             TEXT <span class="kw">PRIMARY KEY</span>,    <span class="cm">-- SL-LOI-20260501-001</span>
+  neg_id          TEXT <span class="kw">REFERENCES</span> negotiations(id),
+  product         TEXT,
+  qty             NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  unit            TEXT,
+  deal_price      NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  total_value     NUMERIC(<span class="num">14</span>,<span class="num">2</span>),
+  buyer_name      TEXT,
+  supplier_ref    TEXT,
+  loi_fee_usd     NUMERIC(<span class="num">10</span>,<span class="num">2</span>) <span class="kw">DEFAULT</span> <span class="num">500</span>,
+  loi_fee_paid    BOOLEAN <span class="kw">DEFAULT</span> false,
+  pdf_url         TEXT,
+  signed_at       TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- 6. Products (supplier catalog, anonymized)</span>
+<span class="kw">CREATE TABLE</span> products (
+  ref             TEXT <span class="kw">PRIMARY KEY</span>,    <span class="cm">-- REF-MET-001</span>
+  supplier_id     UUID <span class="kw">REFERENCES</span> users(id),
+  sector          TEXT,
+  name            TEXT,               <span class="cm">-- visible to buyers</span>
+  sku             TEXT,
+  unit            TEXT,
+  current_price   NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  moq             INT,
+  lead_time_days  INT,
+  certs           TEXT[],
+  active          BOOLEAN <span class="kw">DEFAULT</span> true,
+  updated_at      TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- 7. API keys (for Open Network agents)</span>
+<span class="kw">CREATE TABLE</span> api_keys (
+  id              UUID <span class="kw">DEFAULT</span> gen_random_uuid() <span class="kw">PRIMARY KEY</span>,
+  user_id         UUID <span class="kw">REFERENCES</span> users(id),
+  key_hash        TEXT <span class="kw">NOT NULL UNIQUE</span>,  <span class="cm">-- bcrypt hash of sk-sloi-...</span>
+  name            TEXT,
+  tier            TEXT <span class="kw">DEFAULT</span> <span class="str">'read'</span>,     <span class="cm">-- read|transact</span>
+  wallet_address  TEXT,
+  last_used_at    TIMESTAMPTZ,
+  created_at      TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- 8. Price watches</span>
+<span class="kw">CREATE TABLE</span> price_watches (
+  id              UUID <span class="kw">DEFAULT</span> gen_random_uuid() <span class="kw">PRIMARY KEY</span>,
+  user_id         UUID <span class="kw">REFERENCES</span> users(id),
+  product_ref     TEXT <span class="kw">REFERENCES</span> products(ref),
+  target_price    NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  direction       TEXT <span class="kw">DEFAULT</span> <span class="str">'below'</span>,
+  triggered       BOOLEAN <span class="kw">DEFAULT</span> false,
+  active          BOOLEAN <span class="kw">DEFAULT</span> true,
+  created_at      TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- RLS policies (run after table creation)</span>
+<span class="kw">ALTER TABLE</span> negotiations <span class="kw">ENABLE ROW LEVEL SECURITY</span>;
+<span class="kw">CREATE POLICY</span> neg_buyer   <span class="kw">ON</span> negotiations <span class="kw">FOR SELECT USING</span>(buyer_id=auth.<span class="fn">uid</span>());
+<span class="kw">CREATE POLICY</span> neg_broker  <span class="kw">ON</span> negotiations <span class="kw">FOR SELECT USING</span>(broker_id=auth.<span class="fn">uid</span>());
+<span class="kw">CREATE POLICY</span> neg_boss    <span class="kw">ON</span> negotiations <span class="kw">FOR ALL USING</span>((<span class="kw">SELECT</span> role <span class="kw">FROM</span> users <span class="kw">WHERE</span> id=auth.<span class="fn">uid</span>())=<span class="str">'boss'</span>);
+<span class="kw">ALTER TABLE</span> products <span class="kw">ENABLE ROW LEVEL SECURITY</span>;
+<span class="kw">CREATE POLICY</span> prod_public <span class="kw">ON</span> products <span class="kw">FOR SELECT USING</span>(active=true); <span class="cm">-- ref only, no supplier_id</span>
+<span class="kw">CREATE POLICY</span> prod_supplier <span class="kw">ON</span> products <span class="kw">FOR ALL USING</span>(supplier_id=auth.<span class="fn">uid</span>());</pre>
+  </div>
+
+  <div class="sec-title" id="p1-auth">1.2 — Auth</div>
+  <div class="task-list">
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Enable Supabase Auth (email + magic link)</div><div class="task-desc">In Supabase dashboard → Auth → Providers. Enable Email. Configure magic link for frictionless login.</div></div><div class="task-pri pri-1">Day 1</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">POST /auth/register — creates user + org + credits row</div><div class="task-desc">Single endpoint for all roles. Body: {email, role, org_name, country}. Creates auth.user + users row + organization + credits(balance=0). Returns JWT.</div></div><div class="task-pri pri-1">Day 1</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">authenticate() middleware — JWT + API key</div><div class="task-desc">Detects Authorization: Bearer (JWT = human) vs x-api-key: sk-sloi-... (agent). Sets req.caller.type, req.caller.role, req.caller.id. See payments.html for full code.</div><div class="task-file">Reference: payments.html</div></div><div class="task-pri pri-1">Day 1</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">requireBoss() middleware — for LOI approval endpoint</div><div class="task-desc">Checks req.caller.role === 'boss'. Returns 403 otherwise. Used on POST /negotiations/:id/approve.</div></div><div class="task-pri pri-1">Day 1</div></div>
+  </div>
+
+  <div class="sec-title" id="p1-api">1.3 — Core API Endpoints</div>
+  <table class="tbl">
+    <thead><tr><th>Method</th><th>Path</th><th>Auth</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge bg">GET</span></td><td class="tbl-key">/health</td><td>—</td><td class="tbl-desc">Returns {ok:true, version}. Railway health check.</td></tr>
+      <tr><td><span class="badge br">POST</span></td><td class="tbl-key">/auth/register</td><td>—</td><td class="tbl-desc">Create user + org + credits(0). Returns JWT.</td></tr>
+      <tr><td><span class="badge bg">GET</span></td><td class="tbl-key">/v1/products</td><td>any</td><td class="tbl-desc">List all active products (ref, name, sku, price, unit, moq). Never expose supplier_id.</td></tr>
+      <tr><td><span class="badge bg">GET</span></td><td class="tbl-key">/v1/products/:ref/price</td><td>any</td><td class="tbl-desc">Current price + 7-day history for one product.</td></tr>
+      <tr><td><span class="badge bg">GET</span></td><td class="tbl-key">/v1/credits/balance</td><td>JWT|key</td><td class="tbl-desc">Returns {balance, total_purchased, total_spent}.</td></tr>
+      <tr><td><span class="badge br">POST</span></td><td class="tbl-key">/v1/credits/purchase</td><td>JWT|key</td><td class="tbl-desc">Human → Stripe URL. Agent → USDC instructions. See payments.html.</td></tr>
+      <tr><td><span class="badge br">POST</span></td><td class="tbl-key">/v1/negotiate</td><td>JWT|key</td><td class="tbl-desc">Start negotiation. Returns SSE stream (AG-UI events). See agui.html.</td></tr>
+      <tr><td><span class="badge bg">GET</span></td><td class="tbl-key">/v1/negotiations</td><td>JWT</td><td class="tbl-desc">List negotiations for current user (RLS-filtered by role).</td></tr>
+      <tr><td><span class="badge bg">GET</span></td><td class="tbl-key">/v1/negotiations/:id</td><td>JWT</td><td class="tbl-desc">Single negotiation details (RLS enforced).</td></tr>
+      <tr><td><span class="badge br">POST</span></td><td class="tbl-key">/v1/negotiations/:id/approve</td><td>boss only</td><td class="tbl-desc">{action:'approve'|'reject', override_price?}. Writes to DB → unblocks stream.</td></tr>
+      <tr><td><span class="badge bg">GET</span></td><td class="tbl-key">/v1/stream</td><td>JWT|key</td><td class="tbl-desc">Global SSE stream. Role-filtered. Heartbeat every 15s. See agui.html.</td></tr>
+      <tr><td><span class="badge bg">GET</span></td><td class="tbl-key">/v1/lois</td><td>JWT</td><td class="tbl-desc">List LOIs for current user.</td></tr>
+      <tr><td><span class="badge bg">GET</span></td><td class="tbl-key">/v1/lois/:ref/pdf</td><td>JWT</td><td class="tbl-desc">Download LOI PDF.</td></tr>
+      <tr><td><span class="badge br">POST</span></td><td class="tbl-key">/webhooks/stripe</td><td>Stripe sig</td><td class="tbl-desc">checkout.session.completed → addCredits(). See payments.html.</td></tr>
+      <tr><td><span class="badge br">POST</span></td><td class="tbl-key">/webhooks/base</td><td>Alchemy</td><td class="tbl-desc">USDC transfer to SLOI wallet → addCredits(). See payments.html.</td></tr>
+      <tr><td><span class="badge br">POST</span></td><td class="tbl-key">/v1/agents/register</td><td>—</td><td class="tbl-desc">Open Network agent registration. Returns api_key + SLOI wallet address.</td></tr>
+      <tr><td><span class="badge br">POST</span></td><td class="tbl-key">/v1/compliance/check</td><td>JWT</td><td class="tbl-desc">Screen entity against OFAC+EU+UN. Returns {verdict, lists_matched}.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-title" id="p1-credits">1.4 — Credit Costs</div>
+  <table class="tbl">
+    <thead><tr><th>Action</th><th>Credits</th><th>When deducted</th></tr></thead>
+    <tbody>
+      <tr><td>Price Watcher</td><td class="tbl-key">1/day</td><td class="tbl-desc">Daily cron job</td></tr>
+      <tr><td>Deal Hunter (Standard)</td><td class="tbl-key">10</td><td class="tbl-desc">Before starting negotiation</td></tr>
+      <tr><td>Autopilot (Aggressive)</td><td class="tbl-key">20</td><td class="tbl-desc">Before starting negotiation</td></tr>
+      <tr><td>LOI generation</td><td class="tbl-key">5</td><td class="tbl-desc">After Boss approves</td></tr>
+      <tr><td>LeadFinder scan</td><td class="tbl-key">5</td><td class="tbl-desc">Per scan</td></tr>
+      <tr><td>Compliance check</td><td class="tbl-key">1</td><td class="tbl-desc">Per entity checked</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── PHASE 2 ────────────────────────────────────────────────────────────────── -->
+<div id="p2-neg" class="phase phase-2">
+  <div class="phase-header">
+    <div class="phase-num">2</div>
+    <div>
+      <div class="phase-title">Phase 2 — Agents</div>
+      <div class="phase-subtitle">Negotiation engine · LOI PDF · Payments · ~2 weeks</div>
+      <div class="phase-meta"><span class="badge bg">Requires Phase 1</span></div>
+    </div>
+  </div>
+
+  <div class="sec-title">2.1 — Negotiation Agent (AG-UI + Claude streaming)</div>
+  <div class="note">Full implementation in <a href="agui.html" style="color:var(--indigo)">agui.html</a>. Summary of what to build:</div>
+  <div class="task-list">
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">POST /v1/negotiate → SSE stream</div><div class="task-desc">Streams AG-UI events: NEGOTIATION_STARTED → TEXT_CHUNK (per token) → ROUND_COMPLETE → AWAIT_HUMAN → LOI_GENERATED. Runs Claude twice per round (agent + broker prompts). Full code in agui.html.</div><div class="task-file">Reference: agui.html → Backend tab</div></div><div class="task-pri pri-1">Core</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">GET /v1/stream → global SSE per user</div><div class="task-desc">One persistent connection per logged-in user. eventBus routes events by role: boss sees all, buyer sees own, broker sees assigned, supplier sees RFQ only.</div><div class="task-file">Reference: agui.html → Backend tab</div></div><div class="task-pri pri-1">Core</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">waitForBossDecision() — Supabase Realtime</div><div class="task-desc">Subscribe to negotiations table for boss_decision field change. Timeout after 24h. Unblock the SSE stream when decision arrives.</div></div><div class="task-pri pri-1">Core</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">agui-client.js — shared frontend class</div><div class="task-desc">SloiAGUI class with .on(), .connect(), .humanResponse(), auto-reconnect. Import in all 4 portals. Full code in agui.html → Frontend tab.</div><div class="task-file">Reference: agui.html → Frontend tab</div></div><div class="task-pri pri-2">Phase 2</div></div>
+  </div>
+
+  <div class="sec-title">2.0 — Autonomous Mode (Mandates)</div>
+  <div class="task-list"><div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">POST /v1/mandates — create autonomous mandate</div><div class="task-desc">Body: {product_ref, qty, max_price, auto_approve, max_orders_per_day, max_daily_value, expires_in_days}. See autonomous-mode.html for full spec + backend logic.</div><div class="task-file">Reference: autonomous-mode.html</div></div><div class="task-pri pri-2">Phase 2</div></div><div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">checkAutoApprove() — conditions engine</div><div class="task-desc">price ≤ max_price · compliance cleared · daily caps · mandate active. Falls back to AWAIT_HUMAN if any condition fails. Full code in autonomous-mode.html → Backend tab.</div><div class="task-file">Reference: autonomous-mode.html</div></div><div class="task-pri pri-2">Phase 2</div></div><div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Agent reputation table + floor discount logic</div><div class="task-desc">agent_reputation table · tier calculation · apply discount to broker floor price before negotiation. See autonomous-mode.html → DB tab.</div></div><div class="task-pri pri-3">Phase 3</div></div></div>
+  <div class="sec-title" id="p2-loi">2.2 — LOI PDF Generation</div>
+  <div class="task-list">
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Install puppeteer or @react-pdf/renderer</div><div class="task-desc">Puppeteer renders loi-generator.html to PDF server-side. Pass URL params: ref, product, qty, unit, price, buyer, supplier_ref.</div></div><div class="task-pri pri-1">Core</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Store PDF in Supabase Storage</div><div class="task-desc">Bucket: lois/ · File: {loi_ref}.pdf · Private by default. Signed URL for download. Update lois.pdf_url after generation.</div></div><div class="task-pri pri-1">Core</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Email LOI via Resend</div><div class="task-desc">Send to buyer email + broker email on LOI_GENERATED. Attach PDF. Use Resend SDK. Template: "Your LOI is ready — {loi_ref}".</div></div><div class="task-pri pri-2">Phase 2</div></div>
+  </div>
+
+  <div class="sec-title" id="p2-payments">2.3 — Payments</div>
+  <div class="note">Full implementation in <a href="payments.html" style="color:var(--indigo)">payments.html</a> — Stripe webhook + Base/USDC webhook + SQL + hybrid logic.</div>
+  <div class="task-list">
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Stripe: 4 products + webhook</div><div class="task-desc">Create $99/$299/$599/$999 one-time products in Stripe dashboard. Register webhook for checkout.session.completed pointing to /webhooks/stripe.</div></div><div class="task-pri pri-1">Phase 2</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Base/USDC: Coinbase wallet + Alchemy webhook</div><div class="task-desc">Create SLOI AI wallet on Base mainnet via Coinbase CDP. Register Alchemy Notify webhook for USDC transfers to wallet address.</div></div><div class="task-pri pri-1">Phase 2</div></div>
+  </div>
+</div>
+
+<!-- ── PHASE 3 ────────────────────────────────────────────────────────────────── -->
+<div id="p3-telegram" class="phase phase-3">
+  <div class="phase-header">
+    <div class="phase-num">3</div>
+    <div>
+      <div class="phase-title">Phase 3 — Channels</div>
+      <div class="phase-subtitle">WhatsApp · Telegram Bot · Open Network · ~2 weeks</div>
+      <div class="phase-meta"><span class="badge ba">Requires Phase 2</span><span class="badge" style="background:var(--surface2);border:1px solid var(--border2);color:var(--muted)">Telegram: instant setup</span></div>
+    </div>
+  </div>
+
+  <div class="warn">⚠️ Start Telegram Bot API approval with Meta on Day 1 — approval takes 2-4 weeks. Cannot ship Phase 3 without it.</div>
+
+  <div class="task-list">
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Telegram Bot — 3 notification types</div><div class="task-desc">1. AWAIT_HUMAN → "⚡ Deal pending approval — $X,XXX/MT". 2. LOI_GENERATED → "✅ LOI signed — SL-LOI-001". 3. PRICE_ALERT → "📡 Price target hit — Steel Rebar". Templates pre-approved — see telegram-templates.html.</div><div class="task-file">Reference: telegram-templates.html</div></div><div class="task-pri pri-2">Phase 3</div></div>
+    <div class="task"><input type="checkbox" class="task-check" id="p3-telegram-bot"/><div class="task-body"><div class="task-title">Telegram Bot — VPS setup + SKILL.md</div><div class="task-desc">Install Telegram Bot on Railway or separate VPS. Copy telegram-bot-skill.md to ~/.telegram-bot/workspace/skills/sloi-ai/SKILL.md. Configure SLOI AI API key. Add POST /v1/telegram-bot/notify endpoint.</div><div class="task-file">Reference: telegram-bot.html · telegram-bot-skill.md</div></div><div class="task-pri pri-2">Phase 3</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Open Network — agent registration API</div><div class="task-desc">POST /v1/agents/register → returns sk-sloi-... key + SLOI wallet. Transact tier: verify wallet, 5-day review. Read tier: instant. Commission tracking: 1% of each LOI value.</div><div class="task-file">Reference: open-network.html · agentkit.html</div></div><div class="task-pri pri-3">Phase 3</div></div>
+  </div>
+</div>
+
+<!-- ── PHASE 4 ────────────────────────────────────────────────────────────────── -->
+<div id="p4-compliance" class="phase phase-4">
+  <div class="phase-header">
+    <div class="phase-num">4</div>
+    <div>
+      <div class="phase-title">Phase 4 — Scale</div>
+      <div class="phase-subtitle">Compliance engine · Mobile · TradeFinex · ongoing</div>
+      <div class="phase-meta"><span class="badge bt">Requires Phase 3</span></div>
+    </div>
+  </div>
+  <div class="task-list">
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Compliance — OpenSanctions API</div><div class="task-desc">POST /v1/compliance/check → screens entity against OFAC + EU + UN via OpenSanctions. Blocked verdict = deal cannot proceed (hardcoded). Review verdict = boss must manually approve. Auto-runs on every negotiation start.</div></div><div class="task-pri pri-1">Phase 4</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">Mobile PWA — service worker + push notifications</div><div class="task-desc">mobile.html is the shell. Add service worker for offline + push. Push: AWAIT_HUMAN, LOI_GENERATED, PRICE_ALERT.</div><div class="task-file">Reference: mobile.html</div></div><div class="task-pri pri-3">Phase 4</div></div>
+    <div class="task"><input type="checkbox" class="task-check"/><div class="task-body"><div class="task-title">TradeFinex — finder's fee integration</div><div class="task-desc">When buyer clicks "Apply for financing" on LOI → redirect to TradeFinex with deal params. Log referral. Earn 0.5% finder's fee off-platform.</div></div><div class="task-pri pri-3">Phase 4</div></div>
+  </div>
+</div>
+
+<!-- ── ENV VARIABLES ────────────────────────────────────────────────────────── -->
+<div id="env">
+  <div class="sec-title">All ENV Variables — Railway</div>
+  <table class="tbl">
+    <thead><tr><th>Variable</th><th>Value</th><th>Where to get</th></tr></thead>
+    <tbody>
+      <tr><td class="tbl-key">ANTHROPIC_API_KEY</td><td class="tbl-type">sk-ant-...</td><td class="tbl-desc">console.anthropic.com</td></tr>
+      <tr><td class="tbl-key">SUPABASE_URL</td><td class="tbl-type">https://xxx.supabase.co</td><td class="tbl-desc">Supabase → Project Settings → API</td></tr>
+      <tr><td class="tbl-key">SUPABASE_SERVICE_KEY</td><td class="tbl-type">eyJh...</td><td class="tbl-desc">Supabase → service_role key</td></tr>
+      <tr><td class="tbl-key">SUPABASE_ANON_KEY</td><td class="tbl-type">eyJh...</td><td class="tbl-desc">Supabase → anon key</td></tr>
+      <tr><td class="tbl-key">STRIPE_SECRET_KEY</td><td class="tbl-type">sk_live_...</td><td class="tbl-desc">dashboard.stripe.com → API keys</td></tr>
+      <tr><td class="tbl-key">STRIPE_WEBHOOK_SECRET</td><td class="tbl-type">whsec_...</td><td class="tbl-desc">Stripe → Webhooks → signing secret</td></tr>
+      <tr><td class="tbl-key">STRIPE_PRICE_ID_99</td><td class="tbl-type">price_...</td><td class="tbl-desc">Stripe → Products → $99 pack</td></tr>
+      <tr><td class="tbl-key">STRIPE_PRICE_ID_299</td><td class="tbl-type">price_...</td><td class="tbl-desc">Stripe → Products → $299 pack</td></tr>
+      <tr><td class="tbl-key">STRIPE_PRICE_ID_599</td><td class="tbl-type">price_...</td><td class="tbl-desc">Stripe → Products → $599 pack</td></tr>
+      <tr><td class="tbl-key">STRIPE_PRICE_ID_999</td><td class="tbl-type">price_...</td><td class="tbl-desc">Stripe → Products → $999 pack</td></tr>
+      <tr><td class="tbl-key">SLOI_AI_WALLET_ADDRESS</td><td class="tbl-type">0x...</td><td class="tbl-desc">Coinbase CDP → Base mainnet wallet</td></tr>
+      <tr><td class="tbl-key">SLOI_AI_WALLET_PRIVATE_KEY</td><td class="tbl-type">0x...</td><td class="tbl-desc">Coinbase CDP → keep secret</td></tr>
+      <tr><td class="tbl-key">ALCHEMY_API_KEY</td><td class="tbl-type">alchemy_...</td><td class="tbl-desc">alchemy.com → Base mainnet app</td></tr>
+      <tr><td class="tbl-key">ALCHEMY_WEBHOOK_AUTH</td><td class="tbl-type">...</td><td class="tbl-desc">Alchemy → Notify → auth token</td></tr>
+      <tr><td class="tbl-key">TWILIO_ACCOUNT_SID</td><td class="tbl-type">AC...</td><td class="tbl-desc">twilio.com → Console</td></tr>
+      <tr><td class="tbl-key">TWILIO_AUTH_TOKEN</td><td class="tbl-type">...</td><td class="tbl-desc">twilio.com → Console</td></tr>
+      <tr><td class="tbl-key">TWILIO_WHATSAPP_FROM</td><td class="tbl-type">telegram:+1...</td><td class="tbl-desc">Twilio → WhatsApp Sender</td></tr>
+      <tr><td class="tbl-key">RESEND_API_KEY</td><td class="tbl-type">re_...</td><td class="tbl-desc">resend.com → API Keys</td></tr>
+      <tr><td class="tbl-key">TELEGRAM_BOT_TOKEN</td><td class="tbl-type">https://...</td><td class="tbl-desc">Telegram Bot VPS → from telegram-bot onboard</td></tr>
+      <tr><td class="tbl-key">OPENSANCTIONS_API_KEY</td><td class="tbl-type">...</td><td class="tbl-desc">opensanctions.org → API</td></tr>
+      <tr><td class="tbl-key">FRONTEND_URL</td><td class="tbl-type">https://sloiai.com</td><td class="tbl-desc">Vercel deploy URL</td></tr>
+      <tr><td class="tbl-key">JWT_SECRET</td><td class="tbl-type">random 64 chars</td><td class="tbl-desc">Generate: openssl rand -hex 32</td></tr>
+      <tr><td colspan="3" style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:var(--surface2)">Telegram</td></tr>
+      <tr><td class="tbl-key">TELEGRAM_BOT_TOKEN</td><td class="tbl-type">from BotFather</td><td class="tbl-desc">BotFather → /newbot → token</td></tr>
+      <tr><td class="tbl-key">TELEGRAM_BOSS_CHAT_ID</td><td class="tbl-type">your Telegram user ID</td><td class="tbl-desc">Message @userinfobot to get your ID</td></tr>
+      <tr><td class="tbl-key">TELEGRAM_CHANNEL_ID</td><td class="tbl-type">@SloiAIExchange</td><td class="tbl-desc">Create channel via Telegram → add bot as admin</td></tr>
+      <tr><td colspan="3" style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:var(--surface2)">TON</td></tr>
+      <tr><td class="tbl-key">SLOI_TON_WALLET</td><td class="tbl-type">EQ... address</td><td class="tbl-desc">Create in Tonkeeper · keep private key secure</td></tr>
+      <tr><td class="tbl-key">GETBLOCK_WEBHOOK_SECRET</td><td class="tbl-type">from GetBlock</td><td class="tbl-desc">getblock.io → TON mainnet → Webhooks</td></tr>
+      <tr><td class="tbl-key">TON_API_KEY</td><td class="tbl-type">from GetBlock</td><td class="tbl-desc">getblock.io → API key</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── FILES ─────────────────────────────────────────────────────────────────── -->
+<div id="files">
+  <div class="sec-title">Frontend Files — deploy to Vercel</div>
+  <div class="note">All 42 HTML files are static. Deploy as-is to Vercel. No build step. Point domain sloiai.com to Vercel project.</div>
+  <table class="tbl">
+    <thead><tr><th>File</th><th>Purpose</th><th>Priority</th></tr></thead>
+    <tbody>
+      <tr><td class="tbl-key">m2m-homepage.html</td><td class="tbl-desc">Homepage · entry point · → index as /</td><td><span class="badge bv">P1</span></td></tr>
+      <tr><td class="tbl-key">login.html</td><td class="tbl-desc">Auth · role routing → /login</td><td><span class="badge bv">P1</span></td></tr>
+      <tr><td class="tbl-key">CommodEx_Admin.html</td><td class="tbl-desc">Boss admin portal → /admin</td><td><span class="badge bv">P1</span></td></tr>
+      <tr><td class="tbl-key">CommodEx_Platform.html</td><td class="tbl-desc">Buyer portal → /app</td><td><span class="badge bv">P1</span></td></tr>
+      <tr><td class="tbl-key">CommodEx_Broker.html</td><td class="tbl-desc">Broker portal → /broker</td><td><span class="badge bv">P1</span></td></tr>
+      <tr><td class="tbl-key"><td><span class="badge bv">P1</span></td></tr>
+      <tr><td class="tbl-key">negotiation-agent.html</td><td class="tbl-desc">Agent Console → /console</td><td><span class="badge bv">P1</span></td></tr>
+      <tr><td class="tbl-key">exchange.html</td><td class="tbl-desc">Public exchange → /exchange</td><td><span class="badge bg">P2</span></td></tr>
+      <tr><td class="tbl-key">ton-connect.html</td><td class="tbl-desc">TON Connect spec · wallet connection · Jettons · LOI NFT · one-tap payments · developer checklist</td><td><span class="badge bt">P3</span></td></tr>
+      <tr><td class="tbl-key">a2a.html</td><td class="tbl-desc">A2A Protocol · Agent Card · Task lifecycle · Python examples · autonomous agents</td><td><span class="badge bg">Deploy</span></td></tr>
+      <tr><td class="tbl-key">privacy.html</td><td class="tbl-desc">Privacy Policy · GDPR + UAE PDPL · data collection · retention · user rights</td><td><span class="badge bg">Deploy</span></td></tr>
+      <tr><td class="tbl-key">risk-disclosure.html</td><td class="tbl-desc">Risk Disclosure · LOI non-binding · autonomous mode liability · crypto risks</td><td><span class="badge bg">Deploy</span></td></tr>
+      <tr><td class="tbl-key">telegram-bot.html</td><td class="tbl-desc">Telegram Bot spec + full Node.js code · Boss bot · channel · inline bot · TON payments</td><td><span class="badge bt">P3</span></td></tr>
+      <tr><td class="tbl-key">telegram-mini-app.html</td><td class="tbl-desc">Telegram Mini App · 5 screens · Claude API · TON payments · deploy to sloiai.com/telegram-mini-app.html</td><td><span class="badge bg">Deploy</span></td></tr>
+      <tr><td class="tbl-key">api-client.js</td><td class="tbl-desc">Shared JS · SloiAPI class · AG-UI stream · initPortal() · deploy to sloiai.com/api-client.js · includes SloiTON class for TON Connect</td><td><span class="badge bv">P1</span></td></tr>
+      <tr><td class="tbl-key">skill.md + llms.txt</td><td class="tbl-desc">→ sloiai.com/skill.md and /llms.txt (root)</td><td><span class="badge bv">P1</span></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── TIMELINE ──────────────────────────────────────────────────────────────── -->
+<div id="timeline">
+  <div class="sec-title">Estimated Timeline — 60 working days</div>
+  <table class="tbl">
+    <thead><tr><th>Week</th><th>Deliverable</th><th>Milestone</th></tr></thead>
+    <tbody>
+      <tr><td>1–2</td><td class="tbl-desc">Phase 1: DB schema · Auth · Core API endpoints · Credits</td><td><span class="badge bv">Foundation</span></td></tr>
+      <tr><td>3–4</td><td class="tbl-desc">Phase 2: Negotiation SSE · AG-UI stream · LOI PDF · Stripe payments</td><td><span class="badge bg">First LOI</span></td></tr>
+      <tr><td>5</td><td class="tbl-desc">Phase 2: Base/USDC payments · agui-client.js in all portals</td><td><span class="badge bg">Payments live</span></td></tr>
+      <tr><td>6–7</td><td class="tbl-desc">Phase 3: WhatsApp · Telegram Bot · Open Network API</td><td><span class="badge ba">Boss on WA</span></td></tr>
+      <tr><td>8–9</td><td class="tbl-desc">Phase 4: Compliance · Mobile PWA · Testing · Bug fixes</td><td><span class="badge bt">Production</span></td></tr>
+      <tr><td>10+</td><td class="tbl-desc">TradeFinex · Analytics · Series A prep</td><td><span class="badge bt">Scale</span></td></tr>
+    </tbody>
+  </table>
+
+  <div class="note" style="margin-top:14px">
+    <strong style="color:var(--white)">Break-even:</strong> 1 LOI/month at $500 fee. Infrastructure cost: ~$90/month. Engineering: $4K–$9K one-time.
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /layout -->
+
+<script>
+function copyCode(btn){
+  var pre=btn.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent.trim()).then(()=>{
+    btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1500);
+  });
+}
+
+// Sidebar active state on scroll
+var sections = document.querySelectorAll('[id]');
+var links = document.querySelectorAll('.sb-link');
+var observer = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      links.forEach(function(l){l.classList.remove('active')});
+      var link = document.querySelector('.sb-link[href="#'+e.target.id+'"]');
+      if(link) link.classList.add('active');
+    }
+  });
+},{threshold:0.2,rootMargin:'-52px 0px -60% 0px'});
+sections.forEach(function(s){observer.observe(s)});
+</script>
+</body>
+</html>

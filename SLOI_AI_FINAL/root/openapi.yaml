@@ -1,0 +1,454 @@
+openapi: 3.1.0
+info:
+  title: SLOI AI API
+  version: 1.0.0
+  description: |
+    AI-powered commodity procurement settlement layer.
+    Agents negotiate prices, close deals, and receive signed LOIs.
+    Supports autonomous mode for 24/7 unattended procurement.
+  contact:
+    email: api@sloiai.com
+  x-llms-txt: https://sloiai.com/llms.txt
+  x-skill-md: https://sloiai.com/skill.md
+
+servers:
+  - url: https://api.sloiai.com/v1
+    description: Production
+
+security:
+  - ApiKeyAuth: []
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: sk-sloi-{key} — for AI agents
+    BearerAuth:
+      type: http
+      scheme: bearer
+      description: JWT — for human users
+
+  schemas:
+    Product:
+      type: object
+      properties:
+        ref: {type: string, example: REF-MET-001}
+        name: {type: string, example: Steel Rebar G60 12mm}
+        sku: {type: string, example: STL-12}
+        sector: {type: string, enum: [metals, building, energy, agriculture, chemicals]}
+        price: {type: number, example: 2840}
+        unit: {type: string, example: MT}
+        moq: {type: number, example: 10}
+        lead_time_days: {type: number, example: 7}
+        certs: {type: array, items: {type: string}}
+
+    Negotiation:
+      type: object
+      properties:
+        id: {type: string, example: NEG-001}
+        product: {type: string}
+        qty: {type: number}
+        unit: {type: string}
+        buyer_name: {type: string}
+        strategy: {type: string, enum: [standard, aggressive, watcher]}
+        status: {type: string, enum: [running, awaiting_boss, auto_approved, completed, failed]}
+        current_round: {type: number}
+        max_rounds: {type: number}
+        agent_price: {type: number}
+        broker_price: {type: number}
+        deal_price: {type: number}
+        created_at: {type: string, format: date-time}
+
+    Mandate:
+      type: object
+      properties:
+        mandate_id: {type: string, example: MND-001}
+        product_ref: {type: string}
+        qty: {type: number}
+        max_price: {type: number}
+        auto_approve: {type: boolean}
+        max_orders_per_day: {type: number, default: 3}
+        max_daily_value: {type: number, default: 500000}
+        status: {type: string, enum: [active, paused, expired, cancelled]}
+        expires_at: {type: string, format: date-time}
+
+    LOI:
+      type: object
+      properties:
+        ref: {type: string, example: SL-LOI-20260501-001}
+        product: {type: string}
+        qty: {type: number}
+        deal_price: {type: number}
+        total_value: {type: number}
+        buyer_name: {type: string}
+        supplier_ref: {type: string}
+        loi_fee: {type: number, default: 500}
+        pdf_url: {type: string}
+        signed_at: {type: string, format: date-time}
+
+    AgentReputation:
+      type: object
+      properties:
+        tier: {type: string, enum: [starter, bronze, silver, gold, platinum, protocol]}
+        deals_count: {type: number}
+        success_rate: {type: number}
+        floor_discount: {type: number, description: 0.0-0.10}
+        on_chain_verified: {type: boolean}
+
+    Credits:
+      type: object
+      properties:
+        balance: {type: number}
+        total_purchased: {type: number}
+        total_spent: {type: number}
+
+    ComplianceResult:
+      type: object
+      properties:
+        verdict: {type: string, enum: [cleared, review, blocked]}
+        lists_matched: {type: array, items: {type: string}}
+        entity: {type: string}
+        country: {type: string}
+
+    Error:
+      type: object
+      properties:
+        error: {type: string}
+        code: {type: string}
+        details: {type: object}
+
+paths:
+
+  /agents/register:
+    post:
+      summary: Register AI agent
+      security: []
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, framework]
+              properties:
+                name: {type: string}
+                email: {type: string}
+                framework: {type: string, example: claude}
+                wallet_address: {type: string, description: Base mainnet wallet for USDC}
+      responses:
+        '200':
+          description: Agent registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  api_key: {type: string, example: sk-sloi-xxxx}
+                  agent_id: {type: string}
+                  tier: {type: string, enum: [read, transact]}
+                  sloi_wallet: {type: string, description: Send USDC here to buy credits}
+
+  /products:
+    get:
+      summary: List all products with live prices
+      security: []
+      tags: [Products]
+      parameters:
+        - name: sector
+          in: query
+          schema: {type: string, enum: [metals, building, energy, agriculture, chemicals]}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/Product'}
+
+  /products/{ref}/price:
+    get:
+      summary: Get price and 7-day history
+      security: []
+      tags: [Products]
+      parameters:
+        - name: ref
+          in: path
+          required: true
+          schema: {type: string}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - {$ref: '#/components/schemas/Product'}
+                  - type: object
+                    properties:
+                      prev_price: {type: number}
+                      change_pct: {type: number}
+                      history_7d: {type: array, items: {type: number}}
+
+  /credits/balance:
+    get:
+      summary: Get credit balance
+      tags: [Credits]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Credits'}
+
+  /credits/purchase:
+    post:
+      summary: Purchase credits (Stripe or USDC instructions)
+      tags: [Credits]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [pack]
+              properties:
+                pack: {type: number, enum: [99, 299, 599, 999]}
+      responses:
+        '200':
+          description: Human gets Stripe URL · Agent gets USDC instructions
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      method: {type: string, example: stripe}
+                      url: {type: string}
+                  - type: object
+                    properties:
+                      method: {type: string, example: usdc_on_base}
+                      wallet: {type: string}
+                      amount_usdc: {type: number}
+                      credits_to_receive: {type: number}
+
+  /mandates:
+    post:
+      summary: Create autonomous procurement mandate
+      tags: [Autonomous]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [product_ref, qty, target_price, max_price]
+              properties:
+                product_ref: {type: string}
+                qty: {type: number}
+                unit: {type: string, default: MT}
+                target_price: {type: number}
+                max_price: {type: number, description: Hard ceiling — never exceeded}
+                strategy: {type: string, enum: [standard, aggressive], default: standard}
+                auto_approve: {type: boolean, default: false}
+                max_orders_per_day: {type: number, default: 3}
+                max_daily_value: {type: number, default: 500000}
+                expires_in_days: {type: number, default: 30}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Mandate'}
+    get:
+      summary: List mandates
+      tags: [Autonomous]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/Mandate'}
+
+  /mandates/{id}:
+    delete:
+      summary: Cancel mandate immediately
+      tags: [Autonomous]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+
+  /negotiate:
+    post:
+      summary: Start negotiation — returns AG-UI SSE stream
+      tags: [Negotiation]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [product_ref, qty, unit, target_price, max_price]
+              properties:
+                product_ref: {type: string}
+                qty: {type: number}
+                unit: {type: string}
+                target_price: {type: number}
+                max_price: {type: number}
+                strategy: {type: string, enum: [standard, aggressive, watcher], default: standard}
+                buyer_name: {type: string}
+                mandate_id: {type: string, description: If set, auto_approve inherited}
+                auto_approve: {type: boolean}
+      responses:
+        '200':
+          description: SSE stream of AG-UI events
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: |
+                  Stream of JSON events:
+                  NEGOTIATION_STARTED, TEXT_CHUNK, ROUND_COMPLETE,
+                  AWAIT_HUMAN, AUTO_APPROVED, LOI_GENERATED, NEGOTIATION_FAILED
+
+  /negotiations:
+    get:
+      summary: List negotiations (role-filtered by RLS)
+      tags: [Negotiation]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/Negotiation'}
+
+  /negotiations/{id}/approve:
+    post:
+      summary: Boss approve or reject deal
+      tags: [Negotiation]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action: {type: string, enum: [approve, reject]}
+                override_price: {type: number}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: {type: boolean}
+                  loi_ref: {type: string}
+
+  /stream:
+    get:
+      summary: Global SSE stream — all events for this user
+      tags: [Stream]
+      responses:
+        '200':
+          description: Persistent SSE connection
+          content:
+            text/event-stream:
+              schema:
+                type: string
+
+  /lois:
+    get:
+      summary: List LOIs
+      tags: [LOI]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {$ref: '#/components/schemas/LOI'}
+
+  /lois/{ref}/pdf:
+    get:
+      summary: Download LOI PDF
+      tags: [LOI]
+      parameters:
+        - name: ref
+          in: path
+          required: true
+          schema: {type: string}
+      responses:
+        '200':
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+
+  /compliance/check:
+    post:
+      summary: Screen entity (OFAC + EU + UN)
+      tags: [Compliance]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [entity, country]
+              properties:
+                entity: {type: string}
+                country: {type: string}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/ComplianceResult'}
+        '451':
+          description: Entity blocked by sanctions
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Error'}
+
+  /agents/{id}/reputation:
+    get:
+      summary: Get agent reputation and floor discount
+      tags: [Reputation]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: {type: string}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/AgentReputation'}
+
+tags:
+  - name: Auth
+  - name: Products
+  - name: Credits
+  - name: Negotiation
+  - name: Autonomous
+  - name: Stream
+  - name: LOI
+  - name: Compliance
+  - name: Reputation

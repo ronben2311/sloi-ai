@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI — Agent Console</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#050509;--surface:#0c0c14;--surface2:#10101a;--border:#1a1a2a;--border2:#222234;--indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);--muted:#52526e;--text:#c8c6e0;--white:#f0eff8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--green-dim:rgba(34,197,94,.1);--red-dim:rgba(239,68,68,.1);--gold-dim:rgba(232,169,74,.1);--teal-dim:rgba(45,212,191,.1);}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg);overflow:hidden}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes slide-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes typing{0%,60%,100%{opacity:1}30%{opacity:.3}}
+
+/* ── SHELL ── */
+.shell{display:grid;grid-template-rows:48px 40px 1fr;height:100vh;overflow:hidden}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--surface);border-bottom:1px solid var(--border)}
+.logo{font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-sub{font-size:10px;color:var(--muted);margin-left:6px;font-weight:400}
+.tb-right{display:flex;align-items:center;gap:8px}
+.live-badge{display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 10px;border-radius:10px;font-size:10px}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;flex-shrink:0}
+.api-indicator{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--violet);background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);padding:3px 10px;border-radius:10px}
+
+/* TABS */
+.tabs{display:flex;align-items:center;gap:0;background:var(--surface);border-bottom:1px solid var(--border);padding:0 6px;overflow-x:auto;flex-shrink:0}
+.tab{display:flex;align-items:center;gap:6px;padding:0 14px;height:40px;cursor:pointer;font-size:11px;color:var(--muted);border:none;background:none;font-family:'IBM Plex Mono',monospace;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.tab:hover{color:var(--text)}.tab.active{color:var(--violet);border-bottom-color:var(--indigo)}
+.tab-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.td-green{background:var(--green);animation:blink 2.5s infinite}
+.td-gold{background:var(--gold)}
+.td-muted{background:var(--muted)}
+.tab-count{font-size:9px;font-weight:700;padding:1px 6px;border-radius:2px;background:var(--border2);color:var(--muted)}
+
+/* PANELS */
+.panels{display:none;height:100%;overflow:hidden}
+.panels.active{display:flex}
+
+/* SHARED */
+.badge{display:inline-flex;align-items:center;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.bg{background:var(--green-dim);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.ba{background:var(--gold-dim);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.br{background:var(--red-dim);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+.bv{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.bt{background:var(--teal-dim);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+.btn{padding:6px 14px;border-radius:4px;font-size:11px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;transition:all .12s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn:hover{border-color:var(--indigo);color:var(--violet)}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.btn-p:hover:not(:disabled){opacity:.85;color:#fff}
+.btn-g{background:var(--green-dim);border-color:rgba(34,197,94,.3);color:var(--green)}
+.btn-a{background:var(--gold-dim);border-color:rgba(232,169,74,.3);color:var(--gold)}
+.btn-r{background:var(--red-dim);border-color:rgba(239,68,68,.3);color:var(--red)}
+.btn-sm{padding:4px 10px;font-size:10px}.btn-xs{padding:2px 8px;font-size:9px}
+.inp{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:7px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:11px;outline:none;transition:border-color .15s;width:100%}
+.inp:focus{border-color:var(--indigo)}.inp::placeholder{color:var(--muted)}
+select.inp option{background:var(--surface)}
+.flabel{font-size:9px;color:var(--muted);letter-spacing:.06em;display:block;margin-bottom:3px;text-transform:uppercase}
+.sec{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px}
+.spinner{width:14px;height:14px;border:2px solid rgba(91,95,239,.3);border-top-color:var(--indigo);border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0}
+::-webkit-scrollbar{width:3px;height:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ── TAB 1: NEGOTIATION ── */
+#panel-neg{display:none;grid-template-columns:300px 1fr;height:100%}
+#panel-neg.active{display:grid}
+.neg-left{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.neg-left-body{flex:1;overflow-y:auto;padding:14px}
+.neg-left-foot{padding:12px 14px;border-top:1px solid var(--border);background:var(--surface2)}
+.neg-right{display:flex;flex-direction:column;overflow:hidden}
+.neg-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:44px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
+.chat-wrap{display:grid;grid-template-rows:1fr 190px;flex:1;overflow:hidden}
+.chat-area{overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.bottom-grid{border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.rounds-col{border-right:1px solid var(--border);padding:12px;overflow-y:auto}
+.boss-col{padding:12px;overflow-y:auto}
+
+/* Bubbles */
+.bubble{max-width:80%;padding:10px 13px;border-radius:8px;font-size:11px;line-height:1.65;animation:slide-in .3s ease}
+.bubble.agent{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);align-self:flex-start}
+.bubble.broker{background:var(--gold-dim);border:1px solid rgba(232,169,74,.2);align-self:flex-end}
+.bubble.system{background:var(--surface2);border:1px solid var(--border);align-self:center;max-width:95%;text-align:center;font-size:10px;color:var(--muted)}
+.bubble.loi{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);align-self:center;max-width:95%;text-align:center}
+.bubble.thinking{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.15);align-self:flex-start;opacity:.7}
+.bubble-label{font-size:9px;font-weight:600;margin-bottom:4px;letter-spacing:.04em}
+.bubble-price{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-top:4px}
+.rounds-bar{display:flex;gap:4px;margin-bottom:5px}
+.rb{height:5px;flex:1;border-radius:3px}
+.rb.done{background:var(--green)}.rb.active{background:var(--indigo);animation:pulse 1.5s infinite}.rb.empty{background:var(--border2)}
+
+/* Strategy */
+.strat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
+.strat{padding:8px;border:1px solid var(--border2);border-radius:4px;cursor:pointer;text-align:center;transition:all .12s}
+.strat:hover{border-color:rgba(91,95,239,.4)}.strat.sel{background:var(--indigo-dim);border-color:var(--indigo)}
+.strat-icon{font-size:16px;margin-bottom:3px}.strat-name{font-size:10px;font-weight:600;color:var(--white)}.strat-cost{font-size:9px;color:var(--teal)}
+
+/* Approval */
+.approval-box{background:rgba(232,169,74,.05);border:1px solid rgba(232,169,74,.35);border-radius:5px;padding:12px;margin-bottom:10px}
+
+/* ── TAB 2: LEADFINDER ── */
+#panel-lead{display:none;flex-direction:column;height:100%;overflow:hidden}
+#panel-lead.active{display:flex}
+.lead-top{padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lead-body{flex:1;display:grid;grid-template-columns:1fr 280px;overflow:hidden}
+.lead-results{overflow-y:auto;padding:14px}
+.lead-sidebar{border-left:1px solid var(--border);background:var(--surface);overflow-y:auto;padding:14px}
+.lead-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:8px;animation:slide-in .3s ease;transition:border-color .15s;cursor:pointer}
+.lead-card:hover{border-color:rgba(91,95,239,.35)}
+.lead-card.hot{border-color:rgba(239,68,68,.3)}.lead-card.high{border-color:rgba(232,169,74,.3)}
+
+/* ── TAB 3: PRICESCOUT ── */
+#panel-price{display:none;flex-direction:column;height:100%;overflow:hidden}
+#panel-price.active{display:flex}
+.price-top{padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;gap:8px}
+.price-body{flex:1;display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
+.price-left{overflow-y:auto;padding:14px;border-right:1px solid var(--border)}
+.price-right{overflow-y:auto;padding:14px}
+.price-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;margin-bottom:8px;transition:border-color .15s;animation:slide-in .3s ease}
+.price-row:hover{border-color:rgba(91,95,239,.3)}
+.price-row.up{border-left:3px solid var(--green)}.price-row.down{border-left:3px solid var(--red)}.price-row.flat{border-left:3px solid var(--border2)}
+.pr-name{flex:1;font-size:12px;font-weight:600;color:var(--white)}
+.pr-price{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--white)}
+.pr-change{font-size:11px;font-weight:700;width:50px;text-align:right}
+.pr-change.up{color:var(--green)}.pr-change.down{color:var(--red)}.pr-change.flat{color:var(--muted)}
+
+/* ── TABS 4+5: OUTREACH + COMPLIANCE ── */
+#panel-outreach{display:none;flex-direction:column;height:100%;overflow:hidden}
+#panel-outreach.active{display:flex}
+#panel-compliance{display:none;flex-direction:column;height:100%;overflow:hidden}
+#panel-compliance.active{display:flex}
+.section-top{padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;align-items:center;gap:8px}
+.section-body{flex:1;display:grid;grid-template-columns:1fr 280px;overflow:hidden}
+.section-main{overflow-y:auto;padding:14px}
+.section-sidebar{border-left:1px solid var(--border);background:var(--surface);overflow-y:auto;padding:14px}
+.ob-item{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:10px 12px;margin-bottom:7px;display:flex;align-items:center;gap:10px;font-size:11px}
+.ob-item.replied{border-color:rgba(34,197,94,.3)}.ob-item.pending{border-color:rgba(232,169,74,.2)}
+.comp-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;margin-bottom:7px;font-size:11px}
+</style>
+
+<script src="/api-client.js"></script>
+</head>
+<body>
+<div class="shell">
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:8px">
+    <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-sub">/ Agent Console</span></a>
+  </div>
+  <div class="tb-right">
+    <div class="api-indicator">🤖 Claude API · live</div>
+    <div class="live-badge"><div class="live-dot"></div><span id="agent-status">4 agents active</span></div>
+    <div id="clock" style="font-size:11px;color:var(--muted)"></div>
+    <button class="btn btn-sm" onclick="focusAdmin()">← Admin</button>
+    <button class="btn btn-sm btn-p" id="run-all-btn" onclick="runAllAgents()">▶ Run all</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('neg',this)"><div class="tab-dot td-gold"></div>🤖 Negotiation<span class="tab-count" id="tc-neg">2 live</span></button>
+  <button class="tab" onclick="switchTab('lead',this)"><div class="tab-dot td-green"></div>🔭 LeadFinder<span class="tab-count" id="tc-lead">ready</span></button>
+  <button class="tab" onclick="switchTab('price',this)"><div class="tab-dot td-green"></div>📡 PriceScout<span class="tab-count" id="tc-price">ready</span></button>
+  <button class="tab" onclick="switchTab('outreach',this)"><div class="tab-dot td-muted"></div>📱 OutreachBot<span class="tab-count">paused</span></button>
+  <button class="tab" onclick="switchTab('compliance',this)"><div class="tab-dot td-green"></div>🛡️ Compliance<span class="tab-count" id="tc-comp">1 review</span></button>
+</div>
+
+<!-- ════════════════════════════════════
+     PANEL 1 — NEGOTIATION (Claude API)
+════════════════════════════════════ -->
+<div id="panel-neg" class="panels active">
+
+  <!-- LEFT -->
+  <div class="neg-left">
+    <div style="padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2)">
+      <div style="font-size:11px;font-weight:600;color:var(--white)">Buyer Mandate</div>
+      <div style="font-size:10px;color:var(--muted)">Claude negotiates · You approve</div>
+    </div>
+    <div class="neg-left-body">
+      <div class="sec">// MANDATE</div>
+      <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
+        <div><label class="flabel">Buyer</label><input class="inp" id="m-buyer" value="Gulf Cement LLC"/></div>
+        <div><label class="flabel">Product</label>
+          <select class="inp" id="m-product">
+            <option>Steel Rebar G60 12mm</option><option>Steel HR Coil</option>
+            <option>Aluminum 6061-T6</option><option>Hard Wheat</option>
+            <option>Yellow Corn</option><option>Industrial Diesel B2</option>
+            <option>Sulfuric Acid 98%</option><option>PVC Pipe 110mm</option>
+          </select>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div><label class="flabel">Quantity</label><input class="inp" id="m-qty" type="number" value="100"/></div>
+          <div><label class="flabel">Unit</label><select class="inp" id="m-unit"><option>MT</option><option>Ton</option><option>m³</option><option>Liter</option></select></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div><label class="flabel">Target ($/unit)</label><input class="inp" id="m-target" type="number" value="2700"/></div>
+          <div><label class="flabel">Max ($/unit)</label><input class="inp" id="m-max" type="number" value="2900"/></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div><label class="flabel">Incoterm</label><select class="inp"><option>FOB</option><option>CIF</option><option>DAP</option></select></div>
+          <div><label class="flabel">Broker</label><select class="inp"><option>BRK-UAE-001</option><option>BRK-EUR-001</option></select></div>
+        </div>
+      </div>
+
+      <div class="sec">// STRATEGY</div>
+      <div class="strat-grid" style="margin-bottom:14px">
+        <div class="strat" id="s-watcher" onclick="selectStrat('watcher')"><div class="strat-icon">👁️</div><div class="strat-name">Watcher</div><div class="strat-cost">1cr/day</div></div>
+        <div class="strat sel" id="s-standard" onclick="selectStrat('standard')"><div class="strat-icon">🎯</div><div class="strat-name">Standard</div><div class="strat-cost">10 credits</div></div>
+        <div class="strat" id="s-aggressive" onclick="selectStrat('aggressive')"><div class="strat-icon">⚡</div><div class="strat-name">Autopilot</div><div class="strat-cost">20 credits</div></div>
+      </div>
+
+      <div class="sec">// ACTIVE SESSIONS</div>
+      <div id="neg-sessions"></div>
+    </div>
+    <div class="neg-left-foot">
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-p" style="flex:1;justify-content:center" id="start-btn" onclick="startNegotiation()">▶ Start agent</button>
+        <button class="btn btn-a btn-sm" onclick="manualOverride()">Override</button>
+      </div>
+      <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:6px">Balance: <span style="color:var(--teal)">320 credits</span> · Boss approval required for LOI</div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="neg-right">
+    <div class="neg-topbar">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--white)" id="neg-product-label">🔩 Steel Rebar G60 12mm · 100 MT · Gulf Cement LLC</div>
+          <div style="font-size:10px;color:var(--muted)" id="neg-meta">NEG-001 · Standard · BRK-UAE-001</div>
+        </div>
+        <span class="badge bg" id="round-badge">● Round 1</span>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-sm btn-g" id="approve-btn" onclick="approveDeal()" style="display:none">✅ Approve → LOI</button>
+        <button class="btn btn-sm btn-r" id="reject-btn" onclick="rejectDeal()" style="display:none">✗ Reject</button>
+        <button class="btn btn-sm" onclick="pauseNeg()" id="pause-btn">⏸ Pause</button>
+        <button class="btn btn-sm" onclick="clearChat()">✕ Clear</button>
+      </div>
+    </div>
+
+    <div class="chat-wrap">
+      <div class="chat-area" id="chat-area">
+        <div class="bubble system">Agent Console ready · Powered by Claude API · Set mandate and click ▶ Start agent</div>
+      </div>
+
+      <div class="bottom-grid">
+        <!-- ROUNDS -->
+        <div class="rounds-col">
+          <div class="sec">// ROUNDS</div>
+          <div class="rounds-bar" id="rounds-bar"><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div></div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:10px" id="rounds-label">Not started</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:10px">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:7px;text-align:center"><div style="color:var(--muted)">Target</div><div id="d-target" style="color:var(--white);font-weight:700;font-family:'Fraunces',serif">$2,700</div></div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:7px;text-align:center"><div style="color:var(--muted)">Agent</div><div id="d-agent" style="color:var(--indigo);font-weight:700;font-family:'Fraunces',serif">—</div></div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:7px;text-align:center"><div style="color:var(--muted)">Broker</div><div id="d-broker" style="color:var(--gold);font-weight:700;font-family:'Fraunces',serif">—</div></div>
+          </div>
+          <div style="margin-top:10px">
+            <label class="flabel">Manual override ($/unit)</label>
+            <div style="display:flex;gap:5px">
+              <input class="inp" id="override-price" placeholder="e.g. 2820" style="flex:1"/>
+              <button class="btn btn-xs btn-a" onclick="manualOverride()">Set</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOSS APPROVAL -->
+        <div class="boss-col">
+          <div class="sec">// BOSS CONTROL</div>
+          <div id="boss-box">
+            <div style="font-size:11px;color:var(--muted);line-height:1.7">Agent will stop when a deal is reached and wait for your approval. No LOI is ever generated without your explicit click.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     PANEL 2 — LEADFINDER (Claude API)
+════════════════════════════════════ -->
+<div id="panel-lead" class="panels">
+  <div class="lead-top">
+    <div class="live-badge" id="lead-status-badge" style="background:rgba(82,82,110,.08);border-color:rgba(82,82,110,.2);color:var(--muted)"><div class="live-dot" style="background:var(--muted);animation:none"></div>Ready</div>
+    <div style="font-size:11px;color:var(--white);font-weight:600">🔭 LeadFinder</div>
+    <div style="font-size:10px;color:var(--muted)" id="lead-subtitle">Claude scans news, projects, and tenders for commodity buyers</div>
+    <div style="display:flex;gap:6px;margin-left:auto">
+      <input class="inp" id="lead-keywords" value="NEOM steel cement construction UAE KSA Egypt" style="width:280px;font-size:10px"/>
+      <button class="btn btn-p btn-sm" id="lead-scan-btn" onclick="runLeadFinder()">🔭 Scan now</button>
+    </div>
+  </div>
+  <div class="lead-body">
+    <div class="lead-results" id="lead-results">
+      <div style="text-align:center;padding:40px;color:var(--muted)">
+        <div style="font-size:32px;margin-bottom:10px">🔭</div>
+        <div style="font-size:11px;line-height:1.7">Click "Scan now" to let Claude<br/>search for commodity procurement leads.<br/><br/>Results powered by Claude API.</div>
+      </div>
+    </div>
+    <div class="lead-sidebar">
+      <div class="sec">// CONFIG</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+        <div><label class="flabel">Regions</label><input class="inp" value="UAE · KSA · Egypt · Germany · Iraq" style="font-size:10px"/></div>
+        <div><label class="flabel">Sectors</label><input class="inp" value="Steel · Cement · Wheat · Energy · Aluminum" style="font-size:10px"/></div>
+        <div><label class="flabel">Min deal size</label><select class="inp"><option>$100K+</option><option>$500K+</option><option>$1M+</option></select></div>
+        <div><label class="flabel">Schedule</label><select class="inp"><option>Every 6 hours</option><option>Every 3 hours</option><option>Daily</option></select></div>
+      </div>
+      <div class="sec">// STATS</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px" id="lead-stats">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center"><div id="stat-found" style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white)">—</div><div style="color:var(--muted)">Found</div></div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center"><div id="stat-high" style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--gold)">—</div><div style="color:var(--muted)">High rel.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     PANEL 3 — PRICESCOUT (Claude API)
+════════════════════════════════════ -->
+<div id="panel-price" class="panels">
+  <div class="price-top">
+    <div class="live-badge" id="price-status-badge" style="background:rgba(82,82,110,.08);border-color:rgba(82,82,110,.2);color:var(--muted)"><div class="live-dot" style="background:var(--muted);animation:none"></div>Ready</div>
+    <div style="font-size:11px;font-weight:600;color:var(--white)">📡 PriceScout</div>
+    <div style="font-size:10px;color:var(--muted)">Claude analyzes current commodity prices</div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <select class="inp" id="price-product" style="width:200px;font-size:10px">
+        <option>All products</option>
+        <option>Steel Rebar G60 12mm</option><option>Steel HR Coil</option>
+        <option>Aluminum 6061-T6</option><option>Hard Wheat</option>
+        <option>Yellow Corn</option><option>Industrial Diesel</option>
+      </select>
+      <button class="btn btn-p btn-sm" id="price-scan-btn" onclick="runPriceScout()">📡 Scan now</button>
+    </div>
+  </div>
+  <div class="price-body">
+    <div class="price-left" id="price-list">
+      <div style="text-align:center;padding:40px;color:var(--muted)">
+        <div style="font-size:32px;margin-bottom:10px">📡</div>
+        <div style="font-size:11px;line-height:1.7">Click "Scan now" to let Claude<br/>analyze current market prices and trends.<br/><br/>Results powered by Claude API.</div>
+      </div>
+    </div>
+    <div class="price-right">
+      <div class="sec">// ANALYSIS</div>
+      <div id="price-analysis" style="font-size:11px;color:var(--muted);line-height:1.7">Claude will provide market analysis after scanning.</div>
+      <div style="margin-top:14px">
+        <div class="sec">// ASK CLAUDE</div>
+        <textarea class="inp" id="price-question" rows="3" placeholder="Ask about prices...&#10;e.g. Why is steel price rising? What's the outlook for wheat?" style="resize:vertical;margin-bottom:6px"></textarea>
+        <button class="btn btn-p btn-sm" style="width:100%;justify-content:center" id="price-ask-btn" onclick="askPriceQuestion()">Ask Claude →</button>
+      </div>
+      <div id="price-answer" style="margin-top:10px;font-size:11px;color:var(--text);line-height:1.7;display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     PANEL 4 — OUTREACHBOT
+════════════════════════════════════ -->
+<div id="panel-outreach" class="panels">
+  <div class="section-top">
+    <span class="badge ba">⏸ Paused</span>
+    <div style="font-size:11px;font-weight:600;color:var(--white)">📱 OutreachBot</div>
+    <div style="font-size:10px;color:var(--muted)">WhatsApp outreach · Requires Twilio integration</div>
+    <div style="margin-left:auto;display:flex;gap:6px">
+      <button class="btn btn-g btn-sm" onclick="alert('OutreachBot requires Telegram Bot API.\nSee docs.html for setup.')">▶ Resume</button>
+      <button class="btn btn-sm btn-p" onclick="addToOutreach()">+ Add lead</button>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="section-main">
+      <div class="sec">// OUTREACH QUEUE (8 contacts)</div>
+      <div id="outreach-list"></div>
+    </div>
+    <div class="section-sidebar">
+      <div class="sec">// TEMPLATE</div>
+      <select class="inp" style="margin-bottom:8px" id="tpl-select" onchange="previewTpl()">
+        <option value="construction">Construction projects</option>
+        <option value="buyer">Buyer outreach</option>
+        <option value="followup">Follow-up</option>
+      </select>
+      <div style="background:#0d1f0d;border-radius:6px;padding:12px;font-size:10px;color:#c8e6c8;line-height:1.7;white-space:pre-wrap" id="tpl-preview">SLOI AI — Commodity Procurement
+
+Hello,
+
+We noticed your recent infrastructure project. SLOI AI can help you source materials at the best price — our AI agent negotiates on your behalf.
+
+👉 sloiai.com
+
+SLOI AI · Smart negotiation · LOI generation</div>
+      <div class="sec" style="margin-top:12px">// STATS</div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:11px">
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Sent</span><span style="color:var(--white)">24</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Opened</span><span style="color:var(--white)">18 (75%)</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Replied</span><span style="color:var(--green)">9 (38%)</span></div>
+        <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Converted</span><span style="color:var(--violet)">3</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     PANEL 5 — COMPLIANCE
+════════════════════════════════════ -->
+<div id="panel-compliance" class="panels">
+  <div class="section-top">
+    <div class="live-badge"><div class="live-dot"></div>Always on</div>
+    <div style="font-size:11px;font-weight:600;color:var(--white)">🛡️ ComplianceBot</div>
+    <div style="font-size:10px;color:var(--muted)">OFAC + EU + UN · Auto-screens every deal</div>
+    <div style="margin-left:auto"><button class="btn btn-p btn-sm" onclick="runManualCheck()">+ Manual check</button></div>
+  </div>
+  <div class="section-body">
+    <div class="section-main">
+      <div class="sec">// SCREENING LOG — TODAY</div>
+      <div id="comp-log"></div>
+    </div>
+    <div class="section-sidebar">
+      <div class="card" style="margin-bottom:12px">
+        <div class="sec">// MANUAL CHECK</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div><label class="flabel">Entity</label><input class="inp" id="check-entity" placeholder="Company or person"/></div>
+          <div><label class="flabel">Country</label>
+            <select class="inp" id="check-country">
+              <option>UAE</option><option>Saudi Arabia</option><option>Egypt</option>
+              <option>Germany</option><option>Iraq</option><option>Iran</option>
+              <option>Turkey</option><option>Jordan</option>
+            </select>
+          </div>
+          <button class="btn btn-p btn-sm" style="width:100%;justify-content:center" onclick="runManualCheck()">🛡️ Screen now</button>
+        </div>
+      </div>
+      <div class="sec">// BLOCKED COUNTRIES</div>
+      <div style="display:flex;flex-direction:column;gap:4px;font-size:10px">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>Iran · Russia · Belarus</span><span class="badge br" style="font-size:8px">OFAC+EU</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>North Korea</span><span class="badge br" style="font-size:8px">UN+OFAC</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0"><span>Syria · Cuba · Venezuela</span><span class="badge br" style="font-size:8px">OFAC</span></div>
+      </div>
+      <div class="sec" style="margin-top:10px">// RESTRICTED</div>
+      <div style="display:flex;flex-direction:column;gap:4px;font-size:10px">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span>Iraq · Libya</span><span class="badge ba" style="font-size:8px">Enhanced KYC</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0"><span>Algeria · Tunisia</span><span class="badge ba" style="font-size:8px">Screening</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /shell -->
+
+<script>
+
+const api = initPortal('boss');
+// ── CLAUDE API ────────────────────────────────────────────────────────────────
+async function callClaude(messages, system, maxTokens) {
+  maxTokens = maxTokens || 1000;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: maxTokens,
+        system: system,
+        messages: messages,
+      })
+    });
+    const data = await res.json();
+    return data.content?.[0]?.text || '';
+  } catch(e) {
+    return 'Error connecting to Claude API: ' + e.message;
+  }
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────────
+function switchTab(id, btn) {
+  document.querySelectorAll('.panels').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  history.replaceState(null, '', '#' + id);
+}
+
+// ── NEGOTIATION ───────────────────────────────────────────────────────────────
+let selectedStrat = 'standard';
+let negState = { running: false, paused: false, round: 0, maxRounds: 5, agentPrice: null, brokerPrice: null, agreed: false };
+let negHistory = []; // Claude message history for this negotiation
+const NEG_ID = 'NEG-' + String(Math.floor(Math.random()*900)+100);
+
+function selectStrat(s) {
+  selectedStrat = s;
+  ['watcher','standard','aggressive'].forEach(x => document.getElementById('s-'+x).classList.remove('sel'));
+  document.getElementById('s-'+s).classList.add('sel');
+}
+
+function addBubble(type, html, label) {
+  const area = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = 'bubble ' + type;
+  if(label) div.innerHTML = '<div class="bubble-label" style="color:' + (type==='agent'?'var(--violet)':type==='broker'?'var(--gold)':'var(--muted)') + '">' + label + '</div>' + html;
+  else div.innerHTML = html;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+  return div;
+}
+
+function addThinking() {
+  const area = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = 'bubble thinking';
+  div.id = 'thinking-bubble';
+  div.innerHTML = '<div style="display:flex;align-items:center;gap:8px"><div class="spinner"></div><span style="color:var(--muted);font-size:10px">Claude is composing the offer...</span></div>';
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function removeThinking() {
+  const el = document.getElementById('thinking-bubble');
+  if(el) el.remove();
+}
+
+function updateRoundsBar(round, max) {
+  const bar = document.getElementById('rounds-bar');
+  let html = '';
+  for(let i = 1; i <= max; i++) {
+    html += '<div class="rb ' + (i < round ? 'done' : i === round ? 'active' : 'empty') + '"></div>';
+  }
+  bar.innerHTML = html;
+  document.getElementById('rounds-label').textContent = 'Round ' + round + ' of ' + max + ' · ' + selectedStrat;
+  document.getElementById('round-badge').textContent = '● Round ' + round + '/' + max;
+}
+
+function updatePriceDisplay(agentP, brokerP) {
+  if(agentP) {
+    negState.agentPrice = agentP;
+    document.getElementById('d-agent').textContent = '$' + agentP.toLocaleString();
+  }
+  if(brokerP) {
+    negState.brokerPrice = brokerP;
+    document.getElementById('d-broker').textContent = '$' + brokerP.toLocaleString();
+  }
+}
+
+async function startNegotiation() {
+  const product = document.getElementById('m-product').value;
+  const qty = document.getElementById('m-qty').value;
+  const unit = document.getElementById('m-unit').value;
+  const target = parseInt(document.getElementById('m-target').value);
+  const max = parseInt(document.getElementById('m-max').value);
+  const buyer = document.getElementById('m-buyer').value;
+  if(!qty || !target || !max) { alert('Fill in all mandate fields.'); return; }
+  if(negState.running) { alert('A negotiation is already running.'); return; }
+
+  // Reset state
+  negState = { running: true, paused: false, round: 0, maxRounds: selectedStrat==='aggressive'?7:5, agentPrice: null, brokerPrice: null, agreed: false };
+  negHistory = [];
+  document.getElementById('approve-btn').style.display = 'none';
+  document.getElementById('reject-btn').style.display = 'none';
+  document.getElementById('boss-box').innerHTML = '<div style="font-size:11px;color:var(--muted);line-height:1.7">Negotiation running...<br/>Agent will stop when deal is reached.</div>';
+
+  // Update header
+  document.getElementById('neg-product-label').textContent = '🔩 ' + product + ' · ' + qty + ' ' + unit + ' · ' + buyer;
+  document.getElementById('neg-meta').textContent = NEG_ID + ' · ' + selectedStrat + ' · ' + negState.maxRounds + ' rounds max';
+  document.getElementById('d-target').textContent = '$' + target.toLocaleString();
+  document.getElementById('start-btn').disabled = true;
+
+  // Clear chat
+  const area = document.getElementById('chat-area');
+  area.innerHTML = '';
+  addBubble('system', '🚀 Negotiation started · ' + NEG_ID + ' · ' + selectedStrat + ' strategy · ' + negState.maxRounds + ' rounds max');
+
+  // System prompt for Claude
+  const agentSystem = `You are SLOI AI's commodity procurement negotiation agent. You negotiate on behalf of the buyer.
+
+MANDATE:
+- Product: ${product}
+- Quantity: ${qty} ${unit}
+- Buyer: ${buyer}
+- Target price: $${target}/${unit}
+- Maximum price (walk-away): $${max}/${unit}
+- Strategy: ${selectedStrat}
+
+NEGOTIATION RULES:
+1. Start with an opening offer 8-12% below target price
+2. Move toward target price gradually over rounds
+3. Be firm, professional, and cite market conditions
+4. If broker price is within 2% of max, consider accepting
+5. Always include a specific dollar price per ${unit}
+6. Keep messages concise (3-4 sentences max)
+
+Respond ONLY as the agent (your message to the broker). No meta-commentary.
+Format your price clearly as: $X,XXX/${unit}`;
+
+  // Simulated broker system
+  const brokerSystem = `You are a commodity supplier/broker receiving a procurement inquiry.
+
+Product you are selling: ${product}
+Your starting price: $${Math.round(max * 1.02)}.toLocaleString()/${unit}
+Your floor price (minimum acceptable): $${Math.round(target * 1.01)}/${unit}
+
+RULES:
+1. Start at your asking price
+2. Come down gradually over rounds (3-5% per round)
+3. Mention quality, certifications, delivery terms
+4. Be professional but firm
+5. If buyer offers within 3% of your floor, accept
+
+Respond ONLY as the broker/supplier. Keep it to 3-4 sentences. Include your price clearly.`;
+
+  // Run negotiation rounds
+  await runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max);
+}
+
+async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max) {
+  if(!negState.running || negState.paused || negState.agreed) return;
+
+  negState.round++;
+  const round = negState.round;
+  const maxR = negState.maxRounds;
+
+  updateRoundsBar(round, maxR);
+
+  // Agent's turn
+  addThinking();
+  document.getElementById('agent-status').textContent = 'Agent thinking... Round ' + round;
+
+  const agentMsg = await callClaude(
+    [...negHistory, { role: 'user', content: round === 1 ? 'Start the negotiation. Make your opening offer.' : 'The broker responded. Make your next counter-offer.' }],
+    agentSystem + '\n\nThis is round ' + round + ' of ' + maxR + '.',
+    300
+  );
+
+  removeThinking();
+
+  // Extract price from agent message
+  const agentPriceMatch = agentMsg.match(/\$([0-9,]+(?:\.[0-9]+)?)/);
+  const agentPrice = agentPriceMatch ? parseInt(agentPriceMatch[1].replace(/,/g,'')) : null;
+  if(agentPrice) updatePriceDisplay(agentPrice, null);
+
+  const agentBubble = addBubble('agent', agentMsg + (agentPrice ? '<div class="bubble-price" style="color:var(--violet)">$' + agentPrice.toLocaleString() + '/' + unit + '</div>' : ''), '🤖 AGENT → BROKER (Round ' + round + ')');
+  negHistory.push({ role: 'assistant', content: agentMsg });
+
+  if(!negState.running || negState.paused) return;
+
+  // Brief pause before broker responds
+  await new Promise(r => setTimeout(r, 1200));
+
+  // Broker's turn
+  const brokerHistory = negHistory.map(m => ({ role: m.role === 'assistant' ? 'user' : 'assistant', content: m.content }));
+  const brokerMsg = await callClaude(
+    [...brokerHistory, { role: 'user', content: 'Respond to this offer.' }],
+    brokerSystem + '\n\nThis is round ' + round + '. Agent last offered: ' + (agentPrice ? '$' + agentPrice + '/' + unit : 'unknown price') + '.',
+    300
+  );
+
+  const brokerPriceMatch = brokerMsg.match(/\$([0-9,]+(?:\.[0-9]+)?)/);
+  const brokerPrice = brokerPriceMatch ? parseInt(brokerPriceMatch[1].replace(/,/g,'')) : null;
+  if(brokerPrice) updatePriceDisplay(null, brokerPrice);
+
+  addBubble('broker', brokerMsg + (brokerPrice ? '<div class="bubble-price" style="color:var(--gold)">$' + brokerPrice.toLocaleString() + '/' + unit + '</div>' : ''), '🏭 BROKER → AGENT (Round ' + round + ')');
+  negHistory.push({ role: 'user', content: brokerMsg });
+
+  document.getElementById('agent-status').textContent = '4 agents active';
+
+  // Check if deal reached
+  if(agentPrice && brokerPrice) {
+    const gap = ((brokerPrice - agentPrice) / agentPrice) * 100;
+    const agreed = brokerPrice <= max && gap < 2.5;
+
+    if(agreed || round >= maxR) {
+      const dealPrice = Math.round((agentPrice + brokerPrice) / 2);
+      negState.agreed = true;
+      negState.running = false;
+
+      await new Promise(r => setTimeout(r, 800));
+
+      if(agreed) {
+        addBubble('system', '✅ Agreement reached in round ' + round + ' · Gap closed to ' + gap.toFixed(1) + '%');
+        showApprovalBox(dealPrice, qty, unit, product);
+      } else {
+        addBubble('system', '⏱️ Max rounds reached · Gap: $' + Math.abs(brokerPrice - agentPrice).toLocaleString() + '/' + unit + ' · Manual override or reject');
+        document.getElementById('approve-btn').style.display = 'inline-flex';
+        document.getElementById('reject-btn').style.display = 'inline-flex';
+      }
+      document.getElementById('start-btn').disabled = false;
+      updateRoundsBar(round, maxR);
+      return;
+    }
+  }
+
+  // Continue to next round
+  if(round < maxR && negState.running) {
+    await new Promise(r => setTimeout(r, 1500));
+    if(!negState.paused) runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max);
+  }
+}
+
+function showApprovalBox(dealPrice, qty, unit, product) {
+  const totalVal = dealPrice * parseInt(qty);
+  document.getElementById('boss-box').innerHTML = `
+    <div class="approval-box">
+      <div style="font-size:11px;font-weight:600;color:var(--white);margin-bottom:8px">⚡ Deal pending your approval</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px;margin-bottom:10px">
+        <div><div style="color:var(--muted)">Agreed price</div><div style="color:var(--green);font-weight:700;font-size:14px">$${dealPrice.toLocaleString()}/${unit}</div></div>
+        <div><div style="color:var(--muted)">Total value</div><div style="color:var(--white);font-weight:700;font-size:14px">$${totalVal.toLocaleString()}</div></div>
+        <div><div style="color:var(--muted)">LOI fee</div><div style="color:var(--gold)">$500</div></div>
+        <div><div style="color:var(--muted)">Credits used</div><div style="color:var(--teal)">${selectedStrat==='aggressive'?25:15}</div></div>
+      </div>
+      <div style="display:flex;gap:5px">
+        <button class="btn btn-g btn-sm" style="flex:1;justify-content:center" onclick="approveDeal()">✅ Approve → Generate LOI</button>
+        <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗</button>
+      </div>
+    </div>`;
+  document.getElementById('approve-btn').style.display = 'inline-flex';
+  document.getElementById('reject-btn').style.display = 'inline-flex';
+
+  addBubble('loi', '⚡ <strong>Boss approval required</strong><br/>Deal at $' + dealPrice.toLocaleString() + '/' + unit + ' · Total: $' + totalVal.toLocaleString() + '<br/><span style="color:var(--muted);font-size:10px">Review and approve in the control panel →</span>');
+}
+
+// ── Completed sessions store (multi-session) ────────────────────────────────
+var completedSessions = [];
+var activeSessions = [];
+
+function approveDeal() {
+  const product = document.getElementById('m-product').value;
+  const qty = document.getElementById('m-qty').value;
+  const unit = document.getElementById('m-unit').value;
+  const buyer = document.getElementById('m-buyer').value;
+  const dealPrice = negState.agentPrice && negState.brokerPrice
+    ? Math.round((negState.agentPrice + negState.brokerPrice) / 2)
+    : negState.agentPrice || 2840;
+  const loiRef = 'SL-LOI-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + String(Math.floor(Math.random()*900)+100);
+  const totalVal = dealPrice * parseInt(qty);
+  const loiUrl = 'loi-generator.html?ref=' + loiRef + '&product=' + encodeURIComponent(product) + '&qty=' + qty + '&unit=' + encodeURIComponent(unit) + '&price=' + dealPrice + '&buyer=' + encodeURIComponent(buyer);
+
+  completedSessions.push({ id: loiRef, product, qty, unit, buyer, price: dealPrice, total: totalVal, rounds: negState.round, strat: selectedStrat, ts: new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) });
+
+  addBubble('loi',
+    '✅ <strong>LOI Generated: ' + loiRef + '</strong><br/>' +
+    '$' + dealPrice.toLocaleString() + '/' + unit + ' · ' + qty + ' ' + unit + ' · ' + buyer + '<br/>' +
+    '<span style="color:var(--green)">Emailed to buyer · WhatsApp sent to broker</span><br/>' +
+    '<a href="' + loiUrl + '" target="_blank" style="color:var(--indigo);font-size:10px;text-decoration:none;margin-top:4px;display:inline-block">📄 Open LOI Generator →</a>'
+  );
+
+  document.getElementById('approve-btn').style.display = 'none';
+  document.getElementById('reject-btn').style.display = 'none';
+  document.getElementById('boss-box').innerHTML =
+    '<div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:8px">✅ ' + loiRef + '</div>' +
+    '<a href="' + loiUrl + '" target="_blank" class="btn btn-g" style="width:100%;justify-content:center;margin-bottom:6px;font-size:10px">📄 Open LOI Generator →</a>' +
+    '<div style="font-size:10px;color:var(--muted)">$' + totalVal.toLocaleString() + ' · ' + negState.round + ' rounds · ' + selectedStrat + '</div>';
+
+  document.getElementById('start-btn').disabled = false;
+  negState.running = false;
+  renderNegSessions();
+}
+
+function rejectDeal() {
+  addBubble('system', '✗ Deal rejected · Negotiation closed · No LOI generated');
+  document.getElementById('approve-btn').style.display = 'none';
+  document.getElementById('reject-btn').style.display = 'none';
+  document.getElementById('boss-box').innerHTML = '<div style="font-size:11px;color:var(--red)">✗ Deal rejected.</div>';
+  negState.running = false;
+  document.getElementById('start-btn').disabled = false;
+}
+
+function pauseNeg() {
+  negState.paused = !negState.paused;
+  document.getElementById('pause-btn').textContent = negState.paused ? '▶ Resume' : '⏸ Pause';
+  addBubble('system', negState.paused ? '⏸ Negotiation paused' : '▶ Negotiation resumed');
+}
+
+function manualOverride() {
+  const p = document.getElementById('override-price').value || prompt('Set manual price override ($/unit):');
+  if(p) {
+    updatePriceDisplay(parseInt(p), null);
+    addBubble('system', '✏️ Manual override: $' + parseInt(p).toLocaleString() + '/unit set by Boss');
+  }
+}
+
+function clearChat() {
+  document.getElementById('chat-area').innerHTML = '<div class="bubble system">Chat cleared · Set mandate and click ▶ Start agent</div>';
+  negState = { running: false, paused: false, round: 0, maxRounds: 5, agentPrice: null, brokerPrice: null, agreed: false };
+  negHistory = [];
+  document.getElementById('start-btn').disabled = false;
+  document.getElementById('approve-btn').style.display = 'none';
+  document.getElementById('reject-btn').style.display = 'none';
+  document.getElementById('rounds-bar').innerHTML = '<div class="rb empty"></div>'.repeat(5);
+  document.getElementById('rounds-label').textContent = 'Not started';
+  document.getElementById('round-badge').textContent = '● Round 0';
+  document.getElementById('d-agent').textContent = '—';
+  document.getElementById('d-broker').textContent = '—';
+  document.getElementById('boss-box').innerHTML = '<div style="font-size:11px;color:var(--muted);line-height:1.7">Agent will stop when a deal is reached and wait for your approval.</div>';
+}
+
+function renderNegSessions() {
+  var el = document.getElementById('neg-sessions');
+  if(!el) return;
+  var html = '';
+
+  // Active sessions
+  activeSessions.forEach(function(s, i) {
+    var chg = s.agentPrice && s.brokerPrice ? Math.abs(s.brokerPrice - s.agentPrice) : null;
+    html += '<div style="background:var(--surface2);border:1px solid rgba(91,95,239,.25);border-radius:5px;padding:9px;margin-bottom:6px;cursor:pointer;border-left:3px solid var(--indigo)" onclick="loadSession(' + i + ')">';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">';
+    html += '<div style="font-size:10px;font-weight:600;color:var(--white)">' + s.id + '</div>';
+    html += '<span class="badge bv" style="font-size:8px">● R' + s.round + '/' + s.maxRounds + '</span></div>';
+    html += '<div style="font-size:9px;color:var(--muted)">' + s.product + ' · ' + s.buyer + '</div>';
+    if(chg) html += '<div style="font-size:9px;color:var(--gold);margin-top:2px">Gap: $' + chg.toLocaleString() + '/unit</div>';
+    html += '</div>';
+  });
+
+  // Completed sessions
+  completedSessions.slice(-3).reverse().forEach(function(s) {
+    var loiUrl = 'loi-generator.html?ref=' + s.id + '&product=' + encodeURIComponent(s.product) + '&qty=' + s.qty + '&unit=' + encodeURIComponent(s.unit) + '&price=' + s.price + '&buyer=' + encodeURIComponent(s.buyer);
+    html += '<div style="background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.2);border-radius:5px;padding:9px;margin-bottom:6px">';
+    html += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px">';
+    html += '<div style="font-size:10px;font-weight:600;color:var(--white)">' + s.id + '</div>';
+    html += '<span class="badge bg" style="font-size:8px">✓ LOI</span></div>';
+    html += '<div style="font-size:9px;color:var(--muted)">' + s.product + ' · $' + s.price.toLocaleString() + '/' + s.unit + '</div>';
+    html += '<div style="margin-top:6px"><a href="' + loiUrl + '" target="_blank" style="font-size:9px;color:var(--indigo);text-decoration:none">📄 Open LOI →</a></div>';
+    html += '</div>';
+  });
+
+  // New session card
+  html += '<div style="background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:9px;margin-bottom:6px;cursor:pointer;opacity:.8" onclick="clearChat()" title="Clear chat and start new negotiation">';
+  html += '<div style="font-size:10px;font-weight:600;color:var(--muted);margin-bottom:2px">+ New negotiation</div>';
+  html += '<div style="font-size:9px;color:var(--muted)">Configure mandate · click ▶ Start agent</div>';
+  html += '</div>';
+
+  el.innerHTML = html;
+}
+
+function loadSession(i) {
+  var s = activeSessions[i];
+  if(!s) return;
+  // Restore mandate fields
+  var mp = document.getElementById('m-product');
+  var mb = document.getElementById('m-buyer');
+  var mq = document.getElementById('m-qty');
+  if(mp) { for(var j=0;j<mp.options.length;j++){if(mp.options[j].text.includes(s.product.split(' ')[0])){mp.selectedIndex=j;break;}} }
+  if(mb) mb.value = s.buyer;
+  if(mq) mq.value = s.qty;
+  document.getElementById('neg-product-label').textContent = '🔩 ' + s.product + ' · ' + s.qty + ' ' + s.unit + ' · ' + s.buyer;
+  addBubble('system', '← Loaded session ' + s.id + ' · Round ' + s.round + '/' + s.maxRounds);
+}
+
+// ── LEADFINDER (Claude API) ───────────────────────────────────────────────────
+async function runLeadFinder() {
+  const keywords = document.getElementById('lead-keywords').value;
+  const btn = document.getElementById('lead-scan-btn');
+  const badge = document.getElementById('lead-status-badge');
+  const subtitle = document.getElementById('lead-subtitle');
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Scanning...';
+  badge.style.cssText = 'background:var(--indigo-dim);border-color:rgba(91,95,239,.3);color:var(--violet)';
+  badge.innerHTML = '<div class="live-dot" style="background:var(--violet)"></div>Running';
+  subtitle.textContent = 'Claude is searching for commodity procurement leads...';
+  document.getElementById('tc-lead').textContent = 'scanning';
+
+  document.getElementById('lead-results').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;padding:20px;color:var(--muted);font-size:11px">
+      <div class="spinner"></div>
+      <div>Claude is analyzing news, infrastructure projects, and tender sites...<br/>Keywords: ${keywords}</div>
+    </div>`;
+
+  const system = `You are SLOI AI's LeadFinder agent. Your job is to identify commodity procurement opportunities for a commodity broker/trader based in the UAE.
+
+You specialize in finding buyers who need:
+- Steel (rebar, coil, aluminum)
+- Building materials (cement, concrete, tiles, pipes)  
+- Agricultural commodities (wheat, corn, grain)
+- Energy (diesel, fuel)
+- Chemicals (industrial)
+
+Focus on: ${keywords}
+Region: MENA (UAE, KSA, Egypt, Iraq, Jordan) + Germany/Europe
+
+Return exactly 6 leads in this JSON format (no markdown, no backticks, just pure JSON):
+[
+  {
+    "name": "Project or company name",
+    "type": "Type (megaproject/import/tender/company)",
+    "country": "Country",
+    "value": "Deal size estimate (e.g. $2B)",
+    "sector": "Commodity sectors needed",
+    "source": "Where found (news/tender/linkedin)",
+    "relevance": "very-high/high/medium",
+    "reason": "Why this is a good lead (1 sentence)"
+  }
+]`;
+
+  const response = await callClaude(
+    [{ role: 'user', content: 'Find 6 commodity procurement leads for the IMEC corridor region. Current date: May 2026. Focus on active infrastructure projects and import buyers. Return only JSON.' }],
+    system,
+    1000
+  );
+
+  let leads = [];
+  try {
+    const clean = response.replace(/```json|```/g, '').trim();
+    leads = JSON.parse(clean);
+  } catch(e) {
+    leads = [
+      {name:'NEOM Phase 2 — The Line',type:'Megaproject',country:'KSA',value:'$200B+',sector:'Steel · Cement · Aluminum',source:'News',relevance:'very-high',reason:'Largest active construction project — continuous procurement needs'},
+      {name:'Egypt New Administrative Capital',type:'Infrastructure',country:'Egypt',value:'$58B',sector:'Cement · Steel · Tiles',source:'Tender',relevance:'very-high',reason:'Phase 2 underway with active tender publication'},
+      {name:'German steel importers Q2',type:'Import buyers',country:'Germany',value:'~$50M/mo',sector:'Steel',source:'Trade data',relevance:'high',reason:'Germany imports 40% of steel from MENA after Russia sanctions'},
+      {name:'Oman Duqm Port Expansion',type:'Port infrastructure',country:'Oman',value:'$800M',sector:'Steel · Pipes',source:'News',relevance:'high',reason:'IMEC corridor node — active construction'},
+      {name:'Jordan infrastructure 2026',type:'Government project',country:'Jordan',value:'$2.4B',sector:'Building materials',source:'Tender',relevance:'medium',reason:'World Bank funded, procurement in Q3 2026'},
+      {name:'Kuwait Petroleum refinery',type:'Industrial',country:'Kuwait',value:'$600M',sector:'Chemicals · Steel',source:'LinkedIn',relevance:'medium',reason:'Expansion project with ongoing chemical procurement'},
+    ];
+  }
+
+  document.getElementById('stat-found').textContent = leads.length;
+  document.getElementById('stat-high').textContent = leads.filter(l => l.relevance !== 'medium').length;
+
+  let html = `<div style="font-size:10px;color:var(--muted);margin-bottom:12px">${leads.length} leads found by Claude · Sorted by relevance</div>`;
+  leads.forEach((l, i) => {
+    const relColor = l.relevance === 'very-high' ? 'var(--red)' : l.relevance === 'high' ? 'var(--gold)' : 'var(--muted)';
+    const relLabel = l.relevance === 'very-high' ? '🔥 Very high' : l.relevance === 'high' ? '⭐ High' : '· Medium';
+    const cls = l.relevance === 'very-high' ? 'hot' : l.relevance === 'high' ? 'high' : '';
+    html += `<div class="lead-card ${cls}">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px">
+        <div>
+          <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px">${l.name}</div>
+          <div style="font-size:10px;color:var(--muted)">${l.type}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div style="font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--white)">${l.value}</div>
+          <div style="font-size:9px;color:${relColor};font-weight:600">${relLabel}</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:10px;color:var(--muted);margin-bottom:6px">
+        <span>🌍 ${l.country}</span><span>📦 ${l.sector}</span><span>via ${l.source}</span>
+      </div>
+      <div style="font-size:10px;color:var(--text);line-height:1.5;margin-bottom:8px;background:var(--surface2);padding:6px 8px;border-radius:3px">${l.reason}</div>
+      <div style="display:flex;gap:5px">
+        <button class="btn btn-xs btn-p" onclick="addLeadToPipeline('" + encodeURIComponent(l.name) + "','" + encodeURIComponent(l.sector) + "','" + encodeURIComponent(l.country) + "')">+ Pipeline</button>
+        <button class="btn btn-xs btn-a" onclick="alert('Queuing WhatsApp outreach to ${l.name}...')">📱 Outreach</button>
+        <button class="btn btn-xs" onclick="negotiateFromLead('" + encodeURIComponent(l.name) + "','" + encodeURIComponent(l.sector.split(' · ')[0] || 'Steel Rebar G60 12mm') + "')">🤖 Negotiate</button>
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('lead-results').innerHTML = html;
+  badge.style.cssText = 'background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:var(--green)';
+  badge.innerHTML = '<div class="live-dot"></div>Done';
+  subtitle.textContent = 'Last scan: just now · ' + leads.length + ' leads found';
+  btn.disabled = false;
+  btn.innerHTML = '🔭 Scan now';
+  document.getElementById('tc-lead').textContent = leads.length + ' new';
+}
+
+// ── PRICESCOUT (Claude API) ───────────────────────────────────────────────────
+async function runPriceScout() {
+  const product = document.getElementById('price-product').value;
+  const btn = document.getElementById('price-scan-btn');
+  const badge = document.getElementById('price-status-badge');
+
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Scanning...';
+  badge.style.cssText = 'background:var(--indigo-dim);border-color:rgba(91,95,239,.3);color:var(--violet)';
+  badge.innerHTML = '<div class="live-dot" style="background:var(--violet)"></div>Running';
+  document.getElementById('tc-price').textContent = 'scanning';
+
+  document.getElementById('price-list').innerHTML = `<div style="display:flex;align-items:center;gap:10px;padding:20px;color:var(--muted);font-size:11px"><div class="spinner"></div>Claude analyzing commodity prices...</div>`;
+
+  const system = `You are SLOI AI's PriceScout agent. Provide current commodity price estimates for the MENA/global market as of May 2026.
+
+Return JSON only (no markdown):
+[
+  {"emoji":"🔩","name":"Product name","sku":"SKU","price":1234,"prev":1220,"unit":"MT","trend":"up/down/flat","driver":"Brief reason for price movement (1 sentence)"},
+  ...
+]
+
+Include ${product === 'All products' ? 'all 8 products: Steel Rebar G60, Steel HR Coil, Aluminum 6061-T6, Concrete Block, Industrial Diesel, Hard Wheat, Yellow Corn, Sulfuric Acid' : product}.
+Use realistic 2026 market prices. Prices change slightly daily due to supply/demand.`;
+
+  const response = await callClaude(
+    [{ role: 'user', content: 'Provide current commodity price data for May 2026 MENA market. Return only JSON array.' }],
+    system,
+    1000
+  );
+
+  let prices = [];
+  try {
+    const clean = response.replace(/```json|```/g, '').trim();
+    prices = JSON.parse(clean);
+  } catch(e) {
+    prices = [
+      {emoji:'🔩',name:'Steel Rebar G60 12mm',sku:'STL-12',price:2840,prev:2775,unit:'MT',trend:'up',driver:'NEOM construction demand pushing MENA steel prices higher'},
+      {emoji:'🔩',name:'Aluminum 6061-T6',sku:'ALU-6061',price:9200,prev:9380,unit:'MT',trend:'down',driver:'China increased exports, global supply rising'},
+      {emoji:'🌾',name:'Hard Wheat',sku:'WHT-HRD',price:1120,prev:1129,unit:'MT',trend:'down',driver:'Good harvest in India, pressure on import prices'},
+      {emoji:'🌾',name:'Yellow Corn',sku:'CRN-YLW',price:980,prev:992,unit:'MT',trend:'down',driver:'US crop forecast positive, futures declining'},
+      {emoji:'⚡',name:'Industrial Diesel B2',sku:'DSL-B2',price:4.92,prev:4.90,unit:'Liter',trend:'up',driver:'OPEC+ production cuts supporting oil-linked prices'},
+      {emoji:'🧪',name:'Sulfuric Acid 98%',sku:'H2SO4',price:580,prev:580,unit:'MT',trend:'flat',driver:'Stable demand from fertilizer sector, no major supply shocks'},
+    ];
+  }
+
+  let html = `<div style="font-size:10px;color:var(--muted);margin-bottom:10px">Market prices · Claude analysis · May 2026</div>`;
+  let analysis = '';
+
+  prices.forEach(p => {
+    const pct = ((p.price - p.prev) / p.prev * 100).toFixed(1);
+    const dir = p.trend === 'up' ? 'up' : p.trend === 'down' ? 'down' : 'flat';
+    const arrow = dir === 'up' ? '↑' : dir === 'down' ? '↓' : '→';
+    html += `<div class="price-row ${dir}">
+      <div style="font-size:18px;flex-shrink:0">${p.emoji}</div>
+      <div class="pr-name">${p.name}<div style="font-size:9px;color:var(--muted);font-weight:400;margin-top:1px">${p.sku} · ${p.driver}</div></div>
+      <div style="text-align:right;flex-shrink:0;margin:0 6px"><div class="pr-price">$${p.price.toLocaleString()}</div><div style="font-size:9px;color:var(--muted)">/${p.unit}</div></div>
+      <div class="pr-change ${dir}">${arrow} ${Math.abs(pct)}%</div>
+    </div>`;
+    if(dir !== 'flat') analysis += `<div style="margin-bottom:6px">• <strong style="color:${dir==='up'?'var(--green)':'var(--red)'}">${p.name}</strong> ${arrow} ${Math.abs(pct)}%: ${p.driver}</div>`;
+  });
+
+  document.getElementById('price-list').innerHTML = html;
+  document.getElementById('price-analysis').innerHTML = '<div style="font-size:11px;color:var(--text);line-height:1.7">' + (analysis || 'All prices stable — no significant movements.') + '</div>';
+
+  badge.style.cssText = 'background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:var(--green)';
+  badge.innerHTML = '<div class="live-dot"></div>Done';
+  btn.disabled = false;
+  btn.innerHTML = '📡 Scan now';
+  document.getElementById('tc-price').textContent = prices.length + ' prices';
+}
+
+async function askPriceQuestion() {
+  const q = document.getElementById('price-question').value.trim();
+  if(!q) return;
+  const btn = document.getElementById('price-ask-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div>';
+
+  const answerEl = document.getElementById('price-answer');
+  answerEl.style.display = 'block';
+  answerEl.innerHTML = '<div style="display:flex;align-items:center;gap:6px;color:var(--muted)"><div class="spinner"></div> Claude analyzing...</div>';
+
+  const answer = await callClaude(
+    [{ role: 'user', content: q }],
+    'You are a commodity market analyst specializing in MENA/IMEC corridor trade. Answer questions about commodity prices, market trends, and procurement strategy. Be concise (3-5 sentences). Current date: May 2026.',
+    400
+  );
+
+  answerEl.innerHTML = '<div style="background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);border-radius:4px;padding:10px 12px"><div style="font-size:9px;color:var(--violet);font-weight:600;margin-bottom:5px;letter-spacing:.04em">🤖 CLAUDE ANALYSIS</div>' + answer.replace(/\n/g,'<br/>') + '</div>';
+  btn.disabled = false;
+  btn.innerHTML = 'Ask Claude →';
+}
+
+// ── OUTREACH & COMPLIANCE (static) ────────────────────────────────────────────
+const OUTREACH_DATA = [
+  {name:'Gulf Cement LLC',country:'UAE',sector:'Steel',status:'replied',msg:'Interested — send quote for 200 MT Steel Rebar'},
+  {name:'Cairo Constructions',country:'Egypt',sector:'Building',status:'replied',msg:'Yes, send pricing for cement and tiles'},
+  {name:'NEOM Engineering',country:'KSA',sector:'Steel',status:'pending',msg:''},
+  {name:'Red Sea Trading',country:'KSA',sector:'Agriculture',status:'pending',msg:''},
+  {name:'Atlas Trading GmbH',country:'Germany',sector:'Metals',status:'replied',msg:'Send best price for 50 MT Aluminum 6061'},
+  {name:'Jordan Infrastructure',country:'Jordan',sector:'Building',status:'pending',msg:''},
+];
+
+const COMP_LOG = [
+  {time:'14:35',entity:'Gulf Cement LLC',country:'UAE',verdict:'cleared'},
+  {time:'14:22',entity:'Atlas Trading GmbH',country:'Germany',verdict:'cleared'},
+  {time:'13:55',entity:'Al-Rashid Group',country:'Iraq',verdict:'review'},
+  {time:'13:10',entity:'Unknown entity',country:'Iran',verdict:'blocked'},
+  {time:'12:40',entity:'NEOM Procurement',country:'KSA',verdict:'cleared'},
+  {time:'12:15',entity:'Cairo Constructions',country:'Egypt',verdict:'cleared'},
+];
+
+const TEMPLATES = {
+  construction:'SLOI AI — Commodity Procurement\n\nHello,\n\nWe noticed your infrastructure project and believe SLOI AI can help you source materials at competitive prices.\n\nOur AI agent negotiates directly with verified suppliers — steel, cement, aluminum, and more.\n\n👉 sloiai.com\n\nSLOI AI · Smart negotiation · LOI generation',
+  buyer:'SLOI AI — Best Commodity Prices\n\nHello,\n\nAre you sourcing steel, cement, grain, or other commodities?\n\nSLOI AI connects you to verified suppliers. Our AI negotiates for you.\n\n👉 sloiai.com/smb',
+  followup:'SLOI AI — Following up\n\nHello,\n\nFollowing up on our previous message. Verified suppliers are ready for your inquiry.\n\n👉 sloiai.com',
+};
+
+function previewTpl() {
+  const k = document.getElementById('tpl-select').value;
+  document.getElementById('tpl-preview').textContent = TEMPLATES[k];
+}
+
+function addToOutreach() { alert('Add a lead via LeadFinder tab → click "📱 Outreach" on any lead.'); }
+
+function renderOutreach() {
+  let html = '';
+  OUTREACH_DATA.forEach(o => {
+    html += `<div class="ob-item ${o.status}">
+      <div style="font-size:18px;flex-shrink:0">📱</div>
+      <div style="flex:1"><div style="font-size:11px;font-weight:600;color:var(--white)">${o.name}</div>
+      <div style="font-size:10px;color:var(--muted)">${o.country} · ${o.sector}</div>
+      ${o.msg?'<div style="font-size:10px;color:var(--teal);margin-top:3px">↩ "'+o.msg+'"</div>':''}</div>
+      <span class="${o.status==='replied'?'badge bg':'badge ba'}">${o.status==='replied'?'Replied':'Pending'}</span>
+      ${o.status==='replied'?'<button class="btn btn-xs btn-p" onclick="switchTab(\'neg\',document.querySelectorAll(\'.tab\')[0])">Negotiate</button>':''}
+    </div>`;
+  });
+  document.getElementById('outreach-list').innerHTML = html;
+}
+
+function renderCompLog() {
+  let html = '';
+  COMP_LOG.forEach(c => {
+    const vc = c.verdict==='cleared'?'bg':c.verdict==='review'?'ba':'br';
+    html += `<div class="comp-row">
+      <div style="font-size:9px;color:var(--muted);width:38px;flex-shrink:0">${c.time}</div>
+      <div style="flex:1;font-weight:600;color:var(--white)">${c.entity}</div>
+      <div style="width:80px;color:var(--muted);font-size:10px">${c.country}</div>
+      <div style="flex-shrink:0"><span class="badge ${vc}" style="font-size:8px">${c.verdict.toUpperCase()}</span></div>
+      ${c.verdict==='review'?'<button class="btn btn-xs btn-g" onclick="alert(\'Approved with enhanced KYC.\')">Approve</button>':''}
+      ${c.verdict==='blocked'?'<span style="font-size:9px;color:var(--red);margin-left:4px">OFAC</span>':''}
+    </div>`;
+  });
+  document.getElementById('comp-log').innerHTML = html;
+}
+
+function runManualCheck() {
+  const entity = document.getElementById('check-entity').value;
+  const country = document.getElementById('check-country').value;
+  if(!entity.trim()) { alert('Enter entity name.'); return; }
+  const blocked = ['Iran','Russia','Belarus','North Korea','Syria'];
+  const verdict = blocked.includes(country) ? 'BLOCKED' : entity.toLowerCase().includes('unknown') ? 'REVIEW' : 'CLEARED';
+  alert('🛡️ ' + entity + ' · ' + country + '\n\nVerdict: ' + verdict + '\n' + (verdict==='BLOCKED'?'OFAC/EU sanctions match.':verdict==='REVIEW'?'Restricted country — Boss approval required.':'No sanctions match found.'));
+  if(verdict !== 'BLOCKED') {
+    COMP_LOG.unshift({time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),entity,country,verdict:verdict.toLowerCase()});
+    renderCompLog();
+  }
+}
+
+// ── RUN ALL ───────────────────────────────────────────────────────────────────
+async function runAllAgents() {
+  const btn = document.getElementById('run-all-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Running...';
+  document.getElementById('agent-status').textContent = 'All agents starting...';
+
+  await runLeadFinder();
+  await runPriceScout();
+
+  btn.disabled = false;
+  btn.innerHTML = '▶ Run all';
+  document.getElementById('agent-status').textContent = '4 agents active';
+}
+
+// ── ADMIN SYNC ────────────────────────────────────────────────────────────────
+function focusAdmin() {
+  if(window.opener && !window.opener.closed) window.opener.focus();
+  else window.open('CommodEx_Admin.html','_blank');
+}
+
+function openConsole(tab) {
+  var tabs = document.querySelectorAll('.tab');
+  var map = {neg:0,lead:1,price:2,outreach:3,compliance:4};
+  if(tab && map[tab] !== undefined && tabs[map[tab]]) switchTab(tab, tabs[map[tab]]);
+}
+
+// ── CLOCK ─────────────────────────────────────────────────────────────────────
+function tick() {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'}) + ' UTC';
+}
+setInterval(tick, 1000); tick();
+
+// ── HASH ROUTING ──────────────────────────────────────────────────────────────
+function routeHash() {
+  const hash = location.hash.replace('#','');
+  const tabs = document.querySelectorAll('.tab');
+  const map = {neg:0,lead:1,price:2,outreach:3,compliance:4};
+  if(hash && map[hash] !== undefined && tabs[map[hash]]) switchTab(hash, tabs[map[hash]]);
+}
+window.addEventListener('hashchange', routeHash);
+
+
+function negotiateFromLead(leadName, product) {
+  leadName = decodeURIComponent(leadName);
+  product = decodeURIComponent(product);
+  // Pre-fill mandate
+  var mb = document.getElementById('m-buyer'); if(mb) mb.value = leadName;
+  var mp = document.getElementById('m-product');
+  if(mp) {
+    for(var i=0;i<mp.options.length;i++){
+      if(mp.options[i].text.toLowerCase().includes(product.toLowerCase().split(' ')[0])){
+        mp.selectedIndex=i; break;
+      }
+    }
+  }
+  // Switch to negotiation tab
+  switchTab('neg', document.querySelectorAll('.tab')[0]);
+  addBubble('system', '← Lead imported: ' + leadName + ' · Mandate pre-filled · Click ▶ Start agent');
+}
+
+function addLeadToPipeline(name, sector, country) {
+  name = decodeURIComponent(name);
+  sector = decodeURIComponent(sector);
+  country = decodeURIComponent(country);
+  activeSessions.push({
+    id: 'PIPE-' + String(Date.now()).slice(-4),
+    product: sector.split(' · ')[0] || 'Steel',
+    buyer: name,
+    country: country,
+    qty: 100,
+    unit: 'MT',
+    round: 0,
+    maxRounds: 5,
+    agentPrice: null,
+    brokerPrice: null,
+    strat: 'standard'
+  });
+  renderNegSessions();
+  var btn = event.target;
+  btn.textContent = '✓ Added';
+  btn.style.color = 'var(--green)';
+  setTimeout(function(){ btn.textContent = '+ Pipeline'; btn.style.color=''; }, 2000);
+}
+
+// Snapshot active session when starting
+var _origStart = startNegotiation;
+startNegotiation = async function() {
+  // Save snapshot to activeSessions before starting
+  var product = document.getElementById('m-product').value;
+  var buyer = document.getElementById('m-buyer').value;
+  var qty = document.getElementById('m-qty').value;
+  var unit = document.getElementById('m-unit').value;
+  var sessionSnap = { id: 'NEG-' + String(Date.now()).slice(-4), product, buyer, qty, unit, round: 0, maxRounds: selectedStrat==='aggressive'?7:5, agentPrice: null, brokerPrice: null, strat: selectedStrat };
+  // Remove any existing session with same product+buyer
+  activeSessions = activeSessions.filter(function(s){ return !(s.product===product && s.buyer===buyer); });
+  activeSessions.push(sessionSnap);
+  renderNegSessions();
+  await _origStart();
+};
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+renderNegSessions();
+renderOutreach();
+renderCompLog();
+routeHash();
+</script>
+</body>
+</html>

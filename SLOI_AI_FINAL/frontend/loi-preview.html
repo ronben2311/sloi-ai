@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LOI Sample — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg);min-height:100%}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-links{display:flex;gap:20px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}
+.nav-links a:hover{color:var(--violet)}
+.nav-cta{background:var(--indigo);color:#fff;padding:6px 16px;border-radius:4px;font-size:11px;text-decoration:none;font-weight:600}
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:48px 24px 80px}
+.hero{text-align:center;margin-bottom:48px}
+.eyebrow{font-size:10px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px;justify-content:center}
+.eyebrow::before,.eyebrow::after{content:'';width:24px;height:1px;background:var(--indigo)}
+h1{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,52px);font-weight:900;line-height:.95;letter-spacing:-.03em;color:var(--white);margin-bottom:14px}
+h1 em{font-style:italic;color:var(--indigo)}
+.hero-sub{font-size:13px;color:var(--muted);line-height:1.85;max-width:520px;margin:0 auto 28px}
+.cta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{padding:11px 22px;border-radius:5px;font-size:12px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;transition:all .15s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.btn-p:hover{opacity:.85;color:#fff}
+
+/* LOI DOCUMENT */
+.loi-doc{background:#fff;border-radius:8px;max-width:720px;margin:0 auto;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 24px 64px rgba(0,0,0,.6);overflow:hidden}
+.loi-header{background:#1a1a2e;padding:28px 36px;display:flex;align-items:center;justify-content:space-between}
+.loi-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:#fff;letter-spacing:-.02em}
+.loi-logo em{font-style:italic;color:#6b6ff8}
+.loi-header-right{text-align:right}
+.loi-ref{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b8ff8;font-weight:600}
+.loi-date{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#52526e;margin-top:2px}
+.loi-title-bar{background:#f8f7ff;border-bottom:2px solid #1a1a2e;padding:16px 36px;text-align:center}
+.loi-title{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:#21213a;letter-spacing:-.02em}
+.loi-subtitle{font-size:11px;color:#52526e;margin-top:4px;font-family:'IBM Plex Mono',monospace}
+.loi-body{padding:32px 36px;background:#fff}
+.loi-parties{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-bottom:28px;border:1px solid #e8e8f0;border-radius:6px;overflow:hidden}
+.party{padding:16px;border-right:1px solid #e8e8f0}
+.party:last-child{border-right:none}
+.party-label{font-size:9px;color:#8b8ff8;letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:6px;font-weight:600}
+.party-name{font-size:13px;font-weight:700;color:#21213a;margin-bottom:2px}
+.party-meta{font-size:10px;color:#52526e;line-height:1.5}
+.loi-section{margin-bottom:20px}
+.loi-section-title{font-size:10px;font-weight:700;color:#21213a;letter-spacing:.08em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #e8e8f0}
+.deal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.deal-item{background:#f8f7ff;border:1px solid #e8e8f0;border-radius:4px;padding:10px}
+.di-label{font-size:9px;color:#52526e;letter-spacing:.06em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:3px}
+.di-val{font-size:13px;font-weight:700;color:#21213a}
+.deal-total{background:#21213a;border-radius:5px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.dt-label{font-size:11px;color:rgba(255,255,255,.6);font-family:'IBM Plex Mono',monospace;font-weight:600}
+.dt-val{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:-.02em}
+.clause{font-size:11px;color:#3a3a5c;line-height:1.75;padding:10px 14px;background:#f8f7ff;border-left:3px solid #e8e8f0;border-radius:0 4px 4px 0;margin-bottom:8px}
+.clause-title{font-weight:700;color:#21213a;margin-bottom:3px;font-size:11px}
+.sig-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:24px}
+.sig-box{border-top:1px solid #21213a;padding-top:10px}
+.sig-name{font-size:11px;font-weight:700;color:#21213a;margin-bottom:2px}
+.sig-role{font-size:10px;color:#52526e;margin-bottom:12px}
+.sig-line{height:32px;border-bottom:1px dashed #c8c6e0;margin-bottom:6px}
+.sig-date{font-size:10px;color:#52526e;font-family:'IBM Plex Mono',monospace}
+.loi-footer{background:#f0eff8;padding:14px 36px;border-top:1px solid #e8e8f0;display:flex;align-items:center;justify-content:space-between}
+.lf-logo{font-family:'Fraunces',serif;font-size:12px;font-weight:700;color:#52526e}
+.lf-logo em{font-style:italic;color:#5b5fef}
+.lf-note{font-size:9px;color:#8b8ff8;font-family:'IBM Plex Mono',monospace}
+
+/* FEATURES */
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:40px 0}
+.feat{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px;text-align:center}
+.feat-icon{font-size:24px;margin-bottom:8px}
+.feat-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:4px}
+.feat-desc{font-size:10px;color:var(--muted);line-height:1.55}
+.sample-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.3);color:var(--gold);font-size:10px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:20px}
+.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+</style>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+
+<nav>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="pricing.html">Pricing</a>
+    <a href="docs.html">Docs</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="smb-order.html" class="nav-cta">Get your LOI →</a>
+</nav>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">Sample LOI</div>
+    <h1>This is what you<br/><em>receive.</em></h1>
+    <p class="hero-sub">Every deal on SLOI AI ends with a professional Letter of Intent — auto-generated after AI negotiation and Boss approval. Here is a real example.</p>
+    <div class="cta-row">
+      <a href="smb-order.html" class="btn btn-p">Get your LOI → free to start</a>
+      <a href="negotiation-agent.html" class="btn">Try the agent live</a>
+      <a href="pricing.html" class="btn">See pricing</a>
+    </div>
+  </div>
+
+  <!-- SAMPLE BADGE -->
+  <div style="text-align:center;margin-bottom:20px">
+    <div class="sample-badge">⚠️ Sample document — not a real LOI</div>
+  </div>
+
+  <!-- LOI DOCUMENT -->
+  <div class="loi-doc">
+
+    <div class="loi-header">
+      <div class="loi-logo">SLOI <em>AI</em></div>
+      <div class="loi-header-right">
+        <div class="loi-ref">SL-LOI-20260501-003</div>
+        <div class="loi-date">1 May 2026</div>
+      </div>
+    </div>
+
+    <div class="loi-title-bar">
+      <div class="loi-title">Letter of Intent</div>
+      <div class="loi-subtitle">Commodity Procurement · Facilitated by SLOI AI Ltd.</div>
+    </div>
+
+    <div class="loi-body">
+
+      <!-- PARTIES -->
+      <div class="loi-section">
+        <div class="loi-section-title">Parties</div>
+        <div class="loi-parties">
+          <div class="party">
+            <div class="party-label">Buyer</div>
+            <div class="party-name">Gulf Cement LLC</div>
+            <div class="party-meta">Dubai, United Arab Emirates<br/>Procurement Division</div>
+          </div>
+          <div class="party">
+            <div class="party-label">Supplier (anonymous)</div>
+            <div class="party-name">REF-MET-001</div>
+            <div class="party-meta">Verified supplier<br/>Origin: Global<br/>Sector: Metals</div>
+          </div>
+          <div class="party">
+            <div class="party-label">Facilitator</div>
+            <div class="party-name">SLOI AI Ltd.</div>
+            <div class="party-meta">Digital facilitation platform<br/>sloiai.com<br/>Not a party to the transaction</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DEAL TERMS -->
+      <div class="loi-section">
+        <div class="loi-section-title">Deal Terms</div>
+        <div class="deal-grid">
+          <div class="deal-item"><div class="di-label">Product</div><div class="di-val">Steel Rebar G60 12mm</div></div>
+          <div class="deal-item"><div class="di-label">SKU</div><div class="di-val" style="font-family:'IBM Plex Mono',monospace;font-size:12px">STL-12</div></div>
+          <div class="deal-item"><div class="di-label">Quantity</div><div class="di-val">100 MT</div></div>
+          <div class="deal-item"><div class="di-label">Agreed price</div><div class="di-val">$2,840 / MT</div></div>
+          <div class="deal-item"><div class="di-label">Incoterm</div><div class="di-val">FOB</div></div>
+          <div class="deal-item"><div class="di-label">Currency</div><div class="di-val">USD</div></div>
+          <div class="deal-item"><div class="di-label">Payment method</div><div class="di-val">SWIFT / TT</div></div>
+          <div class="deal-item"><div class="di-label">Delivery deadline</div><div class="di-val">15 Jun 2026</div></div>
+          <div class="deal-item"><div class="di-label">Negotiation rounds</div><div class="di-val">3 of 5</div></div>
+        </div>
+        <div class="deal-total">
+          <div class="dt-label">TOTAL DEAL VALUE</div>
+          <div class="dt-val">$284,000</div>
+        </div>
+      </div>
+
+      <!-- CLAUSES -->
+      <div class="loi-section">
+        <div class="loi-section-title">Terms</div>
+        <div class="clause">
+          <div class="clause-title">1. Intent</div>
+          This LOI confirms the mutual intent of Buyer and Supplier to proceed with the above commodity transaction under the stated terms. Both parties agree to negotiate in good faith toward a final sales contract.
+        </div>
+        <div class="clause">
+          <div class="clause-title">2. Payment</div>
+          Buyer agrees to pay USD $284,000 directly to Supplier via SWIFT / TT within the agreed payment terms. Payment and settlement occur directly between Buyer and Supplier outside the SLOI AI platform. SLOI AI acts as facilitator only and does not hold or process funds.
+        </div>
+        <div class="clause">
+          <div class="clause-title">3. Delivery</div>
+          Supplier delivers on FOB terms no later than 15 June 2026. Delays beyond 7 business days without written notice entitle Buyer to renegotiate terms or cancel this LOI.
+        </div>
+        <div class="clause">
+          <div class="clause-title">4. Governing law</div>
+          This LOI is governed by internationally recognised commercial law. Disputes subject to ICC arbitration. Good-faith mediation required before legal proceedings.
+        </div>
+        <div class="clause">
+          <div class="clause-title">5. Role of SLOI AI</div>
+          SLOI AI Ltd. acts solely as a digital facilitator and negotiation platform. It is not a party to the commercial transaction, does not hold funds, and bears no liability for the performance of either Buyer or Supplier under this LOI.
+        </div>
+      </div>
+
+      <!-- SIGNATURES -->
+      <div class="loi-section">
+        <div class="loi-section-title">Signatures</div>
+        <div class="sig-grid">
+          <div class="sig-box">
+            <div class="sig-name">Gulf Cement LLC</div>
+            <div class="sig-role">Buyer · Dubai, UAE</div>
+            <div class="sig-line"></div>
+            <div class="sig-date">Authorised signatory · Date</div>
+          </div>
+          <div class="sig-box">
+            <div class="sig-name">REF-MET-001</div>
+            <div class="sig-role">Supplier (via broker)</div>
+            <div class="sig-line"></div>
+            <div class="sig-date">Authorised signatory · Date</div>
+          </div>
+          <div class="sig-box">
+            <div class="sig-name">SLOI AI Ltd.</div>
+            <div class="sig-role">Facilitator</div>
+            <div class="sig-line"></div>
+            <div class="sig-date">Authorised signatory · Date</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="loi-footer">
+      <div class="lf-logo">SLOI <em>AI</em> · Digital facilitation platform</div>
+      <div class="lf-note">Generated automatically after AI negotiation and Boss approval · sloiai.com</div>
+    </div>
+
+  </div>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="feat">
+      <div class="feat-icon">🤖</div>
+      <div class="feat-title">AI negotiated</div>
+      <div class="feat-desc">Agent ran 3 rounds of negotiation. Started at $2,700, settled at $2,840 — saving buyer time and cost vs manual negotiation.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">⚡</div>
+      <div class="feat-title">Generated in minutes</div>
+      <div class="feat-desc">From mandate to signed LOI in under 10 minutes. Emailed to buyer instantly. WhatsApp sent to supplier.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🔒</div>
+      <div class="feat-title">Supplier protected</div>
+      <div class="feat-desc">Factory identity never revealed. Buyer sees only REF-MET-001. Full anonymization enforced at database level.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">✅</div>
+      <div class="feat-title">Boss approved</div>
+      <div class="feat-desc">No LOI is ever generated without explicit operator approval. Every deal reviewed before signing.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🛡️</div>
+      <div class="feat-title">Compliance checked</div>
+      <div class="feat-desc">OFAC + EU sanctions screened before generation. Dual-use product classification. ICC-compliant terms.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">💰</div>
+      <div class="feat-title">No direct payment</div>
+      <div class="feat-desc">Payment flows directly between buyer and supplier. SLOI AI charges a fixed LOI fee only — no % cut of your deal.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:10px;padding:40px;text-align:center">
+    <div style="font-family:'Fraunces',serif;font-size:clamp(28px,4vw,42px);font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:12px;line-height:1.05">Ready to get your<br/><em style="font-style:italic;color:var(--indigo)">first LOI?</em></div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.7">Tell us what you need. Our agent negotiates. You approve. LOI delivered.</p>
+    <div class="cta-row">
+      <a href="smb-order.html" class="btn btn-p">Start — it's free →</a>
+      <a href="CommodEx_Platform.html" class="btn">Buyer platform</a>
+      <a href="pricing.html" class="btn">See pricing</a>
+    </div>
+    <div style="font-size:10px;color:var(--muted);margin-top:16px">No credit card to start · Boss approval on every deal · LOI in minutes</div>
+  </div>
+
+</div>
+</body>
+</html>

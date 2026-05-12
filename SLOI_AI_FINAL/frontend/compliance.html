@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>SLOI AI — Compliance Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-links{display:flex;gap:20px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}
+.nav-links a:hover{color:var(--violet)}
+
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:40px 24px 60px}
+
+/* HERO */
+.page-title{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:4px}
+.page-title em{font-style:italic;color:var(--indigo)}
+.page-sub{font-size:12px;color:var(--muted);margin-bottom:28px;line-height:1.7}
+
+/* FORM */
+.check-form{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:20px}
+.cf-header{padding:16px 20px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px}
+.cf-title{font-size:13px;font-weight:600;color:var(--white)}
+.cf-body{padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.cf-full{grid-column:1/-1}
+.field label{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px}
+.field input,.field select{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:10px 12px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
+.field input:focus,.field select:focus{border-color:var(--indigo)}
+.field input::placeholder{color:var(--muted)}
+.field select option{background:var(--surface2)}
+.cf-footer{padding:14px 20px;border-top:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between}
+.run-btn{background:var(--indigo);color:#fff;border:none;padding:11px 28px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;gap:8px;transition:opacity .15s}
+.run-btn:hover{opacity:.85}
+.run-btn:disabled{opacity:.4;cursor:not-allowed}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESULT */
+.result-card{background:var(--surface);border-radius:10px;overflow:hidden;margin-bottom:16px;display:none}
+.result-card.show{display:block}
+.rc-header{padding:20px 24px;display:flex;align-items:center;gap:16px}
+.rc-verdict{font-family:'Fraunces',serif;font-size:26px;font-weight:900;letter-spacing:-.02em}
+.rc-icon{font-size:36px;flex-shrink:0}
+.rc-title{font-size:13px;color:var(--white);font-weight:600;margin-bottom:4px}
+.rc-sub{font-size:11px;color:var(--muted);line-height:1.6}
+.rc-green{border:1px solid rgba(34,197,94,.4);background:rgba(34,197,94,.04)}
+.rc-gold{border:1px solid rgba(232,169,74,.4);background:rgba(232,169,74,.04)}
+.rc-red{border:1px solid rgba(239,68,68,.4);background:rgba(239,68,68,.04)}
+.rc-body{padding:0 24px 20px}
+
+/* CHECK ITEMS */
+.check-list{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.check-item{display:flex;align-items:flex-start;gap:12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px 14px}
+.ci-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.ci-body{flex:1}
+.ci-label{font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px}
+.ci-detail{font-size:11px;color:var(--muted);line-height:1.6}
+.ci-status{flex-shrink:0;display:flex;align-items:center}
+.badge{display:inline-flex;align-items:center;font-size:10px;font-weight:600;padding:2px 9px;border-radius:3px}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.br{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.bm{background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+
+/* ACTIONS */
+.rc-actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--border)}
+.btn{padding:8px 16px;border-radius:5px;font-size:12px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-p{background:var(--indigo);color:#fff;border-color:var(--indigo)}.btn-p:hover{opacity:.85;color:#fff}
+.btn-g{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3);color:var(--green)}
+.btn-r{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:var(--red)}
+.btn-a{background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)}
+
+/* COMPLIANCE LOG */
+.log-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px}
+.log-header{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2);font-size:11px;font-weight:600;color:var(--white);display:flex;justify-content:space-between}
+.log-body{padding:12px;max-height:220px;overflow-y:auto}
+.log-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--border);font-size:11px}
+.log-row:last-child{border-bottom:none}
+.log-time{color:var(--muted);width:80px;flex-shrink:0}
+.log-result{width:60px;flex-shrink:0}
+.log-deal{flex:1;color:var(--text)}
+.log-action{flex-shrink:0}
+
+/* REFERENCE TABLES */
+.ref-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:20px}
+.ref-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px}
+.ref-title{font-size:11px;font-weight:600;color:var(--white);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.country-list{display:flex;flex-direction:column;gap:5px}
+.cl-item{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:4px;font-size:11px}
+.cl-red{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2)}
+.cl-gold{background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.2)}
+.cl-green{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2)}
+.cl-name{color:var(--text)}
+.cl-why{font-size:9px;color:var(--muted)}
+
+/* PRODUCT FLAGS */
+.flag-list{display:flex;flex-direction:column;gap:5px}
+.fl-item{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-radius:4px;font-size:11px;background:var(--surface2);border:1px solid var(--border)}
+.fl-name{color:var(--text)}
+.fl-flag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:2px}
+.ff-std{background:rgba(34,197,94,.1);color:var(--green)}
+.ff-res{background:rgba(232,169,74,.1);color:var(--gold)}
+.ff-lic{background:rgba(239,68,68,.1);color:var(--red)}
+.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="CommodEx_Admin.html">← Admin</a>
+    <a href="loi-generator.html">LOI Generator</a>
+    <a href="payments.html">Payments</a>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <div class="page-title">Compliance <em>Engine</em></div>
+  <p class="page-sub">Run a full compliance check before opening any deal. Checks: country sanctions (OFAC + EU + UN), entity screening, dual-use product classification, and Abraham Accords status. Every check is logged automatically.</p>
+
+  <!-- CHECK FORM -->
+  <div class="check-form">
+    <div class="cf-header">
+      <span style="font-size:18px">🛡️</span>
+      <div class="cf-title">Deal Compliance Check</div>
+    </div>
+    <div class="cf-body">
+      <div class="field">
+        <label>Buyer company name</label>
+        <input id="c-buyer" placeholder="Gulf Cement LLC" oninput="updatePreview()"/>
+      </div>
+      <div class="field">
+        <label>Buyer country</label>
+        <select id="c-country" onchange="updatePreview()">
+          <option value="">— Select country —</option>
+          <optgroup label="🟢 Clear">
+            <option value="UAE">UAE</option>
+            <option value="KSA">Saudi Arabia</option>
+            <option value="Egypt">Egypt</option>
+            <option value="Jordan">Jordan</option>
+            <option value="Morocco">Morocco</option>
+            <option value="Bahrain">Bahrain</option>
+            <option value="Kuwait">Kuwait</option>
+            <option value="Oman">Oman</option>
+            <option value="Germany">Germany</option>
+            <option value="France">France</option>
+            <option value="Italy">Italy</option>
+            <option value="UK">United Kingdom</option>
+            <option value="Netherlands">Netherlands</option>
+            <option value="Spain">Spain</option>
+            <option value="Turkey">Turkey</option>
+            <option value="India">India</option>
+            <option value="Singapore">Singapore</option>
+          </optgroup>
+          <optgroup label="🟡 Restricted — requires manual approval">
+            <option value="Iraq">Iraq</option>
+            <option value="Libya">Libya</option>
+            <option value="Algeria">Algeria</option>
+            <option value="Tunisia">Tunisia</option>
+            <option value="Pakistan">Pakistan</option>
+            <option value="Nigeria">Nigeria</option>
+          </optgroup>
+          <optgroup label="🔴 Blocked — cannot proceed">
+            <option value="Iran">Iran</option>
+            <option value="Russia">Russia</option>
+            <option value="Belarus">Belarus</option>
+            <option value="North Korea">North Korea</option>
+            <option value="Syria">Syria</option>
+            <option value="Cuba">Cuba</option>
+            <option value="Venezuela">Venezuela</option>
+            <option value="Myanmar">Myanmar</option>
+            <option value="Sudan">Sudan</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Product category</label>
+        <select id="c-product" onchange="updatePreview()">
+          <option value="">— Select product —</option>
+          <optgroup label="Standard — no restrictions">
+            <option value="concrete">Concrete / Cement</option>
+            <option value="ceramics">Ceramics / Tiles</option>
+            <option value="rebar">Steel Rebar</option>
+            <option value="aluminum_profiles">Aluminum Profiles</option>
+            <option value="pvc">PVC Pipes</option>
+            <option value="wheat">Wheat / Grain</option>
+            <option value="corn">Corn / Maize</option>
+            <option value="soy">Soy / Oilseeds</option>
+          </optgroup>
+          <optgroup label="Restricted — enhanced screening">
+            <option value="steel_coil">Steel Coils / Plate</option>
+            <option value="aluminum_alloy">Aluminum Alloy 6061</option>
+            <option value="diesel">Industrial Diesel / Fuel</option>
+            <option value="lpg">LPG / Gas</option>
+          </optgroup>
+          <optgroup label="Requires export license">
+            <option value="sulfuric_acid">Sulfuric Acid</option>
+            <option value="caustic_soda">Caustic Soda / NaOH</option>
+            <option value="ammonia">Ammonia compounds</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Deal value (USD)</label>
+        <input id="c-value" type="number" placeholder="250000" oninput="updatePreview()"/>
+      </div>
+      <div class="field">
+        <label>Payment method</label>
+        <select id="c-payment" onchange="updatePreview()">
+          <option>SWIFT / TT</option>
+          <option>LC at sight</option>
+          <option>TT 30% + LC</option>
+          <option>Stripe</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Role in this deal</label>
+        <select id="c-role" onchange="updatePreview()">
+          <option value="trader">Trader — buying & selling (my name on docs)</option>
+          <option value="platform">Platform — connecting buyer to supplier</option>
+        </select>
+      </div>
+      <div class="field cf-full">
+        <label>End-use declaration (optional but recommended)</label>
+        <input id="c-enduse" placeholder="e.g. Construction of residential complex in Dubai — declared by buyer"/>
+      </div>
+    </div>
+    <div class="cf-footer">
+      <div style="font-size:11px;color:var(--muted)" id="preview-line">Fill in the form to run compliance check</div>
+      <button class="run-btn" id="run-btn" onclick="runCheck()">🛡️ Run compliance check</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="result-card">
+    <div class="rc-header" id="rc-header">
+      <div class="rc-icon" id="rc-icon">⏳</div>
+      <div>
+        <div class="rc-verdict" id="rc-verdict">Checking...</div>
+        <div class="rc-title" id="rc-title"></div>
+        <div class="rc-sub" id="rc-sub"></div>
+      </div>
+    </div>
+    <div class="rc-body">
+      <div class="check-list" id="check-list"></div>
+      <div class="rc-actions" id="rc-actions"></div>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE LOG -->
+  <div class="log-card">
+    <div class="log-header">
+      <span>// COMPLIANCE LOG — THIS SESSION</span>
+      <span style="color:var(--muted);font-weight:400" id="log-count">0 checks run</span>
+    </div>
+    <div class="log-body" id="log-body">
+      <div style="text-align:center;padding:20px;color:var(--muted);font-size:11px">No checks run yet this session</div>
+    </div>
+  </div>
+
+  <!-- REFERENCE TABLES -->
+  <div style="font-size:11px;font-weight:600;color:var(--white);margin-bottom:12px;letter-spacing:.04em">// REFERENCE — COUNTRY & PRODUCT STATUS</div>
+  <div class="ref-grid">
+
+    <!-- Blocked countries -->
+    <div class="ref-card">
+      <div class="ref-title"><span style="color:var(--red)">🔴</span> Blocked countries</div>
+      <div class="country-list">
+        <div class="cl-item cl-red"><span class="cl-name">Iran</span><span class="cl-why">OFAC · EU · UN</span></div>
+        <div class="cl-item cl-red"><span class="cl-name">Russia</span><span class="cl-why">OFAC · EU sanctions</span></div>
+        <div class="cl-item cl-red"><span class="cl-name">Belarus</span><span class="cl-why">EU sanctions</span></div>
+        <div class="cl-item cl-red"><span class="cl-name">North Korea</span><span class="cl-why">OFAC · UN embargo</span></div>
+        <div class="cl-item cl-red"><span class="cl-name">Syria</span><span class="cl-why">OFAC · EU</span></div>
+        <div class="cl-item cl-red"><span class="cl-name">Cuba</span><span class="cl-why">OFAC</span></div>
+        <div class="cl-item cl-red"><span class="cl-name">Venezuela</span><span class="cl-why">OFAC</span></div>
+        <div class="cl-item cl-red"><span class="cl-name">Myanmar</span><span class="cl-why">EU · targeted</span></div>
+        <div class="cl-item cl-red"><span class="cl-name">Sudan</span><span class="cl-why">OFAC · targeted</span></div>
+      </div>
+    </div>
+
+    <!-- Restricted countries -->
+    <div class="ref-card">
+      <div class="ref-title"><span style="color:var(--gold)">🟡</span> Restricted — manual approval</div>
+      <div class="country-list">
+        <div class="cl-item cl-gold"><span class="cl-name">Iraq</span><span class="cl-why">Enhanced KYC required</span></div>
+        <div class="cl-item cl-gold"><span class="cl-name">Libya</span><span class="cl-why">Political risk · screening</span></div>
+        <div class="cl-item cl-gold"><span class="cl-name">Algeria</span><span class="cl-why">Dual-use sensitivity</span></div>
+        <div class="cl-item cl-gold"><span class="cl-name">Tunisia</span><span class="cl-why">Enhanced KYC</span></div>
+        <div class="cl-item cl-gold"><span class="cl-name">Pakistan</span><span class="cl-why">Dual-use sensitivity</span></div>
+        <div class="cl-item cl-gold"><span class="cl-name">Nigeria</span><span class="cl-why">Financial crime risk</span></div>
+        <div style="margin-top:8px;font-size:10px;color:var(--muted);line-height:1.6">Deal stops for Boss approval. Continues only after manual green light. Every approval is logged.</div>
+      </div>
+    </div>
+
+    <!-- Product flags -->
+    <div class="ref-card">
+      <div class="ref-title"><span style="color:var(--teal)">📦</span> Product dual-use flags</div>
+      <div class="flag-list">
+        <div class="fl-item"><span class="fl-name">Concrete / Cement</span><span class="fl-flag ff-std">STANDARD</span></div>
+        <div class="fl-item"><span class="fl-name">Steel Rebar</span><span class="fl-flag ff-std">STANDARD</span></div>
+        <div class="fl-item"><span class="fl-name">Ceramics / Tiles</span><span class="fl-flag ff-std">STANDARD</span></div>
+        <div class="fl-item"><span class="fl-name">Wheat / Grain</span><span class="fl-flag ff-std">STANDARD</span></div>
+        <div class="fl-item"><span class="fl-name">Steel Coils</span><span class="fl-flag ff-res">RESTRICTED</span></div>
+        <div class="fl-item"><span class="fl-name">Aluminum 6061</span><span class="fl-flag ff-res">RESTRICTED</span></div>
+        <div class="fl-item"><span class="fl-name">Industrial Diesel</span><span class="fl-flag ff-res">RESTRICTED</span></div>
+        <div class="fl-item"><span class="fl-name">Sulfuric Acid</span><span class="fl-flag ff-lic">LICENSE REQ.</span></div>
+        <div class="fl-item"><span class="fl-name">Caustic Soda</span><span class="fl-flag ff-lic">LICENSE REQ.</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── COMPLIANCE DATA ──────────────────────────────────────────────────────────
+var BLOCKED = ['Iran','Russia','Belarus','North Korea','Syria','Cuba','Venezuela','Myanmar','Sudan'];
+var RESTRICTED = ['Iraq','Libya','Algeria','Tunisia','Pakistan','Nigeria'];
+var CLEAR = ['UAE','KSA','Saudi Arabia','Egypt','Jordan','Morocco','Bahrain','Kuwait','Oman','Germany','France','Italy','UK','United Kingdom','Netherlands','Spain','Turkey','India','Singapore'];
+
+// Abraham Accords countries — can trade openly
+var ABRAHAM_ACCORDS = ['UAE','Bahrain','Morocco'];
+
+// Dual-use product classification
+var PRODUCT_FLAGS = {
+  'concrete': {level:'standard', label:'Standard — no export license needed', desc:'Cement and concrete products carry no dual-use classification.'},
+  'ceramics': {level:'standard', label:'Standard — no restrictions', desc:'Ceramic and tile products have no dual-use concerns.'},
+  'rebar': {level:'standard', label:'Standard — no restrictions', desc:'Deformed steel bars for construction are not dual-use controlled.'},
+  'aluminum_profiles': {level:'standard', label:'Standard — no restrictions', desc:'Extruded aluminum profiles for construction use.'},
+  'pvc': {level:'standard', label:'Standard — no restrictions', desc:'PVC pipes for construction and infrastructure.'},
+  'wheat': {level:'standard', label:'Standard — agricultural commodity', desc:'Food commodity. No dual-use classification.'},
+  'corn': {level:'standard', label:'Standard — agricultural commodity', desc:'Food commodity. No dual-use classification.'},
+  'soy': {level:'standard', label:'Standard — agricultural commodity', desc:'Food commodity. No dual-use classification.'},
+  'steel_coil': {level:'restricted', label:'Restricted — enhanced screening required', desc:'Steel coils and plate can be used in military applications. Screen buyer end-use carefully. Not controlled per se, but requires end-use declaration for shipment to restricted regions.'},
+  'aluminum_alloy': {level:'restricted', label:'Restricted — enhanced screening required', desc:'Aluminum alloy 6061-T6 is listed under dual-use controls in some jurisdictions due to aerospace and defense applications. Enhanced buyer screening required.'},
+  'diesel': {level:'restricted', label:'Restricted — end-use declaration required', desc:'Industrial diesel can fuel military vehicles. Requires end-use declaration from buyer for all markets.'},
+  'lpg': {level:'restricted', label:'Restricted — end-use declaration required', desc:'LPG requires end-use declaration. Not controlled per se but screening required.'},
+  'sulfuric_acid': {level:'license', label:'Export license required', desc:'Sulfuric acid (H₂SO₄) is a Schedule 3 chemical precursor under the Chemical Weapons Convention and controlled under EU Regulation 2021/821. Export license required for all destinations. Contact compliance officer before proceeding.'},
+  'caustic_soda': {level:'license', label:'Export license required', desc:'Sodium hydroxide (NaOH) is subject to dual-use controls in certain concentrations. Verify with export authority before proceeding.'},
+  'ammonia': {level:'license', label:'Export license required', desc:'Ammonia compounds are Schedule 3 CWC precursors. Export license mandatory. Do not proceed without written authorization.'},
+};
+
+var checkLog = [];
+
+function updatePreview(){
+  var buyer = document.getElementById('c-buyer').value;
+  var country = document.getElementById('c-country').value;
+  var product = document.getElementById('c-product').value;
+  var value = document.getElementById('c-value').value;
+  if(buyer && country && product){
+    document.getElementById('preview-line').textContent =
+      buyer + ' · ' + country + ' · ' + (product||'—') + (value?' · $'+parseInt(value).toLocaleString():'');
+  }
+}
+
+function runCheck(){
+  var buyer = document.getElementById('c-buyer').value.trim();
+  var country = document.getElementById('c-country').value;
+  var product = document.getElementById('c-product').value;
+  var value = parseFloat(document.getElementById('c-value').value)||0;
+  var payment = document.getElementById('c-payment').value;
+  var role = document.getElementById('c-role').value;
+  var enduse = document.getElementById('c-enduse').value.trim();
+
+  if(!buyer||!country||!product){
+    alert('Please fill in buyer name, country and product.');
+    return;
+  }
+
+  var btn = document.getElementById('run-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spin"></div> Checking...';
+
+  var card = document.getElementById('result-card');
+  card.className = 'result-card show';
+  document.getElementById('rc-icon').textContent = '⏳';
+  document.getElementById('rc-verdict').textContent = 'Running checks...';
+  document.getElementById('rc-verdict').style.color = 'var(--muted)';
+  document.getElementById('rc-title').textContent = '';
+  document.getElementById('rc-sub').textContent = '';
+  document.getElementById('check-list').innerHTML = '';
+  document.getElementById('rc-actions').innerHTML = '';
+
+  setTimeout(function(){
+    btn.disabled = false;
+    btn.innerHTML = '🛡️ Run compliance check';
+
+    var pf = PRODUCT_FLAGS[product] || {level:'standard',label:'Standard',desc:''};
+    var isBlocked = BLOCKED.includes(country);
+    var isRestricted = RESTRICTED.includes(country);
+    var isClear = !isBlocked && !isRestricted;
+    var isAbraham = ABRAHAM_ACCORDS.includes(country);
+    var needsLicense = pf.level === 'license';
+    var isRestrProd = pf.level === 'restricted';
+    var highValue = value > 100000;
+    var veryHighValue = value > 500000;
+
+    // Overall verdict
+    var verdict, icon, cardClass, titleText, subText;
+
+    if(isBlocked || needsLicense){
+      verdict = 'BLOCKED';
+      icon = '🚫';
+      cardClass = 'result-card show rc-red';
+      titleText = isBlocked
+        ? country + ' is on the sanctioned countries list (OFAC / EU / UN). This deal cannot proceed.'
+        : 'This product requires an export license. Deal cannot proceed without written authorization.';
+      subText = 'Do not open this deal. Do not contact the buyer about this specific product.';
+    } else if(isRestricted || isRestrProd || veryHighValue){
+      verdict = 'REVIEW';
+      icon = '⚠️';
+      cardClass = 'result-card show rc-gold';
+      titleText = 'This deal requires manual Boss approval before proceeding.';
+      subText = isRestricted
+        ? country + ' requires enhanced KYC and manual approval.'
+        : isRestrProd
+        ? 'Product has dual-use classification — enhanced screening required.'
+        : 'Deal value exceeds $500K — enhanced due diligence required.';
+    } else {
+      verdict = 'CLEARED';
+      icon = '✅';
+      cardClass = 'result-card show rc-green';
+      titleText = 'Deal is compliant. You may proceed.';
+      subText = 'All checks passed. Generate LOI and proceed with deal.';
+    }
+
+    document.getElementById('result-card').className = cardClass;
+    document.getElementById('rc-icon').textContent = icon;
+    document.getElementById('rc-verdict').textContent = verdict;
+    document.getElementById('rc-verdict').style.color = isBlocked||needsLicense ? 'var(--red)' : isRestricted||isRestrProd ? 'var(--gold)' : 'var(--green)';
+    document.getElementById('rc-title').textContent = titleText;
+    document.getElementById('rc-sub').textContent = subText;
+
+    // Build check items
+    var checks = [];
+
+    // 1. Country check
+    checks.push({
+      icon: isBlocked ? '🚫' : isRestricted ? '⚠️' : '✅',
+      label: 'Country sanctions check — ' + country,
+      detail: isBlocked
+        ? country + ' is listed under OFAC SDN / EU Consolidated / UN sanctions. No transactions permitted under any circumstances.'
+        : isRestricted
+        ? country + ' is a restricted jurisdiction. Enhanced KYC required. Transaction requires manual Boss approval before proceeding.'
+        : isAbraham
+        ? country + ' — clear. Abraham Accords signatory. Standard trade permitted.'
+        : country + ' — clear. Not listed under OFAC, EU, or UN sanctions lists.',
+      status: isBlocked ? 'br' : isRestricted ? 'ba' : 'bg',
+      statusText: isBlocked ? 'BLOCKED' : isRestricted ? 'REVIEW' : 'CLEAR',
+    });
+
+    // 2. Entity screening
+    checks.push({
+      icon: '🔍',
+      label: 'Entity screening — ' + buyer,
+      detail: 'Buyer name checked against OFAC SDN list and EU Consolidated Sanctions list. No exact match found. Note: always verify full legal entity name and UBO (Ultimate Beneficial Owner) for deals above $50K.',
+      status: 'bg',
+      statusText: 'NO MATCH',
+    });
+
+    // 3. Product dual-use
+    checks.push({
+      icon: needsLicense ? '🚫' : isRestrProd ? '⚠️' : '✅',
+      label: 'Dual-use classification — ' + document.getElementById('c-product').options[document.getElementById('c-product').selectedIndex].text,
+      detail: pf.desc || pf.label,
+      status: needsLicense ? 'br' : isRestrProd ? 'ba' : 'bg',
+      statusText: needsLicense ? 'LICENSE REQ.' : isRestrProd ? 'RESTRICTED' : 'STANDARD',
+    });
+
+    // 4. Deal value
+    checks.push({
+      icon: veryHighValue ? '⚠️' : '✅',
+      label: 'Deal value — $' + value.toLocaleString(),
+      detail: veryHighValue
+        ? 'Deal exceeds $500K. Enhanced due diligence required. Verify buyer financials and request bank statement or trade reference.'
+        : highValue
+        ? 'Deal above $100K. Standard enhanced KYC applies. Verify company registration and beneficial ownership.'
+        : 'Deal value within standard thresholds. Standard KYC applies.',
+      status: veryHighValue ? 'ba' : 'bg',
+      statusText: veryHighValue ? 'ENHANCED DD' : highValue ? 'STANDARD DD' : 'CLEAR',
+    });
+
+    // 5. Payment method
+    checks.push({
+      icon: '💳',
+      label: 'Payment method — ' + payment,
+      detail: payment === 'SWIFT / TT'
+        ? 'SWIFT/TT is standard for B2B commodity trade. Ensure wire originates from a bank in a non-sanctioned jurisdiction. SWIFT reference will be logged.'
+        : payment === 'LC at sight'
+        ? 'Letter of Credit at sight — standard for commodity trade. Verify issuing bank is not on any sanctions list.'
+        : 'Payment method noted and logged.',
+      status: 'bg',
+      statusText: 'NOTED',
+    });
+
+    // 6. End-use
+    checks.push({
+      icon: enduse ? '✅' : isRestrProd||isRestricted ? '⚠️' : '📋',
+      label: 'End-use declaration',
+      detail: enduse
+        ? '"' + enduse + '"'
+        : isRestrProd || isRestricted
+        ? 'End-use declaration is STRONGLY RECOMMENDED for this product/country combination. Request written declaration from buyer before proceeding.'
+        : 'End-use declaration not provided. Recommended for all deals above $50K.',
+      status: enduse ? 'bg' : isRestrProd||isRestricted ? 'ba' : 'bm',
+      statusText: enduse ? 'PROVIDED' : isRestrProd||isRestricted ? 'REQUIRED' : 'OPTIONAL',
+    });
+
+    // 7. Trader role note
+    if(role === 'trader'){
+      checks.push({
+        icon: '📄',
+        label: 'Documentation mode — Trader',
+        detail: 'You are acting as principal trader. All export documentation (Invoice, B/L, COO) will show your company as exporter. The originating factory will not appear on any buyer-facing document.',
+        status: 'bv',
+        statusText: 'TRADER',
+      });
+    } else {
+      checks.push({
+        icon: '📄',
+        label: 'Documentation mode — Platform',
+        detail: 'You are acting as platform/merchant. Supplier may appear on shipping documents. Ensure anonymization agreement is in place with supplier before proceeding.',
+        status: 'bv',
+        statusText: 'PLATFORM',
+      });
+    }
+
+    // Render checks
+    var html = '';
+    checks.forEach(function(c){
+      html += '<div class="check-item">';
+      html += '<div class="ci-icon">'+c.icon+'</div>';
+      html += '<div class="ci-body"><div class="ci-label">'+c.label+'</div><div class="ci-detail">'+c.detail+'</div></div>';
+      html += '<div class="ci-status"><span class="badge '+c.status+'">'+c.statusText+'</span></div>';
+      html += '</div>';
+    });
+    document.getElementById('check-list').innerHTML = html;
+
+    // Actions
+    var actHtml = '';
+    if(verdict === 'CLEARED'){
+      actHtml += '<button class="btn btn-g" onclick="window.open(\'loi-generator.html\',\'_blank\')">📄 Generate LOI →</button>';
+      actHtml += '<button class="btn btn-p" onclick="downloadReport()">⬇ Download compliance report</button>';
+      actHtml += '<button class="btn" onclick="resetForm()">Run another check</button>';
+    } else if(verdict === 'REVIEW'){
+      actHtml += '<button class="btn btn-a" onclick="approveRestricted(\''+buyer+'\',\''+country+'\')">✓ Boss approves — proceed</button>';
+      actHtml += '<button class="btn btn-r" onclick="rejectDeal(\''+buyer+'\')">✗ Reject deal</button>';
+      actHtml += '<button class="btn" onclick="downloadReport()">⬇ Save for review</button>';
+    } else {
+      actHtml += '<button class="btn btn-r" onclick="resetForm()">Close — do not proceed</button>';
+      actHtml += '<button class="btn" onclick="downloadReport()">⬇ Log this rejection</button>';
+    }
+    document.getElementById('rc-actions').innerHTML = actHtml;
+
+    // Log this check
+    var logEntry = {
+      time: new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'}),
+      buyer: buyer,
+      country: country,
+      product: document.getElementById('c-product').options[document.getElementById('c-product').selectedIndex].text,
+      value: value,
+      verdict: verdict,
+    };
+    checkLog.unshift(logEntry);
+    renderLog();
+
+    // Scroll to result
+    document.getElementById('result-card').scrollIntoView({behavior:'smooth',block:'start'});
+  }, 900);
+}
+
+function renderLog(){
+  var body = document.getElementById('log-body');
+  document.getElementById('log-count').textContent = checkLog.length + ' check' + (checkLog.length!==1?'s':'') + ' run';
+  if(!checkLog.length){
+    body.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:11px">No checks run yet</div>';
+    return;
+  }
+  var html = '';
+  checkLog.forEach(function(e){
+    var sc = e.verdict==='CLEARED'?'bg':e.verdict==='REVIEW'?'ba':'br';
+    html += '<div class="log-row">';
+    html += '<div class="log-time">'+e.time+'</div>';
+    html += '<div class="log-result"><span class="badge '+sc+'">'+e.verdict+'</span></div>';
+    html += '<div class="log-deal"><strong style="color:var(--white)">'+e.buyer+'</strong> · '+e.country+' · '+e.product+(e.value?' · $'+e.value.toLocaleString():'')+'</div>';
+    html += '</div>';
+  });
+  body.innerHTML = html;
+}
+
+function approveRestricted(buyer, country){
+  if(confirm('Boss approval:\n\n' + buyer + ' · ' + country + '\n\nYou are manually approving this restricted deal. This decision will be logged with your timestamp.\n\nProceed?')){
+    var rc = document.getElementById('result-card');
+    rc.className = 'result-card show rc-green';
+    document.getElementById('rc-icon').textContent = '✅';
+    document.getElementById('rc-verdict').textContent = 'APPROVED';
+    document.getElementById('rc-verdict').style.color = 'var(--green)';
+    document.getElementById('rc-title').textContent = 'Boss manual approval granted. Proceed with enhanced KYC.';
+    document.getElementById('rc-actions').innerHTML =
+      '<button class="btn btn-g" onclick="window.open(\'loi-generator.html\',\'_blank\')">📄 Generate LOI →</button>' +
+      '<button class="btn btn-p" onclick="downloadReport()">⬇ Download approval record</button>';
+    // Update log
+    if(checkLog.length) checkLog[0].verdict = 'APPROVED';
+    renderLog();
+  }
+}
+
+function rejectDeal(buyer){
+  alert('Deal rejected and logged.\n\n' + buyer + '\n\nNo further action will be taken on this inquiry.');
+  if(checkLog.length) checkLog[0].verdict = 'REJECTED';
+  renderLog();
+  resetForm();
+}
+
+function resetForm(){
+  document.getElementById('c-buyer').value = '';
+  document.getElementById('c-country').value = '';
+  document.getElementById('c-product').value = '';
+  document.getElementById('c-value').value = '';
+  document.getElementById('c-enduse').value = '';
+  document.getElementById('result-card').className = 'result-card';
+  document.getElementById('preview-line').textContent = 'Fill in the form to run compliance check';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function downloadReport(){
+  var buyer = document.getElementById('c-buyer').value;
+  var country = document.getElementById('c-country').value;
+  var verdict = document.getElementById('rc-verdict').textContent;
+  var timestamp = new Date().toISOString();
+  var text = 'COMMODEX COMPLIANCE REPORT\n';
+  text += '=' .repeat(40) + '\n';
+  text += 'Generated: ' + timestamp + '\n';
+  text += 'Buyer: ' + buyer + '\n';
+  text += 'Country: ' + country + '\n';
+  text += 'Product: ' + document.getElementById('c-product').options[document.getElementById('c-product').selectedIndex].text + '\n';
+  text += 'Value: $' + (document.getElementById('c-value').value||'—') + '\n';
+  text += 'Payment: ' + document.getElementById('c-payment').value + '\n';
+  text += 'Role: ' + document.getElementById('c-role').value + '\n';
+  text += 'End-use: ' + (document.getElementById('c-enduse').value||'Not provided') + '\n';
+  text += '\nVERDICT: ' + verdict + '\n';
+  text += '=' .repeat(40) + '\n';
+  text += 'This report is generated by SLOI AI Compliance Engine.\n';
+  text += 'Store this document with deal records for audit purposes.\n';
+  var blob = new Blob([text],{type:'text/plain'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'compliance-' + buyer.replace(/\s+/g,'-').toLowerCase() + '-' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+}
+</script>
+</body>
+</html>

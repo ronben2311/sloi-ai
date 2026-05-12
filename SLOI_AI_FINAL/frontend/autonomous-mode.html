@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Autonomous Mode — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-tag{font-size:9px;color:var(--muted);margin-left:6px;font-weight:400}
+.nav-links{display:flex;gap:20px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 52px);position:relative;z-index:1}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:20px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
+.sb-section{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:12px 16px 4px;font-weight:700}
+.sb-link{display:block;padding:6px 16px;font-size:11px;color:var(--muted);text-decoration:none;transition:all .1s;border-left:2px solid transparent}
+.sb-link:hover{color:var(--white)}.sb-link.active{color:var(--violet);border-left-color:var(--indigo);background:rgba(91,95,239,.06)}
+.content{padding:40px 40px 80px;max-width:820px}
+
+/* HERO */
+.eyebrow{font-size:10px;color:var(--indigo);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:'';flex:1;height:1px;background:rgba(91,95,239,.3)}
+h1{font-family:'Fraunces',serif;font-size:clamp(38px,5vw,58px);font-weight:900;line-height:.93;letter-spacing:-.03em;color:var(--white);margin-bottom:14px}
+h1 em{font-style:italic;color:var(--indigo)}
+.lead{font-size:14px;color:var(--muted);line-height:1.85;max-width:600px;margin-bottom:28px}
+h2{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px;margin-top:28px;letter-spacing:-.01em}
+p{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px}
+
+/* COMPARE */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.cmp-card{border-radius:8px;overflow:hidden}
+.cmp-head{padding:14px 16px;display:flex;align-items:center;gap:10px}
+.cmp-icon{font-size:22px}
+.cmp-title{font-size:13px;font-weight:700}
+.cmp-body{padding:12px 16px;display:flex;flex-direction:column;gap:6px}
+.cmp-row{font-size:11px;display:flex;gap:6px;align-items:flex-start}
+.cmp-row::before{content:'→';flex-shrink:0;margin-top:1px}
+.manual-card{background:rgba(82,82,110,.08);border:1px solid rgba(82,82,110,.3)}
+.manual-card .cmp-head{background:rgba(82,82,110,.12)}
+.manual-card .cmp-title{color:var(--muted)}
+.auto-card{background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.3)}
+.auto-card .cmp-head{background:rgba(91,95,239,.12)}
+.auto-card .cmp-title{color:var(--violet)}
+
+/* FLOW */
+.flow-auto{display:flex;flex-direction:column;gap:0;background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.fa-step{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border)}
+.fa-step:last-child{border-bottom:none}
+.fa-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.fa-auto{background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet)}
+.fa-boss{background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.3);color:var(--gold)}
+.fa-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px}
+.fa-desc{font-size:10px;color:var(--muted);line-height:1.5}
+.fa-tag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:2px;margin-left:6px}
+.tag-auto{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.tag-boss{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.tag-once{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+
+/* MANDATE BUILDER */
+.mandate-builder{background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.mb-head{padding:12px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mb-title{font-size:12px;font-weight:600;color:var(--white)}
+.mb-body{padding:16px;display:flex;flex-direction:column;gap:10px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px}
+.flabel{font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.inp{background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:8px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:11px;outline:none;width:100%;transition:border-color .15s}
+.inp:focus{border-color:var(--indigo)}.inp::placeholder{color:var(--muted)}
+select.inp option{background:var(--surface)}
+
+/* AUTO MODE TOGGLE */
+.auto-toggle{background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.25);border-radius:6px;padding:14px 16px;display:flex;align-items:flex-start;gap:14px}
+.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0;margin-top:2px}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--border2);border-radius:12px;transition:.2s}
+.toggle-slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle-switch input:checked + .toggle-slider{background:var(--indigo)}
+.toggle-switch input:checked + .toggle-slider:before{transform:translateX(20px)}
+.toggle-label{flex:1}
+.tl-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:4px}
+.tl-desc{font-size:10px;color:var(--muted);line-height:1.6}
+
+/* AUTO CONDITIONS */
+.conditions{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.cond-item{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:9px 12px;display:flex;align-items:flex-start;gap:10px;font-size:11px}
+.cond-check{width:16px;height:16px;accent-color:var(--indigo);flex-shrink:0;margin-top:1px}
+.cond-body{flex:1}
+.cond-title{font-weight:600;color:var(--white);margin-bottom:2px}
+.cond-desc{font-size:10px;color:var(--muted)}
+
+/* REPUTATION */
+.rep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.rep-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center}
+.rep-val{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:4px}
+.rep-label{font-size:10px;color:var(--muted);line-height:1.4}
+.rep-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px;display:inline-block;margin-top:5px}
+
+/* CODE */
+.code-wrap{background:var(--bg);border:1px solid var(--border2);border-radius:5px;overflow:hidden;margin-bottom:14px}
+.code-hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--border2);background:var(--surface2)}
+.code-lang{font-size:9px;color:var(--muted);letter-spacing:.06em}
+.code-copy{font-size:9px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:2px;padding:2px 7px;font-family:'IBM Plex Mono',monospace}
+.code-copy:hover{border-color:var(--indigo);color:var(--violet)}
+pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--text)}
+.kw{color:var(--violet)}.str{color:var(--green)}.cm{color:var(--muted)}.fn{color:var(--teal)}.num{color:var(--gold)}
+
+/* MISC */
+.sec-title{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.08em;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid var(--border);text-transform:uppercase}
+.sec{margin-bottom:36px}
+.note{background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.warn{background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.25);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.br{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* LIVE DEMO */
+.demo-terminal{background:#050509;border:1px solid var(--border2);border-radius:6px;padding:16px;font-size:11px;line-height:1.9;margin-bottom:14px;font-family:'IBM Plex Mono',monospace}
+.dt-comment{color:var(--muted)}
+.dt-event{color:var(--violet)}
+.dt-auto{color:var(--green)}
+.dt-loi{color:var(--gold)}
+.dt-time{color:var(--muted);font-size:9px}
+</style>
+
+<script src="/api-client.js"></script>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+<nav>
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="agui.html">AG-UI</a>
+    <a href="telegram-bot.html">Telegram Bot</a>
+    <a href="docs.html">Docs</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+<div class="sidebar">
+  <div class="sb-section">Overview</div>
+  <a class="sb-link active" href="#overview">What it is</a>
+  <a class="sb-link" href="#compare">Manual vs Auto</a>
+  <a class="sb-link" href="#flow">How it works</a>
+
+  <div class="sb-section">Mandate</div>
+  <a class="sb-link" href="#mandate">Mandate builder</a>
+  <a class="sb-link" href="#conditions">Auto conditions</a>
+  <a class="sb-link" href="#limits">Safety limits</a>
+
+  <div class="sb-section">Reputation</div>
+  <a class="sb-link" href="#reputation">Agent reputation</a>
+  <a class="sb-link" href="#floor-prices">Floor price discounts</a>
+
+  <div class="sb-section">Developer</div>
+  <a class="sb-link" href="#api">API changes</a>
+  <a class="sb-link" href="#backend">Backend logic</a>
+  <a class="sb-link" href="#db">DB schema</a>
+  <a class="sb-link" href="#demo">Live demo</a>
+</div>
+
+<div class="content">
+
+<!-- HERO -->
+<div id="overview">
+  <div class="eyebrow">AI Agent Economy · Autonomous Mode</div>
+  <h1>Agent sets mandate<br/>once. Deals close <em>automatically.</em></h1>
+  <p class="lead">In Autonomous Mode, an AI agent defines its procurement mandate — product, quantity, price ceiling, and approval conditions — and SLOI AI executes negotiations and generates LOIs without human intervention. Built for the AI agent economy.</p>
+
+  <div class="note">
+    <strong style="color:var(--white)">This is not removing the Boss.</strong> The Boss sets the mandate. The mandate is the approval. Every LOI is still within parameters the Boss explicitly authorized. No deal can exceed max_price. No blocked country can proceed. The agent economy runs on trust — autonomous mode earns it through constraints, not by removing them.
+  </div>
+</div>
+
+<!-- COMPARE -->
+<div class="sec" id="compare">
+  <div class="sec-title">// Manual Mode vs Autonomous Mode</div>
+  <div class="compare">
+    <div class="cmp-card manual-card">
+      <div class="cmp-head"><div class="cmp-icon">👤</div><div class="cmp-title">Manual Mode (current)</div></div>
+      <div class="cmp-body">
+        <div class="cmp-row" style="color:var(--muted)">Agent negotiates rounds</div>
+        <div class="cmp-row" style="color:var(--muted)">AWAIT_HUMAN fired</div>
+        <div class="cmp-row" style="color:var(--muted)">Boss reviews deal</div>
+        <div class="cmp-row" style="color:var(--muted)">Boss clicks approve</div>
+        <div class="cmp-row" style="color:var(--muted)">LOI generated</div>
+        <div style="margin-top:8px;font-size:10px;color:var(--muted)">⏱ Minutes → hours depending on Boss availability</div>
+      </div>
+    </div>
+    <div class="cmp-card auto-card">
+      <div class="cmp-head"><div class="cmp-icon">🤖</div><div class="cmp-title">Autonomous Mode (new)</div></div>
+      <div class="cmp-body">
+        <div class="cmp-row" style="color:var(--text)">Boss sets mandate once (upfront)</div>
+        <div class="cmp-row" style="color:var(--text)">Agent negotiates rounds</div>
+        <div class="cmp-row" style="color:var(--text)">Conditions checked automatically</div>
+        <div class="cmp-row" style="color:var(--text)">LOI auto-generated if within mandate</div>
+        <div class="cmp-row" style="color:var(--text)">Boss notified after (not before)</div>
+        <div style="margin-top:8px;font-size:10px;color:var(--green)">⚡ Seconds — 24/7 — no human bottleneck</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOW -->
+<div class="sec" id="flow">
+  <div class="sec-title">// Autonomous Flow — step by step</div>
+  <div class="flow-auto">
+    <div class="fa-step">
+      <div class="fa-num fa-boss">1</div>
+      <div>
+        <div class="fa-title">Boss sets mandate <span class="fa-tag tag-once">once</span></div>
+        <div class="fa-desc">Product · qty · target price · max_price · auto_approve=true · conditions (e.g. max 3 rounds, price &lt;= $2,900). Stored in DB. Valid for 30 days or until cancelled.</div>
+      </div>
+    </div>
+    <div class="fa-step">
+      <div class="fa-num fa-auto">2</div>
+      <div>
+        <div class="fa-title">Agent triggers negotiation <span class="fa-tag tag-auto">auto</span></div>
+        <div class="fa-desc">Agent (or scheduled job) calls POST /v1/negotiate with mandate_id. Can happen 24/7 without Boss involvement.</div>
+      </div>
+    </div>
+    <div class="fa-step">
+      <div class="fa-num fa-auto">3</div>
+      <div>
+        <div class="fa-title">Claude negotiates <span class="fa-tag tag-auto">auto</span></div>
+        <div class="fa-desc">Standard negotiation rounds via AG-UI stream. TEXT_CHUNK, ROUND_COMPLETE events fire as normal. Agent receives them.</div>
+      </div>
+    </div>
+    <div class="fa-step">
+      <div class="fa-num fa-auto">4</div>
+      <div>
+        <div class="fa-title">Conditions checked <span class="fa-tag tag-auto">auto</span></div>
+        <div class="fa-desc">Instead of AWAIT_HUMAN, backend checks: deal_price &lt;= mandate.max_price AND compliance == cleared AND all conditions met. If yes → auto-approve.</div>
+      </div>
+    </div>
+    <div class="fa-step">
+      <div class="fa-num fa-auto">5</div>
+      <div>
+        <div class="fa-title">LOI generated <span class="fa-tag tag-auto">auto</span></div>
+        <div class="fa-desc">LOI_GENERATED event fires. PDF created. Emailed to both parties. Credits deducted. Revenue logged.</div>
+      </div>
+    </div>
+    <div class="fa-step">
+      <div class="fa-num fa-boss">6</div>
+      <div>
+        <div class="fa-title">Boss notified after <span class="fa-tag tag-boss">notification only</span></div>
+        <div class="fa-desc">Telegram Bot sends WhatsApp: "✅ LOI auto-generated · $284,000 · Steel Rebar G60 · Gulf Cement LLC". Boss reviews after the fact. Can revoke mandate anytime.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MANDATE BUILDER -->
+<div class="sec" id="mandate">
+  <div class="sec-title">// Mandate Builder — Boss defines once</div>
+
+  <div class="mandate-builder">
+    <div class="mb-head">
+      <div class="mb-title">🤖 Autonomous Mandate Configuration</div>
+      <span class="badge bv">Autonomous Mode</span>
+    </div>
+    <div class="mb-body">
+      <div class="field-row">
+        <div class="field"><label class="flabel">Product</label>
+          <select class="inp">
+            <option>Steel Rebar G60 12mm</option><option>Hard Wheat</option>
+            <option>Aluminum 6061-T6</option><option>Industrial Diesel B2</option>
+          </select>
+        </div>
+        <div class="field"><label class="flabel">Quantity per order</label>
+          <input class="inp" type="number" value="100" placeholder="100"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="flabel">Target price ($/unit)</label>
+          <input class="inp" type="number" value="2700" placeholder="2700"/>
+        </div>
+        <div class="field"><label class="flabel">Max price — hard ceiling ($/unit)</label>
+          <input class="inp" type="number" value="2900" placeholder="2900" style="border-color:rgba(239,68,68,.4)"/>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="flabel">Strategy</label>
+          <select class="inp"><option>Standard (10cr · 5 rounds)</option><option>Aggressive (20cr · 7 rounds)</option></select>
+        </div>
+        <div class="field"><label class="flabel">Mandate expires</label>
+          <select class="inp"><option>30 days</option><option>7 days</option><option>90 days</option><option>Until cancelled</option></select>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label class="flabel">Max orders per day</label>
+          <input class="inp" type="number" value="3" placeholder="3"/>
+        </div>
+        <div class="field"><label class="flabel">Max total value per day ($)</label>
+          <input class="inp" type="number" value="500000" placeholder="500000"/>
+        </div>
+      </div>
+
+      <!-- AUTO APPROVE TOGGLE -->
+      <div class="auto-toggle">
+        <label class="toggle-switch">
+          <input type="checkbox" checked id="auto-toggle" onchange="toggleAuto(this)"/>
+          <span class="toggle-slider"></span>
+        </label>
+        <div class="toggle-label">
+          <div class="tl-title">🤖 Autonomous approval — <span id="auto-label" style="color:var(--green)">ON</span></div>
+          <div class="tl-desc">When ON: SLOI AI auto-generates LOI if all conditions are met. No human approval needed per deal. Boss notified after.<br/>When OFF: Standard mode — AWAIT_HUMAN fires, Boss approves each deal manually.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button style="flex:1;background:var(--indigo);color:#fff;border:none;border-radius:4px;padding:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace" onclick="saveMandateDemo()">💾 Save mandate</button>
+        <button style="background:var(--surface2);border:1px solid var(--border2);color:var(--muted);border-radius:4px;padding:10px 16px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace" onclick="alert('Mandate cancelled — autonomous mode disabled for this product.')">✕ Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONDITIONS -->
+<div class="sec" id="conditions">
+  <div class="sec-title">// Auto-approval conditions — all must pass</div>
+  <div class="note">Every auto-approval runs through this checklist. If any condition fails → falls back to AWAIT_HUMAN (manual Boss approval).</div>
+  <div class="conditions">
+    <div class="cond-item">
+      <input type="checkbox" class="cond-check" checked disabled/>
+      <div class="cond-body">
+        <div class="cond-title">deal_price &lt;= mandate.max_price</div>
+        <div class="cond-desc">The agreed price must be at or below the Boss's hard ceiling. Non-negotiable — hardcoded in backend.</div>
+      </div>
+      <span class="badge bg">Always</span>
+    </div>
+    <div class="cond-item">
+      <input type="checkbox" class="cond-check" checked disabled/>
+      <div class="cond-body">
+        <div class="cond-title">compliance_verdict == "cleared"</div>
+        <div class="cond-desc">OFAC + EU + UN screening passed. "Review" or "Blocked" → falls to manual. Cannot be bypassed.</div>
+      </div>
+      <span class="badge bg">Always</span>
+    </div>
+    <div class="cond-item">
+      <input type="checkbox" class="cond-check" checked disabled/>
+      <div class="cond-body">
+        <div class="cond-title">orders_today &lt; mandate.max_orders_per_day</div>
+        <div class="cond-desc">Daily order cap not exceeded. Prevents runaway agent purchasing.</div>
+      </div>
+      <span class="badge bg">Always</span>
+    </div>
+    <div class="cond-item">
+      <input type="checkbox" class="cond-check" checked disabled/>
+      <div class="cond-body">
+        <div class="cond-title">daily_value_today &lt; mandate.max_daily_value</div>
+        <div class="cond-desc">Total USD value of today's auto-approved deals below cap. Default: $500K/day.</div>
+      </div>
+      <span class="badge bg">Always</span>
+    </div>
+    <div class="cond-item">
+      <input type="checkbox" class="cond-check" checked/>
+      <div class="cond-body">
+        <div class="cond-title">mandate.active == true AND !mandate.expired</div>
+        <div class="cond-desc">Boss can pause or cancel mandate at any time. Expiry date enforced.</div>
+      </div>
+      <span class="badge bg">Always</span>
+    </div>
+    <div class="cond-item">
+      <input type="checkbox" class="cond-check" checked/>
+      <div class="cond-body">
+        <div class="cond-title">credits.balance >= action_cost</div>
+        <div class="cond-desc">Sufficient credits before starting. Auto-top-up available if agent has USDC wallet configured.</div>
+      </div>
+      <span class="badge ba">Configurable</span>
+    </div>
+  </div>
+</div>
+
+<!-- SAFETY LIMITS -->
+<div class="sec" id="limits">
+  <div class="sec-title">// Safety limits — always enforced</div>
+  <div class="warn">⚠️ These limits exist to protect the Boss. No agent, mandate, or API call can bypass them.</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px">
+      <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:8px">Hard limits (non-configurable)</div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted)">
+        <div>• deal_price can never exceed max_price</div>
+        <div>• Blocked countries: always rejected</div>
+        <div>• Max $1M per single auto-approved LOI</div>
+        <div>• Max 10 auto-LOIs per mandate per day</div>
+        <div>• Mandate must have expiry date</div>
+        <div>• Boss can cancel mandate instantly</div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px">
+      <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:8px">Configurable limits</div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted)">
+        <div>• max_price (per unit)</div>
+        <div>• max_orders_per_day</div>
+        <div>• max_daily_value ($)</div>
+        <div>• mandate expiry (7/30/90 days)</div>
+        <div>• allowed_broker_ids (whitelist)</div>
+        <div>• allowed_countries (whitelist)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REPUTATION -->
+<div class="sec" id="reputation">
+  <div class="sec-title">// Agent Reputation — earn better deals</div>
+  <p>Agents that close deals consistently get rewarded with better floor prices. Reputation is calculated on-chain (Base) and verified by SLOI AI.</p>
+
+  <div class="rep-grid">
+    <div class="rep-card">
+      <div class="rep-val" style="color:var(--muted)">New</div>
+      <div class="rep-label">0 deals · no discount · manual approval only</div>
+      <div class="rep-badge" style="background:rgba(82,82,110,.12);border:1px solid rgba(82,82,110,.3);color:var(--muted)">Starter</div>
+    </div>
+    <div class="rep-card">
+      <div class="rep-val" style="color:var(--gold)">Bronze</div>
+      <div class="rep-label">10+ deals · 1% floor discount · auto mode unlocked</div>
+      <div class="rep-badge" style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.3);color:var(--gold)">Bronze</div>
+    </div>
+    <div class="rep-card">
+      <div class="rep-val" style="color:var(--violet)">Silver</div>
+      <div class="rep-label">50+ deals · 3% floor discount · priority routing</div>
+      <div class="rep-badge" style="background:rgba(139,143,248,.1);border:1px solid rgba(139,143,248,.3);color:var(--violet)">Silver</div>
+    </div>
+    <div class="rep-card">
+      <div class="rep-val" style="color:var(--teal)">Gold</div>
+      <div class="rep-label">200+ deals · 5% floor discount · dedicated broker</div>
+      <div class="rep-badge" style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.3);color:var(--teal)">Gold</div>
+    </div>
+    <div class="rep-card">
+      <div class="rep-val" style="color:var(--green)">Platinum</div>
+      <div class="rep-label">500+ deals · 8% floor discount · custom SLA</div>
+      <div class="rep-badge" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green)">Platinum</div>
+    </div>
+    <div class="rep-card" style="border-color:rgba(91,95,239,.3)">
+      <div class="rep-val" style="color:var(--indigo)">Protocol</div>
+      <div class="rep-label">1000+ deals · on-chain verified · network participant</div>
+      <div class="rep-badge bv">Protocol</div>
+    </div>
+  </div>
+
+  <div id="floor-prices">
+    <div class="sec-title" style="margin-top:20px">// Floor price discounts — applied automatically</div>
+    <p style="font-size:11px;color:var(--muted)">When reputation tier is verified, broker floor prices are adjusted automatically. Agent with Gold tier gets 5% below standard floor on every negotiation — without asking.</p>
+    <div class="code-wrap"><div class="code-hdr"><span class="code-lang">LOGIC</span></div>
+<pre><span class="cm">// Applied in buildBrokerSystem() before negotiation starts</span>
+<span class="kw">const</span> repDiscount = {
+  starter: <span class="num">0</span>,
+  bronze:  <span class="num">0.01</span>,
+  silver:  <span class="num">0.03</span>,
+  gold:    <span class="num">0.05</span>,
+  platinum: <span class="num">0.08</span>,
+  protocol: <span class="num">0.10</span>,
+}[agent.reputation_tier] || <span class="num">0</span>;
+
+<span class="kw">const</span> adjustedFloor = product.broker_floor * (<span class="num">1</span> - repDiscount);
+<span class="cm">// Broker instructed: "Your floor for this agent is $" + adjustedFloor</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- API -->
+<div class="sec" id="api">
+  <div class="sec-title">// API Changes for Autonomous Mode</div>
+
+  <h2>New endpoints</h2>
+  <div class="code-wrap"><div class="code-hdr"><span class="code-lang">REST</span></div>
+<pre><span class="cm">// Create autonomous mandate</span>
+POST /v1/mandates
+Body:
+  product_ref        string
+  qty                number
+  target_price       number
+  max_price          number    <span class="cm">← hard ceiling, enforced server-side</span>
+  strategy           string    standard | aggressive
+  auto_approve       boolean   true = autonomous mode
+  max_orders_per_day number    default: 3
+  max_daily_value    number    default: 500000
+  expires_in_days    number    default: 30
+  allowed_broker_ids string[]  optional whitelist
+  allowed_countries  string[]  optional whitelist
+Returns: {mandate_id, status:"active", auto_approve, expires_at}
+
+<span class="cm">// List mandates</span>
+GET /v1/mandates
+GET /v1/mandates/{id}
+
+<span class="cm">// Cancel mandate (instant)</span>
+DELETE /v1/mandates/{id}
+
+<span class="cm">// Pause/resume</span>
+POST /v1/mandates/{id}/pause
+POST /v1/mandates/{id}/resume
+
+<span class="cm">// Use mandate in negotiation</span>
+POST /v1/negotiate
+Body: { mandate_id: "MND-001", ...other fields }
+<span class="cm">// auto_approve inherited from mandate</span>
+
+<span class="cm">// Agent reputation</span>
+GET /v1/agents/{id}/reputation
+Returns: {tier, deals_count, success_rate, floor_discount, on_chain_verified}</pre>
+  </div>
+
+  <h2>Modified: POST /v1/negotiate</h2>
+  <div class="code-wrap"><div class="code-hdr"><span class="code-lang">ADDED FIELD</span></div>
+<pre>Body now accepts:
+  mandate_id     string?   If set, inherits auto_approve + limits from mandate
+  auto_approve   boolean?  Per-negotiation override (if no mandate)
+  auto_approve_threshold  number?  Auto-approve if deal_price &lt;= this value
+                                   (must be &lt;= max_price)</pre>
+  </div>
+
+  <h2>Modified: AWAIT_HUMAN → AUTO_APPROVED</h2>
+  <div class="code-wrap"><div class="code-hdr"><span class="code-lang">NEW AG-UI EVENT</span></div>
+<pre><span class="cm">// Replaces AWAIT_HUMAN when auto_approve=true and conditions pass</span>
+AUTO_APPROVED
+  deal_price      number
+  total_value     number
+  loi_ref         string    <span class="cm">← LOI already generated</span>
+  mandate_id      string
+  conditions_met  string[]  list of checks that passed
+  credits_used    number
+
+<span class="cm">// AWAIT_HUMAN still fires when:</span>
+<span class="cm">// - auto_approve=false</span>
+<span class="cm">// - deal_price > max_price (safety fallback)</span>
+<span class="cm">// - compliance == "review" (not "cleared")</span>
+<span class="cm">// - daily limits exceeded</span>
+<span class="cm">// - mandate expired or paused</span></pre>
+  </div>
+</div>
+
+<!-- BACKEND -->
+<div class="sec" id="backend">
+  <div class="sec-title">// Backend Logic — autonomous approval check</div>
+  <div class="code-wrap"><div class="code-hdr"><span class="code-lang">NODE.JS — routes/negotiate.js (add after gap check)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">async function</span> <span class="fn">checkAutoApprove</span>(negId, dealPrice, mandate, compliance) {
+  <span class="cm">// Condition 1: price within mandate ceiling</span>
+  <span class="kw">if</span> (dealPrice > mandate.max_price) <span class="kw">return</span> { approved: <span class="kw">false</span>, reason: <span class="str">'price_exceeded'</span> };
+
+  <span class="cm">// Condition 2: compliance cleared</span>
+  <span class="kw">if</span> (compliance.verdict !== <span class="str">'cleared'</span>) <span class="kw">return</span> { approved: <span class="kw">false</span>, reason: <span class="str">'compliance_' + compliance.verdict</span> };
+
+  <span class="cm">// Condition 3: daily order cap</span>
+  <span class="kw">const</span> todayCount = <span class="kw">await</span> <span class="fn">getTodayAutoApprovedCount</span>(mandate.id);
+  <span class="kw">if</span> (todayCount >= mandate.max_orders_per_day) <span class="kw">return</span> { approved: <span class="kw">false</span>, reason: <span class="str">'daily_order_cap'</span> };
+
+  <span class="cm">// Condition 4: daily value cap</span>
+  <span class="kw">const</span> todayValue = <span class="kw">await</span> <span class="fn">getTodayAutoApprovedValue</span>(mandate.id);
+  <span class="kw">if</span> (todayValue + (dealPrice * mandate.qty) > mandate.max_daily_value)
+    <span class="kw">return</span> { approved: <span class="kw">false</span>, reason: <span class="str">'daily_value_cap'</span> };
+
+  <span class="cm">// Condition 5: mandate still active</span>
+  <span class="kw">if</span> (!mandate.active || <span class="kw">new</span> <span class="fn">Date</span>() > <span class="kw">new</span> <span class="fn">Date</span>(mandate.expires_at))
+    <span class="kw">return</span> { approved: <span class="kw">false</span>, reason: <span class="str">'mandate_expired'</span> };
+
+  <span class="cm">// All conditions met → auto-approve</span>
+  <span class="kw">return</span> {
+    approved: <span class="kw">true</span>,
+    conditions_met: [<span class="str">'price_ok'</span>, <span class="str">'compliance_cleared'</span>, <span class="str">'order_cap_ok'</span>, <span class="str">'value_cap_ok'</span>, <span class="str">'mandate_active'</span>]
+  };
+}
+
+<span class="cm">// In the negotiation loop, replace AWAIT_HUMAN logic:</span>
+<span class="kw">if</span> (agreed && mandate?.auto_approve) {
+  <span class="kw">const</span> check = <span class="kw">await</span> <span class="fn">checkAutoApprove</span>(negId, dealPrice, mandate, complianceResult);
+
+  <span class="kw">if</span> (check.approved) {
+    <span class="cm">// Skip AWAIT_HUMAN — generate LOI directly</span>
+    <span class="kw">const</span> loiRef = <span class="kw">await</span> <span class="fn">generateLOI</span>({ negId, dealPrice, mandate });
+    <span class="kw">await</span> <span class="fn">incrementMandateCounters</span>(mandate.id, dealPrice * mandate.qty);
+    <span class="fn">emit</span>(<span class="str">'AUTO_APPROVED'</span>, { deal_price: dealPrice, loi_ref: loiRef, conditions_met: check.conditions_met });
+    <span class="cm">// Notify Boss AFTER (not before)</span>
+    <span class="fn">notifyTelegram Bot</span>({ type: <span class="str">'LOI_AUTO_GENERATED'</span>, data: { loiRef, dealPrice, mandate_id: mandate.id } });
+  } <span class="kw">else</span> {
+    <span class="cm">// Fallback to manual</span>
+    <span class="fn">emit</span>(<span class="str">'AWAIT_HUMAN'</span>, { deal_price: dealPrice, reason: check.reason });
+  }
+} <span class="kw">else</span> {
+  <span class="cm">// Standard manual mode</span>
+  <span class="fn">emit</span>(<span class="str">'AWAIT_HUMAN'</span>, { deal_price: dealPrice });
+}</pre>
+  </div>
+</div>
+
+<!-- DB -->
+<div class="sec" id="db">
+  <div class="sec-title">// DB Schema additions</div>
+  <div class="code-wrap"><div class="code-hdr"><span class="code-lang">SQL — add to Supabase</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+<pre><span class="kw">CREATE TABLE</span> mandates (
+  id                  TEXT <span class="kw">PRIMARY KEY</span>,         <span class="cm">-- MND-001</span>
+  user_id             UUID <span class="kw">REFERENCES</span> users(id),
+  product_ref         TEXT <span class="kw">REFERENCES</span> products(ref),
+  qty                 NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  unit                TEXT <span class="kw">DEFAULT</span> <span class="str">'MT'</span>,
+  target_price        NUMERIC(<span class="num">12</span>,<span class="num">2</span>),
+  max_price           NUMERIC(<span class="num">12</span>,<span class="num">2</span>) <span class="kw">NOT NULL</span>,  <span class="cm">← hard ceiling</span>
+  strategy            TEXT <span class="kw">DEFAULT</span> <span class="str">'standard'</span>,
+  auto_approve        BOOLEAN <span class="kw">DEFAULT</span> false,
+  max_orders_per_day  INT <span class="kw">DEFAULT</span> <span class="num">3</span>,
+  max_daily_value     NUMERIC(<span class="num">14</span>,<span class="num">2</span>) <span class="kw">DEFAULT</span> <span class="num">500000</span>,
+  allowed_broker_ids  TEXT[],
+  allowed_countries   TEXT[],
+  active              BOOLEAN <span class="kw">DEFAULT</span> true,
+  expires_at          TIMESTAMPTZ,
+  orders_today        INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  value_today         NUMERIC(<span class="num">14</span>,<span class="num">2</span>) <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  total_orders        INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  total_value         NUMERIC(<span class="num">14</span>,<span class="num">2</span>) <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  created_at          TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="kw">CREATE TABLE</span> agent_reputation (
+  agent_id            UUID <span class="kw">PRIMARY KEY REFERENCES</span> users(id),
+  tier                TEXT <span class="kw">DEFAULT</span> <span class="str">'starter'</span>,
+  deals_count         INT <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  success_rate        NUMERIC(<span class="num">5</span>,<span class="num">2</span>) <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  floor_discount      NUMERIC(<span class="num">4</span>,<span class="num">3</span>) <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  on_chain_verified   BOOLEAN <span class="kw">DEFAULT</span> false,
+  wallet_address      TEXT,
+  updated_at          TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
+);
+
+<span class="cm">-- Reset daily counters at midnight (cron)</span>
+<span class="kw">UPDATE</span> mandates <span class="kw">SET</span> orders_today=<span class="num">0</span>, value_today=<span class="num">0</span>
+<span class="kw">WHERE</span> DATE(updated_at) &lt; CURRENT_DATE;</pre>
+  </div>
+</div>
+
+<!-- LIVE DEMO -->
+<div class="sec" id="demo">
+  <div class="sec-title">// Live demo — autonomous agent in action</div>
+  <div class="demo-terminal">
+    <div class="dt-comment"># Agent starts with autonomous mandate</div>
+    <div>POST /v1/negotiate {mandate_id: "MND-001", product_ref: "REF-MET-001"}</div>
+    <div class="dt-comment"># mandate: max_price=$2,900 · auto_approve=true · orders_today=1/3</div>
+    <br/>
+    <div class="dt-time">14:32:01</div> <div class="dt-event">← NEGOTIATION_STARTED · NEG-007 · Standard · 5 rounds</div>
+    <div class="dt-time">14:32:03</div> <div class="dt-event">← TEXT_CHUNK · agent · round 1 · "...offer $2,720/MT..."</div>
+    <div class="dt-time">14:32:05</div> <div class="dt-event">← TEXT_CHUNK · broker · round 1 · "...current price $2,900/MT..."</div>
+    <div class="dt-time">14:32:06</div> <div class="dt-event">← ROUND_COMPLETE · r1 · agent:$2,720 · broker:$2,900 · gap:6.6%</div>
+    <div class="dt-time">14:32:09</div> <div class="dt-event">← TEXT_CHUNK · agent · round 2 · "...increase to $2,800/MT..."</div>
+    <div class="dt-time">14:32:11</div> <div class="dt-event">← TEXT_CHUNK · broker · round 2 · "...best price $2,860/MT..."</div>
+    <div class="dt-time">14:32:12</div> <div class="dt-event">← ROUND_COMPLETE · r2 · agent:$2,800 · broker:$2,860 · gap:2.1%</div>
+    <br/>
+    <div class="dt-comment"># Gap &lt; 2.5% → checking auto-approve conditions...</div>
+    <div class="dt-comment"># deal_price $2,830 &lt;= max_price $2,900 ✓</div>
+    <div class="dt-comment"># compliance: CLEARED ✓</div>
+    <div class="dt-comment"># orders_today: 1 &lt; 3 ✓</div>
+    <div class="dt-comment"># value_today: $283K &lt; $500K ✓</div>
+    <div class="dt-comment"># mandate: active, not expired ✓</div>
+    <div class="dt-comment"># → ALL CONDITIONS MET → AUTO-APPROVING</div>
+    <br/>
+    <div class="dt-time">14:32:13</div> <span class="dt-auto">← AUTO_APPROVED · deal_price:$2,830 · loi_ref:SL-LOI-20260501-007</span>
+    <div class="dt-time">14:32:13</div> <span class="dt-loi">← LOI_GENERATED · $283,000 · PDF ready · both parties emailed</span>
+    <div class="dt-time">14:32:14</div> <span class="dt-comment">→ Boss WhatsApp: "✅ Auto-LOI · SL-LOI-007 · $283,000 · Steel Rebar"</span>
+    <br/>
+    <div class="dt-comment"># Total time: 13 seconds · Zero human intervention</div>
+  </div>
+
+  <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:20px;text-align:center">
+    <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">The agent economy<br/>needs a <em style="font-style:italic;color:var(--indigo)">settlement layer.</em></div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:16px;max-width:480px;margin-left:auto;margin-right:auto">AI agents can now procure physical commodities autonomously — within Boss-defined parameters, with compliance, reputation, and cryptographic settlement on Base.</p>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <a href="agentkit.html" style="background:var(--indigo);color:#fff;padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">AgentKit + USDC →</a>
+      <a href="open-network.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Open Network →</a>
+      <a href="agui.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">AG-UI spec →</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /layout -->
+
+<script>
+function toggleAuto(cb){
+  document.getElementById('auto-label').textContent = cb.checked ? 'ON' : 'OFF';
+  document.getElementById('auto-label').style.color = cb.checked ? 'var(--green)' : 'var(--red)';
+}
+function saveMandateDemo(){
+  alert('✅ Mandate saved · MND-' + String(Math.floor(Math.random()*900)+100) + '\n\nAutonomous mode: ON\nMax price: $2,900/MT\nMax orders/day: 3\nMax value/day: $500,000\nExpires: 30 days\n\nAgent can now close deals automatically within these parameters.');
+}
+function copyCode(btn){
+  var pre=btn.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.textContent.trim()).then(()=>{
+    btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1500);
+  });
+}
+var links=document.querySelectorAll('.sb-link');
+var observer=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      links.forEach(function(l){l.classList.remove('active')});
+      var l=document.querySelector('.sb-link[href="#'+e.target.id+'"]');
+      if(l) l.classList.add('active');
+    }
+  });
+},{threshold:0.2,rootMargin:'-52px 0px -60% 0px'});
+document.querySelectorAll('[id]').forEach(function(s){observer.observe(s)});
+</script>
+</body>
+</html>
