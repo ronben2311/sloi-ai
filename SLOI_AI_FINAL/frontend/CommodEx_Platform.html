@@ -147,7 +147,7 @@ select.inp option{background:var(--surface)}
 <aside class="sidebar">
   <div class="sb-top">
     <div class="sb-logo">SLOI <em>AI</em><span style="font-size:9px;color:var(--muted);display:block;margin-top:2px;font-weight:400;letter-spacing:.04em">Smart negotiation · LOI generation</span></div>
-    <div class="sb-role">Buyer Portal · Gulf Cement LLC</div>
+    <div class="sb-role">Buyer Portal · <span id="user-org">—</span></div>
   </div>
   <div class="sb-section">Procurement</div>
   <button class="nav active" onclick="show('dashboard',this)"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></button>
@@ -166,7 +166,7 @@ select.inp option{background:var(--surface)}
   <button class="nav" onclick="window.location.href='login.html'"><span class="nav-icon">←</span><span class="nav-label">Sign out</span></button>
   <div class="sb-footer">
     <div class="sf-label">CREDIT BALANCE</div>
-    <div class="sf-credits">320</div>
+    <div class="sf-credits" id="sf-credits">—</div>
     <div style="font-size:10px;color:var(--muted);margin-top:2px">~32 sessions remaining</div>
     <button class="sf-buy" onclick="show('credits',document.querySelectorAll('.nav')[7])">⚡ Buy more credits</button>
   </div>
@@ -180,7 +180,7 @@ select.inp option{background:var(--surface)}
     </div>
     <div class="tb-right">
       <button class="btn btn-sm btn-t" onclick="show('negotiate',document.querySelectorAll('.nav')[2])">🤖 New negotiation · 10 credits</button>
-      <button class="btn btn-sm btn-p" onclick="show('credits',document.querySelectorAll('.nav')[7])">⚡ 320 credits</button>
+      <button class="btn btn-sm btn-p" id="topbar-credits-btn" onclick="show('credits',document.querySelectorAll('.nav')[7])">⚡ — credits</button>
     </div>
   </div>
 
@@ -190,8 +190,8 @@ select.inp option{background:var(--surface)}
   <div id="view-dashboard" class="view active">
     <div class="welcome-bar">
       <div>
-        <div class="wb-title">Good morning, <em>Gulf Cement.</em></div>
-        <div class="wb-sub">2 active negotiations · 1 LOI ready for download · 320 credits available</div>
+        <div class="wb-title">Good morning, <em id="greeting-name">—</em></div>
+        <div class="wb-sub" id="greeting-sub">Loading your dashboard…</div>
       </div>
       <button class="btn btn-p" onclick="show('negotiate',document.querySelectorAll('.nav')[2])">🤖 Start new negotiation →</button>
     </div>
@@ -224,7 +224,7 @@ select.inp option{background:var(--surface)}
       <button class="btn btn-p btn-sm" onclick="show('opennetwork',document.querySelectorAll('.nav')[7])">Connect agent →</button>
     </div>
     <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Credits</div><div class="stat-val" style="color:var(--teal)">320</div><div class="stat-sub">~32 sessions</div></div>
+      <div class="stat"><div class="stat-top">Credits</div><div class="stat-val" id="stat-credits" style="color:var(--teal)">—</div><div class="stat-sub" id="stat-credits-sub">loading</div></div>
       <div class="stat"><div class="stat-top">Active negotiations</div><div class="stat-val" style="color:var(--indigo)">2</div><div class="stat-sub">running now</div></div>
       <div class="stat"><div class="stat-top">LOIs signed</div><div class="stat-val" style="color:var(--green)">8</div><div class="stat-sub">this month</div></div>
       <div class="stat"><div class="stat-top">Total LOI value</div><div class="stat-val">$762K</div><div class="stat-sub">MTD</div></div>
@@ -365,13 +365,7 @@ select.inp option{background:var(--surface)}
         <div class="g3">
           <div><label class="flabel">Product *</label>
             <select class="inp" id="m-product">
-              <option value="">— Select product —</option>
-              <option>Steel Rebar G60 12mm</option><option>Steel HR Coil</option>
-              <option>Aluminum 6061-T6</option><option>Aluminum Profiles</option>
-              <option>Concrete Block 20cm</option><option>Ready-Mix B25</option>
-              <option>Porcelain Tile 60x60cm</option><option>PVC Pipe 110mm</option>
-              <option>Industrial Diesel B2</option><option>Hard Wheat</option>
-              <option>Yellow Corn</option><option>Sulfuric Acid 98%</option>
+              <option value="">— Loading products… —</option>
             </select>
           </div>
           <div><label class="flabel">Quantity *</label><input class="inp" id="m-qty" type="number" placeholder="100"/></div>
@@ -677,9 +671,95 @@ select.inp option{background:var(--surface)}
 <script>
 
 const api = initPortal('buyer');
-var PRODUCTS=[{emoji:'🔩',ref:'REF-MET-001',name:'Steel Rebar G60 12mm',sku:'STL-12',sector:'Metals',price:2840,unit:'MT',moq:10,lead:7,certs:['ISO 3834','CE']},{emoji:'🔩',ref:'REF-MET-001',name:'Steel HR Coil SS400',sku:'STL-HRC',sector:'Metals',price:3100,unit:'MT',moq:20,lead:10,certs:['ISO 3834']},{emoji:'🔩',ref:'REF-MET-002',name:'Aluminum 6061-T6',sku:'ALU-6061',sector:'Metals',price:9200,unit:'MT',moq:5,lead:8,certs:['CE','REACH']},{emoji:'🏗️',ref:'REF-BLD-001',name:'Concrete Block 20cm',sku:'BLK-200',sector:'Building',price:4.8,unit:'Unit',moq:1000,lead:3,certs:['ISO 9001']},{emoji:'🏗️',ref:'REF-BLD-001',name:'Ready-Mix Concrete B25',sku:'CNC-B25',sector:'Building',price:380,unit:'m3',moq:10,lead:2,certs:['ISO 9001']},{emoji:'🏗️',ref:'REF-BLD-002',name:'Porcelain Tile 60x60cm',sku:'TLE-6060',sector:'Building',price:62,unit:'m2',moq:100,lead:5,certs:['ISO 9001']},{emoji:'🏗️',ref:'REF-BLD-003',name:'PVC Pipe 110mm',sku:'PVC-110',sector:'Building',price:28,unit:'m',moq:500,lead:4,certs:['CE']},{emoji:'⚡',ref:'REF-ENE-001',name:'Industrial Diesel B2',sku:'DSL-B2',sector:'Energy',price:4.92,unit:'Liter',moq:5000,lead:2,certs:['ISO 14001']},{emoji:'🌾',ref:'REF-AGR-001',name:'Hard Wheat',sku:'WHT-HRD',sector:'Agriculture',price:1120,unit:'MT',moq:50,lead:14,certs:['ISO 22000']},{emoji:'🌾',ref:'REF-AGR-001',name:'Yellow Corn',sku:'CRN-YLW',sector:'Agriculture',price:980,unit:'MT',moq:50,lead:14,certs:['ISO 22000']},{emoji:'🧪',ref:'REF-CHM-001',name:'Sulfuric Acid 98%',sku:'H2SO4',sector:'Chemicals',price:580,unit:'MT',moq:5,lead:7,certs:['REACH']}];
-var RFQS_DATA=[{ref:'RFQ-20260427-001',product:'Steel Rebar G60',supplier:'REF-MET-001',qty:'100 MT',sent:'Today',status:'awaiting',hot:true},{ref:'RFQ-20260426-003',product:'Industrial Diesel B2',supplier:'REF-ENE-001',qty:'5,000 L',sent:'Yesterday',status:'quoted'},{ref:'RFQ-20260425-007',product:'Hard Wheat',supplier:'REF-AGR-001',qty:'50 MT',sent:'2 days ago',status:'quoted'},{ref:'RFQ-20260424-002',product:'Ready-Mix Concrete B25',supplier:'REF-BLD-001',qty:'20 m3',sent:'3 days ago',status:'awaiting'}];
-var LOIS_DATA=[{ref:'SL-LOI-20260501-003',product:'Hard Wheat · 50 MT',price:'$1,120/MT',total:'$56,000',date:'Today',emoji:'🌾',fresh:true},{ref:'SL-LOI-20260430-002',product:'Aluminum 6061-T6 · 5 MT',price:'$9,200/MT',total:'$46,000',date:'Yesterday',emoji:'🔩'},{ref:'SL-LOI-20260428-001',product:'Steel Rebar G60 · 100 MT',price:'$2,840/MT',total:'$284,000',date:'28 Apr',emoji:'🔩'},{ref:'SL-LOI-20260420-001',product:'Cement OPC 52.5 · 500 MT',price:'$63/MT',total:'$31,500',date:'20 Apr',emoji:'🏗️'},{ref:'SL-LOI-20260415-001',product:'Yellow Corn · 100 MT',price:'$980/MT',total:'$98,000',date:'15 Apr',emoji:'🌾'}];
+
+// Populate real user data
+(function() {
+  var u = api.getUser();
+  if (u) {
+    var name = u.name || u.email;
+    document.getElementById('user-org').textContent = name;
+    document.getElementById('tb-sub').textContent = 'Welcome back · ' + name;
+    document.getElementById('greeting-name').textContent = name.split(' ')[0] + '.';
+  }
+  api.getBalance().then(function(d) {
+    var bal = d.balance;
+    document.getElementById('sf-credits').textContent = bal;
+    document.getElementById('stat-credits').textContent = bal;
+    document.getElementById('stat-credits-sub').textContent = '~' + Math.floor(bal / 10) + ' sessions';
+    document.getElementById('topbar-credits-btn').textContent = '⚡ ' + bal + ' credits';
+    document.getElementById('greeting-sub').textContent = bal + ' credits available';
+  }).catch(function() {
+    document.getElementById('greeting-sub').textContent = 'Credits unavailable';
+  });
+})();
+
+var PRODUCTS = [];
+var SECTOR_EMOJI = {Metals:'🔩',Building:'🏗️',Energy:'⚡',Agriculture:'🌾',Chemicals:'🧪'};
+
+function loadProducts() {
+  api.getProducts().then(function(data) {
+    PRODUCTS = data.map(function(p) {
+      return {
+        emoji: SECTOR_EMOJI[p.sector] || '📦',
+        ref: p.ref, name: p.name, sku: p.sku,
+        sector: p.sector, price: p.current_price,
+        unit: p.unit, moq: p.moq, lead: p.lead_time_days,
+        certs: p.certs || []
+      };
+    });
+    renderProducts('', '');
+    // Populate negotiation product select
+    var sel = document.getElementById('m-product');
+    if (sel) {
+      sel.innerHTML = '<option value="">— Select product —</option>';
+      PRODUCTS.forEach(function(p) {
+        var opt = document.createElement('option');
+        opt.value = p.ref;
+        opt.textContent = p.name;
+        sel.appendChild(opt);
+      });
+    }
+  }).catch(function() {
+    document.getElementById('product-list').innerHTML =
+      '<div style="text-align:center;padding:40px;color:var(--muted)">Failed to load products</div>';
+  });
+}
+var RFQS_DATA = [];
+var LOIS_DATA  = [];
+
+function loadNegotiations() {
+  api.getNegotiations().then(function(data) {
+    RFQS_DATA = data.map(function(n) {
+      return {
+        ref: n.id,
+        product: n.product,
+        supplier: n.supplier_ref || '—',
+        qty: n.qty + ' ' + (n.unit || 'MT'),
+        sent: new Date(n.created_at).toLocaleDateString(),
+        status: n.status === 'running' ? 'awaiting' : 'quoted',
+        hot: n.status === 'running'
+      };
+    });
+    renderRFQs();
+  }).catch(function() { renderRFQs(); });
+}
+
+function loadLOIs() {
+  api.getLOIs().then(function(data) {
+    LOIS_DATA = data.map(function(l) {
+      return {
+        ref: l.ref,
+        product: l.product + ' · ' + l.qty + ' ' + (l.unit || 'MT'),
+        price: '$' + Number(l.deal_price).toLocaleString() + '/' + (l.unit || 'MT'),
+        total: '$' + Number(l.total_value).toLocaleString(),
+        date: new Date(l.signed_at).toLocaleDateString(),
+        emoji: SECTOR_EMOJI['Metals'],
+        fresh: false
+      };
+    });
+    renderLOIs();
+  }).catch(function() { renderLOIs(); });
+}
 var TITLES={opennetwork:['Open Network','Connect your AI agent · earn 1% per LOI'],dashboard:['Dashboard','Welcome back · Gulf Cement LLC'],exchange:['📊 Exchange','Live commodity market · order book · negotiate'],prices:['Price Discovery','Compare verified suppliers · live prices'],negotiate:['Start Negotiation','Configure mandate · AI negotiates for you'],rfqs:['RFQ Tracker','All your quote requests'],lois:['My LOIs','Signed Letters of Intent'],notifications:['Notifications','Alerts and updates'],credits:['Credits','Buy credits · history'],profile:['Profile','Account settings']};
 var selectedStrategy='standard';
 var strategyCosts={watcher:1,standard:10,aggressive:20};
@@ -716,9 +796,9 @@ function renderLOIs(){var html='';LOIS_DATA.forEach(function(l){html+='<div clas
 
 function buyCredits(amount,credits){if(confirm('Buy $'+amount+' credit pack?\n\n'+credits+' credits added instantly via Stripe.')){alert('Redirecting to Stripe checkout...\nCredits added immediately after payment.');}}
 
-renderProducts('','');
-renderRFQs();
-renderLOIs();
+loadProducts();
+loadNegotiations();
+loadLOIs();
 updateCreditDisplay();
 
 // ── EXCHANGE ──────────────────────────────────────────────────────────────────

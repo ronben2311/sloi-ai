@@ -109,7 +109,7 @@ select.inp option{background:var(--surface)}
   <div class="sb-top">
     <div class="sb-logo">SLOI <em>AI</em><span style="font-size:9px;color:var(--muted);display:block;margin-top:2px;font-weight:400;letter-spacing:.04em">Smart negotiation · LOI generation</span></div>
     <div class="sb-role">Broker Portal</div>
-    <div class="sb-ref">BRK-UAE-001 · Gulf Trade Partners</div>
+    <div class="sb-ref" id="user-org">—</div>
   </div>
   <div class="sb-section">Operations</div>
   <button class="nav active" onclick="show('dashboard',this)"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></button>
@@ -495,6 +495,17 @@ select.inp option{background:var(--surface)}
 <script>
 
 const api = initPortal('broker');
+
+// Populate real user data
+(function() {
+  var u = api.getUser();
+  if (u) {
+    var name = u.name || u.email;
+    document.getElementById('user-org').textContent = name;
+    document.getElementById('tb-sub').textContent = name;
+  }
+})();
+
 var PIPELINE = {
   new:[{name:'Cairo Constructions',product:'PVC Pipes',value:28000,country:'Egypt',hot:false},{name:'Kuwait Petro',product:'Diesel B2',value:49200,country:'Kuwait',hot:false}],
   contacted:[{name:'Bauer GmbH',product:'Hard Wheat',value:224000,country:'Germany',hot:true},{name:'Red Sea Trading',product:'Steel Rebar',value:127000,country:'KSA',hot:false}],

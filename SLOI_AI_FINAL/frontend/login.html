@@ -119,19 +119,6 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear
 const api = initLogin();
 var selectedRole = 'buyer';
 
-var ROLE_DESTINATIONS = {
-  buyer:    'CommodEx_Platform.html',
-  broker:   'CommodEx_Broker.html',
-  supplier: 'CommodEx_Admin.html',
-  boss:     'CommodEx_Admin.html',
-};
-
-var DEMO_CREDENTIALS = {
-  buyer:    { email: 'buyer@demo.sloiai.com',    pass: 'demo' },
-  broker:   { email: 'broker@demo.sloiai.com',   pass: 'demo' },
-  supplier: { email: 'supplier@demo.sloiai.com', pass: 'demo' },
-  boss:     { email: 'admin@sloiai.com',         pass: 'demo' },
-};
 
 function selectRole(role, el){
   selectedRole = role;
@@ -143,7 +130,7 @@ function selectRole(role, el){
   document.getElementById('error-msg').classList.remove('show');
 }
 
-function signin(){
+async function signin(){
   var email = document.getElementById('email').value.trim();
   var pass  = document.getElementById('password').value;
   var btn   = document.getElementById('signin-btn');
@@ -155,20 +142,13 @@ function signin(){
   btn.disabled = true;
   err.classList.remove('show');
 
-  // Simulate auth (demo mode)
-  setTimeout(function(){
-    var demo = DEMO_CREDENTIALS[selectedRole];
-    // Accept demo credentials OR any valid email format
-    var emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if(emailValid){
-      window.location.href = ROLE_DESTINATIONS[selectedRole];
-    } else {
-      err.textContent = 'Invalid email format.';
-      err.classList.add('show');
-      btn.textContent = 'Sign in →';
-      btn.disabled = false;
-    }
-  }, 800);
+  var error = await handleLogin(api, email, pass, selectedRole);
+  if(error){
+    err.textContent = typeof error === 'string' ? error : 'Login failed. Check your credentials.';
+    err.classList.add('show');
+    btn.textContent = 'Sign in →';
+    btn.disabled = false;
+  }
 }
 
 // Focus email on load

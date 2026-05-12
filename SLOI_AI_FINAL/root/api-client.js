@@ -8,7 +8,9 @@
  * Deploy: sloiai.com/api-client.js (Vercel root)
  */
 
-const SLOI_API_BASE = 'https://api.sloiai.com/v1';
+const SLOI_API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+  ? 'http://localhost:3000/v1'
+  : 'https://api.sloiai.com/v1';
 
 class SloiAPI {
 

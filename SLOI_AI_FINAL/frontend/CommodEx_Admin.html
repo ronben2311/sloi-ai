@@ -752,8 +752,8 @@ select.inp option{background:var(--surface)}
       <div class="card">
         <div class="card-title">// BOSS ACCOUNT</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
-          <div><label class="flabel">Name</label><input class="inp" value="Boss · SLOI AI"/></div>
-          <div><label class="flabel">Email</label><input class="inp" value="admin@sloiai.com"/></div>
+          <div><label class="flabel">Name</label><input class="inp" id="profile-name" value="Boss · SLOI AI"/></div>
+          <div><label class="flabel">Email</label><input class="inp" id="profile-email" value="admin@sloiai.com"/></div>
         </div>
         <button class="btn btn-p btn-sm">Save changes</button>
         <div style="height:1px;background:var(--border);margin:12px 0"></div>
@@ -813,6 +813,18 @@ select.inp option{background:var(--surface)}
 <script>
 
 const api = initPortal('boss');
+
+// Populate real user data
+(function() {
+  var u = api.getUser();
+  if (u) {
+    var nameEl = document.getElementById('profile-name');
+    var emailEl = document.getElementById('profile-email');
+    if (nameEl) nameEl.value = u.name || 'Boss';
+    if (emailEl) emailEl.value = u.email || '';
+  }
+})();
+
 var PIPELINE={new:[{name:'Gulf Cement LLC',product:'Cement OPC',value:125000,country:'UAE',hot:true},{name:'Al-Rashid Group',product:'Steel Rebar',value:508000,country:'KSA',hot:false}],contacted:[{name:'NEOM Engineering',product:'Aluminum Profiles',value:92000,country:'KSA',hot:false},{name:'Cairo Constructions',product:'PVC Pipes',value:28000,country:'Egypt',hot:false}],rfq:[{name:'Bauer GmbH',product:'Hard Wheat',value:224000,country:'Germany',hot:false},{name:'Kuwait Petro',product:'Diesel B2',value:49200,country:'Kuwait',hot:false}],negotiating:[{name:'Atlas Trading',product:'Steel Rebar',value:254000,country:'Germany',hot:true}],closed:[{name:'NEOM Procurement',product:'Steel Rebar',value:508000,country:'KSA',hot:false},{name:'Gulf Cement',product:'Hard Wheat',value:56000,country:'UAE',hot:false}]};
 var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Building',products:[{name:'Concrete Block 20cm',sku:'BLK-200',price:4.8,unit:'Unit'},{name:'Ready-Mix B25',sku:'CNC-B25',price:380,unit:'m³'}]},{ref:'REF-BLD-002',emoji:'🏗️',name:'Supplier B',sector:'Building',products:[{name:'Porcelain Tile 60×60',sku:'TLE-6060',price:62,unit:'m²'}]},{ref:'REF-BLD-003',emoji:'🏗️',name:'Supplier C',sector:'Building',products:[{name:'PVC Pipe 110mm',sku:'PVC-110',price:28,unit:'m'},{name:'PVC Pipe 160mm',sku:'PVC-160',price:52,unit:'m'}]},{ref:'REF-MET-001',emoji:'🔩',name:'Supplier D',sector:'Metals',products:[{name:'Steel Rebar G60 12mm',sku:'STL-12',price:2840,unit:'MT'},{name:'Steel HR Coil',sku:'STL-HRC',price:3100,unit:'MT'}]},{ref:'REF-MET-002',emoji:'🔩',name:'Supplier E',sector:'Metals',products:[{name:'Aluminum 6061-T6',sku:'ALU-6061',price:9200,unit:'MT'},{name:'Aluminum Profiles',sku:'ALU-PRF',price:38,unit:'m'}]},{ref:'REF-ENE-001',emoji:'⚡',name:'Supplier F',sector:'Energy',products:[{name:'Industrial Diesel B2',sku:'DSL-B2',price:4.92,unit:'L'},{name:'LPG Bulk',sku:'LPG-BLK',price:3.85,unit:'kg'}]},{ref:'REF-AGR-001',emoji:'🌾',name:'Supplier G',sector:'Agriculture',products:[{name:'Hard Wheat',sku:'WHT-HRD',price:1120,unit:'MT'},{name:'Yellow Corn',sku:'CRN-YLW',price:980,unit:'MT'}]},{ref:'REF-CHM-001',emoji:'🧪',name:'Supplier H',sector:'Chemicals',products:[{name:'Sulfuric Acid 98%',sku:'H2SO4',price:580,unit:'MT'},{name:'Caustic Soda 50%',sku:'NaOH',price:420,unit:'MT'}]}];
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
