@@ -513,15 +513,32 @@ select.inp option{background:var(--surface)}
         <div id="broker-floors"></div>
       </div>
       <div class="card" style="margin-bottom:0">
-        <div class="card-title">// EXCHANGE SYNC STATUS</div>
-        <div style="display:flex;flex-direction:column;gap:6px;font-size:11px" id="sync-status">
-          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Exchange last sync</span><span style="color:var(--green)">✓ Just now</span></div>
-          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Buyer Platform prices</span><span style="color:var(--green)">✓ Synced</span></div>
-          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Agent Console PriceScout</span><span style="color:var(--green)">✓ Synced</span></div>
-          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">PriceWatcher alerts</span><span style="color:var(--gold)">3 pending</span></div>
-          <div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:var(--muted)">Next auto-update</span><span style="color:var(--muted)">in 28 min</span></div>
+        <div class="card-title">// CATALOG SYNC</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.6">Upload the product catalog XLSX to sync prices and negotiation rules to the engine. Claude uses these rules on every negotiation.</div>
+
+        <!-- Upload area -->
+        <div id="catalog-drop" style="border:1px dashed #252538;border-radius:6px;padding:20px;text-align:center;cursor:pointer;transition:border-color .2s" onclick="document.getElementById('catalog-file').click()" ondragover="event.preventDefault();this.style.borderColor='#5b5fef'" ondragleave="this.style.borderColor='#252538'" ondrop="handleCatalogDrop(event)">
+          <div style="font-size:20px;margin-bottom:6px">📊</div>
+          <div style="font-size:11px;color:var(--muted)">Drop <strong style="color:var(--white)">SLOI_AI_Product_Catalog.xlsx</strong> here<br>or click to browse</div>
         </div>
-        <button class="btn btn-t btn-sm" style="margin-top:10px;width:100%;justify-content:center" onclick="forceSync()">⟳ Force sync now</button>
+        <input type="file" id="catalog-file" accept=".xlsx" style="display:none" onchange="uploadCatalog(this.files[0])">
+
+        <!-- Status -->
+        <div id="catalog-status" style="margin-top:10px;font-size:11px"></div>
+
+        <!-- Last sync info -->
+        <div id="catalog-last-sync" style="margin-top:8px;display:flex;flex-direction:column;gap:4px;font-size:11px">
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid var(--border)">
+            <span style="color:var(--muted)">Last synced</span>
+            <span id="sync-time" style="color:var(--muted)">—</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0">
+            <span style="color:var(--muted)">Negotiation rules loaded</span>
+            <span id="sync-count" style="color:var(--muted)">—</span>
+          </div>
+        </div>
+
+        <a id="catalog-download-btn" href="#" onclick="downloadCatalog(event)" class="btn btn-sm" style="margin-top:10px;width:100%;justify-content:center">⬇ Download current catalog</a>
       </div>
     </div>
 
@@ -1125,6 +1142,88 @@ function renderAgentLog(){
 
 renderKanban();renderNegotiations();renderBrokers();renderProducts();renderUsers();
 renderLeadFinder();renderPriceScoutFeed();renderAgentLog();
+loadCatalogStatus();
+
+// ── CATALOG UPLOAD ────────────────────────────────────────────────────────────
+
+function loadCatalogStatus() {
+  api.req('GET', '/admin/catalog/status').then(function(data) {
+    var timeEl  = document.getElementById('sync-time');
+    var countEl = document.getElementById('sync-count');
+    if (timeEl)  timeEl.textContent  = data.last_synced ? new Date(data.last_synced).toLocaleString() : 'Never';
+    if (countEl) countEl.textContent = data.param_count ? data.param_count + ' products' : '0';
+    if (countEl) countEl.style.color = data.param_count > 0 ? 'var(--green)' : 'var(--gold)';
+  }).catch(function() {});
+}
+
+function handleCatalogDrop(e) {
+  e.preventDefault();
+  document.getElementById('catalog-drop').style.borderColor = '#252538';
+  var file = e.dataTransfer.files[0];
+  if (file) uploadCatalog(file);
+}
+
+function uploadCatalog(file) {
+  if (!file || !file.name.endsWith('.xlsx')) {
+    setCatalogStatus('⚠ Only .xlsx files are accepted', 'gold');
+    return;
+  }
+
+  setCatalogStatus('⏳ Uploading and parsing…', 'muted');
+  document.getElementById('catalog-drop').style.borderColor = '#5b5fef';
+
+  var formData = new FormData();
+  formData.append('file', file);
+
+  fetch(api.base + '/admin/catalog/upload', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + api.token },
+    body: formData,
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    document.getElementById('catalog-drop').style.borderColor = '#252538';
+    if (data.ok) {
+      setCatalogStatus(
+        '✅ Synced — ' + data.negotiation_params_upserted + ' negotiation rules · ' +
+        data.products_prices_updated + ' prices updated',
+        'green'
+      );
+      loadCatalogStatus();
+    } else {
+      setCatalogStatus('✗ Error: ' + (data.error || 'Unknown error'), 'red');
+    }
+  })
+  .catch(function(err) {
+    document.getElementById('catalog-drop').style.borderColor = '#252538';
+    setCatalogStatus('✗ Upload failed: ' + err.message, 'red');
+  });
+}
+
+function setCatalogStatus(msg, color) {
+  var colors = { muted: 'var(--muted)', green: 'var(--green)', gold: 'var(--gold)', red: 'var(--red)' };
+  var el = document.getElementById('catalog-status');
+  if (el) { el.textContent = msg; el.style.color = colors[color] || colors.muted; }
+}
+
+function downloadCatalog(e) {
+  e.preventDefault();
+  // Fetch as blob (so auth header is sent)
+  fetch(api.base + '/admin/catalog', { headers: { 'Authorization': 'Bearer ' + api.token } })
+    .then(function(r) {
+      if (!r.ok) throw new Error('Download failed');
+      return r.blob();
+    })
+    .then(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var a   = document.createElement('a');
+      a.href  = url;
+      a.download = 'SLOI_AI_Product_Catalog.xlsx';
+      a.click();
+      URL.revokeObjectURL(url);
+    })
+    .catch(function() { showToast('⚠ Could not download catalog', 'gold'); });
+}
 </script>
 </body>
 </html>

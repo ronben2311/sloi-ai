@@ -359,7 +359,7 @@ select.inp option{background:var(--surface)}
 
   <!-- NEGOTIATE -->
   <div id="view-negotiate" class="view">
-    <div class="mandate-form">
+    <div class="mandate-form" id="mandate-form">
       <div class="mf-header"><span style="font-size:18px">🤖</span><div class="mf-title">Configure your mandate</div></div>
       <div class="mf-body">
         <div class="g3">
@@ -410,8 +410,36 @@ select.inp option{background:var(--surface)}
             <div style="font-size:10px;color:var(--muted)">Balance after: <span id="bal-after">305</span></div>
           </div>
         </div>
-        <button class="btn btn-p" style="width:100%;justify-content:center;padding:13px;font-size:13px" onclick="startNegotiation()">🤖 Start negotiation agent →</button>
-        <div style="font-size:10px;color:var(--muted);text-align:center">Boss approval required before LOI is generated · Your balance: 320 credits</div>
+        <button class="btn btn-p" style="width:100%;justify-content:center;padding:13px;font-size:13px" id="neg-start-btn" onclick="startNegotiation()">🤖 Start negotiation agent →</button>
+        <div style="font-size:10px;color:var(--muted);text-align:center">Boss approval required before LOI is generated</div>
+      </div>
+    </div>
+
+    <!-- Live negotiation panel -->
+    <div id="neg-live" style="display:none;max-width:720px;margin:0 auto">
+      <div class="mandate-form">
+        <div class="mf-header">
+          <span id="neg-live-icon" style="font-size:18px">⏳</span>
+          <div>
+            <div class="mf-title" id="neg-live-title">Starting…</div>
+            <div style="font-size:10px;color:var(--muted)" id="neg-live-id"></div>
+          </div>
+        </div>
+        <div class="mf-body">
+          <div id="neg-rounds-bar" style="display:flex;gap:6px;margin-bottom:12px"></div>
+          <div id="neg-chat" style="background:#0a0a16;border:1px solid #1e1e32;border-radius:6px;padding:12px;min-height:100px;max-height:260px;overflow-y:auto;font-size:11px;line-height:1.8;color:var(--muted);font-family:'IBM Plex Mono',monospace;white-space:pre-wrap">Connecting to negotiation engine…</div>
+          <div id="neg-prices" style="display:none;margin-top:12px">
+            <div class="g3">
+              <div class="stat"><div class="stat-top">Agent offer</div><div class="stat-val bt" id="neg-agent-price" style="font-size:18px">—</div></div>
+              <div class="stat"><div class="stat-top">Gap</div><div class="stat-val" id="neg-gap" style="font-size:18px">—</div></div>
+              <div class="stat"><div class="stat-top">Broker price</div><div class="stat-val ba" id="neg-broker-price" style="font-size:18px">—</div></div>
+            </div>
+          </div>
+          <div id="neg-result"></div>
+          <div style="margin-top:12px">
+            <button class="btn" id="neg-reset-btn" style="display:none" onclick="resetNegotiation()">← Start another</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -786,9 +814,127 @@ function startWithProduct(name){var sel=document.getElementById('m-product');if(
 
 function selectStrategy(s){selectedStrategy=s;['watcher','standard','aggressive'].forEach(function(x){document.getElementById('strat-'+x).classList.remove('selected');});document.getElementById('strat-'+s).classList.add('selected');updateCreditDisplay();}
 
-function updateCreditDisplay(){var cost=strategyCosts[selectedStrategy];var total=selectedStrategy==='watcher'?cost:cost+5;var bal=320-total;var d=document.getElementById('credit-cost-display');if(d)d.textContent=total+' credits'+(selectedStrategy==='watcher'?'/day':'');var b=document.getElementById('bal-after');if(b)b.textContent=bal>0?bal:'⚠️ Not enough';}
+function updateCreditDisplay(){
+  var cost=strategyCosts[selectedStrategy];
+  var total=selectedStrategy==='watcher'?cost:cost+5;
+  var d=document.getElementById('credit-cost-display');
+  if(d)d.textContent=total+' credits'+(selectedStrategy==='watcher'?'/day':'');
+  api.getBalance().then(function(data){
+    var bal=data.balance-total;
+    var b=document.getElementById('bal-after');
+    if(b)b.textContent=bal>=0?bal:'⚠️ Not enough';
+  }).catch(function(){});
+}
 
-function startNegotiation(){var product=document.getElementById('m-product').value;var qty=document.getElementById('m-qty').value;var target=document.getElementById('m-target').value;var max=document.getElementById('m-max').value;if(!product||!qty||!target||!max){alert('Please fill in product, quantity, target price and max price.');return;}if(parseFloat(target)>=parseFloat(max)){alert('Target must be lower than max price.');return;}var cost=strategyCosts[selectedStrategy]+(selectedStrategy==='watcher'?0:5);if(confirm('Start negotiation?\n\n'+product+'\n'+qty+' '+document.getElementById('m-unit').value+'\nTarget: $'+target+' · Max: $'+max+'\nCost: '+cost+' credits')){alert('✅ Negotiation agent started!\n\nYou will receive notifications as rounds progress.\nBoss approves before LOI is generated.');window.open('negotiation-agent.html','_blank');}}
+function startNegotiation() {
+  var productSel  = document.getElementById('m-product');
+  var product_ref = productSel.value;
+  var product     = productSel.options[productSel.selectedIndex]?.text || product_ref;
+  var qty         = parseFloat(document.getElementById('m-qty').value);
+  var unit        = document.getElementById('m-unit').value;
+  var target      = parseFloat(document.getElementById('m-target').value);
+  var max         = parseFloat(document.getElementById('m-max').value);
+
+  if (!product_ref || !qty || !target || !max) { alert('Please fill in product, quantity, target price and max price.'); return; }
+  if (target >= max) { alert('Target must be lower than max price.'); return; }
+  if (selectedStrategy === 'watcher') { alert('Price Watcher coming soon. Choose Deal Hunter or Autopilot.'); return; }
+
+  // Switch to live panel
+  document.getElementById('mandate-form').style.display = 'none';
+  var live = document.getElementById('neg-live');
+  live.style.display = 'block';
+  document.getElementById('neg-live-title').textContent = 'Starting…';
+  document.getElementById('neg-live-id').textContent = '';
+  document.getElementById('neg-chat').textContent = 'Connecting to negotiation engine…';
+  document.getElementById('neg-prices').style.display = 'none';
+  document.getElementById('neg-result').innerHTML = '';
+  document.getElementById('neg-reset-btn').style.display = 'none';
+  document.getElementById('neg-rounds-bar').innerHTML = '';
+
+  var chat = document.getElementById('neg-chat');
+  var currentRole = null;
+
+  function appendChat(token, role) {
+    if (role !== currentRole) {
+      currentRole = role;
+      chat.textContent += (chat.textContent ? '\n\n' : '') + (role === 'agent' ? '🤖 AGENT: ' : '🏢 BROKER: ');
+    }
+    chat.textContent += token;
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  api.negotiate({ product: product, product_ref: product_ref, qty: qty, unit: unit, target_price: target, max_price: max, strategy: selectedStrategy })
+    .on('NEGOTIATION_STARTED', function(data) {
+      document.getElementById('neg-live-title').textContent = data.product + ' · ' + data.qty + ' ' + data.unit;
+      document.getElementById('neg-live-id').textContent = data.neg_id + ' · ' + data.strategy + ' · max ' + data.max_rounds + ' rounds';
+      chat.textContent = '';
+      currentRole = null;
+      var bar = document.getElementById('neg-rounds-bar');
+      for (var i = 1; i <= data.max_rounds; i++) {
+        var dot = document.createElement('div');
+        dot.id = 'round-dot-' + i;
+        dot.style.cssText = 'width:26px;height:26px;border-radius:50%;border:1px solid #252538;display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--muted);flex-shrink:0;transition:all .3s';
+        dot.textContent = i;
+        bar.appendChild(dot);
+      }
+    })
+    .on('TEXT_CHUNK', function(data) { appendChat(data.token, data.role); })
+    .on('ROUND_COMPLETE', function(data) {
+      var dot = document.getElementById('round-dot-' + data.round);
+      if (dot) {
+        var col = data.next_action === 'await_human' ? '#22c55e' : data.next_action === 'failed' ? '#ef4444' : '#5b5fef';
+        dot.style.cssText += ';background:' + col + '22;border-color:' + col + ';color:#f0eff8';
+      }
+      document.getElementById('neg-prices').style.display = 'block';
+      document.getElementById('neg-agent-price').textContent  = '$' + parseFloat(data.agent_price).toLocaleString();
+      document.getElementById('neg-broker-price').textContent = '$' + parseFloat(data.broker_price).toLocaleString();
+      var gapEl = document.getElementById('neg-gap');
+      gapEl.textContent = data.gap_pct + '%';
+      gapEl.style.color = data.gap_pct <= 5 ? '#22c55e' : data.gap_pct <= 15 ? '#e8a94a' : '#ef4444';
+      chat.textContent += '\n\n── Round ' + data.round + ' done · Gap: ' + data.gap_pct + '% ──';
+      currentRole = null;
+    })
+    .on('AWAIT_HUMAN', function(data) {
+      document.getElementById('neg-live-title').textContent = '✅ Deal found — awaiting boss approval';
+      var r = document.getElementById('neg-result');
+      r.innerHTML = '<div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:6px;padding:14px;margin-top:12px"><div style="font-size:10px;color:var(--green);font-weight:700;margin-bottom:6px;letter-spacing:.06em">DEAL REACHED</div><div style="font-family:\'Fraunces\',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px">$' + parseFloat(data.deal_price).toLocaleString() + '/unit</div><div style="font-size:11px;color:var(--muted)">Total: $' + parseFloat(data.total_value).toLocaleString() + ' · LOI fee: $' + (data.loi_fee||500) + '</div><div style="font-size:10px;color:var(--gold);margin-top:8px">⏳ Waiting for boss approval…</div></div>';
+    })
+    .on('LOI_GENERATED', function(data) {
+      document.getElementById('neg-live-title').textContent = '🎉 LOI Generated!';
+      var r = document.getElementById('neg-result');
+      r.innerHTML = '<div style="background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.3);border-radius:6px;padding:14px;margin-top:12px"><div style="font-size:10px;color:var(--indigo);font-weight:700;margin-bottom:6px;letter-spacing:.06em">LOI SIGNED · ' + data.loi_ref + '</div><div style="font-family:\'Fraunces\',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:4px">$' + parseFloat(data.deal_price).toLocaleString() + '/unit</div><div style="font-size:11px;color:var(--muted)">Total: $' + parseFloat(data.total_value).toLocaleString() + '</div><div style="margin-top:10px"><button class="btn btn-p btn-sm" onclick="show(\'lois\',document.querySelectorAll(\'.nav\')[4])">📄 View LOI →</button></div></div>';
+      document.getElementById('neg-reset-btn').style.display = 'inline-flex';
+      loadNegotiations(); loadLOIs();
+    })
+    .on('NEGOTIATION_FAILED', function(data) {
+      document.getElementById('neg-live-title').textContent = '✗ Negotiation ended';
+      var reasons = { max_rounds_reached: 'Max rounds reached — gap too wide to close', boss_timeout: 'Boss approval timed out (24h)', boss_rejected: 'Deal rejected by boss' };
+      var r = document.getElementById('neg-result');
+      r.innerHTML = '<div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:14px;margin-top:12px"><div style="font-size:10px;color:var(--red);font-weight:700;margin-bottom:6px;letter-spacing:.06em">NEGOTIATION FAILED</div><div style="font-size:12px;color:var(--muted)">' + (reasons[data.reason]||data.reason) + '</div></div>';
+      document.getElementById('neg-reset-btn').style.display = 'inline-flex';
+      loadNegotiations();
+    })
+    .on('error', function(err) {
+      document.getElementById('neg-live-title').textContent = '✗ Error';
+      document.getElementById('neg-result').innerHTML = '<div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:14px;margin-top:12px"><div style="font-size:11px;color:var(--red)">' + (err.error||'Connection error — check your credits balance.') + '</div></div>';
+      document.getElementById('neg-reset-btn').style.display = 'inline-flex';
+      document.getElementById('mandate-form').style.display = 'block';
+      document.getElementById('neg-live').style.display = 'none';
+    })
+    .start();
+}
+
+function resetNegotiation() {
+  document.getElementById('neg-live').style.display = 'none';
+  document.getElementById('mandate-form').style.display = 'block';
+  api.getBalance().then(function(b) {
+    var btn = document.getElementById('topbar-credits-btn');
+    if (btn) btn.innerHTML = '⚡ ' + b.balance + ' credits';
+    var el = document.getElementById('stat-credits');
+    if (el) el.textContent = b.balance;
+  }).catch(function() {});
+  updateCreditDisplay();
+}
 
 function renderRFQs(){var html='';RFQS_DATA.forEach(function(r){html+='<div class="rfq-row">';html+='<div style="font-size:10px;color:var(--indigo);width:120px;flex-shrink:0">'+r.ref+'</div>';html+='<div style="flex:1;color:var(--white);font-weight:600">'+(r.hot?'🔥 ':'')+r.product+'</div>';html+='<div style="width:90px;font-size:10px;color:var(--muted)">'+r.supplier+'</div>';html+='<div style="width:70px;font-size:10px;color:var(--muted)">'+r.qty+'</div>';html+='<div style="width:80px;font-size:10px;color:var(--muted)">'+r.sent+'</div>';html+='<div style="width:80px">';html+=r.status==='awaiting'?'<span class="badge ba">⏳ Awaiting</span>':'<span class="badge bg">✓ Quoted</span>';html+='</div><div style="display:flex;gap:4px;flex-shrink:0">';if(r.status==='quoted')html+='<button class="btn btn-xs btn-p" onclick="startWithProduct(\''+r.product+'\')">Negotiate →</button>';else html+='<button class="btn btn-xs btn-t" onclick="alert(\'Follow-up WhatsApp sent.\')">Follow up</button>';html+='</div></div>';});document.getElementById('rfq-list').innerHTML=html;}
 
