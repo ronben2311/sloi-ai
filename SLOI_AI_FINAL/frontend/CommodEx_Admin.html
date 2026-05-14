@@ -397,19 +397,17 @@ select.inp option{background:var(--surface)}
   <!-- REVENUE -->
   <div id="view-revenue" class="view">
     <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Total Revenue MTD</div><div class="stat-val" style="color:var(--green)">$18,420</div><div class="stat-sub up">↑ 23%</div></div>
-      <div class="stat"><div class="stat-top">LOI Fee Revenue</div><div class="stat-val" style="color:var(--violet)">$17,450</div><div class="stat-sub">35 LOIs × $500</div></div>
-      <div class="stat"><div class="stat-top">Credit Revenue</div><div class="stat-val" style="color:var(--teal)">$970</div><div class="stat-sub">1,240 credits sold</div></div>
+      <div class="stat"><div class="stat-top">Total Revenue MTD</div><div class="stat-val" style="color:var(--green)" id="rev-stat-total">—</div><div class="stat-sub up">LOI fees</div></div>
+      <div class="stat"><div class="stat-top">LOI Fee Revenue</div><div class="stat-val" style="color:var(--violet)" id="rev-stat-loi">—</div><div class="stat-sub" id="rev-stat-loi-sub">— LOIs × $500</div></div>
+      <div class="stat"><div class="stat-top">Credit Revenue</div><div class="stat-val" style="color:var(--teal)">$0</div><div class="stat-sub">Pending integration</div></div>
       <div class="stat"><div class="stat-top">TradeFinex Fees</div><div class="stat-val">$0</div><div class="stat-sub warn">Pending integration</div></div>
     </div>
     <div class="card">
       <div class="card-title">// LOI FEE LEDGER</div>
       <table>
         <thead><tr><th>Date</th><th>LOI Ref</th><th>Buyer</th><th>Broker</th><th>Deal Value</th><th>LOI Fee</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td style="color:var(--muted)">Today</td><td style="font-size:10px;color:var(--indigo)">SL-LOI-20260501-003</td><td>Gulf Cement LLC</td><td>BRK-UAE-001</td><td>$56,000</td><td style="color:var(--green);font-weight:700">$500</td><td><span class="badge bg">Invoiced</span></td></tr>
-          <tr><td style="color:var(--muted)">Yesterday</td><td style="font-size:10px;color:var(--indigo)">SL-LOI-20260430-002</td><td>Atlas Trading</td><td>BRK-EUR-001</td><td>$46,000</td><td style="color:var(--green);font-weight:700">$500</td><td><span class="badge bg">Paid</span></td></tr>
-          <tr><td style="color:var(--muted)">28 Apr</td><td style="font-size:10px;color:var(--indigo)">SL-LOI-20260428-001</td><td>NEOM Procurement</td><td>BRK-UAE-001</td><td>$284,000</td><td style="color:var(--green);font-weight:700">$500</td><td><span class="badge bg">Paid</span></td></tr>
+        <tbody id="loi-ledger-body">
+          <tr><td colspan="7" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>
         </tbody>
       </table>
     </div>
@@ -596,10 +594,10 @@ select.inp option{background:var(--surface)}
   <!-- USERS -->
   <div id="view-users" class="view">
     <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Total Users</div><div class="stat-val">1,284</div></div>
-      <div class="stat"><div class="stat-top">Active</div><div class="stat-val" style="color:var(--green)">847</div></div>
-      <div class="stat"><div class="stat-top">Pending KYC</div><div class="stat-val" style="color:var(--gold)">7</div></div>
-      <div class="stat"><div class="stat-top">Suspended</div><div class="stat-val" style="color:var(--red)">3</div></div>
+      <div class="stat"><div class="stat-top">Total Users</div><div class="stat-val" id="usr-stat-total">—</div></div>
+      <div class="stat"><div class="stat-top">Active</div><div class="stat-val" style="color:var(--green)" id="usr-stat-active">—</div></div>
+      <div class="stat"><div class="stat-top">Pending KYC</div><div class="stat-val" style="color:var(--gold)" id="usr-stat-pending">—</div></div>
+      <div class="stat"><div class="stat-top">Suspended</div><div class="stat-val" style="color:var(--red)" id="usr-stat-suspended">—</div></div>
     </div>
     <div class="card">
       <div class="card-title">// USERS</div>
@@ -991,120 +989,105 @@ function approveBroker(){alert('KYC approved. Gulf Metals Trading is now active.
 
 
 // ── PRODUCTS & PRICING ────────────────────────────────────────────────────────
-var PRODUCTS_DATA = [
-  {emoji:'🔩',sector:'Metals',name:'Steel Rebar G60 12mm',sku:'STL-12',ref:'REF-MET-001',cost:2580,market:2840,floor:2720,unit:'MT',moq:10,lead:7,certs:['ISO 3834','CE'],active:true},
-  {emoji:'🔩',sector:'Metals',name:'Steel HR Coil SS400',sku:'STL-HRC',ref:'REF-MET-001',cost:2820,market:3100,floor:2950,unit:'MT',moq:20,lead:10,certs:['ISO 3834'],active:true},
-  {emoji:'🔩',sector:'Metals',name:'Aluminum 6061-T6',sku:'ALU-6061',ref:'REF-MET-002',cost:8400,market:9200,floor:8800,unit:'MT',moq:5,lead:8,certs:['CE','REACH'],active:true},
-  {emoji:'🔩',sector:'Metals',name:'Aluminum Profiles',sku:'ALU-PRF',ref:'REF-MET-002',cost:32,market:38,floor:35,unit:'m',moq:500,lead:8,certs:['CE'],active:true},
-  {emoji:'🏗️',sector:'Building',name:'Concrete Block 20cm',sku:'BLK-200',ref:'REF-BLD-001',cost:3.8,market:4.8,floor:4.2,unit:'Unit',moq:1000,lead:3,certs:['ISO 9001'],active:true},
-  {emoji:'🏗️',sector:'Building',name:'Ready-Mix Concrete B25',sku:'CNC-B25',ref:'REF-BLD-001',cost:310,market:380,floor:345,unit:'m³',moq:10,lead:2,certs:['ISO 9001'],active:true},
-  {emoji:'🏗️',sector:'Building',name:'Porcelain Tile 60×60',sku:'TLE-6060',ref:'REF-BLD-002',cost:48,market:62,floor:55,unit:'m²',moq:100,lead:5,certs:['ISO 9001'],active:true},
-  {emoji:'🏗️',sector:'Building',name:'PVC Pipe 110mm',sku:'PVC-110',ref:'REF-BLD-003',cost:21,market:28,floor:25,unit:'m',moq:500,lead:4,certs:['CE'],active:true},
-  {emoji:'⚡',sector:'Energy',name:'Industrial Diesel B2',sku:'DSL-B2',ref:'REF-ENE-001',cost:3.90,market:4.92,floor:4.50,unit:'L',moq:5000,lead:2,certs:['ISO 14001'],active:true},
-  {emoji:'🌾',sector:'Agriculture',name:'Hard Wheat',sku:'WHT-HRD',ref:'REF-AGR-001',cost:960,market:1120,floor:1040,unit:'MT',moq:50,lead:14,certs:['ISO 22000'],active:true},
-  {emoji:'🌾',sector:'Agriculture',name:'Yellow Corn',sku:'CRN-YLW',ref:'REF-AGR-001',cost:820,market:980,floor:900,unit:'MT',moq:50,lead:14,certs:['ISO 22000'],active:true},
-  {emoji:'🧪',sector:'Chemicals',name:'Sulfuric Acid 98%',sku:'H2SO4',ref:'REF-CHM-001',cost:490,market:580,floor:530,unit:'MT',moq:5,lead:7,certs:['REACH'],active:true},
-  {emoji:'🧪',sector:'Chemicals',name:'Caustic Soda 50%',sku:'NaOH',ref:'REF-CHM-001',cost:355,market:420,floor:385,unit:'MT',moq:5,lead:7,certs:['REACH'],active:true},
-];
 
-var BROKER_DATA = [
-  {id:'BRK-UAE-001',name:'Gulf Trade Partners',country:'UAE',sectors:['Metals','Building','Chemicals'],discount:5},
-  {id:'BRK-EUR-001',name:'EuroChem Trading',country:'Germany',sectors:['Agriculture','Chemicals'],discount:4},
-  {id:'BRK-EGY-001',name:'MENA Commodities',country:'Egypt',sectors:['Building','Agriculture'],discount:6},
-];
-
-function renderProducts(){
-  var sector = (document.getElementById('prod-sector-filter')||{}).value || '';
-  var data = PRODUCTS_DATA.filter(function(p){ return !sector || p.sector === sector; });
-  var html = '';
-  data.forEach(function(p,i){
-    var margin = Math.round((p.market - p.cost) / p.cost * 100);
-    var marginColor = margin > 20 ? 'var(--green)' : margin > 10 ? 'var(--gold)' : 'var(--red)';
-    html += '<tr style="border-bottom:1px solid var(--border);transition:background .1s" onmouseover="this.style.background='rgba(91,95,239,.04)'" onmouseout="this.style.background=''">';
-    html += '<td style="padding:8px 12px"><div style="font-size:12px;font-weight:600;color:var(--white)">' + p.emoji + ' ' + p.name + '</div><div style="font-size:9px;color:var(--muted);margin-top:2px">' + p.certs.join(' · ') + '</div></td>';
-    html += '<td style="padding:8px 12px"><div style="font-size:10px;color:var(--indigo)">' + p.sku + '</div><div style="font-size:9px;color:var(--muted)">' + p.ref + '</div></td>';
-    html += '<td style="padding:8px 12px;text-align:right"><input class="price-inp" style="width:80px;text-align:right;background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:3px 6px;font-size:11px;color:var(--white);font-family:'IBM Plex Mono',monospace" data-field="cost" data-idx="' + i + '" value="' + p.cost + '" onchange="updateProductPrice(' + i + ','cost',this.value)"/></td>';
-    html += '<td style="padding:8px 12px;text-align:right"><input class="price-inp" style="width:80px;text-align:right;background:var(--surface2);border:1px solid rgba(91,95,239,.25);border-radius:3px;padding:3px 6px;font-size:11px;color:var(--violet);font-family:'IBM Plex Mono',monospace" data-field="market" data-idx="' + i + '" value="' + p.market + '" onchange="updateProductPrice(' + i + ','market',this.value)"/><div style="font-size:9px;color:var(--muted)">/' + p.unit + '</div></td>';
-    html += '<td style="padding:8px 12px;text-align:right"><input class="price-inp" style="width:80px;text-align:right;background:var(--surface2);border:1px solid rgba(232,169,74,.25);border-radius:3px;padding:3px 6px;font-size:11px;color:var(--gold);font-family:'IBM Plex Mono',monospace" data-field="floor" data-idx="' + i + '" value="' + p.floor + '" onchange="updateProductPrice(' + i + ','floor',this.value)"/></td>';
-    html += '<td style="padding:8px 12px;text-align:right;font-weight:700;color:' + marginColor + '">' + margin + '%</td>';
-    html += '<td style="padding:8px 12px;text-align:right;font-size:10px;color:var(--muted)">' + p.moq.toLocaleString() + ' ' + p.unit + '<br/>' + p.lead + ' days</td>';
-    html += '<td style="padding:8px 12px;text-align:right"><button class="btn btn-xs btn-r" onclick="toggleProduct(' + i + ')" title="Deactivate">' + (p.active ? '✓' : '✗') + '</button></td>';
-    html += '</tr>';
-  });
+function renderProducts() {
   var tbody = document.getElementById('products-tbody');
-  if(tbody) tbody.innerHTML = html;
-  renderBrokerFloors();
-}
-
-function renderBrokerFloors(){
-  var el = document.getElementById('broker-floors');
-  if(!el) return;
-  var html = '<table style="width:100%;border-collapse:collapse;font-size:10px">';
-  html += '<thead><tr style="background:var(--surface2)"><th style="padding:5px 8px;text-align:left;color:var(--muted)">Broker</th><th style="padding:5px 8px;text-align:left;color:var(--muted)">Country</th><th style="padding:5px 8px;text-align:left;color:var(--muted)">Sectors</th><th style="padding:5px 8px;text-align:right;color:var(--muted)">Floor discount</th><th style="padding:5px 8px"></th></tr></thead><tbody>';
-  BROKER_DATA.forEach(function(b){
-    html += '<tr style="border-bottom:1px solid var(--border)">';
-    html += '<td style="padding:6px 8px;font-weight:600;color:var(--white)">' + b.id + '<div style="font-size:9px;color:var(--muted);font-weight:400">' + b.name + '</div></td>';
-    html += '<td style="padding:6px 8px;color:var(--muted)">' + b.country + '</td>';
-    html += '<td style="padding:6px 8px;color:var(--muted);font-size:9px">' + b.sectors.join(' · ') + '</td>';
-    html += '<td style="padding:6px 8px;text-align:right"><input class="price-inp" style="width:50px;text-align:right;background:var(--surface2);border:1px solid rgba(232,169,74,.25);border-radius:3px;padding:3px 6px;font-size:11px;color:var(--gold);font-family:'IBM Plex Mono',monospace" value="' + b.discount + '" onchange="updateBrokerDiscount('' + b.id + '',this.value)"/>%</td>';
-    html += '<td style="padding:6px 8px"><button class="btn btn-xs" onclick="alert('Viewing floor prices for ' + b.name + '')">View floors</button></td>';
-    html += '</tr>';
+  if (!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="6" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>';
+  var EMOJI = {Metals:'🔩',Building:'🏗️',Energy:'⚡',Agriculture:'🌾',Chemicals:'🧪'};
+  var sector = (document.getElementById('prod-sector-filter')||{}).value || '';
+  api.getProducts(sector).then(function(data) {
+    if (!data || !data.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="padding:20px;text-align:center;color:var(--muted)">No products — upload catalog to populate</td></tr>';
+      return;
+    }
+    tbody.innerHTML = data.map(function(p) {
+      var emoji = EMOJI[p.sector] || '📦';
+      var certs = (p.certs||[]).join(' · ') || '—';
+      return '<tr>'
+        + '<td style="padding:8px 12px"><div style="font-size:12px;font-weight:600;color:var(--white)">' + emoji + ' ' + p.name + '</div><div style="font-size:9px;color:var(--muted);margin-top:2px">' + certs + '</div></td>'
+        + '<td style="padding:8px 12px"><div style="font-size:10px;color:var(--indigo)">' + p.sku + '</div><div style="font-size:9px;color:var(--muted)">' + p.ref + '</div></td>'
+        + '<td style="padding:8px 12px;text-align:right"><div style="font-family:Fraunces,serif;font-size:15px;font-weight:700;color:var(--violet)">$' + Number(p.current_price||0).toLocaleString() + '</div><div style="font-size:9px;color:var(--muted)">/' + p.unit + '</div></td>'
+        + '<td style="padding:8px 12px;text-align:right;color:var(--muted)">' + Number(p.moq||0).toLocaleString() + ' ' + p.unit + '</td>'
+        + '<td style="padding:8px 12px;text-align:right;color:var(--muted)">' + (p.lead_time_days||'—') + ' days</td>'
+        + '<td style="padding:8px 12px"><span class="badge bg">Active</span></td>'
+        + '</tr>';
+    }).join('');
+  }).catch(function() {
+    if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="padding:16px;text-align:center;color:var(--muted)">Failed to load products</td></tr>';
   });
-  html += '</tbody></table>';
-  el.innerHTML = html;
 }
 
-function updateProductPrice(idx, field, val){
-  PRODUCTS_DATA[idx][field] = parseFloat(val) || 0;
-  renderProducts();
-  showSyncPending();
+function forceSync() { loadCatalogStatus(); renderProducts(); }
+
+function renderUsers() {
+  var tb = document.getElementById('user-tbody');
+  if (!tb) return;
+  tb.innerHTML = '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>';
+  api.req('GET', '/admin/users').then(function(data) {
+    var total   = data.length;
+    var buyers  = data.filter(function(u){ return u.role !== 'boss'; }).length;
+    var el;
+    el = document.getElementById('usr-stat-total');   if (el) el.textContent = total;
+    el = document.getElementById('usr-stat-active');  if (el) el.textContent = buyers;
+    el = document.getElementById('usr-stat-pending'); if (el) el.textContent = 0;
+    el = document.getElementById('usr-stat-suspended');if (el) el.textContent = 0;
+    if (!data.length) {
+      tb.innerHTML = '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">No users</td></tr>';
+      return;
+    }
+    var roleColor = {buyer:'var(--teal)',broker:'var(--violet)',supplier:'var(--gold)',boss:'var(--red)'};
+    tb.innerHTML = data.map(function(u) {
+      var rc = roleColor[u.role] || 'var(--muted)';
+      return '<tr>'
+        + '<td style="color:var(--white);font-weight:600">' + u.name + '</td>'
+        + '<td>' + u.country + '</td>'
+        + '<td><span style="color:' + rc + '">' + u.role + '</span></td>'
+        + '<td><span class="badge bg">Verified</span></td>'
+        + '<td style="color:var(--teal)">' + u.credits + '</td>'
+        + '<td>' + u.loi_count + '</td>'
+        + '<td><span class="badge bg">Active</span></td>'
+        + '<td><div style="display:flex;gap:4px"><button class="btn btn-xs" onclick="openWA()">📱</button></div></td>'
+        + '</tr>';
+    }).join('');
+  }).catch(function() {
+    tb.innerHTML = '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">Failed to load users</td></tr>';
+  });
 }
 
-function updateBrokerDiscount(brokerId, val){
-  var b = BROKER_DATA.find(function(x){return x.id===brokerId});
-  if(b) b.discount = parseFloat(val)||0;
-  showSyncPending();
+function loadRevenue() {
+  api.getLOIs().then(function(lois) {
+    var totalFees = lois.reduce(function(s, l){ return s + (l.loi_fee_usd || 500); }, 0);
+    var el;
+    el = document.getElementById('rev-stat-total');   if (el) el.textContent = '$' + totalFees.toLocaleString();
+    el = document.getElementById('rev-stat-loi');     if (el) el.textContent = '$' + totalFees.toLocaleString();
+    el = document.getElementById('rev-stat-loi-sub'); if (el) el.textContent = lois.length + ' LOIs × $500';
+    var tbody = document.getElementById('loi-ledger-body');
+    if (!tbody) return;
+    if (!lois.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="padding:16px;text-align:center;color:var(--muted)">No LOIs yet — approve a negotiation to generate one</td></tr>';
+      return;
+    }
+    tbody.innerHTML = lois.map(function(l) {
+      var d = l.signed_at ? new Date(l.signed_at) : new Date();
+      var dateStr = d.toLocaleDateString();
+      var paidClass = l.loi_fee_paid ? 'bg' : 'ba';
+      var paidText  = l.loi_fee_paid ? 'Paid' : 'Invoiced';
+      return '<tr>'
+        + '<td style="color:var(--muted)">' + dateStr + '</td>'
+        + '<td style="font-size:10px;color:var(--indigo)">' + l.ref + '</td>'
+        + '<td>' + l.buyer_name + '</td>'
+        + '<td style="color:var(--muted)">—</td>'
+        + '<td>$' + Number(l.total_value||0).toLocaleString() + '</td>'
+        + '<td style="color:var(--green);font-weight:700">$' + (l.loi_fee_usd||500) + '</td>'
+        + '<td><span class="badge ' + paidClass + '">' + paidText + '</span></td>'
+        + '</tr>';
+    }).join('');
+  }).catch(function() {
+    var tbody = document.getElementById('loi-ledger-body');
+    if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="padding:16px;text-align:center;color:var(--muted)">Failed to load LOIs</td></tr>';
+  });
 }
-
-function toggleProduct(idx){
-  PRODUCTS_DATA[idx].active = !PRODUCTS_DATA[idx].active;
-  renderProducts();
-}
-
-function addProduct(){
-  var name = prompt('Product name:');
-  if(!name) return;
-  var sku = prompt('SKU (e.g. NEW-001):');
-  if(!sku) return;
-  PRODUCTS_DATA.push({emoji:'📦',sector:'Metals',name:name,sku:sku,ref:'REF-NEW-001',cost:0,market:0,floor:0,unit:'MT',moq:1,lead:7,certs:[],active:true});
-  renderProducts();
-}
-
-function showSyncPending(){
-  var el = document.getElementById('sync-status');
-  if(el) el.innerHTML = el.innerHTML.replace('✓ Just now','<span style="color:var(--gold)">⚡ Unsaved changes</span>');
-}
-
-function saveAllPrices(){
-  // In production: POST /v1/products/bulk-update
-  var payload = PRODUCTS_DATA.map(function(p){ return {sku:p.sku,cost:p.cost,market:p.market,floor:p.floor,active:p.active} });
-  alert('✅ ' + payload.length + ' products saved.\nPrices synced to:\n• Exchange (live board)\n• Buyer Platform\n• Agent Console PriceScout\n• Broker floor prices\n\nAll portals will reflect new prices immediately.');
-  var el = document.getElementById('sync-status');
-  if(el) el.innerHTML = '<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Exchange last sync</span><span style="color:var(--green)">✓ Just now</span></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Buyer Platform prices</span><span style="color:var(--green)">✓ Synced</span></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">Agent Console PriceScout</span><span style="color:var(--green)">✓ Synced</span></div><div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--muted)">PriceWatcher alerts</span><span style="color:var(--gold)">3 pending</span></div><div style="display:flex;justify-content:space-between;padding:5px 0"><span style="color:var(--muted)">Next auto-update</span><span style="color:var(--muted)">in 30 min</span></div>';
-}
-
-function forceSync(){
-  saveAllPrices();
-}
-
-function updatePrice(ref, sku, val){
-  saveAllPrices();
-}
-
-function updatePrice(ref,sku,val){var s=SUPPLIERS.find(function(x){return x.ref===ref});if(!s)return;var p=s.products.find(function(x){return x.sku===sku});if(p)p.price=parseFloat(val)||p.price;}
-function saveAllPrices(){alert('✓ All prices saved and synced to SLOI AI API.');}
-
-function renderUsers(){var tb=document.getElementById('user-tbody');if(!tb)return;tb.innerHTML='';USERS.forEach(function(u){var sc=u.status==='Active'?'bg':u.status==='Suspended'?'br':'ba';var kc=u.kyc==='Verified'?'bg':u.kyc==='Expired'?'br':'ba';var tr=document.createElement('tr');tr.innerHTML='<td style="color:var(--white);font-weight:600">'+u.name+'</td><td>'+u.country+'</td><td>'+u.role+'</td><td><span class="badge '+kc+'">'+u.kyc+'</span></td><td style="color:var(--teal)">'+u.credits+'</td><td>'+u.lois+'</td><td><span class="badge '+sc+'">'+u.status+'</span></td><td><div style="display:flex;gap:4px">'+(u.status==='Active'?'<button class="btn btn-xs btn-r" onclick="suspendUser(this)">Suspend</button>':'<button class="btn btn-xs btn-g" onclick="activateUser(this)">Activate</button>')+'<button class="btn btn-xs" onclick="openWA()">📱</button></div></td>';tb.appendChild(tr);});}
 
 function suspendUser(btn){btn.closest('tr').cells[6].innerHTML='<span class="badge br">Suspended</span>';btn.closest('td').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-xs btn-g" onclick="activateUser(this)">Activate</button></div>';}
 function activateUser(btn){btn.closest('tr').cells[6].innerHTML='<span class="badge bg">Active</span>';btn.closest('td').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-xs btn-r" onclick="suspendUser(this)">Suspend</button></div>';}
@@ -1178,7 +1161,7 @@ function renderLeadFinder(){
       ? '<button class="btn btn-xs btn-p" onclick="addToPipeline('+i+')">+ Add to pipeline</button>'
       : l.action === 'outreach'
       ? '<button class="btn btn-xs btn-g" onclick="sendWA()">📱 Outreach</button>'
-      : '<button class="btn btn-xs btn-a" onclick="alert('Iraq requires enhanced KYC. Boss review needed before outreach.')">⚠ Review first</button>';
+      : '<button class="btn btn-xs btn-a" onclick="alert(\'Iraq requires enhanced KYC. Boss review needed before outreach.\')">⚠ Review first</button>';
 
     html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:11px">';
     html += '<div style="font-size:18px;flex-shrink:0;width:26px;text-align:center">'+l.emoji+'</div>';
@@ -1187,7 +1170,7 @@ function renderLeadFinder(){
     html += '<div style="color:var(--muted);font-size:10px">'+l.type+' · '+l.country+' · '+l.sector+'</div>';
     html += '</div>';
     html += '<div style="text-align:right;flex-shrink:0;margin:0 8px">';
-    html += '<div style="font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--white)">'+l.value+'</div>';
+    html += '<div style="font-family:Fraunces,serif;font-size:14px;font-weight:700;color:var(--white)">'+l.value+'</div>';
     html += '<div style="font-size:9px;color:var(--muted)">via '+l.source+'</div>';
     html += '</div>';
     html += '<div style="font-size:10px;flex-shrink:0;margin-right:8px">'+l.relevance+'</div>';
@@ -1278,6 +1261,7 @@ renderKanban();renderBrokers();renderProducts();renderUsers();
 renderLeadFinder();renderPriceScoutFeed();renderAgentLog();
 loadCatalogStatus();
 loadNegotiations();
+loadRevenue();
 // Refresh negotiations when boss SSE fires
 setInterval(loadNegotiations, 15000);
 

@@ -124,6 +124,38 @@ router.post("/catalog/upload", authenticate, requireBoss, upload.single("file"),
   }
 });
 
+// ── GET /v1/admin/users — list all users with credits + LOI counts ───────────
+
+router.get("/users", authenticate, requireBoss, async (req, res) => {
+  const [{ data: users, error }, { data: credits }, { data: lois }, { data: orgs }] = await Promise.all([
+    supabase.from("users").select("id, email, name, role, org_id").order("name"),
+    supabase.from("credits").select("user_id, balance"),
+    supabase.from("lois").select("buyer_name"),
+    supabase.from("organizations").select("id, country"),
+  ]);
+
+  if (error) return res.status(500).json({ error: error.message });
+
+  const orgMap = {};
+  (orgs || []).forEach(o => { orgMap[o.id] = o; });
+
+  const creditMap = {};
+  (credits || []).forEach(c => { creditMap[c.user_id] = c.balance; });
+
+  const loiCountMap = {};
+  (lois || []).forEach(l => { loiCountMap[l.buyer_name] = (loiCountMap[l.buyer_name] || 0) + 1; });
+
+  return res.json((users || []).map(u => ({
+    id:        u.id,
+    email:     u.email,
+    name:      u.name,
+    role:      u.role,
+    country:   (orgMap[u.org_id] || {}).country || "—",
+    credits:   creditMap[u.id] ?? 0,
+    loi_count: loiCountMap[u.name] || 0,
+  })));
+});
+
 // ── GET /v1/admin/catalog/status — last sync info ────────────────────────────
 
 router.get("/catalog/status", authenticate, requireBoss, async (req, res) => {

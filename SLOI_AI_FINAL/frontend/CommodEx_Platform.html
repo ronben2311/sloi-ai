@@ -747,6 +747,21 @@ function loadProducts() {
         sel.appendChild(opt);
       });
     }
+    // Build Exchange products from real catalog
+    var _vol={metals:.003,building:.002,energy:.003,agriculture:.004,chemicals:.002};
+    EX_PRODUCTS = PRODUCTS.map(function(p, i) {
+      var price = p.price;
+      var sector = (p.sector||'').toLowerCase();
+      var v = _vol[sector] || .002;
+      var history = [], hp = price * 0.97;
+      for (var j = 0; j < 7; j++) { hp = parseFloat((hp*(1+(Math.random()-.45)*v*2)).toFixed(4)); history.push(hp); }
+      history.push(price);
+      return { id:i+1, emoji:p.emoji, sector:sector, name:p.name, sku:p.sku, ref:p.ref,
+        price:price, prev:price, unit:p.unit, moq:p.moq||1, lead:p.lead||0, deals:0, volume:0, history:history };
+    });
+    if (exSelectedId === null && EX_PRODUCTS.length > 0) {
+      setTimeout(function(){ exRenderList(); exSelect(EX_PRODUCTS[0].id); }, 100);
+    }
   }).catch(function() {
     document.getElementById('product-list').innerHTML =
       '<div style="text-align:center;padding:40px;color:var(--muted)">Failed to load products</div>';
@@ -786,6 +801,16 @@ function loadLOIs() {
       };
     });
     renderLOIs();
+    // Build Exchange recent deals from real LOIs
+    EX_DEALS = data.map(function(l) {
+      var ep = EX_PRODUCTS.find(function(p){ return p.ref === l.supplier_ref; });
+      return { time: l.signed_at ? new Date(l.signed_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '—',
+        ref: l.ref, product: l.product, qty: (l.qty||'') + ' ' + (l.unit||'MT'),
+        price: parseFloat(l.deal_price||0), unit: l.unit||'MT', loi: true, id: ep ? ep.id : 0 };
+    });
+    // Update deal counts on exchange products
+    EX_PRODUCTS.forEach(function(p) { p.deals = EX_DEALS.filter(function(d){ return d.id===p.id; }).length; });
+    if (exSelectedId) exSelect(exSelectedId);
   }).catch(function() { renderLOIs(); });
 }
 var TITLES={opennetwork:['Open Network','Connect your AI agent · earn 1% per LOI'],dashboard:['Dashboard','Welcome back · Gulf Cement LLC'],exchange:['📊 Exchange','Live commodity market · order book · negotiate'],prices:['Price Discovery','Compare verified suppliers · live prices'],negotiate:['Start Negotiation','Configure mandate · AI negotiates for you'],rfqs:['RFQ Tracker','All your quote requests'],lois:['My LOIs','Signed Letters of Intent'],notifications:['Notifications','Alerts and updates'],credits:['Credits','Buy credits · history'],profile:['Profile','Account settings']};
@@ -948,25 +973,8 @@ loadLOIs();
 updateCreditDisplay();
 
 // ── EXCHANGE ──────────────────────────────────────────────────────────────────
-var EX_PRODUCTS=[
-  {id:1,emoji:'🔩',sector:'metals',name:'Steel Rebar G60 12mm',sku:'STL-12',ref:'REF-MET-001',price:2840,prev:2775,unit:'MT',moq:10,lead:7,deals:7,volume:284000,history:[2680,2710,2730,2750,2775,2800,2820,2840]},
-  {id:2,emoji:'🔩',sector:'metals',name:'Steel HR Coil SS400',sku:'STL-HRC',ref:'REF-MET-001',price:3100,prev:3100,unit:'MT',moq:20,lead:10,deals:2,volume:62000,history:[3050,3060,3070,3080,3095,3100,3100,3100]},
-  {id:3,emoji:'🔩',sector:'metals',name:'Aluminum 6061-T6',sku:'ALU-6061',ref:'REF-MET-002',price:9200,prev:9380,unit:'MT',moq:5,lead:8,deals:4,volume:184000,history:[9500,9450,9400,9380,9350,9300,9250,9200]},
-  {id:4,emoji:'🏗️',sector:'building',name:'Concrete Block 20cm',sku:'BLK-200',ref:'REF-BLD-001',price:4.8,prev:4.75,unit:'Unit',moq:1000,lead:3,deals:3,volume:14400,history:[4.6,4.65,4.7,4.72,4.75,4.75,4.78,4.8]},
-  {id:5,emoji:'🏗️',sector:'building',name:'Ready-Mix B25',sku:'CNC-B25',ref:'REF-BLD-001',price:380,prev:385,unit:'m³',moq:10,lead:2,deals:2,volume:7600,history:[390,388,386,385,385,383,381,380]},
-  {id:6,emoji:'🏗️',sector:'building',name:'Porcelain Tile 60x60',sku:'TLE-6060',ref:'REF-BLD-002',price:62,prev:64,unit:'m²',moq:100,lead:5,deals:1,volume:6200,history:[65,65,64.5,64,64,63,62.5,62]},
-  {id:7,emoji:'🏗️',sector:'building',name:'PVC Pipe 110mm',sku:'PVC-110',ref:'REF-BLD-003',price:28,prev:28,unit:'m',moq:500,lead:4,deals:0,volume:0,history:[28,28,28,28,28,28,28,28]},
-  {id:8,emoji:'⚡',sector:'energy',name:'Industrial Diesel B2',sku:'DSL-B2',ref:'REF-ENE-001',price:4.92,prev:4.90,unit:'L',moq:5000,lead:2,deals:2,volume:49200,history:[4.85,4.86,4.87,4.88,4.90,4.90,4.91,4.92]},
-  {id:9,emoji:'🌾',sector:'agriculture',name:'Hard Wheat',sku:'WHT-HRD',ref:'REF-AGR-001',price:1120,prev:1129,unit:'MT',moq:50,lead:14,deals:3,volume:168000,history:[1140,1138,1135,1132,1130,1128,1124,1120]},
-  {id:10,emoji:'🌾',sector:'agriculture',name:'Yellow Corn',sku:'CRN-YLW',ref:'REF-AGR-001',price:980,prev:992,unit:'MT',moq:50,lead:14,deals:1,volume:49000,history:[1000,998,996,994,992,990,985,980]},
-  {id:11,emoji:'🧪',sector:'chemicals',name:'Sulfuric Acid 98%',sku:'H2SO4',ref:'REF-CHM-001',price:580,prev:580,unit:'MT',moq:5,lead:7,deals:1,volume:29000,history:[578,579,580,580,580,580,580,580]},
-];
-var EX_DEALS=[
-  {time:'14:38',ref:'SL-LOI-20260501-003',product:'Steel Rebar G60',qty:'100 MT',price:2840,unit:'MT',loi:true,id:1},
-  {time:'14:22',ref:'SL-LOI-20260501-004',product:'Hard Wheat',qty:'50 MT',price:1120,unit:'MT',loi:true,id:9},
-  {time:'13:55',ref:'SL-LOI-20260501-002',product:'Aluminum 6061',qty:'5 MT',price:9200,unit:'MT',loi:true,id:3},
-  {time:'12:44',ref:'SL-LOI-20260501-001',product:'Yellow Corn',qty:'50 MT',price:980,unit:'MT',loi:true,id:10},
-];
+var EX_PRODUCTS=[];
+var EX_DEALS=[];
 var EX_SECTOR_ORDER=['metals','building','energy','agriculture','chemicals'];
 var EX_SECTOR_LABELS={metals:'🔩 Metals',building:'🏗️ Building',energy:'⚡ Energy',agriculture:'🌾 Agriculture',chemicals:'🧪 Chemicals'};
 var EX_STRAT_COSTS={watcher:1,standard:10,aggressive:20};
@@ -1118,9 +1126,10 @@ function exStartNeg(){
   var mQty=document.getElementById('m-qty');if(mQty)mQty.value=qty;
   var mTarget=document.getElementById('m-target');if(mTarget)mTarget.value=target;
   var mMax=document.getElementById('m-max');if(mMax)mMax.value=max;
+  var mProd=document.getElementById('m-product');
+  if(mProd){for(var i=0;i<mProd.options.length;i++){if(mProd.options[i].value===p.ref){mProd.selectedIndex=i;break;}}}
   show('negotiate',document.querySelectorAll('.nav')[2]);
   updateCreditDisplay();
-  alert('Mandate pre-filled from Exchange.\nProduct: '+p.name+'\nQty: '+qty+' '+p.unit+'\nTarget: $'+target+' · Max: $'+max);
 }
 
 function exWatch(){
@@ -1135,7 +1144,7 @@ show=function(v,btn){
   if(v==='exchange'){
     setTimeout(function(){
       exRenderList();
-      if(!exSelectedId) exSelect(1);
+      if(!exSelectedId && EX_PRODUCTS.length) exSelect(EX_PRODUCTS[0].id);
     },50);
   }
 };
