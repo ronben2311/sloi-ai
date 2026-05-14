@@ -113,8 +113,8 @@ select.inp option{background:var(--surface)}
   </div>
   <div class="sb-section">Operations</div>
   <button class="nav active" onclick="show('dashboard',this)"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></button>
-  <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold">2</span></button>
-  <button class="nav" onclick="show('lois',this)"><span class="nav-icon">📄</span><span class="nav-label">My LOIs</span><span class="nav-badge nb-red">1</span></button>
+  <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold" id="neg-badge">0</span></button>
+  <button class="nav" onclick="show('lois',this)"><span class="nav-icon">📄</span><span class="nav-label">My LOIs</span><span class="nav-badge nb-red" id="loi-badge">0</span></button>
   <button class="nav" onclick="show('pipeline',this)"><span class="nav-icon">📊</span><span class="nav-label">Pipeline</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('suppliers',this)"><span class="nav-icon">🏭</span><span class="nav-label">My suppliers</span></button>
@@ -127,8 +127,8 @@ select.inp option{background:var(--surface)}
   <button class="nav" onclick="window.location.href='login.html'"><span class="nav-icon">←</span><span class="nav-label">Sign out</span></button>
   <div class="sb-footer">
     <div class="sf-label">LOI FEES THIS MONTH</div>
-    <div class="sf-val">$3,500</div>
-    <div style="font-size:10px;color:var(--muted);margin-top:2px">7 LOIs × $500</div>
+    <div class="sf-val" id="sb-loi-fees-val">$0</div>
+    <div style="font-size:10px;color:var(--muted);margin-top:2px" id="sb-loi-fees-sub">0 LOIs × $500</div>
   </div>
 </aside>
 
@@ -151,16 +151,16 @@ select.inp option{background:var(--surface)}
   <div id="view-dashboard" class="view active">
     <div style="background:linear-gradient(135deg,rgba(91,95,239,.1),rgba(232,169,74,.06));border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
       <div>
-        <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:4px">Good morning, <em style="font-style:italic;color:var(--gold)">Gulf Trade Partners.</em></div>
-        <div style="font-size:11px;color:var(--muted)">2 active negotiations · 1 LOI pending fee · $892K volume this month</div>
+        <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:4px">Broker portal — <em style="font-style:italic;color:var(--gold)" id="dash-greeting-name">loading...</em></div>
+        <div style="font-size:11px;color:var(--muted)" id="dash-greeting-sub">Loading live data...</div>
       </div>
       <button class="btn btn-p" onclick="show('negotiations',document.querySelectorAll('.nav')[1])">🤖 View live negotiations →</button>
     </div>
 
     <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Volume MTD</div><div class="stat-val" style="color:var(--violet)">$892K</div><div class="stat-sub up">↑ 18%</div></div>
-      <div class="stat"><div class="stat-top">LOIs signed</div><div class="stat-val" style="color:var(--green)">7</div><div class="stat-sub">this month</div></div>
-      <div class="stat"><div class="stat-top">LOI fees owed</div><div class="stat-val" style="color:var(--gold)">$3,500</div><div class="stat-sub">7 × $500</div></div>
+      <div class="stat"><div class="stat-top">Volume MTD</div><div class="stat-val" style="color:var(--violet)" id="dash-stat-volume">—</div><div class="stat-sub up">total LOI value</div></div>
+      <div class="stat"><div class="stat-top">LOIs signed</div><div class="stat-val" style="color:var(--green)" id="dash-stat-lois">—</div><div class="stat-sub">this month</div></div>
+      <div class="stat"><div class="stat-top">LOI fees owed</div><div class="stat-val" style="color:var(--gold)" id="dash-stat-fees">—</div><div class="stat-sub">unpaid × $500</div></div>
       <div class="stat"><div class="stat-top">Pipeline value</div><div class="stat-val">$420K</div><div class="stat-sub">8 active leads</div></div>
     </div>
 
@@ -168,71 +168,14 @@ select.inp option{background:var(--surface)}
       <!-- LIVE NEGOTIATIONS -->
       <div class="card" style="margin-bottom:0">
         <div class="card-title">// LIVE NEGOTIATIONS</div>
-
-        <div class="neg-card live">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-            <div>
-              <div style="font-size:10px;color:var(--muted)">NEG-001 · Deal Hunter</div>
-              <div style="font-size:13px;font-weight:600;color:var(--white)">🔩 Steel Rebar G60 · 100 MT</div>
-            </div>
-            <span class="badge bg">● Round 3/5</span>
-          </div>
-          <div class="rounds-bar">
-            <div class="rb done"></div><div class="rb done"></div><div class="rb active"></div><div class="rb empty"></div><div class="rb empty"></div>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:10px;margin-top:8px">
-            <div><div style="color:var(--muted)">Buyer target</div><div style="color:var(--white);font-weight:600">$2,700/MT</div></div>
-            <div><div style="color:var(--muted)">Agent offer</div><div style="color:var(--indigo);font-weight:600">$2,820/MT</div></div>
-            <div><div style="color:var(--muted)">Your floor</div><div style="color:var(--gold);font-weight:600">$2,600/MT</div></div>
-          </div>
-          <div style="font-size:10px;color:var(--muted);margin-top:8px;line-height:1.5">Agent is negotiating using your floor price. You will be notified when agreement is reached and Boss approves.</div>
-        </div>
-
-        <div class="neg-card pending">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-            <div>
-              <div style="font-size:10px;color:var(--muted)">NEG-002 · Standard</div>
-              <div style="font-size:13px;font-weight:600;color:var(--white)">🌾 Hard Wheat · 50 MT</div>
-            </div>
-            <span class="badge ba">⚡ Round 1/5</span>
-          </div>
-          <div class="rounds-bar">
-            <div class="rb active"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div>
-          </div>
-          <div style="font-size:10px;color:var(--muted);margin-top:8px">Agent sending first offer · Awaiting your response via platform</div>
-        </div>
+        <div id="dash-live-negs"><div style="font-size:11px;color:var(--muted);padding:16px;text-align:center">Loading...</div></div>
       </div>
 
       <!-- RECENT LOIs -->
       <div class="card" style="margin-bottom:0">
         <div class="card-title">// RECENT LOIs</div>
-        <div class="loi-card recent" style="margin-bottom:7px">
-          <div style="font-size:22px;flex-shrink:0">📄</div>
-          <div style="flex:1">
-            <div style="font-size:10px;color:var(--indigo);margin-bottom:2px">SL-LOI-20260501-003</div>
-            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:2px">Steel Rebar G60 · 100 MT</div>
-            <div style="font-size:10px;color:var(--muted)">$2,840/MT · FOB · Today</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--white)">$284,000</div>
-            <span class="badge bg" style="margin-top:3px">Signed</span>
-            <div style="font-size:10px;color:var(--gold);margin-top:4px">Fee: $500 due</div>
-          </div>
-        </div>
-        <div class="loi-card" style="margin-bottom:7px">
-          <div style="font-size:22px;flex-shrink:0">📄</div>
-          <div style="flex:1">
-            <div style="font-size:10px;color:var(--indigo);margin-bottom:2px">SL-LOI-20260428-001</div>
-            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:2px">Steel Rebar G60 · 50 MT</div>
-            <div style="font-size:10px;color:var(--muted)">$2,840/MT · FOB · 28 Apr</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--white)">$142,000</div>
-            <span class="badge bg" style="margin-top:3px">Signed</span>
-            <div style="font-size:10px;color:var(--green);margin-top:4px">Fee paid ✓</div>
-          </div>
-        </div>
-        <button class="btn btn-sm" style="width:100%;justify-content:center" onclick="show('lois',document.querySelectorAll('.nav')[2])">View all LOIs →</button>
+        <div id="dash-recent-lois"><div style="font-size:11px;color:var(--muted);padding:16px;text-align:center">Loading...</div></div>
+        <button class="btn btn-sm" style="width:100%;justify-content:center;margin-top:8px" onclick="show('lois',document.querySelectorAll('.nav')[2])">View all LOIs →</button>
       </div>
     </div>
   </div>
@@ -243,62 +186,25 @@ select.inp option{background:var(--surface)}
       🤖 <strong style="color:var(--white)">How it works:</strong> SLOI AI's agent negotiates with buyers on behalf of Boss, using your floor prices as the minimum. You see each round in real time. When agreement is reached, Boss approves and LOI is auto-generated. You pay a $500 LOI fee per signed deal.
     </div>
     <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Active</div><div class="stat-val" style="color:var(--green)">2</div></div>
-      <div class="stat"><div class="stat-top">Completed today</div><div class="stat-val">3</div></div>
-      <div class="stat"><div class="stat-top">Agreed</div><div class="stat-val" style="color:var(--green)">2</div></div>
-      <div class="stat"><div class="stat-top">No agreement</div><div class="stat-val" style="color:var(--muted)">1</div></div>
+      <div class="stat"><div class="stat-top">Active</div><div class="stat-val" style="color:var(--green)" id="neg-stat-active">—</div></div>
+      <div class="stat"><div class="stat-top">Total today</div><div class="stat-val" id="neg-stat-completed">—</div></div>
+      <div class="stat"><div class="stat-top">Agreed</div><div class="stat-val" style="color:var(--green)" id="neg-stat-agreed">—</div></div>
+      <div class="stat"><div class="stat-top">No agreement</div><div class="stat-val" style="color:var(--muted)" id="neg-stat-no-agree">—</div></div>
     </div>
 
     <!-- LIVE -->
     <div class="card">
       <div class="card-title">// LIVE NEGOTIATIONS</div>
-      <div class="neg-card live">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-          <div><div style="font-size:10px;color:var(--muted)">NEG-001 · Deal Hunter · Standard strategy</div><div style="font-size:14px;font-weight:600;color:var(--white)">🔩 Steel Rebar G60 12mm · 100 MT</div></div>
-          <span class="badge bg">● Round 3/5</span>
-        </div>
-        <div class="rounds-bar" style="margin-bottom:8px">
-          <div class="rb done"></div><div class="rb done"></div><div class="rb active"></div><div class="rb empty"></div><div class="rb empty"></div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;font-size:10px;margin-bottom:10px">
-          <div><div style="color:var(--muted)">Buyer target</div><div style="color:var(--white);font-weight:600">$2,700/MT</div></div>
-          <div><div style="color:var(--muted)">Buyer max</div><div style="color:var(--white);font-weight:600">$2,900/MT</div></div>
-          <div><div style="color:var(--muted)">Agent offer (R3)</div><div style="color:var(--indigo);font-weight:600">$2,820/MT</div></div>
-          <div><div style="color:var(--muted)">Your floor</div><div style="color:var(--gold);font-weight:600">$2,600/MT</div></div>
-          <div><div style="color:var(--muted)">Total if agreed</div><div style="color:var(--violet);font-weight:600">~$282K</div></div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:10px;font-size:11px;color:var(--muted);margin-bottom:10px">
-          <div style="color:var(--white);font-weight:600;margin-bottom:4px">Round 3 — Agent message to buyer:</div>
-          "We are making progress. Our suppliers can accommodate $2,820/MT FOB for 100 MT with delivery by 15 June. This is a competitive offer reflecting current market conditions."
-        </div>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-xs btn-g" onclick="setFloor()">Update floor price</button>
-          <button class="btn btn-xs" onclick="openWA()">📱 Notify Boss</button>
-          <button class="btn btn-xs btn-r" onclick="alert('Negotiation cancelled. Boss will be notified.')">Cancel deal</button>
-        </div>
-      </div>
-
-      <div class="neg-card" style="opacity:.85">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <div><div style="font-size:10px;color:var(--muted)">NEG-002 · Standard strategy</div><div style="font-size:14px;font-weight:600;color:var(--white)">🌾 Hard Wheat · 50 MT</div></div>
-          <span class="badge ba">Round 1/5</span>
-        </div>
-        <div class="rounds-bar" style="margin-bottom:8px">
-          <div class="rb active"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div>
-        </div>
-        <div style="font-size:10px;color:var(--muted)">Agent sending first offer · Target: $1,050/MT · Your floor: $1,000/MT</div>
-      </div>
+      <div id="neg-live-section"><div style="font-size:11px;color:var(--muted);padding:16px;text-align:center">Loading...</div></div>
     </div>
 
     <!-- HISTORY -->
     <div class="card">
-      <div class="card-title">// HISTORY — TODAY</div>
+      <div class="card-title">// HISTORY</div>
       <table>
-        <thead><tr><th>Time</th><th>Product</th><th>Qty</th><th>Agreed price</th><th>Total</th><th>Rounds</th><th>Outcome</th></tr></thead>
-        <tbody>
-          <tr><td style="color:var(--muted)">13:22</td><td style="color:var(--white);font-weight:600">Hard Wheat</td><td>50 MT</td><td style="color:var(--green)">$1,120/MT</td><td style="color:var(--violet)">$56,000</td><td>3/5</td><td><span class="badge bg">LOI signed</span></td></tr>
-          <tr><td style="color:var(--muted)">11:44</td><td style="color:var(--white);font-weight:600">Steel Rebar G60</td><td>30 MT</td><td style="color:var(--green)">$2,840/MT</td><td style="color:var(--violet)">$85,200</td><td>2/5</td><td><span class="badge bg">LOI signed</span></td></tr>
-          <tr><td style="color:var(--muted)">10:15</td><td style="color:var(--white);font-weight:600">Steel HR Coil</td><td>20 MT</td><td style="color:var(--muted)">—</td><td style="color:var(--muted)">—</td><td>5/5</td><td><span class="badge br">No agreement</span></td></tr>
+        <thead><tr><th>Time</th><th>Product</th><th>Qty</th><th>Deal price</th><th>Total</th><th>Rounds</th><th>Outcome</th></tr></thead>
+        <tbody id="neg-history-body">
+          <tr><td colspan="7" style="color:var(--muted);text-align:center;padding:16px">Loading...</td></tr>
         </tbody>
       </table>
     </div>
@@ -307,10 +213,10 @@ select.inp option{background:var(--surface)}
   <!-- LOIs -->
   <div id="view-lois" class="view">
     <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Total LOIs</div><div class="stat-val">24</div></div>
-      <div class="stat"><div class="stat-top">This month</div><div class="stat-val" style="color:var(--green)">7</div></div>
-      <div class="stat"><div class="stat-top">Total volume</div><div class="stat-val" style="color:var(--violet)">$4.2M</div></div>
-      <div class="stat"><div class="stat-top">Fees owed</div><div class="stat-val" style="color:var(--gold)">$3,500</div></div>
+      <div class="stat"><div class="stat-top">Total LOIs</div><div class="stat-val" id="loi-stat-total">—</div></div>
+      <div class="stat"><div class="stat-top">This month</div><div class="stat-val" style="color:var(--green)" id="loi-stat-month">—</div></div>
+      <div class="stat"><div class="stat-top">Total volume</div><div class="stat-val" style="color:var(--violet)" id="loi-stat-volume">—</div></div>
+      <div class="stat"><div class="stat-top">Fees owed</div><div class="stat-val" style="color:var(--gold)" id="loi-stat-fees">—</div></div>
     </div>
     <div style="background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.25);border-radius:6px;padding:12px 16px;margin-bottom:14px;font-size:11px;color:var(--text);line-height:1.7">
       💰 <strong style="color:var(--white)">LOI fee:</strong> $500 per signed LOI (your agreed rate). Invoiced monthly by SLOI AI. Payment via SWIFT to SLOI AI Ltd. bank account. Fees are separate from your deal margin.
@@ -496,15 +402,218 @@ select.inp option{background:var(--surface)}
 
 const api = initPortal('broker');
 
-// Populate real user data
+// Real user info
 (function() {
   var u = api.getUser();
   if (u) {
     var name = u.name || u.email;
     document.getElementById('user-org').textContent = name;
-    document.getElementById('tb-sub').textContent = name;
+    var gn = document.getElementById('dash-greeting-name');
+    if (gn) gn.textContent = (u.org_name || name) + '.';
   }
 })();
+
+// ── State ─────────────────────────────────────────────────────────────────────
+
+var _negs = [];
+var _lois = [];
+
+// ── Data loading ──────────────────────────────────────────────────────────────
+
+async function loadData() {
+  try {
+    var results = await Promise.all([api.getNegotiations(), api.getLOIs()]);
+    _negs = results[0] || [];
+    _lois = results[1] || [];
+    renderAll();
+  } catch(e) { console.error('[broker] loadData', e); }
+}
+
+function renderAll() {
+  renderSidebar();
+  renderDashboard();
+  renderNegotiationsView();
+  renderLOIsView();
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+
+function renderSidebar() {
+  var active = _negs.filter(function(n){ return n.status === 'running' || n.status === 'awaiting_boss'; }).length;
+  var unpaid = _lois.filter(function(l){ return !l.loi_fee_paid; }).length;
+  var nb = document.getElementById('neg-badge');
+  if (nb) { nb.textContent = active; nb.style.display = active ? '' : 'none'; }
+  var lb = document.getElementById('loi-badge');
+  if (lb) { lb.textContent = unpaid; lb.style.display = unpaid ? '' : 'none'; }
+  var fv = document.getElementById('sb-loi-fees-val');
+  if (fv) fv.textContent = '$' + (unpaid * 500).toLocaleString();
+  var fs = document.getElementById('sb-loi-fees-sub');
+  if (fs) fs.textContent = unpaid + ' LOIs × $500';
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+
+function renderDashboard() {
+  var active = _negs.filter(function(n){ return n.status === 'running'; });
+  var today = new Date(); today.setHours(0,0,0,0);
+  var loisMonth = _lois.filter(function(l){
+    if (!l.signed_at) return false;
+    var d = new Date(l.signed_at);
+    return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+  });
+  var totalVol = _lois.reduce(function(s,l){ return s + (parseFloat(l.total_value)||0); }, 0);
+  var unpaid = _lois.filter(function(l){ return !l.loi_fee_paid; }).length;
+
+  var gs = document.getElementById('dash-greeting-sub');
+  if (gs) gs.textContent = active.length + ' active negotiation(s) · ' + unpaid + ' LOI fee(s) pending';
+  var dv = document.getElementById('dash-stat-volume');
+  if (dv) dv.textContent = '$' + (totalVol >= 1000000 ? (totalVol/1000000).toFixed(1)+'M' : totalVol >= 1000 ? Math.round(totalVol/1000)+'K' : totalVol.toLocaleString());
+  var dl = document.getElementById('dash-stat-lois');
+  if (dl) dl.textContent = loisMonth.length;
+  var df = document.getElementById('dash-stat-fees');
+  if (df) df.textContent = '$' + (unpaid * 500).toLocaleString();
+
+  var liveNegs = _negs.filter(function(n){ return n.status === 'running' || n.status === 'awaiting_boss'; });
+  var dlc = document.getElementById('dash-live-negs');
+  if (dlc) dlc.innerHTML = liveNegs.length
+    ? liveNegs.slice(0,2).map(function(n){ return buildNegCard(n, true); }).join('')
+    : '<div style="font-size:11px;color:var(--muted);padding:16px;text-align:center">No active negotiations</div>';
+
+  var drl = document.getElementById('dash-recent-lois');
+  if (drl) drl.innerHTML = _lois.length
+    ? _lois.slice(0,2).map(buildLoiCard).join('')
+    : '<div style="font-size:11px;color:var(--muted);padding:16px;text-align:center">No LOIs yet</div>';
+}
+
+// ── Negotiations view ─────────────────────────────────────────────────────────
+
+function renderNegotiationsView() {
+  var today = new Date(); today.setHours(0,0,0,0);
+  var todayNegs = _negs.filter(function(n){ return new Date(n.created_at||0) >= today; });
+  var active = _negs.filter(function(n){ return n.status === 'running'; });
+  var agreed = _negs.filter(function(n){ return n.status === 'completed'; });
+  var failed = _negs.filter(function(n){ return n.status === 'failed'; });
+
+  var na = document.getElementById('neg-stat-active'); if (na) na.textContent = active.length;
+  var nc = document.getElementById('neg-stat-completed'); if (nc) nc.textContent = todayNegs.length;
+  var ng = document.getElementById('neg-stat-agreed'); if (ng) ng.textContent = agreed.length;
+  var nf = document.getElementById('neg-stat-no-agree'); if (nf) nf.textContent = failed.length;
+
+  var liveNegs = _negs.filter(function(n){ return n.status === 'running' || n.status === 'awaiting_boss'; });
+  var ls = document.getElementById('neg-live-section');
+  if (ls) ls.innerHTML = liveNegs.length
+    ? liveNegs.map(function(n){ return buildNegCard(n, false); }).join('')
+    : '<div style="font-size:11px;color:var(--muted);padding:16px;text-align:center">No active negotiations</div>';
+
+  var histNegs = _negs.filter(function(n){ return n.status !== 'running'; });
+  var hb = document.getElementById('neg-history-body');
+  if (hb) {
+    if (!histNegs.length) {
+      hb.innerHTML = '<tr><td colspan="7" style="color:var(--muted);text-align:center;padding:16px">No completed negotiations yet</td></tr>';
+    } else {
+      hb.innerHTML = histNegs.map(function(n){
+        var t = n.updated_at ? new Date(n.updated_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}) : '—';
+        var badge = n.status==='completed' ? '<span class="badge bg">LOI signed</span>'
+          : n.status==='rejected' ? '<span class="badge br">Rejected</span>'
+          : n.status==='failed'   ? '<span class="badge br">No agreement</span>'
+          : '<span class="badge ba">'+n.status+'</span>';
+        var dp = n.deal_price ? '$'+parseFloat(n.deal_price).toFixed(2)+'/'+n.unit : '—';
+        var tv = n.deal_price ? '$'+(parseFloat(n.deal_price)*parseFloat(n.qty||0)).toLocaleString() : '—';
+        return '<tr><td style="color:var(--muted)">'+t+'</td>'
+          +'<td style="color:var(--white);font-weight:600">'+n.product+'</td>'
+          +'<td>'+n.qty+' '+(n.unit||'MT')+'</td>'
+          +'<td style="color:var(--green)">'+dp+'</td>'
+          +'<td style="color:var(--violet)">'+tv+'</td>'
+          +'<td>'+(n.current_round||'—')+'/'+(n.max_rounds||5)+'</td>'
+          +'<td>'+badge+'</td></tr>';
+      }).join('');
+    }
+  }
+}
+
+// ── LOIs view ─────────────────────────────────────────────────────────────────
+
+function renderLOIsView() {
+  var today = new Date();
+  var loisMonth = _lois.filter(function(l){
+    if (!l.signed_at) return false;
+    var d = new Date(l.signed_at);
+    return d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+  });
+  var totalVol = _lois.reduce(function(s,l){ return s+(parseFloat(l.total_value)||0); }, 0);
+  var unpaid = _lois.filter(function(l){ return !l.loi_fee_paid; }).length;
+
+  var lt = document.getElementById('loi-stat-total'); if (lt) lt.textContent = _lois.length;
+  var lm = document.getElementById('loi-stat-month'); if (lm) lm.textContent = loisMonth.length;
+  var lv = document.getElementById('loi-stat-volume');
+  if (lv) lv.textContent = '$'+(totalVol>=1000000?(totalVol/1000000).toFixed(1)+'M':totalVol>=1000?Math.round(totalVol/1000)+'K':totalVol.toLocaleString());
+  var lf = document.getElementById('loi-stat-fees'); if (lf) lf.textContent = '$'+(unpaid*500).toLocaleString();
+
+  var loiList = document.getElementById('loi-list');
+  if (loiList) loiList.innerHTML = _lois.length
+    ? _lois.map(buildLoiCard).join('')
+    : '<div style="font-size:11px;color:var(--muted);padding:16px;text-align:center">No LOIs yet</div>';
+}
+
+// ── Card builders ─────────────────────────────────────────────────────────────
+
+function buildNegCard(n, compact) {
+  var maxR = n.max_rounds || 5;
+  var curR = n.current_round || 0;
+  var cls = n.status === 'running' ? 'live' : n.status === 'awaiting_boss' ? 'pending' : '';
+  var badge = n.status === 'running'       ? '<span class="badge bg">● Round '+curR+'/'+maxR+'</span>'
+    : n.status === 'awaiting_boss' ? '<span class="badge ba">⚡ Awaiting boss</span>'
+    : '<span class="badge bm">'+n.status+'</span>';
+  var rounds = '';
+  for (var i = 1; i <= maxR; i++) {
+    rounds += '<div class="rb '+(i < curR ? 'done' : i === curR ? 'active' : 'empty')+'"></div>';
+  }
+  var prices = '';
+  if (n.agent_price) {
+    var cols = compact ? 'grid-template-columns:1fr 1fr 1fr' : 'grid-template-columns:repeat(4,1fr)';
+    prices = '<div style="display:grid;'+cols+';gap:8px;font-size:10px;margin-top:8px">'
+      +'<div><div style="color:var(--muted)">Target</div><div style="color:var(--white);font-weight:600">$'+parseFloat(n.target_price||0).toFixed(0)+'/'+n.unit+'</div></div>'
+      +'<div><div style="color:var(--muted)">Agent offer</div><div style="color:var(--indigo);font-weight:600">$'+parseFloat(n.agent_price).toFixed(0)+'/'+n.unit+'</div></div>'
+      +'<div><div style="color:var(--muted)">Broker counter</div><div style="color:var(--gold);font-weight:600">'+(n.broker_price?'$'+parseFloat(n.broker_price).toFixed(0)+'/'+n.unit:'—')+'</div></div>'
+      +(!compact ? '<div><div style="color:var(--muted)">Deal price</div><div style="color:var(--violet);font-weight:600">'+(n.deal_price?'$'+parseFloat(n.deal_price).toFixed(0)+'/'+n.unit:'—')+'</div></div>' : '')
+      +'</div>';
+  }
+  return '<div class="neg-card '+cls+'">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+    +'<div><div style="font-size:10px;color:var(--muted)">'+n.id+' · '+(n.strategy||'Standard')+'</div>'
+    +'<div style="font-size:13px;font-weight:600;color:var(--white)">'+n.product+' · '+n.qty+' '+(n.unit||'MT')+'</div></div>'
+    +badge+'</div>'
+    +'<div class="rounds-bar">'+rounds+'</div>'
+    +prices+'</div>';
+}
+
+function buildLoiCard(l) {
+  var fresh = l.signed_at && (Date.now() - new Date(l.signed_at).getTime()) < 86400000;
+  return '<div class="loi-card'+(fresh?' recent':'')+'"><div style="font-size:22px;flex-shrink:0">📄</div>'
+    +'<div style="flex:1"><div style="font-size:10px;color:var(--indigo);margin-bottom:2px">'+l.ref+'</div>'
+    +'<div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:2px">'+l.product+' · '+l.qty+' '+(l.unit||'MT')+'</div>'
+    +'<div style="font-size:10px;color:var(--muted)">'+(l.signed_at?new Date(l.signed_at).toLocaleDateString():'Pending')+'</div></div>'
+    +'<div style="text-align:right;flex-shrink:0">'
+    +'<div style="font-family:\'Fraunces\',serif;font-size:17px;font-weight:700;color:var(--white)">$'+(parseFloat(l.total_value)||0).toLocaleString()+'</div>'
+    +'<span class="badge bg" style="margin-top:3px">Signed</span>'
+    +'<div style="margin-top:4px">'+(l.loi_fee_paid
+      ? '<span style="font-size:10px;color:var(--green)">Fee paid ✓</span>'
+      : '<span style="font-size:10px;color:var(--gold)">Fee due: $'+(l.loi_fee_usd||500)+'</span>')
+    +'</div></div></div>';
+}
+
+// ── SSE refresh ───────────────────────────────────────────────────────────────
+
+if (api.agui) {
+  api.agui.on('AWAIT_HUMAN', function(data) {
+    showToast('⚡ Deal reached: ' + (data.product||'') + ' · awaiting boss approval', 'gold');
+    loadData();
+  });
+  api.agui.on('LOI_GENERATED', function() { loadData(); });
+  api.agui.on('NEGOTIATION_STARTED', function() { loadData(); });
+}
+
+// ── Pipeline (mock) ───────────────────────────────────────────────────────────
 
 var PIPELINE = {
   new:[{name:'Cairo Constructions',product:'PVC Pipes',value:28000,country:'Egypt',hot:false},{name:'Kuwait Petro',product:'Diesel B2',value:49200,country:'Kuwait',hot:false}],
@@ -514,21 +623,13 @@ var PIPELINE = {
 };
 
 var SUPPLIERS_DATA = [
-  {ref:'REF-MET-001',emoji:'🔩',sector:'Metals',products:'Steel Rebar G60 · Steel HR Coil',cap:'500 MT/mo',lead:'7 days',status:'active'},
-  {ref:'REF-MET-002',emoji:'🔩',sector:'Metals',products:'Aluminum 6061-T6 · Aluminum Profiles',cap:'100 MT/mo',lead:'8 days',status:'active'},
-  {ref:'REF-AGR-001',emoji:'🌾',sector:'Agriculture',products:'Hard Wheat · Yellow Corn',cap:'2,000 MT/mo',lead:'14 days',status:'active'},
-];
-
-var LOIS_DATA = [
-  {ref:'SL-LOI-20260501-003',product:'Steel Rebar G60 · 100 MT',total:'$284,000',date:'Today',fee:'$500',feeStatus:'unpaid',fresh:true},
-  {ref:'SL-LOI-20260430-004',product:'Hard Wheat · 50 MT',total:'$56,000',date:'Yesterday',fee:'$500',feeStatus:'unpaid'},
-  {ref:'SL-LOI-20260428-001',product:'Steel Rebar G60 · 50 MT',total:'$142,000',date:'28 Apr',fee:'$500',feeStatus:'paid'},
-  {ref:'SL-LOI-20260420-001',product:'Aluminum 6061-T6 · 5 MT',total:'$46,000',date:'20 Apr',fee:'$500',feeStatus:'paid'},
-  {ref:'SL-LOI-20260415-001',product:'Steel HR Coil · 30 MT',total:'$93,000',date:'15 Apr',fee:'$500',feeStatus:'paid'},
+  {ref:'REF-MET-001',emoji:'🔩',sector:'Metals',products:'Steel Rebar G60 · Steel HR Coil',cap:'500 MT/mo',lead:'7 days'},
+  {ref:'REF-MET-002',emoji:'🔩',sector:'Metals',products:'Aluminum 6061-T6 · Aluminum Profiles',cap:'100 MT/mo',lead:'8 days'},
+  {ref:'REF-AGR-001',emoji:'🌾',sector:'Agriculture',products:'Hard Wheat · Yellow Corn',cap:'2,000 MT/mo',lead:'14 days'},
 ];
 
 var TITLES = {
-  dashboard:['Dashboard','BRK-UAE-001 · UAE / KSA / Iraq'],
+  dashboard:['Dashboard','Broker portal · live operations'],
   negotiations:['Negotiations','Live AI negotiation sessions'],
   lois:['My LOIs','Signed Letters of Intent · fee tracker'],
   pipeline:['Pipeline','Lead tracker · deal flow'],
@@ -581,46 +682,26 @@ function addLead(){
   renderPipeline();
 }
 
-function renderLOIs(){
-  var html='';
-  LOIS_DATA.forEach(function(l){
-    html+='<div class="loi-card'+(l.fresh?' recent':'')+'"><div style="font-size:22px;flex-shrink:0">📄</div>';
-    html+='<div style="flex:1"><div style="font-size:10px;color:var(--indigo);margin-bottom:2px">'+l.ref+'</div>';
-    html+='<div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:2px">'+l.product+'</div>';
-    html+='<div style="font-size:10px;color:var(--muted)">FOB · '+l.date+'</div></div>';
-    html+='<div style="text-align:right;flex-shrink:0">';
-    html+='<div style="font-family:\'Fraunces\',serif;font-size:17px;font-weight:700;color:var(--white)">'+l.total+'</div>';
-    html+='<span class="badge bg" style="margin-top:3px">Signed</span>';
-    html+='<div style="margin-top:4px">';
-    html+=l.feeStatus==='paid'?'<span style="font-size:10px;color:var(--green)">Fee paid ✓</span>':'<span style="font-size:10px;color:var(--gold)">Fee due: '+l.fee+'</span>';
-    html+='</div><button class="btn btn-xs" style="margin-top:5px" onclick="alert(\'Download LOI PDF\')">📄 Download</button>';
-    html+='</div></div>';
-  });
-  var el=document.getElementById('loi-list');
-  if(el) el.innerHTML=html;
-}
-
 function renderSuppliers(){
   var html='';
   SUPPLIERS_DATA.forEach(function(s){
-    html+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:14px;transition:border-color .15s" onmouseover="this.style.borderColor=\'rgba(91,95,239,.3)\'" onmouseout="this.style.borderColor=\'var(--border)\'">';
+    html+='<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:14px">';
     html+='<div style="font-size:24px;flex-shrink:0;width:36px;text-align:center">'+s.emoji+'</div>';
     html+='<div style="flex:1"><div style="font-size:11px;font-weight:700;color:var(--indigo);margin-bottom:2px">'+s.ref+'</div>';
     html+='<div style="font-size:11px;color:var(--white);font-weight:600;margin-bottom:2px">'+s.products+'</div>';
     html+='<div style="font-size:10px;color:var(--muted)">'+s.sector+' · Capacity: '+s.cap+' · Lead: '+s.lead+'</div></div>';
     html+='<span class="badge bg">Active</span>';
-    html+='<button class="btn btn-xs btn-a" onclick="openWA()" style="margin-left:6px">📱 Contact</button>';
     html+='</div>';
   });
   var el=document.getElementById('supplier-list');
   if(el) el.innerHTML=html;
 }
 
-function setFloor(){var p=prompt('Set new floor price for Steel Rebar G60 (USD/MT):','2600');if(p)alert('Floor price updated to $'+p+'/MT.\nAgent will not accept offers below this price.');}
-function openWA(){window.open('https://wa.me/?text='+encodeURIComponent('SLOI AI Broker Update\n\nBRK-UAE-001 · Gulf Trade Partners\n\nPowered by SLOI AI · sloiai.com'),'_blank');}
+function openWA(){window.open('https://wa.me/?text='+encodeURIComponent('SLOI AI Broker Update — Powered by SLOI AI · sloiai.com'),'_blank');}
 
+loadData();
+setInterval(loadData, 15000);
 renderPipeline();
-renderLOIs();
 renderSuppliers();
 </script>
 </body>

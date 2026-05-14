@@ -209,6 +209,10 @@ router.post("/", authenticate, async (req, res) => {
         neg_id: negId, product: productName, qty, unit, deal_price: dealPrice,
         total_value: totalValue, buyer: req.caller.name,
       }));
+      emitToRole("broker", sseEvent("AWAIT_HUMAN", negId, {
+        neg_id: negId, product: productName, qty, unit, deal_price: dealPrice,
+        total_value: totalValue, buyer: req.caller.name,
+      }));
 
       let decision;
       try { decision = await waitForBossDecision(negId); }
@@ -242,6 +246,7 @@ router.post("/", authenticate, async (req, res) => {
 
       emit("LOI_GENERATED", { loi_ref: loiRef, product: productName, qty, unit, deal_price: finalPrice, total_value: finalPrice * qty });
       emitToRole("buyer", sseEvent("LOI_GENERATED", negId, { loi_ref: loiRef, product: productName }));
+      emitToRole("broker", sseEvent("LOI_GENERATED", negId, { loi_ref: loiRef, product: productName }));
 
       return res.end();
     }

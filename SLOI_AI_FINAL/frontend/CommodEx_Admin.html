@@ -354,36 +354,41 @@ select.inp option{background:var(--surface)}
   <!-- NEGOTIATIONS -->
   <div id="view-negotiations" class="view">
     <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Active Now</div><div class="stat-val" style="color:var(--green)">2</div></div>
-      <div class="stat"><div class="stat-top">Pending Boss</div><div class="stat-val" style="color:var(--gold)">1</div></div>
-      <div class="stat"><div class="stat-top">Completed Today</div><div class="stat-val">4</div></div>
-      <div class="stat"><div class="stat-top">Avg Rounds</div><div class="stat-val">3.2</div></div>
+      <div class="stat"><div class="stat-top">Active Now</div><div class="stat-val" id="neg-stat-active" style="color:var(--green)">—</div></div>
+      <div class="stat"><div class="stat-top">Pending Boss</div><div class="stat-val" id="neg-stat-pending" style="color:var(--gold)">—</div></div>
+      <div class="stat"><div class="stat-top">Completed Today</div><div class="stat-val" id="neg-stat-completed">—</div></div>
+      <div class="stat"><div class="stat-top">Total</div><div class="stat-val" id="neg-stat-total">—</div></div>
     </div>
-    <div class="approval-box">
-      <div class="ab-title">⚡ Boss approval required</div>
+
+    <!-- Approval box — shown only when there's a pending deal -->
+    <div class="approval-box" id="approval-box" style="display:none">
+      <div class="ab-title">⚡ Boss approval required · <span id="ab-neg-id" style="font-weight:400;opacity:.7"></span></div>
       <div class="ab-grid">
-        <div><div class="abg-label">Buyer</div><div class="abg-val">Gulf Cement LLC · UAE</div></div>
-        <div><div class="abg-label">Product</div><div class="abg-val">Steel Rebar G60 · 100 MT</div></div>
-        <div><div class="abg-label">Agreed price</div><div class="abg-val" style="color:var(--green)">$2,840/MT</div></div>
-        <div><div class="abg-label">Total value</div><div class="abg-val">$284,000</div></div>
+        <div><div class="abg-label">Buyer</div><div class="abg-val" id="ab-buyer">—</div></div>
+        <div><div class="abg-label">Product</div><div class="abg-val" id="ab-product">—</div></div>
+        <div><div class="abg-label">Deal price</div><div class="abg-val" id="ab-price" style="color:var(--green)">—</div></div>
+        <div><div class="abg-label">Total value</div><div class="abg-val" id="ab-total">—</div></div>
         <div><div class="abg-label">LOI fee</div><div class="abg-val" style="color:var(--indigo)">$500</div></div>
-        <div><div class="abg-label">Rounds</div><div class="abg-val">3 of 5</div></div>
+        <div><div class="abg-label">Rounds</div><div class="abg-val" id="ab-rounds">—</div></div>
+      </div>
+      <div style="margin-bottom:8px">
+        <label style="font-size:10px;color:var(--muted);display:block;margin-bottom:4px">Override price (optional — leave blank to use agent deal price)</label>
+        <input class="inp" id="ab-override" type="number" placeholder="e.g. 2800" style="max-width:180px;padding:6px 10px;font-size:11px">
       </div>
       <div style="display:flex;gap:8px">
         <button class="btn btn-g" onclick="approveDeal()">✅ Approve — Generate LOI</button>
         <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗ Reject</button>
-        <button class="btn btn-sm" onclick="openConsole('neg')">Open Agent Console →</button>
       </div>
     </div>
+
     <div id="neg-list"></div>
+
     <div class="card">
-      <div class="card-title">// HISTORY — TODAY</div>
+      <div class="card-title">// ALL NEGOTIATIONS</div>
       <table>
-        <thead><tr><th>Time</th><th>Buyer</th><th>Product</th><th>Rounds</th><th>Price</th><th>Total</th><th>Outcome</th></tr></thead>
-        <tbody>
-          <tr><td style="color:var(--muted)">13:22</td><td><b style="color:var(--white)">Gulf Cement</b></td><td>Hard Wheat · 50 MT</td><td>3/5</td><td style="color:var(--green)">$1,120/MT</td><td>$56,000</td><td><span class="badge bg">Agreed</span></td></tr>
-          <tr><td style="color:var(--muted)">11:44</td><td><b style="color:var(--white)">Atlas Trading</b></td><td>Aluminum · 5 MT</td><td>2/5</td><td style="color:var(--green)">$9,200/MT</td><td>$46,000</td><td><span class="badge bg">Agreed</span></td></tr>
-          <tr><td style="color:var(--muted)">10:15</td><td><b style="color:var(--white)">Bauer GmbH</b></td><td>PVC Pipe · 2,000 m</td><td>5/5</td><td style="color:var(--muted)">—</td><td>—</td><td><span class="badge br">No deal</span></td></tr>
+        <thead><tr><th>ID</th><th>Buyer</th><th>Product</th><th>Rounds</th><th>Deal Price</th><th>Status</th><th>Time</th></tr></thead>
+        <tbody id="neg-history-body">
+          <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>
         </tbody>
       </table>
     </div>
@@ -880,7 +885,105 @@ function moveCard(from,to,name){var idx=PIPELINE[from].findIndex(function(c){ret
 
 function addLead(){var co=document.getElementById('pl-co').value.trim();var pr=document.getElementById('pl-prod').value.trim();var val=parseInt(document.getElementById('pl-val').value)||0;var cty=document.getElementById('pl-cty').value;if(!co||!pr){alert('Enter company and product.');return;}PIPELINE.new.push({name:co,product:pr,value:val,country:cty,hot:false});document.getElementById('pl-co').value='';document.getElementById('pl-prod').value='';document.getElementById('pl-val').value='';renderKanban();}
 
-function renderNegotiations(){var negs=[{id:'N001',emoji:'🔩',product:'Steel Rebar G60',buyer:'Gulf Cement LLC',strategy:'Standard',rounds:3,maxRounds:5,agentPrice:2820,brokerPrice:2840,target:2700,max:2900},{id:'N002',emoji:'🌾',product:'Hard Wheat',buyer:'Bauer GmbH',strategy:'Aggressive',rounds:5,maxRounds:7,agentPrice:1100,brokerPrice:1150,target:1050,max:1200}];var html='';negs.forEach(function(n){var bars='';for(var i=1;i<=n.maxRounds;i++)bars+='<div class="rb '+(i<n.rounds?'done':i===n.rounds?'active':'pending')+'"></div>';html+='<div class="neg-card live"><div class="nc-top"><div class="nc-avatar">'+n.emoji+'</div><div style="flex:1"><div class="nc-ref">'+n.id+' · '+n.strategy+'</div><div class="nc-product">'+n.product+' · '+n.buyer+'</div></div><span class="badge bg">● Live</span></div>';html+='<div style="background:var(--surface2);border-radius:4px;padding:10px;margin-bottom:10px"><div class="rounds-bar">'+bars+'</div><div style="font-size:9px;color:var(--muted)">Round '+n.rounds+' of '+n.maxRounds+'</div></div>';html+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:10px;margin-bottom:10px"><div><div style="color:var(--muted);margin-bottom:2px">Agent offer</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--indigo)">$'+n.agentPrice.toLocaleString()+'</div></div><div><div style="color:var(--muted);margin-bottom:2px">Broker price</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--gold)">$'+n.brokerPrice.toLocaleString()+'</div></div><div><div style="color:var(--muted);margin-bottom:2px">Gap</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--red)">$'+(n.brokerPrice-n.agentPrice).toLocaleString()+'</div></div></div>';html+='<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn btn-xs btn-a" onclick="alert(\'Set manual price for '+n.id+'\')">Set manual price</button><button class="btn btn-xs" onclick="window.open(\'negotiation-agent.html\',\'_blank\')">Open console →</button><button class="btn btn-xs btn-r" onclick="alert(\'Stopped.\')">Stop</button></div></div>';});document.getElementById('neg-list').innerHTML=html||'<div style="text-align:center;padding:20px;color:var(--muted)">No active negotiations</div>';}
+var _pendingNegId = null;
+
+function loadNegotiations() {
+  api.getNegotiations().then(function(negs) {
+    // Stats
+    var active    = negs.filter(function(n){ return n.status === 'running'; }).length;
+    var pending   = negs.filter(function(n){ return n.status === 'awaiting_boss'; }).length;
+    var today     = new Date().toISOString().slice(0,10);
+    var completed = negs.filter(function(n){ return n.status === 'completed' && n.updated_at && n.updated_at.slice(0,10) === today; }).length;
+
+    document.getElementById('neg-stat-active').textContent    = active;
+    document.getElementById('neg-stat-pending').textContent   = pending;
+    document.getElementById('neg-stat-completed').textContent = completed;
+    document.getElementById('neg-stat-total').textContent     = negs.length;
+    document.getElementById('neg-count').textContent          = pending || '';
+
+    // Approval box — show first awaiting_boss
+    var pendingNeg = negs.find(function(n){ return n.status === 'awaiting_boss'; });
+    var box = document.getElementById('approval-box');
+    if (pendingNeg) {
+      _pendingNegId = pendingNeg.id;
+      document.getElementById('ab-neg-id').textContent  = pendingNeg.id;
+      document.getElementById('ab-buyer').textContent   = pendingNeg.buyer_name || '—';
+      document.getElementById('ab-product').textContent = pendingNeg.product + ' · ' + pendingNeg.qty + ' ' + pendingNeg.unit;
+      document.getElementById('ab-price').textContent   = pendingNeg.deal_price ? '$' + parseFloat(pendingNeg.deal_price).toLocaleString() + '/' + pendingNeg.unit : '—';
+      document.getElementById('ab-total').textContent   = pendingNeg.deal_price ? '$' + (parseFloat(pendingNeg.deal_price) * pendingNeg.qty).toLocaleString() : '—';
+      document.getElementById('ab-rounds').textContent  = (pendingNeg.current_round || '?') + ' of ' + (pendingNeg.max_rounds || '?');
+      document.getElementById('ab-override').value      = '';
+      box.style.display = 'block';
+    } else {
+      _pendingNegId = null;
+      box.style.display = 'none';
+    }
+
+    // Live negotiations list (running only)
+    renderNegotiations(negs.filter(function(n){ return n.status === 'running'; }));
+
+    // Full history table
+    renderNegHistory(negs);
+  }).catch(function(e) {
+    console.error('loadNegotiations:', e);
+  });
+}
+
+function renderNegotiations(negs) {
+  var STATUS_BADGE = {
+    running:       '<span class="badge bg">● Live</span>',
+    awaiting_boss: '<span class="badge ba">⏳ Awaiting boss</span>',
+    completed:     '<span class="badge bg">✓ Done</span>',
+    failed:        '<span class="badge br">✗ Failed</span>',
+    rejected:      '<span class="badge br">✗ Rejected</span>',
+  };
+  var html = '';
+  negs.forEach(function(n) {
+    var bars = '';
+    for (var i = 1; i <= (n.max_rounds||5); i++) {
+      bars += '<div class="rb ' + (i < n.current_round ? 'done' : i === n.current_round ? 'active' : 'pending') + '"></div>';
+    }
+    var agentP  = n.agent_price  ? '$' + parseFloat(n.agent_price).toLocaleString()  : '—';
+    var brokerP = n.broker_price ? '$' + parseFloat(n.broker_price).toLocaleString() : '—';
+    var gap     = (n.agent_price && n.broker_price)
+      ? '$' + Math.abs(parseFloat(n.broker_price) - parseFloat(n.agent_price)).toLocaleString()
+      : '—';
+    html += '<div class="neg-card live" style="margin-bottom:10px">';
+    html += '<div class="nc-top"><div class="nc-avatar">🤖</div><div style="flex:1"><div class="nc-ref">' + n.id + ' · ' + (n.strategy||'standard') + '</div><div class="nc-product">' + n.product + ' · ' + n.buyer_name + '</div></div>' + (STATUS_BADGE[n.status]||'') + '</div>';
+    html += '<div style="background:var(--surface2);border-radius:4px;padding:10px;margin-bottom:10px"><div class="rounds-bar">' + bars + '</div><div style="font-size:9px;color:var(--muted)">Round ' + (n.current_round||1) + ' of ' + (n.max_rounds||5) + '</div></div>';
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:10px;margin-bottom:10px">';
+    html += '<div><div style="color:var(--muted);margin-bottom:2px">Agent offer</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--indigo)">' + agentP + '</div></div>';
+    html += '<div><div style="color:var(--muted);margin-bottom:2px">Gap</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--gold)">' + gap + '</div></div>';
+    html += '<div><div style="color:var(--muted);margin-bottom:2px">Broker price</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--red)">' + brokerP + '</div></div>';
+    html += '</div></div>';
+  });
+  document.getElementById('neg-list').innerHTML = html || '';
+}
+
+function renderNegHistory(negs) {
+  var STATUS_BADGE = {
+    running:       '<span class="badge bg">Running</span>',
+    awaiting_boss: '<span class="badge ba">Pending boss</span>',
+    completed:     '<span class="badge bg">Completed</span>',
+    failed:        '<span class="badge br">Failed</span>',
+    rejected:      '<span class="badge br">Rejected</span>',
+  };
+  var html = negs.map(function(n) {
+    var time = n.created_at ? new Date(n.created_at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '—';
+    var price = n.deal_price ? '$' + parseFloat(n.deal_price).toLocaleString() + '/' + n.unit : '—';
+    return '<tr>' +
+      '<td style="color:var(--indigo);font-size:10px">' + n.id + '</td>' +
+      '<td><b style="color:var(--white)">' + (n.buyer_name||'—') + '</b></td>' +
+      '<td>' + n.product + ' · ' + n.qty + ' ' + n.unit + '</td>' +
+      '<td>' + (n.current_round||0) + '/' + (n.max_rounds||5) + '</td>' +
+      '<td style="color:var(--green)">' + price + '</td>' +
+      '<td>' + (STATUS_BADGE[n.status]||n.status) + '</td>' +
+      '<td style="color:var(--muted);font-size:10px">' + time + '</td>' +
+      '</tr>';
+  }).join('');
+  document.getElementById('neg-history-body').innerHTML = html ||
+    '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">No negotiations yet</td></tr>';
+}
 
 function renderBrokers(){var html='';BROKERS.forEach(function(b){html+='<div class="broker-row"><div class="br-av" style="background:'+b.color+';color:'+b.ct+'">'+b.init+'</div><div class="br-info"><div class="br-name">'+b.name+'</div><div class="br-meta">'+b.company+' · '+b.territory+'</div></div><div class="br-stats"><div class="brs"><div class="brs-v">'+b.deals+'</div><div class="brs-l">Deals</div></div><div class="brs"><div class="brs-v">'+b.volume+'</div><div class="brs-l">Volume</div></div><div class="brs"><div class="brs-v" style="color:var(--violet)">'+b.fees+'</div><div class="brs-l">LOI fees</div></div><div class="brs"><div class="brs-v" style="color:var(--gold)">'+b.pipeline+'</div><div class="brs-l">Pipeline</div></div></div><div style="display:flex;gap:5px;flex-shrink:0"><span class="badge bg">Active</span><button class="btn btn-xs btn-g" onclick="openWA()">📱</button><button class="btn btn-xs">Edit</button></div></div>';});document.getElementById('broker-list').innerHTML=html;}
 
@@ -1012,8 +1115,39 @@ function loadTpl(){var k=document.getElementById('wa-tpl').value;var m=WA_TPLS[k
 document.addEventListener('input',function(e){if(e.target.id==='wa-msg')document.getElementById('wa-preview').textContent=e.target.value;});
 function sendWA(){var m=document.getElementById('wa-msg').value;if(!m){alert('Enter a message.');return;}window.open('https://wa.me/?text='+encodeURIComponent(m),'_blank');closeWA();}
 
-function approveDeal(){if(confirm('Approve deal?\n\nSteel Rebar G60 · 100 MT · $2,840/MT\nGulf Cement LLC · UAE\nTotal: $284,000\n\nLOI will be generated automatically.')){alert('✅ Deal approved!\nSL-LOI-20260501-004\nEmailed to buyer · WhatsApp to supplier\n5 credits deducted · $500 LOI fee invoiced');document.getElementById('neg-count').textContent='1';document.getElementById('alert-count').textContent='2';}}
-function rejectDeal(){if(confirm('Reject this deal?')){alert('Deal rejected.');document.getElementById('neg-count').textContent='1';}}
+function approveDeal() {
+  if (!_pendingNegId) return;
+  var override = parseFloat(document.getElementById('ab-override').value) || null;
+  var btn = document.querySelector('#approval-box .btn-g');
+  if (btn) { btn.textContent = '⏳ Approving…'; btn.disabled = true; }
+
+  api.approveDeal(_pendingNegId, { action: 'approve', override_price: override })
+    .then(function() {
+      showToast('✅ Deal approved — LOI being generated', 'green');
+      document.getElementById('approval-box').style.display = 'none';
+      setTimeout(loadNegotiations, 2000);
+    })
+    .catch(function(err) {
+      showToast('✗ Approve failed: ' + (err.error || 'error'), 'red');
+      if (btn) { btn.textContent = '✅ Approve — Generate LOI'; btn.disabled = false; }
+    });
+}
+
+function rejectDeal() {
+  if (!_pendingNegId) return;
+  if (!confirm('Reject this deal? The buyer will be notified.')) return;
+
+  api.approveDeal(_pendingNegId, { action: 'reject' })
+    .then(function() {
+      showToast('Deal rejected', 'gold');
+      document.getElementById('approval-box').style.display = 'none';
+      _pendingNegId = null;
+      setTimeout(loadNegotiations, 1000);
+    })
+    .catch(function(err) {
+      showToast('✗ Reject failed: ' + (err.error || 'error'), 'red');
+    });
+}
 
 function tick(){document.getElementById('tb-clock').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' UTC';}
 setInterval(tick,1000);tick();
@@ -1140,9 +1274,12 @@ function renderAgentLog(){
   el.innerHTML = html;
 }
 
-renderKanban();renderNegotiations();renderBrokers();renderProducts();renderUsers();
+renderKanban();renderBrokers();renderProducts();renderUsers();
 renderLeadFinder();renderPriceScoutFeed();renderAgentLog();
 loadCatalogStatus();
+loadNegotiations();
+// Refresh negotiations when boss SSE fires
+setInterval(loadNegotiations, 15000);
 
 // ── CATALOG UPLOAD ────────────────────────────────────────────────────────────
 

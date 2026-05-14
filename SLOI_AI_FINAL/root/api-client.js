@@ -481,13 +481,15 @@ function initPortal(requiredRole) {
   // Connect global AG-UI stream
   api.stream()
     .on('AWAIT_HUMAN', (data, ev) => {
-      // Show approval notification on all portals that have permission
-      if (api.role === 'boss') showApprovalNotification(data, ev.session_id, api);
+      if (api.role === 'boss') {
+        showApprovalNotification(data, ev.session_id, api);
+        if (typeof loadNegotiations === 'function') loadNegotiations();
+      }
     })
     .on('LOI_GENERATED', (data) => {
       showToast('✅ LOI generated: ' + data.loi_ref, 'green');
-      // Refresh LOI list if visible
       if (typeof renderLOIs === 'function') renderLOIs();
+      if (typeof loadNegotiations === 'function') loadNegotiations();
     })
     .on('PRICE_UPDATE', (data) => {
       // Update Exchange if open

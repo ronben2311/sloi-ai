@@ -8,9 +8,8 @@ router.get("/", authenticate, async (req, res) => {
     .select("id, product, qty, unit, status, current_round, max_rounds, target_price, max_price, agent_price, broker_price, deal_price, supplier_ref, credits_used, created_at, updated_at")
     .order("created_at", { ascending: false });
 
-  if (req.caller.role === "buyer")  query = query.eq("buyer_id",  req.caller.id);
-  if (req.caller.role === "broker") query = query.eq("broker_id", req.caller.id);
-  // boss sees all — no filter
+  if (req.caller.role === "buyer") query = query.eq("buyer_id", req.caller.id);
+  // broker and boss see all — no filter
 
   const { data, error } = await query;
   if (error) return res.status(500).json({ error: error.message });
