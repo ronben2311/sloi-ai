@@ -33,31 +33,47 @@ class SloiAPI {
 
   // ── REQUEST HELPER ────────────────────────────────────────────────────────────
 
-  async req(method, path, body = null) {
+  async req(method, path, body = null, _retry = false) {
     const opts = { method, headers: this.headers() };
     if (body) opts.body = JSON.stringify(body);
-    try {
-      const res = await fetch(this.base + path, opts);
-      const data = await res.json();
-      if (!res.ok) throw { status: res.status, ...data };
-      return data;
-    } catch (err) {
-      this._handleError(err);
-      throw err;
+
+    const res = await fetch(this.base + path, opts);
+    const data = await res.json().catch(() => ({}));
+
+    if (res.status === 401 && !_retry && !path.startsWith('/auth/')) {
+      try {
+        await this._refresh();
+        return this.req(method, path, body, true);
+      } catch {
+        this.logout();
+        window.location.href = '/login.html';
+        throw { status: 401, error: 'session_expired' };
+      }
     }
+
+    if (!res.ok) {
+      if (res.status === 402) this._showToast('⚡ Insufficient credits — top up to continue', 'gold');
+      if (res.status === 451) this._showToast('🛡️ Blocked — compliance check failed', 'red');
+      if (res.status === 401) { this.logout(); window.location.href = '/login.html'; }
+      throw { status: res.status, ...data };
+    }
+
+    return data;
   }
 
-  _handleError(err) {
-    if (err.status === 401) {
-      this.logout();
-      window.location.href = '/login.html';
-    }
-    if (err.status === 402) {
-      this._showToast('⚡ Insufficient credits — top up to continue', 'gold');
-    }
-    if (err.status === 451) {
-      this._showToast('🛡️ Blocked — compliance check failed', 'red');
-    }
+  async _refresh() {
+    const refresh_token = localStorage.getItem('sloi_refresh');
+    if (!refresh_token) throw new Error('no_refresh_token');
+    const res = await fetch(this.base + '/auth/refresh', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw data;
+    this.token = data.token;
+    localStorage.setItem('sloi_jwt', data.token);
+    localStorage.setItem('sloi_refresh', data.refresh_token);
   }
 
   _showToast(msg, color = 'indigo') {
@@ -76,6 +92,7 @@ class SloiAPI {
     this.token = data.token;
     this.role = data.role;
     localStorage.setItem('sloi_jwt', data.token);
+    localStorage.setItem('sloi_refresh', data.refresh_token || '');
     localStorage.setItem('sloi_role', data.role);
     localStorage.setItem('sloi_user', JSON.stringify(data.user));
     return data;
@@ -86,6 +103,7 @@ class SloiAPI {
     this.token = data.token;
     this.role = data.role;
     localStorage.setItem('sloi_jwt', data.token);
+    localStorage.setItem('sloi_refresh', data.refresh_token || '');
     localStorage.setItem('sloi_role', data.role);
     localStorage.setItem('sloi_user', JSON.stringify(data.user));
     return data;
@@ -100,6 +118,7 @@ class SloiAPI {
 
   logout() {
     localStorage.removeItem('sloi_jwt');
+    localStorage.removeItem('sloi_refresh');
     localStorage.removeItem('sloi_api_key');
     localStorage.removeItem('sloi_role');
     localStorage.removeItem('sloi_user');
@@ -342,7 +361,8 @@ class SloiAGUI {
   }
 
   connect() {
-    const url = `${this.base}/stream?token=${encodeURIComponent(this.token)}`;
+    const token = localStorage.getItem('sloi_jwt') || this.token;
+    const url = `${this.base}/stream?token=${encodeURIComponent(token)}`;
     this.es = new EventSource(url);
 
     this.es.onmessage = (e) => {

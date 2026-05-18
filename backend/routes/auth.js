@@ -45,7 +45,8 @@ router.post("/register", async (req, res) => {
   if (sessionError) return res.status(500).json({ error: sessionError.message });
 
   return res.status(201).json({
-    token: session.session.access_token,
+    token:         session.session.access_token,
+    refresh_token: session.session.refresh_token,
     role,
     user: {
       id: authData.user.id,
@@ -76,7 +77,8 @@ router.post("/login", async (req, res) => {
   if (rowError || !userRow) return res.status(401).json({ error: "user_not_found" });
 
   return res.json({
-    token: data.session.access_token,
+    token:         data.session.access_token,
+    refresh_token: data.session.refresh_token,
     role: userRow.role,
     user: {
       id: data.user.id,
@@ -85,6 +87,19 @@ router.post("/login", async (req, res) => {
       role: userRow.role,
       org_id: userRow.org_id,
     },
+  });
+});
+
+router.post("/refresh", async (req, res) => {
+  const { refresh_token } = req.body;
+  if (!refresh_token) return res.status(400).json({ error: "refresh_token required" });
+
+  const { data, error } = await supabase.auth.refreshSession({ refresh_token });
+  if (error || !data.session) return res.status(401).json({ error: "refresh_failed" });
+
+  return res.json({
+    token:         data.session.access_token,
+    refresh_token: data.session.refresh_token,
   });
 });
 
