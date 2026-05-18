@@ -3183,15 +3183,12 @@
               return {
                 ref: l.ref,
                 product: l.product + " · " + l.qty + " " + (l.unit || "MT"),
-                price:
-                  "$" +
-                  Number(l.deal_price).toLocaleString() +
-                  "/" +
-                  (l.unit || "MT"),
+                price: "$" + Number(l.deal_price).toLocaleString() + "/" + (l.unit || "MT"),
                 total: "$" + Number(l.total_value).toLocaleString(),
                 date: new Date(l.signed_at).toLocaleDateString(),
                 emoji: SECTOR_EMOJI["Metals"],
                 fresh: false,
+                _raw: { ref: l.ref, product: l.product, qty: l.qty, unit: l.unit || "MT", price: l.deal_price, buyer: l.buyer_name },
               };
             });
             renderLOIs();
@@ -3602,6 +3599,12 @@
         document.getElementById("rfq-list").innerHTML = html;
       }
 
+      function openLOI(btn) {
+        var d = btn.dataset;
+        var q = new URLSearchParams({ ref: d.ref, product: d.product, qty: d.qty, unit: d.unit, price: d.price, buyer: d.buyer });
+        window.open('loi-generator.html?' + q.toString(), '_blank');
+      }
+
       function renderLOIs() {
         var html = "";
         LOIS_DATA.forEach(function (l) {
@@ -3620,7 +3623,7 @@
             l.date +
             '</div></div><div style="text-align:right;flex-shrink:0"><div class="lc-val">' +
             l.total +
-            '</div><div style="margin-top:4px"><span class="badge bg">Signed</span></div><button class="btn btn-xs btn-g" style="margin-top:6px" onclick="window.open(\'loi-generator.html\',\'_blank\')">📄 Download</button></div></div>';
+            '</div><div style="margin-top:4px"><span class="badge bg">Signed</span></div><button class="btn btn-xs btn-g" style="margin-top:6px" onclick="openLOI(this)" data-ref="' + (l._raw.ref||'') + '" data-product="' + (l._raw.product||'') + '" data-qty="' + (l._raw.qty||'') + '" data-unit="' + (l._raw.unit||'') + '" data-price="' + (l._raw.price||'') + '" data-buyer="' + (l._raw.buyer||'') + '">📄 Download</button></div></div>';
         });
         document.getElementById("loi-list").innerHTML = html;
       }
