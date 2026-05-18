@@ -70,7 +70,7 @@ router.post("/catalog/upload", authenticate, requireBoss, upload.single("file"),
 
     if (paramError) return res.status(500).json({ error: "negotiation_params upsert failed: " + paramError.message });
 
-    // ── Parse Product Catalog sheet — update prices on existing products ─────
+    // ── Parse Product Catalog sheet — upsert all products ───────────────────
     const catSheet = wb.Sheets["📦 Product Catalog"];
     let pricesUpdated = 0;
 
@@ -79,31 +79,33 @@ router.post("/catalog/upload", authenticate, requireBoss, upload.single("file"),
       const catHeaderIdx = catRows.findIndex(r => String(r[0]).trim() === "REF Code");
 
       if (catHeaderIdx !== -1) {
-        const catData = catRows
+        const products = catRows
           .slice(catHeaderIdx + 1)
-          .filter(r => String(r[0]).startsWith("REF-"));
-
-        for (const r of catData) {
-          const sku          = String(r[1]).trim();
-          const market_price = parseFloat(r[6]);
-          const moq          = parseInt(r[23]);
-          const lead_time    = parseInt(r[14]);
-          const certs        = String(r[25]).split(",").map(c => c.trim()).filter(Boolean);
-
-          if (!sku || !market_price) continue;
-
-          const { error } = await supabase
-            .from("products")
-            .update({
+          .filter(r => String(r[0]).startsWith("REF-"))
+          .map(r => {
+            const sku          = String(r[1]).trim();
+            const market_price = parseFloat(r[6]);
+            if (!sku || !market_price) return null;
+            return {
+              ref:            String(r[0]).trim(),
+              sku,
+              name:           String(r[2]).trim(),
+              sector:         String(r[3]).trim(),
+              unit:           String(r[4]).trim(),
               current_price:  market_price,
-              moq:            moq || undefined,
-              lead_time_days: lead_time || undefined,
-              certs:          certs.length ? certs : undefined,
-            })
-            .eq("sku", sku);
+              moq:            parseInt(r[23]) || 1,
+              lead_time_days: parseInt(r[14]) || 0,
+              certs:          String(r[25]).split(",").map(c => c.trim()).filter(Boolean),
+              active:         String(r[27]).trim().toLowerCase() === "yes",
+            };
+          })
+          .filter(Boolean);
 
-          if (!error) pricesUpdated++;
-        }
+        const { error: prodError } = await supabase
+          .from("products")
+          .upsert(products, { onConflict: "sku" });
+
+        if (!prodError) pricesUpdated = products.length;
       }
     }
 

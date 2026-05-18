@@ -27,7 +27,7 @@ router.post("/", authenticate, async (req, res) => {
     const { data } = await supabase
       .from("products")
       .select("name, sku, current_price, unit, moq, certs")
-      .eq("ref", product_ref)
+      .eq("sku", product_ref)
       .single();
     productRow = data;
   }
@@ -119,7 +119,7 @@ router.post("/", authenticate, async (req, res) => {
     ].filter(Boolean).join("\n");
 
     const agentStream = await anthropic.messages.stream({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 120,
       system: agentSystem,
       messages: [...history, { role: "user", content: agentUserMsg }],
@@ -154,7 +154,7 @@ router.post("/", authenticate, async (req, res) => {
     ].filter(Boolean).join("\n");
 
     const brokerStream = await anthropic.messages.stream({
-      model: "claude-sonnet-4-20250514",
+      model: "claude-sonnet-4-6",
       max_tokens: 120,
       system: brokerSystem,
       messages: [{ role: "user", content: `Buyer offered $${agentPrice.toFixed(2)}/${unit}. What is your counter-offer?` }],
