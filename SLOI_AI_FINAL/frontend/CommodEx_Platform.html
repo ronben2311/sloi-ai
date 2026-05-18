@@ -1916,19 +1916,19 @@
             <div class="g4" style="margin-bottom: 14px">
               <div class="stat">
                 <div class="stat-top">Total LOIs</div>
-                <div class="stat-val">8</div>
+                <div class="stat-val" id="loi-stat-total">—</div>
               </div>
               <div class="stat">
                 <div class="stat-top">This month</div>
-                <div class="stat-val" style="color: var(--green)">3</div>
+                <div class="stat-val" style="color: var(--green)" id="loi-stat-month">—</div>
               </div>
               <div class="stat">
                 <div class="stat-top">Total value</div>
-                <div class="stat-val">$762K</div>
+                <div class="stat-val" id="loi-stat-value">—</div>
               </div>
               <div class="stat">
                 <div class="stat-top">Credits spent</div>
-                <div class="stat-val" style="color: var(--teal)">125</div>
+                <div class="stat-val" style="color: var(--teal)" id="loi-stat-credits">—</div>
               </div>
             </div>
             <div id="loi-list"></div>
@@ -3189,8 +3189,20 @@
                 emoji: SECTOR_EMOJI["Metals"],
                 fresh: false,
                 _raw: { ref: l.ref, product: l.product, qty: l.qty, unit: l.unit || "MT", price: l.deal_price, buyer: l.buyer_name },
+                _val: parseFloat(l.total_value) || 0,
+                _signed_at: l.signed_at,
               };
             });
+            // Update stats
+            var thisMonth = new Date().toISOString().slice(0, 7);
+            var monthCount = LOIS_DATA.filter(function(l){ return (l._signed_at||'').slice(0,7) === thisMonth; }).length;
+            var totalVal = LOIS_DATA.reduce(function(s,l){ return s + l._val; }, 0);
+            var fmt = totalVal >= 1e6 ? '$' + (totalVal/1e6).toFixed(1) + 'M' : '$' + Math.round(totalVal/1000) + 'K';
+            var el;
+            el = document.getElementById('loi-stat-total');  if(el) el.textContent = LOIS_DATA.length;
+            el = document.getElementById('loi-stat-month');  if(el) el.textContent = monthCount;
+            el = document.getElementById('loi-stat-value');  if(el) el.textContent = fmt;
+            el = document.getElementById('loi-stat-credits'); if(el) el.textContent = LOIS_DATA.length * 15;
             renderLOIs();
             // Build Exchange recent deals from real LOIs
             EX_DEALS = data.map(function (l) {
