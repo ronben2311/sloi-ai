@@ -1609,7 +1609,7 @@
                 <div class="g3">
                   <div>
                     <label class="flabel">Product *</label>
-                    <select class="inp" id="m-product">
+                    <select class="inp" id="m-product" onchange="onProductSelect(this.value)">
                       <option value="">— Loading products… —</option>
                     </select>
                   </div>
@@ -3353,6 +3353,36 @@
             if (b) b.textContent = bal >= 0 ? bal : "⚠️ Not enough";
           })
           .catch(function () {});
+      }
+
+      function onProductSelect(sku) {
+        if (!sku) return;
+        fetch(api.base + '/products/' + encodeURIComponent(sku) + '/params', {
+          headers: api.headers()
+        })
+          .then(function(r) { return r.json(); })
+          .then(function(p) {
+            // Auto-fill unit
+            var unitSel = document.getElementById('m-unit');
+            if (unitSel && p.unit) {
+              for (var i = 0; i < unitSel.options.length; i++) {
+                if (unitSel.options[i].value === p.unit || unitSel.options[i].text === p.unit) {
+                  unitSel.selectedIndex = i; break;
+                }
+              }
+            }
+            // Auto-fill qty with MOQ
+            var qtyEl = document.getElementById('m-qty');
+            if (qtyEl && p.moq) qtyEl.value = p.moq;
+            // Auto-fill target = walk_away (best price buyer can realistically get)
+            var targetEl = document.getElementById('m-target');
+            if (targetEl && p.walk_away) targetEl.value = p.walk_away;
+            // Auto-fill max = market_price (buyer won't pay above market)
+            var maxEl = document.getElementById('m-max');
+            if (maxEl && p.market_price) maxEl.value = p.market_price;
+            updateCreditDisplay();
+          })
+          .catch(function() {});
       }
 
       function startNegotiation() {
