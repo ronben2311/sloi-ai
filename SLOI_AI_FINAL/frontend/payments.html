@@ -175,7 +175,7 @@ pre{padding:16px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
         <div class="fa">→</div>
         <div class="fn"><div class="fn-icon">⚡</div><div class="fn-label">Credits added</div><div class="fn-sub">Supabase updated</div></div>
         <div class="fa">→</div>
-        <div class="fn"><div class="fn-icon">📱</div><div class="fn-label">WhatsApp alert</div><div class="fn-sub">balance confirmed</div></div>
+        <div class="fn"><div class="fn-icon">📲</div><div class="fn-label">Telegram alert</div><div class="fn-sub">balance confirmed</div></div>
       </div>
     </div>
 
@@ -252,8 +252,8 @@ app.<span class="fn">post</span>(<span class="str">'/webhooks/stripe'</span>,
       stripe_session_id: session.id,
     });
 
-    <span class="cm">// Notify buyer via WhatsApp</span>
-    <span class="kw">await</span> <span class="fn">sendWhatsApp</span>(user_id,
+    <span class="cm">// Notify buyer via Telegram</span>
+    <span class="kw">await</span> <span class="fn">sendTelegram</span>(user_id,
       <span class="str">`⚡ ${credits} credits added to your SLOI AI account.\nBalance: ${await getBalance(user_id)} credits.`</span>
     );
   }
@@ -610,7 +610,7 @@ app.<span class="fn">post</span>(<span class="str">'/v1/credits/purchase'</span>
     console.<span class="fn">log</span>(<span class="str">`Paid ${pack} USDC on Base. Credits incoming.`</span>);
 
   } <span class="kw">else</span> {
-    <span class="cm">// Fallback: request human top-up via Telegram Bot/WhatsApp</span>
+    <span class="cm">// Fallback: request human top-up via Telegram Bot</span>
     <span class="kw">await</span> <span class="fn">notifyBoss</span>({
       type: <span class="str">'low_credits'</span>,
       message: <span class="str">`Agent needs top-up. Balance: ${data.balance}. Please add USDC to agent wallet or buy credits at sloiai.com/credits`</span>

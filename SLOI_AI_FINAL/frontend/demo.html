@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Live Negotiation Demo — SLOI AI</title>
+<meta name="description" content="Watch SLOI AI's negotiation agent close a $282,500 steel deal in 3 rounds. No sign-up. No API key."/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;
+  --border:#1c1c2e;--border2:#252538;
+  --indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);
+  --muted:#52526e;--text:#d4d2f0;--white:#eeedf8;
+  --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);gap:12px}
+.logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;white-space:nowrap}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-sub{font-size:10px;color:var(--muted);margin-left:6px;font-weight:400;font-family:'IBM Plex Mono',monospace}
+.demo-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 12px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap}
+.btn-cta-nav{padding:7px 16px;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;background:var(--indigo);color:#fff;border:none;display:inline-flex;align-items:center;gap:5px;transition:opacity .15s;white-space:nowrap}
+.btn-cta-nav:hover{opacity:.85}
+
+/* WRAP */
+.wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:44px 20px 80px}
+
+/* PAGE HEADER */
+.page-header{text-align:center;margin-bottom:36px}
+.page-title{font-family:'Fraunces',serif;font-size:clamp(30px,5vw,46px);font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1.0;margin-bottom:10px}
+.page-title em{font-style:italic;color:var(--indigo)}
+.page-sub{font-size:12px;color:var(--muted);line-height:1.8}
+
+/* DEMO BOX */
+.demo-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.5)}
+
+/* DEMO HEADER */
+.demo-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.demo-product{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px}
+.demo-meta{font-size:10px;color:var(--muted)}
+.status-badge{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;color:var(--green);flex-shrink:0}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.live-dot.pulse{animation:blink 1.8s infinite}
+
+/* MANDATE PILLS */
+.mandate-row{display:flex;gap:6px;padding:10px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:rgba(91,95,239,.02)}
+.mpill{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:3px;font-size:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.mpill b{color:var(--white)}
+
+/* CHAT */
+.chat-area{padding:18px 20px;display:flex;flex-direction:column;gap:10px;min-height:300px;max-height:440px;overflow-y:auto}
+@keyframes slide-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.bubble{max-width:76%;padding:11px 14px;border-radius:8px;font-size:11px;line-height:1.68;animation:slide-in .25s ease}
+.b-agent{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);align-self:flex-start}
+.b-broker{background:rgba(232,169,74,.07);border:1px solid rgba(232,169,74,.2);align-self:flex-end;text-align:right}
+.b-system{background:var(--surface2);border:1px solid var(--border);align-self:center;max-width:95%;text-align:center;font-size:10px;color:var(--muted);padding:6px 16px;border-radius:4px}
+.b-deal{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.25);align-self:center;max-width:95%;text-align:center;padding:14px 20px;border-radius:6px;animation:slide-in .4s ease}
+.b-loi{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.3);align-self:center;max-width:95%;text-align:center;padding:14px 20px;border-radius:6px;animation:slide-in .4s ease}
+.b-thinking{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;padding:8px 14px;border-radius:8px;font-size:10px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.b-thinking.right{align-self:flex-end}
+.b-label{font-size:9px;font-weight:700;letter-spacing:.05em;margin-bottom:5px}
+.b-price{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-top:5px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:11px;height:11px;border:2px solid rgba(91,95,239,.25);border-top-color:var(--indigo);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+
+/* FOOTER BAR */
+.demo-footer{border-top:1px solid var(--border);padding:14px 20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;background:var(--surface2)}
+.foot-label{font-size:9px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px}
+.rounds-bar{display:flex;gap:5px;margin-bottom:5px}
+.rb{flex:1;height:5px;border-radius:3px;transition:background .4s,opacity .4s}
+.rb.empty{background:var(--border2)}
+.rb.active{background:var(--indigo)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+.rb.active{animation:pulse 1.4s infinite}
+.rb.done{background:var(--green)}
+.rounds-count{font-size:10px;color:var(--muted)}
+
+.prices-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+.price-cell{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:8px 10px;text-align:center}
+.price-cell-label{font-size:9px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.price-cell-val{font-family:'Fraunces',serif;font-size:16px;font-weight:700}
+.gap-pill{font-size:9px;font-weight:700;padding:4px 8px;border-radius:3px;text-align:center;transition:all .5s;background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
+
+/* APPROVAL */
+.approval-section{border-top:1px solid rgba(232,169,74,.3);padding:20px;background:rgba(232,169,74,.03);display:none;animation:slide-in .35s ease}
+.approval-title{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+.approval-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;font-size:10px}
+.ag-cell{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:9px;text-align:center}
+.ag-label{color:var(--muted);margin-bottom:4px}
+.ag-val{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--white)}
+.approve-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.approve-btn{background:var(--green);color:#fff;border:none;border-radius:5px;padding:10px 22px;font-size:12px;font-weight:700;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.approve-btn:hover:not(:disabled){opacity:.85}
+.approve-btn:disabled{opacity:.6;cursor:default}
+.auto-msg{font-size:10px;color:var(--muted)}
+
+/* LOI */
+.loi-section{border-top:1px solid rgba(34,197,94,.3);padding:20px;background:rgba(34,197,94,.03);display:none;animation:slide-in .4s ease}
+.loi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.loi-cell{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:10px;text-align:center}
+.loi-label{font-size:9px;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.loi-val{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--white)}
+.loi-note{font-size:10px;color:var(--muted);line-height:1.75}
+
+/* CTA */
+.cta-section{margin-top:36px;text-align:center;display:none;animation:slide-in .4s ease}
+.cta-eyebrow{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+.cta-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+.btn-p{background:var(--indigo);color:#fff;border:none;border-radius:5px;padding:13px 26px;font-size:13px;font-weight:700;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:opacity .15s}
+.btn-p:hover{opacity:.85}
+.btn-s{background:none;border:1px solid var(--border2);color:var(--text);border-radius:5px;padding:13px 22px;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.btn-s:hover{border-color:var(--indigo);color:var(--violet)}
+.replay-btn{background:none;border:1px solid var(--border2);color:var(--muted);border-radius:4px;padding:6px 16px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.replay-btn:hover{border-color:var(--indigo);color:var(--violet)}
+
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--surface)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+@media(max-width:640px){
+  .approval-grid{grid-template-columns:1fr 1fr}.demo-footer{grid-template-columns:1fr}
+  .prices-grid{grid-template-columns:1fr auto 1fr}.mandate-row{display:none}
+  .btn-p,.btn-s{padding:11px 16px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-sub">/ Live Demo</span></a>
+  <div class="demo-pill">🎬 Scripted · No tokens · No sign-up</div>
+  <a href="smb-order.html" class="btn-cta-nav">🎯 Start for real →</a>
+</nav>
+
+<div class="wrap">
+
+  <div class="page-header">
+    <div class="page-title">Watch the agent<br/><em>negotiate live.</em></div>
+    <p class="page-sub">Steel Rebar · 100 MT · 3 rounds · $282,500 deal — scripted demo, plays in your browser<br/>No API key · No credits · No login required</p>
+  </div>
+
+  <div class="demo-box">
+
+    <!-- HEADER -->
+    <div class="demo-header">
+      <div>
+        <div class="demo-product">🔩 Steel Rebar G60 12mm · 100 MT · Gulf Cement LLC · UAE</div>
+        <div class="demo-meta" id="neg-meta">NEG-20260519-007 · Deal Hunter strategy · Max 5 rounds</div>
+      </div>
+      <div class="status-badge">
+        <div class="live-dot pulse" id="live-dot"></div>
+        <span id="status-text">Initialising…</span>
+      </div>
+    </div>
+
+    <!-- MANDATE PILLS -->
+    <div class="mandate-row">
+      <div class="mpill">Buyer <b>Gulf Cement LLC</b></div>
+      <div class="mpill">Target <b style="color:var(--violet)">$2,700/MT</b></div>
+      <div class="mpill">Max budget <b style="color:var(--gold)">$2,900/MT</b></div>
+      <div class="mpill">Strategy <b>Deal Hunter</b></div>
+      <div class="mpill">Incoterm <b>FOB</b></div>
+      <div class="mpill">Payment <b>SWIFT TT</b></div>
+    </div>
+
+    <!-- CHAT AREA -->
+    <div class="chat-area" id="chat"></div>
+
+    <!-- FOOTER: ROUNDS + PRICES -->
+    <div class="demo-footer">
+      <div>
+        <div class="foot-label">Rounds</div>
+        <div class="rounds-bar">
+          <div class="rb empty" id="rb1"></div>
+          <div class="rb empty" id="rb2"></div>
+          <div class="rb empty" id="rb3"></div>
+          <div class="rb empty" id="rb4"></div>
+          <div class="rb empty" id="rb5"></div>
+        </div>
+        <div class="rounds-count" id="rounds-count">Not started</div>
+      </div>
+      <div>
+        <div class="foot-label">Live prices</div>
+        <div class="prices-grid">
+          <div class="price-cell">
+            <div class="price-cell-label">🤖 Agent</div>
+            <div class="price-cell-val" id="p-agent" style="color:var(--violet)">—</div>
+          </div>
+          <div class="gap-pill" id="gap-pill">Gap</div>
+          <div class="price-cell">
+            <div class="price-cell-label">🏭 Broker</div>
+            <div class="price-cell-val" id="p-broker" style="color:var(--gold)">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOSS APPROVAL -->
+    <div class="approval-section" id="approval-section">
+      <div class="approval-title">⚡ Boss approval required — deal reached in 3 rounds</div>
+      <div class="approval-grid">
+        <div class="ag-cell">
+          <div class="ag-label">Agreed price</div>
+          <div class="ag-val" style="color:var(--green)">$2,825/MT</div>
+        </div>
+        <div class="ag-cell">
+          <div class="ag-label">Total value</div>
+          <div class="ag-val">$282,500</div>
+        </div>
+        <div class="ag-cell">
+          <div class="ag-label">LOI fee</div>
+          <div class="ag-val" style="color:var(--gold)">$500</div>
+        </div>
+        <div class="ag-cell">
+          <div class="ag-label">Credits used</div>
+          <div class="ag-val" style="color:var(--teal)">15</div>
+        </div>
+      </div>
+      <div class="approve-row">
+        <button class="approve-btn" id="approve-btn" onclick="approveDeal()">✅ Approve → Generate LOI</button>
+        <span class="auto-msg" id="auto-msg"></span>
+      </div>
+    </div>
+
+    <!-- LOI RESULT -->
+    <div class="loi-section" id="loi-section">
+      <div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px">✅ LOI Generated — SL-LOI-20260519-007</div>
+      <div class="loi-grid">
+        <div class="loi-cell" style="border-color:rgba(34,197,94,.25)">
+          <div class="loi-label">LOI Reference</div>
+          <div style="color:var(--green);font-weight:700;font-size:11px;margin-top:2px">SL-LOI-20260519-007</div>
+        </div>
+        <div class="loi-cell">
+          <div class="loi-label">Deal price</div>
+          <div class="loi-val">$2,825/MT</div>
+        </div>
+        <div class="loi-cell">
+          <div class="loi-label">Total value</div>
+          <div class="loi-val">$282,500</div>
+        </div>
+      </div>
+      <div class="loi-note">
+        ✓ LOI emailed to buyer and broker &nbsp;·&nbsp;
+        ✓ Compliance cleared (OFAC + EU) &nbsp;·&nbsp;
+        ✓ 3 rounds &nbsp;·&nbsp;
+        ✓ Saved <b style="color:var(--green)">$13,500</b> vs broker's opening price
+      </div>
+    </div>
+
+  </div><!-- /demo-box -->
+
+  <!-- CTA -->
+  <div class="cta-section" id="cta-section">
+    <div class="cta-eyebrow">Ready to negotiate your own deal?</div>
+    <div class="cta-buttons">
+      <a href="smb-order.html" class="btn-p">🎯 Start my negotiation →</a>
+      <a href="loi-preview.html" class="btn-s">📄 See sample LOI</a>
+      <a href="CommodEx_Platform.html" class="btn-s">🤖 Buyer platform</a>
+    </div>
+    <button class="replay-btn" onclick="replayDemo()">↺ Replay demo</button>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+// ── DEMO SCRIPT ────────────────────────────────────────────────────────────────
+
+var UNIT = 'MT';
+
+var SCRIPT = [
+  {
+    round: 1,
+    agent: {
+      label: '🤖 AGENT → BROKER  ·  Round 1',
+      text: 'Good morning. We are seeking 100 MT of Steel Rebar G60 12mm for an active infrastructure project in the UAE. Based on current MENA market benchmarks and recent trade indices, our opening offer is $2,680/MT FOB.',
+      price: 2680
+    },
+    broker: {
+      label: '🏭 BROKER → AGENT  ·  Round 1',
+      text: 'Thank you for your inquiry. Our certified G60 12mm rebar carries ISO 9001 quality certification with 7-day lead time and full mill documentation. Current market price for this specification is $2,960/MT FOB. We can confirm immediate availability.',
+      price: 2960
+    }
+  },
+  {
+    round: 2,
+    agent: {
+      label: '🤖 AGENT → BROKER  ·  Round 2',
+      text: 'We appreciate your response. After reviewing recent MENA trade indices, we are prepared to move to $2,750/MT. We can offer SWIFT TT payment within 5 business days of LOI signing — a firm commitment on 100 MT.',
+      price: 2750
+    },
+    broker: {
+      label: '🏭 BROKER → AGENT  ·  Round 2',
+      text: 'For confirmed SWIFT payment on 100 MT with fast settlement, we can offer $2,870/MT FOB. Full documentation package included — mill certificates, quality reports, and packing list. This reflects genuine cost pressure in the current market.',
+      price: 2870
+    }
+  },
+  {
+    round: 3,
+    agent: {
+      label: '🤖 AGENT → BROKER  ·  Round 3',
+      text: 'We are approaching agreement. Our best and final offer is $2,810/MT FOB — aligned with current MENA benchmarks for this specification. We commit to SWIFT payment within 5 days and look forward to a long-term supply relationship.',
+      price: 2810
+    },
+    broker: {
+      label: '🏭 BROKER → AGENT  ·  Round 3',
+      text: 'After consideration of your volume, payment terms, and potential for ongoing business, we can accept $2,840/MT FOB. All certifications and 7-day delivery are included. This is our final price — we have a deal.',
+      price: 2840
+    }
+  }
+];
+
+var chatEl, demoRunning = false, autoTimer;
+
+function q(id){ return document.getElementById(id); }
+
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+function setRound(n) {
+  for (var i = 1; i <= 5; i++) {
+    var el = q('rb' + i);
+    if (!el) continue;
+    if (i < n) el.className = 'rb done';
+    else if (i === n) el.className = 'rb active';
+    else el.className = 'rb empty';
+  }
+  if (n <= 5) q('rounds-count').textContent = 'Round ' + n + ' of 5 · Deal Hunter';
+  else q('rounds-count').textContent = 'Complete · 3 rounds';
+}
+
+function updatePrices(agent, broker) {
+  if (agent !== null) q('p-agent').textContent = '$' + agent.toLocaleString();
+  if (broker !== null) q('p-broker').textContent = '$' + broker.toLocaleString();
+  var a = agent !== null ? agent : parseFloat(q('p-agent').textContent.replace(/[$,]/g,'')) || null;
+  var b = broker !== null ? broker : parseFloat(q('p-broker').textContent.replace(/[$,]/g,'')) || null;
+  if (a && b) {
+    var gapPct = ((b - a) / b * 100).toFixed(1);
+    var col = gapPct <= 2.5 ? '#22c55e' : gapPct <= 8 ? '#e8a94a' : '#ef4444';
+    var gapEl = q('gap-pill');
+    gapEl.textContent = gapPct + '%';
+    gapEl.style.cssText = 'font-size:9px;font-weight:700;padding:4px 8px;border-radius:3px;text-align:center;transition:all .5s;color:' + col + ';border:1px solid ' + col + '44;background:' + col + '11';
+  }
+}
+
+function addSystemBubble(text) {
+  var div = document.createElement('div');
+  div.className = 'bubble b-system';
+  div.textContent = text;
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+function addThinking(role) {
+  var div = document.createElement('div');
+  div.id = 'thinking';
+  div.className = 'b-thinking' + (role === 'broker' ? ' right' : '');
+  var sp = document.createElement('div');
+  sp.className = 'spinner';
+  div.appendChild(sp);
+  var txt = document.createTextNode(role === 'agent' ? '🤖 Agent composing offer…' : '🏭 Broker responding…');
+  div.appendChild(txt);
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+function removeThinking() {
+  var el = q('thinking');
+  if (el) el.remove();
+}
+
+function typeText(element, text, speed) {
+  return new Promise(function(resolve) {
+    var i = 0;
+    function tick() {
+      if (i < text.length) {
+        element.textContent += text[i++];
+        chatEl.scrollTop = chatEl.scrollHeight;
+        setTimeout(tick, speed);
+      } else {
+        resolve();
+      }
+    }
+    tick();
+  });
+}
+
+async function addAgentBubble(item) {
+  var div = document.createElement('div');
+  div.className = 'bubble b-agent';
+
+  var label = document.createElement('div');
+  label.className = 'b-label';
+  label.style.color = 'var(--violet)';
+  label.textContent = item.label;
+  div.appendChild(label);
+
+  var textSpan = document.createElement('span');
+  div.appendChild(textSpan);
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+
+  await typeText(textSpan, item.text, 16);
+
+  var priceDiv = document.createElement('div');
+  priceDiv.className = 'b-price';
+  priceDiv.style.color = 'var(--violet)';
+  priceDiv.textContent = '$' + item.price.toLocaleString() + '/' + UNIT;
+  div.appendChild(priceDiv);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+async function addBrokerBubble(item) {
+  var div = document.createElement('div');
+  div.className = 'bubble b-broker';
+
+  var label = document.createElement('div');
+  label.className = 'b-label';
+  label.style.color = 'var(--gold)';
+  label.textContent = item.label;
+  div.appendChild(label);
+
+  var textSpan = document.createElement('span');
+  div.appendChild(textSpan);
+  chatEl.appendChild(div);
+  chatEl.scrollTop = chatEl.scrollHeight;
+
+  await typeText(textSpan, item.text, 16);
+
+  var priceDiv = document.createElement('div');
+  priceDiv.className = 'b-price';
+  priceDiv.style.color = 'var(--gold)';
+  priceDiv.textContent = '$' + item.price.toLocaleString() + '/' + UNIT;
+  div.appendChild(priceDiv);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+async function runDemo() {
+  if (demoRunning) return;
+  demoRunning = true;
+
+  chatEl = q('chat');
+  chatEl.innerHTML = '';
+  q('p-agent').textContent = '—';
+  q('p-broker').textContent = '—';
+  q('rounds-count').textContent = 'Not started';
+  q('gap-pill').textContent = 'Gap';
+  q('gap-pill').style.cssText = '';
+  q('approval-section').style.display = 'none';
+  q('loi-section').style.display = 'none';
+  q('cta-section').style.display = 'none';
+  q('live-dot').style.background = 'var(--green)';
+  q('live-dot').className = 'live-dot pulse';
+  q('approve-btn').textContent = '✅ Approve → Generate LOI';
+  q('approve-btn').disabled = false;
+  q('auto-msg').textContent = '';
+  for (var i = 1; i <= 5; i++) { var rb = q('rb'+i); if(rb) rb.className = 'rb empty'; }
+
+  await sleep(500);
+  q('status-text').textContent = 'Agent starting…';
+  addSystemBubble('🚀 Negotiation started · NEG-20260519-007 · Deal Hunter · 5 rounds max · Gulf Cement LLC · UAE');
+
+  for (var r = 0; r < SCRIPT.length; r++) {
+    var entry = SCRIPT[r];
+    var rn = entry.round;
+
+    await sleep(800);
+    setRound(rn);
+    q('status-text').textContent = 'Round ' + rn + ' · Agent thinking…';
+
+    // Agent turn
+    addThinking('agent');
+    await sleep(1100);
+    removeThinking();
+    await addAgentBubble(entry.agent);
+    updatePrices(entry.agent.price, null);
+
+    // Broker turn
+    await sleep(900);
+    q('status-text').textContent = 'Round ' + rn + ' · Broker responding…';
+    addThinking('broker');
+    await sleep(1100);
+    removeThinking();
+    await addBrokerBubble(entry.broker);
+    updatePrices(null, entry.broker.price);
+
+    // Round complete separator (not after last round)
+    var isLast = (r === SCRIPT.length - 1);
+    if (!isLast) {
+      await sleep(700);
+      var gap = ((entry.broker.price - entry.agent.price) / entry.broker.price * 100).toFixed(1);
+      addSystemBubble('── Round ' + rn + ' complete · Gap: ' + gap + '% · Continuing ──');
+    }
+  }
+
+  // Deal found
+  await sleep(800);
+  q('status-text').textContent = '✅ Deal reached · Round 3';
+  q('live-dot').className = 'live-dot';
+  q('live-dot').style.background = 'var(--green)';
+
+  for (var i = 1; i <= 3; i++) { var rb = q('rb'+i); if(rb) rb.className = 'rb done'; }
+  for (var i = 4; i <= 5; i++) { var rb = q('rb'+i); if(rb) rb.className = 'rb empty'; }
+  q('rounds-count').textContent = 'Complete · 3 of 5 rounds used';
+
+  var dealDiv = document.createElement('div');
+  dealDiv.className = 'bubble b-deal';
+  dealDiv.innerHTML =
+    '<div style="font-size:10px;color:var(--green);font-weight:700;letter-spacing:.06em;margin-bottom:8px">✅ AGREEMENT REACHED · ROUND 3</div>' +
+    '<div style="font-family:\'Fraunces\',serif;font-size:24px;font-weight:900;color:var(--white);margin-bottom:6px">$2,825/MT FOB</div>' +
+    '<div style="font-size:11px;color:var(--muted)">Total: $282,500 · Gap closed to 1.1% · 3 rounds</div>';
+  chatEl.appendChild(dealDiv);
+  chatEl.scrollTop = chatEl.scrollHeight;
+
+  await sleep(900);
+
+  // Show approval section
+  q('approval-section').style.display = 'block';
+  q('approval-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  // Auto-approve countdown
+  var secs = 6;
+  function tick() {
+    if (secs > 0) {
+      q('auto-msg').textContent = 'Auto-approving in ' + secs + 's for this demo — in real life you click';
+      secs--;
+      autoTimer = setTimeout(tick, 1000);
+    } else {
+      approveDeal();
+    }
+  }
+  tick();
+}
+
+function approveDeal() {
+  clearTimeout(autoTimer);
+  q('approve-btn').textContent = '✅ Approved!';
+  q('approve-btn').disabled = true;
+  q('auto-msg').textContent = '';
+  q('live-dot').style.background = 'var(--indigo)';
+
+  setTimeout(function() {
+    // Add LOI chat bubble
+    var loiDiv = document.createElement('div');
+    loiDiv.className = 'bubble b-loi';
+    loiDiv.innerHTML =
+      '<div style="font-size:10px;color:var(--violet);font-weight:700;letter-spacing:.06em;margin-bottom:8px">📄 LOI SIGNED · SL-LOI-20260519-007</div>' +
+      '<div style="font-family:\'Fraunces\',serif;font-size:22px;font-weight:900;color:var(--white);margin-bottom:6px">$2,825/MT · 100 MT</div>' +
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Total $282,500 · Emailed to buyer & broker</div>' +
+      '<div style="font-size:10px;color:var(--teal)">Saved $13,500 vs broker\'s opening offer</div>';
+    chatEl.appendChild(loiDiv);
+    chatEl.scrollTop = chatEl.scrollHeight;
+
+    q('status-text').textContent = '🎉 LOI generated · SL-LOI-20260519-007';
+    q('loi-section').style.display = 'block';
+    q('loi-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    setTimeout(function() {
+      q('cta-section').style.display = 'block';
+      q('cta-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      demoRunning = false;
+    }, 1000);
+  }, 700);
+}
+
+function replayDemo() {
+  clearTimeout(autoTimer);
+  demoRunning = false;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(runDemo, 400);
+}
+
+// Auto-start
+window.addEventListener('load', function() {
+  setTimeout(runDemo, 900);
+});
+</script>
+</body>
+</html>

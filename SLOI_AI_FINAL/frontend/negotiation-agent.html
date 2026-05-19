@@ -362,7 +362,7 @@ select.inp option{background:var(--surface)}
   <div class="section-top">
     <span class="badge ba">⏸ Paused</span>
     <div style="font-size:11px;font-weight:600;color:var(--white)">📱 OutreachBot</div>
-    <div style="font-size:10px;color:var(--muted)">WhatsApp outreach · Requires Twilio integration</div>
+    <div style="font-size:10px;color:var(--muted)">Telegram outreach · Requires Telegram Bot API</div>
     <div style="margin-left:auto;display:flex;gap:6px">
       <button class="btn btn-g btn-sm" onclick="alert('OutreachBot requires Telegram Bot API.\nSee docs.html for setup.')">▶ Resume</button>
       <button class="btn btn-sm btn-p" onclick="addToOutreach()">+ Add lead</button>
@@ -737,7 +737,7 @@ function approveDeal() {
   addBubble('loi',
     '✅ <strong>LOI Generated: ' + loiRef + '</strong><br/>' +
     '$' + dealPrice.toLocaleString() + '/' + unit + ' · ' + qty + ' ' + unit + ' · ' + buyer + '<br/>' +
-    '<span style="color:var(--green)">Emailed to buyer · WhatsApp sent to broker</span><br/>' +
+    '<span style="color:var(--green)">Emailed to buyer · Telegram sent to broker</span><br/>' +
     '<a href="' + loiUrl + '" target="_blank" style="color:var(--indigo);font-size:10px;text-decoration:none;margin-top:4px;display:inline-block">📄 Open LOI Generator →</a>'
   );
 
@@ -935,7 +935,7 @@ Return exactly 6 leads in this JSON format (no markdown, no backticks, just pure
       <div style="font-size:10px;color:var(--text);line-height:1.5;margin-bottom:8px;background:var(--surface2);padding:6px 8px;border-radius:3px">${l.reason}</div>
       <div style="display:flex;gap:5px">
         <button class="btn btn-xs btn-p" onclick="addLeadToPipeline('" + encodeURIComponent(l.name) + "','" + encodeURIComponent(l.sector) + "','" + encodeURIComponent(l.country) + "')">+ Pipeline</button>
-        <button class="btn btn-xs btn-a" onclick="alert('Queuing WhatsApp outreach to ${l.name}...')">📱 Outreach</button>
+        <button class="btn btn-xs btn-a" onclick="alert('Queuing Telegram outreach to ${l.name}...')">📲 Outreach</button>
         <button class="btn btn-xs" onclick="negotiateFromLead('" + encodeURIComponent(l.name) + "','" + encodeURIComponent(l.sector.split(' · ')[0] || 'Steel Rebar G60 12mm') + "')">🤖 Negotiate</button>
       </div>
     </div>`;

@@ -254,7 +254,7 @@ suppliers: {
       incoterms_supported:['FOB','CIF','DAP','EXW'],
       payment_methods:['TT','LC at sight','TT 30% + LC'],
       currencies:['USD','ILS','EUR'],
-      contact:{email:'orders@northern-steel.trade',whatsapp:'+972-4-XXX-XXXX'},
+      contact:{email:'orders@northern-steel.trade',telegram:'@northernsteel'},
       api_endpoint:'https://api.sloiai.com/v1/suppliers/'+( p.id||'SUP-004')
     };
   }
@@ -410,7 +410,7 @@ search: {
 
 rfq: {
   method:'POST', path:'/v1/rfq',
-  desc:'Submit a Request for Quotation to a supplier. The supplier receives a notification via email and WhatsApp.',
+  desc:'Submit a Request for Quotation to a supplier. The supplier receives a notification via email and Telegram.',
   params:[
     {name:'supplier_id',type:'string',id:'p-rfq-sup',default:'SUP-004',req:true},
     {name:'sku',type:'string',id:'p-rfq-sku',default:'STL-RBR12',req:true},

@@ -204,7 +204,7 @@ select.inp option{background:var(--surface2)}
     </div>
     <div class="how-item">
       <div class="how-n">2</div>
-      <div><div class="how-title">Buyer submits RFQ</div><div class="how-desc">A buyer or AI agent finds your products and submits a Request for Quote. You receive a WhatsApp notification immediately.</div></div>
+      <div><div class="how-title">Buyer submits RFQ</div><div class="how-desc">A buyer or AI agent finds your products and submits a Request for Quote. You receive a Telegram notification immediately.</div></div>
     </div>
     <div class="how-item">
       <div class="how-n">3</div>
@@ -227,7 +227,7 @@ select.inp option{background:var(--surface2)}
     <div class="crit"><div class="crit-icon">🌍</div><div><div class="crit-title">Clear territory</div><div class="crit-desc">You operate in a specific country or region and know the local market well.</div></div></div>
     <div class="crit"><div class="crit-icon">📋</div><div><div class="crit-title">Export capability</div><div class="crit-desc">You can handle export documentation, customs, and international logistics.</div></div></div>
     <div class="crit"><div class="crit-icon">✅</div><div><div class="crit-title">Clean compliance record</div><div class="crit-desc">No sanctions exposure. Company is registered and KYC-clearable. Bank account in a non-sanctioned jurisdiction.</div></div></div>
-    <div class="crit"><div class="crit-icon">💬</div><div><div class="crit-title">WhatsApp active</div><div class="crit-desc">You respond to deal alerts on WhatsApp. This is our primary communication channel for time-sensitive RFQs.</div></div></div>
+    <div class="crit"><div class="crit-icon">💬</div><div><div class="crit-title">Telegram active</div><div class="crit-desc">You respond to deal alerts on Telegram. This is our primary communication channel for time-sensitive RFQs.</div></div></div>
     <div class="crit"><div class="crit-icon">📦</div><div><div class="crit-title">Real stock or firm supply</div><div class="crit-desc">You have confirmed supply lines — not spot market speculation. Buyers need reliable delivery commitments.</div></div></div>
   </div>
 
@@ -289,9 +289,9 @@ select.inp option{background:var(--surface2)}
         </div>
         <div class="field-group g2">
           <div class="field"><label>Email address <span class="req">*</span></label><input class="inp" id="b-email" type="email" placeholder="mohammed@yourcompany.com"/></div>
-          <div class="field"><label>WhatsApp number <span class="req">*</span></label><input class="inp" id="b-whatsapp" placeholder="+971-5X-XXX-XXXX"/><div class="field-hint">Include country code. This is your deal alert channel.</div></div>
+          <div class="field"><label>Telegram username <span class="req">*</span></label><input class="inp" id="b-whatsapp" placeholder="@yourhandle"/><div class="field-hint">Your Telegram username (without @). This is your deal alert channel.</div></div>
         </div>
-        <div class="field"><label>Secondary contact (optional)</label><input class="inp" id="b-contact2" placeholder="Name · Email · WhatsApp"/></div>
+        <div class="field"><label>Secondary contact (optional)</label><input class="inp" id="b-contact2" placeholder="Name · Email · Telegram"/></div>
       </div>
     </div>
 
@@ -591,7 +591,7 @@ function goStep(n){
       if(!document.getElementById('b-company').value.trim()){ alert('Please enter your company name.'); return; }
       if(!document.getElementById('b-name').value.trim()){ alert('Please enter your contact name.'); return; }
       if(!document.getElementById('b-email').value.trim()){ alert('Please enter your email.'); return; }
-      if(!document.getElementById('b-whatsapp').value.trim()){ alert('Please enter your WhatsApp number.'); return; }
+      if(!document.getElementById('b-whatsapp').value.trim()){ alert('Please enter your Telegram username.'); return; }
     }
     if(currentStep === 2){
       if(!document.getElementById('b-territory').value.trim()){ alert('Please enter your territory.'); return; }
@@ -647,7 +647,7 @@ function populateReview(){
     rv('Est.', document.getElementById('b-year').value) +
     rv('Contact', document.getElementById('b-name').value) +
     rv('Email', document.getElementById('b-email').value) +
-    rv('WhatsApp', document.getElementById('b-whatsapp').value) +
+    rv('Telegram', document.getElementById('b-whatsapp').value) +
     rv('Website', document.getElementById('b-website').value||'—');
 
   document.getElementById('rv-territory').innerHTML =

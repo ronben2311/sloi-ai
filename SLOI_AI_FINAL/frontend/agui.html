@@ -183,7 +183,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
         <div class="event-row">
           <div class="ev-name" style="color:var(--gold)">AWAIT_HUMAN</div>
           <div class="ev-dir dir-s2c">S→C</div>
-          <div><div class="ev-desc">Agent stopped — Boss approval required. Contains: deal_price, total_value, loi_fee, credits_used. UI must show approval box.</div><div class="ev-portal">Admin · Agent Console · Boss WhatsApp (via Telegram Bot)</div></div>
+          <div><div class="ev-desc">Agent stopped — Boss approval required. Contains: deal_price, total_value, loi_fee, credits_used. UI must show approval box.</div><div class="ev-portal">Admin · Agent Console · Boss Telegram</div></div>
         </div>
         <div class="event-row">
           <div class="ev-name" style="color:var(--gold)">HUMAN_RESPONSE</div>
@@ -644,7 +644,7 @@ app.<span class="fn">get</span>(<span class="str">'/v1/stream'</span>, <span cla
     &lt;/div&gt;`</span>;
   popup.style.display = <span class="str">'block'</span>;
 
-  <span class="cm">// Also notify via Telegram Bot → WhatsApp</span>
+  <span class="cm">// Also notify via Telegram Bot</span>
   <span class="fn">fetch</span>(<span class="str">'/v1/telegram-bot/notify'</span>, { method: <span class="str">'POST'</span>, body: JSON.<span class="fn">stringify</span>({ type: <span class="str">'AWAIT_HUMAN'</span>, ...data }) });
 });
 
@@ -744,7 +744,7 @@ agui.<span class="fn">on</span>(<span class="str">'LOI_GENERATED'</span>, () => 
 
         <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:8px 0 4px;text-transform:uppercase">Telegram Bot integration</div>
         <div class="cl-item"><input type="checkbox"/>
-          <div class="cl-text">Add <code style="color:var(--teal)">POST /v1/telegram-bot/notify</code> — forwards AWAIT_HUMAN to Telegram Bot webhook → WhatsApp</div>
+          <div class="cl-text">Add <code style="color:var(--teal)">POST /v1/telegram-bot/notify</code> — forwards AWAIT_HUMAN to Telegram Bot webhook</div>
           <span class="cl-tag">Phase 3</span>
         </div>
         <div class="cl-item"><input type="checkbox"/>
@@ -772,7 +772,7 @@ AG_UI_HEARTBEAT_INTERVAL=15000         <span class="cm"># ms between heartbeats<
 
     <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:20px;text-align:center">
       <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">Result: one stream.<br/><em style="font-style:italic;color:var(--indigo)">Four portals. Real time.</em></div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Boss approves on WhatsApp → Admin popup closes → Buyer sees LOI → Broker gets notification → all from a single SSE stream.</p>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Boss approves on Telegram → Admin popup closes → Buyer sees LOI → Broker gets notification → all from a single SSE stream.</p>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
         <a href="telegram-bot.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Telegram Bot setup →</a>
         <a href="payments.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Payment infra →</a>

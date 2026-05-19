@@ -178,7 +178,7 @@ select.inp option{background:var(--surface)}
 .modal-close:hover{color:var(--white)}
 .modal-body{padding:18px}
 .modal-ft{padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
-.wa-bubble{background:#0d1f0d;border-radius:8px 8px 8px 2px;padding:12px 14px;font-size:11px;color:#c8e6c8;line-height:1.7;white-space:pre-wrap;margin-top:10px}
+.tg-bubble{background:#0a1929;border-radius:8px 8px 8px 2px;padding:12px 14px;font-size:11px;color:#b3d4f0;line-height:1.7;white-space:pre-wrap;margin-top:10px}
 ::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
@@ -209,11 +209,8 @@ select.inp option{background:var(--surface)}
   <button class="nav" onclick="show('compliance',this)"><span class="nav-icon">🛡️</span><span class="nav-label">Compliance</span></button>
   <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & KYC</span></button>
   <div class="sb-section">Tools</div>
-  <button class="nav" onclick="openConsole('neg')"><span class="nav-icon">🎯</span><span class="nav-label">Agent Console</span></button>
   <button class="nav" onclick="window.open('loi-generator.html','_blank')"><span class="nav-icon">📄</span><span class="nav-label">LOI Generator</span></button>
   <button class="nav" onclick="window.open('compliance.html','_blank')"><span class="nav-icon">✅</span><span class="nav-label">Compliance Check</span></button>
-  <button class="nav" onclick="window.open('broker-onboarding.html','_blank')"><span class="nav-icon">🌍</span><span class="nav-label">Broker Onboarding</span></button>
-  <button class="nav" onclick="window.open('investor.html','_blank')"><span class="nav-icon">📈</span><span class="nav-label">Investor Page</span></button>
   <button class="nav" onclick="show('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
   <button class="nav" onclick="window.open('terms.html','_blank')"><span class="nav-icon">📋</span><span class="nav-label">Terms & Privacy</span></button>
   <button class="nav" onclick="window.location.href='login.html'"><span class="nav-icon">←</span><span class="nav-label">Sign out</span></button>
@@ -233,7 +230,7 @@ select.inp option{background:var(--surface)}
     <div class="tb-right">
       <div class="live-badge"><div class="live-dot"></div>LIVE</div>
       <div id="tb-clock" style="font-size:11px;color:var(--muted)"></div>
-      <button class="btn btn-sm btn-a" onclick="openWA()">📱 WhatsApp</button>
+      <button class="btn btn-sm btn-a" onclick="openTG()">📲 Telegram</button>
       <button class="btn btn-sm btn-p" onclick="openConsole('neg')">🤖 New negotiation</button>
     </div>
   </div>
@@ -242,7 +239,7 @@ select.inp option{background:var(--surface)}
     <button class="qa" style="background:var(--indigo-dim);border-color:rgba(91,95,239,.35);color:var(--violet)" onclick="window.open('loi-generator.html','_blank')">📄 Generate LOI</button>
     <button class="qa" style="background:var(--gold-dim);border-color:rgba(232,169,74,.35);color:var(--gold)" onclick="approveDeal()">⚡ Approve pending</button>
     <button class="qa" style="background:var(--red-dim);border-color:rgba(239,68,68,.3);color:var(--red)" onclick="window.open('compliance.html','_blank')">🛡️ Compliance check</button>
-    <button class="qa" style="background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.3);color:#25d366" onclick="openWA()">📱 WhatsApp blast</button>
+    <button class="qa" style="background:rgba(0,136,204,.08);border-color:rgba(0,136,204,.3);color:#0088cc" onclick="openTG()">📲 Telegram blast</button>
     <button class="qa" style="background:var(--teal-dim);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="window.open('price-discovery.html','_blank')">🔍 Price check</button>
     <button class="qa" style="background:var(--surface);border-color:var(--border2);color:var(--muted)" onclick="window.open('exchange.html','_blank')">📊 Exchange</button>
     <button class="qa" style="background:var(--surface);border-color:var(--border2);color:var(--muted)" onclick="window.open('broker-onboarding.html','_blank')">🌍 Add broker</button>
@@ -281,7 +278,7 @@ select.inp option{background:var(--surface)}
             <div class="al-desc">Applied 1h ago · Steel sector · waiting KYC review</div>
             <div class="al-actions">
               <button class="btn btn-xs btn-p" onclick="show('brokers',document.querySelectorAll('.nav')[5])">Review</button>
-              <button class="btn btn-xs btn-g" onclick="openWA()">📱 Contact</button>
+              <button class="btn btn-xs btn-g" onclick="openTG()">📲 Contact</button>
             </div>
           </div>
         </div>
@@ -405,9 +402,9 @@ select.inp option{background:var(--surface)}
     <div class="card">
       <div class="card-title">// LOI FEE LEDGER</div>
       <table>
-        <thead><tr><th>Date</th><th>LOI Ref</th><th>Buyer</th><th>Broker</th><th>Deal Value</th><th>LOI Fee</th><th>Status</th></tr></thead>
+        <thead><tr><th>Date</th><th>LOI Ref</th><th>Buyer</th><th>Broker</th><th>Deal Value</th><th>LOI Fee</th><th>Status</th><th></th></tr></thead>
         <tbody id="loi-ledger-body">
-          <tr><td colspan="7" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>
+          <tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>
         </tbody>
       </table>
     </div>
@@ -457,7 +454,7 @@ select.inp option{background:var(--surface)}
         <div class="al-actions">
           <button class="btn btn-xs btn-g" onclick="approveBroker()">✓ Approve KYC</button>
           <button class="btn btn-xs btn-r">✗ Reject</button>
-          <button class="btn btn-xs" onclick="openWA()">📱 Contact</button>
+          <button class="btn btn-xs" onclick="openTG()">📲 Contact</button>
         </div>
       </div>
     </div>
@@ -693,7 +690,7 @@ select.inp option{background:var(--surface)}
             <div style="width:32px;height:32px;border-radius:6px;background:rgba(37,211,102,.1);display:flex;align-items:center;justify-content:center;font-size:16px">📱</div>
             <div>
               <div style="font-size:12px;font-weight:600;color:var(--white)">OutreachBot</div>
-              <div style="font-size:10px;color:var(--muted)">Sends WhatsApp to leads · personalised per sector</div>
+              <div style="font-size:10px;color:var(--muted)">Sends Telegram messages to leads · personalised per sector</div>
             </div>
           </div>
           <div style="display:flex;gap:5px;margin-bottom:10px">
@@ -713,7 +710,7 @@ select.inp option{background:var(--surface)}
         </div>
         <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
           <button class="btn btn-xs btn-g" onclick="resumeOutreach()" style="flex:1;justify-content:center">▶ Resume</button>
-          <button class="btn btn-xs" onclick="window.open('whatsapp-templates.html','_blank')">Templates</button>
+          <button class="btn btn-xs" onclick="window.open('telegram-templates.html','_blank')">Templates</button>
         </div>
       </div>
 
@@ -799,33 +796,33 @@ select.inp option{background:var(--surface)}
 </div>
 </div>
 
-<!-- WA MODAL -->
-<div class="modal-bg" id="wa-modal" onclick="if(event.target===this)closeWA()">
+<!-- TG MODAL -->
+<div class="modal-bg" id="tg-modal" onclick="if(event.target===this)closeTG()">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-title">📱 Send WhatsApp</div><button class="modal-close" onclick="closeWA()">×</button></div>
+    <div class="modal-hd"><div class="modal-title">📲 Send via Telegram</div><button class="modal-close" onclick="closeTG()">×</button></div>
     <div class="modal-body">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
         <div><label class="flabel">Recipient</label>
-          <select class="inp" id="wa-to">
+          <select class="inp" id="tg-to">
             <option>REF-MET-001 · Verified Contact</option><option>REF-MET-002 · Verified Contact</option>
             <option>REF-BLD-001 · Verified Contact</option><option>REF-ENE-001 · Verified Contact</option>
             <option>Gulf Cement LLC</option><option>Atlas Trading</option><option>NEOM Procurement</option>
           </select>
         </div>
         <div><label class="flabel">Template</label>
-          <select class="inp" id="wa-tpl" onchange="loadTpl()">
+          <select class="inp" id="tg-tpl" onchange="loadTpl()">
             <option value="rfq">RFQ received</option><option value="loi">LOI signed</option>
             <option value="doc">Document needed</option><option value="custom">Custom</option>
           </select>
         </div>
       </div>
       <label class="flabel">Message</label>
-      <textarea class="inp" id="wa-msg" style="min-height:100px;resize:vertical;line-height:1.7"></textarea>
-      <div class="wa-bubble" id="wa-preview">Select a template above</div>
+      <textarea class="inp" id="tg-msg" style="min-height:100px;resize:vertical;line-height:1.7"></textarea>
+      <div class="tg-bubble" id="tg-preview">Select a template above</div>
     </div>
     <div class="modal-ft">
-      <button class="btn" onclick="closeWA()">Cancel</button>
-      <button class="btn" style="background:#075e54;color:#fff;border-color:#075e54" onclick="sendWA()">Open in WhatsApp</button>
+      <button class="btn" onclick="closeTG()">Cancel</button>
+      <button class="btn" style="background:#0088cc;color:#fff;border-color:#0088cc" onclick="sendTG()">Open in Telegram</button>
     </div>
   </div>
 </div>
@@ -849,7 +846,7 @@ var PIPELINE={new:[{name:'Gulf Cement LLC',product:'Cement OPC',value:125000,cou
 var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Building',products:[{name:'Concrete Block 20cm',sku:'BLK-200',price:4.8,unit:'Unit'},{name:'Ready-Mix B25',sku:'CNC-B25',price:380,unit:'m³'}]},{ref:'REF-BLD-002',emoji:'🏗️',name:'Supplier B',sector:'Building',products:[{name:'Porcelain Tile 60×60',sku:'TLE-6060',price:62,unit:'m²'}]},{ref:'REF-BLD-003',emoji:'🏗️',name:'Supplier C',sector:'Building',products:[{name:'PVC Pipe 110mm',sku:'PVC-110',price:28,unit:'m'},{name:'PVC Pipe 160mm',sku:'PVC-160',price:52,unit:'m'}]},{ref:'REF-MET-001',emoji:'🔩',name:'Supplier D',sector:'Metals',products:[{name:'Steel Rebar G60 12mm',sku:'STL-12',price:2840,unit:'MT'},{name:'Steel HR Coil',sku:'STL-HRC',price:3100,unit:'MT'}]},{ref:'REF-MET-002',emoji:'🔩',name:'Supplier E',sector:'Metals',products:[{name:'Aluminum 6061-T6',sku:'ALU-6061',price:9200,unit:'MT'},{name:'Aluminum Profiles',sku:'ALU-PRF',price:38,unit:'m'}]},{ref:'REF-ENE-001',emoji:'⚡',name:'Supplier F',sector:'Energy',products:[{name:'Industrial Diesel B2',sku:'DSL-B2',price:4.92,unit:'L'},{name:'LPG Bulk',sku:'LPG-BLK',price:3.85,unit:'kg'}]},{ref:'REF-AGR-001',emoji:'🌾',name:'Supplier G',sector:'Agriculture',products:[{name:'Hard Wheat',sku:'WHT-HRD',price:1120,unit:'MT'},{name:'Yellow Corn',sku:'CRN-YLW',price:980,unit:'MT'}]},{ref:'REF-CHM-001',emoji:'🧪',name:'Supplier H',sector:'Chemicals',products:[{name:'Sulfuric Acid 98%',sku:'H2SO4',price:580,unit:'MT'},{name:'Caustic Soda 50%',sku:'NaOH',price:420,unit:'MT'}]}];
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
-var WA_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
+var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
 var TITLES={agents:['🧠 AI Agents','LeadFinder · PriceScout · OutreachBot · ComplianceBot'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],brokers:['👥 Brokers','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · broker floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration']};
 
 
@@ -877,7 +874,7 @@ function resumeOutreach(){
 
 function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];}
 
-function renderKanban(){var cols=[{key:'new',label:'New',color:'var(--muted)'},{key:'contacted',label:'Contacted',color:'var(--blue)'},{key:'rfq',label:'RFQ sent',color:'var(--teal)'},{key:'negotiating',label:'Negotiating',color:'var(--gold)'},{key:'closed',label:'Closed ✓',color:'var(--green)'}];var html='';cols.forEach(function(col){var cards=PIPELINE[col.key]||[];html+='<div class="kc"><div class="kc-head" style="color:'+col.color+'">'+col.label+'<span class="kc-count">'+cards.length+'</span></div>';cards.forEach(function(c){html+='<div class="kcard'+(c.hot?' hot':'')+'"><div class="kcard-name">'+(c.hot?'🔥 ':'')+c.name+'</div><div class="kcard-sub">'+c.product+' · '+c.country+'</div><div class="kcard-val">$'+c.value.toLocaleString()+'</div><div class="kcard-actions">';if(col.key==='new')html+='<button class="btn btn-xs btn-g" onclick="openWA()">WA</button><button class="btn btn-xs btn-p" onclick="moveCard(\'new\',\'contacted\',\''+c.name+'\')">Contact</button>';else if(col.key==='contacted')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'contacted\',\'rfq\',\''+c.name+'\')">Send RFQ</button>';else if(col.key==='rfq')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'rfq\',\'negotiating\',\''+c.name+'\')">Negotiate</button>';else if(col.key==='negotiating')html+='<button class="btn btn-xs btn-g" onclick="moveCard(\'negotiating\',\'closed\',\''+c.name+'\')">Close ✓</button>';else html+='<button class="btn btn-xs" onclick="window.open(\'loi-generator.html\',\'_blank\')">LOI</button>';html+='</div></div>';});html+='</div>';});document.getElementById('kanban').innerHTML=html;}
+function renderKanban(){var cols=[{key:'new',label:'New',color:'var(--muted)'},{key:'contacted',label:'Contacted',color:'var(--blue)'},{key:'rfq',label:'RFQ sent',color:'var(--teal)'},{key:'negotiating',label:'Negotiating',color:'var(--gold)'},{key:'closed',label:'Closed ✓',color:'var(--green)'}];var html='';cols.forEach(function(col){var cards=PIPELINE[col.key]||[];html+='<div class="kc"><div class="kc-head" style="color:'+col.color+'">'+col.label+'<span class="kc-count">'+cards.length+'</span></div>';cards.forEach(function(c){html+='<div class="kcard'+(c.hot?' hot':'')+'"><div class="kcard-name">'+(c.hot?'🔥 ':'')+c.name+'</div><div class="kcard-sub">'+c.product+' · '+c.country+'</div><div class="kcard-val">$'+c.value.toLocaleString()+'</div><div class="kcard-actions">';if(col.key==='new')html+='<button class="btn btn-xs btn-g" onclick="openTG()">WA</button><button class="btn btn-xs btn-p" onclick="moveCard(\'new\',\'contacted\',\''+c.name+'\')">Contact</button>';else if(col.key==='contacted')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'contacted\',\'rfq\',\''+c.name+'\')">Send RFQ</button>';else if(col.key==='rfq')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'rfq\',\'negotiating\',\''+c.name+'\')">Negotiate</button>';else if(col.key==='negotiating')html+='<button class="btn btn-xs btn-g" onclick="moveCard(\'negotiating\',\'closed\',\''+c.name+'\')">Close ✓</button>';else html+='<button class="btn btn-xs" onclick="window.open(\'loi-generator.html\',\'_blank\')">LOI</button>';html+='</div></div>';});html+='</div>';});document.getElementById('kanban').innerHTML=html;}
 
 function moveCard(from,to,name){var idx=PIPELINE[from].findIndex(function(c){return c.name===name});if(idx>-1){PIPELINE[to].push(PIPELINE[from].splice(idx,1)[0]);renderKanban();}}
 
@@ -983,7 +980,7 @@ function renderNegHistory(negs) {
     '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">No negotiations yet</td></tr>';
 }
 
-function renderBrokers(){var html='';BROKERS.forEach(function(b){html+='<div class="broker-row"><div class="br-av" style="background:'+b.color+';color:'+b.ct+'">'+b.init+'</div><div class="br-info"><div class="br-name">'+b.name+'</div><div class="br-meta">'+b.company+' · '+b.territory+'</div></div><div class="br-stats"><div class="brs"><div class="brs-v">'+b.deals+'</div><div class="brs-l">Deals</div></div><div class="brs"><div class="brs-v">'+b.volume+'</div><div class="brs-l">Volume</div></div><div class="brs"><div class="brs-v" style="color:var(--violet)">'+b.fees+'</div><div class="brs-l">LOI fees</div></div><div class="brs"><div class="brs-v" style="color:var(--gold)">'+b.pipeline+'</div><div class="brs-l">Pipeline</div></div></div><div style="display:flex;gap:5px;flex-shrink:0"><span class="badge bg">Active</span><button class="btn btn-xs btn-g" onclick="openWA()">📱</button><button class="btn btn-xs">Edit</button></div></div>';});document.getElementById('broker-list').innerHTML=html;}
+function renderBrokers(){var html='';BROKERS.forEach(function(b){html+='<div class="broker-row"><div class="br-av" style="background:'+b.color+';color:'+b.ct+'">'+b.init+'</div><div class="br-info"><div class="br-name">'+b.name+'</div><div class="br-meta">'+b.company+' · '+b.territory+'</div></div><div class="br-stats"><div class="brs"><div class="brs-v">'+b.deals+'</div><div class="brs-l">Deals</div></div><div class="brs"><div class="brs-v">'+b.volume+'</div><div class="brs-l">Volume</div></div><div class="brs"><div class="brs-v" style="color:var(--violet)">'+b.fees+'</div><div class="brs-l">LOI fees</div></div><div class="brs"><div class="brs-v" style="color:var(--gold)">'+b.pipeline+'</div><div class="brs-l">Pipeline</div></div></div><div style="display:flex;gap:5px;flex-shrink:0"><span class="badge bg">Active</span><button class="btn btn-xs btn-g" onclick="openTG()">📲</button><button class="btn btn-xs">Edit</button></div></div>';});document.getElementById('broker-list').innerHTML=html;}
 
 function approveBroker(){alert('KYC approved. Gulf Metals Trading is now active.\nRef: BRK-UAE-002');document.getElementById('broker-pending').style.display='none';}
 
@@ -1047,7 +1044,7 @@ function renderUsers() {
         + '<td style="color:var(--teal)">' + u.credits + '</td>'
         + '<td>' + u.loi_count + '</td>'
         + '<td><span class="badge bg">Active</span></td>'
-        + '<td><div style="display:flex;gap:4px"><button class="btn btn-xs" onclick="openWA()">📱</button></div></td>'
+        + '<td><div style="display:flex;gap:4px"><button class="btn btn-xs" onclick="openTG()">📲</button></div></td>'
         + '</tr>';
     }).join('');
   }).catch(function() {
@@ -1065,7 +1062,7 @@ function loadRevenue() {
     var tbody = document.getElementById('loi-ledger-body');
     if (!tbody) return;
     if (!lois.length) {
-      tbody.innerHTML = '<tr><td colspan="7" style="padding:16px;text-align:center;color:var(--muted)">No LOIs yet — approve a negotiation to generate one</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">No LOIs yet — approve a negotiation to generate one</td></tr>';
       return;
     }
     tbody.innerHTML = lois.map(function(l) {
@@ -1073,6 +1070,9 @@ function loadRevenue() {
       var dateStr = d.toLocaleDateString();
       var paidClass = l.loi_fee_paid ? 'bg' : 'ba';
       var paidText  = l.loi_fee_paid ? 'Paid' : 'Invoiced';
+      var loiUrl = 'loi-generator.html?ref=' + encodeURIComponent(l.ref||'')
+        + '&buyer=' + encodeURIComponent(l.buyer_name||'')
+        + '&price=' + encodeURIComponent(l.total_value||'');
       return '<tr>'
         + '<td style="color:var(--muted)">' + dateStr + '</td>'
         + '<td style="font-size:10px;color:var(--indigo)">' + l.ref + '</td>'
@@ -1081,22 +1081,23 @@ function loadRevenue() {
         + '<td>$' + Number(l.total_value||0).toLocaleString() + '</td>'
         + '<td style="color:var(--green);font-weight:700">$' + (l.loi_fee_usd||500) + '</td>'
         + '<td><span class="badge ' + paidClass + '">' + paidText + '</span></td>'
+        + '<td><button class="btn btn-xs" onclick="window.open(\'' + loiUrl + '\',\'_blank\')">📄 View LOI</button></td>'
         + '</tr>';
     }).join('');
   }).catch(function() {
     var tbody = document.getElementById('loi-ledger-body');
-    if (tbody) tbody.innerHTML = '<tr><td colspan="7" style="padding:16px;text-align:center;color:var(--muted)">Failed to load LOIs</td></tr>';
+    if (tbody) tbody.innerHTML = '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">Failed to load LOIs</td></tr>';
   });
 }
 
 function suspendUser(btn){btn.closest('tr').cells[6].innerHTML='<span class="badge br">Suspended</span>';btn.closest('td').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-xs btn-g" onclick="activateUser(this)">Activate</button></div>';}
 function activateUser(btn){btn.closest('tr').cells[6].innerHTML='<span class="badge bg">Active</span>';btn.closest('td').innerHTML='<div style="display:flex;gap:4px"><button class="btn btn-xs btn-r" onclick="suspendUser(this)">Suspend</button></div>';}
 
-function openWA(){document.getElementById('wa-modal').classList.add('open');loadTpl();}
-function closeWA(){document.getElementById('wa-modal').classList.remove('open');}
-function loadTpl(){var k=document.getElementById('wa-tpl').value;var m=WA_TPLS[k]||'';document.getElementById('wa-msg').value=m;document.getElementById('wa-preview').textContent=m||'Custom message...';}
-document.addEventListener('input',function(e){if(e.target.id==='wa-msg')document.getElementById('wa-preview').textContent=e.target.value;});
-function sendWA(){var m=document.getElementById('wa-msg').value;if(!m){alert('Enter a message.');return;}window.open('https://wa.me/?text='+encodeURIComponent(m),'_blank');closeWA();}
+function openTG(){document.getElementById('tg-modal').classList.add('open');loadTpl();}
+function closeTG(){document.getElementById('tg-modal').classList.remove('open');}
+function loadTpl(){var k=document.getElementById('tg-tpl').value;var m=TG_TPLS[k]||'';document.getElementById('tg-msg').value=m;document.getElementById('tg-preview').textContent=m||'Custom message...';}
+document.addEventListener('input',function(e){if(e.target.id==='tg-msg')document.getElementById('tg-preview').textContent=e.target.value;});
+function sendTG(){var m=document.getElementById('tg-msg').value;if(!m){alert('Enter a message.');return;}window.open('https://t.me/share/url?text='+encodeURIComponent(m),'_blank');closeTG();}
 
 function approveDeal() {
   if (!_pendingNegId) return;
@@ -1105,9 +1106,19 @@ function approveDeal() {
   if (btn) { btn.textContent = '⏳ Approving…'; btn.disabled = true; }
 
   api.approveDeal(_pendingNegId, { action: 'approve', override_price: override })
-    .then(function() {
+    .then(function(res) {
       showToast('✅ Deal approved — LOI being generated', 'green');
       document.getElementById('approval-box').style.display = 'none';
+      // Build loi-generator URL from approval box data
+      var product = (document.getElementById('ab-product').textContent||'').split(' · ')[0];
+      var buyer   = document.getElementById('ab-buyer').textContent||'';
+      var priceRaw = (document.getElementById('ab-price').textContent||'').replace(/[^0-9.]/g,'');
+      var ref  = (res && res.ref) ? res.ref : ('SL-LOI-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + String(_pendingNegId).slice(-3));
+      var loiUrl = 'loi-generator.html?ref=' + encodeURIComponent(ref)
+        + '&buyer=' + encodeURIComponent(buyer)
+        + '&product=' + encodeURIComponent(product)
+        + '&price=' + encodeURIComponent(priceRaw);
+      window.open(loiUrl, '_blank');
       setTimeout(loadNegotiations, 2000);
     })
     .catch(function(err) {
@@ -1135,7 +1146,7 @@ function rejectDeal() {
 function tick(){document.getElementById('tb-clock').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' UTC';}
 setInterval(tick,1000);tick();
 
-var FEED_MSGS=[['🤖','PriceScout queried REF-MET-002 — $9,200/MT'],['📋','New RFQ — Bauer GmbH · Hard Wheat 200 MT'],['💬','NegotiationAgent — counter offer $2,800/MT'],['✅','KYC verified — Atlas Trading Germany'],['🎯','LeadFinder — 2 new prospects in Egypt'],['📱','OutreachBot — WhatsApp sent to 3 buyers'],['⚡','Credit purchase — $599 · 800 credits'],['📄','LOI generated — $92,000']];
+var FEED_MSGS=[['🤖','PriceScout queried REF-MET-002 — $9,200/MT'],['📋','New RFQ — Bauer GmbH · Hard Wheat 200 MT'],['💬','NegotiationAgent — counter offer $2,800/MT'],['✅','KYC verified — Atlas Trading Germany'],['🎯','LeadFinder — 2 new prospects in Egypt'],['📲','OutreachBot — Telegram messages sent to 3 buyers'],['⚡','Credit purchase — $599 · 800 credits'],['📄','LOI generated — $92,000']];
 var feedIdx=0;
 setInterval(function(){var feed=document.getElementById('live-feed');if(!feed)return;var msg=FEED_MSGS[feedIdx%FEED_MSGS.length];feedIdx++;var d=new Date();var time=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');var row=document.createElement('div');row.className='feed-row';row.style.background='rgba(91,95,239,.07)';row.innerHTML='<div class="feed-time">'+time+'</div><div class="feed-icon">'+msg[0]+'</div><div class="feed-text">'+msg[1]+'</div>';feed.insertBefore(row,feed.firstChild);setTimeout(function(){row.style.background='';},2000);if(feed.children.length>10)feed.removeChild(feed.lastChild);},12000);
 
@@ -1160,7 +1171,7 @@ function renderLeadFinder(){
     var actionBtn = l.action === 'rfq'
       ? '<button class="btn btn-xs btn-p" onclick="addToPipeline('+i+')">+ Add to pipeline</button>'
       : l.action === 'outreach'
-      ? '<button class="btn btn-xs btn-g" onclick="sendWA()">📱 Outreach</button>'
+      ? '<button class="btn btn-xs btn-g" onclick="openTG()">📲 Telegram</button>'
       : '<button class="btn btn-xs btn-a" onclick="alert(\'Iraq requires enhanced KYC. Boss review needed before outreach.\')">⚠ Review first</button>';
 
     html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:11px">';
@@ -1242,7 +1253,7 @@ function renderAgentLog(){
     {time:'14:22',agent:'🛡️ ComplianceBot',action:'Gulf Cement LLC — CLEARED · Al-Rashid Group — REVIEW required'},
     {time:'14:09',agent:'🔭 LeadFinder',action:'Baghdad Airport project found · Iraq flag · Boss review recommended'},
     {time:'13:55',agent:'📡 PriceScout',action:'Scanned 11 products · All within normal range except Steel Rebar'},
-    {time:'13:40',agent:'📱 OutreachBot',action:'Sent 6 WhatsApp messages · 2 replies received · Cairo Constructions interested'},
+    {time:'13:40',agent:'📱 OutreachBot',action:'Sent 6 Telegram messages · 2 replies received · Cairo Constructions interested'},
     {time:'12:00',agent:'🔭 LeadFinder',action:'Routine scan · 3 leads found · Added to pipeline'},
     {time:'11:05',agent:'🛡️ ComplianceBot',action:'Iran entity blocked · OFAC match · Deal rejected automatically'},
   ];

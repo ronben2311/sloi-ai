@@ -2852,8 +2852,8 @@
                     ><input class="inp" value="mohammed@gulfcement.ae" />
                   </div>
                   <div>
-                    <label class="flabel">WhatsApp</label
-                    ><input class="inp" value="+971-5X-XXX-XXXX" />
+                    <label class="flabel">Telegram</label
+                    ><input class="inp" value="@gulfcement" />
                   </div>
                   <div>
                     <label class="flabel">Country</label
@@ -3520,7 +3520,8 @@
               parseFloat(data.total_value).toLocaleString() +
               " · LOI fee: $" +
               (data.loi_fee || 500) +
-              '</div><div style="font-size:10px;color:var(--gold);margin-top:8px">⏳ Waiting for boss approval…</div></div>';
+              '</div><div style="font-size:10px;color:var(--gold);margin-top:8px">⏳ Waiting for boss approval… You can start a new negotiation while you wait.</div></div>';
+            document.getElementById("neg-reset-btn").style.display = "inline-flex";
           })
           .on("LOI_GENERATED", function (data) {
             document.getElementById("neg-live-title").textContent =
@@ -3623,7 +3624,7 @@
               "')\">Negotiate →</button>";
           else
             html +=
-              '<button class="btn btn-xs btn-t" onclick="alert(\'Follow-up WhatsApp sent.\')">Follow up</button>';
+              '<button class="btn btn-xs btn-t" onclick="alert(\'Follow-up Telegram sent.\')">Follow up</button>';
           html += "</div></div>";
         });
         document.getElementById("rfq-list").innerHTML = html;

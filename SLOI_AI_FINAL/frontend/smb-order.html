@@ -235,13 +235,17 @@ select.inp option{background:var(--surface2)}
     </div>
 
     <div class="inp-wrap">
-      <div class="inp-label">WhatsApp number</div>
-      <input class="inp" id="contact-wa" placeholder="+971-5X-XXX-XXXX"/>
-      <div class="inp-hint">We will send you updates and the final price offer on WhatsApp.</div>
+      <div class="inp-label">Telegram username</div>
+      <input class="inp" id="contact-wa" placeholder="@yourhandle"/>
+      <div class="inp-hint">We will send you updates and the final price offer on Telegram.</div>
     </div>
 
     <button class="btn-next" onclick="goStep(4)">→ Find me the best price</button>
     <button class="btn-back" onclick="goStep(2)">← Back</button>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+      <div style="font-size:10px;color:var(--muted);text-align:center;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">Or negotiate right now</div>
+      <a href="negotiation-agent.html" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.3);color:var(--violet);border-radius:8px;padding:14px;font-size:13px;font-weight:600;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s" onmouseover="this.style.background='rgba(91,95,239,.15)'" onmouseout="this.style.background='rgba(91,95,239,.08)'">🤖 Start negotiation agent →</a>
+    </div>
   </div>
 
   <!-- STEP 4 — REVIEW + SUBMIT -->
@@ -256,12 +260,12 @@ select.inp option{background:var(--surface2)}
       <div class="summary-row"><span class="sr-label">Budget</span><span class="sr-val" id="sum-budget">—</span></div>
       <div class="summary-row"><span class="sr-label">Delivery country</span><span class="sr-val" id="sum-country">—</span></div>
       <div class="summary-row"><span class="sr-label">Timeline</span><span class="sr-val" id="sum-urgency">—</span></div>
-      <div class="summary-row"><span class="sr-label">Your WhatsApp</span><span class="sr-val" id="sum-wa">—</span></div>
+      <div class="summary-row"><span class="sr-label">Your Telegram</span><span class="sr-val" id="sum-wa">—</span></div>
     </div>
 
     <div style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:11px;color:var(--teal);line-height:1.7">
       ✓ Our AI agent will negotiate the best price with verified suppliers<br/>
-      ✓ You will receive price offers on WhatsApp within 24 hours<br/>
+      ✓ You will receive price offers on Telegram within 24 hours<br/>
       ✓ You approve before anything is signed — no commitment now<br/>
       ✓ No credit card needed to get started
     </div>
@@ -275,12 +279,12 @@ select.inp option{background:var(--surface2)}
     <div class="success-wrap">
       <div class="success-icon">🎉</div>
       <div class="success-title">We're on it,<br/><em>right now.</em></div>
-      <div class="success-sub">Our AI agent is searching for the best verified supplier for your order. You'll receive a price offer on WhatsApp within 24 hours.</div>
+      <div class="success-sub">Our AI agent is searching for the best verified supplier for your order. You'll receive a price offer on Telegram within 24 hours.</div>
 
       <div class="next-steps">
         <div class="ns"><div class="ns-n">1</div><div>Agent searches verified supplier network for your product and quantity</div></div>
         <div class="ns"><div class="ns-n">2</div><div>Agent negotiates the best price — aiming for your budget</div></div>
-        <div class="ns"><div class="ns-n">3</div><div>We send you the price offer on WhatsApp — you approve or decline</div></div>
+        <div class="ns"><div class="ns-n">3</div><div>We send you the price offer on Telegram — you approve or decline</div></div>
         <div class="ns"><div class="ns-n">4</div><div>If you approve — we generate a professional Letter of Intent (LOI) and send it to both parties</div></div>
         <div class="ns" style="border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.05)"><div class="ns-n" style="background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);color:var(--green)">✓</div><div style="color:var(--text)">You deal directly with the supplier — payment and delivery are between you and them</div></div>
       </div>
@@ -312,7 +316,7 @@ function goStep(n){
     if(currentStep === 3){
       if(!state.urgency){ alert('Please select a timeline.'); return; }
       if(!document.getElementById('contact-name').value){ alert('Please enter your name.'); return; }
-      if(!document.getElementById('contact-wa').value){ alert('Please enter your WhatsApp number.'); return; }
+      if(!document.getElementById('contact-wa').value){ alert('Please enter your Telegram username.'); return; }
       state.name = document.getElementById('contact-name').value;
       state.wa = document.getElementById('contact-wa').value;
     }

@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>SLOI AI — Buyer WhatsApp Pitch</title>
+<title>SLOI AI — Buyer Telegram Pitch</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:wght@700;900&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--wa:#25D366;}
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--tg:#0088cc;}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
 
@@ -80,8 +80,8 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
 .action-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
 .btn{padding:8px 16px;border-radius:5px;font-size:12px;cursor:pointer;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'IBM Plex Mono',monospace;transition:all .12s;display:flex;align-items:center;gap:6px}
 .btn:hover{border-color:var(--indigo);color:var(--violet)}
-.btn-wa{background:#075e54;color:#fff;border-color:#075e54}
-.btn-wa:hover{background:#128c7e;border-color:#128c7e;color:#fff}
+.btn-wa{background:#0088cc;color:#fff;border-color:#0088cc}
+.btn-wa:hover{background:#0077bb;border-color:#0077bb;color:#fff}
 .btn-copy{background:var(--surface2)}
 .btn-sm{padding:4px 10px;font-size:11px}
 
@@ -112,7 +112,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
 <nav class="nav">
   <div class="nav-logo">SLOI <em>AI</em> <span style="font-size:11px;color:var(--muted);font-weight:400">/ Buyer Pitch</span></div>
   <div class="nav-links">
-    <a href="whatsapp-templates.html">Supplier templates</a>
+    <a href="telegram-templates.html">Supplier templates</a>
     <a href="login.html">Platform →</a>
   </div>
 </nav>
@@ -206,7 +206,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
 
 <!-- MAIN -->
 <main class="main">
-  <div class="page-title">Buyer WhatsApp Pitch</div>
+  <div class="page-title">Buyer Telegram Pitch</div>
   <div class="page-sub">Edit the variables → preview → copy and send. Works for cold outreach, warm leads, and follow-ups.</div>
 
   <div class="lang-tabs">
@@ -227,7 +227,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
       <div class="wa-avatar">⚡</div>
       <div>
         <div class="wa-name" id="wa-sender-name">You</div>
-        <div class="wa-status">WhatsApp Business</div>
+        <div class="wa-status">Telegram</div>
       </div>
     </div>
     <div class="wa-body">
@@ -243,9 +243,9 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
   <!-- ACTIONS -->
   <div class="action-row">
     <button class="btn btn-copy" onclick="copyMsg()">📋 Copy message</button>
-    <button class="btn btn-wa" onclick="openWA()">📱 Open in WhatsApp</button>
-    <button class="btn" onclick="openWAto()">📞 Send to number</button>
-    <button class="btn btn-sm" onclick="copyLink()">🔗 Copy wa.me link</button>
+    <button class="btn btn-wa" onclick="openTG()">📲 Open in Telegram</button>
+    <button class="btn" onclick="openTGto()">📞 Send to username</button>
+    <button class="btn btn-sm" onclick="copyTGLink()">🔗 Copy t.me link</button>
   </div>
 
   <!-- TIPS -->
@@ -286,7 +286,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
 
   <div class="divider"></div>
   <div class="rs-title">// OPEN RATE STATS</div>
-  <div class="stat-box"><div class="stat-v" style="color:var(--green)">94%</div><div class="stat-k">WhatsApp open rate</div></div>
+  <div class="stat-box"><div class="stat-v" style="color:var(--green)">96%</div><div class="stat-k">Telegram open rate</div></div>
   <div class="stat-box"><div class="stat-v">~4 min</div><div class="stat-k">Avg. response time</div></div>
   <div class="stat-box"><div class="stat-v" style="color:var(--violet)">5×</div><div class="stat-k">vs email open rate</div></div>
 
@@ -805,25 +805,25 @@ function copyMsg(){
   }
 }
 
-function openWA(){
+function openTG(){
   var msg=buildMessage();
-  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+  window.open('https://t.me/share/url?text='+encodeURIComponent(msg),'_blank');
 }
 
-function openWAto(){
-  var phone=prompt('Enter phone number with country code (e.g. +971501234567):');
-  if(!phone)return;
+function openTGto(){
+  var handle=prompt('Enter Telegram username (e.g. @username):');
+  if(!handle)return;
   var msg=buildMessage();
-  var clean=phone.replace(/[^0-9+]/g,'');
-  window.open('https://wa.me/'+clean+'?text='+encodeURIComponent(msg),'_blank');
+  var clean=handle.replace(/^@/,'');
+  window.open('https://t.me/'+clean,'_blank');
 }
 
-function copyLink(){
+function copyTGLink(){
   var msg=buildMessage();
-  var link='https://wa.me/?text='+encodeURIComponent(msg);
+  var link='https://t.me/share/url?text='+encodeURIComponent(msg);
   navigator.clipboard&&navigator.clipboard.writeText(link);
   event.target.textContent='✓ Copied!';
-  setTimeout(function(){event.target.textContent='🔗 Copy wa.me link';},2000);
+  setTimeout(function(){event.target.textContent='🔗 Copy t.me link';},2000);
 }
 
 // Init

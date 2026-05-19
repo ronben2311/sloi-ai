@@ -140,7 +140,7 @@ select.inp option{background:var(--surface)}
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span class="badge bg">✓ Active broker</span>
-      <button class="btn btn-sm btn-a" onclick="openWA()">📱 WhatsApp boss</button>
+      <button class="btn btn-sm btn-a" onclick="openTG()">📲 Telegram boss</button>
       <button class="btn btn-sm btn-p" onclick="show('pipeline',document.querySelectorAll('.nav')[3])">+ New lead</button>
     </div>
   </div>
@@ -369,7 +369,7 @@ select.inp option{background:var(--surface)}
           <div><label class="flabel">Territory</label><input class="inp" value="UAE / Saudi Arabia / Iraq"/></div>
           <div><label class="flabel">Contact name</label><input class="inp" value="Ali Al-Omari"/></div>
           <div><label class="flabel">Email</label><input class="inp" value="ali@gulftrade.ae"/></div>
-          <div><label class="flabel">WhatsApp</label><input class="inp" value="+971-5X-XXX-XXXX"/></div>
+          <div><label class="flabel">Telegram</label><input class="inp" value="@yourhandle"/></div>
           <button class="btn btn-p btn-sm">Save changes</button>
         </div>
       </div>
@@ -387,7 +387,7 @@ select.inp option{background:var(--surface)}
         <div class="card">
           <div class="card-title">// SETTINGS</div>
           <div class="sw-row"><div><div class="sw-label">Accept new RFQs</div><div class="sw-desc">Allow SLOI AI to send deals</div></div><div class="sw on" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div></div>
-          <div class="sw-row"><div><div class="sw-label">WhatsApp alerts</div><div class="sw-desc">Notifications for LOI and deal events</div></div><div class="sw on" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div></div>
+          <div class="sw-row"><div><div class="sw-label">Telegram alerts</div><div class="sw-desc">Notifications for LOI and deal events</div></div><div class="sw on" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div></div>
           <div class="sw-row"><div><div class="sw-label">Auto-confirm floor prices</div><div class="sw-desc">Agent uses floor without manual confirm</div></div><div class="sw on" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div></div>
         </div>
       </div>
@@ -697,7 +697,7 @@ function renderSuppliers(){
   if(el) el.innerHTML=html;
 }
 
-function openWA(){window.open('https://wa.me/?text='+encodeURIComponent('SLOI AI Broker Update — Powered by SLOI AI · sloiai.com'),'_blank');}
+function openTG(){window.open('https://t.me/share/url?text='+encodeURIComponent('SLOI AI Broker Update — Powered by SLOI AI · sloiai.com'),'_blank');}
 
 loadData();
 setInterval(loadData, 15000);
