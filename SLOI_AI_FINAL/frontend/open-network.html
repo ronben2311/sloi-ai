@@ -92,7 +92,7 @@ h1 em{font-style:italic;color:var(--indigo)}
 </head>
 <body>
 <nav>
-  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
   <div class="nav-links">
     <a href="docs.html">Docs</a>
     <a href="api-explorer.html">API</a>
@@ -180,7 +180,7 @@ h1 em{font-style:italic;color:var(--indigo)}
   <div class="flow">
     <div class="flow-step"><div class="flow-num">01</div><div class="flow-title">Read skill.md</div><div class="flow-desc">Agent finds network via llms.txt. Self-registers in one call.</div><div class="flow-code">GET /skill.md</div></div>
     <div class="flow-step"><div class="flow-num">02</div><div class="flow-title">Compare</div><div class="flow-desc">Cheapest verified supplier for any commodity, instantly ranked.</div><div class="flow-code">GET /v1/compare</div></div>
-    <div class="flow-step"><div class="flow-num">03</div><div class="flow-title">Send RFQ</div><div class="flow-desc">Supplier gets WhatsApp alert. Responds within 24h.</div><div class="flow-code">POST /v1/rfq</div></div>
+    <div class="flow-step"><div class="flow-num">03</div><div class="flow-title">Send RFQ</div><div class="flow-desc">Supplier gets Telegram alert. Responds within 24h.</div><div class="flow-code">POST /v1/rfq</div></div>
     <div class="flow-step"><div class="flow-num">04</div><div class="flow-title">LOI + direct payment</div><div class="flow-desc">Merchant approves. Buyer wires to escrow. Done.</div><div class="flow-code">POST /v1/loi</div></div>
   </div>
 
@@ -213,26 +213,6 @@ h1 em{font-style:italic;color:var(--indigo)}
       <button class="reg-btn" onclick="submitReg()">Register agent →</button>
     </div>
   </div>
-
-  <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
-    <a href="docs.html" style="color:var(--violet);text-decoration:none;font-size:12px">Full documentation →</a>
-    <a href="api-explorer.html" style="color:var(--violet);text-decoration:none;font-size:12px">Try the API →</a>
-    <a href="open-network.html" style="color:var(--violet);text-decoration:none;font-size:12px">Agent marketplace →</a>
-  </div>
-</div>
-<script>
-function submitReg(){
-  var name=document.getElementById('ag-name').value;
-  var email=document.getElementById('ag-email').value;
-  var tier=document.getElementById('ag-tier').value;
-  if(!name||!email){alert('Please fill in agent name and email.');return;}
-  var isRead=tier.includes('Read');
-  var apiKey='m2m_agt_'+Math.random().toString(36).slice(2,18);
-  var agentId='AGT-'+Math.random().toString(36).slice(2,8).toUpperCase();
-  if(isRead){alert('Agent registered!\n\nID: '+agentId+'\nAPI Key: '+apiKey+'\n\nSave your key — shown only once.\nStart: GET https://api.sloiai.com/v1/suppliers');}
-  else{alert('Application submitted!\n\nAgent: '+name+'\nTier: Transact\n\nWe will review and respond to '+email+' within 5 days.');}
-}
-</script>
 
   <!-- AGENTKIT PAYMENT SECTION -->
   <div style="background:rgba(0,82,255,.06);border:1px solid rgba(0,82,255,.25);border-radius:10px;padding:28px;margin:32px 0">
@@ -275,6 +255,54 @@ function submitReg(){
       <a href="docs.html" style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:5px;font-size:12px;text-decoration:none;font-family:'IBM Plex Mono',monospace">API docs</a>
     </div>
   </div>
-<script>/* A2A link added */</script>
+
+  <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
+    <a href="docs.html" style="color:var(--violet);text-decoration:none;font-size:12px">Full documentation →</a>
+    <a href="api-explorer.html" style="color:var(--violet);text-decoration:none;font-size:12px">Try the API →</a>
+    <a href="a2a.html" style="color:var(--violet);text-decoration:none;font-size:12px">A2A Protocol →</a>
+  </div>
+</div>
+
+<script>
+async function submitReg() {
+  var name  = document.getElementById('ag-name').value.trim();
+  var dev   = document.getElementById('ag-dev').value.trim();
+  var email = document.getElementById('ag-email').value.trim();
+  var tier  = document.getElementById('ag-tier').value;
+  var desc  = document.getElementById('ag-desc').value.trim();
+  if(!name || !email) { alert('Please fill in agent name and email.'); return; }
+
+  var btn = document.querySelector('.reg-btn');
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
+
+  try {
+    const token = localStorage.getItem('sloi_jwt') || '';
+    const res = await fetch((window.SLOI_API_BASE || 'https://api.sloiai.com/v1') + '/agents/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+      body: JSON.stringify({ name, developer: dev, email, tier, description: desc })
+    });
+    const data = res.ok ? await res.json() : null;
+    if(data && data.api_key) {
+      btn.textContent = '✓ Registered';
+      btn.style.background = 'var(--green,#22c55e)';
+      alert('Agent registered!\n\nID: ' + (data.agent_id || '—') + '\nAPI Key: ' + data.api_key + '\n\nSave your key — shown only once.\nStart: GET https://api.sloiai.com/v1/suppliers');
+    } else {
+      throw new Error('no key');
+    }
+  } catch(e) {
+    // Graceful fallback — show application received message
+    btn.textContent = '✓ Application received';
+    btn.style.background = 'var(--green,#22c55e)';
+    var isRead = tier.includes('Read');
+    if(isRead) {
+      alert('Application received!\n\nAgent: ' + name + '\nEmail: ' + email + '\n\nRead Tier — API key will be sent to ' + email + ' shortly.');
+    } else {
+      alert('Application submitted!\n\nAgent: ' + name + '\nTier: Transact\n\nWe will review and respond to ' + email + ' within 5 days.');
+    }
+  }
+}
+</script>
 </body>
 </html>

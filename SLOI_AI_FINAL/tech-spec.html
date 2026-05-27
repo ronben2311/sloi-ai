@@ -117,7 +117,7 @@ p{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px}
   <a class="sb-link" href="#p2-payments">Payments</a>
 
   <div class="sb-section">Phase 3 — Channels</div>
-  <a class="sb-link" href="#p3-telegram">WhatsApp</a>
+  <a class="sb-link" href="#p3-telegram">Telegram</a>
   <a class="sb-link" href="#p3-telegram-bot">Telegram Bot</a>
   <a class="sb-link" href="#p3-open-network">Open Network</a>
 
@@ -151,9 +151,9 @@ p{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px}
       <tr><td>Agent protocol</td><td class="tbl-key">AG-UI (SSE)</td><td class="tbl-desc">See agui.html for full spec</td></tr>
       <tr><td>Payments (humans)</td><td class="tbl-key">Stripe</td><td class="tbl-desc">Checkout + webhook · See payments.html</td></tr>
       <tr><td>Payments (agents)</td><td class="tbl-key">Base + USDC (Coinbase)</td><td class="tbl-desc">Alchemy webhook · See payments.html</td></tr>
-      <tr><td>WhatsApp</td><td class="tbl-key">Twilio</td><td class="tbl-desc">Business API · Meta-approved templates</td></tr>
+      <tr><td>Telegram</td><td class="tbl-key">Telegram Bot API</td><td class="tbl-desc">Bot API · t.me links · sendMessage</td></tr>
       <tr><td>Email</td><td class="tbl-key">Resend</td><td class="tbl-desc">LOI delivery + credit receipts</td></tr>
-      <tr><td>Boss interface</td><td class="tbl-key">Telegram Bot</td><td class="tbl-desc">VPS · Telegram/WhatsApp control</td></tr>
+      <tr><td>Boss interface</td><td class="tbl-key">Telegram Bot</td><td class="tbl-desc">VPS · Telegram control · deal alerts</td></tr>
       <tr><td>Compliance</td><td class="tbl-key">OpenSanctions</td><td class="tbl-desc">OFAC + EU + UN screening API</td></tr>
     </tbody>
   </table>
@@ -172,7 +172,7 @@ Buyer / Broker / Supplier / Boss (browser)
     Event bus ──→ Admin portal (real-time)
                 ──→ Buyer portal (own deals)
                 ──→ Broker portal (assigned)
-                ──→ Telegram Bot → Telegram/WhatsApp
+                ──→ Telegram Bot → Telegram
 
 Payments:
     Human  → Stripe checkout → webhook → credits
@@ -447,7 +447,7 @@ $$ <span class="kw">LANGUAGE</span> plpgsql;
     <div class="phase-num">3</div>
     <div>
       <div class="phase-title">Phase 3 — Channels</div>
-      <div class="phase-subtitle">WhatsApp · Telegram Bot · Open Network · ~2 weeks</div>
+      <div class="phase-subtitle">Telegram · Telegram Bot · Open Network · ~2 weeks</div>
       <div class="phase-meta"><span class="badge ba">Requires Phase 2</span><span class="badge" style="background:var(--surface2);border:1px solid var(--border2);color:var(--muted)">Telegram: instant setup</span></div>
     </div>
   </div>
@@ -498,9 +498,8 @@ $$ <span class="kw">LANGUAGE</span> plpgsql;
       <tr><td class="tbl-key">SLOI_AI_WALLET_PRIVATE_KEY</td><td class="tbl-type">0x...</td><td class="tbl-desc">Coinbase CDP → keep secret</td></tr>
       <tr><td class="tbl-key">ALCHEMY_API_KEY</td><td class="tbl-type">alchemy_...</td><td class="tbl-desc">alchemy.com → Base mainnet app</td></tr>
       <tr><td class="tbl-key">ALCHEMY_WEBHOOK_AUTH</td><td class="tbl-type">...</td><td class="tbl-desc">Alchemy → Notify → auth token</td></tr>
-      <tr><td class="tbl-key">TWILIO_ACCOUNT_SID</td><td class="tbl-type">AC...</td><td class="tbl-desc">twilio.com → Console</td></tr>
-      <tr><td class="tbl-key">TWILIO_AUTH_TOKEN</td><td class="tbl-type">...</td><td class="tbl-desc">twilio.com → Console</td></tr>
-      <tr><td class="tbl-key">TWILIO_WHATSAPP_FROM</td><td class="tbl-type">telegram:+1...</td><td class="tbl-desc">Twilio → WhatsApp Sender</td></tr>
+      <tr><td class="tbl-key">TELEGRAM_BOT_TOKEN</td><td class="tbl-type">1234567890:ABC...</td><td class="tbl-desc">@BotFather → /newbot</td></tr>
+      <tr><td class="tbl-key">TELEGRAM_BOSS_CHAT_ID</td><td class="tbl-type">-100...</td><td class="tbl-desc">Boss Telegram chat/group ID</td></tr>
       <tr><td class="tbl-key">RESEND_API_KEY</td><td class="tbl-type">re_...</td><td class="tbl-desc">resend.com → API Keys</td></tr>
       <tr><td class="tbl-key">TELEGRAM_BOT_TOKEN</td><td class="tbl-type">https://...</td><td class="tbl-desc">Telegram Bot VPS → from telegram-bot onboard</td></tr>
       <tr><td class="tbl-key">OPENSANCTIONS_API_KEY</td><td class="tbl-type">...</td><td class="tbl-desc">opensanctions.org → API</td></tr>
@@ -554,7 +553,7 @@ $$ <span class="kw">LANGUAGE</span> plpgsql;
       <tr><td>1–2</td><td class="tbl-desc">Phase 1: DB schema · Auth · Core API endpoints · Credits</td><td><span class="badge bv">Foundation</span></td></tr>
       <tr><td>3–4</td><td class="tbl-desc">Phase 2: Negotiation SSE · AG-UI stream · LOI PDF · Stripe payments</td><td><span class="badge bg">First LOI</span></td></tr>
       <tr><td>5</td><td class="tbl-desc">Phase 2: Base/USDC payments · agui-client.js in all portals</td><td><span class="badge bg">Payments live</span></td></tr>
-      <tr><td>6–7</td><td class="tbl-desc">Phase 3: WhatsApp · Telegram Bot · Open Network API</td><td><span class="badge ba">Boss on WA</span></td></tr>
+      <tr><td>6–7</td><td class="tbl-desc">Phase 3: Telegram · Telegram Bot · Open Network API</td><td><span class="badge ba">Boss on TG</span></td></tr>
       <tr><td>8–9</td><td class="tbl-desc">Phase 4: Compliance · Mobile PWA · Testing · Bug fixes</td><td><span class="badge bt">Production</span></td></tr>
       <tr><td>10+</td><td class="tbl-desc">TradeFinex · Analytics · Series A prep</td><td><span class="badge bt">Scale</span></td></tr>
     </tbody>

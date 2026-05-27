@@ -163,8 +163,8 @@ pre{padding:14px;font-size:11px;line-height:1.8;overflow-x:auto;color:var(--text
 <!-- HERO -->
 <div id="overview">
   <div class="eyebrow">OpenClaw × SLOI AI · Orchestration Layer</div>
-  <h1>Boss controls<br/>every <em>agent</em><br/>from WhatsApp.</h1>
-  <p class="lead">OpenClaw is the primary orchestration layer for all SLOI AI Claude agents. The Negotiation Agent, LeadFinder, PriceScout, OutreachBot, and ComplianceBot are all started, stopped, and directed through OpenClaw — from Telegram or WhatsApp, in any language.</p>
+  <h1>Boss controls<br/>every <em>agent</em><br/>from Telegram.</h1>
+  <p class="lead">OpenClaw is the primary orchestration layer for all SLOI AI Claude agents. The Negotiation Agent, LeadFinder, PriceScout, OutreachBot, and ComplianceBot are all started, stopped, and directed through OpenClaw — from Telegram, in any language.</p>
 
   <!-- ARCHITECTURE -->
   <div class="arch" id="architecture">
@@ -172,7 +172,7 @@ pre{padding:14px;font-size:11px;line-height:1.8;overflow-x:auto;color:var(--text
     <div class="arch-flow">
       <div class="arch-boss">
         <div class="arch-boss-label">👤 Boss</div>
-        <div class="arch-boss-sub">Telegram · WhatsApp · Any language</div>
+        <div class="arch-boss-sub">Telegram · Any language</div>
       </div>
       <div class="arch-arrow">↕</div>
       <div class="arch-oc">
@@ -208,7 +208,7 @@ cp openclaw-skill.md ~/.openclaw/workspace/skills/sloi-ai/SKILL.md
 <span class="cm"># 3. Configure (edit ~/.openclaw/openclaw.json)</span>
 <span class="cm"># Add api_key, stream_url, notify_channel — see config below</span>
 
-<span class="cm"># 4. Connect Telegram or WhatsApp</span>
+<span class="cm"># 4. Connect Telegram</span>
 openclaw channels add telegram      <span class="cm"># 5 min setup</span>
 openclaw channels add telegram      <span class="cm"># via Telegram Bot API</span>
 
@@ -357,8 +357,8 @@ openclaw start --skill sloi-ai --stream</pre>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
     <div class="agent-block" id="outreach-agent" style="margin-bottom:0">
       <div class="ab-header">
-        <div class="ab-icon">📱</div>
-        <div><div class="ab-name">OutreachBot</div><div class="ab-sub">WhatsApp queue control</div></div>
+        <div class="ab-icon">📲</div>
+        <div><div class="ab-name">OutreachBot</div><div class="ab-sub">Telegram queue control</div></div>
       </div>
       <div class="ab-body">
         <div class="cmd-list">
@@ -408,7 +408,7 @@ openclaw start --skill sloi-ai --stream</pre>
             <div class="msg-label" style="color:var(--green)">✅ LOI GENERATED</div>
             SL-LOI-20260501-003<br/>
             $284,000 · Gulf Cement LLC<br/>
-            Emailed · WhatsApp sent to broker<br/>
+            Emailed · Telegram sent to broker<br/>
             5 credits deducted
           </div>
         </div>
@@ -476,7 +476,7 @@ openclaw start --skill sloi-ai --stream</pre>
 <!-- ALERTS -->
 <div class="sec" id="alerts">
   <div class="sec-title">// Automatic Alerts — Boss receives these</div>
-  <div class="note">These events are pushed automatically from the AG-UI stream → OpenClaw → WhatsApp. No command needed.</div>
+  <div class="note">These events are pushed automatically from the AG-UI stream → OpenClaw → Telegram. No command needed.</div>
   <div style="display:flex;flex-direction:column;gap:8px">
     <div style="background:rgba(232,169,74,.05);border:1px solid rgba(232,169,74,.25);border-radius:5px;padding:11px 14px;font-size:11px;line-height:1.7">
       <div style="font-weight:700;color:var(--white);margin-bottom:4px">⚡ AWAIT_HUMAN — deal needs approval</div>
@@ -518,9 +518,9 @@ openclaw start --skill sloi-ai --stream</pre>
       <tr><td class="map-cmd">"brief" / "דוח יומי"</td><td class="map-api">GET /v1/brief (aggregated)</td></tr>
       <tr><td class="map-cmd">"compliance [co] [country]"</td><td class="map-api">POST /v1/compliance/check</td></tr>
       <tr><td class="map-cmd">"balance" / "קרדיטים"</td><td class="map-api">GET /v1/credits/balance</td></tr>
-      <tr><td class="map-cmd">AWAIT_HUMAN event received</td><td class="map-api">→ Format alert → Send WhatsApp to Boss</td></tr>
-      <tr><td class="map-cmd">LOI_GENERATED event received</td><td class="map-api">→ Format confirmation → Send WhatsApp to Boss</td></tr>
-      <tr><td class="map-cmd">LEAD_FOUND (high+) received</td><td class="map-api">→ Format lead card → Send WhatsApp to Boss</td></tr>
+      <tr><td class="map-cmd">AWAIT_HUMAN event received</td><td class="map-api">→ Format alert → Send Telegram to Boss</td></tr>
+      <tr><td class="map-cmd">LOI_GENERATED event received</td><td class="map-api">→ Format confirmation → Send Telegram to Boss</td></tr>
+      <tr><td class="map-cmd">LEAD_FOUND (high+) received</td><td class="map-api">→ Format lead card → Send Telegram to Boss</td></tr>
     </tbody>
   </table>
 </div>
@@ -582,7 +582,7 @@ eventBus.<span class="fn">publish</span> = <span class="kw">function</span>(even
     <div class="cl-item"><input type="checkbox"/><div>Add <code style="color:var(--teal)">POST /v1/openclaw/notify</code> — receives events from eventBus, forwards to OpenClaw webhook</div></div>
     <div class="cl-item"><input type="checkbox"/><div>Add <code style="color:var(--teal)">POST /v1/agents/leadfinder/run</code> — triggers Claude LeadFinder, streams LEAD_FOUND events</div></div>
     <div class="cl-item"><input type="checkbox"/><div>Add <code style="color:var(--teal)">POST /v1/agents/pricescout/run</code> — triggers Claude market analysis, streams PRICE_UPDATE events</div></div>
-    <div class="cl-item"><input type="checkbox"/><div>Add <code style="color:var(--teal)">POST /v1/agents/outreachbot/resume|pause</code> — controls WhatsApp batch</div></div>
+    <div class="cl-item"><input type="checkbox"/><div>Add <code style="color:var(--teal)">POST /v1/agents/outreachbot/resume|pause</code> — controls Telegram batch</div></div>
     <div class="cl-item"><input type="checkbox"/><div>Add <code style="color:var(--teal)">GET /v1/brief</code> — aggregated daily briefing endpoint</div></div>
     <div class="cl-item"><input type="checkbox"/><div>Add <code style="color:var(--teal)">OPENCLAW_WEBHOOK_URL</code> to Railway ENV</div></div>
     <div class="cl-item"><input type="checkbox"/><div>Call <code style="color:var(--teal)">notifyOpenClaw(event)</code> inside <code style="color:var(--teal)">eventBus.publish()</code></div></div>
@@ -591,14 +591,14 @@ eventBus.<span class="fn">publish</span> = <span class="kw">function</span>(even
     <div class="cl-item"><input type="checkbox"/><div>Install OpenClaw on Railway VPS or separate server: <code style="color:var(--teal)">npm install -g @openclaw/gateway</code></div></div>
     <div class="cl-item"><input type="checkbox"/><div>Copy <code style="color:var(--teal)">openclaw-skill.md</code> → <code style="color:var(--teal)">~/.openclaw/workspace/skills/sloi-ai/SKILL.md</code></div></div>
     <div class="cl-item"><input type="checkbox"/><div>Configure <code style="color:var(--teal)">~/.openclaw/openclaw.json</code> with SLOI API key + stream URL</div></div>
-    <div class="cl-item"><input type="checkbox"/><div>Connect WhatsApp (Twilio) or Telegram channel</div></div>
+    <div class="cl-item"><input type="checkbox"/><div>Connect Telegram channel (Bot API)</div></div>
     <div class="cl-item"><input type="checkbox"/><div>Run <code style="color:var(--teal)">openclaw start --skill sloi-ai --stream</code> — connects to AG-UI SSE stream</div></div>
-    <div class="cl-item"><input type="checkbox"/><div>Test: send "מה הסטטוס?" from WhatsApp → should get platform summary</div></div>
-    <div class="cl-item"><input type="checkbox"/><div>Test: trigger negotiation → verify AWAIT_HUMAN arrives on WhatsApp → approve → verify LOI</div></div>
+    <div class="cl-item"><input type="checkbox"/><div>Test: send "מה הסטטוס?" from Telegram → should get platform summary</div></div>
+    <div class="cl-item"><input type="checkbox"/><div>Test: trigger negotiation → verify AWAIT_HUMAN arrives on Telegram → approve → verify LOI</div></div>
   </div>
 
   <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:20px;text-align:center;margin-top:20px">
-    <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">One WhatsApp message.<br/><em style="font-style:italic;color:var(--indigo)">Five agents move.</em></div>
+    <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">One Telegram message.<br/><em style="font-style:italic;color:var(--indigo)">Five agents move.</em></div>
     <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Boss says "approve" → OpenClaw calls the API → Claude generates the LOI → buyer and broker receive email → platform updates in real time.</p>
     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
       <a href="openclaw-skill.md" download style="background:var(--indigo);color:#fff;padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none;font-family:'IBM Plex Mono',monospace">↓ Download SKILL.md</a>

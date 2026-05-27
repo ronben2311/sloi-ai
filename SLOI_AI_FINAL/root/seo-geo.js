@@ -200,7 +200,7 @@
         'OFAC/EU/UN compliance screening',
         'Autonomous agent mode',
         'USDC payments on Base',
-        'OpenClaw WhatsApp integration',
+        'OpenClaw Telegram integration',
       ],
     });
 

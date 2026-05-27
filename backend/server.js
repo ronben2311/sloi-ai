@@ -19,6 +19,7 @@ app.get("/health", (req, res) => res.json({ ok: true, version: "1.0.0" }));
 
 // API routes
 app.use("/v1/auth",         require("./routes/auth"));
+app.use("/v1/chat",         require("./routes/chat"));
 app.use("/v1/products",     require("./routes/products"));
 app.use("/v1/stream",       require("./routes/stream"));
 app.use("/v1/negotiate",    require("./routes/negotiate"));

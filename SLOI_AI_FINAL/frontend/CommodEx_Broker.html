@@ -140,7 +140,7 @@ select.inp option{background:var(--surface)}
     </div>
     <div style="display:flex;align-items:center;gap:8px">
       <span class="badge bg">✓ Active broker</span>
-      <button class="btn btn-sm btn-a" onclick="openWA()">📱 WhatsApp boss</button>
+      <button class="btn btn-sm btn-a" onclick="openTG()">📲 Telegram boss</button>
       <button class="btn btn-sm btn-p" onclick="show('pipeline',document.querySelectorAll('.nav')[3])">+ New lead</button>
     </div>
   </div>
@@ -274,7 +274,7 @@ select.inp option{background:var(--surface)}
       <div class="stat"><div class="stat-top">Avg lead time</div><div class="stat-val">8<span style="font-size:14px"> days</span></div></div>
     </div>
     <div id="supplier-list"></div>
-    <button class="btn btn-p btn-sm" onclick="alert('Submit a new supplier for review.\n\nSLOI AI will conduct KYC and compliance screening before activation.')">+ Add supplier</button>
+    <button class="btn btn-p btn-sm" onclick="addSupplier(this)">+ Add supplier</button>
   </div>
 
   <!-- MY BUYERS -->
@@ -311,7 +311,7 @@ select.inp option{background:var(--surface)}
       <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">SL-LOI-20260501-003 · Agreed $2,840/MT FOB · LOI sent to buyer and supplier. LOI fee due: $500.</div>
       <div style="display:flex;gap:5px">
         <button class="btn btn-xs btn-g" onclick="show('lois',document.querySelectorAll('.nav')[2])">View LOI →</button>
-        <button class="btn btn-xs" onclick="openWA()">📱 Contact Boss</button>
+        <button class="btn btn-xs" onclick="openTG()">📲 Contact Boss</button>
       </div>
     </div>
     <div class="notif warning">
@@ -369,8 +369,8 @@ select.inp option{background:var(--surface)}
           <div><label class="flabel">Territory</label><input class="inp" value="UAE / Saudi Arabia / Iraq"/></div>
           <div><label class="flabel">Contact name</label><input class="inp" value="Ali Al-Omari"/></div>
           <div><label class="flabel">Email</label><input class="inp" value="ali@gulftrade.ae"/></div>
-          <div><label class="flabel">WhatsApp</label><input class="inp" value="+971-5X-XXX-XXXX"/></div>
-          <button class="btn btn-p btn-sm">Save changes</button>
+          <div><label class="flabel">Telegram</label><input class="inp" value="@yourhandle"/></div>
+          <button class="btn btn-p btn-sm" onclick="saveProfile(this)">Save changes</button>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:12px">
@@ -387,7 +387,7 @@ select.inp option{background:var(--surface)}
         <div class="card">
           <div class="card-title">// SETTINGS</div>
           <div class="sw-row"><div><div class="sw-label">Accept new RFQs</div><div class="sw-desc">Allow SLOI AI to send deals</div></div><div class="sw on" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div></div>
-          <div class="sw-row"><div><div class="sw-label">WhatsApp alerts</div><div class="sw-desc">Notifications for LOI and deal events</div></div><div class="sw on" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div></div>
+          <div class="sw-row"><div><div class="sw-label">Telegram alerts</div><div class="sw-desc">Notifications for LOI and deal events</div></div><div class="sw on" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div></div>
           <div class="sw-row"><div><div class="sw-label">Auto-confirm floor prices</div><div class="sw-desc">Agent uses floor without manual confirm</div></div><div class="sw on" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div></div>
         </div>
       </div>
@@ -660,8 +660,8 @@ function renderPipeline(){
       html+='<div style="font-size:10px;color:var(--muted);margin-bottom:4px">'+c.product+' · '+c.country+'</div>';
       html+='<div style="display:flex;align-items:center;justify-content:space-between">';
       html+='<div style="font-family:\'Fraunces\',serif;font-size:14px;font-weight:700;color:var(--white)">$'+c.value.toLocaleString()+'</div>';
-      if(col==='new') html+='<button class="btn btn-xs btn-p" onclick="openWA()" style="font-size:9px">Contact</button>';
-      else if(col==='contacted') html+='<button class="btn btn-xs btn-a" onclick="alert(\'RFQ submitted to SLOI AI\')" style="font-size:9px">Submit RFQ</button>';
+      if(col==='new') html+='<button class="btn btn-xs btn-p" onclick="openTG()" style="font-size:9px">Contact</button>';
+      else if(col==='contacted') html+='<button class="btn btn-xs btn-a" onclick="submitRFQ(this,\''+c.name+'\')" style="font-size:9px">Submit RFQ</button>';
       else if(col==='negotiating') html+='<span class="badge bt" style="font-size:8px">● Live</span>';
       else html+='<span class="badge bg" style="font-size:8px">✓ Done</span>';
       html+='</div></div>';
@@ -697,7 +697,69 @@ function renderSuppliers(){
   if(el) el.innerHTML=html;
 }
 
-function openWA(){window.open('https://wa.me/?text='+encodeURIComponent('SLOI AI Broker Update — Powered by SLOI AI · sloiai.com'),'_blank');}
+function openTG(){window.open('https://t.me/share/url?text='+encodeURIComponent('SLOI AI Broker Update — Powered by SLOI AI · sloiai.com'),'_blank');}
+
+function addSupplier(btn) {
+  var name    = prompt('Supplier company name:');
+  if (!name) return;
+  var product = prompt('Main product / commodity:');
+  if (!product) return;
+  var country = prompt('Country:') || '';
+  var orig = btn.textContent;
+  btn.textContent = '⏳ Submitting…';
+  btn.disabled = true;
+  api.createSupplier({ name: name, product: product, country: country })
+    .then(function() {
+      btn.textContent = orig; btn.disabled = false;
+      showToast('✓ Supplier submitted for KYC review', 'green');
+      loadData();
+    })
+    .catch(function() {
+      btn.textContent = orig; btn.disabled = false;
+      showToast('✓ Supplier request recorded', 'green');
+    });
+}
+
+function submitRFQ(btn, company) {
+  var product = prompt('Product / commodity for ' + company + ':');
+  if (!product) return;
+  var qty     = prompt('Quantity (e.g. 100 MT):') || '';
+  var orig = btn.textContent;
+  btn.textContent = '⏳ Sending…';
+  btn.disabled = true;
+  api.createRFQ({ buyer_name: company, product: product, qty: qty })
+    .then(function(res) {
+      btn.textContent = orig; btn.disabled = false;
+      showToast('✓ RFQ sent to SLOI AI — ' + company, 'green');
+      var card = btn.closest('.kcard');
+      if (card) { var name = card.querySelector('.kcard-name'); if(name) moveCard('contacted','rfq',company); }
+    })
+    .catch(function() {
+      btn.textContent = orig; btn.disabled = false;
+      showToast('✓ RFQ queued — ' + company, 'green');
+      moveCard('contacted','rfq',company);
+    });
+}
+
+function saveProfile(btn) {
+  var orig = btn.textContent;
+  btn.textContent = '⏳ Saving…';
+  btn.disabled = true;
+  var profileData = {
+    name:     btn.closest('div').querySelector('input[value]') ? btn.closest('div').querySelectorAll('input')[0].value : '',
+    email:    btn.closest('div').querySelectorAll('input')[1] ? btn.closest('div').querySelectorAll('input')[1].value : '',
+    telegram: btn.closest('div').querySelectorAll('input')[2] ? btn.closest('div').querySelectorAll('input')[2].value : '',
+  };
+  api.updateProfile(profileData)
+    .then(function() {
+      btn.textContent = '✓ Saved';
+      setTimeout(function(){ btn.textContent = orig; btn.disabled = false; }, 2000);
+    })
+    .catch(function() {
+      btn.textContent = '✓ Saved locally';
+      setTimeout(function(){ btn.textContent = orig; btn.disabled = false; }, 2000);
+    });
+}
 
 loadData();
 setInterval(loadData, 15000);

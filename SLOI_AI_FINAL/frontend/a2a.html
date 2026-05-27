@@ -382,7 +382,7 @@ curl -X POST https://api.sloiai.com/v1/negotiate \
     "product_ref": "REF-MET-001",
     "qty": 100, "unit": "MT",
     "target_price": 2700, "max_price": 2900,
-    "strategy": "standard"
+    "strategy": "deal-hunter"
   }'
 <span class="cm"># → SSE stream: NEGOTIATION_STARTED → TEXT_CHUNK → ROUND_COMPLETE → AWAIT_HUMAN → LOI_GENERATED</span></pre>
   </div>
@@ -417,7 +417,7 @@ steel = <span class="fn">next</span>(p <span class="kw">for</span> p <span class
     <span class="str">"qty"</span>: <span class="num">100</span>, <span class="str">"unit"</span>: <span class="str">"MT"</span>,
     <span class="str">"target_price"</span>: steel[<span class="str">"price"</span>] * <span class="num">0.97</span>,
     <span class="str">"max_price"</span>: steel[<span class="str">"price"</span>] * <span class="num">1.02</span>,
-    <span class="str">"strategy"</span>: <span class="str">"standard"</span>,
+    <span class="str">"strategy"</span>: <span class="str">"deal-hunter"</span>,
     <span class="str">"buyer_name"</span>: <span class="str">"MyAgent Procurement LLC"</span>,
 }) <span class="kw">as</span> response:
     <span class="kw">for</span> line <span class="kw">in</span> response.<span class="fn">iter_lines</span>():
@@ -474,7 +474,7 @@ mandate = httpx.<span class="fn">post</span>(<span class="str">f"{BASE}/mandates
     <span class="str">"unit"</span>:              <span class="str">"MT"</span>,
     <span class="str">"target_price"</span>:      <span class="num">2700</span>,
     <span class="str">"max_price"</span>:         <span class="num">2900</span>,   <span class="cm"># hard ceiling</span>
-    <span class="str">"strategy"</span>:          <span class="str">"standard"</span>,
+    <span class="str">"strategy"</span>:          <span class="str">"deal-hunter"</span>,
     <span class="str">"auto_approve"</span>:      <span class="kw">True</span>,   <span class="cm"># autonomous mode ON</span>
     <span class="str">"max_orders_per_day"</span>: <span class="num">3</span>,
     <span class="str">"max_daily_value"</span>:   <span class="num">500000</span>,
@@ -539,7 +539,7 @@ mandate = httpx.<span class="fn">post</span>(<span class="str">f"{BASE}/mandates
     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
       <a href="open-network.html" style="background:var(--indigo);color:#fff;padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Register agent →</a>
       <a href="autonomous-mode.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Autonomous mode →</a>
-      <a href="agent.json" target="_blank" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">agent.json →</a>
+      <a href="/.well-known/agent.json" target="_blank" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">agent.json →</a>
     </div>
   </div>
 </div>

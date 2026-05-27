@@ -1,0 +1,128 @@
+SLOI AI — Recent Changes Summary
+==================================
+Date: 2026-05-19
+Author: office109 / AI-assisted (Claude)
+
+
+── 1. WHATSAPP → TELEGRAM MIGRATION (full platform) ───────────────────────────
+
+All WhatsApp communication has been replaced with Telegram across every page
+and file in the project. Twilio dependency removed. Telegram Bot API is now
+the sole messaging layer.
+
+Key technical changes:
+  - All `wa.me/?text=` share URLs → `t.me/share/url?text=`
+  - All JS functions openWA/closeWA/sendWA → openTG/closeTG/sendTG
+  - All CSS IDs wa-modal/wa-tpl/wa-msg/wa-preview → tg-modal/tg-tpl/tg-msg/tg-preview
+  - WA_TPLS object → TG_TPLS object
+  - Colors: WhatsApp green (#25d366, #075e54) → Telegram blue (#0088cc, #0077bb)
+  - Twilio ENV vars removed; replaced with TELEGRAM_BOT_TOKEN + TELEGRAM_BOSS_CHAT_ID
+
+Files updated:
+  frontend/CommodEx_Admin.html     — modal, topbar, templates link, outreach functions
+  frontend/CommodEx_Broker.html    — profile, settings toggle, share function
+  frontend/telegram-templates.html — NEW FILE: full Telegram-themed template library
+                                     (replaces whatsapp-templates.html as active page)
+  frontend/broker-onboarding.html  — "Telegram active" criterion, username field
+  frontend/buyer-pitch-wa.html     — title, CSS, JS functions, share buttons
+  frontend/autonomous-mode.html    — bot description text
+  frontend/about.html              — tech stack entry (Twilio → Telegram Bot API)
+  frontend/negotiation-agent.html  — outreach bot description, LOI bubble text
+  frontend/agui.html               — AWAIT_HUMAN portal labels, comments
+  frontend/api-explorer.html       — contact object, RFQ description
+  frontend/docs.html               — all alert/notification references
+  frontend/daily-briefing.html     — quick link to telegram-templates.html
+  frontend/m2m-homepage.html       — feature description
+  frontend/openclaw.html           — hero headline, architecture, all table rows,
+                                     checklist, footer tagline
+  frontend/open-network.html       — RFQ flow step description
+  frontend/investor.html           — problem description, milestone list
+  frontend/loi-preview.html        — generated LOI delivery description
+  frontend/price-discovery.html    — RFQ info bar
+  frontend/CommodEx_Platform.html  — contact field label, follow-up button alert
+  frontend/pricing.html            — plan features, comparison table row
+  frontend/smb-order.html          — contact field (label, placeholder, validation,
+                                     summary label, success text)
+  frontend/payments.html           — alert label, code comment
+  frontend/sitemap.html            — template card → telegram-templates.html,
+                                     contact/openclaw/buyer-pitch descriptions
+  frontend/summary.html            — phase 3 description, file entry, checklist item
+  frontend/terms.html              — account data field, usage bullet, third-party entry
+  frontend/privacy.html            — data collection bullet
+  frontend/risk-checklist.html     — confirmation channel placeholder text
+  frontend/contact.html            — "TELEGRAM (FASTEST)" section with @sloiai handle
+  tech-spec.html                   — ENV vars table (Twilio rows → Telegram Bot rows)
+  root/seo-geo.js                  — integration description text
+
+Note: whatsapp-templates.html is kept as a legacy file but is no longer linked
+from anywhere active. All navigation points to telegram-templates.html.
+
+
+── 2. COMMODEX_ADMIN — LOI GENERATOR CONNECTED ────────────────────────────────
+
+The LOI Generator page (loi-generator.html) is now wired into the admin flow
+at two points:
+
+  a) Approve deal button
+     When boss clicks "Approve → Generate LOI", after the API call succeeds the
+     admin automatically opens loi-generator.html in a new tab, pre-filled with:
+       - LOI ref (from API response, or auto-generated from negotiation ID)
+       - Buyer name
+       - Product
+       - Price
+     loi-generator.html already reads these from URL params (?ref=&buyer=&product=&price=)
+     and shows a green "Pre-filled from Agent Console" banner.
+
+  b) LOI Fee Ledger table
+     Each row in the Revenue → LOI Fee Ledger now has a "📄 View LOI" button.
+     Clicking it opens loi-generator.html pre-filled with that LOI's ref, buyer,
+     and total value. Table colspan updated from 7 → 8 to accommodate the new column.
+
+
+── 3. COMMODEX_ADMIN — SIDEBAR TOOLS CLEANUP ──────────────────────────────────
+
+Removed from the Tools section in the left sidebar:
+  - Agent Console  (openConsole function still exists, just not in sidebar)
+  - Broker Onboarding
+  - Investor Page
+
+Remaining Tools entries: LOI Generator, Compliance Check.
+
+
+── 4. NEGOTIATION AGENT — UX FIXES (prior session) ───────────────────────────
+
+  - After AWAIT_HUMAN state, "Start new negotiation" button now appears so the
+    admin can kick off a fresh negotiation without refreshing.
+  - smb-order.html Step 3: added "🤖 Start negotiation agent →" button linking
+    to negotiation-agent.html for buyers who want to negotiate live.
+
+
+── 5. DEMO PAGE (prior session) ──────────────────────────────────────────────
+
+  frontend/demo.html — NEW FILE
+  Live demo of a negotiation conversation that plays back automatically without
+  requiring any API tokens or backend connection. Linked from m2m-homepage.html
+  "Watch Live Demo" button. Safe to share publicly.
+
+
+── 6. HOMEPAGE NAV CLEANUP (prior session) ───────────────────────────────────
+
+  frontend/m2m-homepage.html — removed top navigation links:
+    - Autonomous (removed)
+    - Exchange (removed)
+    - Investors (removed)
+
+
+── PIPELINE NOTE ──────────────────────────────────────────────────────────────
+
+The Pipeline (Kanban board) in CommodEx_Admin.html currently uses hardcoded
+static data defined in the PIPELINE JS variable. It is NOT connected to the
+database or API. Cards can be moved visually but changes are lost on page
+refresh. Next step: connect to Supabase or use localStorage for persistence.
+
+
+── PENDING / NOT YET DONE ─────────────────────────────────────────────────────
+
+  - Backend ANTHROPIC_API_KEY: still placeholder in backend/.env
+  - Pipeline (Kanban): not connected to real data source
+  - Backend port 3000 EADDRINUSE: process conflict unresolved
