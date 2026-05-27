@@ -932,9 +932,7 @@
             <div class="action-cards">
               <div
                 class="action-card"
-                onclick="
-                  selectStrategy('watcher');
-                  show('negotiate', document.querySelectorAll('.nav')[2]);
+                onclick="show('negotiate', document.querySelectorAll('.nav')[2]);
                 "
               >
                 <div class="ac-icon">👁️</div>
@@ -952,9 +950,7 @@
               <div
                 class="action-card"
                 style="border-color: rgba(91, 95, 239, 0.3)"
-                onclick="
-                  selectStrategy('standard');
-                  show('negotiate', document.querySelectorAll('.nav')[2]);
+                onclick="show('negotiate', document.querySelectorAll('.nav')[2]);
                 "
               >
                 <div class="ac-icon">🎯</div>
@@ -971,9 +967,7 @@
               </div>
               <div
                 class="action-card"
-                onclick="
-                  selectStrategy('aggressive');
-                  show('negotiate', document.querySelectorAll('.nav')[2]);
+                onclick="show('negotiate', document.querySelectorAll('.nav')[2]);
                 "
               >
                 <div class="ac-icon">🤖</div>
@@ -1549,7 +1543,7 @@
                   "
                 >
                   <button
-                    onclick="exStartNeg()"
+                    onclick="window.location.href='smb-order.html'"
                     style="
                       width: 100%;
                       background: var(--indigo);
@@ -1598,281 +1592,12 @@
             </div>
           </div>
 
-          <!-- NEGOTIATE -->
-          <div id="view-negotiate" class="view">
-            <div class="mandate-form" id="mandate-form">
-              <div class="mf-header">
-                <span style="font-size: 18px">🤖</span>
-                <div class="mf-title">Configure your mandate</div>
-              </div>
-              <div class="mf-body">
-                <div class="g3">
-                  <div>
-                    <label class="flabel">Product *</label>
-                    <select class="inp" id="m-product" onchange="onProductSelect(this.value)">
-                      <option value="">— Loading products… —</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="flabel">Quantity *</label
-                    ><input
-                      class="inp"
-                      id="m-qty"
-                      type="number"
-                      placeholder="100"
-                    />
-                  </div>
-                  <div>
-                    <label class="flabel">Unit</label>
-                    <select class="inp" id="m-unit">
-                      <option>MT</option>
-                      <option>Ton</option>
-                      <option>m2</option>
-                      <option>m3</option>
-                      <option>Liter</option>
-                      <option>kg</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="g3">
-                  <div>
-                    <label class="flabel">Target price (USD/unit) *</label
-                    ><input
-                      class="inp"
-                      id="m-target"
-                      type="number"
-                      placeholder="2700"
-                    />
-                  </div>
-                  <div>
-                    <label class="flabel">Max price (walk away) *</label
-                    ><input
-                      class="inp"
-                      id="m-max"
-                      type="number"
-                      placeholder="2900"
-                    />
-                  </div>
-                  <div>
-                    <label class="flabel">Delivery deadline</label
-                    ><input class="inp" id="m-deadline" type="date" />
-                  </div>
-                </div>
-                <div class="g2">
-                  <div>
-                    <label class="flabel">Incoterm</label
-                    ><select class="inp" id="m-inco">
-                      <option>FOB</option>
-                      <option>CIF</option>
-                      <option>DAP</option>
-                      <option>EXW</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label class="flabel">Payment method</label
-                    ><select class="inp" id="m-pay">
-                      <option>SWIFT / TT</option>
-                      <option>LC at sight</option>
-                      <option>TT 30% + LC</option>
-                    </select>
-                  </div>
-                </div>
-                <div>
-                  <label class="flabel">Special instructions (optional)</label
-                  ><input
-                    class="inp"
-                    id="m-notes"
-                    placeholder="e.g. Must have ISO 9001, prefer FOB"
-                  />
-                </div>
-                <div>
-                  <label class="flabel" style="margin-bottom: 8px"
-                    >Strategy *</label
-                  >
-                  <div class="strategy-grid">
-                    <div
-                      class="strategy-card"
-                      id="strat-watcher"
-                      onclick="selectStrategy('watcher')"
-                    >
-                      <div class="sc-icon">👁️</div>
-                      <div class="sc-name">Price Watcher</div>
-                      <div class="sc-cost">1 credit/day</div>
-                      <div class="sc-desc">Monitor only · alert on target</div>
-                    </div>
-                    <div
-                      class="strategy-card selected"
-                      id="strat-standard"
-                      onclick="selectStrategy('standard')"
-                    >
-                      <div class="sc-icon">🎯</div>
-                      <div class="sc-name">Deal Hunter</div>
-                      <div class="sc-cost">10 credits</div>
-                      <div class="sc-desc">Standard · up to 5 rounds</div>
-                    </div>
-                    <div
-                      class="strategy-card"
-                      id="strat-aggressive"
-                      onclick="selectStrategy('aggressive')"
-                    >
-                      <div class="sc-icon">🤖</div>
-                      <div class="sc-name">Autopilot</div>
-                      <div class="sc-cost">20 credits</div>
-                      <div class="sc-desc">Aggressive · up to 7 rounds</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="credit-cost-bar">
-                  <div>
-                    <div
-                      style="
-                        font-size:13px;
-                        color: var(--white);
-                        font-weight: 600;
-                      "
-                    >
-                      Total cost estimate
-                    </div>
-                    <div
-                      style="
-                        font-size:12px;
-                        color: var(--muted);
-                        margin-top: 2px;
-                      "
-                    >
-                      Session + LOI generation (5 credits)
-                    </div>
-                  </div>
-                  <div style="text-align: right">
-                    <div
-                      style="
-                        font-family: &quot;Fraunces&quot;, serif;
-                        font-size: 20px;
-                        font-weight: 700;
-                        color: var(--teal);
-                      "
-                      id="credit-cost-display"
-                    >
-                      15 credits
-                    </div>
-                    <div style="font-size:12px; color: var(--muted)">
-                      Balance after: <span id="bal-after">305</span>
-                    </div>
-                  </div>
-                </div>
-                <button
-                  class="btn btn-p"
-                  style="
-                    width: 100%;
-                    justify-content: center;
-                    padding: 13px;
-                    font-size:15px;
-                  "
-                  id="neg-start-btn"
-                  onclick="startNegotiation()"
-                >
-                  🤖 Start negotiation agent →
-                </button>
-                <div
-                  style="
-                    font-size:12px;
-                    color: var(--muted);
-                    text-align: center;
-                  "
-                >
-                  Boss approval required before LOI is generated
-                </div>
-              </div>
-            </div>
-
-            <!-- Live negotiation panel -->
-            <div
-              id="neg-live"
-              style="display: none; max-width: 720px; margin: 0 auto"
-            >
-              <div class="mandate-form">
-                <div class="mf-header">
-                  <span id="neg-live-icon" style="font-size: 18px">⏳</span>
-                  <div>
-                    <div class="mf-title" id="neg-live-title">Starting…</div>
-                    <div
-                      style="font-size:12px; color: var(--muted)"
-                      id="neg-live-id"
-                    ></div>
-                  </div>
-                </div>
-                <div class="mf-body">
-                  <div
-                    id="neg-rounds-bar"
-                    style="display: flex; gap: 6px; margin-bottom: 12px"
-                  ></div>
-                  <div
-                    id="neg-chat"
-                    style="
-                      background: #0a0a16;
-                      border: 1px solid #1e1e32;
-                      border-radius: 6px;
-                      padding: 12px;
-                      min-height: 100px;
-                      max-height: 260px;
-                      overflow-y: auto;
-                      font-size:13px;
-                      line-height: 1.8;
-                      color: var(--muted);
-                      font-family: &quot;IBM Plex Mono&quot;, monospace;
-                      white-space: pre-wrap;
-                    "
-                  >
-                    Connecting to negotiation engine…
-                  </div>
-                  <div id="neg-prices" style="display: none; margin-top: 12px">
-                    <div class="g3">
-                      <div class="stat">
-                        <div class="stat-top">Agent offer</div>
-                        <div
-                          class="stat-val bt"
-                          id="neg-agent-price"
-                          style="font-size: 18px"
-                        >
-                          —
-                        </div>
-                      </div>
-                      <div class="stat">
-                        <div class="stat-top">Gap</div>
-                        <div
-                          class="stat-val"
-                          id="neg-gap"
-                          style="font-size: 18px"
-                        >
-                          —
-                        </div>
-                      </div>
-                      <div class="stat">
-                        <div class="stat-top">Broker price</div>
-                        <div
-                          class="stat-val ba"
-                          id="neg-broker-price"
-                          style="font-size: 18px"
-                        >
-                          —
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="neg-result"></div>
-                  <div style="margin-top: 12px">
-                    <button
-                      class="btn"
-                      id="neg-reset-btn"
-                      style="display: none"
-                      onclick="resetNegotiation()"
-                    >
-                      ← Start another
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+                    <!-- NEGOTIATE -->
+          <div id="view-negotiate" class="view" style="padding:0;overflow:hidden">
+            <iframe src="smb-order.html"
+              style="width:100%;height:calc(100vh - 48px);border:none;display:block"
+              title="Start negotiation">
+            </iframe>
           </div>
 
           <!-- RFQ TRACKER -->
