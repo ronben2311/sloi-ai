@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Critical Minerals — Energy Transition | SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06080f;--surface:#0c0f1c;--surface2:#111422;
+  --border:#181c2e;--border2:#20253a;
+  --indigo:#5b5fef;--violet:#8b8ff8;
+  --muted:#4e5270;--text:#cdd0f0;--white:#eceef8;
+  --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
+  --emerald:#34d399;--sky:#38bdf8;--amber:#fbbf24;
+  --copper:#b87333;--copper-l:#d4956a;
+  --phosphor:#a3e635;--iron:#94a3b8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+
+/* animated particle grid */
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(91,95,239,.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(45,212,191,.04) 0%, transparent 50%),
+    linear-gradient(rgba(91,95,239,.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(91,95,239,.015) 1px,transparent 1px);
+  background-size:100% 100%,100% 100%,48px 48px,48px 48px;
+  pointer-events:none}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(6,8,15,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+.logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-tag{font-size:9px;color:var(--muted);margin-left:7px;font-family:'IBM Plex Mono',monospace}
+.nav-links{display:flex;gap:24px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
+.btn-cta{background:var(--emerald);color:#06080f;padding:8px 18px;border-radius:4px;font-size:11px;font-weight:700;text-decoration:none;font-family:'IBM Plex Mono',monospace}
+
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:72px 24px 80px}
+
+/* EYEBROW */
+.eyebrow{font-size:10px;color:var(--emerald);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:'';flex:1;height:1px;background:rgba(52,211,153,.2)}
+
+/* HERO */
+h1{font-family:'Fraunces',serif;font-size:clamp(38px,7vw,72px);font-weight:900;line-height:.93;letter-spacing:-.04em;color:var(--white);margin-bottom:22px}
+h1 em{font-style:italic;color:var(--emerald)}
+.hero-sub{font-size:14px;color:var(--muted);line-height:1.9;max-width:640px;margin-bottom:32px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{padding:12px 22px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-em{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);color:var(--emerald)}.btn-em:hover{background:rgba(52,211,153,.2)}
+.btn-p{background:var(--emerald);color:#06080f;border:none;font-weight:700}.btn-p:hover{opacity:.85}
+.btn-sk{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.3);color:var(--sky)}.btn-sk:hover{background:rgba(56,189,248,.18)}
+
+/* URGENCY BANNER */
+.urgency-banner{background:linear-gradient(90deg,rgba(52,211,153,.06),rgba(56,189,248,.04),rgba(251,191,36,.06));border:1px solid rgba(52,211,153,.2);border-radius:8px;padding:14px 20px;margin-bottom:48px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ub-dot{width:8px;height:8px;border-radius:50%;background:var(--emerald);flex-shrink:0;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.ub-text{font-size:11px;color:var(--text);line-height:1.6;flex:1}
+.ub-text strong{color:var(--emerald)}
+
+/* STAT BAR */
+.stat-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:52px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;text-align:center}
+.stat-val{font-family:'Fraunces',serif;font-size:26px;font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:5px}
+.stat-lbl{font-size:10px;color:var(--muted);line-height:1.5}
+
+/* SECTION HEADS */
+.section{margin-bottom:56px}
+h2{font-family:'Fraunces',serif;font-size:clamp(26px,4vw,38px);font-weight:900;color:var(--white);letter-spacing:-.03em;margin-bottom:10px}
+h2 em{font-style:italic;color:var(--emerald)}
+.section-sub{font-size:12px;color:var(--muted);line-height:1.9;margin-bottom:22px;max-width:680px}
+.divider{border:none;border-top:1px solid var(--border);margin:52px 0}
+
+/* COUNTRY STRIP */
+.country-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.cs-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;transition:border-color .15s;position:relative;overflow:hidden}
+.cs-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.cs-ksa::before{background:linear-gradient(90deg,rgba(34,197,94,.6),transparent)}
+.cs-egy::before{background:linear-gradient(90deg,rgba(56,189,248,.6),transparent)}
+.cs-alg::before{background:linear-gradient(90deg,rgba(251,191,36,.6),transparent)}
+.cs-card:hover{border-color:rgba(52,211,153,.2)}
+.cs-flag{font-size:28px;margin-bottom:8px}
+.cs-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px}
+.cs-sub{font-size:10px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.cs-wealth{font-family:'Fraunces',serif;font-size:22px;font-weight:900;margin-bottom:4px}
+.cs-wealth-lbl{font-size:9px;color:var(--muted);margin-bottom:12px}
+.mineral-pill{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:3px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);margin:2px 2px 2px 0}
+
+/* MINERAL GRID */
+.mineral-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.mineral-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;transition:border-color .2s;position:relative;overflow:hidden}
+.mineral-card::after{content:'';position:absolute;bottom:0;right:0;width:80px;height:80px;border-radius:50%;opacity:.04;filter:blur(20px)}
+.mineral-card:hover{border-color:rgba(52,211,153,.25)}
+.mc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.mc-icon{font-size:28px}
+.mc-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:3px}
+.mc-name{font-size:15px;font-weight:700;color:var(--white);margin-bottom:2px}
+.mc-formula{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:10px}
+.mc-use{font-size:10px;color:var(--text);line-height:1.65;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.mc-specs{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mc-spec{background:var(--surface2);border-radius:4px;padding:6px 8px}
+.mc-spec-label{font-size:9px;color:var(--muted);margin-bottom:2px}
+.mc-spec-val{font-size:11px;font-weight:600;color:var(--white)}
+.mc-origins{margin-top:10px;display:flex;gap:5px;flex-wrap:wrap}
+.mc-origin{font-size:9px;padding:2px 7px;border-radius:2px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+
+/* transition score bar */
+.transition-bar{height:3px;border-radius:2px;background:var(--border);margin-top:10px;overflow:hidden}
+.transition-fill{height:100%;border-radius:2px}
+
+/* DEMAND CHART */
+.demand-section{background:var(--surface);border:1px solid rgba(52,211,153,.15);border-radius:10px;padding:24px;margin-bottom:24px}
+.demand-title{font-size:10px;color:var(--emerald);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
+.demand-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.demand-label{font-size:11px;color:var(--text);width:160px;flex-shrink:0}
+.demand-bar-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.demand-bar{height:100%;border-radius:3px}
+.demand-val{font-size:11px;font-weight:600;width:60px;text-align:right;flex-shrink:0}
+.demand-year{font-size:9px;color:var(--muted);width:32px;flex-shrink:0}
+
+/* EU CRM CALLOUT */
+.crm-callout{background:linear-gradient(135deg,rgba(56,189,248,.06),rgba(91,95,239,.04));border:1px solid rgba(56,189,248,.2);border-radius:8px;padding:20px;margin-bottom:20px}
+.crm-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.crm-icon{font-size:20px}
+.crm-title{font-size:12px;font-weight:700;color:var(--white)}
+.crm-sub{font-size:10px;color:var(--muted)}
+.crm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.crm-item{background:var(--surface2);border-radius:5px;padding:10px 12px}
+.crm-item-label{font-size:9px;color:var(--muted);margin-bottom:3px}
+.crm-item-val{font-size:12px;font-weight:700;color:var(--sky)}
+
+/* BUYER CARDS */
+.buyer-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:14px;transition:border-color .15s}
+.buyer-card:hover{border-color:rgba(52,211,153,.25)}
+.buyer-card.hot{border-color:rgba(52,211,153,.3)}
+.bj-icon{font-size:22px;flex-shrink:0;width:34px;text-align:center;margin-top:2px}
+.bj-body{flex:1}
+.bj-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.bj-meta{font-size:10px;color:var(--muted);margin-bottom:7px}
+.bj-tags{display:flex;gap:5px;flex-wrap:wrap}
+.bj-tag{font-size:9px;padding:2px 7px;border-radius:2px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.bj-val{flex-shrink:0;text-align:right}
+.bj-num{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white)}
+.bj-sub{font-size:9px;color:var(--muted)}
+
+/* TAGS */
+.tag{display:inline-flex;font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px}
+.tag-g{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.tag-a{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.tag-v{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.tag-t{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+.tag-em{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--emerald)}
+.tag-sk{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.25);color:var(--sky)}
+.tag-r{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+
+/* PRICE TABLE */
+.price-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:11px}
+.price-table th{text-align:left;padding:10px 12px;background:var(--surface2);color:var(--muted);font-weight:600;font-size:9px;letter-spacing:.07em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.price-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.price-table tr:last-child td{border-bottom:none}
+.price-table tr:hover td{background:rgba(255,255,255,.015)}
+.price-hl{color:var(--emerald);font-weight:700;font-family:'Fraunces',serif;font-size:13px}
+.inco{font-family:'IBM Plex Mono',monospace;font-size:9px;background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:2px 6px;color:var(--muted)}
+
+/* WHY */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.why-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px}
+.why-icon{font-size:20px;margin-bottom:8px}
+.why-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:5px}
+.why-desc{font-size:11px;color:var(--muted);line-height:1.65}
+
+/* CTA */
+.cta-box{background:linear-gradient(135deg,rgba(52,211,153,.07),rgba(56,189,248,.04));border:1px solid rgba(52,211,153,.25);border-radius:10px;padding:44px;text-align:center;margin-top:52px}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:11px}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:var(--muted);text-decoration:none}.footer-links a:hover{color:var(--white)}
+
+@media(max-width:640px){
+  .stat-bar,.country-strip,.mineral-grid,.why-grid,.crm-grid,.mc-specs{grid-template-columns:1fr}
+  nav{padding:0 16px}.wrap{padding:48px 16px 60px}
+  h1{font-size:clamp(34px,10vw,52px)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="m2m-homepage.html">Home</a>
+    <a href="imec.html">IMEC</a>
+    <a href="cement-clinker.html">Cement</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <a href="smb-order.html" class="btn-cta">Request LOI →</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div style="margin-bottom:20px">
+    <div class="eyebrow">Critical Minerals · Energy Transition · Arab Belt</div>
+    <h1>The minerals that<br/>power the planet.<br/><em>We trade them.</em></h1>
+    <p class="hero-sub">The global energy transition runs on copper, phosphate, iron, zinc, silica, and gold. Saudi Arabia, Egypt, and Algeria sit on some of the world's largest untapped reserves of every one of them — and they are opening up fast. Saudi Arabia alone just revalued its mineral wealth to $2.5 trillion. Algeria's Gara Djebilet iron mine went live in February 2026 — the second largest iron reserve on earth. SLOI AI negotiates the offtake, generates the LOI, and connects Arab Belt supply to the buyers the energy transition cannot function without.</p>
+    <div class="hero-actions">
+      <a href="smb-order.html" class="btn btn-p">Request a minerals LOI →</a>
+      <a href="cement-clinker.html" class="btn btn-em">Cement &amp; Clinker page</a>
+      <a href="imec.html" class="btn btn-sk">IMEC corridor</a>
+    </div>
+  </div>
+
+  <!-- URGENCY BANNER -->
+  <div class="urgency-banner">
+    <div class="ub-dot"></div>
+    <div class="ub-text">
+      <strong>China restricted rare earth exports in April 2025.</strong> The EU's Critical Raw Materials Act is now live. The RESourceEU platform launched its first buyer–supplier matchmaking round in March 2026. Europe and the US are scrambling to diversify away from Chinese mineral supply — and the Arab Belt is the closest non-Chinese, non-Russian alternative. <strong>The window is now.</strong>
+    </div>
+    <span class="tag tag-r">🚨 Geopolitical shift</span>
+  </div>
+
+  <!-- STAT BAR -->
+  <div class="stat-bar">
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--emerald)">$2.5T</div>
+      <div class="stat-lbl">Saudi Arabia's revalued mineral wealth — 2025 National Minerals Program</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--sky)">3.5B MT</div>
+      <div class="stat-lbl">Algeria Gara Djebilet iron ore reserves — 2nd largest deposit on earth</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--amber)">3×</div>
+      <div class="stat-lbl">IEA projected growth in global critical mineral demand by 2035</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--violet)">$100B</div>
+      <div class="stat-lbl">Saudi mining investment plan targeting critical minerals by 2035</div>
+    </div>
+  </div>
+
+  <!-- COUNTRY PROFILES -->
+  <div class="section">
+    <h2>Three countries.<br/><em>One mineral superpower.</em></h2>
+    <p class="section-sub">Each country contributes a distinct mineral portfolio — together forming the most strategically positioned supply cluster outside China, Australia, and South America.</p>
+    <div class="country-strip">
+
+      <div class="cs-card cs-ksa">
+        <div class="cs-flag">🇸🇦</div>
+        <div class="cs-name">Saudi Arabia</div>
+        <div class="cs-sub">Arabian Shield · Ma'aden mining · Vision 2030 opening to foreign investment · 933 active exploration sites</div>
+        <div class="cs-wealth" style="color:var(--green)">$2.5T</div>
+        <div class="cs-wealth-lbl">Revalued mineral reserves (2025)</div>
+        <div>
+          <span class="mineral-pill">⚗️ Phosphate</span>
+          <span class="mineral-pill">🥇 Gold (67M oz)</span>
+          <span class="mineral-pill">🔶 Copper</span>
+          <span class="mineral-pill">⚡ Zinc</span>
+          <span class="mineral-pill">🪨 Bauxite</span>
+          <span class="mineral-pill">🔬 Rare Earths</span>
+        </div>
+      </div>
+
+      <div class="cs-card cs-egy">
+        <div class="cs-flag">🇪🇬</div>
+        <div class="cs-name">Egypt</div>
+        <div class="cs-sub">Eastern Desert gold · Safaga phosphate · Black Sand Complex · Suez Canal Economic Zone processing hub</div>
+        <div class="cs-wealth" style="color:var(--sky)">$Multi-B</div>
+        <div class="cs-wealth-lbl">Proven mineral export capacity</div>
+        <div>
+          <span class="mineral-pill">⚗️ Phosphate rock</span>
+          <span class="mineral-pill">🥇 Gold</span>
+          <span class="mineral-pill">🏖️ Silica sand</span>
+          <span class="mineral-pill">🏺 Kaolin</span>
+          <span class="mineral-pill">⚙️ Iron ore</span>
+          <span class="mineral-pill">⬛ Black sand minerals</span>
+        </div>
+      </div>
+
+      <div class="cs-card cs-alg">
+        <div class="cs-flag">🇩🇿</div>
+        <div class="cs-name">Algeria</div>
+        <div class="cs-sub">Gara Djebilet iron live Feb 2026 · Oued Amizour zinc under construction · Phosphate program scaling · Mining law opened Aug 2025</div>
+        <div class="cs-wealth" style="color:var(--amber)">$Emerging</div>
+        <div class="cs-wealth-lbl">Rapidly monetizing vast reserves</div>
+        <div>
+          <span class="mineral-pill">🪨 Iron ore (3.5B MT)</span>
+          <span class="mineral-pill">⚡ Zinc 170K MT/yr</span>
+          <span class="mineral-pill">⚗️ Phosphate</span>
+          <span class="mineral-pill">🔩 Lead</span>
+          <span class="mineral-pill">⛏️ Barite</span>
+          <span class="mineral-pill">✨ Gold (tender 2026)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- MINERAL CATALOG -->
+  <div class="section">
+    <h2>What the energy<br/>transition <em>actually needs.</em></h2>
+    <p class="section-sub">Eight minerals. Every one of them available from Arab Belt origins. Every one of them in surging demand from solar, EV, green steel, fertilizer, and semiconductor industries globally.</p>
+    <div class="mineral-grid">
+
+      <!-- PHOSPHATE -->
+      <div class="mineral-card" style="border-color:rgba(163,230,53,.15)">
+        <div style="position:absolute;bottom:0;right:0;width:100px;height:100px;border-radius:50%;background:rgba(163,230,53,.08);filter:blur(30px)"></div>
+        <div class="mc-top">
+          <div class="mc-icon">⚗️</div>
+          <span class="mc-badge" style="background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.3);color:var(--phosphor)">🌾 Food security</span>
+        </div>
+        <div class="mc-name">Phosphate Rock</div>
+        <div class="mc-formula">Ca₅(PO₄)₃ · BPL 68–72%</div>
+        <div class="mc-use">The foundation of global fertilizer supply. No phosphate = no food production at scale. Saudi Ma'aden and Egypt Safaga are top-10 global producers. Algeria's integrated phosphate program targets 10M MT/yr extraction by 2027. Also critical for LFP lithium-iron-phosphate batteries — the dominant EV battery chemistry in 2026.</div>
+        <div class="mc-specs">
+          <div class="mc-spec"><div class="mc-spec-label">FOB price range</div><div class="mc-spec-val" style="color:var(--phosphor)">$70–110/MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Typical lot</div><div class="mc-spec-val">10,000–50,000 MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Key grade</div><div class="mc-spec-val">BPL 68–72%</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Payment</div><div class="mc-spec-val">LC at sight</div></div>
+        </div>
+        <div class="mc-origins">
+          <span class="mc-origin">🇸🇦 Al-Jalamid (Ma'aden)</span>
+          <span class="mc-origin">🇪🇬 Safaga · Abu Tartur</span>
+          <span class="mc-origin">🇩🇿 Bled El Hadba</span>
+        </div>
+        <div class="transition-bar"><div class="transition-fill" style="width:92%;background:linear-gradient(90deg,var(--phosphor),var(--emerald))"></div></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">Energy transition relevance: LFP batteries + food security · 92%</div>
+      </div>
+
+      <!-- IRON ORE -->
+      <div class="mineral-card" style="border-color:rgba(148,163,184,.15)">
+        <div style="position:absolute;bottom:0;right:0;width:100px;height:100px;border-radius:50%;background:rgba(148,163,184,.06);filter:blur(30px)"></div>
+        <div class="mc-top">
+          <div class="mc-icon">🪨</div>
+          <span class="mc-badge" style="background:rgba(148,163,184,.1);border:1px solid rgba(148,163,184,.3);color:var(--iron)">🏗️ Green steel</span>
+        </div>
+        <div class="mc-name">Iron Ore</div>
+        <div class="mc-formula">Fe₂O₃ · Fe 58–67%</div>
+        <div class="mc-use">Algeria's Gara Djebilet — 3.5 billion tonnes, 58.67% Fe — began production in February 2026. Second largest iron reserve on earth. Green steel (hydrogen-based DRI) requires high-grade iron ore pellets — exactly what Gara Djebilet is designed to produce. The EU's green steel mandate creates an enormous new demand signal for non-Chinese iron ore.</div>
+        <div class="mc-specs">
+          <div class="mc-spec"><div class="mc-spec-label">FOB price range</div><div class="mc-spec-val" style="color:var(--iron)">$95–115/MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Typical lot</div><div class="mc-spec-val">25,000–80,000 MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Fe content</div><div class="mc-spec-val">58–67%</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Form</div><div class="mc-spec-val">Fines · Pellets · Lump</div></div>
+        </div>
+        <div class="mc-origins">
+          <span class="mc-origin">🇩🇿 Gara Djebilet (live 2026)</span>
+          <span class="mc-origin">🇩🇿 Ouenza (active)</span>
+          <span class="mc-origin">🇪🇬 Aswan · Bahariya</span>
+        </div>
+        <div class="transition-bar"><div class="transition-fill" style="width:85%;background:linear-gradient(90deg,var(--iron),var(--sky))"></div></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">Energy transition relevance: green steel via hydrogen DRI · 85%</div>
+      </div>
+
+      <!-- COPPER -->
+      <div class="mineral-card" style="border-color:rgba(184,115,51,.2)">
+        <div style="position:absolute;bottom:0;right:0;width:100px;height:100px;border-radius:50%;background:rgba(184,115,51,.08);filter:blur(30px)"></div>
+        <div class="mc-top">
+          <div class="mc-icon">🔶</div>
+          <span class="mc-badge" style="background:rgba(184,115,51,.15);border:1px solid rgba(184,115,51,.4);color:var(--copper-l)">⚡ #1 EV mineral</span>
+        </div>
+        <div class="mc-name">Copper</div>
+        <div class="mc-formula">Cu · Grade 99.9% cathode / concentrate</div>
+        <div class="mc-use">Copper is the single most important mineral for the energy transition — every EV uses 4× more copper than an ICE vehicle, every solar panel needs it, every wind turbine needs it. Saudi Arabia's Jabal Sayid mine (Ma'aden + Barrick Gold JV) is active. New discoveries in Najran region 2025–2026 suggest 11M+ tonnes of resources. "Copper is the biggest metal in scope at the moment" — Saudi Vice Minister of Mining at PDAC 2025.</div>
+        <div class="mc-specs">
+          <div class="mc-spec"><div class="mc-spec-label">Cathode price</div><div class="mc-spec-val" style="color:var(--copper-l)">$8,800–9,400/MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Concentrate</div><div class="mc-spec-val">$1,200–1,600/DMT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Key grade</div><div class="mc-spec-val">Cu 99.9% (cathode)</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Payment</div><div class="mc-spec-val">LC at sight / TT</div></div>
+        </div>
+        <div class="mc-origins">
+          <span class="mc-origin">🇸🇦 Jabal Sayid (Ma'aden/Barrick)</span>
+          <span class="mc-origin">🇸🇦 Khnaiguiyah project</span>
+          <span class="mc-origin">🇸🇦 Najran (2025 discovery)</span>
+        </div>
+        <div class="transition-bar"><div class="transition-fill" style="width:98%;background:linear-gradient(90deg,var(--copper-l),var(--amber))"></div></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">Energy transition relevance: EVs, solar, wind, grid · 98%</div>
+      </div>
+
+      <!-- ZINC -->
+      <div class="mineral-card" style="border-color:rgba(56,189,248,.15)">
+        <div style="position:absolute;bottom:0;right:0;width:100px;height:100px;border-radius:50%;background:rgba(56,189,248,.06);filter:blur(30px)"></div>
+        <div class="mc-top">
+          <div class="mc-icon">⚡</div>
+          <span class="mc-badge tag-sk">🔋 Grid storage</span>
+        </div>
+        <div class="mc-name">Zinc</div>
+        <div class="mc-formula">Zn · Concentrate 50–55% / SHG 99.99%</div>
+        <div class="mc-use">Algeria's Oued Amizour project — 53 million tonnes at 5.3% zinc — is under construction with a $336M EPC contract awarded to Sinosteel. Annual production of 170,000 tonnes of zinc concentrate expected from 2026–2027. Zinc-air batteries are emerging as a low-cost grid storage solution. Galvanizing steel for solar structures, offshore wind towers, and EV infrastructure is a massive and growing demand source.</div>
+        <div class="mc-specs">
+          <div class="mc-spec"><div class="mc-spec-label">SHG zinc price</div><div class="mc-spec-val" style="color:var(--sky)">$2,600–2,900/MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Concentrate</div><div class="mc-spec-val">TC basis ~$180/DMT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Annual output</div><div class="mc-spec-val">170,000 MT/yr (DZ)</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Project life</div><div class="mc-spec-val">20+ years</div></div>
+        </div>
+        <div class="mc-origins">
+          <span class="mc-origin">🇩🇿 Oued Amizour (Béjaïa)</span>
+          <span class="mc-origin">🇩🇿 El-Abed · Tlemcen</span>
+          <span class="mc-origin">🇸🇦 Khnaiguiyah Zn-Cu</span>
+        </div>
+        <div class="transition-bar"><div class="transition-fill" style="width:78%;background:linear-gradient(90deg,var(--sky),var(--teal))"></div></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">Energy transition relevance: grid storage, galvanizing solar/wind · 78%</div>
+      </div>
+
+      <!-- SILICA SAND -->
+      <div class="mineral-card" style="border-color:rgba(251,191,36,.15)">
+        <div style="position:absolute;bottom:0;right:0;width:100px;height:100px;border-radius:50%;background:rgba(251,191,36,.06);filter:blur(30px)"></div>
+        <div class="mc-top">
+          <div class="mc-icon">🌞</div>
+          <span class="mc-badge" style="background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.3);color:var(--amber)">☀️ Solar glass</span>
+        </div>
+        <div class="mc-name">Silica Sand</div>
+        <div class="mc-formula">SiO₂ · Purity 99.5–99.9%</div>
+        <div class="mc-use">Ultra-pure silica sand is the raw material for solar panel glass — and demand is exploding with the global solar build-out. Egypt's Eastern Desert holds some of the world's purest silica deposits. Every gigawatt of solar capacity requires thousands of tonnes of high-purity silica glass. Egypt already exports silica sand and is investing in the Black Sand Minerals Complex for downstream processing. Also critical for semiconductor manufacturing and fiber optic cables.</div>
+        <div class="mc-specs">
+          <div class="mc-spec"><div class="mc-spec-label">FOB price</div><div class="mc-spec-val" style="color:var(--amber)">$35–80/MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Solar grade purity</div><div class="mc-spec-val">SiO₂ ≥ 99.5%</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Typical lot</div><div class="mc-spec-val">5,000–20,000 MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Key market</div><div class="mc-spec-val">China · EU · India</div></div>
+        </div>
+        <div class="mc-origins">
+          <span class="mc-origin">🇪🇬 Eastern Desert deposits</span>
+          <span class="mc-origin">🇪🇬 Black Sand Complex (Burullus)</span>
+          <span class="mc-origin">🇸🇦 Arabian Shield quartz</span>
+        </div>
+        <div class="transition-bar"><div class="transition-fill" style="width:90%;background:linear-gradient(90deg,var(--amber),var(--phosphor))"></div></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">Energy transition relevance: solar glass, semiconductors, fiber · 90%</div>
+      </div>
+
+      <!-- GOLD -->
+      <div class="mineral-card" style="border-color:rgba(232,169,74,.15)">
+        <div style="position:absolute;bottom:0;right:0;width:100px;height:100px;border-radius:50%;background:rgba(232,169,74,.06);filter:blur(30px)"></div>
+        <div class="mc-top">
+          <div class="mc-icon">🥇</div>
+          <span class="mc-badge tag-a">💰 Reserve asset</span>
+        </div>
+        <div class="mc-name">Gold</div>
+        <div class="mc-formula">Au · 999.9 fine / doré bars</div>
+        <div class="mc-use">Saudi Arabia holds an estimated 67 million ounces of gold reserves across 691 exploration sites — and Vision 2030 targets tripling production. Egypt's Eastern Desert (Golden Triangle) is one of the oldest gold-mining regions in the world with active modern mines. Algeria has significant gold deposits at Tirek Amesmessa and Zita with a new tender launched in 2025. Gold also serves critical electronics functions — connectors, semiconductors, and medical devices.</div>
+        <div class="mc-specs">
+          <div class="mc-spec"><div class="mc-spec-label">Spot price (May 2026)</div><div class="mc-spec-val" style="color:var(--gold)">~$3,200/oz</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Doré purity</div><div class="mc-spec-val">60–90% Au</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">KSA reserves</div><div class="mc-spec-val">67M oz identified</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Payment</div><div class="mc-spec-val">TT advance / LBMA</div></div>
+        </div>
+        <div class="mc-origins">
+          <span class="mc-origin">🇸🇦 Ad Duwayhi · Mansourah</span>
+          <span class="mc-origin">🇪🇬 Sukari · Hamama (Eastern Desert)</span>
+          <span class="mc-origin">🇩🇿 Tirek · Amesmessa · Zita</span>
+        </div>
+        <div class="transition-bar"><div class="transition-fill" style="width:65%;background:linear-gradient(90deg,var(--gold),var(--amber))"></div></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">Energy transition relevance: electronics, connectors, reserve asset · 65%</div>
+      </div>
+
+      <!-- KAOLIN -->
+      <div class="mineral-card" style="border-color:rgba(139,143,248,.15)">
+        <div style="position:absolute;bottom:0;right:0;width:100px;height:100px;border-radius:50%;background:rgba(139,143,248,.06);filter:blur(30px)"></div>
+        <div class="mc-top">
+          <div class="mc-icon">🏺</div>
+          <span class="mc-badge tag-v">🔬 Industrial</span>
+        </div>
+        <div class="mc-name">Kaolin</div>
+        <div class="mc-formula">Al₂Si₂O₅(OH)₄ · Brightness 80–92 ISO</div>
+        <div class="mc-use">Egypt's Eastern Desert kaolin deposits serve the ceramics, paper, rubber, and paint industries across Europe. UNCTAD flags kaolin as highly critical for Africa while Europe has constrained supply — positioning Egypt as a natural supplier for EU industrial needs under the Critical Raw Materials Act. Used in paper coatings, ceramics manufacturing, rubber compounding, and increasingly in advanced battery separators.</div>
+        <div class="mc-specs">
+          <div class="mc-spec"><div class="mc-spec-label">FOB price</div><div class="mc-spec-val" style="color:var(--violet)">$45–120/MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Brightness</div><div class="mc-spec-val">80–92 ISO</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Al₂O₃ content</div><div class="mc-spec-val">≥ 36%</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Key buyers</div><div class="mc-spec-val">EU ceramics · Paper</div></div>
+        </div>
+        <div class="mc-origins">
+          <span class="mc-origin">🇪🇬 Eastern Desert (Aswan area)</span>
+          <span class="mc-origin">🇪🇬 Sinai Peninsula</span>
+          <span class="mc-origin">🇸🇦 Arabian Shield clays</span>
+        </div>
+        <div class="transition-bar"><div class="transition-fill" style="width:55%;background:linear-gradient(90deg,var(--violet),var(--indigo))"></div></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">Energy transition relevance: battery separators, ceramics, electronics · 55%</div>
+      </div>
+
+      <!-- BARITE -->
+      <div class="mineral-card" style="border-color:rgba(45,212,191,.15)">
+        <div style="position:absolute;bottom:0;right:0;width:100px;height:100px;border-radius:50%;background:rgba(45,212,191,.06);filter:blur(30px)"></div>
+        <div class="mc-top">
+          <div class="mc-icon">🛢️</div>
+          <span class="mc-badge tag-t">⛽ Oil &amp; gas</span>
+        </div>
+        <div class="mc-name">Barite</div>
+        <div class="mc-formula">BaSO₄ · SG 4.1–4.4 g/cm³</div>
+        <div class="mc-use">Algeria's primary barite exports serve the global oil and gas drilling industry — barite is the key weighting agent in drilling mud and is required for every oil and gas well drilled worldwide. With NEOM and GCC energy projects driving new drilling activity, demand is strong. Also used in radiation shielding for medical and nuclear applications. Algeria holds significant barite reserves and is a consistent exporter to European and MENA oil service companies.</div>
+        <div class="mc-specs">
+          <div class="mc-spec"><div class="mc-spec-label">FOB price</div><div class="mc-spec-val" style="color:var(--teal)">$140–180/MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">API spec grade</div><div class="mc-spec-val">SG ≥ 4.2 g/cm³</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Typical lot</div><div class="mc-spec-val">2,000–10,000 MT</div></div>
+          <div class="mc-spec"><div class="mc-spec-label">Key buyers</div><div class="mc-spec-val">Oil service companies</div></div>
+        </div>
+        <div class="mc-origins">
+          <span class="mc-origin">🇩🇿 Hammam N'Bails · M'Zila</span>
+          <span class="mc-origin">🇸🇦 Arabian Shield deposits</span>
+          <span class="mc-origin">🇪🇬 Eastern Desert</span>
+        </div>
+        <div class="transition-bar"><div class="transition-fill" style="width:40%;background:linear-gradient(90deg,var(--teal),var(--sky))"></div></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">Energy transition relevance: drilling infrastructure, radiation shielding · 40%</div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- DEMAND SURGE VISUAL -->
+  <div class="section">
+    <h2>Demand is <em>tripling.</em></h2>
+    <p class="section-sub">The IEA projects global critical mineral demand to more than triple by 2035. China currently controls 60–80% of processing for most of them. Europe and the US are legislating their way out of that dependency — and looking for exactly what the Arab Belt has.</p>
+
+    <div class="demand-section">
+      <div class="demand-title">// Projected demand growth index (2024 = 100) by 2035</div>
+      <div class="demand-row">
+        <div class="demand-label">🔶 Copper (EVs + grid)</div>
+        <div class="demand-bar-wrap"><div class="demand-bar" style="width:82%;background:linear-gradient(90deg,var(--copper-l),var(--amber))"></div></div>
+        <div class="demand-val" style="color:var(--copper-l)">+280%</div>
+        <div class="demand-year">2035</div>
+      </div>
+      <div class="demand-row">
+        <div class="demand-label">⚗️ Phosphate (LFP batteries)</div>
+        <div class="demand-bar-wrap"><div class="demand-bar" style="width:74%;background:linear-gradient(90deg,var(--phosphor),var(--emerald))"></div></div>
+        <div class="demand-val" style="color:var(--phosphor)">+240%</div>
+        <div class="demand-year">2035</div>
+      </div>
+      <div class="demand-row">
+        <div class="demand-label">🌞 Silica (solar glass)</div>
+        <div class="demand-bar-wrap"><div class="demand-bar" style="width:70%;background:linear-gradient(90deg,var(--amber),var(--gold))"></div></div>
+        <div class="demand-val" style="color:var(--amber)">+220%</div>
+        <div class="demand-year">2035</div>
+      </div>
+      <div class="demand-row">
+        <div class="demand-label">🪨 Iron ore (green steel)</div>
+        <div class="demand-bar-wrap"><div class="demand-bar" style="width:55%;background:linear-gradient(90deg,var(--iron),var(--sky))"></div></div>
+        <div class="demand-val" style="color:var(--iron)">+160%</div>
+        <div class="demand-year">2035</div>
+      </div>
+      <div class="demand-row">
+        <div class="demand-label">⚡ Zinc (grid storage + galv.)</div>
+        <div class="demand-bar-wrap"><div class="demand-bar" style="width:50%;background:linear-gradient(90deg,var(--sky),var(--teal))"></div></div>
+        <div class="demand-val" style="color:var(--sky)">+150%</div>
+        <div class="demand-year">2035</div>
+      </div>
+      <div class="demand-row">
+        <div class="demand-label">🏺 Kaolin (battery separators)</div>
+        <div class="demand-bar-wrap"><div class="demand-bar" style="width:42%;background:linear-gradient(90deg,var(--violet),var(--indigo))"></div></div>
+        <div class="demand-val" style="color:var(--violet)">+130%</div>
+        <div class="demand-year">2035</div>
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px">Source: IEA Global Critical Minerals Outlook 2025 · SLOI AI analysis</div>
+    </div>
+
+    <!-- EU CRM ACT CALLOUT -->
+    <div class="crm-callout">
+      <div class="crm-header">
+        <div class="crm-icon">🇪🇺</div>
+        <div>
+          <div class="crm-title">EU Critical Raw Materials Act — live now</div>
+          <div class="crm-sub">The RESourceEU matchmaking platform launched its first buyer–supplier round in March 2026. Arab Belt suppliers are eligible to register.</div>
+        </div>
+        <span class="tag tag-sk" style="margin-left:auto;flex-shrink:0">Active</span>
+      </div>
+      <div class="crm-grid">
+        <div class="crm-item">
+          <div class="crm-item-label">EU domestic extraction target by 2030</div>
+          <div class="crm-item-val">≥ 10%</div>
+        </div>
+        <div class="crm-item">
+          <div class="crm-item-label">Single-country supply cap (any mineral)</div>
+          <div class="crm-item-val">≤ 65%</div>
+        </div>
+        <div class="crm-item">
+          <div class="crm-item-label">China rare earth dependency — target reduction</div>
+          <div class="crm-item-val">95% → 42%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WHO IS BUYING -->
+  <div class="section">
+    <h2>Who is <em>buying now.</em></h2>
+    <p class="section-sub">Four buyer categories — each with urgent, funded demand for Arab Belt minerals. SLOI AI connects them to verified suppliers and generates the LOI in 72 hours.</p>
+
+    <div style="font-size:11px;color:var(--white);font-weight:600;margin-bottom:10px">🇪🇺 European industrial buyers — Critical Raw Materials Act driven</div>
+
+    <div class="buyer-card hot">
+      <div class="bj-icon">🔋</div>
+      <div class="bj-body">
+        <div class="bj-name">EU Battery Manufacturers — CATL EU, Northvolt, ACC</div>
+        <div class="bj-meta">Germany · France · Sweden · Gigafactories under construction · LFP chemistry scaling fast</div>
+        <div class="bj-tags">
+          <span class="bj-tag">⚗️ Phosphate (LFP)</span><span class="bj-tag">🔶 Copper</span><span class="bj-tag">Arab Belt origin qualifies for CRMA</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--emerald)">€250B</div>
+        <div class="bj-sub">EU battery investment 2025–2030</div>
+        <span class="tag tag-em" style="margin-top:6px;display:block;text-align:center">🔥 Urgent</span>
+      </div>
+    </div>
+
+    <div class="buyer-card hot">
+      <div class="bj-icon">☀️</div>
+      <div class="bj-body">
+        <div class="bj-name">Solar Glass Manufacturers — AGC, Saint-Gobain, Xinyi Glass EU plants</div>
+        <div class="bj-meta">Germany · Netherlands · Spain · Solar panel glass production scaling to meet EU Green Deal targets</div>
+        <div class="bj-tags">
+          <span class="bj-tag">🌞 Silica sand SiO₂ ≥99.5%</span><span class="bj-tag">Egypt Eastern Desert supply</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--amber)">40GW+</div>
+        <div class="bj-sub">EU annual solar target</div>
+        <span class="tag tag-a" style="margin-top:6px;display:block;text-align:center">🔥 Active</span>
+      </div>
+    </div>
+
+    <div class="buyer-card">
+      <div class="bj-icon">🏗️</div>
+      <div class="bj-body">
+        <div class="bj-name">Green Steel Mills — SSAB, ArcelorMittal, Thyssenkrupp H₂ DRI</div>
+        <div class="bj-meta">Sweden · Germany · Belgium · Transitioning to hydrogen-based direct reduction — needs high-grade iron ore</div>
+        <div class="bj-tags">
+          <span class="bj-tag">🪨 Iron ore pellets Fe 65%+</span><span class="bj-tag">Algeria Gara Djebilet</span><span class="bj-tag">Low-phosphorus grade</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--iron)">$180B</div>
+        <div class="bj-sub">EU green steel investment</div>
+        <span class="tag tag-sk" style="margin-top:6px;display:block;text-align:center">Emerging</span>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--white);font-weight:600;margin:20px 0 10px">🌾 Fertilizer &amp; food security buyers — phosphate chain</div>
+
+    <div class="buyer-card hot">
+      <div class="bj-icon">🇮🇳</div>
+      <div class="bj-body">
+        <div class="bj-name">India — IFFCO, Chambal Fertilisers, RCF</div>
+        <div class="bj-meta">India · World's largest phosphate fertilizer importer · Government-backed food security procurement</div>
+        <div class="bj-tags">
+          <span class="bj-tag">⚗️ Phosphate rock BPL 68%+</span><span class="bj-tag">DAP · MAP</span><span class="bj-tag">Saudi Ma'aden preferred</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--phosphor)">8M MT/yr</div>
+        <div class="bj-sub">India phosphate import need</div>
+        <span class="tag tag-em" style="margin-top:6px;display:block;text-align:center">🔥 Largest buyer</span>
+      </div>
+    </div>
+
+    <div class="buyer-card">
+      <div class="bj-icon">🌍</div>
+      <div class="bj-body">
+        <div class="bj-name">Africa — Ethiopia, Kenya, Nigeria (AFAP programme)</div>
+        <div class="bj-meta">Sub-Saharan Africa · Africa Fertilizer &amp; Soil Health Action Plan · Soil nutrient deficit crisis</div>
+        <div class="bj-tags">
+          <span class="bj-tag">⚗️ Phosphate rock</span><span class="bj-tag">Urea + DAP</span><span class="bj-tag">Egypt &amp; Algeria origin</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--green)">$3B/yr</div>
+        <div class="bj-sub">Africa fertilizer import gap</div>
+        <span class="tag tag-g" style="margin-top:6px;display:block;text-align:center">Growing</span>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--white);font-weight:600;margin:20px 0 10px">🏭 Industrial &amp; metals buyers — zinc, copper, kaolin</div>
+
+    <div class="buyer-card">
+      <div class="bj-icon">🔶</div>
+      <div class="bj-body">
+        <div class="bj-name">Copper smelters &amp; cathode traders — Aurubis, Freeport, Glencore EU</div>
+        <div class="bj-meta">Europe · USA · Sourcing copper concentrate and anode slime from new non-Chinese origins</div>
+        <div class="bj-tags">
+          <span class="bj-tag">🔶 Cu concentrate 25–30%</span><span class="bj-tag">Saudi Jabal Sayid</span><span class="bj-tag">Doré bars</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--copper-l)">$9,200/MT</div>
+        <div class="bj-sub">LME copper May 2026</div>
+        <span class="tag tag-v" style="margin-top:6px;display:block;text-align:center">Strategic</span>
+      </div>
+    </div>
+
+    <div class="buyer-card">
+      <div class="bj-icon">🏺</div>
+      <div class="bj-body">
+        <div class="bj-name">EU Ceramics &amp; Paper — Imerys, Sibelco, Smurfit Kappa</div>
+        <div class="bj-meta">France · Belgium · Netherlands · Kaolin buyers under CRMA supply diversification mandates · Egypt origin competitive</div>
+        <div class="bj-tags">
+          <span class="bj-tag">🏺 Kaolin brightness 85+ ISO</span><span class="bj-tag">Egypt Eastern Desert</span><span class="bj-tag">REACH compliant</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--violet)">€4B</div>
+        <div class="bj-sub">EU kaolin market size</div>
+        <span class="tag tag-t" style="margin-top:6px;display:block;text-align:center">Steady</span>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--muted);margin-top:14px;display:flex;align-items:center;gap:6px">
+      🔭 SLOI AI monitors mineral tenders across EU, India, and MENA continuously — alerting brokers when new RFQs are published.
+      <a href="smb-order.html" style="color:var(--emerald);text-decoration:none">Submit a minerals RFQ →</a>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PRICE TABLE -->
+  <div class="section">
+    <h2>Price <em>reference.</em></h2>
+    <p class="section-sub">Indicative FOB prices from Arab Belt origins, May 2026. SLOI AI negotiates within these ranges with verified, KYC-cleared suppliers.</p>
+    <table class="price-table">
+      <thead>
+        <tr>
+          <th>Mineral</th>
+          <th>Form</th>
+          <th>Origin</th>
+          <th>FOB price</th>
+          <th>Typical lot</th>
+          <th>Incoterm</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--white)">Phosphate Rock</strong></td>
+          <td>BPL 68–72% bulk</td>
+          <td>🇸🇦 Ma'aden / 🇪🇬 Safaga</td>
+          <td class="price-hl">$70–110/MT</td>
+          <td>10,000–50,000 MT</td>
+          <td><span class="inco">FOB</span></td>
+          <td><span class="tag tag-em">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Iron Ore Fines</strong></td>
+          <td>Fe 58–62% fines</td>
+          <td>🇩🇿 Gara Djebilet / Ouenza</td>
+          <td class="price-hl">$95–108/MT</td>
+          <td>25,000–80,000 MT</td>
+          <td><span class="inco">FOB</span> <span class="inco">CFR</span></td>
+          <td><span class="tag tag-a">Ramping 2026</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Iron Ore Pellets</strong></td>
+          <td>Fe 65%+ DRI-grade</td>
+          <td>🇩🇿 Gara Djebilet (processed)</td>
+          <td class="price-hl">$115–130/MT</td>
+          <td>20,000–60,000 MT</td>
+          <td><span class="inco">CFR</span></td>
+          <td><span class="tag tag-a">2027 target</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Copper Concentrate</strong></td>
+          <td>Cu 25–30% conc.</td>
+          <td>🇸🇦 Jabal Sayid</td>
+          <td class="price-hl">Payable Cu basis</td>
+          <td>5,000–20,000 DMT</td>
+          <td><span class="inco">CIF</span></td>
+          <td><span class="tag tag-em">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Zinc Concentrate</strong></td>
+          <td>Zn 50–55% conc.</td>
+          <td>🇩🇿 Oued Amizour</td>
+          <td class="price-hl">TC ~$180/DMT</td>
+          <td>5,000–20,000 DMT</td>
+          <td><span class="inco">CIF</span></td>
+          <td><span class="tag tag-sk">2026–27 start</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Silica Sand (solar)</strong></td>
+          <td>SiO₂ ≥ 99.5%</td>
+          <td>🇪🇬 Eastern Desert</td>
+          <td class="price-hl">$45–80/MT</td>
+          <td>5,000–20,000 MT</td>
+          <td><span class="inco">FOB</span></td>
+          <td><span class="tag tag-em">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Kaolin</strong></td>
+          <td>Brightness 85+ ISO</td>
+          <td>🇪🇬 Eastern Desert</td>
+          <td class="price-hl">$55–120/MT</td>
+          <td>1,000–10,000 MT</td>
+          <td><span class="inco">FOB</span> <span class="inco">CIF</span></td>
+          <td><span class="tag tag-em">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Gold Doré</strong></td>
+          <td>Au 60–90% doré bar</td>
+          <td>🇸🇦 Ad Duwayhi / 🇪🇬 Sukari</td>
+          <td class="price-hl">LBMA spot −2%</td>
+          <td>Negotiated</td>
+          <td><span class="inco">TT advance</span></td>
+          <td><span class="tag tag-v">By arrangement</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Barite API Grade</strong></td>
+          <td>SG ≥ 4.2 g/cm³</td>
+          <td>🇩🇿 Hammam N'Bails</td>
+          <td class="price-hl">$140–180/MT</td>
+          <td>2,000–10,000 MT</td>
+          <td><span class="inco">FOB</span></td>
+          <td><span class="tag tag-em">Available</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:10px;color:var(--muted);margin-top:10px">Prices indicative · May 2026 · SLOI AI negotiates final terms with KYC-cleared, verified Arab Belt suppliers · All deals subject to Boss approval before LOI issuance</div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WHY SLOI AI -->
+  <div class="section">
+    <h2>Why SLOI AI for<br/><em>critical minerals.</em></h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🌍</div>
+        <div class="why-title">Arab Belt — the non-China alternative</div>
+        <div class="why-desc">The EU CRMA, US IRA, and G7 mineral initiatives all point to the same need: supply from stable, non-adversarial nations. Saudi Arabia, Egypt, and Algeria are NATO-aligned or neutral, geopolitically stable, and actively courting Western investment. SLOI AI is the broker layer between these suppliers and the buyers who cannot afford Chinese dependency.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📄</div>
+        <div class="why-title">Offtake LOI in 72 hours</div>
+        <div class="why-desc">Mineral supply agreements typically take weeks to negotiate manually. SLOI AI's AI agent runs up to 5 negotiation rounds against the supplier, handles concessions, checks compliance, and generates a signed offtake LOI in 72 hours — ready for your trade finance desk or project board approval.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔗</div>
+        <div class="why-title">HBAR chain-of-custody for ESG compliance</div>
+        <div class="why-desc">EU buyers under CRMA and CBAM need verifiable, tamper-proof supply chain records. Every mineral shipment brokered through SLOI AI gets hashed to Hedera blockchain — Bill of Lading, inspection cert, country of origin, and quality report — providing the ESG audit trail that European procurement teams require.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🛡️</div>
+        <div class="why-title">Sanctions screening built in</div>
+        <div class="why-desc">Mineral trade is geopolitically sensitive. SLOI AI screens every supplier and buyer against OFAC, EU, and UN sanctions lists before any LOI is generated. Gold, copper, and rare earth transactions get enhanced KYC. Compliance is built into the deal flow — not a manual step after the fact.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏦</div>
+        <div class="why-title">Trade finance ready</div>
+        <div class="why-desc">Large mineral offtake deals need Letters of Credit, performance bonds, and sometimes pre-payment facilities. SLOI AI generates the full document package needed for LC presentation — commercial invoice terms, inspection references, and BL clause language — compatible with HSBC, Standard Chartered, and Abu Dhabi Commercial Bank trade finance desks.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤖</div>
+        <div class="why-title">RESourceEU platform compatible</div>
+        <div class="why-desc">The EU's RESourceEU matchmaking platform — launched March 2026 — connects CRM suppliers with EU industrial buyers. SLOI AI's broker network includes registered Arab Belt suppliers who can respond to RESourceEU RFQs, with SLOI AI managing the negotiation and LOI generation on their behalf.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <div style="font-family:'Fraunces',serif;font-size:clamp(28px,5vw,48px);font-weight:900;color:var(--white);letter-spacing:-.03em;margin-bottom:12px;line-height:1.05">
+      $2.5 trillion in reserves.<br/>Tripling demand.<br/><em style="font-style:italic;color:var(--emerald)">Your LOI in 72 hours.</em>
+    </div>
+    <p style="color:var(--muted);max-width:520px;margin:0 auto 28px;font-size:13px;line-height:1.85">Whether you are sourcing phosphate for an LFP battery gigafactory in Germany, iron ore for a green steel DRI plant in Sweden, or silica sand for a solar glass facility in Spain — SLOI AI connects you to Arab Belt supply, negotiates the offtake terms, and delivers a signed LOI ready for your board.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="smb-order.html" class="btn btn-p" style="padding:13px 28px;font-size:13px">Request a minerals LOI →</a>
+      <a href="cement-clinker.html" class="btn btn-em" style="padding:13px 28px;font-size:13px">Cement &amp; Clinker</a>
+      <a href="imec.html" class="btn btn-sk" style="padding:13px 28px;font-size:13px">IMEC corridor</a>
+    </div>
+    <div style="margin-top:16px;font-size:10px;color:var(--muted)">
+      No credit card needed · Boss approval on every deal · LOI in 72 hours · HBAR verified · CRMA compatible
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white);text-decoration:none">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
+  <div class="footer-links">
+    <a href="m2m-homepage.html">Home</a>
+    <a href="imec.html">IMEC</a>
+    <a href="cement-clinker.html">Cement</a>
+    <a href="investor.html">Investors</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div style="font-size:10px;color:var(--muted)">© 2026 SLOI AI Ltd. · Prices indicative · Subject to market conditions</div>
+</footer>
+
+</body>
+</html>

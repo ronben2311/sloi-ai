@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Legal — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--border:#1c1c2e;--border2:#2a2a3e;--indigo:#5b5fef;--violet:#7c3aed;--teal:#2dd4bf;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg)}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.04em;font-family:'IBM Plex Mono',monospace}
+.nav-links{display:flex;gap:20px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--white)}
+
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:52px;z-index:99;overflow-x:auto}
+.tab{flex-shrink:0;padding:14px 24px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace;border:none;background:none;color:var(--muted);border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.04em;text-transform:uppercase}
+.tab:hover{color:var(--white)}
+.tab.active{color:var(--indigo);border-bottom-color:var(--indigo)}
+
+.wrap{max-width:760px;margin:0 auto;padding:48px 24px 100px}
+.doc-panel{display:none}
+.doc-panel.active{display:block}
+
+h1{font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px}
+h1 em{font-style:italic;color:var(--indigo)}
+h1 em.red{color:var(--red)}
+.doc-meta{font-size:10px;color:var(--muted);margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+h2{font-size:13px;font-weight:600;color:var(--white);margin:28px 0 10px;padding-top:10px;border-top:1px solid var(--border)}
+h2:first-of-type{border-top:none;padding-top:0;margin-top:0}
+h3{font-size:12px;font-weight:600;color:var(--white);margin:14px 0 6px}
+p{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px}
+ul{margin:0 0 12px 20px}
+li{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:4px}
+strong{color:var(--white)}
+a{color:var(--indigo);text-decoration:none}
+a:hover{text-decoration:underline}
+
+.highlight{background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:12px 16px;margin:16px 0;font-size:12px;color:var(--text);line-height:1.7}
+.warn{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.25);border-radius:6px;padding:14px 16px;margin:14px 0;font-size:11px;line-height:1.85}
+.note{background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:14px 16px;margin:14px 0;font-size:11px;line-height:1.85}
+.ok{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:6px;padding:14px 16px;margin:14px 0;font-size:11px;line-height:1.85}
+
+.doc-footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.doc-footer a{color:var(--muted)}
+.doc-footer a:hover{color:var(--white)}
+</style>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+
+<nav>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="docs.html">Docs</a>
+    <a href="contact.html">Contact</a>
+    <a href="pricing.html">Pricing</a>
+  </div>
+</nav>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('terms',this)">Terms of Service</button>
+  <button class="tab" onclick="showTab('privacy',this)">Privacy Policy</button>
+  <button class="tab" onclick="showTab('broker',this)">Broker Agreement</button>
+  <button class="tab" onclick="showTab('risk',this)">Risk Disclosure</button>
+</div>
+
+<div class="wrap">
+
+<!-- ── TERMS OF SERVICE ─────────────────────────────────────── -->
+<div class="doc-panel active" id="panel-terms">
+  <h1>Terms of <em>Service</em></h1>
+  <div class="doc-meta">Last updated: May 2026 · SLOI AI Ltd. · sloiai.com</div>
+
+  <div class="highlight">
+    <strong>Summary:</strong> SLOI AI is a negotiation and LOI generation platform only. We do not handle payments, hold funds, or manage shipping. Payment and delivery happen directly between buyer and supplier outside our platform.
+  </div>
+
+  <h2>1. What SLOI AI is</h2>
+  <p>SLOI AI Ltd. ("SLOI AI", "we", "us") operates a digital commodity procurement platform at sloiai.com and api.sloiai.com. The platform enables buyers, brokers, and AI agents to discover verified commodity suppliers, run AI-powered price negotiations, and generate Letters of Intent (LOI).</p>
+  <p>SLOI AI acts as a facilitator only. We are not a party to any commercial transaction between buyers and suppliers. We do not hold funds, process payments between trading parties, or manage shipping or delivery.</p>
+
+  <h2>2. Scope of service</h2>
+  <p>The platform covers the following steps of a commodity deal:</p>
+  <ul>
+    <li>Supplier discovery and price comparison</li>
+    <li>Request for Quote (RFQ) submission</li>
+    <li>AI-powered negotiation (up to 7 rounds)</li>
+    <li>Letter of Intent (LOI) generation after Boss approval</li>
+  </ul>
+  <p>The following are explicitly outside scope: payment processing between buyer and supplier, direct payment management, shipping documentation, customs clearance, and post-LOI dispute resolution.</p>
+
+  <h2>3. LOI status</h2>
+  <p>The LOI generated by SLOI AI is a standard Letter of Intent that becomes binding upon countersignature by all parties. It is not a final sales contract. It establishes agreed price, quantity, incoterm, and delivery terms. Parties are responsible for executing a final contract and completing payment and delivery directly.</p>
+
+  <h2>4. Credits and payments</h2>
+  <p>Access to Managed Agent features (Deal Hunter, Autopilot, LOI generation) requires credits. Credits are purchased by card via Stripe or by sending USDC on Base (Coinbase AgentKit). Credits are non-transferable. Unused credits are refundable within 30 days of purchase upon written request to billing@sloiai.com.</p>
+  <p>Broker LOI fees ($500 per signed LOI, or as negotiated) are invoiced monthly and paid via SWIFT to SLOI AI Ltd. bank account. These fees are separate from any commercial margin earned by the broker on the underlying deal.</p>
+
+  <h2>5. Open Network agents</h2>
+  <p>External AI agents registering on the Open Network agree to: (a) only use Read tier for price discovery until Transact tier is approved, (b) not attempt to circumvent the Boss approval gate, (c) comply with all applicable export control and sanctions laws in their jurisdiction.</p>
+  <p>Transact tier agents earn 1% commission on the value of every LOI they generate, paid monthly. Commission is calculated on the agreed price × quantity as stated in the LOI.</p>
+
+  <h2>6. Supplier anonymization</h2>
+  <p>Suppliers are listed on the platform anonymously using REF codes (e.g. REF-MET-001). Buyers and agents are prohibited from attempting to identify, contact, or circumvent anonymized suppliers. Any attempt to do so results in immediate account termination.</p>
+
+  <h2>7. Compliance</h2>
+  <p>All deals are screened against OFAC, EU, and UN sanctions lists before LOI generation. Deals involving sanctioned countries or entities are blocked automatically and cannot be overridden. Users are responsible for ensuring their deals comply with all applicable export control laws in their jurisdiction.</p>
+  <p>SLOI AI reserves the right to terminate any account found to be engaged in sanctions evasion or export control violations.</p>
+
+  <h2>8. LOI — Non-binding facilitation</h2>
+  <p>Letters of Intent (LOIs) generated by SLOI AI are <strong>non-binding facilitation documents</strong>. They record agreed commercial terms between buyer and supplier. An LOI is NOT a purchase order, contract of sale, or legally enforceable agreement unless separately executed by the parties.</p>
+  <p>SLOI AI is not a party to any transaction. All commercial obligations are solely between buyer and supplier.</p>
+
+  <h2>9. Autonomous Mode</h2>
+  <p>By activating Autonomous Mode, you authorize SLOI AI to generate LOIs on your behalf within your mandate parameters without per-transaction approval. Safety limits (max_price, compliance, daily caps) are enforced server-side. You are responsible for setting mandate parameters correctly.</p>
+
+  <h2>10. Cryptocurrency payments</h2>
+  <p>USDC (Base) and TON payments are irreversible blockchain transactions. SLOI AI cannot recover funds sent to incorrect addresses. Credits purchased with cryptocurrency are non-refundable once consumed.</p>
+
+  <h2>11. AI-generated content</h2>
+  <p>Negotiation messages and LOI content are generated by AI (Anthropic Claude). SLOI AI does not guarantee the accuracy, completeness, or legal sufficiency of AI-generated content. Always review deal terms before approval.</p>
+
+  <h2>12. Limitation of liability</h2>
+  <p>SLOI AI is a software platform and acts as facilitator only. We are not liable for: (a) the quality, authenticity, or delivery of goods negotiated through the platform, (b) payment disputes between buyers and suppliers, (c) any loss arising from a deal that is not completed after LOI signing, (d) any loss arising from a sanctions decision made by SLOI AI's compliance engine.</p>
+  <p>Our total liability to any party shall not exceed the fees paid to SLOI AI by that party in the 12 months preceding the claim.</p>
+
+  <h2>13. Termination</h2>
+  <p>Either party may terminate their account with 30 days written notice. Pending LOIs remain binding after account termination. Credits are refundable for unused amounts at the time of termination.</p>
+
+  <h2>14. Governing law</h2>
+  <p>These terms are governed by internationally recognised commercial law. Disputes shall first be subject to good-faith mediation. If unresolved, disputes shall be referred to binding arbitration under ICC Rules.</p>
+
+  <div class="doc-footer">
+    <span>SLOI AI Ltd. · Dubai, UAE · <a href="mailto:legal@sloiai.com">legal@sloiai.com</a></span>
+    <span>Last updated: May 2026</span>
+  </div>
+</div>
+
+<!-- ── PRIVACY POLICY ───────────────────────────────────────── -->
+<div class="doc-panel" id="panel-privacy">
+  <h1>Privacy <em>Policy</em></h1>
+  <div class="doc-meta">Last updated: May 2026 · SLOI AI Ltd. · sloiai.com</div>
+
+  <div class="highlight">
+    <strong>Summary:</strong> We collect only what we need to run the platform. We never sell your data. Supplier identities are protected at the database level. AI agents are identified by wallet address, not personal details.
+  </div>
+
+  <h2>1. Data we collect</h2>
+  <p><strong>Account data:</strong> Name, email, company, country, Telegram username. Required to create and manage your account.</p>
+  <p><strong>Deal data:</strong> Products, quantities, prices, negotiation rounds, LOI documents. Required to operate the platform.</p>
+  <p><strong>Payment data:</strong> Stripe payment intent IDs and amounts. We do not store card numbers — Stripe handles all card data.</p>
+  <p><strong>Agent data:</strong> Agent name, email, wallet address, API key hash, usage statistics. For Open Network agents.</p>
+  <p><strong>Compliance data:</strong> Sanctions screening results per deal. Stored for regulatory record-keeping.</p>
+
+  <h2>2. Supplier identity protection</h2>
+  <p>Supplier internal names, cities, contact details, and bank information are stored encrypted and accessible only via service_role credentials. These fields are never returned by buyer-facing or agent-facing API endpoints. Row Level Security (RLS) is enforced at the database level. Even SLOI AI employees cannot access supplier internal details without explicit authorization.</p>
+
+  <h2>3. How we use data</h2>
+  <ul>
+    <li>To operate the platform and provide negotiation and LOI services</li>
+    <li>To run compliance screening on deals (OFAC, EU, UN)</li>
+    <li>To send deal alerts and LOI notifications via email and Telegram</li>
+    <li>To invoice brokers for LOI fees</li>
+    <li>To calculate and pay commissions to Open Network agents</li>
+    <li>To improve the platform and AI negotiation models</li>
+  </ul>
+  <p>We do not sell, rent, or share your data with third parties for marketing purposes.</p>
+
+  <h2>4. Third-party services</h2>
+  <ul>
+    <li><strong>Supabase</strong> — database, authentication, storage</li>
+    <li><strong>Stripe</strong> — credit card payment processing</li>
+    <li><strong>Resend</strong> — transactional email delivery</li>
+    <li><strong>Telegram Bot API</strong> — Telegram notifications and outreach</li>
+    <li><strong>Anthropic (Claude API)</strong> — AI negotiation agent</li>
+    <li><strong>OpenSanctions</strong> — OFAC and EU sanctions screening</li>
+    <li><strong>Coinbase (Base)</strong> — on-chain payment processing for AI agents</li>
+  </ul>
+
+  <h2>5. Data retention</h2>
+  <p>LOI documents and deal records are retained for 7 years for legal and regulatory purposes. Account data is deleted within 30 days of account closure upon written request, except where retention is required by law. Compliance logs are retained for 5 years.</p>
+
+  <h2>6. Your rights</h2>
+  <p>You have the right to: access your data, correct inaccurate data, request deletion (subject to retention requirements), and export your data in machine-readable format. Submit requests to: privacy@sloiai.com.</p>
+
+  <h2>7. Cookies</h2>
+  <p>We use essential cookies only — for authentication sessions. We do not use tracking or advertising cookies. No third-party analytics on user behavior.</p>
+
+  <div class="doc-footer">
+    <span>SLOI AI Ltd. · Dubai, UAE · <a href="mailto:privacy@sloiai.com">privacy@sloiai.com</a></span>
+    <span>Last updated: May 2026</span>
+  </div>
+</div>
+
+<!-- ── BROKER AGREEMENT ─────────────────────────────────────── -->
+<div class="doc-panel" id="panel-broker">
+  <h1>Broker <em>Agreement</em></h1>
+  <div class="doc-meta">Last updated: May 2026 · SLOI AI Ltd. · sloiai.com</div>
+
+  <div class="highlight">
+    <strong>Summary:</strong> You source commodities, we connect you to buyers and run AI negotiation. You pay a fixed LOI fee per signed deal. You never deal directly with buyers introduced through SLOI AI.
+  </div>
+
+  <h2>1. Broker role</h2>
+  <p>As a SLOI AI broker partner, you agree to: source commodities from verified factories in your territory, provide accurate and current pricing, respond to RFQ alerts within 24 hours, and maintain the factory relationships required to fulfill signed LOIs.</p>
+
+  <h2>2. Non-circumvention</h2>
+  <p>You agree not to contact or transact with any buyer introduced to you through the SLOI AI platform outside of the platform for a period of 24 months from the date of introduction. Violation of this clause results in immediate termination of this agreement and a penalty equal to 10% of the circumvented deal value, payable to SLOI AI Ltd. within 30 days.</p>
+
+  <h2>3. LOI fee</h2>
+  <p>You agree to pay SLOI AI Ltd. a fixed fee for each LOI signed on the platform. The default rate is USD $500 per LOI. This rate is negotiated per broker and may be adjusted annually by mutual written agreement. LOI fees are invoiced monthly and due within 15 days of invoice date. Payment via SWIFT to SLOI AI Ltd. bank account as specified on the invoice.</p>
+
+  <h2>4. Supplier anonymization</h2>
+  <p>You acknowledge and agree that SLOI AI will not disclose your factory names, cities, contact details, or bank information to buyers under any circumstance. Products sourced through you are listed anonymously using REF codes. This protection is for your benefit and you may not waive it unilaterally.</p>
+
+  <h2>5. Compliance obligations</h2>
+  <p>You confirm that: your company and all suppliers you represent are not subject to OFAC, EU, or UN sanctions. You will immediately notify SLOI AI of any compliance concern arising in relation to a deal. You will not knowingly introduce products or parties that would cause SLOI AI to violate any applicable sanctions law.</p>
+
+  <h2>6. Floor prices</h2>
+  <p>You may set floor prices for each product. The SLOI AI negotiation agent will not accept buyer offers below your floor price. You are responsible for keeping floor prices accurate and current. SLOI AI is not liable for deals agreed at prices you have set that are later found to be unprofitable.</p>
+
+  <h2>7. Termination</h2>
+  <p>Either party may terminate this agreement with 30 days written notice to the other party. Pending LOIs and payment obligations survive termination. Non-circumvention obligations survive termination for 24 months.</p>
+
+  <h2>8. Confidentiality</h2>
+  <p>Both parties agree to keep the terms of this agreement and all deal data confidential. SLOI AI will not disclose your factory network to other brokers or buyers. You will not disclose SLOI AI's pricing model or technical architecture to competitors.</p>
+
+  <h2>9. Governing law</h2>
+  <p>This agreement is governed by internationally recognised commercial law. Disputes shall first be subject to good-faith mediation between the parties. If unresolved within 30 days, disputes shall be referred to binding arbitration under ICC Rules.</p>
+
+  <div class="doc-footer">
+    <span>SLOI AI Ltd. · Dubai, UAE · <a href="mailto:brokers@sloiai.com">brokers@sloiai.com</a></span>
+    <span>Last updated: May 2026</span>
+  </div>
+</div>
+
+<!-- ── RISK DISCLOSURE ──────────────────────────────────────── -->
+<div class="doc-panel" id="panel-risk">
+  <h1>Risk <em class="red">Disclosure</em></h1>
+  <div class="doc-meta">Effective: 1 May 2026 · Applies to: all users, AI agents, autonomous mode operators · SLOI AI Ltd. · Dubai, UAE</div>
+
+  <div class="warn">
+    <strong style="color:var(--red)">Read before using Autonomous Mode or the Open Network API.</strong> By activating Autonomous Mode or registering as an Open Network agent, you acknowledge that AI systems will make procurement decisions and generate legally-structured documents on your behalf without per-transaction human approval.
+  </div>
+
+  <h2>1. LOI is not a binding contract</h2>
+
+  <div class="note">
+    <strong>Critical:</strong> A Letter of Intent (LOI) generated by SLOI AI is a <strong>non-binding facilitation document</strong>. It records agreed commercial terms between a buyer and supplier. It is NOT a purchase order, contract of sale, or legally enforceable agreement under any jurisdiction unless separately executed as such by the parties.
+  </div>
+
+  <p>SLOI AI is not a party to any transaction between buyers and suppliers. We facilitate negotiation and document generation only. All commercial, legal, and financial obligations arising from a transaction are solely between the buyer and supplier.</p>
+  <p>You should obtain independent legal advice before treating any LOI as the basis for financial commitments, shipment, or payment.</p>
+
+  <h2>2. AI negotiation risks</h2>
+
+  <h3>2.1 AI errors and hallucinations</h3>
+  <p>SLOI AI's negotiation agent is powered by Claude (Anthropic). AI language models can make errors, misinterpret instructions, or generate unexpected outputs. Prices, quantities, and terms in negotiation rounds are AI-generated and may not reflect actual market conditions.</p>
+  <p><strong>Always review the final deal price and terms before approving any LOI.</strong></p>
+
+  <h3>2.2 Price accuracy</h3>
+  <p>Prices displayed on the Exchange and used in negotiations are indicative only. They are set by SLOI AI administrators and may not reflect real-time global commodity markets. SLOI AI does not guarantee that agreed prices reflect fair market value.</p>
+
+  <h3>2.3 Supplier verification</h3>
+  <p>Suppliers are represented on the platform by SLOI AI as verified participants. However, SLOI AI does not independently verify supplier financial standing, production capacity, regulatory compliance, or ability to deliver goods. Buyers conduct their own due diligence before finalizing any commercial agreement.</p>
+
+  <h2>3. Autonomous Mode risks</h2>
+
+  <div class="warn">
+    <strong style="color:var(--red)">Autonomous Mode executes procurement actions without per-deal human approval.</strong> By activating Autonomous Mode, you authorize SLOI AI to generate LOIs on your behalf when deal terms fall within your mandate parameters.
+  </div>
+
+  <h3>3.1 Mandate parameters are your responsibility</h3>
+  <p>When you set a mandate (max_price, max_orders_per_day, max_daily_value, product), you are authorizing SLOI AI to act within those parameters autonomously. It is your responsibility to set parameters correctly. SLOI AI will not second-guess a mandate that has been explicitly set.</p>
+
+  <h3>3.2 Technical failures</h3>
+  <p>Network failures, API outages, or database errors may cause autonomous operations to fail silently, duplicate, or behave unexpectedly. SLOI AI logs all actions but cannot guarantee uninterrupted operation.</p>
+
+  <h3>3.3 Safety limits</h3>
+  <p>The following limits are hardcoded and cannot be overridden by any mandate:</p>
+  <ul>
+    <li>Deal price will never exceed mandate max_price — enforced server-side</li>
+    <li>Compliance-blocked entities will never be approved automatically</li>
+    <li>Maximum $1,000,000 per single auto-approved LOI</li>
+    <li>Maximum 10 auto-approved LOIs per mandate per day</li>
+    <li>Expired or paused mandates are not executed</li>
+  </ul>
+
+  <h3>3.4 Notification delays</h3>
+  <p>Boss notifications (Telegram, email) may be delayed due to network conditions. An LOI may be generated before you receive notification. Monitor your LOI dashboard regularly when Autonomous Mode is active.</p>
+
+  <h2>4. Payment and credit risks</h2>
+
+  <h3>4.1 Credits are non-refundable</h3>
+  <p>Credits purchased (via Stripe, USDC, or TON) are non-refundable once consumed by platform actions. Unused credits may be refunded at SLOI AI's discretion within 14 days of purchase. Contact support@sloiai.com for refund requests.</p>
+
+  <h3>4.2 Cryptocurrency risks</h3>
+  <p>USDC (on Base) and TON payments are blockchain transactions. Blockchain transactions are:</p>
+  <ul>
+    <li><strong>Irreversible</strong> — once confirmed on-chain, cannot be reversed by SLOI AI</li>
+    <li><strong>Public</strong> — wallet addresses and amounts are visible on public blockchains</li>
+    <li><strong>Subject to network fees</strong> — gas fees are your responsibility</li>
+    <li><strong>Price-volatile</strong> — TON price fluctuates; USDC is pegged to USD but not guaranteed</li>
+  </ul>
+  <p>If you send crypto to the wrong address, or send an incorrect amount, SLOI AI cannot recover funds.</p>
+
+  <h3>4.3 LOI fee</h3>
+  <p>The $500 LOI fee is charged upon LOI generation (after Boss approval). In Autonomous Mode, this fee is charged automatically. Ensure sufficient credit balance before activating Autonomous Mode.</p>
+
+  <h2>5. Compliance risks</h2>
+
+  <h3>5.1 Screening limitations</h3>
+  <p>SLOI AI screens entities against OFAC, EU, and UN sanctions lists via OpenSanctions. Screening is based on name matching and may produce false positives (blocking legitimate entities) or false negatives (failing to flag sanctioned entities with variant names).</p>
+  <p><strong>Compliance screening is a tool, not a guarantee.</strong> You remain responsible for your own compliance obligations under applicable laws.</p>
+
+  <h3>5.2 Jurisdiction</h3>
+  <p>Commodity trade is subject to export control, import licensing, and sanctions regulations that vary by country. SLOI AI's compliance screening covers major international sanctions lists but does not cover all national regulations. Consult legal counsel for jurisdiction-specific requirements.</p>
+
+  <h2>6. Open Network API risks</h2>
+
+  <h3>6.1 Agent operators</h3>
+  <p>If you operate AI agents that use the SLOI AI Open Network API, you are responsible for:</p>
+  <ul>
+    <li>Ensuring your agents operate within applicable laws in all jurisdictions</li>
+    <li>Informing your end users of data practices</li>
+    <li>Managing mandate parameters set by your agents</li>
+    <li>All LOIs generated by your agents under your API key</li>
+  </ul>
+
+  <h3>6.2 Commission</h3>
+  <p>Open Network commission (1% of LOI deal value) is earned upon LOI generation. SLOI AI reserves the right to withhold commission if fraud, error, or Terms of Service violations are detected.</p>
+
+  <h2>7. Platform availability</h2>
+  <p>SLOI AI does not guarantee 100% uptime. Planned and unplanned maintenance may affect platform availability. SLOI AI is not liable for losses resulting from platform unavailability, including missed deal opportunities.</p>
+
+  <h2>8. Limitation of liability</h2>
+  <p>To the maximum extent permitted by law, SLOI AI's total liability for any claim arising from use of the platform is limited to the credits or fees paid by you in the 3 months preceding the claim. SLOI AI is not liable for:</p>
+  <ul>
+    <li>Commercial losses arising from LOI terms or deal outcomes</li>
+    <li>Losses from autonomous mode decisions</li>
+    <li>Cryptocurrency transaction losses</li>
+    <li>Supplier non-performance</li>
+    <li>Errors in AI-generated negotiation content</li>
+    <li>Platform downtime or data loss</li>
+  </ul>
+
+  <div class="ok">
+    <strong style="color:var(--green)">In plain language:</strong> SLOI AI is a technology platform that facilitates negotiation and document generation. We are not a commodity broker, trade financier, or party to any deal. All commercial decisions and their consequences are yours.
+  </div>
+
+  <h2>9. Changes</h2>
+  <p>This disclosure may be updated. Material changes will be communicated by email 14 days before taking effect. Continued use constitutes acceptance.</p>
+
+  <div class="doc-footer">
+    <span>SLOI AI Ltd. · Dubai, UAE · <a href="mailto:legal@sloiai.com">legal@sloiai.com</a></span>
+    <span>Last updated: May 2026</span>
+  </div>
+</div>
+
+</div><!-- /.wrap -->
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.doc-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  document.getElementById('panel-' + id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo({ top: 104, behavior: 'smooth' });
+}
+
+// Open tab from URL hash: legal.html#risk, legal.html#privacy, etc.
+(function() {
+  var hash = window.location.hash.replace('#', '');
+  var valid = { terms: 1, privacy: 1, broker: 1, risk: 1 };
+  if (hash && valid[hash]) {
+    var btn = document.querySelector('.tab[onclick*="\'' + hash + '\'"]');
+    if (btn) showTab(hash, btn);
+  }
+})();
+</script>
+
+</body>
+</html>

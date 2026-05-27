@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Petrochemicals & Commodities | SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06080c;--surface:#0b0e18;--surface2:#101422;
+  --border:#181d2e;--border2:#202638;
+  --indigo:#5b5fef;--violet:#8b8ff8;
+  --muted:#4a506e;--text:#ccd2f0;--white:#eef0fa;
+  --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
+  --petro:#7fffd4;--petro-d:#2dd4a0;--petro-dim:#1a4a3a;
+  --poly:#60a5fa;--poly-d:#3b82f6;
+  --fert:#a3e635;--fert-d:#65a30d;
+  --chem:#f472b6;--chem-d:#db2777;
+  --orange:#fb923c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;
+  background-image:
+    radial-gradient(ellipse at 10% 40%,rgba(127,255,212,.04) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 15%,rgba(96,165,250,.03) 0%,transparent 55%),
+    linear-gradient(rgba(91,95,239,.01) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(91,95,239,.01) 1px,transparent 1px);
+  background-size:100% 100%,100% 100%,52px 52px,52px 52px;
+  pointer-events:none}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(6,8,12,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+.logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.logo em{font-style:italic;color:var(--indigo)}
+.logo-tag{font-size:9px;color:var(--muted);margin-left:7px}
+.nav-links{display:flex;gap:24px;font-size:11px}
+.nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
+.btn-cta{background:var(--petro);color:#06080c;padding:8px 18px;border-radius:4px;font-size:11px;font-weight:700;text-decoration:none}
+
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:72px 24px 80px}
+
+.eyebrow{font-size:10px;color:var(--petro);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow::after{content:'';flex:1;height:1px;background:rgba(127,255,212,.18)}
+
+h1{font-family:'Fraunces',serif;font-size:clamp(38px,7vw,72px);font-weight:900;line-height:.93;letter-spacing:-.04em;color:var(--white);margin-bottom:22px}
+h1 em{font-style:italic;color:var(--petro)}
+.hero-sub{font-size:14px;color:var(--muted);line-height:1.9;max-width:640px;margin-bottom:32px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{padding:12px 22px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-p{background:var(--petro);color:#06080c;border:none;font-weight:700}.btn-p:hover{opacity:.85}
+.btn-em{background:rgba(127,255,212,.1);border:1px solid rgba(127,255,212,.35);color:var(--petro)}.btn-em:hover{background:rgba(127,255,212,.18)}
+.btn-g{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.3);color:var(--gold)}.btn-g:hover{background:rgba(232,169,74,.17)}
+
+/* ALERT BANNER */
+.alert-banner{background:rgba(251,146,60,.06);border:1px solid rgba(251,146,60,.25);border-radius:8px;padding:14px 18px;margin-bottom:40px;display:flex;align-items:flex-start;gap:12px}
+.ab-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.ab-text{font-size:11px;color:var(--text);line-height:1.7}
+.ab-text strong{color:var(--orange)}
+
+/* STAT BAR */
+.stat-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:44px 0}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;text-align:center}
+.stat-val{font-family:'Fraunces',serif;font-size:26px;font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:5px}
+.stat-lbl{font-size:10px;color:var(--muted);line-height:1.5}
+
+/* ORIGINS */
+.origin-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}
+.origin-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;position:relative;overflow:hidden;transition:border-color .15s}
+.origin-card:hover{border-color:rgba(127,255,212,.25)}
+.origin-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.oc-sa::before{background:linear-gradient(90deg,rgba(34,197,94,.8),transparent)}
+.oc-uae::before{background:linear-gradient(90deg,rgba(139,143,248,.8),transparent)}
+.oc-qa::before{background:linear-gradient(90deg,rgba(127,255,212,.8),transparent)}
+.oc-eg::before{background:linear-gradient(90deg,rgba(96,165,250,.8),transparent)}
+.oc-flag{font-size:24px;margin-bottom:6px}
+.oc-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px}
+.oc-role{font-size:9px;color:var(--muted);line-height:1.5;margin-bottom:8px}
+.oc-cap{font-family:'Fraunces',serif;font-size:18px;font-weight:900;margin-bottom:2px}
+.oc-caplbl{font-size:9px;color:var(--muted)}
+.oc-pills{display:flex;flex-wrap:wrap;gap:3px;margin-top:8px}
+.oc-pill{font-size:8px;padding:2px 5px;border-radius:2px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+
+/* SECTION */
+.section{margin-bottom:56px}
+h2{font-family:'Fraunces',serif;font-size:clamp(26px,4vw,38px);font-weight:900;color:var(--white);letter-spacing:-.03em;margin-bottom:10px}
+h2 em{font-style:italic;color:var(--petro)}
+.section-sub{font-size:12px;color:var(--muted);line-height:1.9;margin-bottom:22px;max-width:680px}
+.divider{border:none;border-top:1px solid var(--border);margin:52px 0}
+
+/* CAT HEADER */
+.cat-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.cat-hdr-badge{font-size:9px;font-weight:700;padding:3px 9px;border-radius:3px}
+.cat-hdr-desc{font-size:10px;color:var(--muted)}
+
+/* PRODUCT GRID */
+.product-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px}
+.product-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;transition:border-color .2s;position:relative;overflow:hidden}
+.product-card:hover{border-color:rgba(127,255,212,.2)}
+.glow-poly::after{content:'';position:absolute;bottom:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(96,165,250,.06);filter:blur(24px);pointer-events:none}
+.glow-fert::after{content:'';position:absolute;bottom:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(163,230,53,.05);filter:blur(24px);pointer-events:none}
+.glow-chem::after{content:'';position:absolute;bottom:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(244,114,182,.05);filter:blur(24px);pointer-events:none}
+.glow-petro::after{content:'';position:absolute;bottom:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:rgba(127,255,212,.05);filter:blur(24px);pointer-events:none}
+.pc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.pc-icon{font-size:26px}
+.pc-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px}
+.badge-poly{background:rgba(96,165,250,.12);border:1px solid rgba(96,165,250,.3);color:var(--poly)}
+.badge-fert{background:rgba(163,230,53,.1);border:1px solid rgba(163,230,53,.3);color:var(--fert)}
+.badge-chem{background:rgba(244,114,182,.1);border:1px solid rgba(244,114,182,.3);color:var(--chem)}
+.badge-petro{background:rgba(127,255,212,.1);border:1px solid rgba(127,255,212,.3);color:var(--petro)}
+.pc-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:2px}
+.pc-formula{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:10px}
+.pc-row{display:flex;justify-content:space-between;padding:4px 0;border-top:1px solid var(--border);font-size:10px}
+.pc-row-l{color:var(--muted)}
+.pc-row-r{color:var(--white);font-weight:600}
+.pc-desc{font-size:10px;color:var(--muted);line-height:1.65;margin-top:8px}
+.pc-origins{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.pc-origin{font-size:9px;padding:2px 6px;border-radius:2px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.inco{font-family:'IBM Plex Mono',monospace;font-size:9px;background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:2px 5px;color:var(--muted)}
+
+/* PRICE TABLE */
+.price-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:11px}
+.price-table th{text-align:left;padding:10px 12px;background:var(--surface2);color:var(--muted);font-weight:600;font-size:9px;letter-spacing:.07em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.price-table td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.price-table tr:last-child td{border-bottom:none}
+.price-table tr:hover td{background:rgba(255,255,255,.012)}
+.price-hl{color:var(--petro);font-weight:700;font-family:'Fraunces',serif;font-size:13px}
+
+/* TAGS */
+.tag{display:inline-flex;font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px}
+.tag-g{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.tag-a{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.tag-v{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.tag-t{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+.tag-p{background:rgba(127,255,212,.1);border:1px solid rgba(127,255,212,.25);color:var(--petro)}
+.tag-r{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)}
+.tag-poly{background:rgba(96,165,250,.1);border:1px solid rgba(96,165,250,.25);color:var(--poly)}
+
+/* BUYER CARDS */
+.buyer-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:14px;transition:border-color .15s}
+.buyer-card:hover{border-color:rgba(127,255,212,.2)}
+.buyer-card.hot{border-color:rgba(239,68,68,.3)}
+.bj-icon{font-size:22px;flex-shrink:0;width:34px;text-align:center;margin-top:2px}
+.bj-body{flex:1}
+.bj-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.bj-meta{font-size:10px;color:var(--muted);margin-bottom:7px}
+.bj-tags{display:flex;gap:5px;flex-wrap:wrap}
+.bj-tag{font-size:9px;padding:2px 7px;border-radius:2px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.bj-val{flex-shrink:0;text-align:right}
+.bj-num{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white)}
+.bj-sub{font-size:9px;color:var(--muted)}
+
+/* SUPPLY ADVANTAGE BOX */
+.adv-box{background:var(--surface);border:1px solid rgba(127,255,212,.15);border-radius:8px;padding:20px;margin-bottom:20px}
+.adv-title{font-size:10px;color:var(--petro);letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
+.adv-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.adv-item{display:flex;gap:10px;align-items:flex-start}
+.adv-check{color:var(--petro);font-size:14px;flex-shrink:0;margin-top:1px}
+.adv-text{font-size:11px;color:var(--muted);line-height:1.65}
+.adv-text strong{color:var(--white)}
+
+/* WHY GRID */
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.why-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px}
+.why-icon{font-size:20px;margin-bottom:8px}
+.why-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:5px}
+.why-desc{font-size:11px;color:var(--muted);line-height:1.65}
+
+/* CTA */
+.cta-box{background:linear-gradient(135deg,rgba(127,255,212,.06),rgba(96,165,250,.03));border:1px solid rgba(127,255,212,.22);border-radius:10px;padding:44px;text-align:center;margin-top:52px}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:11px}
+.footer-links{display:flex;gap:20px}
+.footer-links a{color:var(--muted);text-decoration:none}.footer-links a:hover{color:var(--white)}
+
+@media(max-width:640px){
+  .stat-bar,.origin-strip,.product-grid,.why-grid,.adv-grid{grid-template-columns:1fr 1fr}
+  .origin-strip{grid-template-columns:1fr 1fr}
+  nav{padding:0 16px}.wrap{padding:48px 16px 60px}
+  h1{font-size:clamp(34px,10vw,52px)}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
+  <div class="nav-links">
+    <a href="m2m-homepage.html">Home</a>
+    <a href="imec.html">IMEC</a>
+    <a href="building-materials.html">Building</a>
+    <a href="critical-minerals.html">Minerals</a>
+  </div>
+  <a href="smb-order.html" class="btn-cta">Request LOI →</a>
+</nav>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div style="margin-bottom:20px">
+    <div class="eyebrow">Petrochemicals · Polymers · Fertilizers · Industrial Chemicals</div>
+    <h1>The molecules<br/>the world runs on.<br/><em>We trade them.</em></h1>
+    <p class="hero-sub">PP granules, HDPE, LDPE, PVC resin, methanol, urea, MEG, benzene, bitumen — every industrial economy runs on these products every day. Saudi Arabia (SABIC), UAE (Borouge + ADNOC), Qatar (QAPCO), and Egypt produce them at feedstock cost advantages no other region can match. SLOI AI negotiates the offtake, generates the LOI, and moves the deal to close in 72 hours — fully compliant, OFAC-screened, HBAR-verified.</p>
+    <div class="hero-actions">
+      <a href="smb-order.html" class="btn btn-p">Request a commodities LOI →</a>
+      <a href="building-materials.html" class="btn btn-em">Building materials</a>
+      <a href="critical-minerals.html" class="btn btn-g">Critical minerals</a>
+    </div>
+  </div>
+
+  <!-- GEOPOLITICAL ALERT -->
+  <div class="alert-banner">
+    <div class="ab-icon">⚡</div>
+    <div class="ab-text">
+      <strong>Supply shock — Q1 2026:</strong> The US-Iran conflict (from Feb 28, 2026) and partial Strait of Hormuz disruption drove PP prices in Saudi Arabia up +27.83% in March 2026 alone, and global polyethylene supply tightened sharply. Saudi and UAE producers — unaffected by the conflict — captured immediate market share as buyers scrambled for reliable, sanctions-clean supply. <strong>Arab Belt petrochemicals have never been more strategically valuable.</strong> SLOI AI brokers exclusively from OFAC/EU/UN-compliant origins: Saudi Arabia, UAE, Qatar, and Egypt.
+    </div>
+  </div>
+
+  <!-- STAT BAR -->
+  <div class="stat-bar">
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--petro)">$60B</div>
+      <div class="stat-lbl">Borouge–Borealis–Nova merger valuation — world's #4 polyolefins group, Ruwais 2026</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--poly)">13.6M MT</div>
+      <div class="stat-lbl">Combined PE + PP capacity from Borouge Group International upon merger completion</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--fert)">+27%</div>
+      <div class="stat-lbl">Saudi PP price surge in March 2026 — supply shock premium captured by compliant origins</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--gold)">$408/MT</div>
+      <div class="stat-lbl">Urea FOB Middle East futures — Jan 2026 · Fertiglobe benchmark</div>
+    </div>
+  </div>
+
+  <!-- ORIGINS -->
+  <div class="section">
+    <h2>Four origins.<br/><em>Zero sanctions risk.</em></h2>
+    <p class="section-sub">All four origins are OFAC-clean, EU-compliant, and UN-screened. Every LOI issued by SLOI AI is sanctions-verified before generation. No Iranian origin. No exposure.</p>
+    <div class="origin-strip">
+
+      <div class="origin-card oc-sa">
+        <div class="oc-flag">🇸🇦</div>
+        <div class="oc-name">Saudi Arabia</div>
+        <div class="oc-role">SABIC · Tasnee · NATPET · Petro Rabigh · Ibn Zahr · Sadara · Al-Jubail + Yanbu ports</div>
+        <div class="oc-cap" style="color:var(--green)">~40M MT</div>
+        <div class="oc-caplbl">annual petrochem capacity</div>
+        <div class="oc-pills">
+          <span class="oc-pill">PP Homo/Co</span>
+          <span class="oc-pill">HDPE/LDPE/LLDPE</span>
+          <span class="oc-pill">PVC Resin</span>
+          <span class="oc-pill">Methanol</span>
+          <span class="oc-pill">Urea</span>
+          <span class="oc-pill">MEG</span>
+          <span class="oc-pill">Benzene</span>
+        </div>
+      </div>
+
+      <div class="origin-card oc-uae">
+        <div class="oc-flag">🇦🇪</div>
+        <div class="oc-name">UAE</div>
+        <div class="oc-role">Borouge (ADNOC/OMV) · Fertiglobe · Ta'ziz · Jebel Ali + Ruwais export terminals</div>
+        <div class="oc-cap" style="color:var(--violet)">6.4M MT PE</div>
+        <div class="oc-caplbl">Borouge nameplate 2025 + merger</div>
+        <div class="oc-pills">
+          <span class="oc-pill">HDPE Borstar</span>
+          <span class="oc-pill">LLDPE specialty</span>
+          <span class="oc-pill">PP copolymer</span>
+          <span class="oc-pill">Urea (Fertiglobe)</span>
+          <span class="oc-pill">Ammonia</span>
+        </div>
+      </div>
+
+      <div class="origin-card oc-qa">
+        <div class="oc-flag">🇶🇦</div>
+        <div class="oc-name">Qatar</div>
+        <div class="oc-role">QAPCO · Qatar Petrochemical · Industries Qatar (IQ) · Mesaieed Industrial City · Ras Laffan port</div>
+        <div class="oc-cap" style="color:var(--petro)">~14M MT</div>
+        <div class="oc-caplbl">total petrochem capacity</div>
+        <div class="oc-pills">
+          <span class="oc-pill">LDPE film/injection</span>
+          <span class="oc-pill">LLDPE Butene</span>
+          <span class="oc-pill">Ethylene</span>
+          <span class="oc-pill">Urea granular</span>
+          <span class="oc-pill">LPG / Butane</span>
+        </div>
+      </div>
+
+      <div class="origin-card oc-eg">
+        <div class="oc-flag">🇪🇬</div>
+        <div class="oc-name">Egypt</div>
+        <div class="oc-role">Egyptian Petrochemicals · Sidi Kerir Petrochemicals · Carbon Holdings · Alexandria + Sokhna ports</div>
+        <div class="oc-cap" style="color:var(--poly)">~5M MT</div>
+        <div class="oc-caplbl">capacity — growing rapidly</div>
+        <div class="oc-pills">
+          <span class="oc-pill">HDPE</span>
+          <span class="oc-pill">Polybutadiene</span>
+          <span class="oc-pill">Urea</span>
+          <span class="oc-pill">Methanol</span>
+          <span class="oc-pill">Carbon Black</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="adv-box">
+      <div class="adv-title">// Why Arab Belt petrochemicals dominate on price</div>
+      <div class="adv-grid">
+        <div class="adv-item">
+          <div class="adv-check">✓</div>
+          <div class="adv-text"><strong>Ethane feedstock advantage</strong> — Saudi and UAE producers use ethane cracking at $0.75–1.50/MMBtu vs naphtha at $400–600/MT in Europe and Asia. Cash cost of PE production is 40–60% lower than European competitors.</div>
+        </div>
+        <div class="adv-item">
+          <div class="adv-check">✓</div>
+          <div class="adv-text"><strong>SABIC capacity</strong> — 4.01 million tonnes of polyethylene alone, with integrated cracker margins near 88% due to subsidized ethane. Jubail and Yanbu industrial cities are purpose-built export hubs.</div>
+        </div>
+        <div class="adv-item">
+          <div class="adv-check">✓</div>
+          <div class="adv-text"><strong>Borouge Borstar technology</strong> — Borouge's proprietary Borstar Enhanced PE delivers superior downgauging performance for film converters, commanding premium vs standard HDPE while still priced below European grades.</div>
+        </div>
+        <div class="adv-item">
+          <div class="adv-check">✓</div>
+          <div class="adv-text"><strong>Supply shock premium — captured now</strong> — Q1 2026 Hormuz disruption pushed global PP up +20–28%. Saudi and UAE producers are the only major origin with intact supply chains. Buyers locked into Arab Belt contracts before the disruption won.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- POLYMERS -->
+  <div class="section">
+    <h2>The full catalog.<br/><em>Every molecule.</em></h2>
+
+    <!-- POLYOLEFINS -->
+    <div class="cat-hdr">
+      <span class="pc-badge badge-poly" style="font-size:10px;padding:3px 10px">Polyolefins</span>
+      <span class="cat-hdr-desc">PP · HDPE · LDPE · LLDPE — the most traded polymers on earth</span>
+    </div>
+    <div class="product-grid" style="margin-bottom:28px">
+
+      <div class="product-card glow-poly" style="border-color:rgba(96,165,250,.12)">
+        <div class="pc-top"><div class="pc-icon">🔵</div><span class="pc-badge badge-poly">Polyolefin</span></div>
+        <div class="pc-name">PP Homopolymer</div>
+        <div class="pc-formula">Raffia · Film · Injection · Fiber grades</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (SABIC/NATPET)</span><span class="pc-row-r" style="color:var(--poly)">$880–960/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE (Borouge)</span><span class="pc-row-r" style="color:var(--petro)">$890–970/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">MOQ</span><span class="pc-row-r">500 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Payment</span><span class="pc-row-r">LC at sight / TT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">The world's most-traded polymer. Raffia grade for woven bags (FIBC, cement sacks, agri bags). Film grade for BOPP packaging. Injection grade for automotive and consumer goods. Saudi PP up +27% in March 2026 — supply tightness premium fully captured by Arab Belt.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 SABIC · NATPET</span><span class="pc-origin">🇦🇪 Borouge</span><span class="pc-origin">🇶🇦 QAPCO</span></div>
+      </div>
+
+      <div class="product-card glow-poly" style="border-color:rgba(96,165,250,.12)">
+        <div class="pc-top"><div class="pc-icon">🟦</div><span class="pc-badge badge-poly">Polyolefin</span></div>
+        <div class="pc-name">PP Copolymer (Random / Impact)</div>
+        <div class="pc-formula">Random copo · Impact copo · Pipe grade PP-R</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi</span><span class="pc-row-r" style="color:var(--poly)">$930–1,010/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE (Borouge)</span><span class="pc-row-r" style="color:var(--petro)">$950–1,040/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">MOQ</span><span class="pc-row-r">100 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Payment</span><span class="pc-row-r">LC at sight</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Random copo for clear packaging, containers, and caps. Impact copo for automotive bumpers, appliances, and tough-use packaging. PP-R pipe grade for hot/cold water plumbing — huge demand from GCC and African construction. Borouge specializes in high-performance copolymer grades.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 Saudi</span><span class="pc-origin">🇦🇪 Borouge</span></div>
+      </div>
+
+      <div class="product-card glow-poly" style="border-color:rgba(96,165,250,.12)">
+        <div class="pc-top"><div class="pc-icon">🟢</div><span class="pc-badge badge-poly">Polyolefin</span></div>
+        <div class="pc-name">HDPE (Blow / Pipe / Film)</div>
+        <div class="pc-formula">MFI 0.03–20 · Density 0.940–0.965 g/cm³</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (SABIC/Tasnee)</span><span class="pc-row-r" style="color:var(--poly)">$870–940/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE (Borouge Borstar)</span><span class="pc-row-r" style="color:var(--petro)">$900–980/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Egypt</span><span class="pc-row-r" style="color:var(--green)">$845–910/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">MOQ</span><span class="pc-row-r">500 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Blow grade for jerricans, drums, and bottles. Pipe grade (PE100) for pressure water and gas distribution — high demand from Libya, Iraq, Sudan reconstruction. Film grade for heavy-duty bags and liners. Saudi holds 39% of Middle East PE market. Borouge's Borstar Enhanced PE is premium for film converters.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 SABIC · Tasnee</span><span class="pc-origin">🇦🇪 Borouge</span><span class="pc-origin">🇪🇬 Egypt</span></div>
+      </div>
+
+      <div class="product-card glow-poly" style="border-color:rgba(96,165,250,.12)">
+        <div class="pc-top"><div class="pc-icon">🔷</div><span class="pc-badge badge-poly">Polyolefin</span></div>
+        <div class="pc-name">LDPE (Film / Injection)</div>
+        <div class="pc-formula">MFI 0.3–8 · Density 0.916–0.930 g/cm³</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Qatar (QAPCO)</span><span class="pc-row-r" style="color:var(--petro)">$860–930/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi</span><span class="pc-row-r" style="color:var(--poly)">$855–925/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">MOQ</span><span class="pc-row-r">200 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Payment</span><span class="pc-row-r">LC at sight</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span></span></div>
+        <div class="pc-desc">Flexible film for shrink wrap, stretch film, agricultural mulch, and general packaging. Qatar's QAPCO is a cornerstone LDPE exporter, selling to India, Turkey, China, and Europe. Film grade (MFI 0.3–2) commands premium. Extrusion coating grade for paper and board lamination.</div>
+        <div class="pc-origins"><span class="pc-origin">🇶🇦 QAPCO</span><span class="pc-origin">🇸🇦 Saudi</span></div>
+      </div>
+
+      <div class="product-card glow-poly" style="border-color:rgba(96,165,250,.12)">
+        <div class="pc-top"><div class="pc-icon">🟩</div><span class="pc-badge badge-poly">Polyolefin</span></div>
+        <div class="pc-name">LLDPE (C4 / C6 / C8)</div>
+        <div class="pc-formula">Butene · Hexene · Octene comonomer grades</div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE (Borouge)</span><span class="pc-row-r" style="color:var(--petro)">$880–960/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Qatar</span><span class="pc-row-r" style="color:var(--teal)">$860–940/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">MOQ</span><span class="pc-row-r">200 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Key use</span><span class="pc-row-r">Stretch film · Agri film</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Linear low-density for stretch film, rotomolding, and agricultural films. Borouge's C4 LLDPE is widely specified by film converters in Turkey and India for downgauging. C6 and C8 grades (hexene/octene) deliver superior toughness — growing share in food contact packaging.</div>
+        <div class="pc-origins"><span class="pc-origin">🇦🇪 Borouge</span><span class="pc-origin">🇶🇦 Qatar</span><span class="pc-origin">🇸🇦 Saudi</span></div>
+      </div>
+
+      <div class="product-card glow-poly" style="border-color:rgba(96,165,250,.12)">
+        <div class="pc-top"><div class="pc-icon">⬜</div><span class="pc-badge badge-poly">Polyolefin</span></div>
+        <div class="pc-name">PVC Resin (S-PVC)</div>
+        <div class="pc-formula">K-value 65–70 / 57–60 · Suspension grade</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (SABIC/Ibn Zahr)</span><span class="pc-row-r" style="color:var(--poly)">$780–860/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Egypt</span><span class="pc-row-r" style="color:var(--green)">$750–830/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">MOQ</span><span class="pc-row-r">200 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Payment</span><span class="pc-row-r">LC at sight</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Suspension PVC resin — raw material for pipes, profiles, window frames, cables, flooring, and rigid packaging. K67 for pipes and profiles. K57 for rigid packaging. Massive demand from Egypt, Libya, Iraq infrastructure rebuild. Saudi PVC benefits from integrated chlorine-alkali feedstock from SABIC.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 SABIC · Ibn Zahr</span><span class="pc-origin">🇪🇬 Egypt</span></div>
+      </div>
+
+    </div>
+
+    <!-- FERTILIZERS -->
+    <div class="cat-hdr">
+      <span class="pc-badge badge-fert" style="font-size:10px;padding:3px 10px">Fertilizers &amp; Ammonia</span>
+      <span class="cat-hdr-desc">Urea · Ammonia · MEA · DAP — feeding 4 billion people</span>
+    </div>
+    <div class="product-grid" style="margin-bottom:28px">
+
+      <div class="product-card glow-fert" style="border-color:rgba(163,230,53,.1)">
+        <div class="pc-top"><div class="pc-icon">🌾</div><span class="pc-badge badge-fert">Fertilizer</span></div>
+        <div class="pc-name">Urea 46% Prilled / Granular</div>
+        <div class="pc-formula">N 46% · Prilled 1–3.35mm · Granular 2–5mm</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Middle East (Fertiglobe)</span><span class="pc-row-r" style="color:var(--fert)">$390–420/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (SABIC/Safco)</span><span class="pc-row-r" style="color:var(--green)">$385–415/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Egypt</span><span class="pc-row-r" style="color:var(--poly)">$375–405/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">5,000–50,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CFR</span></span></div>
+        <div class="pc-desc">World's most widely used nitrogen fertilizer. Fertiglobe (ADNOC + OCI JV) is one of the largest global urea producers. Saudi Arabia's SAFCO complex exports to India, South Asia, Brazil, and Africa. Egypt exports via Alexandria and Port Said. India alone absorbs 8M MT/yr of imports.</div>
+        <div class="pc-origins"><span class="pc-origin">🇦🇪 Fertiglobe (ADNOC)</span><span class="pc-origin">🇸🇦 SAFCO · SABIC</span><span class="pc-origin">🇪🇬 Egypt</span><span class="pc-origin">🇶🇦 Industries Qatar</span></div>
+      </div>
+
+      <div class="product-card glow-fert" style="border-color:rgba(163,230,53,.1)">
+        <div class="pc-top"><div class="pc-icon">💧</div><span class="pc-badge badge-fert">Fertilizer</span></div>
+        <div class="pc-name">Anhydrous Ammonia</div>
+        <div class="pc-formula">NH₃ · Purity ≥ 99.5% · Refrigerated liquid</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Middle East</span><span class="pc-row-r" style="color:var(--fert)">$310–380/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE (Fertiglobe)</span><span class="pc-row-r" style="color:var(--petro)">$320–390/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">5,000–30,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Special requirements</span><span class="pc-row-r">Refrigerated tanker</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CFR</span></span></div>
+        <div class="pc-desc">Feedstock for fertilizer manufacturing (DAP, MAP, nitric acid) and direct application fertilizer for high-value crops. Also critical for green ammonia production and emerging hydrogen carrier applications. UAE's Fertiglobe is the world's largest seaborne ammonia exporter.</div>
+        <div class="pc-origins"><span class="pc-origin">🇦🇪 Fertiglobe (world #1 seaborne)</span><span class="pc-origin">🇸🇦 Saudi</span><span class="pc-origin">🇶🇦 Qatar</span></div>
+      </div>
+
+      <div class="product-card glow-fert" style="border-color:rgba(163,230,53,.1)">
+        <div class="pc-top"><div class="pc-icon">⚗️</div><span class="pc-badge badge-fert">Fertilizer</span></div>
+        <div class="pc-name">DAP Fertilizer 18-46-0</div>
+        <div class="pc-formula">Di-ammonium phosphate · N 18% · P₂O₅ 46%</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (Ma'aden)</span><span class="pc-row-r" style="color:var(--green)">$580–640/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Morocco (OCP) via SLOI AI</span><span class="pc-row-r" style="color:var(--fert)">$560–620/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">5,000–50,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Payment</span><span class="pc-row-r">LC at sight / 30 days</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CFR</span></span></div>
+        <div class="pc-desc">The dominant phosphorus fertilizer. Ma'aden Phosphate (Saudi Arabia) is a top-5 global DAP producer — joint venture with Mosaic. Massive demand from India (8M MT/yr imports), Brazil (agri sector), and Africa (soil nutrient deficit). Saudi Ma'aden's new Phosphate 3 project will boost capacity 50%.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 Ma'aden (top-5 global)</span><span class="pc-origin">🇶🇦 Qatar</span></div>
+      </div>
+
+    </div>
+
+    <!-- INDUSTRIAL CHEMICALS -->
+    <div class="cat-hdr">
+      <span class="pc-badge badge-chem" style="font-size:10px;padding:3px 10px">Industrial Chemicals</span>
+      <span class="cat-hdr-desc">Methanol · MEG · Benzene · Caustic Soda · Sulfuric Acid</span>
+    </div>
+    <div class="product-grid" style="margin-bottom:28px">
+
+      <div class="product-card glow-chem" style="border-color:rgba(244,114,182,.1)">
+        <div class="pc-top"><div class="pc-icon">🧪</div><span class="pc-badge badge-chem">Industrial</span></div>
+        <div class="pc-name">Methanol</div>
+        <div class="pc-formula">CH₃OH · Purity ≥ 99.85% · IMPCA spec</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (SABIC/Ibn Sina)</span><span class="pc-row-r" style="color:var(--chem)">$280–340/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Qatar (QMC)</span><span class="pc-row-r" style="color:var(--petro)">$275–335/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">5,000–25,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Payment</span><span class="pc-row-r">LC at sight</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CFR</span></span></div>
+        <div class="pc-desc">Feedstock for formaldehyde, acetic acid, MTBE, and biodiesel (DME route). Also a marine fuel blendstock and emerging green methanol demand from shipping. Saudi Arabia's Ibn Sina plant and Qatar's QMC are IMPCA-spec producers. Arab Belt methanol captured market share from Iranian origin (sanctioned) in Q1 2026.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 SABIC · Ibn Sina</span><span class="pc-origin">🇶🇦 QMC</span><span class="pc-origin">🇦🇪 UAE</span></div>
+      </div>
+
+      <div class="product-card glow-chem" style="border-color:rgba(244,114,182,.1)">
+        <div class="pc-top"><div class="pc-icon">🔮</div><span class="pc-badge badge-chem">Industrial</span></div>
+        <div class="pc-name">MEG (Mono-ethylene Glycol)</div>
+        <div class="pc-formula">C₂H₆O₂ · Purity ≥ 99.9% · Fiber grade</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (SABIC/YANPET)</span><span class="pc-row-r" style="color:var(--chem)">$480–560/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE</span><span class="pc-row-r" style="color:var(--petro)">$490–570/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">1,000–10,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Key use</span><span class="pc-row-r">PET resin · Polyester fiber</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Key raw material for PET bottles, polyester fiber and film, and antifreeze. Saudi Arabia (YANPET, SHARQ, SABIC) is one of the world's largest MEG exporters. Major buyers in India, China, and Turkey's textile industry. Fiber-grade (≥99.9%) commands highest pricing.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 YANPET · SHARQ · SABIC</span><span class="pc-origin">🇦🇪 UAE</span><span class="pc-origin">🇶🇦 Qatar</span></div>
+      </div>
+
+      <div class="product-card glow-chem" style="border-color:rgba(244,114,182,.1)">
+        <div class="pc-top"><div class="pc-icon">🟣</div><span class="pc-badge badge-chem">Industrial</span></div>
+        <div class="pc-name">Benzene</div>
+        <div class="pc-formula">C₆H₆ · Purity ≥ 99.9% · Petrochemical grade</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (Petro Rabigh)</span><span class="pc-row-r" style="color:var(--chem)">$680–780/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE</span><span class="pc-row-r" style="color:var(--petro)">$690–800/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">1,000–5,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Payment</span><span class="pc-row-r">LC at sight</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Aromatic feedstock for styrene (PS, ABS), phenol (polycarbonate, epoxy), cyclohexane (nylon), and aniline (polyurethane). Petro Rabigh (Saudi Aramco + Sumitomo JV) is a large benzene exporter. Toluene and xylene (paraxylene for PET) also available from same origin.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 Petro Rabigh · Yanbu PC</span><span class="pc-origin">🇦🇪 UAE</span></div>
+      </div>
+
+      <div class="product-card glow-chem" style="border-color:rgba(244,114,182,.1)">
+        <div class="pc-top"><div class="pc-icon">🧊</div><span class="pc-badge badge-chem">Industrial</span></div>
+        <div class="pc-name">Caustic Soda 50% Liquid</div>
+        <div class="pc-formula">NaOH 50% solution · Membrane grade</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (SABIC)</span><span class="pc-row-r" style="color:var(--chem)">$380–440/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE</span><span class="pc-row-r" style="color:var(--petro)">$390–455/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Egypt</span><span class="pc-row-r" style="color:var(--green)">$365–425/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">500–5,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">DAP</span> <span class="inco">FOB</span></span></div>
+        <div class="pc-desc">Co-product of chlorine manufacturing. Used in alumina refining, soap and detergent manufacturing, water treatment, pulp and paper, and textile mercerization. Saudi SABIC (membrane cell) and Egyptian producers supply MENA, East Africa, and India. Liquid grade requires isotank or flexi-tank logistics.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 SABIC</span><span class="pc-origin">🇦🇪 UAE</span><span class="pc-origin">🇪🇬 Egypt</span></div>
+      </div>
+
+      <div class="product-card glow-chem" style="border-color:rgba(244,114,182,.1)">
+        <div class="pc-top"><div class="pc-icon">🔴</div><span class="pc-badge badge-chem">Industrial</span></div>
+        <div class="pc-name">Sulfuric Acid 98%</div>
+        <div class="pc-formula">H₂SO₄ · 98% · Contact process · Technical grade</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi</span><span class="pc-row-r" style="color:var(--chem)">$90–130/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE (Jebel Ali)</span><span class="pc-row-r" style="color:var(--petro)">$95–140/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Egypt</span><span class="pc-row-r" style="color:var(--green)">$85–125/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">500–5,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">DAP</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Used in fertilizer production (phosphoric acid), metal leaching in mining, battery manufacturing, and water treatment. Derived as a by-product from copper smelting and refinery operations. Corrosive goods — requires specialized isotank or lined vessel transport. Full MSDS and REACH documentation provided.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 Saudi</span><span class="pc-origin">🇦🇪 UAE</span><span class="pc-origin">🇪🇬 Egypt</span></div>
+      </div>
+
+      <div class="product-card glow-chem" style="border-color:rgba(244,114,182,.1)">
+        <div class="pc-top"><div class="pc-icon">⬛</div><span class="pc-badge badge-chem">Industrial</span></div>
+        <div class="pc-name">Carbon Black N330 / N550 / N660</div>
+        <div class="pc-formula">ASTM D1765 · Pelletized · Oil absorption</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (Tasnee/SABIC)</span><span class="pc-row-r" style="color:var(--chem)">$820–940/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Egypt (ECCO)</span><span class="pc-row-r" style="color:var(--green)">$790–900/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">100–1,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Key use</span><span class="pc-row-r">Tires · Rubber · Plastics</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Reinforcing agent for tires (70% of demand), conveyor belts, hoses, and rubber compounds. N330 (HAF) for tire tread. N550 (FEF) for sidewalls and mechanical rubber. N660 for general rubber. Egypt's ECCO Carbon Black serves MENA and African tire manufacturers. Saudi Tasnee produces N-series grades from oil furnace process.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 Tasnee · SABIC</span><span class="pc-origin">🇪🇬 ECCO Carbon Black</span></div>
+      </div>
+
+    </div>
+
+    <!-- BITUMEN & BASE OIL -->
+    <div class="cat-hdr">
+      <span class="pc-badge badge-petro" style="font-size:10px;padding:3px 10px">Bitumen &amp; Base Oil</span>
+      <span class="cat-hdr-desc">Road construction · Lubricants · Waterproofing</span>
+    </div>
+    <div class="product-grid" style="margin-bottom:8px">
+
+      <div class="product-card glow-petro" style="border-color:rgba(127,255,212,.1)">
+        <div class="pc-top"><div class="pc-icon">🛣️</div><span class="pc-badge badge-petro">Bitumen</span></div>
+        <div class="pc-name">Bitumen 60/70 · 80/100</div>
+        <div class="pc-formula">Penetration grade · ASTM D946 / EN 12591</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (Aramco)</span><span class="pc-row-r" style="color:var(--petro)">$310–380/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE (ADNOC)</span><span class="pc-row-r" style="color:var(--teal)">$320–390/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB Iran (not offered)</span><span class="pc-row-r" style="color:var(--red)">Sanctioned</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">1,000–10,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CFR</span></span></div>
+        <div class="pc-desc">Road construction bitumen — 60/70 pen for hot climates (MENA, Africa), 80/100 pen for moderate climates. ADNOC and Saudi Aramco refineries produce export-quality paving grade bitumen. Huge demand from Iraq road rebuilding, Libya reconstruction, West African road programmes. Bulk liquid cargo via bitumen tanker or drum.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 Saudi Aramco</span><span class="pc-origin">🇦🇪 ADNOC</span><span class="pc-origin">🇶🇦 Qatar Refinery</span></div>
+      </div>
+
+      <div class="product-card glow-petro" style="border-color:rgba(127,255,212,.1)">
+        <div class="pc-top"><div class="pc-icon">🛢️</div><span class="pc-badge badge-petro">Base Oil</span></div>
+        <div class="pc-name">Base Oil Group I / II / III</div>
+        <div class="pc-formula">SN150 · SN500 · 4cSt · 6cSt · 8cSt</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (Luberef)</span><span class="pc-row-r" style="color:var(--petro)">$680–820/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE (ADNOC)</span><span class="pc-row-r" style="color:var(--teal)">$700–850/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">1,000–5,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Payment</span><span class="pc-row-r">LC 30 days / TT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Lubricant base oil for engine oil, industrial lubricants, metalworking fluids, and transformer oil blending. Saudi Aramco Luberef is one of the world's largest base oil producers. Group II and III synthetic-quality base oils from Ruwais and Jubail. India, Turkey, and Egypt are major importers for local blending operations.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 Luberef (Aramco)</span><span class="pc-origin">🇦🇪 ADNOC</span><span class="pc-origin">🇶🇦 Qatar</span></div>
+      </div>
+
+      <div class="product-card glow-petro" style="border-color:rgba(127,255,212,.1)">
+        <div class="pc-top"><div class="pc-icon">🔆</div><span class="pc-badge badge-petro">Aromatics</span></div>
+        <div class="pc-name">Paraxylene (PX)</div>
+        <div class="pc-formula">C₈H₁₀ · Purity ≥ 99.7% · Fiber grade</div>
+        <div class="pc-row"><span class="pc-row-l">FOB Saudi (Petro Rabigh/SATORP)</span><span class="pc-row-r" style="color:var(--petro)">$820–920/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">FOB UAE</span><span class="pc-row-r" style="color:var(--teal)">$830–940/MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Typical lot</span><span class="pc-row-r">1,000–5,000 MT</span></div>
+        <div class="pc-row"><span class="pc-row-l">Key use</span><span class="pc-row-r">PTA → PET → Polyester</span></div>
+        <div class="pc-row"><span class="pc-row-l">Incoterm</span><span class="pc-row-r"><span class="inco">FOB</span> <span class="inco">CIF</span></span></div>
+        <div class="pc-desc">Feedstock for purified terephthalic acid (PTA) → PET resin → polyester fiber and bottles. Saudi Arabia's SATORP and Petro Rabigh are major PX exporters to Asian PTA plants. Q1 2026 Hormuz disruption tightened PX supply and pushed global PET margins wider — Arab Belt PX producers benefited.</div>
+        <div class="pc-origins"><span class="pc-origin">🇸🇦 SATORP · Petro Rabigh</span><span class="pc-origin">🇶🇦 Qatar</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- PRICE TABLE -->
+  <div class="section">
+    <h2>Price <em>reference.</em></h2>
+    <p class="section-sub">Indicative FOB prices from Arab Belt origins, May 2026. All prices reflect post-Hormuz supply tightness premium. SLOI AI negotiates within these ranges with OFAC/EU/UN-screened suppliers.</p>
+    <table class="price-table">
+      <thead>
+        <tr><th>Product</th><th>Grade / Spec</th><th>Best origin</th><th>FOB price</th><th>Lot</th><th>Terms</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong style="color:var(--white)">PP Homopolymer</strong></td><td>Raffia / Film / Injection</td><td>🇸🇦 SABIC · 🇦🇪 Borouge</td><td class="price-hl">$880–960/MT</td><td>500+ MT</td><td><span class="inco">FOB</span> <span class="inco">CIF</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">PP Copolymer</strong></td><td>Random / Impact / PP-R pipe</td><td>🇸🇦 Saudi · 🇦🇪 Borouge</td><td class="price-hl">$930–1,010/MT</td><td>100+ MT</td><td><span class="inco">FOB</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">HDPE</strong></td><td>Blow / Pipe PE100 / Film</td><td>🇸🇦 SABIC · 🇦🇪 Borstar</td><td class="price-hl">$845–980/MT</td><td>500+ MT</td><td><span class="inco">FOB</span> <span class="inco">CIF</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">LDPE</strong></td><td>Film / Extrusion coating</td><td>🇶🇦 QAPCO · 🇸🇦 Saudi</td><td class="price-hl">$855–930/MT</td><td>200+ MT</td><td><span class="inco">FOB</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">LLDPE</strong></td><td>C4 / C6 Butene/Hexene</td><td>🇦🇪 Borouge · 🇶🇦 Qatar</td><td class="price-hl">$860–960/MT</td><td>200+ MT</td><td><span class="inco">FOB</span> <span class="inco">CIF</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">PVC Resin S-PVC</strong></td><td>K67 pipe / K57 rigid</td><td>🇸🇦 SABIC · 🇪🇬 Egypt</td><td class="price-hl">$750–860/MT</td><td>200+ MT</td><td><span class="inco">FOB</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Urea 46%</strong></td><td>Prilled · Granular</td><td>🇦🇪 Fertiglobe · 🇸🇦 SAFCO</td><td class="price-hl">$375–420/MT</td><td>5,000+ MT</td><td><span class="inco">FOB</span> <span class="inco">CFR</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Ammonia (anhydrous)</strong></td><td>NH₃ ≥ 99.5%</td><td>🇦🇪 Fertiglobe (world #1)</td><td class="price-hl">$310–390/MT</td><td>5,000+ MT</td><td><span class="inco">FOB</span> <span class="inco">CFR</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">DAP 18-46-0</strong></td><td>Granular fertilizer</td><td>🇸🇦 Ma'aden (top-5 global)</td><td class="price-hl">$580–640/MT</td><td>5,000+ MT</td><td><span class="inco">FOB</span> <span class="inco">CFR</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Methanol</strong></td><td>IMPCA ≥99.85%</td><td>🇸🇦 Ibn Sina · 🇶🇦 QMC</td><td class="price-hl">$275–340/MT</td><td>5,000+ MT</td><td><span class="inco">FOB</span> <span class="inco">CFR</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">MEG</strong></td><td>Fiber grade ≥99.9%</td><td>🇸🇦 YANPET · SHARQ</td><td class="price-hl">$480–560/MT</td><td>1,000+ MT</td><td><span class="inco">FOB</span> <span class="inco">CIF</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Benzene</strong></td><td>Petrochem grade ≥99.9%</td><td>🇸🇦 Petro Rabigh</td><td class="price-hl">$680–780/MT</td><td>1,000+ MT</td><td><span class="inco">FOB</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Caustic Soda 50%</strong></td><td>Membrane NaOH liquid</td><td>🇸🇦 SABIC · 🇪🇬 Egypt</td><td class="price-hl">$365–455/MT</td><td>500+ MT</td><td><span class="inco">DAP</span> <span class="inco">FOB</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Sulfuric Acid 98%</strong></td><td>Technical / Battery grade</td><td>🇸🇦 Saudi · 🇪🇬 Egypt</td><td class="price-hl">$85–140/MT</td><td>500+ MT</td><td><span class="inco">DAP</span> <span class="inco">CIF</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Carbon Black N330</strong></td><td>HAF · Tire / Rubber grade</td><td>🇸🇦 Tasnee · 🇪🇬 ECCO</td><td class="price-hl">$790–940/MT</td><td>100+ MT</td><td><span class="inco">FOB</span> <span class="inco">CIF</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Bitumen 60/70</strong></td><td>Pen grade · Road paving</td><td>🇸🇦 Aramco · 🇦🇪 ADNOC</td><td class="price-hl">$310–390/MT</td><td>1,000+ MT</td><td><span class="inco">FOB</span> <span class="inco">CFR</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Base Oil Group II</strong></td><td>SN150 / SN500 · 4–8 cSt</td><td>🇸🇦 Luberef (Aramco)</td><td class="price-hl">$680–850/MT</td><td>1,000+ MT</td><td><span class="inco">FOB</span> <span class="inco">CIF</span></td><td><span class="tag tag-g">Available</span></td></tr>
+        <tr><td><strong style="color:var(--white)">Paraxylene (PX)</strong></td><td>≥99.7% fiber grade</td><td>🇸🇦 SATORP · Petro Rabigh</td><td class="price-hl">$820–940/MT</td><td>1,000+ MT</td><td><span class="inco">FOB</span></td><td><span class="tag tag-g">Available</span></td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:10px;color:var(--muted);margin-top:10px">All prices indicative · May 2026 · Post-Hormuz supply premium reflected · OFAC/EU/UN compliant origins only · Boss approval required before LOI issuance</div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WHO IS BUYING -->
+  <div class="section">
+    <h2>Who is <em>buying now.</em></h2>
+    <p class="section-sub">Plastics converters, fertilizer traders, chemical distributors, and agri-buyers across four continents — all with urgent demand for Arab Belt supply. SLOI AI connects them to verified, compliant producers in 72 hours.</p>
+
+    <div style="font-size:11px;color:var(--white);font-weight:600;margin-bottom:10px">🏭 Plastics converters — polymers buyers</div>
+
+    <div class="buyer-card hot">
+      <div class="bj-icon">🇹🇷</div>
+      <div class="bj-body">
+        <div class="bj-name">Turkey — Packaging + Pipe + Automotive converters</div>
+        <div class="bj-meta">Turkey · Major PP/HDPE/PVC importer · 3,000+ active converters · Bursa, İzmir, İstanbul industrial zones</div>
+        <div class="bj-tags">
+          <span class="bj-tag">🔵 PP Homo/Co (raffia, injection)</span><span class="bj-tag">🟢 HDPE pipe/blow</span><span class="bj-tag">⬜ PVC K67</span><span class="bj-tag">Saudi + UAE origin preferred</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--petro)">3.5M MT</div>
+        <div class="bj-sub">annual polymer imports</div>
+        <span class="tag tag-r" style="margin-top:6px;display:block;text-align:center">🔥 Top market</span>
+      </div>
+    </div>
+
+    <div class="buyer-card hot">
+      <div class="bj-icon">🇮🇳</div>
+      <div class="bj-body">
+        <div class="bj-name">India — Reliance competitors, fertilizer authorities, agri buyers</div>
+        <div class="bj-meta">India · World's largest urea importer · Massive PP/HDPE demand from packaging boom · IFFCO, RCF, KRIBHCO buying DAP + urea</div>
+        <div class="bj-tags">
+          <span class="bj-tag">⚗️ Urea 8M MT/yr imports</span><span class="bj-tag">🔵 PP raffia + film</span><span class="bj-tag">DAP fertilizer</span><span class="bj-tag">MEG for polyester</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--fert)">$12B/yr</div>
+        <div class="bj-sub">petrochem + fertilizer imports</div>
+        <span class="tag tag-r" style="margin-top:6px;display:block;text-align:center">🔥 Largest buyer</span>
+      </div>
+    </div>
+
+    <div class="buyer-card">
+      <div class="bj-icon">🌍</div>
+      <div class="bj-body">
+        <div class="bj-name">Africa — Nigeria, Ethiopia, Kenya, Ghana agri + plastics</div>
+        <div class="bj-meta">Sub-Saharan Africa · Growing fertilizer deficit · Packaging industry expanding rapidly · Algeria Atlantic + Egypt route</div>
+        <div class="bj-tags">
+          <span class="bj-tag">⚗️ Urea · DAP · Ammonia</span><span class="bj-tag">🔵 PP raffia bags</span><span class="bj-tag">🛣️ Bitumen (road construction)</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--green)">$3B+</div>
+        <div class="bj-sub">fertilizer import gap/yr</div>
+        <span class="tag tag-g" style="margin-top:6px;display:block;text-align:center">Fast growing</span>
+      </div>
+    </div>
+
+    <div class="buyer-card">
+      <div class="bj-icon">🇧🇷</div>
+      <div class="bj-body">
+        <div class="bj-name">Brazil — Braskem competitors + agri sector</div>
+        <div class="bj-meta">Brazil · World's largest agricultural economy · Fertilizer importer · Qatar LDPE + Saudi MEG buyers</div>
+        <div class="bj-tags">
+          <span class="bj-tag">🔷 LDPE film</span><span class="bj-tag">⚗️ Urea · DAP (agri)</span><span class="bj-tag">🔮 MEG for PET</span><span class="bj-tag">Qatar / Saudi origin</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--gold)">$6B/yr</div>
+        <div class="bj-sub">petrochem + fertilizer imports</div>
+        <span class="tag tag-a" style="margin-top:6px;display:block;text-align:center">Active</span>
+      </div>
+    </div>
+
+    <div class="buyer-card">
+      <div class="bj-icon">🇪🇺</div>
+      <div class="bj-body">
+        <div class="bj-name">Europe — Chemical distributors + specialty converters</div>
+        <div class="bj-meta">Germany · Netherlands · Italy · Spain · Borouge specialty grades + SABIC MEG + Saudi benzene for aromatics chain</div>
+        <div class="bj-tags">
+          <span class="bj-tag">🟩 LLDPE specialty Borstar</span><span class="bj-tag">🔮 MEG fiber grade</span><span class="bj-tag">🟣 Benzene · Paraxylene</span><span class="bj-tag">🛢️ Base oil Group II/III</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--violet)">$8B/yr</div>
+        <div class="bj-sub">Middle East petrochem imports</div>
+        <span class="tag tag-v" style="margin-top:6px;display:block;text-align:center">Strategic</span>
+      </div>
+    </div>
+
+    <div class="buyer-card">
+      <div class="bj-icon">🏗️</div>
+      <div class="bj-body">
+        <div class="bj-name">MENA Infrastructure — Iraq, Libya, Sudan reconstruction</div>
+        <div class="bj-meta">Iraq · Libya · Sudan · Road builders + pipe contractors + packaging manufacturers serving reconstruction markets</div>
+        <div class="bj-tags">
+          <span class="bj-tag">🛣️ Bitumen 60/70</span><span class="bj-tag">⬜ PVC resin K67</span><span class="bj-tag">🟢 HDPE pipe grade PE100</span><span class="bj-tag">🔴 H₂SO₄ for water treatment</span>
+        </div>
+      </div>
+      <div class="bj-val">
+        <div class="bj-num" style="color:var(--teal)">$100B+</div>
+        <div class="bj-sub">reconstruction pipeline</div>
+        <span class="tag tag-t" style="margin-top:6px;display:block;text-align:center">Urgent</span>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--muted);margin-top:14px;display:flex;align-items:center;gap:6px">
+      🔭 SLOI AI monitors polymer, fertilizer, and chemical tenders continuously across MENA, Asia, Africa, and Europe.
+      <a href="smb-order.html" style="color:var(--petro);text-decoration:none">Submit a commodities RFQ →</a>
+    </div>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- WHY SLOI -->
+  <div class="section">
+    <h2>Why SLOI AI for<br/><em>petrochemicals.</em></h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">🛡️</div>
+        <div class="why-title">Zero sanctions exposure — OFAC screened</div>
+        <div class="why-desc">Every supplier on SLOI AI's Arab Belt petrochemical network is screened against OFAC, EU, and UN sanctions before any LOI is generated. No Iranian origin. No shadow fleet. No secondary sanctions risk. UAE companies lost their ability to operate globally overnight for trading Iranian methanol — SLOI AI's compliance layer prevents exactly that.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚡</div>
+        <div class="why-title">Q1 2026 supply shock — positioned correctly</div>
+        <div class="why-desc">The Hormuz disruption tightened global PP supply by +27% in one month. Buyers locked into Arab Belt contracts with Saudi and UAE origins before the shock won significantly. SLOI AI brokers exclusively from these origins — the same ones that gained market share as Iranian supply collapsed. Lock in supply now before the next disruption.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤖</div>
+        <div class="why-title">AI negotiation for commodity lots</div>
+        <div class="why-desc">Commodity trading moves fast — polymer prices shift weekly. SLOI AI's negotiation agent runs against current supplier offers in real time, tracks concession rounds, and closes the deal at the best available price before the market moves again. The LOI is generated the same session — no manual back-and-forth.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">📄</div>
+        <div class="why-title">Commodity-grade LOI templates</div>
+        <div class="why-desc">Petrochemical LOIs require precise specification references — MFI, density, K-value, purity grade, ASTM or ISO standard, packaging (jumbo bag, isotank, flexibag). SLOI AI's templates for every product category are pre-loaded with the correct technical clauses, inspection references (SGS/Intertek), and REACH/MSDS documentation requirements.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏦</div>
+        <div class="why-title">LC and TT documentation ready</div>
+        <div class="why-desc">Polymer and chemical transactions over $500K typically require Letters of Credit. SLOI AI generates the full LC presentation package — commercial invoice template, packing list requirements, BL clause wording, and COA reference — compatible with HSBC, Standard Chartered, and Emirates NBD trade finance desks.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🔗</div>
+        <div class="why-title">HBAR for product authenticity</div>
+        <div class="why-desc">Counterfeit and off-spec polymer shipments are a known risk in spot markets. Every SLOI AI deal includes an inspection clause and the COA hash is recorded on Hedera blockchain alongside the LOI — giving converters, traders, and end-users a tamper-proof authenticity record at the lot level.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <div style="font-family:'Fraunces',serif;font-size:clamp(28px,5vw,46px);font-weight:900;color:var(--white);letter-spacing:-.03em;margin-bottom:12px;line-height:1.05">
+      PP from SABIC.<br/>Urea from Fertiglobe.<br/><em style="font-style:italic;color:var(--petro)">LOI in 72 hours. Zero sanctions risk.</em>
+    </div>
+    <p style="color:var(--muted);max-width:540px;margin:0 auto 28px;font-size:13px;line-height:1.85">Whether you need 500 MT of PP homopolymer raffia for a bag converter in Turkey, 10,000 MT of urea for an Indian fertilizer company, or 5,000 MT of HDPE pipe grade for an Iraqi water project — SLOI AI negotiates the price from a compliant Arab Belt origin and delivers a signed LOI ready for your finance desk.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="smb-order.html" class="btn btn-p" style="padding:13px 28px;font-size:13px">Request a commodities LOI →</a>
+      <a href="building-materials.html" class="btn btn-em" style="padding:13px 28px;font-size:13px">Building materials</a>
+      <a href="critical-minerals.html" class="btn btn-g" style="padding:13px 28px;font-size:13px">Critical minerals</a>
+    </div>
+    <div style="margin-top:16px;font-size:10px;color:var(--muted)">
+      No credit card needed · Boss approval on every deal · OFAC/EU/UN screened · HBAR verified · LOI in 72 hours
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white);text-decoration:none">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
+  <div class="footer-links">
+    <a href="m2m-homepage.html">Home</a>
+    <a href="imec.html">IMEC</a>
+    <a href="cement-clinker.html">Cement</a>
+    <a href="building-materials.html">Building</a>
+    <a href="critical-minerals.html">Minerals</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div style="font-size:10px;color:var(--muted)">© 2026 SLOI AI Ltd. · Prices indicative · OFAC/EU/UN compliant origins only</div>
+</footer>
+
+</body>
+</html>
