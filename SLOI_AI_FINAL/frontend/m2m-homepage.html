@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -163,6 +163,20 @@ h1 em{font-style:italic;
 .feat-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:7px}
 .feat-desc{font-size:11px;color:var(--muted);line-height:1.7}
 
+/* ── SECTORS ── */
+.sectors-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sector-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px 20px;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;transition:all .22s;position:relative;overflow:hidden;cursor:pointer}
+.sector-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(91,95,239,.07) 0%,transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
+.sector-card:hover{transform:translateY(-4px);border-color:rgba(91,95,239,.4);box-shadow:0 16px 48px rgba(0,0,0,.45)}
+.sector-card:hover::before{opacity:1}
+.sc-icon{font-size:40px;margin-bottom:14px;line-height:1}
+.sc-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px}
+.sc-desc{font-size:11px;color:var(--muted);line-height:1.75;margin-bottom:14px;flex:1}
+.sc-tags{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:16px}
+.sc-tag{font-size:9px;padding:2px 8px;background:var(--indigo-dim);border:1px solid rgba(91,95,239,.18);border-radius:3px;color:var(--text);letter-spacing:.03em}
+.sc-cta{font-size:10px;color:var(--indigo);font-weight:600;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:4px;margin-top:auto;transition:color .15s}
+.sector-card:hover .sc-cta{color:var(--violet)}
+
 /* ── PRICING ── */
 .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
 .price-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;transition:all .2s;cursor:pointer;position:relative}
@@ -237,6 +251,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   .personas{grid-template-columns:1fr}
   .pricing-grid{grid-template-columns:1fr 1fr}
   .features-grid{grid-template-columns:1fr}
+  .sectors-grid{grid-template-columns:1fr 1fr}
   .nav-links{display:none}
   .ld-body{grid-template-columns:1fr}
   .hero-stats{grid-template-columns:1fr 1fr}
@@ -257,10 +272,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   <div class="nav-links">
     <a href="#how">How it works</a>
     <a href="#who">Who it's for</a>
+    <a href="#sectors">Sectors</a>
     <a href="pricing.html">Pricing</a>
-    <a href="docs.html">Docs</a>
     <a href="open-network.html">Open Network</a>
-    <a href="imec.html">IMEC</a>
   </div>
   <div class="nav-right">
     <a href="login.html" class="btn-ghost">Sign in</a>
@@ -521,6 +535,70 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 
 <div class="sec-divider"></div>
 
+<!-- SECTORS WE SERVE -->
+<div class="section" id="sectors">
+  <div class="section-eyebrow fade-in">Sectors we serve</div>
+  <div class="section-title fade-in">Deep coverage across<br/><em style="font-style:italic;color:var(--indigo)">four commodity sectors.</em></div>
+  <div class="section-sub fade-in">Verified suppliers, pre-loaded price data, and sector-specific negotiation parameters — ready to use.</div>
+  <div class="sectors-grid fade-in">
+
+    <a href="cement-clinker.html" class="sector-card">
+      <div class="sc-icon">🏗️</div>
+      <div class="sc-name">Cement &amp; Clinker</div>
+      <div class="sc-desc">OPC, PPC, white cement, and clinker. Factory-direct from verified cement plants across Asia, Middle East, and Europe.</div>
+      <div class="sc-tags">
+        <span class="sc-tag">OPC 42.5R</span>
+        <span class="sc-tag">Clinker</span>
+        <span class="sc-tag">White Cement</span>
+        <span class="sc-tag">Dry Mortar</span>
+      </div>
+      <div class="sc-cta">Explore sector →</div>
+    </a>
+
+    <a href="petrochemicals.html" class="sector-card">
+      <div class="sc-icon">🧪</div>
+      <div class="sc-name">Petrochemicals</div>
+      <div class="sc-desc">Base chemicals, industrial solvents, and polymer feedstocks. Bulk and IBC supply. REACH-compliant verified suppliers.</div>
+      <div class="sc-tags">
+        <span class="sc-tag">Sulfuric Acid</span>
+        <span class="sc-tag">Caustic Soda</span>
+        <span class="sc-tag">HDPE</span>
+        <span class="sc-tag">Polypropylene</span>
+      </div>
+      <div class="sc-cta">Explore sector →</div>
+    </a>
+
+    <a href="critical-minerals.html" class="sector-card">
+      <div class="sc-icon">⛏️</div>
+      <div class="sc-name">Critical Minerals</div>
+      <div class="sc-desc">Lithium, cobalt, rare earths, and graphite. Strategically vital materials from verified mines and processing facilities.</div>
+      <div class="sc-tags">
+        <span class="sc-tag">Lithium</span>
+        <span class="sc-tag">Cobalt</span>
+        <span class="sc-tag">Graphite</span>
+        <span class="sc-tag">Rare Earths</span>
+      </div>
+      <div class="sc-cta">Explore sector →</div>
+    </a>
+
+    <a href="building-materials.html" class="sector-card">
+      <div class="sc-icon">🧱</div>
+      <div class="sc-name">Building Materials</div>
+      <div class="sc-desc">Rebar, hollow blocks, structural steel, floor tiles, and PVC pipes. Full procurement for large-scale construction projects.</div>
+      <div class="sc-tags">
+        <span class="sc-tag">Steel Rebar</span>
+        <span class="sc-tag">Hollow Block</span>
+        <span class="sc-tag">Floor Tile</span>
+        <span class="sc-tag">PVC Pipe</span>
+      </div>
+      <div class="sc-cta">Explore sector →</div>
+    </a>
+
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
 <!-- PRICING -->
 <div class="section">
   <div class="section-eyebrow fade-in">Pricing</div>
@@ -659,10 +737,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   <div class="footer-links">
     <a href="#how">How it works</a>
     <a href="#who">Who it's for</a>
+    <a href="#sectors">Sectors</a>
     <a href="pricing.html">Pricing</a>
-    <a href="docs.html">Docs</a>
     <a href="open-network.html">Open Network</a>
-    <a href="imec.html">IMEC</a>
     <a href="contact.html">Contact</a>
     <a href="legal.html">Legal</a>
   </div>
@@ -710,5 +787,6 @@ if(stepsEl){
   },{threshold:.3}).observe(stepsEl);
 }
 </script>
+<script src="/lang-switcher.js"></script>
 </body>
 </html>
