@@ -938,31 +938,32 @@ function submitOrder() {
     notes:          'Urgency: ' + state.urgency + ' | Purchase type: ' + state.purchaseType + (state.annualVolume ? ' | Annual volume: ' + state.annualVolume : ''),
   };
 
-  var doSubmit = (window._sloiAPI && window._sloiAPI.startNegotiation)
-    ? window._sloiAPI.startNegotiation(payload)
-    : Promise.reject('no_api');
+  var API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
 
-  doSubmit
-    .catch(function(){ return null; })
-    .then(function(){
-      btn.textContent = '✓ Find me the best price →';
-      btn.disabled = false;
-      document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
-      document.getElementById('step-success').classList.add('active');
-      // Mark all done
-      for (var i = 1; i <= 4; i++) {
-        var dot   = document.getElementById('dot-' + i);
-        var lname = document.getElementById('lname-' + i);
-        var line  = document.getElementById('line-' + i);
-        if (dot)   { dot.className = 'sn-dot done'; dot.textContent = '✓'; }
-        if (lname) lname.className = 'sn-name done';
-        if (line)  line.className  = 'sn-line done';
-      }
-      document.getElementById('progress').style.width = '100%';
-      document.getElementById('prog-lbl').textContent = 'Done!';
-      var rb = document.querySelector('.right-body');
-      if (rb) rb.scrollTop = 0;
-    });
+  fetch(API_BASE + '/v1/orders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  })
+  .catch(function(){ return null; })
+  .then(function(){
+    btn.textContent = '✓ Find me the best price →';
+    btn.disabled = false;
+    document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById('step-success').classList.add('active');
+    for (var i = 1; i <= 4; i++) {
+      var dot   = document.getElementById('dot-' + i);
+      var lname = document.getElementById('lname-' + i);
+      var line  = document.getElementById('line-' + i);
+      if (dot)   { dot.className = 'sn-dot done'; dot.textContent = '✓'; }
+      if (lname) lname.className = 'sn-name done';
+      if (line)  line.className  = 'sn-line done';
+    }
+    document.getElementById('progress').style.width = '100%';
+    document.getElementById('prog-lbl').textContent = 'Done!';
+    var rb = document.querySelector('.right-body');
+    if (rb) rb.scrollTop = 0;
+  });
 }
 </script>
 <script src="/lang-switcher.js"></script>
