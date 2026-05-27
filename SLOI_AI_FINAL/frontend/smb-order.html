@@ -3,388 +3,966 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Order Materials — SLOI AI</title>
+<title>Get the best price — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;}
+:root{
+  --bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;
+  --border:#1a1a2c;--border2:#24243a;
+  --indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);
+  --muted:#52526e;--text:#c8c6e0;--white:#f0eff8;
+  --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
-body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
-.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none}
-.nav-logo em{font-style:italic;color:var(--indigo)}
-.nav-back{font-size:11px;color:var(--muted);text-decoration:none}
-.nav-back:hover{color:var(--violet)}
-.wrap{position:relative;z-index:1;max-width:560px;margin:0 auto;padding:52px 20px 80px}
+html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg);overflow:hidden}
 
-/* STEP INDICATOR */
-.steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:44px}
-.step-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;transition:all .3s}
-.step-dot.done{background:var(--green);color:#fff}
-.step-dot.active{background:var(--indigo);color:#fff;box-shadow:0 0 0 4px rgba(91,95,239,.2)}
-.step-dot.pending{background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
-.step-line{flex:1;height:1px;background:var(--border2);max-width:60px}
-.step-line.done{background:var(--green)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+@keyframes fade-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* STEPS */
-.step{display:none}
+/* ── SHELL ── */
+.shell{display:grid;grid-template-columns:360px 1fr;height:100vh}
+
+/* ── LEFT PANEL ── */
+.left{
+  background:linear-gradient(180deg,#0b0b1a 0%,#090914 100%);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;padding:36px 32px;
+  position:relative;overflow:hidden;
+}
+.left::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:280px;
+  background:radial-gradient(ellipse 100% 60% at 50% 0%,rgba(91,95,239,.13) 0%,transparent 70%);
+  pointer-events:none;
+}
+.left-logo{
+  position:relative;z-index:1;
+  font-family:'Fraunces',serif;font-size:17px;font-weight:900;
+  color:var(--white);text-decoration:none;letter-spacing:-.02em;
+  display:inline-block;margin-bottom:44px;
+}
+.left-logo em{font-style:italic;color:var(--indigo)}
+.left-logo-sub{font-size:9px;color:var(--muted);margin-left:5px;font-style:normal;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;font-weight:400}
+
+/* Step list */
+.steps-nav{position:relative;z-index:1;flex:1}
+.sn-row{display:flex;align-items:flex-start;gap:14px;cursor:pointer;padding:4px 0}
+.sn-col{display:flex;flex-direction:column;align-items:center}
+.sn-dot{
+  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;transition:all .3s;
+  border:1px solid var(--border2);background:var(--surface);color:var(--muted);
+}
+.sn-dot.done{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.35);color:var(--green)}
+.sn-dot.active{background:var(--indigo);border-color:var(--indigo);color:#fff;box-shadow:0 0 0 4px rgba(91,95,239,.18)}
+.sn-line{width:1px;height:28px;background:var(--border2);margin:3px 0;transition:background .3s}
+.sn-line.done{background:rgba(34,197,94,.3)}
+.sn-info{padding-top:5px;flex:1}
+.sn-name{font-size:11px;font-weight:600;color:var(--muted);transition:color .2s;line-height:1}
+.sn-name.active{color:var(--white)}
+.sn-name.done{color:var(--green)}
+.sn-desc{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4;display:none}
+.sn-name.active ~ .sn-desc{display:block}
+.sn-spacer{height:10px}
+
+/* Trust */
+.left-trust{position:relative;z-index:1;padding-top:24px;border-top:1px solid var(--border)}
+.trust-row{display:flex;align-items:center;gap:9px;font-size:10px;color:var(--muted);margin-bottom:9px;line-height:1.3}
+.trust-row:last-child{margin-bottom:0}
+.t-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.t-green{background:var(--green)}
+.t-violet{background:var(--violet)}
+
+/* ── RIGHT PANEL ── */
+.right{display:flex;flex-direction:column;overflow:hidden}
+.right-head{
+  flex-shrink:0;height:60px;padding:0 52px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(7,7,15,.8);backdrop-filter:blur(10px);
+}
+.prog-wrap{display:flex;align-items:center;gap:10px}
+.prog-track{width:180px;height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--indigo),var(--violet));border-radius:2px;transition:width .45s ease}
+.prog-lbl{font-size:10px;color:var(--muted)}
+.exit-link{font-size:10px;color:var(--muted);text-decoration:none;transition:color .15s}
+.exit-link:hover{color:var(--violet)}
+
+.right-body{flex:1;overflow-y:auto;padding:56px 52px 80px}
+
+/* ── STEP WRAPPER ── */
+.step{display:none;animation:fade-up .3s ease}
 .step.active{display:block}
 
-/* QUESTION */
-.q-number{font-size:10px;color:var(--indigo);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
-.q-text{font-family:'Fraunces',serif;font-size:clamp(28px,5vw,40px);font-weight:900;color:var(--white);letter-spacing:-.02em;line-height:1.05;margin-bottom:8px}
-.q-text em{font-style:italic;color:var(--indigo)}
-.q-sub{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:28px}
+/* Question header */
+.q-eyebrow{font-size:10px;color:var(--indigo);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.q-eyebrow::before{content:'';width:18px;height:1px;background:var(--indigo)}
+.q-title{font-family:'Fraunces',serif;font-size:clamp(30px,3.5vw,46px);font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1.0;margin-bottom:10px}
+.q-title em{font-style:italic;color:var(--indigo)}
+.q-sub{font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:38px;max-width:500px}
 
-/* PRODUCT GRID */
-.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
-.product-card{background:var(--surface);border:2px solid var(--border);border-radius:8px;padding:16px;cursor:pointer;transition:all .15s;text-align:center}
-.product-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
-.product-card.selected{border-color:var(--indigo);background:rgba(91,95,239,.1)}
-.pc-emoji{font-size:32px;margin-bottom:8px}
-.pc-name{font-size:12px;font-weight:600;color:var(--white)}
-.pc-eg{font-size:10px;color:var(--muted);margin-top:3px}
+/* ── PRODUCT CARDS ── */
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:30px}
+.pc{
+  background:var(--surface);border:1px solid var(--border2);border-radius:10px;
+  padding:20px 14px 16px;cursor:pointer;transition:all .2s;
+  text-align:center;position:relative;overflow:hidden;
+}
+.pc:hover{border-color:rgba(91,95,239,.45);transform:translateY(-2px);background:#0f0f20}
+.pc.sel{border-color:var(--indigo);background:rgba(91,95,239,.07)}
+.pc-check{
+  position:absolute;top:8px;right:9px;
+  font-size:9px;font-weight:700;color:var(--indigo);
+  background:rgba(91,95,239,.18);border-radius:3px;padding:2px 6px;
+  opacity:0;transition:opacity .2s;
+}
+.pc.sel .pc-check{opacity:1}
+.pc-icon{font-size:30px;margin-bottom:10px;display:block}
+.pc-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:4px}
+.pc-sub{font-size:10px;color:var(--muted);line-height:1.4}
 
-/* INPUTS */
-.inp-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
-.inp-label{font-size:11px;color:var(--muted);font-weight:600}
-.inp{background:var(--surface);border:2px solid var(--border2);border-radius:8px;padding:14px 16px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:15px;outline:none;width:100%;transition:border-color .15s}
-.inp:focus{border-color:var(--indigo)}
-.inp::placeholder{color:var(--muted);font-size:13px}
-select.inp option{background:var(--surface2)}
-.inp-hint{font-size:10px;color:var(--muted)}
+/* ── FIELD SYSTEM ── */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:18px}
+.field-lbl{font-size:10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+.req{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--indigo);margin-left:4px;vertical-align:middle}
+.inp{
+  background:var(--surface);border:1px solid var(--border2);border-radius:8px;
+  padding:13px 15px;color:var(--white);font-family:'IBM Plex Mono',monospace;
+  font-size:14px;outline:none;width:100%;transition:all .2s;
+}
+.inp:focus{border-color:var(--indigo);background:rgba(91,95,239,.04);box-shadow:0 0 0 3px rgba(91,95,239,.1)}
+.inp::placeholder{color:var(--muted);font-size:12px}
+select.inp option{background:var(--surface2);color:var(--white)}
+.inp.shake{animation:shake .3s ease;border-color:var(--red)!important}
+.field-hint{font-size:10px;color:var(--muted);line-height:1.5}
+.qty-row{display:grid;grid-template-columns:1fr 100px;gap:10px;margin-bottom:18px}
 
-/* QUANTITY ROW */
-.qty-row{display:flex;gap:10px;margin-bottom:20px}
-.qty-row .inp{flex:1}
-.qty-row select{width:100px;flex-shrink:0}
+/* ── TIMELINE CARDS ── */
+.tl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:30px}
+.tc{
+  background:var(--surface);border:1px solid var(--border2);border-radius:10px;
+  padding:18px 14px 16px;cursor:pointer;transition:all .2s;
+  position:relative;overflow:hidden;
+}
+.tc:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
+.tc.sel{border-color:var(--indigo);background:rgba(91,95,239,.07)}
+.tc-check{position:absolute;top:8px;right:9px;font-size:9px;font-weight:700;color:var(--indigo);background:rgba(91,95,239,.18);border-radius:3px;padding:2px 6px;opacity:0;transition:opacity .2s}
+.tc.sel .tc-check{opacity:1}
+.tc-icon{font-size:26px;margin-bottom:9px}
+.tc-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:4px}
+.tc-desc{font-size:10px;color:var(--muted);line-height:1.35;margin-bottom:8px}
+.tc-mode{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.2);color:var(--gold)}
+.tc.sel .tc-mode{background:rgba(91,95,239,.15);border-color:rgba(91,95,239,.3);color:var(--violet)}
 
-/* URGENCY */
-.urgency-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:28px}
-.urg-card{background:var(--surface);border:2px solid var(--border);border-radius:8px;padding:14px;cursor:pointer;transition:all .15s;text-align:center}
-.urg-card:hover{border-color:rgba(91,95,239,.4)}
-.urg-card.selected{border-color:var(--indigo);background:rgba(91,95,239,.1)}
-.urg-emoji{font-size:24px;margin-bottom:6px}
-.urg-title{font-size:11px;font-weight:600;color:var(--white);margin-bottom:2px}
-.urg-desc{font-size:10px;color:var(--muted)}
+/* ── SUMMARY GRID ── */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}
+.sum-cell{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:14px 16px}
+.sum-cell.hi{border-color:rgba(91,95,239,.3);background:rgba(91,95,239,.05)}
+.sum-lbl{font-size:9px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px}
+.sum-val{font-size:13px;font-weight:600;color:var(--white);line-height:1.3}
+.sum-cell.hi .sum-val{color:var(--violet)}
 
-/* SUMMARY */
-.summary-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:24px}
-.summary-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
-.summary-row:last-child{border-bottom:none}
-.sr-label{color:var(--muted)}
-.sr-val{color:var(--white);font-weight:600}
+/* ── GUARANTEE BOX ── */
+.gbox{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.14);border-radius:8px;padding:14px 16px;margin-bottom:22px}
+.g-row{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--muted);padding:3px 0;line-height:1.6}
+.g-chk{color:var(--green);flex-shrink:0;font-weight:700;font-size:12px;margin-top:1px}
 
-/* BUTTONS */
-.btn-next{width:100%;background:var(--indigo);color:#fff;border:none;border-radius:8px;padding:16px;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:opacity .15s;margin-bottom:10px}
-.btn-next:hover{opacity:.85}
-.btn-back{width:100%;background:none;border:1px solid var(--border2);color:var(--muted);border-radius:8px;padding:12px;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace}
-.btn-back:hover{border-color:var(--border);color:var(--text)}
+/* ── BUTTONS ── */
+.btn-p{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;background:var(--indigo);color:#fff;border:none;border-radius:8px;
+  padding:15px;font-size:14px;font-weight:700;cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;transition:all .2s;margin-bottom:10px;
+}
+.btn-p:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+.btn-p:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-s{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  width:100%;background:none;border:1px solid var(--border2);color:var(--muted);
+  border-radius:8px;padding:12px;font-size:12px;cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;transition:all .2s;
+}
+.btn-s:hover{border-color:var(--border);color:var(--text)}
 
-/* SUCCESS */
-.success-wrap{text-align:center;padding:20px 0}
-.success-icon{font-size:64px;margin-bottom:20px}
-.success-title{font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:10px;line-height:1.05}
-.success-title em{font-style:italic;color:var(--green)}
-.success-sub{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:28px}
-.next-steps{display:flex;flex-direction:column;gap:8px;text-align:left;margin-bottom:28px}
-.ns{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:12px}
-.ns-n{width:22px;height:22px;border-radius:50%;background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+/* Agent alt link */
+.agent-link{
+  display:flex;align-items:center;gap:12px;margin-top:20px;
+  background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.18);
+  border-radius:8px;padding:14px 16px;text-decoration:none;transition:all .2s;
+}
+.agent-link:hover{background:rgba(91,95,239,.12);border-color:rgba(91,95,239,.38)}
+.al-icon{font-size:22px;flex-shrink:0}
+.al-body{flex:1}
+.al-title{font-size:12px;font-weight:600;color:var(--violet);margin-bottom:2px}
+.al-desc{font-size:10px;color:var(--muted)}
+.al-arrow{font-size:16px;color:var(--indigo);flex-shrink:0}
 
-/* PROGRESS */
-.progress-bar{height:3px;background:var(--border2);border-radius:2px;margin-bottom:40px}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--indigo),var(--violet));border-radius:2px;transition:width .4s ease}
-.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+/* ── SUCCESS ── */
+.suc-wrap{max-width:560px}
+.suc-head{text-align:center;margin-bottom:40px}
+.suc-icon{font-size:56px;margin-bottom:16px}
+.suc-title{font-family:'Fraunces',serif;font-size:clamp(30px,4vw,46px);font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1.0;margin-bottom:10px}
+.suc-title em{font-style:italic;color:var(--green)}
+.suc-sub{font-size:12px;color:var(--muted);line-height:1.8}
+.flow-list{margin-bottom:32px}
+.fl-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.fl-item:last-child{border-bottom:none}
+.fl-num{width:28px;height:28px;border-radius:50%;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.28);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--violet);flex-shrink:0;margin-top:2px}
+.fl-num.g{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.28);color:var(--green)}
+.fl-text{font-size:12px;color:var(--text);line-height:1.7}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap}
+.cta-p{background:var(--indigo);color:#fff;padding:13px 24px;border-radius:6px;font-size:12px;font-weight:700;text-decoration:none;transition:opacity .15s}
+.cta-p:hover{opacity:.85}
+.cta-s{background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:13px 24px;border-radius:6px;font-size:12px;text-decoration:none;transition:all .2s}
+.cta-s:hover{border-color:var(--indigo);color:var(--violet)}
+
+/* Purchase type cards */
+.ptype-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+.pt{
+  background:var(--surface);border:1px solid var(--border2);border-radius:10px;
+  padding:16px 14px;cursor:pointer;transition:all .2s;position:relative;
+}
+.pt:hover{border-color:rgba(91,95,239,.45);transform:translateY(-1px)}
+.pt.sel{border-color:var(--indigo);background:rgba(91,95,239,.07)}
+.pt-check{position:absolute;top:8px;right:9px;font-size:9px;font-weight:700;color:var(--indigo);background:rgba(91,95,239,.18);border-radius:3px;padding:2px 6px;opacity:0;transition:opacity .2s}
+.pt.sel .pt-check{opacity:1}
+.pt-icon{font-size:22px;margin-bottom:7px}
+.pt-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px}
+.pt-desc{font-size:10px;color:var(--muted);line-height:1.35}
+/* Annual volume field — shown only when recurring selected */
+.annual-reveal{overflow:hidden;max-height:0;transition:max-height .35s ease;margin-bottom:0}
+.annual-reveal.open{max-height:120px;margin-bottom:18px}
+
+/* ── MOBILE ── */
+@media(max-width:760px){
+  html,body{overflow:auto}
+  .shell{grid-template-columns:1fr;height:auto}
+  .left{display:none}
+  .right{overflow:visible;min-height:100vh}
+  .right-body{padding:32px 20px 60px}
+  .right-head{padding:0 20px}
+  .prod-grid{grid-template-columns:1fr 1fr}
+  .tl-grid{grid-template-columns:1fr}
+  .sum-grid{grid-template-columns:1fr}
+  .prog-track{width:120px}
+}
+/* ── CATALOG DROPDOWN ── */
+.cat-wrap{margin-bottom:16px;display:none}
+.cat-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.cat-badge{font-size:9px;color:var(--indigo);letter-spacing:.06em;background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.2);border-radius:3px;padding:2px 7px}
+.cat-info{margin-top:8px;background:rgba(45,212,191,.05);border:1px solid rgba(45,212,191,.18);border-radius:7px;padding:10px 14px;display:none;gap:18px;flex-wrap:wrap}
+.cat-info.show{display:flex}
+.ci-item{display:flex;flex-direction:column;gap:2px}
+.ci-lbl{font-size:9px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.ci-val{font-size:12px;font-weight:600;color:var(--teal)}
+.ci-val.price{color:var(--gold)}
 </style>
-
 <script src="/api-client.js"></script>
 <script src="/seo-geo.js"></script>
 </head>
 <body>
+<div class="shell">
 
-<nav>
-  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
-  <a href="m2m-homepage.html" class="nav-back">← Back to home</a>
-</nav>
+<!-- ════════════════════════ LEFT PANEL ════════════════════════ -->
+<div class="left">
+  <a href="m2m-homepage.html" class="left-logo">SLOI <em>AI</em><span class="left-logo-sub">Commodity procurement</span></a>
 
-<div class="wrap">
+  <div class="steps-nav">
 
-  <!-- STEP INDICATOR -->
-  <div class="steps" id="step-indicator">
-    <div class="step-dot active" id="dot-1">1</div>
-    <div class="step-line" id="line-1"></div>
-    <div class="step-dot pending" id="dot-2">2</div>
-    <div class="step-line" id="line-2"></div>
-    <div class="step-dot pending" id="dot-3">3</div>
-    <div class="step-line" id="line-3"></div>
-    <div class="step-dot pending" id="dot-4">✓</div>
+    <div class="sn-row" onclick="tryGoStep(1)">
+      <div class="sn-col">
+        <div class="sn-dot active" id="dot-1">1</div>
+        <div class="sn-line" id="line-1"></div>
+      </div>
+      <div class="sn-info">
+        <div class="sn-name active" id="lname-1">What you need</div>
+        <div class="sn-desc">Choose a commodity category</div>
+      </div>
+    </div>
+    <div class="sn-spacer"></div>
+
+    <div class="sn-row" onclick="tryGoStep(2)">
+      <div class="sn-col">
+        <div class="sn-dot pending" id="dot-2">2</div>
+        <div class="sn-line" id="line-2"></div>
+      </div>
+      <div class="sn-info">
+        <div class="sn-name" id="lname-2">Quantity & budget</div>
+        <div class="sn-desc">How much, your price target, delivery country</div>
+      </div>
+    </div>
+    <div class="sn-spacer"></div>
+
+    <div class="sn-row" onclick="tryGoStep(3)">
+      <div class="sn-col">
+        <div class="sn-dot pending" id="dot-3">3</div>
+        <div class="sn-line" id="line-3"></div>
+      </div>
+      <div class="sn-info">
+        <div class="sn-name" id="lname-3">Timeline & contact</div>
+        <div class="sn-desc">When you need it · how to reach you</div>
+      </div>
+    </div>
+    <div class="sn-spacer"></div>
+
+    <div class="sn-row">
+      <div class="sn-col">
+        <div class="sn-dot pending" id="dot-4">✓</div>
+      </div>
+      <div class="sn-info">
+        <div class="sn-name" id="lname-4">Review & submit</div>
+        <div class="sn-desc">Confirm details · launch negotiation</div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- PROGRESS BAR -->
-  <div class="progress-bar"><div class="progress-fill" id="progress" style="width:25%"></div></div>
-
-  <!-- STEP 1 — WHAT DO YOU NEED? -->
-  <div class="step active" id="step-1">
-    <div class="q-number">Question 1 of 3</div>
-    <div class="q-text">What do you<br/><em>need to buy?</em></div>
-    <div class="q-sub">Choose a category. We'll find you the best verified supplier and negotiate the price for you.</div>
-
-    <div class="product-grid">
-      <div class="product-card" onclick="selectProduct(this,'Steel & Metals','steel rebar, coil, aluminum')">
-        <div class="pc-emoji">🔩</div>
-        <div class="pc-name">Steel & Metals</div>
-        <div class="pc-eg">Rebar · Coil · Aluminum</div>
-      </div>
-      <div class="product-card" onclick="selectProduct(this,'Building Materials','cement, tiles, pipes, concrete')">
-        <div class="pc-emoji">🏗️</div>
-        <div class="pc-name">Building Materials</div>
-        <div class="pc-eg">Cement · Tiles · Pipes</div>
-      </div>
-      <div class="product-card" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
-        <div class="pc-emoji">🌾</div>
-        <div class="pc-name">Agriculture</div>
-        <div class="pc-eg">Wheat · Corn · Grain</div>
-      </div>
-      <div class="product-card" onclick="selectProduct(this,'Energy','diesel, LPG, fuel')">
-        <div class="pc-emoji">⚡</div>
-        <div class="pc-name">Energy</div>
-        <div class="pc-eg">Diesel · LPG · Fuel</div>
-      </div>
-      <div class="product-card" onclick="selectProduct(this,'Chemicals','industrial chemicals')">
-        <div class="pc-emoji">🧪</div>
-        <div class="pc-name">Chemicals</div>
-        <div class="pc-eg">Industrial · Raw materials</div>
-      </div>
-      <div class="product-card" onclick="selectProduct(this,'Other','other materials')">
-        <div class="pc-emoji">📦</div>
-        <div class="pc-name">Other</div>
-        <div class="pc-eg">Tell us what you need</div>
-      </div>
-    </div>
-
-    <div class="inp-wrap">
-      <div class="inp-label">What exactly do you need? (optional)</div>
-      <input class="inp" id="product-detail" placeholder="e.g. Steel Rebar G60 12mm, 50 tons"/>
-    </div>
-
-    <button class="btn-next" onclick="goStep(2)">Next →</button>
+  <div class="left-trust">
+    <div class="trust-row"><div class="t-dot t-green"></div>AI negotiates — you approve before anything is signed</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>No credit card to get started</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>Price offer on Telegram within 24 hours</div>
+    <div class="trust-row"><div class="t-dot t-violet"></div>Verified suppliers · MENA corridor specialists</div>
   </div>
-
-  <!-- STEP 2 — HOW MUCH? -->
-  <div class="step" id="step-2">
-    <div class="q-number">Question 2 of 3</div>
-    <div class="q-text">How much do<br/><em>you need?</em></div>
-    <div class="q-sub">Give us a rough quantity. Our AI agent will find the best price for you.</div>
-
-    <div class="qty-row">
-      <input class="inp" id="qty" type="number" placeholder="e.g. 50" min="1"/>
-      <select class="inp" id="unit">
-        <option>Tons</option><option>MT</option><option>kg</option>
-        <option>m²</option><option>m³</option><option>Liters</option>
-        <option>Units</option><option>m</option>
-      </select>
-    </div>
-
-    <div class="inp-wrap">
-      <div class="inp-label">What is your budget? (optional)</div>
-      <input class="inp" id="budget" placeholder="e.g. $50,000 or $2,800 per ton"/>
-      <div class="inp-hint">This helps the agent negotiate better. You are not committed to this price.</div>
-    </div>
-
-    <div class="inp-wrap">
-      <div class="inp-label">Delivery country</div>
-      <select class="inp" id="country">
-        <option>UAE</option><option>Saudi Arabia</option><option>Egypt</option>
-        <option>Jordan</option><option>Kuwait</option><option>Oman</option>
-        <option>Bahrain</option><option>Iraq</option><option>Germany</option>
-        <option>France</option><option>Italy</option><option>Other</option>
-      </select>
-    </div>
-
-    <button class="btn-next" onclick="goStep(3)">Next →</button>
-    <button class="btn-back" onclick="goStep(1)">← Back</button>
-  </div>
-
-  <!-- STEP 3 — WHEN DO YOU NEED IT? -->
-  <div class="step" id="step-3">
-    <div class="q-number">Question 3 of 3</div>
-    <div class="q-text">When do you<br/><em>need it?</em></div>
-    <div class="q-sub">This determines how aggressive the negotiation will be. Faster = we push harder.</div>
-
-    <div class="urgency-grid">
-      <div class="urg-card" onclick="selectUrgency(this,'ASAP — within 2 weeks')">
-        <div class="urg-emoji">🚨</div>
-        <div class="urg-title">ASAP</div>
-        <div class="urg-desc">Within 2 weeks</div>
-      </div>
-      <div class="urg-card" onclick="selectUrgency(this,'1–2 months')">
-        <div class="urg-emoji">📅</div>
-        <div class="urg-title">1–2 months</div>
-        <div class="urg-desc">Standard timeline</div>
-      </div>
-      <div class="urg-card" onclick="selectUrgency(this,'3+ months — flexible')">
-        <div class="urg-emoji">🌊</div>
-        <div class="urg-title">Flexible</div>
-        <div class="urg-desc">3+ months · no rush</div>
-      </div>
-    </div>
-
-    <div class="inp-wrap">
-      <div class="inp-label">Your name</div>
-      <input class="inp" id="contact-name" placeholder="Mohammed Al-Rashidi"/>
-    </div>
-
-    <div class="inp-wrap">
-      <div class="inp-label">Telegram username</div>
-      <input class="inp" id="contact-wa" placeholder="@yourhandle"/>
-      <div class="inp-hint">We will send you updates and the final price offer on Telegram.</div>
-    </div>
-
-    <button class="btn-next" onclick="goStep(4)">→ Find me the best price</button>
-    <button class="btn-back" onclick="goStep(2)">← Back</button>
-    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-      <div style="font-size:10px;color:var(--muted);text-align:center;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">Or negotiate right now</div>
-      <a href="negotiation-agent.html" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.3);color:var(--violet);border-radius:8px;padding:14px;font-size:13px;font-weight:600;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s" onmouseover="this.style.background='rgba(91,95,239,.15)'" onmouseout="this.style.background='rgba(91,95,239,.08)'">🤖 Start negotiation agent →</a>
-    </div>
-  </div>
-
-  <!-- STEP 4 — REVIEW + SUBMIT -->
-  <div class="step" id="step-4">
-    <div class="q-number">Almost done</div>
-    <div class="q-text">Here's your<br/><em>order summary.</em></div>
-    <div class="q-sub">Our AI agent will find the best verified supplier and negotiate the price for you. You approve before anything is signed.</div>
-
-    <div class="summary-card">
-      <div class="summary-row"><span class="sr-label">What you need</span><span class="sr-val" id="sum-product">—</span></div>
-      <div class="summary-row"><span class="sr-label">Quantity</span><span class="sr-val" id="sum-qty">—</span></div>
-      <div class="summary-row"><span class="sr-label">Budget</span><span class="sr-val" id="sum-budget">—</span></div>
-      <div class="summary-row"><span class="sr-label">Delivery country</span><span class="sr-val" id="sum-country">—</span></div>
-      <div class="summary-row"><span class="sr-label">Timeline</span><span class="sr-val" id="sum-urgency">—</span></div>
-      <div class="summary-row"><span class="sr-label">Your Telegram</span><span class="sr-val" id="sum-wa">—</span></div>
-    </div>
-
-    <div style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:12px 16px;margin-bottom:20px;font-size:11px;color:var(--teal);line-height:1.7">
-      ✓ Our AI agent will negotiate the best price with verified suppliers<br/>
-      ✓ You will receive price offers on Telegram within 24 hours<br/>
-      ✓ You approve before anything is signed — no commitment now<br/>
-      ✓ No credit card needed to get started
-    </div>
-
-    <button class="btn-next" onclick="submitOrder()">✓ Find me the best price →</button>
-    <button class="btn-back" onclick="goStep(3)">← Back</button>
-  </div>
-
-  <!-- SUCCESS -->
-  <div class="step" id="step-success">
-    <div class="success-wrap">
-      <div class="success-icon">🎉</div>
-      <div class="success-title">We're on it,<br/><em>right now.</em></div>
-      <div class="success-sub">Our AI agent is searching for the best verified supplier for your order. You'll receive a price offer on Telegram within 24 hours.</div>
-
-      <div class="next-steps">
-        <div class="ns"><div class="ns-n">1</div><div>Agent searches verified supplier network for your product and quantity</div></div>
-        <div class="ns"><div class="ns-n">2</div><div>Agent negotiates the best price — aiming for your budget</div></div>
-        <div class="ns"><div class="ns-n">3</div><div>We send you the price offer on Telegram — you approve or decline</div></div>
-        <div class="ns"><div class="ns-n">4</div><div>If you approve — we generate a professional Letter of Intent (LOI) and send it to both parties</div></div>
-        <div class="ns" style="border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.05)"><div class="ns-n" style="background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.3);color:var(--green)">✓</div><div style="color:var(--text)">You deal directly with the supplier — payment and delivery are between you and them</div></div>
-      </div>
-
-      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-        <a href="m2m-homepage.html" style="background:var(--indigo);color:#fff;padding:13px 24px;border-radius:5px;font-size:12px;font-weight:600;text-decoration:none">Back to SLOI AI →</a>
-        <a href="pricing.html" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:13px 24px;border-radius:5px;font-size:12px;text-decoration:none">See pricing</a>
-      </div>
-    </div>
-  </div>
-
 </div>
 
-<script>
-var state = {product:'', detail:'', qty:'', unit:'', budget:'', country:'', urgency:'', name:'', wa:''};
-var currentStep = 1;
+<!-- ════════════════════════ RIGHT PANEL ════════════════════════ -->
+<div class="right">
 
-function goStep(n){
-  // Validate
-  if(n > currentStep){
-    if(currentStep === 1 && !state.product){ alert('Please select a category.'); return; }
-    if(currentStep === 2){
-      if(!document.getElementById('qty').value){ alert('Please enter a quantity.'); return; }
-      state.qty = document.getElementById('qty').value;
-      state.unit = document.getElementById('unit').value;
-      state.budget = document.getElementById('budget').value || 'Not specified';
-      state.country = document.getElementById('country').value;
+  <div class="right-head">
+    <div class="prog-wrap">
+      <div class="prog-track"><div class="prog-fill" id="progress" style="width:25%"></div></div>
+      <div class="prog-lbl" id="prog-lbl">Step 1 of 4</div>
+    </div>
+    <a href="m2m-homepage.html" class="exit-link">Exit ✕</a>
+  </div>
+
+  <div class="right-body">
+
+    <!-- ── STEP 1 ── -->
+    <div class="step active" id="step-1">
+      <div class="q-eyebrow">Step 1</div>
+      <div class="q-title">What do you<br/><em>need to buy?</em></div>
+      <div class="q-sub">Choose a category. Our AI agent finds verified suppliers and negotiates the best price — you approve before anything is signed.</div>
+
+      <div class="prod-grid">
+        <div class="pc" onclick="selectProduct(this,'Steel & Metals','steel rebar, coil, aluminum')">
+          <div class="pc-check">✓ selected</div>
+          <span class="pc-icon">🔩</span>
+          <div class="pc-name">Steel & Metals</div>
+          <div class="pc-sub">Rebar · Coil · Aluminum · Pipes</div>
+        </div>
+        <div class="pc" onclick="selectProduct(this,'Building Materials','cement, tiles, pipes, concrete')">
+          <div class="pc-check">✓ selected</div>
+          <span class="pc-icon">🏗️</span>
+          <div class="pc-name">Building Materials</div>
+          <div class="pc-sub">Cement · Tiles · Concrete · PVC</div>
+        </div>
+        <div class="pc" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
+          <div class="pc-check">✓ selected</div>
+          <span class="pc-icon">🌾</span>
+          <div class="pc-name">Agriculture</div>
+          <div class="pc-sub">Wheat · Corn · Grain · Feed</div>
+        </div>
+        <div class="pc" onclick="selectProduct(this,'Energy','diesel, LPG, fuel oil')">
+          <div class="pc-check">✓ selected</div>
+          <span class="pc-icon">⚡</span>
+          <div class="pc-name">Energy</div>
+          <div class="pc-sub">Diesel · LPG · Fuel oil · Gas</div>
+        </div>
+        <div class="pc" onclick="selectProduct(this,'Chemicals','industrial chemicals, fertilizers')">
+          <div class="pc-check">✓ selected</div>
+          <span class="pc-icon">🧪</span>
+          <div class="pc-name">Chemicals</div>
+          <div class="pc-sub">Industrial · Fertilizers · Acids</div>
+        </div>
+        <div class="pc" onclick="selectProduct(this,'Other','other commodities')">
+          <div class="pc-check">✓ selected</div>
+          <span class="pc-icon">📦</span>
+          <div class="pc-name">Other</div>
+          <div class="pc-sub">Tell us exactly what you need</div>
+        </div>
+      </div>
+
+      <!-- catalog product dropdown — shown after category pick -->
+      <div class="cat-wrap" id="cat-wrap">
+        <div class="cat-hdr">
+          <div class="field-lbl" style="margin:0">Select product from catalog</div>
+          <span class="cat-badge" id="cat-count"></span>
+        </div>
+        <select class="inp" id="product-select" onchange="onProductSelect()">
+          <option value="">— Browse verified products —</option>
+        </select>
+        <div class="cat-info" id="cat-info">
+          <div class="ci-item"><div class="ci-lbl">Market price</div><div class="ci-val price" id="ci-price">—</div></div>
+          <div class="ci-item"><div class="ci-lbl">SKU / Ref</div><div class="ci-val" id="ci-sku">—</div></div>
+          <div class="ci-item"><div class="ci-lbl">Unit</div><div class="ci-val" id="ci-unit">—</div></div>
+          <div class="ci-item"><div class="ci-lbl">Min. order</div><div class="ci-val" id="ci-moq">—</div></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl" id="detail-lbl">Additional specifications <span style="color:var(--muted);font-size:9px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+        <input class="inp" id="product-detail" placeholder="e.g. ISO certified · 12mm · special grade"/>
+      </div>
+
+      <button class="btn-p" onclick="goStep(2)">Continue →</button>
+    </div>
+
+    <!-- ── STEP 2 ── -->
+    <div class="step" id="step-2">
+      <div class="q-eyebrow">Step 2</div>
+      <div class="q-title">Quantity<br/><em>& budget.</em></div>
+      <div class="q-sub">A rough estimate is fine. The AI agent will work within your parameters and push for the best available price.</div>
+
+      <div class="qty-row">
+        <div class="field" style="margin-bottom:0">
+          <div class="field-lbl">Quantity <span class="req"></span></div>
+          <input class="inp" id="qty" type="number" min="1" placeholder="e.g. 100"/>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <div class="field-lbl">Unit</div>
+          <select class="inp" id="unit">
+            <option>MT</option><option>Tons</option><option>kg</option>
+            <option>m²</option><option>m³</option><option>Liters</option><option>Units</option><option>m</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl">Target budget <span style="color:var(--muted);font-size:9px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+        <input class="inp" id="budget" placeholder="e.g. $2,800/MT  or  $280,000 total"/>
+        <div class="field-hint">Helps the agent negotiate harder toward your number. Not a commitment.</div>
+      </div>
+
+      <div class="field" style="margin-bottom:8px">
+        <div class="field-lbl">Purchase type <span class="req"></span></div>
+        <div class="ptype-grid">
+          <div class="pt" id="pt-once" onclick="selectPurchaseType(this,'One-time purchase')">
+            <div class="pt-check">✓ selected</div>
+            <div class="pt-icon">🛒</div>
+            <div class="pt-name">One-time</div>
+            <div class="pt-desc">Single order for this project</div>
+          </div>
+          <div class="pt" id="pt-recurring" onclick="selectPurchaseType(this,'Recurring contract')">
+            <div class="pt-check">✓ selected</div>
+            <div class="pt-icon">🔄</div>
+            <div class="pt-name">Recurring</div>
+            <div class="pt-desc">Ongoing supply — monthly / quarterly</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shown only when Recurring is selected -->
+      <div class="annual-reveal" id="annual-reveal">
+        <div class="field" style="margin-bottom:0;padding:14px;background:rgba(91,95,239,.04);border:1px solid rgba(91,95,239,.18);border-radius:8px">
+          <div class="field-lbl" style="color:var(--violet)">Estimated annual volume <span style="color:var(--muted);font-size:9px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+          <input class="inp" id="annual-volume" placeholder="e.g. 1,200 MT/year  or  $3.5M/year" style="background:var(--surface2);margin-top:4px"/>
+          <div class="field-hint" style="margin-top:4px">Recurring buyers get better rates — share your yearly volume to unlock volume pricing.</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl">Delivery country <span class="req"></span></div>
+        <select class="inp" id="country">
+          <optgroup label="── Gulf & MENA ──">
+            <option>UAE</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option>
+            <option>Bahrain</option><option>Oman</option><option>Egypt</option><option>Jordan</option>
+            <option>Iraq</option><option>Yemen</option><option>Lebanon</option><option>Syria</option>
+            <option>Palestine</option><option>Libya</option><option>Tunisia</option><option>Algeria</option>
+            <option>Morocco</option><option>Sudan</option><option>Iran</option><option>Turkey</option>
+          </optgroup>
+          <optgroup label="── Europe ──">
+            <option>Germany</option><option>France</option><option>Italy</option><option>Spain</option>
+            <option>Netherlands</option><option>Belgium</option><option>Switzerland</option>
+            <option>Austria</option><option>Poland</option><option>Czech Republic</option>
+            <option>Romania</option><option>Hungary</option><option>Bulgaria</option>
+            <option>Greece</option><option>Portugal</option><option>Sweden</option>
+            <option>Norway</option><option>Denmark</option><option>Finland</option>
+            <option>United Kingdom</option><option>Ireland</option><option>Slovakia</option>
+            <option>Croatia</option><option>Serbia</option><option>Ukraine</option>
+            <option>Russia</option><option>Belarus</option><option>Estonia</option>
+            <option>Latvia</option><option>Lithuania</option><option>Slovenia</option>
+            <option>Luxembourg</option><option>Malta</option><option>Cyprus</option>
+            <option>Albania</option><option>North Macedonia</option><option>Bosnia</option>
+            <option>Montenegro</option><option>Moldova</option><option>Kosovo</option>
+          </optgroup>
+          <optgroup label="── Asia ──">
+            <option>China</option><option>India</option><option>Japan</option>
+            <option>South Korea</option><option>Singapore</option><option>Malaysia</option>
+            <option>Thailand</option><option>Indonesia</option><option>Vietnam</option>
+            <option>Philippines</option><option>Taiwan</option><option>Hong Kong</option>
+            <option>Pakistan</option><option>Bangladesh</option><option>Sri Lanka</option>
+            <option>Nepal</option><option>Myanmar</option><option>Cambodia</option>
+            <option>Kazakhstan</option><option>Uzbekistan</option><option>Azerbaijan</option>
+            <option>Georgia</option><option>Armenia</option><option>Turkmenistan</option>
+            <option>Afghanistan</option><option>Mongolia</option><option>Kyrgyzstan</option>
+            <option>Tajikistan</option>
+          </optgroup>
+          <optgroup label="── Africa ──">
+            <option>Nigeria</option><option>South Africa</option><option>Kenya</option>
+            <option>Ethiopia</option><option>Ghana</option><option>Tanzania</option>
+            <option>Uganda</option><option>Mozambique</option><option>Zambia</option>
+            <option>Zimbabwe</option><option>Angola</option><option>Cameroon</option>
+            <option>Senegal</option><option>Ivory Coast</option><option>DR Congo</option>
+            <option>Congo</option><option>Rwanda</option><option>Botswana</option>
+            <option>Namibia</option><option>Malawi</option><option>Mauritius</option>
+            <option>Madagascar</option><option>Somalia</option><option>Djibouti</option>
+          </optgroup>
+          <optgroup label="── Americas ──">
+            <option>United States</option><option>Canada</option><option>Mexico</option>
+            <option>Brazil</option><option>Argentina</option><option>Chile</option>
+            <option>Colombia</option><option>Peru</option><option>Venezuela</option>
+            <option>Ecuador</option><option>Bolivia</option><option>Uruguay</option>
+            <option>Paraguay</option><option>Panama</option><option>Costa Rica</option>
+            <option>Guatemala</option><option>Honduras</option><option>El Salvador</option>
+            <option>Dominican Republic</option><option>Cuba</option><option>Jamaica</option>
+          </optgroup>
+          <optgroup label="── Oceania ──">
+            <option>Australia</option><option>New Zealand</option><option>Papua New Guinea</option>
+            <option>Fiji</option>
+          </optgroup>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <button class="btn-p" onclick="goStep(3)">Continue →</button>
+      <button class="btn-s" onclick="goStep(1)">← Back</button>
+    </div>
+
+    <!-- ── STEP 3 ── -->
+    <div class="step" id="step-3">
+      <div class="q-eyebrow">Step 3</div>
+      <div class="q-title">When do you<br/><em>need it?</em></div>
+      <div class="q-sub">This shapes the negotiation mode. A tighter deadline means the agent pushes harder on availability — a looser one maximises savings.</div>
+
+      <div class="tl-grid">
+        <div class="tc" onclick="selectUrgency(this,'ASAP — within 2 weeks')">
+          <div class="tc-check">✓ selected</div>
+          <div class="tc-icon">🚨</div>
+          <div class="tc-name">ASAP</div>
+          <div class="tc-desc">Within 2 weeks — urgent procurement</div>
+          <div class="tc-mode">Aggressive mode</div>
+        </div>
+        <div class="tc" onclick="selectUrgency(this,'1–2 months')">
+          <div class="tc-check">✓ selected</div>
+          <div class="tc-icon">📅</div>
+          <div class="tc-name">1–2 months</div>
+          <div class="tc-desc">Standard project timeline</div>
+          <div class="tc-mode">Balanced mode</div>
+        </div>
+        <div class="tc" onclick="selectUrgency(this,'3+ months — flexible')">
+          <div class="tc-check">✓ selected</div>
+          <div class="tc-icon">🌊</div>
+          <div class="tc-name">Flexible</div>
+          <div class="tc-desc">3+ months — no rush, max savings</div>
+          <div class="tc-mode">Max savings mode</div>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl">Your name <span class="req"></span></div>
+        <input class="inp" id="contact-name" placeholder="Mohammed Al-Rashidi"/>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl">Telegram username <span class="req"></span></div>
+        <input class="inp" id="contact-wa" placeholder="@yourhandle"/>
+        <div class="field-hint">Price offers and deal updates arrive on Telegram. Response within 24 hours.</div>
+      </div>
+
+      <button class="btn-p" onclick="goStep(4)">Review my order →</button>
+      <button class="btn-s" onclick="goStep(2)">← Back</button>
+
+      <a href="negotiation-agent.html" class="agent-link">
+        <div class="al-icon">🤖</div>
+        <div class="al-body">
+          <div class="al-title">Skip the queue — negotiate right now</div>
+          <div class="al-desc">Open the live agent console · Claude negotiates instantly in your browser</div>
+        </div>
+        <div class="al-arrow">→</div>
+      </a>
+    </div>
+
+    <!-- ── STEP 4 — REVIEW ── -->
+    <div class="step" id="step-4">
+      <div class="q-eyebrow">Review</div>
+      <div class="q-title">Your order<br/><em>summary.</em></div>
+      <div class="q-sub">Confirm the details below. Our AI agent will negotiate with verified suppliers and send you price offers on Telegram within 24 hours.</div>
+
+      <div class="sum-grid">
+        <div class="sum-cell hi">
+          <div class="sum-lbl">What you need</div>
+          <div class="sum-val" id="sum-product">—</div>
+        </div>
+        <div class="sum-cell">
+          <div class="sum-lbl">Quantity</div>
+          <div class="sum-val" id="sum-qty">—</div>
+        </div>
+        <div class="sum-cell">
+          <div class="sum-lbl">Target budget</div>
+          <div class="sum-val" id="sum-budget">—</div>
+        </div>
+        <div class="sum-cell">
+          <div class="sum-lbl">Purchase type</div>
+          <div class="sum-val" id="sum-ptype">—</div>
+        </div>
+        <div class="sum-cell" id="sum-annual-cell" style="display:none">
+          <div class="sum-lbl">Annual volume</div>
+          <div class="sum-val" id="sum-annual" style="color:var(--teal)">—</div>
+        </div>
+        <div class="sum-cell">
+          <div class="sum-lbl">Delivery country</div>
+          <div class="sum-val" id="sum-country">—</div>
+        </div>
+        <div class="sum-cell">
+          <div class="sum-lbl">Timeline</div>
+          <div class="sum-val" id="sum-urgency">—</div>
+        </div>
+        <div class="sum-cell">
+          <div class="sum-lbl">Telegram</div>
+          <div class="sum-val" id="sum-wa">—</div>
+        </div>
+      </div>
+
+      <div class="gbox">
+        <div class="g-row"><span class="g-chk">✓</span>AI agent negotiates the best price with verified suppliers</div>
+        <div class="g-row"><span class="g-chk">✓</span>Price offer delivered to Telegram within 24 hours</div>
+        <div class="g-row"><span class="g-chk">✓</span>You approve before anything is signed — zero commitment now</div>
+        <div class="g-row"><span class="g-chk">✓</span>No credit card required to get started</div>
+      </div>
+
+      <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Find me the best price →</button>
+      <button class="btn-s" onclick="goStep(3)">← Back</button>
+    </div>
+
+    <!-- ── SUCCESS ── -->
+    <div class="step" id="step-success">
+      <div class="suc-wrap">
+        <div class="suc-head">
+          <div class="suc-icon">🎯</div>
+          <div class="suc-title">We're on it,<br/><em>right now.</em></div>
+          <div class="suc-sub">Our AI agent is scanning the verified supplier network for your order. Expect a price offer on Telegram within 24 hours.</div>
+        </div>
+
+        <div class="flow-list">
+          <div class="fl-item"><div class="fl-num">1</div><div class="fl-text">Agent searches verified supplier network for your product and quantity</div></div>
+          <div class="fl-item"><div class="fl-num">2</div><div class="fl-text">Agent negotiates the best available price — targeting your budget</div></div>
+          <div class="fl-item"><div class="fl-num">3</div><div class="fl-text">Price offer sent to you on Telegram — you approve or decline, no pressure</div></div>
+          <div class="fl-item"><div class="fl-num">4</div><div class="fl-text">If approved — a professional Letter of Intent (LOI) is generated and sent to all parties</div></div>
+          <div class="fl-item"><div class="fl-num g">✓</div><div class="fl-text" style="color:var(--green)">You deal directly with the supplier — SLOI AI never touches your funds</div></div>
+        </div>
+
+        <div class="cta-row">
+          <a href="m2m-homepage.html" class="cta-p">Back to SLOI AI →</a>
+          <a href="negotiation-agent.html" class="cta-s">🤖 Open agent console</a>
+          <a href="demo.html" class="cta-s">Watch demo</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /right-body -->
+</div><!-- /right -->
+</div><!-- /shell -->
+
+<script>
+var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', purchaseType:'', annualVolume:'', country:'UAE', urgency:'', name:'', wa:'' };
+
+var CATALOG = [
+  {sector:'Metals',    sku:'STL-12',    name:'Steel Rebar G60 12mm',         unit:'MT',    market:2840,  moq:10},
+  {sector:'Metals',    sku:'STL-HRC',   name:'Steel HR Coil SS400',          unit:'MT',    market:3100,  moq:20},
+  {sector:'Metals',    sku:'STL-CRC',   name:'Steel CR Coil DC01',           unit:'MT',    market:3400,  moq:20},
+  {sector:'Metals',    sku:'ALU-6061',  name:'Aluminum 6061-T6',             unit:'MT',    market:9200,  moq:5},
+  {sector:'Metals',    sku:'ALU-PRF',   name:'Aluminum Profiles',            unit:'m',     market:38,    moq:500},
+  {sector:'Metals',    sku:'CPR-ETP',   name:'Copper ETP Rod 8mm',           unit:'MT',    market:9800,  moq:5},
+  {sector:'Building',  sku:'BLK-200',   name:'Concrete Block 20cm',          unit:'Unit',  market:4.8,   moq:1000},
+  {sector:'Building',  sku:'CNC-B25',   name:'Ready-Mix Concrete B25',       unit:'m³',    market:380,   moq:10},
+  {sector:'Building',  sku:'TLE-6060',  name:'Porcelain Tile 60×60cm',       unit:'m²',    market:62,    moq:100},
+  {sector:'Building',  sku:'PVC-110',   name:'PVC Pipe 110mm SDR34',         unit:'m',     market:28,    moq:500},
+  {sector:'Building',  sku:'STL-STR',   name:'Structural Steel H-Beam',      unit:'MT',    market:3200,  moq:10},
+  {sector:'Energy',    sku:'DSL-B2',    name:'Industrial Diesel B2',          unit:'Liter', market:4.92,  moq:5000},
+  {sector:'Energy',    sku:'DSL-B5',    name:'Biodiesel B5',                  unit:'Liter', market:5.15,  moq:5000},
+  {sector:'Energy',    sku:'LFO-380',   name:'Fuel Oil 380 CST',             unit:'MT',    market:510,   moq:100},
+  {sector:'Agriculture',sku:'WHT-HRD',  name:'Hard Wheat 14% protein',       unit:'MT',    market:1120,  moq:50},
+  {sector:'Agriculture',sku:'WHT-SFT',  name:'Soft Wheat 11% protein',       unit:'MT',    market:1050,  moq:50},
+  {sector:'Agriculture',sku:'CRN-YLW',  name:'Yellow Corn No.2',             unit:'MT',    market:980,   moq:50},
+  {sector:'Agriculture',sku:'SOY-GMO',  name:'Soybean GMO 48% prot',         unit:'MT',    market:1200,  moq:50},
+  {sector:'Agriculture',sku:'SGR-RAW',  name:'Raw Cane Sugar VHP',           unit:'MT',    market:560,   moq:50},
+  {sector:'Chemicals', sku:'H2SO4',     name:'Sulfuric Acid 98%',            unit:'MT',    market:580,   moq:5},
+  {sector:'Chemicals', sku:'NaOH',      name:'Caustic Soda 50% liquid',      unit:'MT',    market:420,   moq:5},
+  {sector:'Chemicals', sku:'UREA',      name:'Urea 46% Prilled',             unit:'MT',    market:450,   moq:50},
+  {sector:'Chemicals', sku:'DAP-F',     name:'DAP Fertilizer 18-46-0',       unit:'MT',    market:620,   moq:50},
+  {sector:'Chemicals', sku:'PP-GRN',    name:'PP Granules Homopolymer',      unit:'MT',    market:1280,  moq:20},
+  {sector:'Chemicals', sku:'HDPE-BLW',  name:'HDPE Blow Grade',              unit:'MT',    market:1220,  moq:20},
+];
+
+var SECTOR_MAP = {
+  'Steel & Metals':      'Metals',
+  'Building Materials':  'Building',
+  'Agriculture':         'Agriculture',
+  'Energy':              'Energy',
+  'Chemicals':           'Chemicals',
+  'Other':               null,
+};
+
+function filterCatalog(categoryName) {
+  var sector  = SECTOR_MAP[categoryName] || null;
+  var items   = sector ? CATALOG.filter(function(p){ return p.sector === sector; }) : CATALOG;
+  var sel     = document.getElementById('product-select');
+  var wrap    = document.getElementById('cat-wrap');
+  var badge   = document.getElementById('cat-count');
+
+  sel.innerHTML = '<option value="">— Browse verified products —</option>';
+
+  if (!sector) {
+    // group by sector for "Other"
+    var sectors = ['Metals','Building','Energy','Agriculture','Chemicals'];
+    sectors.forEach(function(s){
+      var grp = document.createElement('optgroup');
+      grp.label = s;
+      CATALOG.filter(function(p){ return p.sector === s; }).forEach(function(p){
+        var opt = document.createElement('option');
+        opt.value = p.sku;
+        opt.textContent = p.name + '  ·  ' + p.sku + '  ·  ~$' + p.market + '/' + p.unit;
+        grp.appendChild(opt);
+      });
+      sel.appendChild(grp);
+    });
+  } else {
+    items.forEach(function(p){
+      var opt = document.createElement('option');
+      opt.value = p.sku;
+      opt.textContent = p.name + '  ·  ' + p.sku + '  ·  ~$' + p.market + '/' + p.unit;
+      sel.appendChild(opt);
+    });
+  }
+
+  badge.textContent = items.length + ' product' + (items.length !== 1 ? 's' : '');
+  wrap.style.display = 'block';
+  document.getElementById('cat-info').classList.remove('show');
+  state.sku = '';
+}
+
+function onProductSelect() {
+  var sel  = document.getElementById('product-select');
+  var sku  = sel.value;
+  var info = document.getElementById('cat-info');
+
+  if (!sku) {
+    info.classList.remove('show');
+    state.sku = '';
+    document.getElementById('detail-lbl').innerHTML = 'Additional specifications <span style="color:var(--muted);font-size:9px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span>';
+    return;
+  }
+
+  var prod = CATALOG.find(function(p){ return p.sku === sku; });
+  if (!prod) return;
+
+  state.sku = sku;
+  document.getElementById('ci-price').textContent = '$' + prod.market.toLocaleString() + '/' + prod.unit;
+  document.getElementById('ci-sku').textContent   = prod.sku;
+  document.getElementById('ci-unit').textContent  = prod.unit;
+  document.getElementById('ci-moq').textContent   = prod.moq.toLocaleString() + ' ' + prod.unit;
+  info.classList.add('show');
+
+  // pre-fill detail placeholder with product name
+  var detailInput = document.getElementById('product-detail');
+  detailInput.placeholder = prod.name + ' · ' + prod.sku;
+
+  // auto-select matching unit in step 2
+  var unitSel = document.getElementById('unit');
+  for (var i = 0; i < unitSel.options.length; i++) {
+    if (unitSel.options[i].value === prod.unit || unitSel.options[i].text === prod.unit) {
+      unitSel.selectedIndex = i;
+      state.unit = unitSel.value;
+      break;
     }
-    if(currentStep === 3){
-      if(!state.urgency){ alert('Please select a timeline.'); return; }
-      if(!document.getElementById('contact-name').value){ alert('Please enter your name.'); return; }
-      if(!document.getElementById('contact-wa').value){ alert('Please enter your Telegram username.'); return; }
-      state.name = document.getElementById('contact-name').value;
-      state.wa = document.getElementById('contact-wa').value;
+  }
+}
+var currentStep = 1;
+var maxReached  = 1;
+
+function tryGoStep(n) { if (n <= maxReached) goStep(n); }
+
+function goStep(n) {
+  // Validate on forward moves
+  if (n > currentStep) {
+    if (currentStep === 1) {
+      if (!state.product) { pulse(document.querySelector('.prod-grid')); return; }
+      state.detail = document.getElementById('product-detail').value;
+    }
+    if (currentStep === 2) {
+      var qv = document.getElementById('qty').value;
+      if (!qv || parseFloat(qv) <= 0) { shake('qty'); return; }
+      if (!state.purchaseType) { pulse(document.querySelector('.ptype-grid')); return; }
+      state.qty          = qv;
+      state.unit         = document.getElementById('unit').value;
+      state.budget       = document.getElementById('budget').value || 'Not specified';
+      state.annualVolume = document.getElementById('annual-volume').value || '';
+      state.country      = document.getElementById('country').value;
+    }
+    if (currentStep === 3) {
+      if (!state.urgency) { pulse(document.querySelector('.tl-grid')); return; }
+      var nm = document.getElementById('contact-name').value.trim();
+      var wa = document.getElementById('contact-wa').value.trim();
+      if (!nm) { shake('contact-name'); return; }
+      if (!wa) { shake('contact-wa'); return; }
+      state.name = nm;
+      state.wa   = wa;
     }
   }
 
   document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
   currentStep = n;
+  if (n > maxReached) maxReached = n;
 
-  if(n === 4) populateSummary();
-  if(n <= 4) document.getElementById('step-'+n).classList.add('active');
+  if (n === 4) populateSummary();
+  var el = document.getElementById(n <= 4 ? 'step-' + n : 'step-success');
+  if (el) el.classList.add('active');
 
-  // Update dots
-  for(var i=1;i<=4;i++){
-    var dot = document.getElementById('dot-'+i);
-    if(i < n){ dot.className='step-dot done'; dot.textContent='✓'; }
-    else if(i === n){ dot.className='step-dot active'; dot.textContent= i < 4 ? i : '✓'; }
-    else{ dot.className='step-dot pending'; dot.textContent= i < 4 ? i : '✓'; }
-  }
-  for(var j=1;j<=3;j++){
-    var line = document.getElementById('line-'+j);
-    line.className = 'step-line' + (j < n ? ' done' : '');
-  }
-
-  // Progress
-  var pct = {1:25,2:50,3:75,4:90}[n] || 25;
-  document.getElementById('progress').style.width = pct + '%';
-
-  window.scrollTo({top:0,behavior:'smooth'});
+  updateNav(n);
+  var rb = document.querySelector('.right-body');
+  if (rb) rb.scrollTop = 0;
 }
 
-function selectProduct(el, name, eg){
-  document.querySelectorAll('.product-card').forEach(function(c){ c.classList.remove('selected'); });
-  el.classList.add('selected');
+function updateNav(n) {
+  var pcts  = {1:25,2:50,3:75,4:90};
+  var lbls  = {1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Review'};
+  document.getElementById('progress').style.width = (pcts[n] || 100) + '%';
+  document.getElementById('prog-lbl').textContent = lbls[n] || 'Done!';
+
+  for (var i = 1; i <= 4; i++) {
+    var dot   = document.getElementById('dot-' + i);
+    var lname = document.getElementById('lname-' + i);
+    var line  = document.getElementById('line-' + i);
+    if (!dot) continue;
+    if (i < n) {
+      dot.className = 'sn-dot done'; dot.textContent = '✓';
+      if (lname) lname.className = 'sn-name done';
+      if (line)  line.className  = 'sn-line done';
+    } else if (i === n) {
+      dot.className = 'sn-dot active'; dot.textContent = i < 4 ? i : '✓';
+      if (lname) lname.className = 'sn-name active';
+      if (line)  line.className  = 'sn-line';
+    } else {
+      dot.className = 'sn-dot pending'; dot.textContent = i < 4 ? i : '✓';
+      if (lname) lname.className = 'sn-name';
+      if (line)  line.className  = 'sn-line';
+    }
+  }
+}
+
+function shake(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('shake');
+  el.focus();
+  setTimeout(function(){ el.classList.remove('shake'); }, 400);
+}
+
+function pulse(el) {
+  if (!el) return;
+  el.style.animation = 'shake .3s ease';
+  setTimeout(function(){ el.style.animation = ''; }, 400);
+}
+
+function selectProduct(el, name) {
+  document.querySelectorAll('.pc').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
   state.product = name;
-  state.detail = document.getElementById('product-detail').value;
+  // reset catalog selection and repopulate dropdown
+  document.getElementById('product-select').value = '';
+  document.getElementById('cat-info').classList.remove('show');
+  document.getElementById('product-detail').placeholder = 'e.g. ISO certified · 12mm · special grade';
+  state.sku = '';
+  filterCatalog(name);
 }
 
-function selectUrgency(el, val){
-  document.querySelectorAll('.urg-card').forEach(function(c){ c.classList.remove('selected'); });
-  el.classList.add('selected');
+function selectUrgency(el, val) {
+  document.querySelectorAll('.tc').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
   state.urgency = val;
 }
 
-function populateSummary(){
-  var detail = document.getElementById('product-detail').value;
-  document.getElementById('sum-product').textContent = state.product + (detail ? ' — ' + detail : '');
-  document.getElementById('sum-qty').textContent = state.qty + ' ' + state.unit;
-  document.getElementById('sum-budget').textContent = state.budget;
+function populateSummary() {
+  var detail     = document.getElementById('product-detail').value;
+  var skuLabel   = state.sku ? ' [' + state.sku + ']' : '';
+  var prodLabel  = document.getElementById('product-select').value
+    ? (CATALOG.find(function(p){ return p.sku === state.sku; }) || {name: state.product}).name
+    : state.product;
+  document.getElementById('sum-product').textContent = prodLabel + skuLabel + (detail ? ' — ' + detail : '');
+  document.getElementById('sum-qty').textContent     = state.qty + ' ' + state.unit;
+  document.getElementById('sum-budget').textContent  = state.budget;
+  document.getElementById('sum-ptype').textContent   = state.purchaseType;
   document.getElementById('sum-country').textContent = state.country;
   document.getElementById('sum-urgency').textContent = state.urgency;
-  document.getElementById('sum-wa').textContent = state.wa;
+  document.getElementById('sum-wa').textContent      = state.wa;
+  var annualCell = document.getElementById('sum-annual-cell');
+  if (state.annualVolume) {
+    document.getElementById('sum-annual').textContent = state.annualVolume;
+    annualCell.style.display = 'block';
+  } else {
+    annualCell.style.display = 'none';
+  }
 }
 
-function submitOrder(){
-  // Hide all steps, show success
-  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
-  document.getElementById('step-success').classList.add('active');
-
-  // Update dots — all done
-  for(var i=1;i<=4;i++){
-    var dot = document.getElementById('dot-'+i);
-    dot.className = 'step-dot done';
-    dot.textContent = '✓';
+function selectPurchaseType(el, val) {
+  document.querySelectorAll('.pt').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  state.purchaseType = val;
+  var reveal = document.getElementById('annual-reveal');
+  if (val === 'Recurring contract') {
+    reveal.classList.add('open');
+  } else {
+    reveal.classList.remove('open');
+    document.getElementById('annual-volume').value = '';
+    state.annualVolume = '';
   }
-  document.querySelectorAll('.step-line').forEach(function(l){ l.classList.add('done'); });
-  document.getElementById('progress').style.width = '100%';
+}
 
-  window.scrollTo({top:0,behavior:'smooth'});
+function submitOrder() {
+  var btn = document.getElementById('submit-btn');
+  btn.textContent = '⏳ Submitting…';
+  btn.disabled = true;
+
+  var payload = {
+    product:        (state.sku
+      ? (CATALOG.find(function(p){ return p.sku===state.sku; })||{name:state.product}).name + ' [' + state.sku + ']'
+      : state.product) + (document.getElementById('product-detail').value ? ' — ' + document.getElementById('product-detail').value : ''),
+    qty:            parseFloat(state.qty) || 0,
+    unit:           state.unit || 'MT',
+    target_price:   null,
+    max_price:      state.budget && state.budget !== 'Not specified' ? parseFloat(state.budget.replace(/[^0-9.]/g,'')) || null : null,
+    buyer_name:     state.name,
+    buyer_telegram: state.wa,
+    country:        state.country,
+    notes:          'Urgency: ' + state.urgency + ' | Purchase type: ' + state.purchaseType + (state.annualVolume ? ' | Annual volume: ' + state.annualVolume : ''),
+  };
+
+  var doSubmit = (window._sloiAPI && window._sloiAPI.startNegotiation)
+    ? window._sloiAPI.startNegotiation(payload)
+    : Promise.reject('no_api');
+
+  doSubmit
+    .catch(function(){ return null; })
+    .then(function(){
+      btn.textContent = '✓ Find me the best price →';
+      btn.disabled = false;
+      document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+      document.getElementById('step-success').classList.add('active');
+      // Mark all done
+      for (var i = 1; i <= 4; i++) {
+        var dot   = document.getElementById('dot-' + i);
+        var lname = document.getElementById('lname-' + i);
+        var line  = document.getElementById('line-' + i);
+        if (dot)   { dot.className = 'sn-dot done'; dot.textContent = '✓'; }
+        if (lname) lname.className = 'sn-name done';
+        if (line)  line.className  = 'sn-line done';
+      }
+      document.getElementById('progress').style.width = '100%';
+      document.getElementById('prog-lbl').textContent = 'Done!';
+      var rb = document.querySelector('.right-body');
+      if (rb) rb.scrollTop = 0;
+    });
 }
 </script>
 </body>

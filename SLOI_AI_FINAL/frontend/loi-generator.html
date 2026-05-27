@@ -702,13 +702,25 @@ calcTotal();
 (function(){
   var params = new URLSearchParams(window.location.search);
   var fields = {
-    ref:     document.getElementById('loi-ref'),
-    product: document.getElementById('loi-product'),
-    qty:     document.getElementById('loi-qty'),
-    unit:    document.getElementById('loi-unit'),
-    price:   document.getElementById('loi-price'),
-    buyer:   document.getElementById('loi-buyer'),
+    ref:      document.getElementById('ref'),
+    product:  document.getElementById('product'),
+    qty:      document.getElementById('quantity'),
+    unit:     document.getElementById('unit'),
+    price:    document.getElementById('unit_price'),
+    buyer:    document.getElementById('buyer_name'),
+    location: document.getElementById('port_destination'),
   };
+  // deadline comes as a formatted string (e.g. "15 Jun 2026") — convert back to YYYY-MM-DD for the date input
+  var deadlineParam = params.get('deadline');
+  if (deadlineParam && deadlineParam !== 'TBD') {
+    var parsed = new Date(deadlineParam);
+    if (!isNaN(parsed)) {
+      var dd = String(parsed.getDate()).padStart(2,'0');
+      var mm = String(parsed.getMonth()+1).padStart(2,'0');
+      var deliveryEl = document.getElementById('delivery_date');
+      if (deliveryEl) { deliveryEl.value = parsed.getFullYear() + '-' + mm + '-' + dd; }
+    }
+  }
   Object.entries(fields).forEach(function([k,el]){
     if(el && params.get(k)) {
       if(el.tagName === 'SELECT') {
@@ -722,6 +734,8 @@ calcTotal();
       }
     }
   });
+  if(params.get('ref')||params.get('buyer')||params.get('product')) updatePreview();
+  if(params.get('price')) calcTotal();
   if(params.get('ref')) {
     var note = document.createElement('div');
     note.style.cssText = 'background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--green);margin-bottom:14px';

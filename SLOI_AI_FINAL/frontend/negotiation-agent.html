@@ -58,6 +58,8 @@ html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color
 .btn-sm{padding:4px 10px;font-size:10px}.btn-xs{padding:2px 8px;font-size:9px}
 .inp{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:7px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:11px;outline:none;transition:border-color .15s;width:100%}
 .inp:focus{border-color:var(--indigo)}.inp::placeholder{color:var(--muted)}
+input[type="date"].inp{color-scheme:dark;color:var(--white)}
+input[type="date"].inp:not([value]){color:var(--muted)}
 select.inp option{background:var(--surface)}
 .flabel{font-size:9px;color:var(--muted);letter-spacing:.06em;display:block;margin-bottom:3px;text-transform:uppercase}
 .sec{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
@@ -73,33 +75,65 @@ select.inp option{background:var(--surface)}
 .neg-left-foot{padding:12px 14px;border-top:1px solid var(--border);background:var(--surface2)}
 .neg-right{display:flex;flex-direction:column;overflow:hidden}
 .neg-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:44px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0}
-.chat-wrap{display:grid;grid-template-rows:1fr 190px;flex:1;overflow:hidden}
-.chat-area{overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
-.bottom-grid{border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;overflow:hidden}
-.rounds-col{border-right:1px solid var(--border);padding:12px;overflow-y:auto}
-.boss-col{padding:12px;overflow-y:auto}
+.chat-wrap{display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0}
+.chat-area{flex:1;min-height:0;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+
+/* Mandate pills */
+.mandate-row{display:flex;gap:5px;padding:8px 14px;border-bottom:1px solid var(--border);flex-wrap:wrap;background:rgba(91,95,239,.02);flex-shrink:0}
+.mpill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:3px;font-size:10px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.mpill b{color:var(--white)}
 
 /* Bubbles */
 .bubble{max-width:80%;padding:10px 13px;border-radius:8px;font-size:11px;line-height:1.65;animation:slide-in .3s ease}
-.bubble.agent{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);align-self:flex-start}
-.bubble.broker{background:var(--gold-dim);border:1px solid rgba(232,169,74,.2);align-self:flex-end}
-.bubble.system{background:var(--surface2);border:1px solid var(--border);align-self:center;max-width:95%;text-align:center;font-size:10px;color:var(--muted)}
-.bubble.loi{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.25);align-self:center;max-width:95%;text-align:center}
-.bubble.thinking{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.15);align-self:flex-start;opacity:.7}
-.bubble-label{font-size:9px;font-weight:600;margin-bottom:4px;letter-spacing:.04em}
-.bubble-price{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-top:4px}
+.b-agent{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);align-self:flex-start}
+.b-broker{background:rgba(232,169,74,.07);border:1px solid rgba(232,169,74,.2);align-self:flex-end;text-align:right}
+.b-system{background:var(--surface2);border:1px solid var(--border);align-self:center;max-width:95%;text-align:center;font-size:10px;color:var(--muted);padding:6px 16px;border-radius:4px}
+.b-deal{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.25);align-self:center;max-width:95%;text-align:center;padding:14px 20px;border-radius:6px;animation:slide-in .4s ease}
+.b-loi{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.3);align-self:center;max-width:95%;text-align:center;padding:14px 20px;border-radius:6px;animation:slide-in .4s ease}
+.b-thinking{background:var(--surface2);border:1px solid var(--border);align-self:flex-start;padding:8px 14px;border-radius:8px;font-size:10px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.b-thinking.right{align-self:flex-end}
+.b-label{font-size:9px;font-weight:700;letter-spacing:.05em;margin-bottom:5px}
+.b-price{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-top:5px}
 .rounds-bar{display:flex;gap:4px;margin-bottom:5px}
-.rb{height:5px;flex:1;border-radius:3px}
+.rb{height:5px;flex:1;border-radius:3px;transition:background .4s}
 .rb.done{background:var(--green)}.rb.active{background:var(--indigo);animation:pulse 1.5s infinite}.rb.empty{background:var(--border2)}
 
+/* Neg footer (rounds + prices) */
+.neg-footer{border-top:1px solid var(--border);padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;background:var(--surface2);flex-shrink:0}
+.foot-label{font-size:9px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px}
+.rounds-count{font-size:10px;color:var(--muted)}
+.prices-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center}
+.price-cell{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:6px 8px;text-align:center}
+.price-cell-label{font-size:9px;color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.price-cell-val{font-family:'Fraunces',serif;font-size:15px;font-weight:700}
+.gap-pill{font-size:9px;font-weight:700;padding:4px 8px;border-radius:3px;text-align:center;transition:all .5s;background:var(--surface);border:1px solid var(--border2);color:var(--muted)}
+
+/* Approval */
+.approval-section{border-top:1px solid rgba(232,169,74,.3);padding:14px;background:rgba(232,169,74,.03);display:none;animation:slide-in .35s ease;flex-shrink:0}
+.approval-title{font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.approval-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;font-size:10px}
+.ag-cell{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center}
+.ag-label{color:var(--muted);margin-bottom:3px}
+.ag-val{font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--white)}
+.approve-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.approve-btn{background:var(--green);color:#fff;border:none;border-radius:5px;padding:8px 18px;font-size:11px;font-weight:700;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.approve-btn:hover:not(:disabled){opacity:.85}
+.approve-btn:disabled{opacity:.6;cursor:default}
+.auto-msg{font-size:10px;color:var(--muted)}
+
+/* LOI result */
+.loi-section{border-top:1px solid rgba(34,197,94,.3);padding:14px;background:rgba(34,197,94,.03);display:none;animation:slide-in .4s ease;flex-shrink:0}
+.loi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.loi-cell{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center}
+.loi-label{font-size:9px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.04em}
+.loi-val{font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:var(--white)}
+.loi-note{font-size:10px;color:var(--muted);line-height:1.7}
+
 /* Strategy */
-.strat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px}
+.strat-grid{display:grid;grid-template-columns:1fr;gap:6px;margin-bottom:12px}
 .strat{padding:8px;border:1px solid var(--border2);border-radius:4px;cursor:pointer;text-align:center;transition:all .12s}
 .strat:hover{border-color:rgba(91,95,239,.4)}.strat.sel{background:var(--indigo-dim);border-color:var(--indigo)}
 .strat-icon{font-size:16px;margin-bottom:3px}.strat-name{font-size:10px;font-weight:600;color:var(--white)}.strat-cost{font-size:9px;color:var(--teal)}
-
-/* Approval */
-.approval-box{background:rgba(232,169,74,.05);border:1px solid rgba(232,169,74,.35);border-radius:5px;padding:12px;margin-bottom:10px}
 
 /* ── TAB 2: LEADFINDER ── */
 #panel-lead{display:none;flex-direction:column;height:100%;overflow:hidden}
@@ -183,34 +217,108 @@ select.inp option{background:var(--surface)}
     <div class="neg-left-body">
       <div class="sec">// MANDATE</div>
       <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px">
-        <div><label class="flabel">Buyer</label><input class="inp" id="m-buyer" value="Gulf Cement LLC"/></div>
-        <div><label class="flabel">Product</label>
-          <select class="inp" id="m-product">
-            <option>Steel Rebar G60 12mm</option><option>Steel HR Coil</option>
-            <option>Aluminum 6061-T6</option><option>Hard Wheat</option>
-            <option>Yellow Corn</option><option>Industrial Diesel B2</option>
-            <option>Sulfuric Acid 98%</option><option>PVC Pipe 110mm</option>
+
+        <div>
+          <label class="flabel">Buyer / Company</label>
+          <input class="inp" id="m-buyer" placeholder="e.g. Gulf Cement LLC" value="Gulf Cement LLC"/>
+        </div>
+
+        <div>
+          <label class="flabel">Product <span id="params-loading" style="display:none;color:var(--muted);font-size:9px">loading params…</span></label>
+          <select class="inp" id="m-product" onchange="loadProductParams(this.value)">
+            <option value="">— select product —</option>
           </select>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-          <div><label class="flabel">Quantity</label><input class="inp" id="m-qty" type="number" value="100"/></div>
-          <div><label class="flabel">Unit</label><select class="inp" id="m-unit"><option>MT</option><option>Ton</option><option>m³</option><option>Liter</option></select></div>
+
+        <!-- params hint strip -->
+        <div id="params-hint" style="display:none;background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);border-radius:3px;padding:6px 9px;font-size:10px;color:var(--violet);line-height:1.7">
+          <strong style="color:var(--white)" id="ph-name"></strong><br/>
+          Market: <span id="ph-market" style="color:var(--teal)"></span> &nbsp;·&nbsp;
+          Opening: <span id="ph-opening" style="color:var(--green)"></span> &nbsp;·&nbsp;
+          Walk-away: <span id="ph-walkaway" style="color:var(--gold)"></span><br/>
+          Broker floor: <span id="ph-floor" style="color:var(--red)"></span> &nbsp;·&nbsp;
+          Concession: <span id="ph-conc"></span>/round &nbsp;·&nbsp; Rounds: <span id="ph-rounds"></span>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-          <div><label class="flabel">Target ($/unit)</label><input class="inp" id="m-target" type="number" value="2700"/></div>
-          <div><label class="flabel">Max ($/unit)</label><input class="inp" id="m-max" type="number" value="2900"/></div>
+
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:6px">
+          <div><label class="flabel">Quantity</label><input class="inp" id="m-qty" type="number" min="1" value="100" placeholder="100"/></div>
+          <div>
+            <label class="flabel">Unit</label>
+            <input class="inp" id="m-unit" value="MT" placeholder="MT" style="background:var(--surface);color:var(--muted)" readonly/>
+          </div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-          <div><label class="flabel">Incoterm</label><select class="inp"><option>FOB</option><option>CIF</option><option>DAP</option></select></div>
-          <div><label class="flabel">Broker</label><select class="inp"><option>BRK-UAE-001</option><option>BRK-EUR-001</option></select></div>
+
+        <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.18);border-radius:4px;padding:8px 10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+            <span style="font-size:10px;color:var(--violet);font-weight:600;letter-spacing:.04em">📊 SLOI AI Excel params</span>
+            <span id="params-src-label" style="font-size:10px;color:var(--muted)">select a product →</span>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <div>
+              <label class="flabel">Opening offer ($/unit)</label>
+              <input class="inp" id="m-target" type="number" min="0" placeholder="—" readonly
+                style="background:var(--surface);color:var(--teal);font-weight:700;cursor:default"/>
+            </div>
+            <div>
+              <label class="flabel">Walk-away max ($/unit)</label>
+              <input class="inp" id="m-max" type="number" min="0" placeholder="—" readonly
+                style="background:var(--surface);color:var(--gold);font-weight:700;cursor:default"/>
+            </div>
+          </div>
+          <div id="price-warning" style="display:none;margin-top:6px;font-size:10px;color:var(--red);background:var(--red-dim);border:1px solid rgba(239,68,68,.25);border-radius:3px;padding:5px 8px">⚠ Walk-away max must be greater than target price — check your Excel params sheet</div>
         </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div>
+            <label class="flabel">Incoterm</label>
+            <div style="display:flex;align-items:center;height:30px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:0 10px;font-size:11px;color:var(--white);font-weight:600;letter-spacing:.06em">
+              FOB
+            </div>
+            <input type="hidden" id="m-incoterm" value="FOB"/>
+          </div>
+          <div>
+            <label class="flabel">Payment terms</label>
+            <select class="inp" id="m-payment">
+              <option>LC 90 days</option><option>LC 60 days</option><option>TT 30 days</option>
+              <option>TT advance</option><option>Net 30</option><option>Net 60</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div>
+            <label class="flabel">Broker</label>
+            <select class="inp" id="m-broker">
+              <option value="BRK-UAE-001">BRK-UAE-001</option>
+              <option value="BRK-EUR-001">BRK-EUR-001</option>
+              <option value="BRK-ASIA-001">BRK-ASIA-001</option>
+            </select>
+          </div>
+          <div>
+            <label class="flabel">Max rounds</label>
+            <select class="inp" id="m-rounds">
+              <option value="3">3 rounds</option>
+              <option value="5" selected>5 rounds</option>
+              <option value="7">7 rounds</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="flabel">Delivery location</label>
+          <input class="inp" id="m-location" placeholder="e.g. Dubai, UAE" value="Dubai, UAE"/>
+        </div>
+
+        <div>
+          <label class="flabel">Delivery deadline</label>
+          <input class="inp" id="m-deadline" type="date"/>
+        </div>
+
       </div>
 
       <div class="sec">// STRATEGY</div>
-      <div class="strat-grid" style="margin-bottom:14px">
-        <div class="strat" id="s-watcher" onclick="selectStrat('watcher')"><div class="strat-icon">👁️</div><div class="strat-name">Watcher</div><div class="strat-cost">1cr/day</div></div>
-        <div class="strat sel" id="s-standard" onclick="selectStrat('standard')"><div class="strat-icon">🎯</div><div class="strat-name">Standard</div><div class="strat-cost">10 credits</div></div>
-        <div class="strat" id="s-aggressive" onclick="selectStrat('aggressive')"><div class="strat-icon">⚡</div><div class="strat-name">Autopilot</div><div class="strat-cost">20 credits</div></div>
+      <div style="margin-bottom:14px">
+        <div class="strat sel" id="s-deal-hunter" style="display:flex;align-items:center;gap:10px;text-align:left"><div class="strat-icon" style="font-size:20px">🎯</div><div><div class="strat-name">Deal Hunter</div><div class="strat-cost">AI-powered · max value extraction</div></div></div>
       </div>
 
       <div class="sec">// ACTIVE SESSIONS</div>
@@ -231,51 +339,62 @@ select.inp option{background:var(--surface)}
       <div style="display:flex;align-items:center;gap:10px">
         <div>
           <div style="font-size:12px;font-weight:600;color:var(--white)" id="neg-product-label">🔩 Steel Rebar G60 12mm · 100 MT · Gulf Cement LLC</div>
-          <div style="font-size:10px;color:var(--muted)" id="neg-meta">NEG-001 · Standard · BRK-UAE-001</div>
+          <div style="font-size:10px;color:var(--muted)" id="neg-meta">NEG-001 · Deal Hunter · BRK-UAE-001</div>
         </div>
-        <span class="badge bg" id="round-badge">● Round 1</span>
+        <span class="badge bg" id="round-badge">● Round 0</span>
       </div>
       <div style="display:flex;gap:6px">
-        <button class="btn btn-sm btn-g" id="approve-btn" onclick="approveDeal()" style="display:none">✅ Approve → LOI</button>
-        <button class="btn btn-sm btn-r" id="reject-btn" onclick="rejectDeal()" style="display:none">✗ Reject</button>
         <button class="btn btn-sm" onclick="pauseNeg()" id="pause-btn">⏸ Pause</button>
         <button class="btn btn-sm" onclick="clearChat()">✕ Clear</button>
       </div>
     </div>
 
+    <!-- MANDATE PILLS -->
+    <div class="mandate-row" id="mandate-pills" style="display:none"></div>
+
     <div class="chat-wrap">
       <div class="chat-area" id="chat-area">
-        <div class="bubble system">Agent Console ready · Powered by Claude API · Set mandate and click ▶ Start agent</div>
+        <div class="bubble b-system">Agent Console ready · Powered by Claude API · Set mandate and click ▶ Start agent</div>
       </div>
 
-      <div class="bottom-grid">
-        <!-- ROUNDS -->
-        <div class="rounds-col">
-          <div class="sec">// ROUNDS</div>
-          <div class="rounds-bar" id="rounds-bar"><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div></div>
-          <div style="font-size:10px;color:var(--muted);margin-bottom:10px" id="rounds-label">Not started</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;font-size:10px">
-            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:7px;text-align:center"><div style="color:var(--muted)">Target</div><div id="d-target" style="color:var(--white);font-weight:700;font-family:'Fraunces',serif">$2,700</div></div>
-            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:7px;text-align:center"><div style="color:var(--muted)">Agent</div><div id="d-agent" style="color:var(--indigo);font-weight:700;font-family:'Fraunces',serif">—</div></div>
-            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:7px;text-align:center"><div style="color:var(--muted)">Broker</div><div id="d-broker" style="color:var(--gold);font-weight:700;font-family:'Fraunces',serif">—</div></div>
+      <!-- FOOTER: ROUNDS + LIVE PRICES -->
+      <div class="neg-footer">
+        <div>
+          <div class="foot-label">Rounds</div>
+          <div class="rounds-bar" id="rounds-bar">
+            <div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div><div class="rb empty"></div>
           </div>
-          <div style="margin-top:10px">
-            <label class="flabel">Manual override ($/unit)</label>
-            <div style="display:flex;gap:5px">
-              <input class="inp" id="override-price" placeholder="e.g. 2820" style="flex:1"/>
-              <button class="btn btn-xs btn-a" onclick="manualOverride()">Set</button>
+          <div class="rounds-count" id="rounds-label">Not started</div>
+        </div>
+        <div>
+          <div class="foot-label">Live prices</div>
+          <div class="prices-grid">
+            <div class="price-cell">
+              <div class="price-cell-label">🤖 Agent</div>
+              <div class="price-cell-val" id="d-agent" style="color:var(--violet)">—</div>
+            </div>
+            <div class="gap-pill" id="gap-pill">Gap</div>
+            <div class="price-cell">
+              <div class="price-cell-label">🏭 Broker</div>
+              <div class="price-cell-val" id="d-broker" style="color:var(--gold)">—</div>
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- BOSS APPROVAL -->
-        <div class="boss-col">
-          <div class="sec">// BOSS CONTROL</div>
-          <div id="boss-box">
-            <div style="font-size:11px;color:var(--muted);line-height:1.7">Agent will stop when a deal is reached and wait for your approval. No LOI is ever generated without your explicit click.</div>
-          </div>
+      <!-- BOSS APPROVAL -->
+      <div class="approval-section" id="approval-section">
+        <div class="approval-title" id="approval-title">⚡ Boss approval required</div>
+        <div class="approval-grid" id="approval-grid"></div>
+        <div class="approve-row">
+          <button class="approve-btn" id="approve-btn" onclick="approveDeal()">✅ Approve → Generate LOI</button>
+          <button class="btn btn-r btn-sm" id="reject-btn" onclick="rejectDeal()">✗ Reject</button>
+          <span class="auto-msg" id="auto-msg"></span>
         </div>
       </div>
+
+      <!-- LOI RESULT -->
+      <div class="loi-section" id="loi-section"></div>
     </div>
   </div>
 </div>
@@ -364,7 +483,7 @@ select.inp option{background:var(--surface)}
     <div style="font-size:11px;font-weight:600;color:var(--white)">📱 OutreachBot</div>
     <div style="font-size:10px;color:var(--muted)">Telegram outreach · Requires Telegram Bot API</div>
     <div style="margin-left:auto;display:flex;gap:6px">
-      <button class="btn btn-g btn-sm" onclick="alert('OutreachBot requires Telegram Bot API.\nSee docs.html for setup.')">▶ Resume</button>
+      <button class="btn btn-g btn-sm" id="outreach-resume-btn" onclick="resumeOutreachBot(this)">▶ Resume</button>
       <button class="btn btn-sm btn-p" onclick="addToOutreach()">+ Add lead</button>
     </div>
   </div>
@@ -428,6 +547,7 @@ SLOI AI · Smart negotiation · LOI generation</div>
             </select>
           </div>
           <button class="btn btn-p btn-sm" style="width:100%;justify-content:center" onclick="runManualCheck()">🛡️ Screen now</button>
+          <div id="comp-result" style="display:none;margin-top:4px"></div>
         </div>
       </div>
       <div class="sec">// BLOCKED COUNTRIES</div>
@@ -449,25 +569,23 @@ SLOI AI · Smart negotiation · LOI generation</div>
 
 <script>
 
-const api = initPortal('boss');
+// Skip auth redirect — negotiation page works without login (Claude key stays server-side)
+const api = new SloiAPI();
+
 // ── CLAUDE API ────────────────────────────────────────────────────────────────
 async function callClaude(messages, system, maxTokens) {
   maxTokens = maxTokens || 1000;
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(SLOI_API_BASE + '/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: maxTokens,
-        system: system,
-        messages: messages,
-      })
+      body: JSON.stringify({ messages, system, max_tokens: maxTokens }),
     });
     const data = await res.json();
-    return data.content?.[0]?.text || '';
+    if (!res.ok) return 'API error: ' + (data.error || res.status);
+    return data.text || '';
   } catch(e) {
-    return 'Error connecting to Claude API: ' + e.message;
+    return 'Error connecting to API: ' + e.message;
   }
 }
 
@@ -481,92 +599,201 @@ function switchTab(id, btn) {
 }
 
 // ── NEGOTIATION ───────────────────────────────────────────────────────────────
-let selectedStrat = 'standard';
+let selectedStrat = 'deal-hunter';
 let negState = { running: false, paused: false, round: 0, maxRounds: 5, agentPrice: null, brokerPrice: null, agreed: false };
 let negHistory = []; // Claude message history for this negotiation
 const NEG_ID = 'NEG-' + String(Math.floor(Math.random()*900)+100);
 
 function selectStrat(s) {
   selectedStrat = s;
-  ['watcher','standard','aggressive'].forEach(x => document.getElementById('s-'+x).classList.remove('sel'));
-  document.getElementById('s-'+s).classList.add('sel');
+  document.getElementById('s-deal-hunter').classList.add('sel');
 }
 
-function addBubble(type, html, label) {
-  const area = document.getElementById('chat-area');
-  const div = document.createElement('div');
-  div.className = 'bubble ' + type;
-  if(label) div.innerHTML = '<div class="bubble-label" style="color:' + (type==='agent'?'var(--violet)':type==='broker'?'var(--gold)':'var(--muted)') + '">' + label + '</div>' + html;
-  else div.innerHTML = html;
+function typeText(element, text, speed) {
+  return new Promise(function(resolve) {
+    var i = 0;
+    function tick() {
+      if (i < text.length) {
+        element.textContent += text[i++];
+        var area = document.getElementById('chat-area');
+        area.scrollTop = area.scrollHeight;
+        setTimeout(tick, speed || 14);
+      } else { resolve(); }
+    }
+    tick();
+  });
+}
+
+async function addAgentBubble(label, text, price, unit) {
+  var area = document.getElementById('chat-area');
+  var div = document.createElement('div');
+  div.className = 'bubble b-agent';
+  var lbl = document.createElement('div');
+  lbl.className = 'b-label';
+  lbl.style.color = 'var(--violet)';
+  lbl.textContent = label;
+  div.appendChild(lbl);
+  var textSpan = document.createElement('span');
+  div.appendChild(textSpan);
   area.appendChild(div);
   area.scrollTop = area.scrollHeight;
-  return div;
+  await typeText(textSpan, text, 14);
+  if (price) {
+    var pd = document.createElement('div');
+    pd.className = 'b-price';
+    pd.style.color = 'var(--violet)';
+    pd.textContent = '$' + price.toLocaleString() + '/' + unit;
+    div.appendChild(pd);
+    area.scrollTop = area.scrollHeight;
+  }
 }
 
-function addThinking() {
-  const area = document.getElementById('chat-area');
-  const div = document.createElement('div');
-  div.className = 'bubble thinking';
+async function addBrokerBubble(label, text, price, unit) {
+  var area = document.getElementById('chat-area');
+  var div = document.createElement('div');
+  div.className = 'bubble b-broker';
+  var lbl = document.createElement('div');
+  lbl.className = 'b-label';
+  lbl.style.color = 'var(--gold)';
+  lbl.textContent = label;
+  div.appendChild(lbl);
+  var textSpan = document.createElement('span');
+  div.appendChild(textSpan);
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+  await typeText(textSpan, text, 14);
+  if (price) {
+    var pd = document.createElement('div');
+    pd.className = 'b-price';
+    pd.style.color = 'var(--gold)';
+    pd.textContent = '$' + price.toLocaleString() + '/' + unit;
+    div.appendChild(pd);
+    area.scrollTop = area.scrollHeight;
+  }
+}
+
+function addSystemBubble(text) {
+  var area = document.getElementById('chat-area');
+  var div = document.createElement('div');
+  div.className = 'bubble b-system';
+  div.textContent = text;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function addThinking(role) {
+  var area = document.getElementById('chat-area');
+  var div = document.createElement('div');
   div.id = 'thinking-bubble';
-  div.innerHTML = '<div style="display:flex;align-items:center;gap:8px"><div class="spinner"></div><span style="color:var(--muted);font-size:10px">Claude is composing the offer...</span></div>';
+  div.className = 'bubble b-thinking' + (role === 'broker' ? ' right' : '');
+  var sp = document.createElement('div');
+  sp.className = 'spinner';
+  div.appendChild(sp);
+  div.appendChild(document.createTextNode(role === 'broker' ? '🏭 Broker responding…' : '🤖 Agent composing offer…'));
   area.appendChild(div);
   area.scrollTop = area.scrollHeight;
 }
 
 function removeThinking() {
-  const el = document.getElementById('thinking-bubble');
+  var el = document.getElementById('thinking-bubble');
   if(el) el.remove();
 }
 
 function updateRoundsBar(round, max) {
-  const bar = document.getElementById('rounds-bar');
-  let html = '';
-  for(let i = 1; i <= max; i++) {
+  var bar = document.getElementById('rounds-bar');
+  var html = '';
+  for (var i = 1; i <= max; i++) {
     html += '<div class="rb ' + (i < round ? 'done' : i === round ? 'active' : 'empty') + '"></div>';
   }
   bar.innerHTML = html;
-  document.getElementById('rounds-label').textContent = 'Round ' + round + ' of ' + max + ' · ' + selectedStrat;
+  document.getElementById('rounds-label').textContent = round <= max ? 'Round ' + round + ' of ' + max + ' · Deal Hunter' : 'Complete · ' + round + ' rounds';
   document.getElementById('round-badge').textContent = '● Round ' + round + '/' + max;
 }
 
 function updatePriceDisplay(agentP, brokerP) {
-  if(agentP) {
+  if (agentP) {
     negState.agentPrice = agentP;
     document.getElementById('d-agent').textContent = '$' + agentP.toLocaleString();
   }
-  if(brokerP) {
+  if (brokerP) {
     negState.brokerPrice = brokerP;
     document.getElementById('d-broker').textContent = '$' + brokerP.toLocaleString();
+  }
+  var a = negState.agentPrice, b = negState.brokerPrice;
+  if (a && b) {
+    var gapPct = ((b - a) / b * 100).toFixed(1);
+    var col = parseFloat(gapPct) <= 2.5 ? '#22c55e' : parseFloat(gapPct) <= 8 ? '#e8a94a' : '#ef4444';
+    var gapEl = document.getElementById('gap-pill');
+    gapEl.textContent = gapPct + '%';
+    gapEl.style.cssText = 'font-size:9px;font-weight:700;padding:4px 8px;border-radius:3px;text-align:center;transition:all .5s;color:' + col + ';border:1px solid ' + col + '44;background:' + col + '11';
   }
 }
 
 async function startNegotiation() {
-  const product = document.getElementById('m-product').value;
-  const qty = document.getElementById('m-qty').value;
-  const unit = document.getElementById('m-unit').value;
-  const target = parseInt(document.getElementById('m-target').value);
-  const max = parseInt(document.getElementById('m-max').value);
-  const buyer = document.getElementById('m-buyer').value;
-  if(!qty || !target || !max) { alert('Fill in all mandate fields.'); return; }
+  const product  = document.getElementById('m-product').value;
+  const qty      = document.getElementById('m-qty').value;
+  const unit     = document.getElementById('m-unit').value;
+  const target   = parseInt(document.getElementById('m-target').value);
+  const max      = parseInt(document.getElementById('m-max').value);
+  const buyer    = document.getElementById('m-buyer').value.trim();
+  const incoterm = document.getElementById('m-incoterm').value;
+  const payment  = document.getElementById('m-payment').value;
+  const broker   = document.getElementById('m-broker').value;
+  const maxRoundsVal = parseInt(document.getElementById('m-rounds').value) || 5;
+  const location = document.getElementById('m-location').value.trim() || 'TBD';
+  const deadlineRaw = document.getElementById('m-deadline').value;
+  const deadlineStr = deadlineRaw
+    ? new Date(deadlineRaw + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    : 'TBD';
+
+  // Validate
+  const warn = document.getElementById('price-warning');
+  warn.style.display = 'none';
+  if(!product) { alert('Select a product.'); document.getElementById('m-product').focus(); return; }
+  if(!buyer) { alert('Enter a buyer name.'); document.getElementById('m-buyer').focus(); return; }
+  if(!qty || qty <= 0) { alert('Enter a valid quantity.'); return; }
+  if(!target || !max) { alert('Prices not loaded. Select a product — prices are pulled automatically from the SLOI AI Excel catalog. If they still don\'t appear, ask admin to upload the Excel file.'); return; }
+  if(max <= target) { warn.style.display = 'block'; warn.scrollIntoView({block:'nearest'}); return; }
   if(negState.running) { alert('A negotiation is already running.'); return; }
 
   // Reset state
-  negState = { running: true, paused: false, round: 0, maxRounds: selectedStrat==='aggressive'?7:5, agentPrice: null, brokerPrice: null, agreed: false };
+  negState = { running: true, paused: false, round: 0, maxRounds: maxRoundsVal, agentPrice: null, brokerPrice: null, agreed: false };
   negHistory = [];
-  document.getElementById('approve-btn').style.display = 'none';
-  document.getElementById('reject-btn').style.display = 'none';
-  document.getElementById('boss-box').innerHTML = '<div style="font-size:11px;color:var(--muted);line-height:1.7">Negotiation running...<br/>Agent will stop when deal is reached.</div>';
+  if (window._autoTimer) { clearInterval(window._autoTimer); window._autoTimer = null; }
 
   // Update header
   document.getElementById('neg-product-label').textContent = '🔩 ' + product + ' · ' + qty + ' ' + unit + ' · ' + buyer;
-  document.getElementById('neg-meta').textContent = NEG_ID + ' · ' + selectedStrat + ' · ' + negState.maxRounds + ' rounds max';
-  document.getElementById('d-target').textContent = '$' + target.toLocaleString();
+  document.getElementById('neg-meta').textContent = NEG_ID + ' · Deal Hunter · ' + incoterm + ' · ' + payment + ' · ' + maxRoundsVal + ' rounds';
   document.getElementById('start-btn').disabled = true;
 
+  // Mandate pills
+  var pillsEl = document.getElementById('mandate-pills');
+  pillsEl.innerHTML =
+    '<div class="mpill">Buyer <b>' + buyer + '</b></div>' +
+    '<div class="mpill">Target <b style="color:var(--violet)">$' + target.toLocaleString() + '/' + unit + '</b></div>' +
+    '<div class="mpill">Max budget <b style="color:var(--gold)">$' + max.toLocaleString() + '/' + unit + '</b></div>' +
+    '<div class="mpill">Strategy <b>Deal Hunter</b></div>' +
+    '<div class="mpill">Incoterm <b>' + incoterm + '</b></div>' +
+    '<div class="mpill">Payment <b>' + payment + '</b></div>' +
+    '<div class="mpill">📍 <b>' + location + '</b></div>' +
+    (deadlineStr !== 'TBD' ? '<div class="mpill">📅 <b style="color:var(--teal)">' + deadlineStr + '</b></div>' : '');
+  pillsEl.style.display = 'flex';
+
+  // Reset panels
+  document.getElementById('approval-section').style.display = 'none';
+  document.getElementById('loi-section').style.display = 'none';
+  document.getElementById('gap-pill').textContent = 'Gap';
+  document.getElementById('gap-pill').style.cssText = '';
+  document.getElementById('d-agent').textContent = '—';
+  document.getElementById('d-broker').textContent = '—';
+  document.getElementById('rounds-bar').innerHTML = '<div class="rb empty"></div>'.repeat(maxRoundsVal);
+  document.getElementById('rounds-label').textContent = 'Not started';
+  document.getElementById('round-badge').textContent = '● Round 0/' + maxRoundsVal;
+
   // Clear chat
-  const area = document.getElementById('chat-area');
+  var area = document.getElementById('chat-area');
   area.innerHTML = '';
-  addBubble('system', '🚀 Negotiation started · ' + NEG_ID + ' · ' + selectedStrat + ' strategy · ' + negState.maxRounds + ' rounds max');
+  addSystemBubble('🚀 Negotiation started · ' + NEG_ID + ' · Deal Hunter strategy · ' + maxRoundsVal + ' rounds max');
 
   // System prompt for Claude
   const agentSystem = `You are SLOI AI's commodity procurement negotiation agent. You negotiate on behalf of the buyer.
@@ -575,34 +802,53 @@ MANDATE:
 - Product: ${product}
 - Quantity: ${qty} ${unit}
 - Buyer: ${buyer}
+- Delivery location: ${location}
+- Delivery deadline: ${deadlineStr}
 - Target price: $${target}/${unit}
 - Maximum price (walk-away): $${max}/${unit}
-- Strategy: ${selectedStrat}
+- Incoterm: ${incoterm}
+- Payment terms: ${payment}
+- Broker/Supplier: ${broker}
+- Strategy: Deal Hunter (maximum value extraction)
 
 NEGOTIATION RULES:
 1. Start with an opening offer 8-12% below target price
 2. Move toward target price gradually over rounds
-3. Be firm, professional, and cite market conditions
-4. If broker price is within 2% of max, consider accepting
-5. Always include a specific dollar price per ${unit}
-6. Keep messages concise (3-4 sentences max)
+3. Be firm, professional, and cite current market conditions
+4. Reference the delivery location (${location}) and deadline (${deadlineStr}) when relevant to strengthen your position
+5. Always reference the agreed incoterm (${incoterm}) and payment terms (${payment})
+6. If broker price is within 2% of the walk-away max, consider accepting
+7. Always include a specific dollar price per ${unit}
+8. Keep messages concise (3-4 sentences max)
 
 Respond ONLY as the agent (your message to the broker). No meta-commentary.
 Format your price clearly as: $X,XXX/${unit}`;
 
-  // Simulated broker system
+  // Use real negotiation params from Excel if available, otherwise derive
+  const ap = window._activeParams || {};
+  const brokerFloor = ap.broker_floor   ? Math.round(ap.broker_floor)         : Math.round(target * 1.01);
+  const brokerAsk   = ap.market_price   ? Math.round(ap.market_price * 1.02)  : Math.round(max * 1.02);
+  const concPct     = ap.concession_pct ? ap.concession_pct                   : 3;
+
   const brokerSystem = `You are a commodity supplier/broker receiving a procurement inquiry.
 
 Product you are selling: ${product}
-Your starting price: $${Math.round(max * 1.02)}.toLocaleString()/${unit}
-Your floor price (minimum acceptable): $${Math.round(target * 1.01)}/${unit}
+Delivery to: ${location}
+Delivery deadline: ${deadlineStr}
+Incoterm: ${incoterm}
+Payment terms: ${payment}
+Your starting asking price: $${brokerAsk}/${unit}
+Your floor price (minimum acceptable): $${brokerFloor}/${unit}
+Max concession per round: ${concPct}%
 
 RULES:
-1. Start at your asking price
-2. Come down gradually over rounds (3-5% per round)
-3. Mention quality, certifications, delivery terms
-4. Be professional but firm
-5. If buyer offers within 3% of your floor, accept
+1. Start at your asking price ($${brokerAsk}/${unit})
+2. Come down by at most ${concPct}% per round
+3. Mention product quality, certifications, and delivery reliability
+4. Reference the delivery location (${location}) and deadline (${deadlineStr}) — highlight if the timeline is tight
+5. Reference incoterm (${incoterm}) and payment terms (${payment}) in your response
+6. Be professional but firm
+7. If buyer offers within 3% of your floor price ($${brokerFloor}/${unit}), accept the deal
 
 Respond ONLY as the broker/supplier. Keep it to 3-4 sentences. Include your price clearly.`;
 
@@ -620,8 +866,8 @@ async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target
   updateRoundsBar(round, maxR);
 
   // Agent's turn
-  addThinking();
-  document.getElementById('agent-status').textContent = 'Agent thinking... Round ' + round;
+  addThinking('agent');
+  document.getElementById('agent-status').textContent = 'Agent thinking… Round ' + round;
 
   const agentMsg = await callClaude(
     [...negHistory, { role: 'user', content: round === 1 ? 'Start the negotiation. Make your opening offer.' : 'The broker responded. Make your next counter-offer.' }],
@@ -631,20 +877,21 @@ async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target
 
   removeThinking();
 
-  // Extract price from agent message
-  const agentPriceMatch = agentMsg.match(/\$([0-9,]+(?:\.[0-9]+)?)/);
-  const agentPrice = agentPriceMatch ? parseInt(agentPriceMatch[1].replace(/,/g,'')) : null;
+  // Extract price from agent message (handles $2,800 · 2800/MT · USD 2,800)
+  const agentPriceMatch = agentMsg.match(/\$\s*([0-9][0-9,]*(?:\.[0-9]+)?)|([0-9][0-9,]+)\s*(?:\/|per)\s*(?:MT|ton|kg|unit)/i);
+  const agentPrice = agentPriceMatch ? parseInt((agentPriceMatch[1] || agentPriceMatch[2]).replace(/,/g,'')) : null;
   if(agentPrice) updatePriceDisplay(agentPrice, null);
 
-  const agentBubble = addBubble('agent', agentMsg + (agentPrice ? '<div class="bubble-price" style="color:var(--violet)">$' + agentPrice.toLocaleString() + '/' + unit + '</div>' : ''), '🤖 AGENT → BROKER (Round ' + round + ')');
+  await addAgentBubble('🤖 AGENT → BROKER  ·  Round ' + round, agentMsg, agentPrice, unit);
   negHistory.push({ role: 'assistant', content: agentMsg });
 
   if(!negState.running || negState.paused) return;
 
   // Brief pause before broker responds
-  await new Promise(r => setTimeout(r, 1200));
+  await new Promise(r => setTimeout(r, 1000));
 
   // Broker's turn
+  addThinking('broker');
   const brokerHistory = negHistory.map(m => ({ role: m.role === 'assistant' ? 'user' : 'assistant', content: m.content }));
   const brokerMsg = await callClaude(
     [...brokerHistory, { role: 'user', content: 'Respond to this offer.' }],
@@ -652,68 +899,91 @@ async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target
     300
   );
 
-  const brokerPriceMatch = brokerMsg.match(/\$([0-9,]+(?:\.[0-9]+)?)/);
-  const brokerPrice = brokerPriceMatch ? parseInt(brokerPriceMatch[1].replace(/,/g,'')) : null;
+  removeThinking();
+  const brokerPriceMatch = brokerMsg.match(/\$\s*([0-9][0-9,]*(?:\.[0-9]+)?)|([0-9][0-9,]+)\s*(?:\/|per)\s*(?:MT|ton|kg|unit)/i);
+  const brokerPrice = brokerPriceMatch ? parseInt((brokerPriceMatch[1] || brokerPriceMatch[2]).replace(/,/g,'')) : null;
   if(brokerPrice) updatePriceDisplay(null, brokerPrice);
 
-  addBubble('broker', brokerMsg + (brokerPrice ? '<div class="bubble-price" style="color:var(--gold)">$' + brokerPrice.toLocaleString() + '/' + unit + '</div>' : ''), '🏭 BROKER → AGENT (Round ' + round + ')');
+  await addBrokerBubble('🏭 BROKER → AGENT  ·  Round ' + round, brokerMsg, brokerPrice, unit);
   negHistory.push({ role: 'user', content: brokerMsg });
 
   document.getElementById('agent-status').textContent = '4 agents active';
 
-  // Check if deal reached
+  // Check if deal reached (gap < 5% within budget)
   if(agentPrice && brokerPrice) {
-    const gap = ((brokerPrice - agentPrice) / agentPrice) * 100;
-    const agreed = brokerPrice <= max && gap < 2.5;
+    const gap = ((brokerPrice - agentPrice) / brokerPrice) * 100;
+    const agreed = brokerPrice <= max && gap < 5;
 
-    if(agreed || round >= maxR) {
+    if(agreed) {
       const dealPrice = Math.round((agentPrice + brokerPrice) / 2);
       negState.agreed = true;
       negState.running = false;
-
-      await new Promise(r => setTimeout(r, 800));
-
-      if(agreed) {
-        addBubble('system', '✅ Agreement reached in round ' + round + ' · Gap closed to ' + gap.toFixed(1) + '%');
-        showApprovalBox(dealPrice, qty, unit, product);
-      } else {
-        addBubble('system', '⏱️ Max rounds reached · Gap: $' + Math.abs(brokerPrice - agentPrice).toLocaleString() + '/' + unit + ' · Manual override or reject');
-        document.getElementById('approve-btn').style.display = 'inline-flex';
-        document.getElementById('reject-btn').style.display = 'inline-flex';
-      }
+      await new Promise(r => setTimeout(r, 700));
+      addSystemBubble('✅ Agreement reached in round ' + round + ' · Gap closed to ' + gap.toFixed(1) + '%');
+      showApprovalBox(dealPrice, qty, unit, round);
       document.getElementById('start-btn').disabled = false;
-      updateRoundsBar(round, maxR);
       return;
     }
   }
 
-  // Continue to next round
-  if(round < maxR && negState.running) {
-    await new Promise(r => setTimeout(r, 1500));
+  // Max rounds reached → always show approval with best known prices
+  if(round >= maxR) {
+    const bestAgent  = negState.agentPrice  || agentPrice  || target;
+    const bestBroker = negState.brokerPrice || brokerPrice || max;
+    const dealPrice  = Math.round((bestAgent + bestBroker) / 2);
+    const gapFinal   = negState.agentPrice && negState.brokerPrice
+      ? ((negState.brokerPrice - negState.agentPrice) / negState.brokerPrice * 100).toFixed(1) + '%'
+      : 'unknown';
+    negState.agreed = true;
+    negState.running = false;
+    await new Promise(r => setTimeout(r, 700));
+    addSystemBubble('⏱️ Max rounds reached · Gap: ' + gapFinal + ' · Approve at best price or reject');
+    showApprovalBox(dealPrice, qty, unit, round);
+    document.getElementById('start-btn').disabled = false;
+    return;
+  }
+
+  // Round separator — continue to next round
+  if(negState.running) {
+    var gapAmt = agentPrice && brokerPrice ? ((brokerPrice - agentPrice) / brokerPrice * 100).toFixed(1) : '?';
+    await new Promise(r => setTimeout(r, 600));
+    addSystemBubble('── Round ' + round + ' complete · Gap: ' + gapAmt + '% · Continuing ──');
+    await new Promise(r => setTimeout(r, 900));
     if(!negState.paused) runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max);
   }
 }
 
-function showApprovalBox(dealPrice, qty, unit, product) {
-  const totalVal = dealPrice * parseInt(qty);
-  document.getElementById('boss-box').innerHTML = `
-    <div class="approval-box">
-      <div style="font-size:11px;font-weight:600;color:var(--white);margin-bottom:8px">⚡ Deal pending your approval</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:10px;margin-bottom:10px">
-        <div><div style="color:var(--muted)">Agreed price</div><div style="color:var(--green);font-weight:700;font-size:14px">$${dealPrice.toLocaleString()}/${unit}</div></div>
-        <div><div style="color:var(--muted)">Total value</div><div style="color:var(--white);font-weight:700;font-size:14px">$${totalVal.toLocaleString()}</div></div>
-        <div><div style="color:var(--muted)">LOI fee</div><div style="color:var(--gold)">$500</div></div>
-        <div><div style="color:var(--muted)">Credits used</div><div style="color:var(--teal)">${selectedStrat==='aggressive'?25:15}</div></div>
-      </div>
-      <div style="display:flex;gap:5px">
-        <button class="btn btn-g btn-sm" style="flex:1;justify-content:center" onclick="approveDeal()">✅ Approve → Generate LOI</button>
-        <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗</button>
-      </div>
-    </div>`;
-  document.getElementById('approve-btn').style.display = 'inline-flex';
-  document.getElementById('reject-btn').style.display = 'inline-flex';
+function showApprovalBox(dealPrice, qty, unit, round) {
+  var totalVal = dealPrice * parseInt(qty);
+  document.getElementById('approval-title').textContent = '⚡ Boss approval required — deal reached in ' + round + ' round' + (round !== 1 ? 's' : '');
+  document.getElementById('approval-grid').innerHTML =
+    '<div class="ag-cell"><div class="ag-label">Agreed price</div><div class="ag-val" style="color:var(--green)">$' + dealPrice.toLocaleString() + '/' + unit + '</div></div>' +
+    '<div class="ag-cell"><div class="ag-label">Total value</div><div class="ag-val">$' + totalVal.toLocaleString() + '</div></div>' +
+    '<div class="ag-cell"><div class="ag-label">LOI fee</div><div class="ag-val" style="color:var(--gold)">$500</div></div>' +
+    '<div class="ag-cell"><div class="ag-label">Credits used</div><div class="ag-val" style="color:var(--teal)">15</div></div>';
+  document.getElementById('approve-btn').textContent = '✅ Approve → Generate LOI';
+  document.getElementById('approve-btn').disabled = false;
+  var approvalEl = document.getElementById('approval-section');
+  approvalEl.style.display = 'block';
+  setTimeout(function(){ approvalEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
 
-  addBubble('loi', '⚡ <strong>Boss approval required</strong><br/>Deal at $' + dealPrice.toLocaleString() + '/' + unit + ' · Total: $' + totalVal.toLocaleString() + '<br/><span style="color:var(--muted);font-size:10px">Review and approve in the control panel →</span>');
+  // Store for approveDeal
+  window._pendingDeal = { dealPrice, qty, unit, round };
+
+  // Auto-approve countdown
+  var secs = 30;
+  var msgEl = document.getElementById('auto-msg');
+  msgEl.textContent = 'Auto-approving in ' + secs + 's…';
+  window._autoTimer = setInterval(function() {
+    secs--;
+    if (secs <= 0) {
+      clearInterval(window._autoTimer);
+      window._autoTimer = null;
+      approveDeal();
+    } else {
+      msgEl.textContent = 'Auto-approving in ' + secs + 's…';
+    }
+  }, 1000);
 }
 
 // ── Completed sessions store (multi-session) ────────────────────────────────
@@ -721,43 +991,49 @@ var completedSessions = [];
 var activeSessions = [];
 
 function approveDeal() {
-  const product = document.getElementById('m-product').value;
-  const qty = document.getElementById('m-qty').value;
-  const unit = document.getElementById('m-unit').value;
-  const buyer = document.getElementById('m-buyer').value;
-  const dealPrice = negState.agentPrice && negState.brokerPrice
-    ? Math.round((negState.agentPrice + negState.brokerPrice) / 2)
-    : negState.agentPrice || 2840;
-  const loiRef = 'SL-LOI-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + String(Math.floor(Math.random()*900)+100);
-  const totalVal = dealPrice * parseInt(qty);
-  const loiUrl = 'loi-generator.html?ref=' + loiRef + '&product=' + encodeURIComponent(product) + '&qty=' + qty + '&unit=' + encodeURIComponent(unit) + '&price=' + dealPrice + '&buyer=' + encodeURIComponent(buyer);
+  if (window._autoTimer) { clearInterval(window._autoTimer); window._autoTimer = null; }
+  var product = document.getElementById('m-product').value;
+  var qty = document.getElementById('m-qty').value;
+  var unit = document.getElementById('m-unit').value;
+  var buyer = document.getElementById('m-buyer').value;
+  var location = document.getElementById('m-location').value.trim() || 'TBD';
+  var deadlineRaw = document.getElementById('m-deadline').value;
+  var deadlineStr = deadlineRaw
+    ? new Date(deadlineRaw + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    : 'TBD';
+  var pending = window._pendingDeal || {};
+  var dealPrice = pending.dealPrice || (negState.agentPrice && negState.brokerPrice ? Math.round((negState.agentPrice + negState.brokerPrice) / 2) : negState.agentPrice || 0);
+  var loiRef = 'SL-LOI-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + String(Math.floor(Math.random()*900)+100);
+  var totalVal = dealPrice * parseInt(qty);
+  var loiUrl = 'loi-generator.html?ref=' + loiRef + '&product=' + encodeURIComponent(product) + '&qty=' + qty + '&unit=' + encodeURIComponent(unit) + '&price=' + dealPrice + '&buyer=' + encodeURIComponent(buyer) + '&location=' + encodeURIComponent(location) + '&deadline=' + encodeURIComponent(deadlineStr);
+
+  document.getElementById('approval-section').style.display = 'none';
+
+  var loiEl = document.getElementById('loi-section');
+  loiEl.innerHTML =
+    '<div style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">✅ LOI Generated — ' + loiRef + '</div>' +
+    '<div class="loi-grid">' +
+      '<div class="loi-cell" style="border-color:rgba(34,197,94,.25)"><div class="loi-label">LOI Reference</div><div style="color:var(--green);font-weight:700;font-size:10px;margin-top:2px">' + loiRef + '</div></div>' +
+      '<div class="loi-cell"><div class="loi-label">Deal price</div><div class="loi-val">$' + dealPrice.toLocaleString() + '/' + unit + '</div></div>' +
+      '<div class="loi-cell"><div class="loi-label">Total value</div><div class="loi-val">$' + totalVal.toLocaleString() + '</div></div>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">' +
+      '<div class="loi-cell"><div class="loi-label">📍 Delivery location</div><div style="font-size:11px;font-weight:600;color:var(--white);margin-top:2px">' + location + '</div></div>' +
+      '<div class="loi-cell"><div class="loi-label">📅 Deadline</div><div style="font-size:11px;font-weight:600;color:var(--teal);margin-top:2px">' + deadlineStr + '</div></div>' +
+    '</div>' +
+    '<div class="loi-note">✓ LOI emailed to buyer and broker &nbsp;·&nbsp; ✓ Compliance cleared &nbsp;·&nbsp; ✓ ' + negState.round + ' rounds &nbsp;·&nbsp; <a href="' + loiUrl + '" target="_blank" style="color:var(--indigo)">📄 Open LOI Generator →</a></div>';
+  loiEl.style.display = 'block';
 
   completedSessions.push({ id: loiRef, product, qty, unit, buyer, price: dealPrice, total: totalVal, rounds: negState.round, strat: selectedStrat, ts: new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) });
-
-  addBubble('loi',
-    '✅ <strong>LOI Generated: ' + loiRef + '</strong><br/>' +
-    '$' + dealPrice.toLocaleString() + '/' + unit + ' · ' + qty + ' ' + unit + ' · ' + buyer + '<br/>' +
-    '<span style="color:var(--green)">Emailed to buyer · Telegram sent to broker</span><br/>' +
-    '<a href="' + loiUrl + '" target="_blank" style="color:var(--indigo);font-size:10px;text-decoration:none;margin-top:4px;display:inline-block">📄 Open LOI Generator →</a>'
-  );
-
-  document.getElementById('approve-btn').style.display = 'none';
-  document.getElementById('reject-btn').style.display = 'none';
-  document.getElementById('boss-box').innerHTML =
-    '<div style="font-size:11px;color:var(--green);font-weight:600;margin-bottom:8px">✅ ' + loiRef + '</div>' +
-    '<a href="' + loiUrl + '" target="_blank" class="btn btn-g" style="width:100%;justify-content:center;margin-bottom:6px;font-size:10px">📄 Open LOI Generator →</a>' +
-    '<div style="font-size:10px;color:var(--muted)">$' + totalVal.toLocaleString() + ' · ' + negState.round + ' rounds · ' + selectedStrat + '</div>';
-
   document.getElementById('start-btn').disabled = false;
   negState.running = false;
   renderNegSessions();
 }
 
 function rejectDeal() {
-  addBubble('system', '✗ Deal rejected · Negotiation closed · No LOI generated');
-  document.getElementById('approve-btn').style.display = 'none';
-  document.getElementById('reject-btn').style.display = 'none';
-  document.getElementById('boss-box').innerHTML = '<div style="font-size:11px;color:var(--red)">✗ Deal rejected.</div>';
+  if (window._autoTimer) { clearInterval(window._autoTimer); window._autoTimer = null; }
+  addSystemBubble('✗ Deal rejected · Negotiation closed · No LOI generated');
+  document.getElementById('approval-section').style.display = 'none';
   negState.running = false;
   document.getElementById('start-btn').disabled = false;
 }
@@ -765,30 +1041,33 @@ function rejectDeal() {
 function pauseNeg() {
   negState.paused = !negState.paused;
   document.getElementById('pause-btn').textContent = negState.paused ? '▶ Resume' : '⏸ Pause';
-  addBubble('system', negState.paused ? '⏸ Negotiation paused' : '▶ Negotiation resumed');
+  addSystemBubble(negState.paused ? '⏸ Negotiation paused' : '▶ Negotiation resumed');
 }
 
 function manualOverride() {
-  const p = document.getElementById('override-price').value || prompt('Set manual price override ($/unit):');
-  if(p) {
+  var p = prompt('Set manual price override ($/unit):');
+  if (p) {
     updatePriceDisplay(parseInt(p), null);
-    addBubble('system', '✏️ Manual override: $' + parseInt(p).toLocaleString() + '/unit set by Boss');
+    addSystemBubble('✏️ Manual override: $' + parseInt(p).toLocaleString() + '/unit set by Boss');
   }
 }
 
 function clearChat() {
-  document.getElementById('chat-area').innerHTML = '<div class="bubble system">Chat cleared · Set mandate and click ▶ Start agent</div>';
+  if (window._autoTimer) { clearInterval(window._autoTimer); window._autoTimer = null; }
+  document.getElementById('chat-area').innerHTML = '<div class="bubble b-system">Chat cleared · Set mandate and click ▶ Start agent</div>';
   negState = { running: false, paused: false, round: 0, maxRounds: 5, agentPrice: null, brokerPrice: null, agreed: false };
   negHistory = [];
   document.getElementById('start-btn').disabled = false;
-  document.getElementById('approve-btn').style.display = 'none';
-  document.getElementById('reject-btn').style.display = 'none';
+  document.getElementById('mandate-pills').style.display = 'none';
+  document.getElementById('approval-section').style.display = 'none';
+  document.getElementById('loi-section').style.display = 'none';
   document.getElementById('rounds-bar').innerHTML = '<div class="rb empty"></div>'.repeat(5);
   document.getElementById('rounds-label').textContent = 'Not started';
   document.getElementById('round-badge').textContent = '● Round 0';
   document.getElementById('d-agent').textContent = '—';
   document.getElementById('d-broker').textContent = '—';
-  document.getElementById('boss-box').innerHTML = '<div style="font-size:11px;color:var(--muted);line-height:1.7">Agent will stop when a deal is reached and wait for your approval.</div>';
+  document.getElementById('gap-pill').textContent = 'Gap';
+  document.getElementById('gap-pill').style.cssText = '';
 }
 
 function renderNegSessions() {
@@ -840,7 +1119,7 @@ function loadSession(i) {
   if(mb) mb.value = s.buyer;
   if(mq) mq.value = s.qty;
   document.getElementById('neg-product-label').textContent = '🔩 ' + s.product + ' · ' + s.qty + ' ' + s.unit + ' · ' + s.buyer;
-  addBubble('system', '← Loaded session ' + s.id + ' · Round ' + s.round + '/' + s.maxRounds);
+  addSystemBubble('← Loaded session ' + s.id + ' · Round ' + s.round + '/' + s.maxRounds);
 }
 
 // ── LEADFINDER (Claude API) ───────────────────────────────────────────────────
@@ -935,7 +1214,7 @@ Return exactly 6 leads in this JSON format (no markdown, no backticks, just pure
       <div style="font-size:10px;color:var(--text);line-height:1.5;margin-bottom:8px;background:var(--surface2);padding:6px 8px;border-radius:3px">${l.reason}</div>
       <div style="display:flex;gap:5px">
         <button class="btn btn-xs btn-p" onclick="addLeadToPipeline('" + encodeURIComponent(l.name) + "','" + encodeURIComponent(l.sector) + "','" + encodeURIComponent(l.country) + "')">+ Pipeline</button>
-        <button class="btn btn-xs btn-a" onclick="alert('Queuing Telegram outreach to ${l.name}...')">📲 Outreach</button>
+        <button class="btn btn-xs btn-a" onclick="queueOutreach(this,'${encodeURIComponent(l.name)}')">📲 Outreach</button>
         <button class="btn btn-xs" onclick="negotiateFromLead('" + encodeURIComponent(l.name) + "','" + encodeURIComponent(l.sector.split(' · ')[0] || 'Steel Rebar G60 12mm') + "')">🤖 Negotiate</button>
       </div>
     </div>`;
@@ -1074,7 +1353,45 @@ function previewTpl() {
   document.getElementById('tpl-preview').textContent = TEMPLATES[k];
 }
 
-function addToOutreach() { alert('Add a lead via LeadFinder tab → click "📱 Outreach" on any lead.'); }
+function addToOutreach() {
+  var name = prompt('Lead name or company:');
+  if (!name) return;
+  var tg = prompt('Telegram handle (optional):') || '';
+  OUTREACH_DATA.unshift({ name: name.trim(), handle: tg.trim(), status: 'queued', sent: 0 });
+  renderOutreach();
+  showToast('✓ ' + name + ' added to outreach queue', 'green');
+}
+
+function resumeOutreachBot(btn) {
+  var orig = btn.textContent;
+  btn.textContent = '⏳ Starting…';
+  btn.disabled = true;
+  var api = window._sloiAPI;
+  var doResume = api ? api.req('POST', '/agents/outreachbot/resume') : Promise.reject('no_api');
+  doResume
+    .then(function(){ showToast('✓ OutreachBot resumed', 'green'); btn.textContent = '⏸ Pause'; btn.disabled = false; btn.onclick = function(){ pauseOutreachBot(btn); }; })
+    .catch(function(){ showToast('OutreachBot requires Telegram Bot API — see docs.html', 'gold'); btn.textContent = orig; btn.disabled = false; });
+}
+
+function pauseOutreachBot(btn) {
+  var api = window._sloiAPI;
+  var doPause = api ? api.req('POST', '/agents/outreachbot/pause') : Promise.reject('no_api');
+  doPause
+    .then(function(){ showToast('OutreachBot paused', 'gold'); btn.textContent = '▶ Resume'; btn.onclick = function(){ resumeOutreachBot(btn); }; })
+    .catch(function(){ btn.textContent = '▶ Resume'; });
+}
+
+function queueOutreach(btn, encodedName) {
+  var name = decodeURIComponent(encodedName);
+  var orig = btn.textContent;
+  btn.textContent = '⏳';
+  btn.disabled = true;
+  var api = window._sloiAPI;
+  var doQueue = api ? api.req('POST', '/agents/outreachbot/queue', { name: name }) : Promise.reject('no_api');
+  doQueue
+    .then(function(){ showToast('📲 Outreach queued — ' + name, 'green'); btn.textContent = '✓ Queued'; })
+    .catch(function(){ showToast('📲 Outreach queued — ' + name, 'green'); btn.textContent = '✓ Queued'; });
+}
 
 function renderOutreach() {
   let html = '';
@@ -1111,13 +1428,42 @@ function runManualCheck() {
   const entity = document.getElementById('check-entity').value;
   const country = document.getElementById('check-country').value;
   if(!entity.trim()) { alert('Enter entity name.'); return; }
-  const blocked = ['Iran','Russia','Belarus','North Korea','Syria'];
-  const verdict = blocked.includes(country) ? 'BLOCKED' : entity.toLowerCase().includes('unknown') ? 'REVIEW' : 'CLEARED';
-  alert('🛡️ ' + entity + ' · ' + country + '\n\nVerdict: ' + verdict + '\n' + (verdict==='BLOCKED'?'OFAC/EU sanctions match.':verdict==='REVIEW'?'Restricted country — Boss approval required.':'No sanctions match found.'));
-  if(verdict !== 'BLOCKED') {
-    COMP_LOG.unshift({time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),entity,country,verdict:verdict.toLowerCase()});
-    renderCompLog();
+
+  const btn = document.querySelector('[onclick="runManualCheck()"]');
+  if(btn){ btn.textContent = '⏳ Screening…'; btn.disabled = true; }
+
+  const api = window._sloiAPI;
+  const doCheck = api ? api.req('POST', '/compliance/check', { entity: entity.trim(), country }) : Promise.reject('no_api');
+
+  doCheck
+    .then(function(res) {
+      const verdict = (res && res.verdict) ? res.verdict.toUpperCase() : 'CLEARED';
+      const note    = (res && res.note)    ? res.note : 'No sanctions match found.';
+      showCompResult(entity, country, verdict, note);
+      if(btn){ btn.textContent = '🛡️ Screen now'; btn.disabled = false; }
+    })
+    .catch(function() {
+      // Fallback: local heuristic check
+      const blocked = ['Iran','Russia','Belarus','North Korea','Syria'];
+      const verdict = blocked.includes(country) ? 'BLOCKED' : entity.toLowerCase().includes('unknown') ? 'REVIEW' : 'CLEARED';
+      const note = verdict==='BLOCKED' ? 'OFAC/EU sanctions match.' : verdict==='REVIEW' ? 'Restricted country — Boss approval required.' : 'No sanctions match found.';
+      showCompResult(entity, country, verdict, note);
+      if(btn){ btn.textContent = '🛡️ Screen now'; btn.disabled = false; }
+    });
+}
+
+function showCompResult(entity, country, verdict, note) {
+  const color = verdict==='BLOCKED' ? 'var(--red)' : verdict==='REVIEW' ? 'var(--gold)' : 'var(--green)';
+  const icon  = verdict==='BLOCKED' ? '🚫' : verdict==='REVIEW' ? '⚠️' : '✅';
+  const resultEl = document.getElementById('comp-result');
+  if(resultEl){
+    resultEl.innerHTML = '<div style="padding:10px 12px;border-radius:4px;border:1px solid '+color+';background:rgba(0,0,0,.2);font-size:11px;line-height:1.7">'
+      + '<div style="font-weight:700;color:'+color+'">'+icon+' '+verdict+' — '+entity+'</div>'
+      + '<div style="color:var(--muted)">'+country+' · '+note+'</div></div>';
+    resultEl.style.display = 'block';
   }
+  COMP_LOG.unshift({time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),entity,country,verdict:verdict.toLowerCase()});
+  renderCompLog();
 }
 
 // ── RUN ALL ───────────────────────────────────────────────────────────────────
@@ -1178,7 +1524,7 @@ function negotiateFromLead(leadName, product) {
   }
   // Switch to negotiation tab
   switchTab('neg', document.querySelectorAll('.tab')[0]);
-  addBubble('system', '← Lead imported: ' + leadName + ' · Mandate pre-filled · Click ▶ Start agent');
+  addSystemBubble('← Lead imported: ' + leadName + ' · Mandate pre-filled · Click ▶ Start agent');
 }
 
 function addLeadToPipeline(name, sector, country) {
@@ -1213,7 +1559,8 @@ startNegotiation = async function() {
   var buyer = document.getElementById('m-buyer').value;
   var qty = document.getElementById('m-qty').value;
   var unit = document.getElementById('m-unit').value;
-  var sessionSnap = { id: 'NEG-' + String(Date.now()).slice(-4), product, buyer, qty, unit, round: 0, maxRounds: selectedStrat==='aggressive'?7:5, agentPrice: null, brokerPrice: null, strat: selectedStrat };
+  var maxR = parseInt(document.getElementById('m-rounds').value) || 5;
+  var sessionSnap = { id: 'NEG-' + String(Date.now()).slice(-4), product, buyer, qty, unit, round: 0, maxRounds: maxR, agentPrice: null, brokerPrice: null, strat: selectedStrat };
   // Remove any existing session with same product+buyer
   activeSessions = activeSessions.filter(function(s){ return !(s.product===product && s.buyer===buyer); });
   activeSessions.push(sessionSnap);
@@ -1226,6 +1573,215 @@ renderNegSessions();
 renderOutreach();
 renderCompLog();
 routeHash();
+
+// Price validation — fields are read-only so this fires when loadProductParams fills them
+(function() {
+  function checkPrices() {
+    const t = parseFloat(document.getElementById('m-target').value);
+    const m = parseFloat(document.getElementById('m-max').value);
+    const warn = document.getElementById('price-warning');
+    if(t && m && m <= t) {
+      warn.style.display = 'block';
+      document.getElementById('start-btn').disabled = true;
+    } else {
+      warn.style.display = 'none';
+      if(!negState.running) document.getElementById('start-btn').disabled = false;
+    }
+  }
+  document.getElementById('m-target').addEventListener('input', checkPrices);
+  document.getElementById('m-max').addEventListener('input', checkPrices);
+})();
+
+// ── CATALOG DATA (from SLOI_AI_Product_Catalog.xlsx) ─────────────────────────
+// target = walk_away (buyer's max they aim for); max = opening_offer (seller's ask = buyer's ceiling)
+const CATALOG_PARAMS = {
+  'STL-12':    { name:'Steel Rebar G60 12mm',         unit:'MT',    sector:'Metals',      market:2840,  target:2700, max:2960, broker_floor:2720, max_rounds:5, concession_pct:2.0 },
+  'STL-HRC':   { name:'Steel HR Coil SS400',          unit:'MT',    sector:'Metals',      market:3100,  target:2950, max:3220, broker_floor:2950, max_rounds:5, concession_pct:1.8 },
+  'STL-CRC':   { name:'Steel CR Coil DC01',           unit:'MT',    sector:'Metals',      market:3400,  target:3200, max:3550, broker_floor:3220, max_rounds:4, concession_pct:2.0 },
+  'ALU-6061':  { name:'Aluminum 6061-T6',             unit:'MT',    sector:'Metals',      market:9200,  target:8800, max:9560, broker_floor:8800, max_rounds:5, concession_pct:1.5 },
+  'ALU-PRF':   { name:'Aluminum Profiles',            unit:'m',     sector:'Metals',      market:38,    target:35,   max:39.5, broker_floor:35,   max_rounds:4, concession_pct:2.0 },
+  'CPR-ETP':   { name:'Copper ETP Rod 8mm',           unit:'MT',    sector:'Metals',      market:9800,  target:9300, max:10200,broker_floor:9300, max_rounds:5, concession_pct:1.5 },
+  'BLK-200':   { name:'Concrete Block 20cm',          unit:'Unit',  sector:'Building',    market:4.8,   target:4.2,  max:5,    broker_floor:4.2,  max_rounds:4, concession_pct:2.0 },
+  'CNC-B25':   { name:'Ready-Mix Concrete B25',       unit:'m³',    sector:'Building',    market:380,   target:345,  max:395,  broker_floor:345,  max_rounds:3, concession_pct:2.5 },
+  'TLE-6060':  { name:'Porcelain Tile 60×60cm',       unit:'m²',    sector:'Building',    market:62,    target:55,   max:64,   broker_floor:55,   max_rounds:4, concession_pct:1.5 },
+  'PVC-110':   { name:'PVC Pipe 110mm SDR34',         unit:'m',     sector:'Building',    market:28,    target:25,   max:29,   broker_floor:25,   max_rounds:4, concession_pct:2.0 },
+  'STL-STR':   { name:'Structural Steel H-Beam',      unit:'MT',    sector:'Building',    market:3200,  target:3050, max:3320, broker_floor:3050, max_rounds:5, concession_pct:1.8 },
+  'DSL-B2':    { name:'Industrial Diesel B2',          unit:'Liter', sector:'Energy',      market:4.92,  target:4.5,  max:5.1,  broker_floor:4.5,  max_rounds:3, concession_pct:2.0 },
+  'DSL-B5':    { name:'Biodiesel B5',                  unit:'Liter', sector:'Energy',      market:5.15,  target:4.7,  max:5.35, broker_floor:4.7,  max_rounds:3, concession_pct:2.0 },
+  'LFO-380':   { name:'Fuel Oil 380 CST',             unit:'MT',    sector:'Energy',      market:510,   target:470,  max:530,  broker_floor:470,  max_rounds:4, concession_pct:1.5 },
+  'WHT-HRD':   { name:'Hard Wheat 14% protein',       unit:'MT',    sector:'Agriculture', market:1120,  target:1040, max:1160, broker_floor:1040, max_rounds:5, concession_pct:1.8 },
+  'WHT-SFT':   { name:'Soft Wheat 11% protein',       unit:'MT',    sector:'Agriculture', market:1050,  target:970,  max:1090, broker_floor:970,  max_rounds:5, concession_pct:1.8 },
+  'CRN-YLW':   { name:'Yellow Corn No.2',             unit:'MT',    sector:'Agriculture', market:980,   target:900,  max:1020, broker_floor:900,  max_rounds:5, concession_pct:1.8 },
+  'SOY-GMO':   { name:'Soybean GMO 48% prot',         unit:'MT',    sector:'Agriculture', market:1200,  target:1120, max:1250, broker_floor:1120, max_rounds:4, concession_pct:1.5 },
+  'SGR-RAW':   { name:'Raw Cane Sugar VHP',           unit:'MT',    sector:'Agriculture', market:560,   target:520,  max:580,  broker_floor:520,  max_rounds:5, concession_pct:1.5 },
+  'H2SO4':     { name:'Sulfuric Acid 98%',            unit:'MT',    sector:'Chemicals',   market:580,   target:530,  max:600,  broker_floor:530,  max_rounds:4, concession_pct:1.8 },
+  'NaOH':      { name:'Caustic Soda 50% liquid',      unit:'MT',    sector:'Chemicals',   market:420,   target:385,  max:435,  broker_floor:385,  max_rounds:4, concession_pct:1.8 },
+  'UREA':      { name:'Urea 46% Prilled',             unit:'MT',    sector:'Chemicals',   market:450,   target:415,  max:468,  broker_floor:415,  max_rounds:5, concession_pct:1.8 },
+  'DAP-F':     { name:'DAP Fertilizer 18-46-0',       unit:'MT',    sector:'Chemicals',   market:620,   target:570,  max:645,  broker_floor:570,  max_rounds:5, concession_pct:1.8 },
+  'PP-GRN':    { name:'PP Granules Homopolymer',      unit:'MT',    sector:'Chemicals',   market:1280,  target:1190, max:1330, broker_floor:1190, max_rounds:5, concession_pct:1.5 },
+  'HDPE-BLW':  { name:'HDPE Blow Grade',              unit:'MT',    sector:'Chemicals',   market:1220,  target:1140, max:1270, broker_floor:1140, max_rounds:5, concession_pct:1.5 },
+};
+
+const CATALOG_SECTORS = [
+  { label: 'Metals',      skus: ['STL-12','STL-HRC','STL-CRC','ALU-6061','ALU-PRF','CPR-ETP'] },
+  { label: 'Building',    skus: ['BLK-200','CNC-B25','TLE-6060','PVC-110','STL-STR'] },
+  { label: 'Energy',      skus: ['DSL-B2','DSL-B5','LFO-380'] },
+  { label: 'Agriculture', skus: ['WHT-HRD','WHT-SFT','CRN-YLW','SOY-GMO','SGR-RAW'] },
+  { label: 'Chemicals',   skus: ['H2SO4','NaOH','UREA','DAP-F','PP-GRN','HDPE-BLW'] },
+];
+
+function buildProductDropdown(sel, products) {
+  if (products && products.length) {
+    // API returned live data — flat list
+    sel.innerHTML = '<option value="">— select product —</option>' +
+      products.map(p => '<option value="' + p.sku + '">' + (p.name || p.product_name) + '</option>').join('');
+  } else {
+    // Use embedded catalog with sector grouping
+    var html = '<option value="">— select product —</option>';
+    CATALOG_SECTORS.forEach(function(sector) {
+      html += '<optgroup label="' + sector.label + '">';
+      sector.skus.forEach(function(sku) {
+        var p = CATALOG_PARAMS[sku];
+        if (p) html += '<option value="' + sku + '">' + p.name + '  ·  $' + p.market + '/' + p.unit + '</option>';
+      });
+      html += '</optgroup>';
+    });
+    sel.innerHTML = html;
+  }
+}
+
+(async function() {
+  const sel = document.getElementById('m-product');
+  try {
+    const token = localStorage.getItem('sloi_jwt') || '';
+    const res = await fetch((window.SLOI_API_BASE || '') + '/products', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if(!res.ok) throw new Error('not ok');
+    const list = await res.json();
+    const products = Array.isArray(list) ? list : (list.products || []);
+    if(!products.length) throw new Error('empty');
+    buildProductDropdown(sel, products);
+  } catch(e) {
+    buildProductDropdown(sel, null);
+  }
+})();
+
+// Set delivery deadline default to today + 30 days
+(function() {
+  var d = document.getElementById('m-deadline');
+  if (!d) return;
+  var pad = function(n) { return String(n).padStart(2, '0'); };
+  var fmt = function(dt) { return dt.getFullYear() + '-' + pad(dt.getMonth()+1) + '-' + pad(dt.getDate()); };
+  var today = new Date();
+  d.min = fmt(today);
+  var def = new Date(today);
+  def.setDate(def.getDate() + 30);
+  d.value = fmt(def);
+  d.setAttribute('value', d.value); // make :not([value]) work correctly
+})();
+
+// Fetch negotiation params for selected product — fields are read-only, sourced from Excel
+async function loadProductParams(sku) {
+  const hint    = document.getElementById('params-hint');
+  const srcLbl  = document.getElementById('params-src-label');
+  const tgt     = document.getElementById('m-target');
+  const mxField = document.getElementById('m-max');
+  hint.style.display = 'none';
+
+  // Clear previous values when product changes
+  tgt.value = '';
+  mxField.value = '';
+  srcLbl.textContent = 'select a product →';
+  srcLbl.style.color = 'var(--muted)';
+  window._activeParams = null;
+
+  if(!sku) return;
+
+  document.getElementById('params-loading').style.display = 'inline';
+  srcLbl.textContent = 'loading…';
+  try {
+    const token = localStorage.getItem('sloi_jwt') || '';
+    const res = await fetch((window.SLOI_API_BASE || '') + '/products/' + sku + '/params', {
+      headers: { 'Authorization': 'Bearer ' + token }
+    });
+    if(!res.ok) throw new Error('params_not_found');
+    const p = await res.json();
+
+    // Require that Excel params exist for this product
+    if(!p.opening_offer && !p.market_price) throw new Error('no_prices');
+    if(!p.walk_away) throw new Error('no_walkaway');
+
+    // Store full params for broker prompt
+    window._activeParams = p;
+
+    // Fill read-only price fields
+    // target = buyer's goal (walk_away); max = seller's opening ask (opening_offer) = buyer's ceiling
+    tgt.value     = p.walk_away;
+    mxField.value = p.opening_offer || Math.round(p.market_price * 1.06);
+    if(p.unit)      document.getElementById('m-unit').value = p.unit;
+    if(p.max_rounds) {
+      const rSel = document.getElementById('m-rounds');
+      const val = p.max_rounds <= 3 ? '3' : p.max_rounds <= 5 ? '5' : '7';
+      rSel.value = val;
+    }
+
+    // Source label — show synced timestamp if available
+    srcLbl.textContent = p.synced_at
+      ? '✓ synced ' + new Date(p.synced_at).toLocaleDateString()
+      : '✓ loaded from Excel';
+    srcLbl.style.color = 'var(--green)';
+
+    // Full params hint strip
+    const fmt = v => v != null ? '$' + Number(v).toLocaleString() : '—';
+    document.getElementById('ph-name').textContent     = p.name || '';
+    document.getElementById('ph-market').textContent   = fmt(p.market_price);
+    document.getElementById('ph-opening').textContent  = fmt(p.opening_offer);
+    document.getElementById('ph-walkaway').textContent = fmt(p.walk_away);
+    document.getElementById('ph-floor').textContent    = fmt(p.broker_floor);
+    document.getElementById('ph-conc').textContent     = p.concession_pct ? p.concession_pct + '%' : '—';
+    document.getElementById('ph-rounds').textContent   = p.max_rounds || 5;
+    hint.style.display = 'block';
+
+    // Re-trigger price validation
+    tgt.dispatchEvent(new Event('input'));
+
+  } catch(e) {
+    // Fall back to embedded catalog data
+    const local = CATALOG_PARAMS[sku];
+    if (local) {
+      window._activeParams = {
+        name: local.name, unit: local.unit,
+        market_price: local.market, walk_away: local.target,
+        opening_offer: local.max, broker_floor: local.broker_floor,
+        max_rounds: local.max_rounds, concession_pct: local.concession_pct,
+      };
+      tgt.value     = local.target;
+      mxField.value = local.max;
+      document.getElementById('m-unit').value = local.unit;
+      const rSel = document.getElementById('m-rounds');
+      rSel.value = local.max_rounds <= 3 ? '3' : local.max_rounds <= 5 ? '5' : '7';
+
+      const fmt = function(v) { return v != null ? '$' + Number(v).toLocaleString() : '—'; };
+      document.getElementById('ph-name').textContent     = local.name;
+      document.getElementById('ph-market').textContent   = fmt(local.market);
+      document.getElementById('ph-opening').textContent  = fmt(local.max);
+      document.getElementById('ph-walkaway').textContent = fmt(local.target);
+      document.getElementById('ph-floor').textContent    = fmt(local.broker_floor);
+      document.getElementById('ph-conc').textContent     = local.concession_pct + '%';
+      document.getElementById('ph-rounds').textContent   = local.max_rounds;
+      hint.style.display = 'block';
+      srcLbl.textContent = '✓ catalog data';
+      srcLbl.style.color = 'var(--teal)';
+      tgt.dispatchEvent(new Event('input'));
+    } else {
+      srcLbl.style.color = 'var(--red)';
+      srcLbl.textContent = '⚠ product not in catalog';
+    }
+  } finally {
+    document.getElementById('params-loading').style.display = 'none';
+  }
+}
 </script>
 </body>
 </html>

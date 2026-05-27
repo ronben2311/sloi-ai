@@ -109,6 +109,10 @@ class SloiAPI {
     return data;
   }
 
+  async registerBroker(profile) {
+    return this.req('POST', '/brokers/register', profile);
+  }
+
   async registerAgent({ name, email, framework, wallet_address }) {
     const data = await this.req('POST', '/agents/register', { name, email, framework, wallet_address });
     this.apiKey = data.api_key;
@@ -187,6 +191,10 @@ class SloiAPI {
 
   async getNegotiation(id) {
     return this.req('GET', `/negotiations/${id}`);
+  }
+
+  async startNegotiation({ product, qty, unit, target_price, max_price, buyer_name, buyer_email, buyer_telegram, country, notes }) {
+    return this.req('POST', '/negotiations', { product, qty, unit, target_price, max_price, buyer_name, buyer_email, buyer_telegram, country, notes });
   }
 
   async approveDeal(id, { action, override_price } = {}) {

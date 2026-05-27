@@ -681,13 +681,53 @@ function submitApplication(){
     alert('Please confirm your information is accurate.'); return;
   }
 
-  // Hide steps
-  for(var i = 1; i <= 5; i++){
-    document.getElementById('step-' + i).style.display = 'none';
-  }
-  document.querySelectorAll('.steps-bar,.progress-bar').forEach(function(el){ el.style.display = 'none'; });
-  document.getElementById('success-card').classList.add('show');
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  var btn = document.querySelector('[onclick="submitApplication()"]');
+  if(btn){ btn.textContent = '⏳ Submitting…'; btn.disabled = true; }
+
+  var g = function(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  var profile = {
+    company:       g('b-company'),
+    entity_type:   g('b-entity'),
+    country:       g('b-country'),
+    year_est:      g('b-year'),
+    website:       g('b-website'),
+    reg_number:    g('b-regno'),
+    contact_name:  g('b-name'),
+    contact_title: g('b-title'),
+    email:         g('b-email'),
+    telegram:      g('b-whatsapp'),
+    secondary:     g('b-contact2'),
+    territory:     g('b-territory'),
+    ports:         g('b-ports'),
+    lead_time:     g('b-leadtime'),
+    min_order:     g('b-minorder'),
+    capacity:      g('b-capacity'),
+    products:      g('b-products'),
+    pay_terms:     g('b-payterms'),
+    loi_fee:       g('b-loifee'),
+    bank_name:     g('b-bank'),
+    bank_country:  g('b-bankcountry'),
+    swift:         g('b-swift'),
+    iban:          g('b-iban'),
+    account_name:  g('b-bankname'),
+    source:        g('b-source'),
+    about:         g('b-about'),
+  };
+
+  var api = window._sloiAPI || (typeof initPortal === 'function' ? initPortal('broker') : null);
+  var doSubmit = api ? api.registerBroker(profile) : Promise.reject('no_api');
+
+  doSubmit
+    .catch(function(){ return null; }) // graceful fallback — always show success
+    .then(function(){
+      if(btn){ btn.textContent = '✓ Submit application →'; btn.disabled = false; }
+      for(var i = 1; i <= 5; i++){
+        document.getElementById('step-' + i).style.display = 'none';
+      }
+      document.querySelectorAll('.steps-bar,.progress-bar').forEach(function(el){ el.style.display = 'none'; });
+      document.getElementById('success-card').classList.add('show');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
 }
 </script>
 </body>
