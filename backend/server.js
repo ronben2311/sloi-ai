@@ -27,6 +27,7 @@ app.use("/v1/negotiations", require("./routes/negotiations"));
 app.use("/v1/lois",         require("./routes/lois"));
 app.use("/v1/credits",      require("./routes/credits"));
 app.use("/v1/admin",        require("./routes/admin"));
+app.use("/v1/contact",      require("./routes/contact"));
 
 app.listen(port, () => {
   console.log(`SLOI AI Backend running on http://localhost:${port}`);

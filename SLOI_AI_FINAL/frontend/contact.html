@@ -184,12 +184,36 @@ h1 em{font-style:italic;color:var(--indigo)}
 </div>
 
 <script>
-function submitContact(){
-  var name = document.getElementById('c-name').value;
-  var email = document.getElementById('c-email').value;
-  if(!name||!email){alert('Please fill in your name and email.');return;}
-  document.getElementById('contact-form').style.display='none';
-  document.getElementById('contact-success').classList.add('show');
+var API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
+
+async function submitContact(){
+  var name    = document.getElementById('c-name').value.trim();
+  var email   = document.getElementById('c-email').value.trim();
+  var role    = document.getElementById('c-role').value;
+  var subject = document.getElementById('c-subject').value.trim();
+  var message = document.getElementById('c-message').value.trim();
+
+  if(!name || !email){ alert('Please fill in your name and email.'); return; }
+  if(!message){ alert('Please write a message.'); return; }
+
+  var btn = document.querySelector('.submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    var res = await fetch(API_BASE + '/v1/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, role, subject, message })
+    });
+    if(!res.ok) throw new Error('server error');
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('contact-success').classList.add('show');
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Send message →';
+    alert('Failed to send. Please try again or email us directly at hello@sloiai.com');
+  }
 }
 </script>
 </body>
