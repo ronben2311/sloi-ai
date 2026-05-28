@@ -1665,7 +1665,55 @@ function buildProductDropdown(sel, products) {
   } catch(e) {
     buildProductDropdown(sel, null);
   }
+  loadMandateFromStorage();
 })();
+
+function loadMandateFromStorage() {
+  var raw = localStorage.getItem('sloiMandate');
+  if (!raw) return;
+  try {
+    var m = JSON.parse(raw);
+    localStorage.removeItem('sloiMandate');
+
+    if (m.name)    document.getElementById('m-buyer').value    = m.name;
+    if (m.qty)     document.getElementById('m-qty').value      = m.qty;
+    if (m.country) document.getElementById('m-location').value = m.country;
+
+    // urgency → rounds count + deadline
+    if (m.urgency) {
+      var pad = function(n){ return String(n).padStart(2,'0'); };
+      var fmt = function(dt){ return dt.getFullYear()+'-'+pad(dt.getMonth()+1)+'-'+pad(dt.getDate()); };
+      var today = new Date();
+      var rSel   = document.getElementById('m-rounds');
+      var dField = document.getElementById('m-deadline');
+      if (m.urgency.indexOf('ASAP') >= 0) {
+        rSel.value = '7';
+        var dd = new Date(today); dd.setDate(dd.getDate() + 14);
+        dField.value = fmt(dd);
+      } else if (m.urgency.indexOf('1') >= 0) {
+        rSel.value = '5';
+        var dd = new Date(today); dd.setDate(dd.getDate() + 45);
+        dField.value = fmt(dd);
+      } else {
+        rSel.value = '3';
+        var dd = new Date(today); dd.setDate(dd.getDate() + 90);
+        dField.value = fmt(dd);
+      }
+    }
+
+    // SKU → select product + load params (prices load async from Excel)
+    if (m.sku) {
+      var sel = document.getElementById('m-product');
+      for (var i = 0; i < sel.options.length; i++) {
+        if (sel.options[i].value === m.sku) {
+          sel.selectedIndex = i;
+          loadProductParams(m.sku);
+          break;
+        }
+      }
+    }
+  } catch(e) {}
+}
 
 // Set delivery deadline default to today + 30 days
 (function() {

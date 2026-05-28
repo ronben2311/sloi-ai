@@ -573,7 +573,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <button class="btn-p" onclick="goStep(4)">Review my order →</button>
       <button class="btn-s" onclick="goStep(2)">← Back</button>
 
-      <a href="negotiation-agent.html" class="agent-link">
+      <a href="javascript:void(0)" onclick="saveMandateAndGo('negotiation-agent.html')" class="agent-link">
         <div class="al-icon">🤖</div>
         <div class="al-body">
           <div class="al-title">Skip the queue — negotiate right now</div>
@@ -654,7 +654,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
         <div class="cta-row">
           <a href="m2m-homepage.html" class="cta-p">Back to SLOI AI →</a>
-          <a href="negotiation-agent.html" class="cta-s">🤖 Open agent console</a>
+          <a href="javascript:void(0)" onclick="saveMandateAndGo('negotiation-agent.html')" class="cta-s">🤖 Open agent console</a>
           <a href="demo.html" class="cta-s">Watch demo</a>
         </div>
       </div>
@@ -666,6 +666,16 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
 <script>
 var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', purchaseType:'', annualVolume:'', country:'UAE', urgency:'', name:'', wa:'' };
+
+function saveMandateAndGo(url) {
+  // capture any partially-entered step-3 fields before navigating
+  var nm = document.getElementById('contact-name').value.trim();
+  var wa = document.getElementById('contact-wa').value.trim();
+  if (nm) state.name = nm;
+  if (wa) state.wa   = wa;
+  localStorage.setItem('sloiMandate', JSON.stringify(state));
+  window.location.href = url;
+}
 
 var CATALOG = [
   {sector:'Metals',    sku:'STL-12',    name:'Steel Rebar G60 12mm',         unit:'MT',    market:2840,  moq:10},
