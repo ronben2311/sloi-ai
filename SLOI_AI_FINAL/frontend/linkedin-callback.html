@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Signing in — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+.shell{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.logo{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;margin-bottom:36px;display:block;text-align:center}
+.logo em{font-style:italic;color:var(--indigo)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;width:100%;max-width:420px;padding:36px;text-align:center}
+
+/* Spinner */
+.spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--indigo);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 20px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:6px}
+.status-sub{font-size:11px;color:var(--muted)}
+
+/* Error */
+.error-icon{font-size:40px;margin-bottom:16px}
+.btn-back{display:inline-block;margin-top:20px;background:var(--indigo);color:#fff;padding:11px 24px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;transition:opacity .15s}
+.btn-back:hover{opacity:.85}
+
+/* Onboarding */
+#onboarding{display:none}
+.avatar{width:64px;height:64px;border-radius:50%;border:2px solid var(--border2);margin:0 auto 14px;display:block;object-fit:cover}
+.avatar-placeholder{width:64px;height:64px;border-radius:50%;background:var(--surface2);border:2px solid var(--border2);margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.welcome-name{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:4px}
+.welcome-email{font-size:11px;color:var(--muted);margin-bottom:28px}
+.ob-label{font-size:10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:12px;text-align:left}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.role-card{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:18px 14px;cursor:pointer;transition:all .2s;text-align:center}
+.role-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-1px)}
+.role-card.sel{background:rgba(91,95,239,.1);border-color:var(--indigo)}
+.rc-icon{font-size:26px;margin-bottom:8px}
+.rc-label{font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px}
+.rc-desc{font-size:10px;color:var(--muted);line-height:1.4}
+.btn-continue{width:100%;background:var(--indigo);color:#fff;border:none;border-radius:6px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:opacity .15s}
+.btn-continue:hover:not(:disabled){opacity:.85}
+.btn-continue:disabled{opacity:.4;cursor:not-allowed}
+</style>
+</head>
+<body>
+<div class="shell">
+  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em></a>
+
+  <!-- Loading state -->
+  <div class="card" id="loading">
+    <div class="spinner"></div>
+    <div class="status-title">Signing you in…</div>
+    <div class="status-sub">Verifying your LinkedIn account</div>
+  </div>
+
+  <!-- Error state -->
+  <div class="card" id="error-state" style="display:none">
+    <div class="error-icon">⚠️</div>
+    <div class="status-title">Sign-in failed</div>
+    <div class="status-sub" id="error-text">Something went wrong. Please try again.</div>
+    <a href="login.html" class="btn-back">← Back to login</a>
+  </div>
+
+  <!-- Onboarding — role selection for new users -->
+  <div class="card" id="onboarding" style="display:none">
+    <div id="avatar-wrap"></div>
+    <div class="welcome-name" id="ob-name">Welcome</div>
+    <div class="welcome-email" id="ob-email"></div>
+
+    <div class="ob-label">I am joining as a…</div>
+    <div class="role-grid">
+      <div class="role-card" id="rc-buyer" onclick="selectRole('buyer',this)">
+        <div class="rc-icon">🏢</div>
+        <div class="rc-label">Buyer</div>
+        <div class="rc-desc">Procure commodities · AI negotiation · LOI generation</div>
+      </div>
+      <div class="role-card" id="rc-broker" onclick="selectRole('broker',this)">
+        <div class="rc-icon">🌍</div>
+        <div class="rc-label">Broker</div>
+        <div class="rc-desc">Manage deals · Connect buyers and suppliers</div>
+      </div>
+    </div>
+
+    <button class="btn-continue" id="ob-btn" onclick="completeOnboarding()" disabled>
+      Continue →
+    </button>
+  </div>
+</div>
+
+<script>
+var API_BASE     = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
+var sbClient     = null;
+var sessionData  = null;
+var selectedRole = null;
+var processed    = false;
+
+async function init() {
+  try {
+    // Check for explicit error from LinkedIn/Supabase
+    var params     = new URLSearchParams(window.location.search);
+    var errorParam = params.get('error');
+    if (errorParam) {
+      showError('LinkedIn sign-in cancelled: ' + (params.get('error_description') || errorParam));
+      return;
+    }
+
+    var cfg = await fetch(API_BASE + '/v1/auth/config').then(function(r){ return r.json(); });
+    sbClient = supabase.createClient(cfg.supabase_url, cfg.supabase_anon_key);
+
+    // Let Supabase handle both implicit (hash tokens) and PKCE (code param) automatically
+    sbClient.auth.onAuthStateChange(async function(event, session) {
+      if (processed) return;
+      if (session && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')) {
+        processed   = true;
+        sessionData = session;
+        await loginWithSession(session, null);
+      }
+    });
+
+    // Timeout fallback after 10s
+    setTimeout(function() {
+      if (!processed) showError('Timed out — no SIGNED_IN event fired. Check console.');
+    }, 10000);
+
+  } catch(e) {
+    showError('Unexpected error: ' + e.message);
+  }
+}
+
+async function loginWithSession(session, role) {
+  var res = await fetch(API_BASE + '/v1/auth/linkedin', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      access_token:  session.access_token,
+      refresh_token: session.refresh_token,
+      role:          role,
+    })
+  });
+
+  var data = await res.json();
+
+  if (!res.ok) {
+    showError('Backend error ' + res.status + ': ' + (data.error || 'unknown'));
+    return;
+  }
+
+  if (data.needs_onboarding) {
+    showOnboarding(data.profile);
+    return;
+  }
+
+  // Store tokens using the same keys as api-client.js
+  localStorage.setItem('sloi_jwt',     data.token);
+  localStorage.setItem('sloi_refresh', data.refresh_token);
+  localStorage.setItem('sloi_role',          data.role);
+  localStorage.setItem('sloi_user',          JSON.stringify(data.user));
+
+  var portals = {
+    buyer:    'CommodEx_Platform.html',
+    broker:   'CommodEx_Broker.html',
+    boss:     'CommodEx_Admin.html',
+    supplier: 'CommodEx_Supplier.html',
+  };
+  window.location.href = portals[data.role] || 'CommodEx_Platform.html';
+}
+
+function showOnboarding(profile) {
+  document.getElementById('loading').style.display    = 'none';
+  document.getElementById('onboarding').style.display = 'block';
+
+  document.getElementById('ob-name').textContent  = profile.name  || 'Welcome';
+  document.getElementById('ob-email').textContent = profile.email || '';
+
+  var avatarWrap = document.getElementById('avatar-wrap');
+  if (profile.avatar) {
+    avatarWrap.innerHTML = '<img class="avatar" src="' + profile.avatar + '" onerror="this.style.display=\'none\'"/>';
+  } else {
+    avatarWrap.innerHTML = '<div class="avatar-placeholder">👤</div>';
+  }
+}
+
+function selectRole(role, el) {
+  selectedRole = role;
+  document.querySelectorAll('.role-card').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  document.getElementById('ob-btn').disabled = false;
+}
+
+async function completeOnboarding() {
+  if (!selectedRole || !sessionData) return;
+  var btn = document.getElementById('ob-btn');
+  btn.disabled    = true;
+  btn.textContent = 'Creating your account…';
+  await loginWithSession(sessionData, selectedRole);
+  btn.disabled    = false;
+  btn.textContent = 'Continue →';
+}
+
+function showError(msg) {
+  document.getElementById('loading').style.display     = 'none';
+  document.getElementById('error-state').style.display = 'block';
+  document.getElementById('error-text').textContent    = msg;
+}
+
+init();
+</script>
+</body>
+</html>
