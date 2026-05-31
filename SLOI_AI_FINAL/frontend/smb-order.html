@@ -352,11 +352,11 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="pc-name">Steel & Metals</div>
           <div class="pc-sub">Rebar · Coil · Aluminum · Pipes</div>
         </div>
-        <div class="pc" onclick="selectProduct(this,'Building Materials','cement, tiles, pipes, concrete')">
+        <div class="pc" onclick="selectProduct(this,'Cement & Clinker','OPC, clinker, bulk cement, bagged cement')">
           <div class="pc-check">✓ selected</div>
-          <span class="pc-icon">🏗️</span>
-          <div class="pc-name">Building Materials</div>
-          <div class="pc-sub">Cement · Tiles · Concrete · PVC</div>
+          <span class="pc-icon">🪨</span>
+          <div class="pc-name">Cement & Clinker</div>
+          <div class="pc-sub">OPC · Clinker · Bulk · Bagged · White</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
           <div class="pc-check">✓ selected</div>
@@ -685,13 +685,23 @@ var CATALOG = [
   {sector:'Metals',    sku:'ALU-6061',  name:'Aluminum 6061-T6',             unit:'MT',    market:9200,  moq:5},
   {sector:'Metals',    sku:'ALU-PRF',   name:'Aluminum Profiles',            unit:'m',     market:38,    moq:500},
   {sector:'Metals',    sku:'CPR-ETP',   name:'Copper ETP Rod 8mm',           unit:'MT',    market:9800,  moq:5},
+  {sector:'Cement',    sku:'OPC-425B',  name:'OPC Cement 42.5R — Bulk',      unit:'MT',    market:72,    moq:500},
+  {sector:'Cement',    sku:'OPC-425K',  name:'OPC Cement 42.5R — 50kg bags', unit:'MT',    market:88,    moq:100},
+  {sector:'Cement',    sku:'OPC-525B',  name:'OPC Cement 52.5N — Bulk',      unit:'MT',    market:85,    moq:200},
+  {sector:'Cement',    sku:'CKR-GRY',   name:'Portland Clinker Grey',        unit:'MT',    market:58,    moq:5000},
+  {sector:'Cement',    sku:'CKR-WHT',   name:'White Clinker',                unit:'MT',    market:145,   moq:1000},
+  {sector:'Cement',    sku:'WHT-CEM',   name:'White Cement 52.5',            unit:'MT',    market:280,   moq:100},
+  {sector:'Cement',    sku:'SLC-CEM',   name:'Slag Cement GGBS 42.5',        unit:'MT',    market:65,    moq:500},
+  {sector:'Cement',    sku:'PZL-CEM',   name:'Pozzolanic Cement PPC',        unit:'MT',    market:70,    moq:500},
+  {sector:'Cement',    sku:'SRC-CEM',   name:'Sulphate Resistant Cement',    unit:'MT',    market:95,    moq:200},
+  {sector:'Cement',    sku:'OIL-CEM',   name:'Oil Well Cement Class G',      unit:'MT',    market:180,   moq:100},
   {sector:'Building',  sku:'BLK-200',   name:'Concrete Block 20cm',          unit:'Unit',  market:4.8,   moq:1000},
   {sector:'Building',  sku:'CNC-B25',   name:'Ready-Mix Concrete B25',       unit:'m³',    market:380,   moq:10},
   {sector:'Building',  sku:'TLE-6060',  name:'Porcelain Tile 60×60cm',       unit:'m²',    market:62,    moq:100},
   {sector:'Building',  sku:'PVC-110',   name:'PVC Pipe 110mm SDR34',         unit:'m',     market:28,    moq:500},
   {sector:'Building',  sku:'STL-STR',   name:'Structural Steel H-Beam',      unit:'MT',    market:3200,  moq:10},
-  {sector:'Energy',    sku:'DSL-B2',    name:'Industrial Diesel B2',          unit:'Liter', market:4.92,  moq:5000},
-  {sector:'Energy',    sku:'DSL-B5',    name:'Biodiesel B5',                  unit:'Liter', market:5.15,  moq:5000},
+  {sector:'Energy',    sku:'DSL-B2',    name:'Industrial Diesel B2',         unit:'Liter', market:4.92,  moq:5000},
+  {sector:'Energy',    sku:'DSL-B5',    name:'Biodiesel B5',                 unit:'Liter', market:5.15,  moq:5000},
   {sector:'Energy',    sku:'LFO-380',   name:'Fuel Oil 380 CST',             unit:'MT',    market:510,   moq:100},
   {sector:'Agriculture',sku:'WHT-HRD',  name:'Hard Wheat 14% protein',       unit:'MT',    market:1120,  moq:50},
   {sector:'Agriculture',sku:'WHT-SFT',  name:'Soft Wheat 11% protein',       unit:'MT',    market:1050,  moq:50},
@@ -707,12 +717,12 @@ var CATALOG = [
 ];
 
 var SECTOR_MAP = {
-  'Steel & Metals':      'Metals',
-  'Building Materials':  'Building',
-  'Agriculture':         'Agriculture',
-  'Energy':              'Energy',
-  'Chemicals':           'Chemicals',
-  'Other':               null,
+  'Steel & Metals':   'Metals',
+  'Cement & Clinker': 'Cement',
+  'Agriculture':      'Agriculture',
+  'Energy':           'Energy',
+  'Chemicals':        'Chemicals',
+  'Other':            null,    // null = show all sectors
 };
 
 function filterCatalog(categoryName) {
