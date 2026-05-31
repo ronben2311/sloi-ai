@@ -83,11 +83,12 @@ router.post("/", orderLimiter, async (req, res) => {
     // Save to negotiations table so the admin panel shows this order under "Pending boss"
     try {
       const negId = await generateNegId();
-      const notesStr = [
-        buyer_telegram ? `Telegram: ${buyer_telegram}` : null,
-        country        ? `Country: ${country}`          : null,
-        notes          ? notes                           : null,
-      ].filter(Boolean).join(" | ");
+
+      // supplier_ref stores contact info for order-flow (no supplier assigned yet)
+      const contactStr = [
+        buyer_telegram ? `TG:${buyer_telegram}` : null,
+        country        ? country                 : null,
+      ].filter(Boolean).join(" · ");
 
       await supabase.from("negotiations").insert({
         id:            negId,
@@ -97,11 +98,11 @@ router.post("/", orderLimiter, async (req, res) => {
         buyer_name:    buyer_name,
         buyer_id:      null,
         max_price:     max_price ? parseFloat(String(max_price).replace(/[^0-9.]/g, "")) || null : null,
+        supplier_ref:  contactStr || null,
         status:        "awaiting_boss",
         current_round: 0,
         max_rounds:    0,
         credits_used:  0,
-        notes:         notesStr || null,
         created_at:    new Date().toISOString(),
         updated_at:    new Date().toISOString(),
       });

@@ -5,7 +5,7 @@ const supabase = require("../lib/supabase");
 router.get("/", authenticate, async (req, res) => {
   let query = supabase
     .from("negotiations")
-    .select("id, product, qty, unit, buyer_name, notes, status, current_round, max_rounds, target_price, max_price, agent_price, broker_price, deal_price, supplier_ref, credits_used, created_at, updated_at")
+    .select("id, product, qty, unit, buyer_name, status, current_round, max_rounds, target_price, max_price, agent_price, broker_price, deal_price, supplier_ref, credits_used, created_at, updated_at")
     .order("created_at", { ascending: false });
 
   if (req.caller.role === "buyer") query = query.eq("buyer_id", req.caller.id);

@@ -369,7 +369,6 @@ select.inp option{background:var(--surface)}
         <div><div class="abg-label">Total value</div><div class="abg-val" id="ab-total">—</div></div>
         <div><div class="abg-label">LOI fee</div><div class="abg-val" style="color:var(--indigo)">$500</div></div>
       </div>
-      <div id="ab-notes" style="display:none;margin-bottom:8px;padding:8px 10px;background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.15);border-radius:4px;font-size:11px;color:var(--muted)"></div>
       <div style="margin-bottom:8px">
         <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Override price (optional — leave blank to use agent deal price)</label>
         <input class="inp" id="ab-override" type="number" placeholder="e.g. 2800" style="max-width:180px;padding:6px 10px;font-size:13px">
@@ -906,10 +905,10 @@ function loadNegotiations() {
       document.getElementById('ab-neg-id').textContent  = pendingNeg.id;
       document.getElementById('ab-buyer').textContent   = pendingNeg.buyer_name || '—';
 
-      // Parse Telegram handle out of notes if present (order-flow entries)
+      // supplier_ref holds "TG:@handle · Country" for order-flow entries
       var contactEl = document.getElementById('ab-contact');
-      var tgMatch   = pendingNeg.notes && pendingNeg.notes.match(/Telegram:\s*(@?\S+)/);
-      contactEl.textContent = tgMatch ? tgMatch[1] : '—';
+      var tgMatch   = pendingNeg.supplier_ref && pendingNeg.supplier_ref.match(/TG:(\S+)/);
+      contactEl.textContent = tgMatch ? tgMatch[1] : (pendingNeg.supplier_ref || '—');
 
       document.getElementById('ab-product').textContent = pendingNeg.product + ' · ' + pendingNeg.qty + ' ' + pendingNeg.unit;
 
@@ -928,15 +927,6 @@ function loadNegotiations() {
       document.getElementById('ab-total').textContent   = pendingNeg.deal_price
         ? '$' + (parseFloat(pendingNeg.deal_price) * pendingNeg.qty).toLocaleString()
         : (pendingNeg.max_price && pendingNeg.qty ? '≤ $' + (parseFloat(pendingNeg.max_price) * pendingNeg.qty).toLocaleString() : '—');
-
-      // Show notes strip (country, urgency, etc.)
-      var notesEl = document.getElementById('ab-notes');
-      if (pendingNeg.notes) {
-        notesEl.textContent = pendingNeg.notes;
-        notesEl.style.display = 'block';
-      } else {
-        notesEl.style.display = 'none';
-      }
 
       document.getElementById('ab-override').value      = '';
       box.style.display = 'block';
