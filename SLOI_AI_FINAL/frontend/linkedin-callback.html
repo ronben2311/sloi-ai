@@ -117,7 +117,7 @@ async function init() {
       if (session && (event === 'SIGNED_IN' || event === 'INITIAL_SESSION')) {
         processed   = true;
         sessionData = session;
-        await loginWithSession(session, null);
+        await loginWithSession(session, 'buyer');
       }
     });
 
@@ -146,11 +146,6 @@ async function loginWithSession(session, role) {
 
   if (!res.ok) {
     showError('Backend error ' + res.status + ': ' + (data.error || 'unknown'));
-    return;
-  }
-
-  if (data.needs_onboarding) {
-    showOnboarding(data.profile);
     return;
   }
 
