@@ -3,6 +3,7 @@ const { authenticate } = require("../middleware/auth");
 const supabase = require("../lib/supabase");
 const anthropic = require("../lib/anthropic");
 const { emitToRole, sseEvent } = require("../lib/eventBus");
+const { Resend } = require("resend");
 const {
   extractPrice,
   generateNegId,
@@ -209,6 +210,36 @@ router.post("/", authenticate, async (req, res) => {
         neg_id: negId, product: productName, qty, unit, deal_price: dealPrice,
         total_value: totalValue, buyer: req.caller.name,
       }));
+
+      // Email boss so he gets notified even if not in the portal
+      try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const BOSS_EMAIL = process.env.BOSS_EMAIL || "yonparness@gmail.com";
+        const FROM = process.env.RESEND_FROM || "onboarding@resend.dev";
+        await resend.emails.send({
+          from: FROM,
+          to: BOSS_EMAIL,
+          subject: `⚡ Deal needs your approval — ${productName} · $${totalValue.toLocaleString()}`,
+          html: `
+            <div style="font-family:monospace;background:#07070f;color:#d4d2f0;padding:32px;border-radius:8px">
+              <h2 style="color:#eeedf8;margin-bottom:8px">Boss approval needed</h2>
+              <p style="color:#52526e;margin-bottom:24px">A negotiation has reached a deal — your approval is required to generate the LOI.</p>
+              <table style="width:100%;border-collapse:collapse;margin-bottom:24px">
+                <tr><td style="padding:8px 0;color:#52526e">Product</td><td style="color:#eeedf8;font-weight:600">${productName}</td></tr>
+                <tr><td style="padding:8px 0;color:#52526e">Quantity</td><td style="color:#eeedf8">${qty} ${unit}</td></tr>
+                <tr><td style="padding:8px 0;color:#52526e">Deal price</td><td style="color:#2dd4bf;font-weight:700">$${dealPrice.toFixed(2)}/${unit}</td></tr>
+                <tr><td style="padding:8px 0;color:#52526e">Total value</td><td style="color:#eeedf8;font-weight:700">$${totalValue.toLocaleString()}</td></tr>
+                <tr><td style="padding:8px 0;color:#52526e">Buyer</td><td style="color:#eeedf8">${req.caller.name}</td></tr>
+                <tr><td style="padding:8px 0;color:#52526e">Negotiation ID</td><td style="color:#8b8ff8">${negId}</td></tr>
+              </table>
+              <p style="color:#52526e">Log in to <strong style="color:#5b5fef">SLOI AI Admin</strong> and open the Negotiations tab to approve or reject.</p>
+            </div>
+          `,
+        });
+      } catch (emailErr) {
+        console.error("Boss email failed:", emailErr.message);
+      }
+
       emitToRole("broker", sseEvent("AWAIT_HUMAN", negId, {
         neg_id: negId, product: productName, qty, unit, deal_price: dealPrice,
         total_value: totalValue, buyer: req.caller.name,
