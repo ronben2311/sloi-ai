@@ -363,12 +363,13 @@ select.inp option{background:var(--surface)}
       <div class="ab-title">⚡ Boss approval required · <span id="ab-neg-id" style="font-weight:400;opacity:.7"></span></div>
       <div class="ab-grid">
         <div><div class="abg-label">Buyer</div><div class="abg-val" id="ab-buyer">—</div></div>
+        <div><div class="abg-label">Contact</div><div class="abg-val" id="ab-contact" style="color:var(--teal)">—</div></div>
         <div><div class="abg-label">Product</div><div class="abg-val" id="ab-product">—</div></div>
-        <div><div class="abg-label">Deal price</div><div class="abg-val" id="ab-price" style="color:var(--green)">—</div></div>
+        <div><div class="abg-label">Budget / Deal price</div><div class="abg-val" id="ab-price" style="color:var(--green)">—</div></div>
         <div><div class="abg-label">Total value</div><div class="abg-val" id="ab-total">—</div></div>
         <div><div class="abg-label">LOI fee</div><div class="abg-val" style="color:var(--indigo)">$500</div></div>
-        <div><div class="abg-label">Rounds</div><div class="abg-val" id="ab-rounds">—</div></div>
       </div>
+      <div id="ab-notes" style="display:none;margin-bottom:8px;padding:8px 10px;background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.15);border-radius:4px;font-size:11px;color:var(--muted)"></div>
       <div style="margin-bottom:8px">
         <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:4px">Override price (optional — leave blank to use agent deal price)</label>
         <input class="inp" id="ab-override" type="number" placeholder="e.g. 2800" style="max-width:180px;padding:6px 10px;font-size:13px">
@@ -904,10 +905,39 @@ function loadNegotiations() {
       _pendingNegId = pendingNeg.id;
       document.getElementById('ab-neg-id').textContent  = pendingNeg.id;
       document.getElementById('ab-buyer').textContent   = pendingNeg.buyer_name || '—';
+
+      // Parse Telegram handle out of notes if present (order-flow entries)
+      var contactEl = document.getElementById('ab-contact');
+      var tgMatch   = pendingNeg.notes && pendingNeg.notes.match(/Telegram:\s*(@?\S+)/);
+      contactEl.textContent = tgMatch ? tgMatch[1] : '—';
+
       document.getElementById('ab-product').textContent = pendingNeg.product + ' · ' + pendingNeg.qty + ' ' + pendingNeg.unit;
-      document.getElementById('ab-price').textContent   = pendingNeg.deal_price ? '$' + parseFloat(pendingNeg.deal_price).toLocaleString() + '/' + pendingNeg.unit : '—';
-      document.getElementById('ab-total').textContent   = pendingNeg.deal_price ? '$' + (parseFloat(pendingNeg.deal_price) * pendingNeg.qty).toLocaleString() : '—';
-      document.getElementById('ab-rounds').textContent  = (pendingNeg.current_round || '?') + ' of ' + (pendingNeg.max_rounds || '?');
+
+      // Order-flow rows have no deal_price yet — show budget ceiling instead
+      var priceEl = document.getElementById('ab-price');
+      if (pendingNeg.deal_price) {
+        priceEl.textContent = '$' + parseFloat(pendingNeg.deal_price).toLocaleString() + '/' + pendingNeg.unit;
+        priceEl.style.color = 'var(--green)';
+      } else if (pendingNeg.max_price) {
+        priceEl.textContent = 'Budget: $' + parseFloat(pendingNeg.max_price).toLocaleString() + '/' + pendingNeg.unit;
+        priceEl.style.color = 'var(--gold)';
+      } else {
+        priceEl.textContent = '—';
+      }
+
+      document.getElementById('ab-total').textContent   = pendingNeg.deal_price
+        ? '$' + (parseFloat(pendingNeg.deal_price) * pendingNeg.qty).toLocaleString()
+        : (pendingNeg.max_price && pendingNeg.qty ? '≤ $' + (parseFloat(pendingNeg.max_price) * pendingNeg.qty).toLocaleString() : '—');
+
+      // Show notes strip (country, urgency, etc.)
+      var notesEl = document.getElementById('ab-notes');
+      if (pendingNeg.notes) {
+        notesEl.textContent = pendingNeg.notes;
+        notesEl.style.display = 'block';
+      } else {
+        notesEl.style.display = 'none';
+      }
+
       document.getElementById('ab-override').value      = '';
       box.style.display = 'block';
     } else {

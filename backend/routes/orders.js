@@ -2,6 +2,8 @@ const express   = require("express");
 const router     = express.Router();
 const { Resend } = require("resend");
 const rateLimit  = require("express-rate-limit");
+const supabase   = require("../lib/supabase");
+const { generateNegId } = require("../lib/negotiationHelpers");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -77,6 +79,36 @@ router.post("/", orderLimiter, async (req, res) => {
     });
 
     res.json({ ok: true });
+
+    // Save to negotiations table so the admin panel shows this order under "Pending boss"
+    try {
+      const negId = await generateNegId();
+      const notesStr = [
+        buyer_telegram ? `Telegram: ${buyer_telegram}` : null,
+        country        ? `Country: ${country}`          : null,
+        notes          ? notes                           : null,
+      ].filter(Boolean).join(" | ");
+
+      await supabase.from("negotiations").insert({
+        id:            negId,
+        product:       product,
+        qty:           parseFloat(qty) || 0,
+        unit:          unit || "MT",
+        buyer_name:    buyer_name,
+        buyer_id:      null,
+        max_price:     max_price ? parseFloat(String(max_price).replace(/[^0-9.]/g, "")) || null : null,
+        status:        "awaiting_boss",
+        current_round: 0,
+        max_rounds:    0,
+        credits_used:  0,
+        notes:         notesStr || null,
+        created_at:    new Date().toISOString(),
+        updated_at:    new Date().toISOString(),
+      });
+    } catch (dbErr) {
+      console.error("Order DB insert error:", dbErr.message);
+      // Non-fatal — email already sent successfully
+    }
   } catch (err) {
     console.error("Order email error:", err);
     res.status(500).json({ error: "Failed to send order" });

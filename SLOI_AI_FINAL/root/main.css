@@ -6,8 +6,8 @@
 
 /* ── Lifted colour palette ─────────────────────────────────────────────── */
 :root {
-  --muted:   #8080a8;   /* was ~#52526e — lifted ~55% for legibility          */
-  --text:    #d8d6f4;   /* was ~#c8c6e0                                        */
+  --muted:   #a0a0c8;   /* was ~#52526e — significantly lifted for legibility  */
+  --text:    #dddcf6;   /* was ~#c8c6e0                                        */
   --white:   #f5f4ff;   /* was ~#f0eff8 / #eeedf8                              */
   --border:  #24243c;   /* was ~#1a1a2a / #1c1c2e — slightly more visible      */
   --border2: #303050;   /* was ~#222234 / #252538                              */
@@ -16,9 +16,19 @@
 /* ── Base font size ─────────────────────────────────────────────────────── */
 html, body { font-size: 14px !important; }
 
-/* ── Navigation & sidebar ───────────────────────────────────────────────── */
-.nav-label  { font-size: 13px !important; }
-.nav        { font-size: 13px !important; }
+/* ── Navigation links — all nav contexts ────────────────────────────────── */
+nav a, .nav-right a, .nav-links a,
+.nav-links a:visited {
+  color: #b8b6e8 !important;
+  font-size: 13px !important;
+}
+nav a:hover, .nav-right a:hover, .nav-links a:hover {
+  color: #f5f4ff !important;
+}
+
+/* ── Sidebar nav items ──────────────────────────────────────────────────── */
+.nav-label  { font-size: 13px !important; color: #b8b6e8 !important; }
+.nav        { font-size: 13px !important; color: #b8b6e8 !important; }
 
 /* ── Tabs ───────────────────────────────────────────────────────────────── */
 .tab        { font-size: 12px !important; }
