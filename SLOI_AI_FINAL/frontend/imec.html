@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>IMEC Corridor — SLOI AI</title>
+<title>Middle East Reconstruction Procurement — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
@@ -27,26 +27,25 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .eyebrow::after{content:'';flex:1;height:1px;background:rgba(232,169,74,.3)}
 h1{font-family:'Fraunces',serif;font-size:clamp(44px,7vw,78px);font-weight:900;line-height:.93;letter-spacing:-.04em;color:var(--white);margin-bottom:20px}
 h1 em{font-style:italic;color:var(--gold)}
-.hero-sub{font-size:15px;color:var(--muted);line-height:1.85;max-width:600px;margin-bottom:32px}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.85;max-width:620px;margin-bottom:32px}
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap}
 .btn{padding:12px 22px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
 .btn-gold{background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.4);color:var(--gold)}.btn-gold:hover{background:rgba(232,169,74,.2)}
 .btn-p{background:var(--indigo);color:#fff;border:none}.btn-p:hover{opacity:.85}
 .btn-sm{padding:8px 16px;font-size:11px}
 
-/* CORRIDOR MAP */
-.corridor{background:var(--surface);border:1px solid rgba(232,169,74,.2);border-radius:10px;padding:28px;margin-bottom:48px;overflow:hidden}
-.corridor-title{font-size:10px;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;font-weight:600}
-.corridor-map{display:flex;align-items:center;justify-content:space-between;gap:0;flex-wrap:wrap;margin-bottom:20px}
-.corridor-node{text-align:center;flex:1;min-width:80px}
-.cn-dot{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 8px;border:2px solid}
-.cn-name{font-size:11px;font-weight:700;color:var(--white)}
-.cn-role{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.4}
-.corridor-line{flex:1;height:2px;background:linear-gradient(90deg,rgba(232,169,74,.3),rgba(232,169,74,.6),rgba(232,169,74,.3));min-width:20px;position:relative}
-.corridor-line::after{content:'→';position:absolute;top:-9px;left:50%;transform:translateX(-50%);color:var(--gold);font-size:14px}
-.sloi-badge{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.4);border-radius:6px;padding:12px 16px;text-align:center;margin-top:16px}
-.sb-label{font-size:10px;color:var(--muted);margin-bottom:4px}
-.sb-text{font-size:12px;color:var(--violet);font-weight:600}
+/* HOW IT WORKS FLOW */
+.flow{background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:10px;padding:28px;margin-bottom:48px}
+.flow-title{font-size:10px;color:var(--violet);letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px;font-weight:600}
+.flow-steps{display:flex;align-items:flex-start;gap:0;flex-wrap:wrap}
+.flow-step{text-align:center;flex:1;min-width:120px;padding:0 8px}
+.fs-num{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:18px;font-weight:900;margin:0 auto 10px;border:2px solid}
+.fs-label{font-size:11px;font-weight:700;color:var(--white);margin-bottom:4px}
+.fs-desc{font-size:10px;color:var(--muted);line-height:1.5}
+.flow-arrow{padding-top:20px;color:var(--border2);font-size:18px;flex-shrink:0;align-self:flex-start}
+.sloi-note{background:rgba(91,95,239,.07);border:1px solid rgba(91,95,239,.3);border-radius:6px;padding:12px 16px;text-align:center;margin-top:20px}
+.sn-text{font-size:12px;color:var(--violet);font-weight:600}
+.sn-sub{font-size:10px;color:var(--muted);margin-top:3px}
 
 /* NUMBERS */
 .numbers-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:48px}
@@ -89,6 +88,18 @@ p{font-size:12px;color:var(--text);line-height:1.9;margin-bottom:12px}
 .why-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:5px}
 .why-desc{font-size:11px;color:var(--muted);line-height:1.65}
 
+/* PAIN POINTS */
+.pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:32px}
+.pain{background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.18);border-radius:6px;padding:14px}
+.pain-icon{font-size:18px;margin-bottom:6px}
+.pain-title{font-size:12px;font-weight:600;color:var(--red);margin-bottom:4px}
+.pain-desc{font-size:10px;color:var(--muted);line-height:1.6}
+
+/* TESTIMONIAL */
+.quote-box{background:var(--surface);border:1px solid rgba(232,169,74,.25);border-radius:8px;padding:24px 28px;margin-bottom:32px;border-left:3px solid var(--gold)}
+.q-text{font-family:'Fraunces',serif;font-size:18px;font-style:italic;color:var(--white);line-height:1.5;margin-bottom:12px}
+.q-attr{font-size:10px;color:var(--muted)}
+
 /* CTA */
 .cta-box{background:linear-gradient(135deg,rgba(91,95,239,.08),rgba(232,169,74,.05));border:1px solid rgba(91,95,239,.3);border-radius:10px;padding:44px;text-align:center;margin-top:52px}
 
@@ -116,144 +127,148 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <a href="pricing.html">Pricing</a>
     <a href="contact.html">Contact</a>
   </div>
-  <a href="smb-order.html" class="btn-cta">Start negotiating →</a>
+  <a href="smb-order.html" class="btn-cta">Start procurement →</a>
 </nav>
 
 <div class="wrap">
 
   <!-- HERO -->
   <div class="hero">
-    <div class="eyebrow">India — Middle East — Europe Economic Corridor</div>
-    <h1>The biggest trade<br/>corridor in history.<br/><em>We close the deals.</em></h1>
-    <p class="hero-sub">IMEC is a $300B+ infrastructure initiative connecting India, the Gulf, and Europe via a new multimodal trade corridor. Every project on that route needs steel, cement, energy, and agricultural commodities. Every purchase needs a signed LOI. That's where SLOI AI sits.</p>
+    <div class="eyebrow">For American Construction Companies · Middle East Reconstruction</div>
+    <h1>You won the contract.<br/>Now source the<br/><em>materials.</em></h1>
+    <p class="hero-sub">American construction firms are winning billions in Middle East reconstruction contracts — Iraq, Libya, Gaza, Lebanon. The bottleneck isn't winning the bid. It's sourcing cement, steel, and pipes from verified regional suppliers at the right price, fast enough to keep the project on schedule.</p>
     <div class="hero-actions">
-      <a href="smb-order.html" class="btn btn-p">Start a negotiation →</a>
-      <a href="investor.html" class="btn btn-gold">Investor deck</a>
-      <a href="contact.html" class="btn btn-gold">Talk to us</a>
+      <a href="smb-order.html" class="btn btn-p">Get a price now →</a>
+      <a href="contact.html" class="btn btn-gold">Talk to our team</a>
+      <a href="pricing.html" class="btn btn-gold">See pricing</a>
     </div>
   </div>
 
-  <!-- CORRIDOR MAP -->
-  <div class="corridor">
-    <div class="corridor-title">// The IMEC Route</div>
-    <div class="corridor-map">
-      <div class="corridor-node">
-        <div class="cn-dot" style="background:rgba(255,153,0,.12);border-color:rgba(255,153,0,.5)">🇮🇳</div>
-        <div class="cn-name">India</div>
-        <div class="cn-role">Manufacturing hub · Exports raw materials</div>
+  <!-- HOW IT WORKS -->
+  <div class="flow">
+    <div class="flow-title">// How it works for US contractors</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="fs-num" style="background:rgba(91,95,239,.12);border-color:var(--indigo);color:var(--indigo)">1</div>
+        <div class="fs-label">Submit your RFQ</div>
+        <div class="fs-desc">Tell us what you need — steel, cement, pipes, energy. Quantity, spec, delivery country, timeline.</div>
       </div>
-      <div class="corridor-line"></div>
-      <div class="corridor-node">
-        <div class="cn-dot" style="background:rgba(0,82,255,.12);border-color:rgba(0,82,255,.4)">🌊</div>
-        <div class="cn-name">Arabian Sea</div>
-        <div class="cn-role">Maritime link</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-num" style="background:rgba(232,169,74,.1);border-color:var(--gold);color:var(--gold)">2</div>
+        <div class="fs-label">AI negotiates</div>
+        <div class="fs-desc">Our agent contacts verified MENA suppliers and negotiates the best price within your budget — in minutes.</div>
       </div>
-      <div class="corridor-line"></div>
-      <div class="corridor-node" style="transform:scale(1.08)">
-        <div class="cn-dot" style="background:rgba(91,95,239,.2);border-color:var(--indigo);box-shadow:0 0 16px rgba(91,95,239,.3)">🇦🇪</div>
-        <div class="cn-name" style="color:var(--violet)">UAE</div>
-        <div class="cn-role" style="color:var(--violet)">Central hub · SLOI AI HQ</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-num" style="background:rgba(45,212,191,.1);border-color:var(--teal);color:var(--teal)">3</div>
+        <div class="fs-label">Boss approves</div>
+        <div class="fs-desc">You review the deal. Accept, adjust the price, or reject — zero commitment until you say yes.</div>
       </div>
-      <div class="corridor-line"></div>
-      <div class="corridor-node">
-        <div class="cn-dot" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.4)">🇸🇦</div>
-        <div class="cn-name">Saudi Arabia</div>
-        <div class="cn-role">Energy · NEOM · Vision 2030</div>
-      </div>
-      <div class="corridor-line"></div>
-      <div class="corridor-node">
-        <div class="cn-dot" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.4)">🇯🇴</div>
-        <div class="cn-name">Jordan</div>
-        <div class="cn-role">Land bridge to Europe</div>
-      </div>
-      <div class="corridor-line"></div>
-      <div class="corridor-node">
-        <div class="cn-dot" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.4)">🇮🇱</div>
-        <div class="cn-name">Israel</div>
-        <div class="cn-role">Mediterranean access</div>
-      </div>
-      <div class="corridor-line"></div>
-      <div class="corridor-node">
-        <div class="cn-dot" style="background:rgba(0,82,200,.1);border-color:rgba(0,82,200,.4)">🇪🇺</div>
-        <div class="cn-name">Europe</div>
-        <div class="cn-role">End market · Germany · Italy · Greece</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="fs-num" style="background:rgba(34,197,94,.1);border-color:var(--green);color:var(--green)">4</div>
+        <div class="fs-label">LOI generated</div>
+        <div class="fs-desc">A signed Letter of Intent goes to both parties. ICC-compliant. Ready for your project documentation file.</div>
       </div>
     </div>
-    <div class="sloi-badge">
-      <div class="sb-label">SLOI AI sits at the centre of every commodity transaction on this route</div>
-      <div class="sb-text">Buyer in Europe → SLOI AI negotiates → Supplier in UAE/India → Signed LOI → Deal closed</div>
+    <div class="sloi-note">
+      <div class="sn-text">From RFQ to signed LOI — typically under 24 hours</div>
+      <div class="sn-sub">vs. 2–6 weeks of manual procurement through traditional channels</div>
     </div>
   </div>
 
   <!-- NUMBERS -->
   <div class="numbers-grid">
     <div class="num-card">
-      <div class="nc-val" style="color:var(--gold)">$300B+</div>
-      <div class="nc-label">Planned IMEC infrastructure investment</div>
+      <div class="nc-val" style="color:var(--gold)">$1.2T</div>
+      <div class="nc-label">Middle East reconstruction pipeline through 2030</div>
     </div>
     <div class="num-card">
-      <div class="nc-val" style="color:var(--indigo)">3.2B</div>
-      <div class="nc-label">People connected by the corridor</div>
+      <div class="nc-val" style="color:var(--indigo)">12–18%</div>
+      <div class="nc-label">Typical savings vs. importing materials from the US</div>
     </div>
     <div class="num-card">
-      <div class="nc-val" style="color:var(--green)">40%</div>
-      <div class="nc-label">Reduction in EU-India transit time vs Suez</div>
+      <div class="nc-val" style="color:var(--green)">&lt;24h</div>
+      <div class="nc-label">RFQ to signed LOI with a verified regional supplier</div>
     </div>
     <div class="num-card">
-      <div class="nc-val" style="color:var(--teal)">$10T+</div>
-      <div class="nc-label">Annual commodity trade volume in the region</div>
+      <div class="nc-val" style="color:var(--teal)">$500</div>
+      <div class="nc-label">Flat LOI fee — no % of deal, no hidden costs</div>
     </div>
   </div>
 
-  <!-- WHY NOW -->
+  <!-- PAIN POINTS -->
   <div class="section">
-    <h2>Why this corridor.<br/><em>Why now.</em></h2>
-    <p>The IMEC corridor was announced at the G20 summit in New Delhi in September 2023. It is the most significant trade infrastructure initiative since the Belt and Road. The corridor is designed to move goods — physical commodities — faster and cheaper between Asia, the Middle East, and Europe.</p>
-    <p>Every kilometre of rail, every port expansion, every logistics hub requires steel, cement, pipes, energy, and agricultural supply. Every one of those purchases needs a negotiated price and a signed agreement between buyer and supplier. That agreement is a Letter of Intent.</p>
-    <p>The region is awash with capital — Saudi Vision 2030, NEOM, UAE industrial expansion, Iraq reconstruction, Egypt's New Administrative Capital. All of it needs commodities. All of it needs procurement infrastructure. There is no AI-native procurement platform built for this corridor. Until now.</p>
+    <h2>The procurement problem<br/>every US contractor <em>knows.</em></h2>
+    <p>Winning a reconstruction contract is one thing. Sourcing 50,000 MT of cement from a vetted supplier in the UAE or Jordan — at a defensible price, with signed documentation — is another. This is where projects stall.</p>
+
+    <div class="pain-grid">
+      <div class="pain">
+        <div class="pain-icon">🕐</div>
+        <div class="pain-title">Time kills margins</div>
+        <div class="pain-desc">Every week without a signed supply agreement is a week of schedule risk. Manual RFQ processes take 4–8 weeks. Your project start date doesn't move.</div>
+      </div>
+      <div class="pain">
+        <div class="pain-icon">🌐</div>
+        <div class="pain-title">No MENA supplier network</div>
+        <div class="pain-desc">US firms don't have pre-vetted relationships with cement mills in UAE, steel yards in Egypt, or fuel suppliers in Jordan. Building that network takes years.</div>
+      </div>
+      <div class="pain">
+        <div class="pain-icon">💱</div>
+        <div class="pain-title">Price discovery is opaque</div>
+        <div class="pain-desc">Regional commodity prices change weekly. Without a local presence, US contractors often overpay by 15–20% or get quoted inflated "foreigner prices."</div>
+      </div>
+      <div class="pain">
+        <div class="pain-icon">📋</div>
+        <div class="pain-title">Documentation for auditors</div>
+        <div class="pain-desc">US federal contracts require documented procurement processes. You need price justification and signed agreements — not just an email chain.</div>
+      </div>
+    </div>
   </div>
 
   <hr class="divider"/>
 
   <!-- COMMODITIES -->
   <div class="section">
-    <h2>The commodities<br/>moving through <em>IMEC.</em></h2>
+    <h2>What reconstruction<br/><em>projects buy.</em></h2>
+    <p style="margin-bottom:20px">These are the materials MENA reconstruction projects consume at scale. SLOI AI has verified suppliers and live market pricing for all of them.</p>
     <div class="commodity-grid">
       <div class="commodity">
+        <div class="com-icon">🪨</div>
+        <div class="com-name">Cement & Clinker</div>
+        <div class="com-vol" style="color:var(--teal)">$58–95/MT</div>
+        <div class="com-desc">OPC 42.5R, 52.5N, sulphate-resistant. Bulk or bagged. UAE, Egypt, Turkey — ready to ship.</div>
+      </div>
+      <div class="commodity">
         <div class="com-icon">🔩</div>
-        <div class="com-name">Steel & Metals</div>
-        <div class="com-vol" style="color:var(--violet)">$2.1T</div>
-        <div class="com-desc">Rebar, coil, aluminum for construction and infrastructure. Primary commodity of every NEOM-scale project.</div>
+        <div class="com-name">Steel & Rebar</div>
+        <div class="com-vol" style="color:var(--violet)">$2,800–3,400/MT</div>
+        <div class="com-desc">G60 rebar, HR/CR coil, structural H-beam. Regional mills with short lead times.</div>
       </div>
       <div class="commodity">
         <div class="com-icon">🏗️</div>
         <div class="com-name">Building Materials</div>
-        <div class="com-vol" style="color:var(--teal)">$890B</div>
-        <div class="com-desc">Cement, concrete, tiles, pipes. Demand from UAE, KSA, Egypt, Iraq reconstruction projects.</div>
+        <div class="com-vol" style="color:var(--gold)">Market price</div>
+        <div class="com-desc">Concrete block, ready-mix, PVC pipe, porcelain tile. Sourced regionally to cut freight costs.</div>
       </div>
       <div class="commodity">
         <div class="com-icon">⚡</div>
-        <div class="com-name">Energy</div>
-        <div class="com-vol" style="color:var(--gold)">$3.8T</div>
-        <div class="com-desc">Diesel, LPG, industrial fuels for construction equipment and logistics along the corridor.</div>
-      </div>
-      <div class="commodity">
-        <div class="com-icon">🌾</div>
-        <div class="com-name">Agriculture</div>
-        <div class="com-vol" style="color:var(--green)">$1.2T</div>
-        <div class="com-desc">Wheat, corn, grain — India is a top exporter, Middle East imports 80%+ of its food. IMEC makes this trade faster.</div>
+        <div class="com-name">Industrial Energy</div>
+        <div class="com-vol" style="color:var(--green)">$4.92–5.15/L</div>
+        <div class="com-desc">Diesel B2/B5, fuel oil for heavy equipment and generators on remote sites.</div>
       </div>
       <div class="commodity">
         <div class="com-icon">🧪</div>
         <div class="com-name">Chemicals</div>
-        <div class="com-vol" style="color:var(--red)">$640B</div>
-        <div class="com-desc">Industrial chemicals for manufacturing, construction, and energy sectors moving through the corridor.</div>
+        <div class="com-vol" style="color:var(--red)">Market price</div>
+        <div class="com-desc">Caustic soda, HDPE, PP granules, fertilisers. Compliant sourcing with full documentation.</div>
       </div>
       <div class="commodity">
-        <div class="com-icon">📦</div>
-        <div class="com-name">Total addressable</div>
-        <div class="com-vol" style="color:var(--white)">$8.6T</div>
-        <div class="com-desc">Combined annual commodity trade in the IMEC footprint. SLOI AI targets the procurement negotiation layer.</div>
+        <div class="com-icon">🌾</div>
+        <div class="com-name">Food & Agriculture</div>
+        <div class="com-vol" style="color:var(--indigo)">$560–1,200/MT</div>
+        <div class="com-desc">Wheat, corn, sugar for base-camp and humanitarian supply requirements on large sites.</div>
       </div>
     </div>
   </div>
@@ -262,130 +277,126 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 
   <!-- KEY PROJECTS -->
   <div class="section">
-    <h2>Projects <em>buying now.</em></h2>
-    <p style="margin-bottom:18px">These are real, funded, active procurement opportunities across the IMEC corridor — all buying commodities through brokers today. SLOI AI's LeadFinder agent monitors these projects continuously.</p>
+    <h2>Active reconstruction<br/><em>markets.</em></h2>
+    <p style="margin-bottom:18px">US engineering and construction firms are actively bidding and winning in these markets. SLOI AI's supplier network covers every one of them.</p>
 
     <div class="project-card hot">
-      <div class="pj-icon">🏙️</div>
+      <div class="pj-icon">🇮🇶</div>
       <div class="pj-body">
-        <div class="pj-name">NEOM — The Line + Sindalah + Oxagon</div>
-        <div class="pj-meta">Saudi Arabia · Active construction · Multi-phase</div>
+        <div class="pj-name">Iraq — National Reconstruction Programme</div>
+        <div class="pj-meta">Baghdad · Basra · Mosul · US firms active since 2003, accelerating 2024–2030</div>
         <div class="pj-commodities">
-          <span class="pj-com">🔩 Steel</span><span class="pj-com">🏗️ Cement</span><span class="pj-com">🔩 Aluminum</span><span class="pj-com">⚡ Energy</span>
+          <span class="pj-com">🪨 Cement</span><span class="pj-com">🔩 Steel</span><span class="pj-com">🏗️ Pipes</span><span class="pj-com">⚡ Energy</span>
         </div>
       </div>
       <div style="flex-shrink:0;text-align:right">
-        <div class="pj-val" style="color:var(--red)">$500B</div>
-        <div style="font-size:9px;color:var(--muted)">total investment</div>
-        <span class="badge br" style="margin-top:4px">🔥 Active</span>
+        <div class="pj-val" style="color:var(--red)">$88B</div>
+        <div style="font-size:9px;color:var(--muted)">reconstruction plan</div>
+        <span class="badge br" style="margin-top:4px">🔥 Most active</span>
+      </div>
+    </div>
+
+    <div class="project-card hot">
+      <div class="pj-icon">🇵🇸</div>
+      <div class="pj-body">
+        <div class="pj-name">Gaza — Post-Conflict Reconstruction</div>
+        <div class="pj-meta">Gaza Strip · US-led reconstruction framework · USAID-aligned contractors</div>
+        <div class="pj-commodities">
+          <span class="pj-com">🪨 Cement</span><span class="pj-com">🔩 Rebar</span><span class="pj-com">🏗️ Block</span><span class="pj-com">🔩 Structural steel</span>
+        </div>
+      </div>
+      <div style="flex-shrink:0;text-align:right">
+        <div class="pj-val" style="color:var(--gold)">$50B+</div>
+        <div style="font-size:9px;color:var(--muted)">estimated rebuild cost</div>
+        <span class="badge ba" style="margin-top:4px">Emerging</span>
       </div>
     </div>
 
     <div class="project-card">
-      <div class="pj-icon">🏛️</div>
+      <div class="pj-icon">🇱🇧</div>
       <div class="pj-body">
-        <div class="pj-name">Egypt New Administrative Capital</div>
-        <div class="pj-meta">Egypt · Cairo · Phase 2 underway</div>
+        <div class="pj-name">Lebanon — Infrastructure & Port Reconstruction</div>
+        <div class="pj-meta">Beirut · Tripoli · US and EU-funded reconstruction projects</div>
         <div class="pj-commodities">
-          <span class="pj-com">🏗️ Cement</span><span class="pj-com">🔩 Steel</span><span class="pj-com">🏗️ Tiles</span><span class="pj-com">🏗️ Pipes</span>
+          <span class="pj-com">🔩 Steel</span><span class="pj-com">🪨 Cement</span><span class="pj-com">🏗️ Tiles</span><span class="pj-com">⚡ Diesel</span>
         </div>
       </div>
       <div style="flex-shrink:0;text-align:right">
-        <div class="pj-val" style="color:var(--gold)">$58B</div>
-        <div style="font-size:9px;color:var(--muted)">total budget</div>
-        <span class="badge ba" style="margin-top:4px">Ongoing</span>
-      </div>
-    </div>
-
-    <div class="project-card">
-      <div class="pj-icon">🚢</div>
-      <div class="pj-body">
-        <div class="pj-name">Oman Duqm Special Economic Zone</div>
-        <div class="pj-meta">Oman · Port + Industrial zone · IMEC node</div>
-        <div class="pj-commodities">
-          <span class="pj-com">🔩 Steel</span><span class="pj-com">🏗️ Pipes</span><span class="pj-com">⚡ Diesel</span>
-        </div>
-      </div>
-      <div style="flex-shrink:0;text-align:right">
-        <div class="pj-val" style="color:var(--green)">$30B</div>
-        <div style="font-size:9px;color:var(--muted)">development plan</div>
+        <div class="pj-val" style="color:var(--teal)">$15B</div>
+        <div style="font-size:9px;color:var(--muted)">immediate need</div>
         <span class="badge bg" style="margin-top:4px">Active</span>
       </div>
     </div>
 
     <div class="project-card">
-      <div class="pj-icon">🏗️</div>
+      <div class="pj-icon">🇱🇾</div>
       <div class="pj-body">
-        <div class="pj-name">Iraq Reconstruction — Baghdad + Basra</div>
-        <div class="pj-meta">Iraq · Post-conflict reconstruction · Restricted</div>
+        <div class="pj-name">Libya — National Stabilisation & Infrastructure</div>
+        <div class="pj-meta">Tripoli · Benghazi · US contractors returning post-2023 security improvement</div>
         <div class="pj-commodities">
-          <span class="pj-com">🔩 Steel</span><span class="pj-com">🏗️ Cement</span><span class="pj-com">🏗️ Pipes</span><span class="pj-com">⚡ Energy</span>
+          <span class="pj-com">🪨 Cement</span><span class="pj-com">🔩 Steel</span><span class="pj-com">⚡ Energy</span><span class="pj-com">🏗️ Pipes</span>
         </div>
       </div>
       <div style="flex-shrink:0;text-align:right">
-        <div class="pj-val" style="color:var(--teal)">$88B</div>
-        <div style="font-size:9px;color:var(--muted)">reconstruction plan</div>
-        <span class="badge ba" style="margin-top:4px">Enhanced KYC</span>
+        <div class="pj-val" style="color:var(--green)">$30B+</div>
+        <div style="font-size:9px;color:var(--muted)">infrastructure gap</div>
+        <span class="badge bv" style="margin-top:4px">Enhanced KYC</span>
       </div>
     </div>
 
     <div class="project-card">
-      <div class="pj-icon">🇩🇪</div>
+      <div class="pj-icon">🇸🇦</div>
       <div class="pj-body">
-        <div class="pj-name">German manufacturing — MENA sourcing</div>
-        <div class="pj-meta">Germany · Importing aluminum, chemicals, energy via IMEC</div>
+        <div class="pj-name">Saudi Arabia — Vision 2030 / NEOM</div>
+        <div class="pj-meta">NEOM · Riyadh · Jeddah · US firms Bechtel, AECOM, Parsons deeply engaged</div>
         <div class="pj-commodities">
-          <span class="pj-com">🔩 Aluminum</span><span class="pj-com">🧪 Chemicals</span><span class="pj-com">⚡ LPG</span>
+          <span class="pj-com">🔩 Steel</span><span class="pj-com">🪨 Cement</span><span class="pj-com">🔩 Aluminum</span><span class="pj-com">⚡ Energy</span>
         </div>
       </div>
       <div style="flex-shrink:0;text-align:right">
-        <div class="pj-val" style="color:var(--violet)">$200B+</div>
-        <div style="font-size:9px;color:var(--muted)">annual import vol.</div>
-        <span class="badge bv" style="margin-top:4px">EU buyers</span>
+        <div class="pj-val" style="color:var(--violet)">$500B</div>
+        <div style="font-size:9px;color:var(--muted)">NEOM alone</div>
+        <span class="badge bg" style="margin-top:4px">Active</span>
       </div>
     </div>
 
-    <div style="font-size:11px;color:var(--muted);margin-top:10px;display:flex;align-items:center;gap:6px">
-      🔭 SLOI AI's LeadFinder agent monitors these projects continuously — alerting the Boss when new tenders are published.
-      <a href="negotiation-agent.html" style="color:var(--violet);text-decoration:none">Open LeadFinder →</a>
-    </div>
   </div>
 
   <hr class="divider"/>
 
   <!-- WHY SLOI AI -->
   <div class="section">
-    <h2>Why SLOI AI is the<br/><em>procurement layer</em> of IMEC.</h2>
+    <h2>Built for US firms<br/>buying in <em>MENA.</em></h2>
     <div class="why-grid">
       <div class="why-card">
-        <div class="why-icon">📍</div>
-        <div class="why-title">UAE — the hub of the corridor</div>
-        <div class="why-desc">SLOI AI operates from UAE, the central node of IMEC. All commodities flowing India → Europe pass through or are financed through UAE. Our broker network covers UAE, KSA, Egypt, Jordan — the full western half of the corridor.</div>
+        <div class="why-icon">✅</div>
+        <div class="why-title">Pre-vetted regional suppliers</div>
+        <div class="why-desc">Our broker network spans UAE, Egypt, Jordan, Turkey, and Iraq. Every supplier is screened — no cold outreach to unknown mills. You get a verified counterparty from day one.</div>
       </div>
       <div class="why-card">
-        <div class="why-icon">🌐</div>
-        <div class="why-title">Arabic, English, Hebrew — one platform</div>
-        <div class="why-desc">Our AI agent negotiates in any language. The LOI is generated in English with ICC-compliant terms. Buyers in Germany can negotiate with suppliers in UAE or India without language or time-zone friction.</div>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">⚡</div>
-        <div class="why-title">Speed matters at IMEC scale</div>
-        <div class="why-desc">NEOM buys 10,000 MT of steel a month. Every week of manual negotiation costs money. SLOI AI closes in minutes. At IMEC scale, faster procurement = lower project cost = competitive advantage for buyers.</div>
-      </div>
-      <div class="why-card">
-        <div class="why-icon">🤖</div>
-        <div class="why-title">AI agents connect to IMEC automatically</div>
-        <div class="why-desc">Via the Open Network API and skill.md, any AI procurement agent — including those built by IMEC member governments — can connect to SLOI AI, discover suppliers, and generate LOIs autonomously at scale.</div>
+        <div class="why-icon">📄</div>
+        <div class="why-title">Audit-ready LOI documentation</div>
+        <div class="why-desc">Every negotiation produces a signed Letter of Intent with price, quantity, delivery terms, and both parties' details. ICC-standard format. Exactly what your project documentation requires.</div>
       </div>
       <div class="why-card">
         <div class="why-icon">🛡️</div>
-        <div class="why-title">Compliance for a complex region</div>
-        <div class="why-desc">IMEC crosses multiple compliance jurisdictions. SLOI AI screens every deal against OFAC, EU, and UN sanctions. Iraq and restricted territories handled with enhanced KYC. Built-in, not bolted-on.</div>
+        <div class="why-title">OFAC & sanctions compliance built in</div>
+        <div class="why-desc">Every supplier and deal is screened against OFAC, UN, and EU sanctions lists before the LOI is generated. Iraq and Libya get enhanced KYC. Your legal team will thank you.</div>
       </div>
       <div class="why-card">
         <div class="why-icon">💰</div>
-        <div class="why-title">TradeFinex — financing on IMEC deals</div>
-        <div class="why-desc">Large IMEC infrastructure deals often need trade financing. When buyers request it, SLOI AI refers them to TradeFinex — the XDC Network trade finance platform — and earns a 0.5% finder's fee off-platform.</div>
+        <div class="why-title">Regional pricing beats US import costs</div>
+        <div class="why-desc">Sourcing cement from UAE or steel from Egypt vs. shipping from the US or Europe saves 12–20% on material cost before you account for shorter lead times. Our AI gets you the regional market price.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🤖</div>
+        <div class="why-title">AI negotiates across time zones</div>
+        <div class="why-desc">Your procurement team is in Houston or DC. Your suppliers are in Dubai or Cairo. SLOI AI runs the negotiation autonomously — you wake up to a deal on the table, not an inbox full of emails.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">⚡</div>
+        <div class="why-title">No retainer, no % of deal</div>
+        <div class="why-desc">$500 flat fee per signed LOI. No retainer. No percentage of deal value. Whether you're buying $100K of pipe or $10M of steel — same price. Predictable cost for your project budget.</div>
       </div>
     </div>
   </div>
@@ -393,16 +404,16 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <!-- CTA -->
   <div class="cta-box">
     <div style="font-family:'Fraunces',serif;font-size:clamp(30px,5vw,48px);font-weight:900;color:var(--white);letter-spacing:-.03em;margin-bottom:12px;line-height:1">
-      IMEC is moving.<br/>Your deals should<br/><em style="font-style:italic;color:var(--gold)">move faster.</em>
+      Your project starts<br/>when materials<br/><em style="font-style:italic;color:var(--gold)">are on site.</em>
     </div>
-    <p style="color:var(--muted);max-width:480px;margin:0 auto 28px;font-size:13px;line-height:1.8">Whether you are buying steel for a NEOM subcontract, sourcing grain for Egypt, or procuring energy across the corridor — SLOI AI negotiates the best price and generates the LOI in minutes.</p>
+    <p style="color:var(--muted);max-width:520px;margin:0 auto 28px;font-size:13px;line-height:1.8">Tell us what you need — steel, cement, energy, pipes. Our AI agent contacts verified MENA suppliers, negotiates the best price, and generates a signed LOI. Under 24 hours. $500 flat.</p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <a href="smb-order.html" class="btn btn-p" style="padding:13px 26px;font-size:13px">Start negotiating →</a>
-      <a href="investor.html" class="btn btn-gold" style="padding:13px 26px;font-size:13px">Investor deck</a>
-      <a href="open-network.html" class="btn btn-gold" style="padding:13px 26px;font-size:13px">AI Agent API</a>
+      <a href="smb-order.html" class="btn btn-p" style="padding:13px 26px;font-size:13px">Submit your RFQ →</a>
+      <a href="contact.html" class="btn btn-gold" style="padding:13px 26px;font-size:13px">Talk to our team</a>
+      <a href="negotiation-agent.html" class="btn btn-gold" style="padding:13px 26px;font-size:13px">Live agent console</a>
     </div>
     <div style="margin-top:16px;font-size:10px;color:var(--muted)">
-      No credit card needed · Boss approval on every deal · LOI in minutes
+      No credit card needed · OFAC-compliant · ICC-standard LOI · Boss approval on every deal
     </div>
   </div>
 
@@ -412,11 +423,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white);text-decoration:none">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
   <div class="footer-links">
     <a href="m2m-homepage.html">Home</a>
-    <a href="about.html">About</a>
     <a href="investor.html">Investors</a>
     <a href="pricing.html">Pricing</a>
-    <a href="terms.html">Terms</a>
     <a href="contact.html">Contact</a>
+    <a href="terms.html">Terms</a>
   </div>
   <div style="font-size:10px;color:var(--muted)">© 2026 SLOI AI Ltd.</div>
 </footer>
