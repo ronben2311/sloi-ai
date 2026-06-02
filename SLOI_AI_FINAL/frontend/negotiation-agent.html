@@ -135,6 +135,22 @@ select.inp option{background:var(--surface)}
 .strat:hover{border-color:rgba(91,95,239,.4)}.strat.sel{background:var(--indigo-dim);border-color:var(--indigo)}
 .strat-icon{font-size:16px;margin-bottom:3px}.strat-name{font-size:10px;font-weight:600;color:var(--white)}.strat-cost{font-size:9px;color:var(--teal)}
 
+/* Buyer preference chips */
+.pref-chip{padding:7px 4px;border:1px solid var(--border2);border-radius:4px;cursor:pointer;text-align:center;transition:all .12s}
+.pref-chip:hover{border-color:rgba(91,95,239,.4)}
+.pref-chip.pref-sel{background:var(--indigo-dim);border-color:var(--indigo)}
+.pref-name{font-size:10px;font-weight:600;color:var(--white);margin-top:2px;line-height:1.2}
+
+/* Buyer steering panel (mid-negotiation) */
+.steer-panel{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.25);border-radius:6px;padding:12px 14px;margin:4px 0;align-self:stretch;animation:slide-in .3s ease}
+.steer-title{font-size:10px;font-weight:700;color:var(--violet);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.steer-sub{font-size:10px;color:var(--muted);margin-bottom:10px}
+.steer-chips{display:flex;flex-wrap:wrap;gap:6px}
+.steer-chip{padding:6px 12px;border:1px solid var(--border2);border-radius:4px;cursor:pointer;font-size:11px;font-weight:600;color:var(--text);background:var(--surface2);transition:all .12s;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.steer-chip:hover{border-color:rgba(91,95,239,.5);color:var(--white);background:var(--indigo-dim)}
+.steer-chip.sc-accept{border-color:rgba(34,197,94,.4);color:var(--green);background:rgba(34,197,94,.05)}
+.steer-chip.sc-accept:hover{background:rgba(34,197,94,.15);border-color:var(--green)}
+
 /* ── TAB 2: LEADFINDER ── */
 #panel-lead{display:none;flex-direction:column;height:100%;overflow:hidden}
 #panel-lead.active{display:flex}
@@ -313,6 +329,47 @@ select.inp option{background:var(--surface)}
         <div>
           <label class="flabel">Delivery deadline</label>
           <input class="inp" id="m-deadline" type="date"/>
+        </div>
+
+      </div>
+
+      <div class="sec">// BUYER PREFERENCES</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+
+        <div>
+          <label class="flabel">Purchase intent</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+            <div id="pref-onetime" class="pref-chip pref-sel" onclick="selectPref('deal','onetime')">
+              <div style="font-size:14px">📦</div>
+              <div class="pref-name">One-time</div>
+            </div>
+            <div id="pref-annual" class="pref-chip" onclick="selectPref('deal','annual')">
+              <div style="font-size:14px">📅</div>
+              <div class="pref-name">Annual deal</div>
+            </div>
+            <div id="pref-surplus" class="pref-chip" onclick="selectPref('deal','surplus')">
+              <div style="font-size:14px">📉</div>
+              <div class="pref-name">Surplus stock</div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label class="flabel">Negotiation stance</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+            <div id="pref-price" class="pref-chip pref-sel" onclick="selectPref('stance','price')">
+              <div style="font-size:14px">💰</div>
+              <div class="pref-name">Best price</div>
+            </div>
+            <div id="pref-speed" class="pref-chip" onclick="selectPref('stance','speed')">
+              <div style="font-size:14px">⚡</div>
+              <div class="pref-name">Fast delivery</div>
+            </div>
+            <div id="pref-relation" class="pref-chip" onclick="selectPref('stance','relation')">
+              <div style="font-size:14px">🤝</div>
+              <div class="pref-name">Long-term</div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -605,6 +662,90 @@ let negState = { running: false, paused: false, round: 0, maxRounds: 5, agentPri
 let negHistory = []; // Claude message history for this negotiation
 const NEG_ID = 'NEG-' + String(Math.floor(Math.random()*900)+100);
 
+// ── BUYER PREFERENCES ──────────────────────────────────────────────────────────
+var prefDeal   = 'onetime';  // 'onetime' | 'annual' | 'surplus'
+var prefStance = 'price';    // 'price' | 'speed' | 'relation'
+
+function selectPref(group, val) {
+  if (group === 'deal') {
+    prefDeal = val;
+    ['onetime','annual','surplus'].forEach(function(k) {
+      var el = document.getElementById('pref-' + k);
+      if (el) el.classList.toggle('pref-sel', k === val);
+    });
+  } else {
+    prefStance = val;
+    ['price','speed','relation'].forEach(function(k) {
+      var el = document.getElementById('pref-' + k);
+      if (el) el.classList.toggle('pref-sel', k === val);
+    });
+  }
+}
+
+function prefDealLabel() {
+  return { onetime: 'One-time spot purchase', annual: 'Annual supply contract', surplus: 'Surplus / excess stock' }[prefDeal];
+}
+function prefStanceLabel() {
+  return { price: 'Best price', speed: 'Fast delivery', relation: 'Long-term relationship' }[prefStance];
+}
+function prefDealHint() {
+  if (prefDeal === 'annual')  return 'Buyer is open to a multi-shipment yearly agreement — push for volume discounts and framework pricing.';
+  if (prefDeal === 'surplus') return 'Buyer is specifically interested in surplus or off-spec inventory — expect significant discount requests; speed is a priority.';
+  return 'Single shipment — secure the best unit price for this order.';
+}
+function prefStanceHint() {
+  if (prefStance === 'speed')    return 'Delivery timeline is the top priority; buyer may accept a slightly higher price for guaranteed fast delivery.';
+  if (prefStance === 'relation') return 'Buyer values a reliable long-term supplier relationship — highlight consistency, quality, and after-sales support.';
+  return 'Lowest achievable price is the primary goal — hold the line and negotiate hard.';
+}
+
+// ── BUYER STEERING (mid-negotiation) ──────────────────────────────────────────
+var _steerResolve = null;
+
+var STEER_INSTRUCTIONS = {
+  hold:    'BUYER INSTRUCTION: Hold firm — do not concede further this round. Reiterate your current offer and emphasize value.',
+  push:    'BUYER INSTRUCTION: Push harder — be more assertive and demand a bigger price reduction from the supplier.',
+  annual:  'BUYER INSTRUCTION: Pivot strategy — propose a 12-month annual supply framework agreement. Emphasize the volume commitment to justify a better unit price.',
+  surplus: 'BUYER INSTRUCTION: Ask directly whether the supplier has surplus, off-spec, or excess inventory for this product available at a steeper discount.',
+  auto:    null,
+};
+
+function waitForBuyerDirection(brokerPrice, unit, round) {
+  return new Promise(function(resolve) {
+    _steerResolve = resolve;
+    var area = document.getElementById('chat-area');
+    var panel = document.createElement('div');
+    panel.id = 'steer-panel';
+    panel.className = 'steer-panel';
+    panel.innerHTML =
+      '<div class="steer-title">⬆ Your move — steer the agent</div>' +
+      '<div class="steer-sub">Supplier offered: ' + (brokerPrice ? '<strong style="color:var(--gold)">$' + brokerPrice.toLocaleString() + '/' + unit + '</strong>' : '—') + ' · Round ' + round + ' complete</div>' +
+      '<div class="steer-chips">' +
+      '<div class="steer-chip" onclick="buyerPick(\'hold\')">🛡️ Hold firm</div>' +
+      '<div class="steer-chip" onclick="buyerPick(\'push\')">⚡ Push harder</div>' +
+      '<div class="steer-chip" onclick="buyerPick(\'annual\')">📅 Offer annual deal</div>' +
+      '<div class="steer-chip" onclick="buyerPick(\'surplus\')">📉 Ask about surplus</div>' +
+      '<div class="steer-chip" onclick="buyerPick(\'auto\')">🤖 Let agent decide</div>' +
+      '<div class="steer-chip sc-accept" onclick="buyerPick(\'accept\')">✅ Accept this offer</div>' +
+      '</div>';
+    area.appendChild(panel);
+    area.scrollTop = area.scrollHeight;
+  });
+}
+
+function buyerPick(action) {
+  var panel = document.getElementById('steer-panel');
+  if (panel) {
+    var label = { hold: '🛡️ Hold firm', push: '⚡ Push harder', annual: '📅 Offer annual deal', surplus: '📉 Ask about surplus', auto: '🤖 Agent decides', accept: '✅ Accept offer' }[action] || action;
+    panel.innerHTML = '<div style="font-size:10px;color:var(--muted)">You chose: <strong style="color:var(--violet)">' + label + '</strong></div>';
+    panel.style.padding = '8px 14px';
+  }
+  if (_steerResolve) {
+    _steerResolve(action);
+    _steerResolve = null;
+  }
+}
+
 function selectStrat(s) {
   selectedStrat = s;
   document.getElementById('s-deal-hunter').classList.add('sel');
@@ -777,7 +918,9 @@ async function startNegotiation() {
     '<div class="mpill">Incoterm <b>' + incoterm + '</b></div>' +
     '<div class="mpill">Payment <b>' + payment + '</b></div>' +
     '<div class="mpill">📍 <b>' + location + '</b></div>' +
-    (deadlineStr !== 'TBD' ? '<div class="mpill">📅 <b style="color:var(--teal)">' + deadlineStr + '</b></div>' : '');
+    (deadlineStr !== 'TBD' ? '<div class="mpill">📅 <b style="color:var(--teal)">' + deadlineStr + '</b></div>' : '') +
+    '<div class="mpill">' + (prefDeal === 'annual' ? '📅' : prefDeal === 'surplus' ? '📉' : '📦') + ' <b style="color:var(--violet)">' + prefDealLabel() + '</b></div>' +
+    '<div class="mpill">' + (prefStance === 'speed' ? '⚡' : prefStance === 'relation' ? '🤝' : '💰') + ' <b>' + prefStanceLabel() + '</b></div>';
   pillsEl.style.display = 'flex';
 
   // Reset panels
@@ -812,15 +955,23 @@ MANDATE:
 - Trader/Supplier: ${trader}
 - Strategy: Deal Hunter (maximum value extraction)
 
+BUYER PREFERENCES:
+- Purchase intent: ${prefDealLabel()}
+- ${prefDealHint()}
+- Negotiation stance: ${prefStanceLabel()}
+- ${prefStanceHint()}
+
 NEGOTIATION RULES:
 1. Start with an opening offer 8-12% below target price
 2. Move toward target price gradually over rounds
 3. Be firm, professional, and cite current market conditions
 4. Reference the delivery location (${location}) and deadline (${deadlineStr}) when relevant to strengthen your position
 5. Always reference the agreed incoterm (${incoterm}) and payment terms (${payment})
-6. If trader price is within 2% of the walk-away max, consider accepting
-7. Always include a specific dollar price per ${unit}
-8. Keep messages concise (3-4 sentences max)
+6. If buyer intent is "Annual supply contract", proactively offer to negotiate a framework agreement with volume commitments
+7. If buyer intent is "Surplus / excess stock", aggressively push for discounted pricing and ask about available excess inventory
+8. If trader price is within 2% of the walk-away max, consider accepting
+9. Always include a specific dollar price per ${unit}
+10. Keep messages concise (3-4 sentences max)
 
 Respond ONLY as the agent (your message to the trader). No meta-commentary.
 Format your price clearly as: $X,XXX/${unit}`;
@@ -857,7 +1008,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
   await runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max);
 }
 
-async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max) {
+async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max, buyerInstruction) {
   if(!negState.running || negState.paused || negState.agreed) return;
 
   negState.round++;
@@ -870,8 +1021,11 @@ async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target
   addThinking('agent');
   document.getElementById('agent-status').textContent = 'Agent thinking… Round ' + round;
 
+  var basePrompt = round === 1 ? 'Start the negotiation. Make your opening offer.' : 'The trader responded. Make your next counter-offer.';
+  if (buyerInstruction) basePrompt += '\n\n' + buyerInstruction;
+
   const agentMsg = await callClaude(
-    [...negHistory, { role: 'user', content: round === 1 ? 'Start the negotiation. Make your opening offer.' : 'The trader responded. Make your next counter-offer.' }],
+    [...negHistory, { role: 'user', content: basePrompt }],
     agentSystem + '\n\nThis is round ' + round + ' of ' + maxR + '.',
     300
   );
@@ -910,7 +1064,7 @@ async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target
 
   document.getElementById('agent-status').textContent = '4 agents active';
 
-  // Check if deal reached (gap < 5% within budget)
+  // Check if deal reached automatically (gap < 5% within budget)
   if(agentPrice && brokerPrice) {
     const gap = ((brokerPrice - agentPrice) / brokerPrice) * 100;
     const agreed = brokerPrice <= max && gap < 5;
@@ -927,7 +1081,7 @@ async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target
     }
   }
 
-  // Max rounds reached → always show approval with best known prices
+  // Max rounds reached → show approval with best known prices
   if(round >= maxR) {
     const bestAgent  = negState.agentPrice  || agentPrice  || target;
     const bestBroker = negState.brokerPrice || brokerPrice || max;
@@ -944,13 +1098,31 @@ async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target
     return;
   }
 
-  // Round separator — continue to next round
-  if(negState.running) {
-    var gapAmt = agentPrice && brokerPrice ? ((brokerPrice - agentPrice) / brokerPrice * 100).toFixed(1) : '?';
+  // ── BUYER STEERS ──────────────────────────────────────────────────────────
+  if(!negState.running) return;
+  var gapAmt = agentPrice && brokerPrice ? ((brokerPrice - agentPrice) / brokerPrice * 100).toFixed(1) : '?';
+  addSystemBubble('── Round ' + round + ' complete · Gap: ' + gapAmt + '% · Your move ──');
+
+  const steerAction = await waitForBuyerDirection(brokerPrice, unit, round);
+
+  if(!negState.running) return;
+
+  if(steerAction === 'accept' && brokerPrice) {
+    negState.agreed = true;
+    negState.running = false;
+    addSystemBubble('✋ You accepted — $' + brokerPrice.toLocaleString() + '/' + unit + ' · Round ' + round);
+    showApprovalBox(brokerPrice, qty, unit, round);
+    document.getElementById('start-btn').disabled = false;
+    return;
+  }
+
+  const nextInstruction = STEER_INSTRUCTIONS[steerAction] || null;
+  // ── END BUYER STEERS ──────────────────────────────────────────────────────
+
+  // Continue to next round
+  if(negState.running && !negState.paused) {
     await new Promise(r => setTimeout(r, 600));
-    addSystemBubble('── Round ' + round + ' complete · Gap: ' + gapAmt + '% · Continuing ──');
-    await new Promise(r => setTimeout(r, 900));
-    if(!negState.paused) runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max);
+    runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max, nextInstruction);
   }
 }
 
@@ -1043,6 +1215,10 @@ function pauseNeg() {
   negState.paused = !negState.paused;
   document.getElementById('pause-btn').textContent = negState.paused ? '▶ Resume' : '⏸ Pause';
   addSystemBubble(negState.paused ? '⏸ Negotiation paused' : '▶ Negotiation resumed');
+  if (negState.paused && _steerResolve) {
+    _steerResolve('auto');
+    _steerResolve = null;
+  }
 }
 
 function manualOverride() {
@@ -1055,6 +1231,7 @@ function manualOverride() {
 
 function clearChat() {
   if (window._autoTimer) { clearInterval(window._autoTimer); window._autoTimer = null; }
+  if (_steerResolve) { _steerResolve('auto'); _steerResolve = null; }
   document.getElementById('chat-area').innerHTML = '<div class="bubble b-system">Chat cleared · Set mandate and click ▶ Start agent</div>';
   negState = { running: false, paused: false, round: 0, maxRounds: 5, agentPrice: null, brokerPrice: null, agreed: false };
   negHistory = [];
@@ -1712,6 +1889,11 @@ function loadMandateFromStorage() {
           break;
         }
       }
+    }
+
+    // Purchase type → pre-select preference chips
+    if (m.purchaseType === 'recurring') {
+      selectPref('deal', 'annual');
     }
   } catch(e) {}
 }
