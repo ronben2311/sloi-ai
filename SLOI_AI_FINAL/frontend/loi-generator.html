@@ -154,6 +154,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
 <link rel="stylesheet" href="/main.css"/>
 
 <script src="/api-client.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -610,90 +611,42 @@ function generatePDF(){
   document.getElementById('gen-icon').innerHTML = '<div class="spin"></div>';
   document.getElementById('gen-text').textContent = 'Generating PDF...';
 
-  setTimeout(function(){
-    // Print the preview as PDF using browser print dialog
-    var v = getVals();
-    var printContent = document.getElementById('loi-preview').innerHTML;
+  var v = getVals();
+  var element = document.getElementById('loi-preview');
+  var filename = (v.ref || 'LOI') + '.pdf';
 
-    var printWindow = window.open('', '_blank');
-    printWindow.document.write(`<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8"/>
-<title>LOI ${v.ref}</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Fraunces:wght@700;900&display=swap" rel="stylesheet"/>
-<style>
-:root{--bg:#07070f;--surface:#0e0e1a;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--teal:#2dd4bf;}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:white;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#111;margin:0;padding:20px}
-.doc{background:white;border:none;max-width:780px;margin:0 auto}
-.doc-top{background:#07070f;padding:18px 22px 12px;border-bottom:2px solid #5b5fef;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.doc-top-row{display:flex;align-items:flex-start;justify-content:space-between}
-.doc-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:white}
-.doc-logo em{font-style:italic;color:#5b5fef}
-.doc-type-label{font-size:14px;font-weight:700;color:white;text-align:right}
-.doc-ref,.doc-date{font-size:9px;color:#8888aa;text-align:right}
-.doc-tagline{font-size:7px;color:#5b5fef;letter-spacing:2px;text-transform:uppercase;margin-top:4px}
-.doc-body{padding:18px 22px}
-.doc-section{font-size:8px;color:#5b5fef;letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;margin-top:14px}
-.doc-section:first-child{margin-top:0}
-.parties-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #1c1c2e;border-radius:3px;overflow:hidden;margin-bottom:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.party-block{padding:10px;background:#0e0e1a;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.party-block+.party-block{border-left:1px solid #1c1c2e}
-.party-role{font-size:7px;color:#52526e;letter-spacing:1px;margin-bottom:4px}
-.party-name{font-size:10px;font-weight:700;color:white;margin-bottom:2px}
-.party-addr{font-size:9px;color:#8888aa;line-height:1.4}
-.details-table{width:100%;border-collapse:collapse;border:1px solid #1c1c2e;margin-bottom:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.details-table tr{border-bottom:1px solid #1c1c2e}
-.details-table td{padding:5px 8px;font-size:9px}
-.details-table td:nth-child(odd){background:#0e0e1a;color:#52526e;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.details-table td:nth-child(even){background:#07070f;color:white;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.total-box{background:#0e0e1a;border:1px solid #5b5fef;border-radius:3px;padding:10px;text-align:center;margin:8px 0;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.total-label{font-size:8px;color:#52526e;letter-spacing:1px;margin-bottom:3px}
-.total-amount{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:#5b5fef}
-.total-fees{font-size:8px;color:#8888aa;margin-top:3px}
-.clause{margin-bottom:8px}
-.clause-title{font-size:9px;font-weight:700;color:white;margin-bottom:2px}
-.clause-text{font-size:9px;color:#8888aa;line-height:1.6}
-.sig-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #1c1c2e;border-radius:3px;overflow:hidden;margin-top:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.sig-block{padding:10px;background:#0e0e1a;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.sig-block+.sig-block{border-left:1px solid #1c1c2e}
-.sig-role-label{font-size:7px;color:#52526e;letter-spacing:1px;margin-bottom:18px}
-.sig-line{height:1px;background:#252538;margin-bottom:4px}
-.sig-name{font-size:10px;font-weight:700;color:white}
-.sig-title{font-size:8px;color:#8888aa}
-.sig-date{font-size:8px;color:#52526e;margin-top:6px}
-.escrow-box{background:#0e0e1a;border:1px solid #5b5fef;border-radius:3px;padding:10px;margin-top:6px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-.escrow-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #1c1c2e;font-size:9px}
-.escrow-row:last-child{border-bottom:none}
-.escrow-label{color:#52526e}
-.escrow-val{color:white;font-weight:600}
-.doc-footer{padding:8px 22px;background:#07070f;border-top:1px solid #1c1c2e;font-size:8px;color:#52526e;text-align:center;line-height:1.4;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-@media print{
-  body{padding:0;margin:0}
-  .doc{max-width:100%}
-}
-</style>
-</head>
-<body>${printContent}
-<script>
-  window.onload = function(){
-    window.print();
-    setTimeout(function(){window.close();}, 1000);
-  }
-<\/body>\n<\/html>`);
-    printWindow.document.close();
-
+  html2pdf().set({
+    margin: 0,
+    filename: filename,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#07070f',
+      scrollY: 0,
+      windowWidth: element.scrollWidth,
+    },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['avoid-all', 'css'] },
+  }).from(element).save().then(function(){
     btn.disabled = false;
     document.getElementById('gen-icon').textContent = '✅';
-    document.getElementById('gen-text').textContent = 'Generated! Saving PDF...';
+    document.getElementById('gen-text').textContent = 'Downloaded!';
     document.getElementById('success-banner').classList.add('show');
     setTimeout(function(){
       document.getElementById('gen-icon').textContent = '📄';
       document.getElementById('gen-text').textContent = 'Generate & Download PDF';
-      btn.disabled = false;
     }, 3000);
-  }, 800);
+  }).catch(function(err){
+    console.error('[generatePDF]', err);
+    btn.disabled = false;
+    document.getElementById('gen-icon').textContent = '❌';
+    document.getElementById('gen-text').textContent = 'Failed — try again';
+    setTimeout(function(){
+      document.getElementById('gen-icon').textContent = '📄';
+      document.getElementById('gen-text').textContent = 'Generate & Download PDF';
+    }, 3000);
+  });
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
