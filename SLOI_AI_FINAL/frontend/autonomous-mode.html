@@ -437,7 +437,7 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
     </div>
     <div class="rep-card">
       <div class="rep-val" style="color:var(--teal)">Gold</div>
-      <div class="rep-label">200+ deals · 5% floor discount · dedicated broker</div>
+      <div class="rep-label">200+ deals · 5% floor discount · dedicated trader</div>
       <div class="rep-badge" style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.3);color:var(--teal)">Gold</div>
     </div>
     <div class="rep-card">
@@ -454,7 +454,7 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
 
   <div id="floor-prices">
     <div class="sec-title" style="margin-top:20px">// Floor price discounts — applied automatically</div>
-    <p style="font-size:11px;color:var(--muted)">When reputation tier is verified, broker floor prices are adjusted automatically. Agent with Gold tier gets 5% below standard floor on every negotiation — without asking.</p>
+    <p style="font-size:11px;color:var(--muted)">When reputation tier is verified, trader floor prices are adjusted automatically. Agent with Gold tier gets 5% below standard floor on every negotiation — without asking.</p>
     <div class="code-wrap"><div class="code-hdr"><span class="code-lang">LOGIC</span></div>
 <pre><span class="cm">// Applied in buildBrokerSystem() before negotiation starts</span>
 <span class="kw">const</span> repDiscount = {
@@ -467,7 +467,7 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
 }[agent.reputation_tier] || <span class="num">0</span>;
 
 <span class="kw">const</span> adjustedFloor = product.broker_floor * (<span class="num">1</span> - repDiscount);
-<span class="cm">// Broker instructed: "Your floor for this agent is $" + adjustedFloor</span></pre>
+<span class="cm">// Trader instructed: "Your floor for this agent is $" + adjustedFloor</span></pre>
     </div>
   </div>
 </div>
@@ -651,11 +651,11 @@ AUTO_APPROVED
     <br/>
     <div class="dt-time">14:32:01</div> <div class="dt-event">← NEGOTIATION_STARTED · NEG-007 · Standard · 5 rounds</div>
     <div class="dt-time">14:32:03</div> <div class="dt-event">← TEXT_CHUNK · agent · round 1 · "...offer $2,720/MT..."</div>
-    <div class="dt-time">14:32:05</div> <div class="dt-event">← TEXT_CHUNK · broker · round 1 · "...current price $2,900/MT..."</div>
-    <div class="dt-time">14:32:06</div> <div class="dt-event">← ROUND_COMPLETE · r1 · agent:$2,720 · broker:$2,900 · gap:6.6%</div>
+    <div class="dt-time">14:32:05</div> <div class="dt-event">← TEXT_CHUNK · trader · round 1 · "...current price $2,900/MT..."</div>
+    <div class="dt-time">14:32:06</div> <div class="dt-event">← ROUND_COMPLETE · r1 · agent:$2,720 · trader:$2,900 · gap:6.6%</div>
     <div class="dt-time">14:32:09</div> <div class="dt-event">← TEXT_CHUNK · agent · round 2 · "...increase to $2,800/MT..."</div>
-    <div class="dt-time">14:32:11</div> <div class="dt-event">← TEXT_CHUNK · broker · round 2 · "...best price $2,860/MT..."</div>
-    <div class="dt-time">14:32:12</div> <div class="dt-event">← ROUND_COMPLETE · r2 · agent:$2,800 · broker:$2,860 · gap:2.1%</div>
+    <div class="dt-time">14:32:11</div> <div class="dt-event">← TEXT_CHUNK · trader · round 2 · "...best price $2,860/MT..."</div>
+    <div class="dt-time">14:32:12</div> <div class="dt-event">← ROUND_COMPLETE · r2 · agent:$2,800 · trader:$2,860 · gap:2.1%</div>
     <br/>
     <div class="dt-comment"># Gap &lt; 2.5% → checking auto-approve conditions...</div>
     <div class="dt-comment"># deal_price $2,830 &lt;= max_price $2,900 ✓</div>

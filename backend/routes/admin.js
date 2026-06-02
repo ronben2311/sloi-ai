@@ -127,18 +127,45 @@ router.post("/catalog/upload", authenticate, requireBoss, upload.single("file"),
 });
 
 // ── GET /v1/admin/users — list all users with credits + LOI counts ───────────
+//
+// Returns two groups:
+//   status:"registered" — row exists in users table
+//   status:"incomplete" — exists in Supabase Auth but users table insert never ran
+//                          (common when LinkedIn OAuth fails mid-flow)
+//
+// connected: true  → user.admin_id matches this boss's id (entity-linked)
+// connected: false → user has no admin_id or linked to a different boss
+// connected: null  → admin_id column doesn't exist yet (schema not migrated)
+//
+// To enable entity linking, run in Supabase SQL editor:
+//   ALTER TABLE users ADD COLUMN IF NOT EXISTS admin_id uuid REFERENCES users(id);
 
 router.get("/users", authenticate, requireBoss, async (req, res) => {
-  const [{ data: users, error }, { data: credits }, { data: lois }, { data: orgs }] = await Promise.all([
-    supabase.from("users").select("id, email, name, role, org_id").order("name"),
+  const bossId = req.caller.id;
+
+  // Try to include admin_id — falls back gracefully if column doesn't exist
+  const selectWithAdminId = "id, email, name, role, org_id, admin_id, created_at";
+  const selectFallback    = "id, email, name, role, org_id, created_at";
+
+  let hasAdminId = true;
+  let usersResult = await supabase.from("users").select(selectWithAdminId).order("created_at", { ascending: false });
+
+  if (usersResult.error && usersResult.error.message?.includes("admin_id")) {
+    hasAdminId = false;
+    usersResult = await supabase.from("users").select(selectFallback).order("created_at", { ascending: false });
+  }
+
+  if (usersResult.error) return res.status(500).json({ error: usersResult.error.message });
+
+  const [{ data: credits }, { data: lois }, { data: orgs }, authResult] = await Promise.all([
     supabase.from("credits").select("user_id, balance"),
     supabase.from("lois").select("buyer_name"),
     supabase.from("organizations").select("id, country"),
+    supabase.auth.admin.listUsers({ perPage: 1000 }),
   ]);
 
-  if (error) return res.status(500).json({ error: error.message });
-
-  const orgMap = {};
+  const users    = usersResult.data || [];
+  const orgMap   = {};
   (orgs || []).forEach(o => { orgMap[o.id] = o; });
 
   const creditMap = {};
@@ -147,15 +174,41 @@ router.get("/users", authenticate, requireBoss, async (req, res) => {
   const loiCountMap = {};
   (lois || []).forEach(l => { loiCountMap[l.buyer_name] = (loiCountMap[l.buyer_name] || 0) + 1; });
 
-  return res.json((users || []).map(u => ({
-    id:        u.id,
-    email:     u.email,
-    name:      u.name,
-    role:      u.role,
-    country:   (orgMap[u.org_id] || {}).country || "—",
-    credits:   creditMap[u.id] ?? 0,
-    loi_count: loiCountMap[u.name] || 0,
-  })));
+  const registeredIds = new Set(users.map(u => u.id));
+
+  const result = users.map(u => ({
+    id:         u.id,
+    email:      u.email,
+    name:       u.name,
+    role:       u.role,
+    country:    (orgMap[u.org_id] || {}).country || "—",
+    credits:    creditMap[u.id] ?? 0,
+    loi_count:  loiCountMap[u.name] || 0,
+    status:     "registered",
+    connected:  hasAdminId ? (u.admin_id === bossId) : null,
+    created_at: u.created_at || null,
+  }));
+
+  // Supabase Auth users whose users-table insert never completed
+  const authUsers = authResult.data?.users || [];
+  authUsers.forEach(au => {
+    if (registeredIds.has(au.id)) return; // already in result
+    const meta = au.user_metadata || {};
+    result.push({
+      id:         au.id,
+      email:      au.email,
+      name:       meta.full_name || meta.name || au.email?.split("@")[0] || "—",
+      role:       "—",
+      country:    "—",
+      credits:    0,
+      loi_count:  0,
+      status:     "incomplete",   // in Auth but not in users table
+      connected:  false,
+      created_at: au.created_at || null,
+    });
+  });
+
+  return res.json(result);
 });
 
 // ── GET /v1/admin/catalog/status — last sync info ────────────────────────────

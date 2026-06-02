@@ -84,7 +84,7 @@ select.form-input option{background:#0e0e1a}
 .bubble{padding:10px 13px;border-radius:12px;font-size:12px;line-height:1.6;max-width:85%;animation:slideIn .2s ease}
 @keyframes slideIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 .bubble-agent{background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.2);align-self:flex-start;border-bottom-left-radius:4px}
-.bubble-broker{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.2);align-self:flex-end;border-bottom-right-radius:4px}
+.bubble-trader{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.2);align-self:flex-end;border-bottom-right-radius:4px}
 .bubble-system{background:rgba(255,255,255,.05);align-self:center;font-size:10px;color:var(--hint);text-align:center;border-radius:8px;padding:6px 12px;max-width:95%}
 .bubble-loi{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);align-self:center;text-align:center;max-width:95%}
 .bubble-label{font-size:9px;font-weight:700;letter-spacing:.04em;margin-bottom:3px}
@@ -492,9 +492,9 @@ async function startNegotiation() {
 
     await sleep(1000);
 
-    // Broker
+    // Trader
     var brokerHistory = history.map(m=>({role:m.role==='assistant'?'user':'assistant', content:m.content}));
-    var brokerBubble = addBubble('broker', '<div class="spinner"></div>', '🏭 BROKER (Round ' + round + ')');
+    var brokerBubble = addBubble('trader', '<div class="spinner"></div>', '🏭 BROKER (Round ' + round + ')');
     var brokerMsg = await callClaude([...brokerHistory, {role:'user', content:'Respond.'}], brokerSystem + ' Round ' + round + '. Agent offered: $' + (agentPrice||'unknown'));
     brokerBubble.innerHTML = '<div class="bubble-label" style="color:#e8a94a">🏭 BROKER (Round ' + round + ')</div>' + brokerMsg;
     var brokerPrice = extractPrice(brokerMsg);

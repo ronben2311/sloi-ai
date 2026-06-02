@@ -86,7 +86,7 @@ select.inp option{background:var(--surface)}
 /* Bubbles */
 .bubble{max-width:80%;padding:10px 13px;border-radius:8px;font-size:11px;line-height:1.65;animation:slide-in .3s ease}
 .b-agent{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);align-self:flex-start}
-.b-broker{background:rgba(232,169,74,.07);border:1px solid rgba(232,169,74,.2);align-self:flex-end;text-align:right}
+.b-trader{background:rgba(232,169,74,.07);border:1px solid rgba(232,169,74,.2);align-self:flex-end;text-align:right}
 .b-system{background:var(--surface2);border:1px solid var(--border);align-self:center;max-width:95%;text-align:center;font-size:10px;color:var(--muted);padding:6px 16px;border-radius:4px}
 .b-deal{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.25);align-self:center;max-width:95%;text-align:center;padding:14px 20px;border-radius:6px;animation:slide-in .4s ease}
 .b-loi{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.3);align-self:center;max-width:95%;text-align:center;padding:14px 20px;border-radius:6px;animation:slide-in .4s ease}
@@ -237,7 +237,7 @@ select.inp option{background:var(--surface)}
           Market: <span id="ph-market" style="color:var(--teal)"></span> &nbsp;·&nbsp;
           Opening: <span id="ph-opening" style="color:var(--green)"></span> &nbsp;·&nbsp;
           Walk-away: <span id="ph-walkaway" style="color:var(--gold)"></span><br/>
-          Broker floor: <span id="ph-floor" style="color:var(--red)"></span> &nbsp;·&nbsp;
+          Trader floor: <span id="ph-floor" style="color:var(--red)"></span> &nbsp;·&nbsp;
           Concession: <span id="ph-conc"></span>/round &nbsp;·&nbsp; Rounds: <span id="ph-rounds"></span>
         </div>
 
@@ -288,8 +288,8 @@ select.inp option{background:var(--surface)}
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
           <div>
-            <label class="flabel">Broker</label>
-            <select class="inp" id="m-broker">
+            <label class="flabel">Trader</label>
+            <select class="inp" id="m-trader">
               <option value="BRK-UAE-001">BRK-UAE-001</option>
               <option value="BRK-EUR-001">BRK-EUR-001</option>
               <option value="BRK-ASIA-001">BRK-ASIA-001</option>
@@ -376,8 +376,8 @@ select.inp option{background:var(--surface)}
             </div>
             <div class="gap-pill" id="gap-pill">Gap</div>
             <div class="price-cell">
-              <div class="price-cell-label">🏭 Broker</div>
-              <div class="price-cell-val" id="d-broker" style="color:var(--gold)">—</div>
+              <div class="price-cell-label">🏭 Trader</div>
+              <div class="price-cell-val" id="d-trader" style="color:var(--gold)">—</div>
             </div>
           </div>
         </div>
@@ -652,7 +652,7 @@ async function addAgentBubble(label, text, price, unit) {
 async function addBrokerBubble(label, text, price, unit) {
   var area = document.getElementById('chat-area');
   var div = document.createElement('div');
-  div.className = 'bubble b-broker';
+  div.className = 'bubble b-trader';
   var lbl = document.createElement('div');
   lbl.className = 'b-label';
   lbl.style.color = 'var(--gold)';
@@ -686,11 +686,11 @@ function addThinking(role) {
   var area = document.getElementById('chat-area');
   var div = document.createElement('div');
   div.id = 'thinking-bubble';
-  div.className = 'bubble b-thinking' + (role === 'broker' ? ' right' : '');
+  div.className = 'bubble b-thinking' + (role === 'trader' ? ' right' : '');
   var sp = document.createElement('div');
   sp.className = 'spinner';
   div.appendChild(sp);
-  div.appendChild(document.createTextNode(role === 'broker' ? '🏭 Broker responding…' : '🤖 Agent composing offer…'));
+  div.appendChild(document.createTextNode(role === 'trader' ? '🏭 Trader responding…' : '🤖 Agent composing offer…'));
   area.appendChild(div);
   area.scrollTop = area.scrollHeight;
 }
@@ -718,7 +718,7 @@ function updatePriceDisplay(agentP, brokerP) {
   }
   if (brokerP) {
     negState.brokerPrice = brokerP;
-    document.getElementById('d-broker').textContent = '$' + brokerP.toLocaleString();
+    document.getElementById('d-trader').textContent = '$' + brokerP.toLocaleString();
   }
   var a = negState.agentPrice, b = negState.brokerPrice;
   if (a && b) {
@@ -739,7 +739,7 @@ async function startNegotiation() {
   const buyer    = document.getElementById('m-buyer').value.trim();
   const incoterm = document.getElementById('m-incoterm').value;
   const payment  = document.getElementById('m-payment').value;
-  const broker   = document.getElementById('m-broker').value;
+  const trader   = document.getElementById('m-trader').value;
   const maxRoundsVal = parseInt(document.getElementById('m-rounds').value) || 5;
   const location = document.getElementById('m-location').value.trim() || 'TBD';
   const deadlineRaw = document.getElementById('m-deadline').value;
@@ -786,7 +786,7 @@ async function startNegotiation() {
   document.getElementById('gap-pill').textContent = 'Gap';
   document.getElementById('gap-pill').style.cssText = '';
   document.getElementById('d-agent').textContent = '—';
-  document.getElementById('d-broker').textContent = '—';
+  document.getElementById('d-trader').textContent = '—';
   document.getElementById('rounds-bar').innerHTML = '<div class="rb empty"></div>'.repeat(maxRoundsVal);
   document.getElementById('rounds-label').textContent = 'Not started';
   document.getElementById('round-badge').textContent = '● Round 0/' + maxRoundsVal;
@@ -809,7 +809,7 @@ MANDATE:
 - Maximum price (walk-away): $${max}/${unit}
 - Incoterm: ${incoterm}
 - Payment terms: ${payment}
-- Broker/Supplier: ${broker}
+- Trader/Supplier: ${trader}
 - Strategy: Deal Hunter (maximum value extraction)
 
 NEGOTIATION RULES:
@@ -818,11 +818,11 @@ NEGOTIATION RULES:
 3. Be firm, professional, and cite current market conditions
 4. Reference the delivery location (${location}) and deadline (${deadlineStr}) when relevant to strengthen your position
 5. Always reference the agreed incoterm (${incoterm}) and payment terms (${payment})
-6. If broker price is within 2% of the walk-away max, consider accepting
+6. If trader price is within 2% of the walk-away max, consider accepting
 7. Always include a specific dollar price per ${unit}
 8. Keep messages concise (3-4 sentences max)
 
-Respond ONLY as the agent (your message to the broker). No meta-commentary.
+Respond ONLY as the agent (your message to the trader). No meta-commentary.
 Format your price clearly as: $X,XXX/${unit}`;
 
   // Use real negotiation params from Excel if available, otherwise derive
@@ -831,7 +831,7 @@ Format your price clearly as: $X,XXX/${unit}`;
   const brokerAsk   = ap.market_price   ? Math.round(ap.market_price * 1.02)  : Math.round(max * 1.02);
   const concPct     = ap.concession_pct ? ap.concession_pct                   : 3;
 
-  const brokerSystem = `You are a commodity supplier/broker receiving a procurement inquiry.
+  const brokerSystem = `You are a commodity supplier/trader receiving a procurement inquiry.
 
 Product you are selling: ${product}
 Delivery to: ${location}
@@ -851,7 +851,7 @@ RULES:
 6. Be professional but firm
 7. If buyer offers within 3% of your floor price ($${brokerFloor}/${unit}), accept the deal
 
-Respond ONLY as the broker/supplier. Keep it to 3-4 sentences. Include your price clearly.`;
+Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your price clearly.`;
 
   // Run negotiation rounds
   await runNegRound(agentSystem, brokerSystem, product, qty, unit, target, max);
@@ -871,7 +871,7 @@ async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target
   document.getElementById('agent-status').textContent = 'Agent thinking… Round ' + round;
 
   const agentMsg = await callClaude(
-    [...negHistory, { role: 'user', content: round === 1 ? 'Start the negotiation. Make your opening offer.' : 'The broker responded. Make your next counter-offer.' }],
+    [...negHistory, { role: 'user', content: round === 1 ? 'Start the negotiation. Make your opening offer.' : 'The trader responded. Make your next counter-offer.' }],
     agentSystem + '\n\nThis is round ' + round + ' of ' + maxR + '.',
     300
   );
@@ -888,11 +888,11 @@ async function runNegRound(agentSystem, brokerSystem, product, qty, unit, target
 
   if(!negState.running || negState.paused) return;
 
-  // Brief pause before broker responds
+  // Brief pause before trader responds
   await new Promise(r => setTimeout(r, 1000));
 
-  // Broker's turn
-  addThinking('broker');
+  // Trader's turn
+  addThinking('trader');
   const brokerHistory = negHistory.map(m => ({ role: m.role === 'assistant' ? 'user' : 'assistant', content: m.content }));
   const brokerMsg = await callClaude(
     [...brokerHistory, { role: 'user', content: 'Respond to this offer.' }],
@@ -1022,7 +1022,7 @@ function approveDeal() {
       '<div class="loi-cell"><div class="loi-label">📍 Delivery location</div><div style="font-size:11px;font-weight:600;color:var(--white);margin-top:2px">' + location + '</div></div>' +
       '<div class="loi-cell"><div class="loi-label">📅 Deadline</div><div style="font-size:11px;font-weight:600;color:var(--teal);margin-top:2px">' + deadlineStr + '</div></div>' +
     '</div>' +
-    '<div class="loi-note">✓ LOI emailed to buyer and broker &nbsp;·&nbsp; ✓ Compliance cleared &nbsp;·&nbsp; ✓ ' + negState.round + ' rounds &nbsp;·&nbsp; <a href="' + loiUrl + '" target="_blank" style="color:var(--indigo)">📄 Open LOI Generator →</a></div>';
+    '<div class="loi-note">✓ LOI emailed to buyer and trader &nbsp;·&nbsp; ✓ Compliance cleared &nbsp;·&nbsp; ✓ ' + negState.round + ' rounds &nbsp;·&nbsp; <a href="' + loiUrl + '" target="_blank" style="color:var(--indigo)">📄 Open LOI Generator →</a></div>';
   loiEl.style.display = 'block';
 
   completedSessions.push({ id: loiRef, product, qty, unit, buyer, price: dealPrice, total: totalVal, rounds: negState.round, strat: selectedStrat, ts: new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}) });
@@ -1066,7 +1066,7 @@ function clearChat() {
   document.getElementById('rounds-label').textContent = 'Not started';
   document.getElementById('round-badge').textContent = '● Round 0';
   document.getElementById('d-agent').textContent = '—';
-  document.getElementById('d-broker').textContent = '—';
+  document.getElementById('d-trader').textContent = '—';
   document.getElementById('gap-pill').textContent = 'Gap';
   document.getElementById('gap-pill').style.cssText = '';
 }
@@ -1143,7 +1143,7 @@ async function runLeadFinder() {
       <div>Claude is analyzing news, infrastructure projects, and tender sites...<br/>Keywords: ${keywords}</div>
     </div>`;
 
-  const system = `You are SLOI AI's LeadFinder agent. Your job is to identify commodity procurement opportunities for a commodity broker/trader based in the UAE.
+  const system = `You are SLOI AI's LeadFinder agent. Your job is to identify commodity procurement opportunities for a commodity trader/trader based in the UAE.
 
 You specialize in finding buyers who need:
 - Steel (rebar, coil, aluminum)
@@ -1761,7 +1761,7 @@ async function loadProductParams(sku) {
     if(!p.opening_offer && !p.market_price) throw new Error('no_prices');
     if(!p.walk_away) throw new Error('no_walkaway');
 
-    // Store full params for broker prompt
+    // Store full params for trader prompt
     window._activeParams = p;
 
     // Fill read-only price fields

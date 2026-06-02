@@ -441,8 +441,8 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
         <div class="ci-box"></div>
         <div class="ci-body">
           <div class="ci-title">Fee split calculated and confirmed</div>
-          <div class="ci-sub">Platform 1% · Broker 5% (if applicable) · Sub-broker 2% (if applicable). Net to supplier calculated before release.</div>
-          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Total: $___ · Platform: $___ · Broker: $___ · Net to supplier: $___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+          <div class="ci-sub">Platform 1% · Trader 5% (if applicable) · Sub-trader 2% (if applicable). Net to supplier calculated before release.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Total: $___ · Platform: $___ · Trader: $___ · Net to supplier: $___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
         </div>
         <div class="ci-risk risk-med">MED</div>
       </div>
@@ -451,7 +451,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
         <div class="ci-box"></div>
         <div class="ci-body">
           <div class="ci-title">payment release is YOUR decision only</div>
-          <div class="ci-sub">No agent, no broker, no buyer can release escrow. Only you (merchant) after manual document verification.</div>
+          <div class="ci-sub">No agent, no trader, no buyer can release escrow. Only you (merchant) after manual document verification.</div>
           <div class="ci-note"><textarea class="ci-note-inp" placeholder="Confirmed: I am the only release authority"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
         </div>
         <div class="ci-risk risk-critical">CRITICAL</div>
@@ -549,8 +549,8 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
         <div class="ci-box"></div>
         <div class="ci-body">
           <div class="ci-title">Net amount to supplier calculated correctly</div>
-          <div class="ci-sub">Deal value − platform fee (1%) − broker fee (%) = net to supplier. Recalculate manually. Do not trust the UI alone.</div>
-          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Deal: $___ − Platform: $___ − Broker: $___ = Net: $___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
+          <div class="ci-sub">Deal value − platform fee (1%) − trader fee (%) = net to supplier. Recalculate manually. Do not trust the UI alone.</div>
+          <div class="ci-note"><textarea class="ci-note-inp" placeholder="Deal: $___ − Platform: $___ − Trader: $___ = Net: $___"></textarea><div class="ci-actions"><button class="ci-btn flag" onclick="flagItem(event,this)">⚑ Flag issue</button><button class="ci-btn na-btn" onclick="markNA(event,this)">N/A</button></div></div>
         </div>
         <div class="ci-risk risk-critical">CRITICAL</div>
       </div>
@@ -801,11 +801,11 @@ function updateRef(){
 function updateValue(){
   var val = parseFloat(document.getElementById('deal-value').value)||0;
   var platform = Math.round(val*0.01);
-  var broker = Math.round(val*0.05);
-  var net = val - platform - broker;
+  var trader = Math.round(val*0.05);
+  var net = val - platform - trader;
   if(val > 0){
     document.getElementById('deal-value').title =
-      'Platform: $'+platform.toLocaleString()+' | Broker: $'+broker.toLocaleString()+' | Net to supplier: $'+net.toLocaleString();
+      'Platform: $'+platform.toLocaleString()+' | Trader: $'+broker.toLocaleString()+' | Net to supplier: $'+net.toLocaleString();
   }
 }
 

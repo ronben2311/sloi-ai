@@ -58,7 +58,7 @@
     '/open-network':        { title: 'Open Network — AI Agent Commodity API', desc: 'External AI agents earn 1% commission per LOI. Read tier free. Transact tier earns. USDC payments on Base.' },
     '/autonomous-mode':     { title: 'Autonomous Mode — SLOI AI Agent Economy', desc: 'Set mandate once. AI agent closes commodity deals automatically. Auto-approve within parameters. 24/7, no human bottleneck.' },
     '/agui':                { title: 'AG-UI Integration — SLOI AI Real-time Events', desc: 'AG-UI SSE protocol for real-time negotiation events across all portals. TEXT_CHUNK, AWAIT_HUMAN, AUTO_APPROVED, LOI_GENERATED.' },
-    '/login':               { title: 'Sign In — SLOI AI', desc: 'Sign in to your SLOI AI account. Buyer, broker, supplier, or admin.' },
+    '/login':               { title: 'Sign In — SLOI AI', desc: 'Sign in to your SLOI AI account. Buyer, trader, supplier, or admin.' },
     '/smb-order':           { title: 'Get a Price — SLOI AI', desc: '3 questions. Our agent finds you the best price. No account needed to start.' },
   };
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>SLOI AI — Broker Portal</title>
+<title>SLOI AI — Trader Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#050509;--surface:#0c0c14;--surface2:#10101a;--border:#1a1a2a;--border2:#222234;--indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);--muted:#52526e;--text:#c8c6e0;--white:#f0eff8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--green-dim:rgba(34,197,94,.1);--red-dim:rgba(239,68,68,.1);--gold-dim:rgba(232,169,74,.1);--teal-dim:rgba(45,212,191,.1);}
@@ -109,7 +109,7 @@ select.inp option{background:var(--surface)}
 <aside class="sidebar">
   <div class="sb-top">
     <div class="sb-logo">SLOI <em>AI</em><span style="font-size:9px;color:var(--muted);display:block;margin-top:2px;font-weight:400;letter-spacing:.04em">Smart negotiation · LOI generation</span></div>
-    <div class="sb-role">Broker Portal</div>
+    <div class="sb-role">Trader Portal</div>
     <div class="sb-ref" id="user-org">—</div>
   </div>
   <div class="sb-section">Operations</div>
@@ -140,7 +140,7 @@ select.inp option{background:var(--surface)}
       <div style="font-size:10px;color:var(--muted)" id="tb-sub">BRK-UAE-001 · UAE / KSA / Iraq</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px">
-      <span class="badge bg">✓ Active broker</span>
+      <span class="badge bg">✓ Active trader</span>
       <button class="btn btn-sm btn-a" onclick="openTG()">📲 Telegram boss</button>
       <button class="btn btn-sm btn-p" onclick="show('pipeline',document.querySelectorAll('.nav')[3])">+ New lead</button>
     </div>
@@ -152,7 +152,7 @@ select.inp option{background:var(--surface)}
   <div id="view-dashboard" class="view active">
     <div style="background:linear-gradient(135deg,rgba(91,95,239,.1),rgba(232,169,74,.06));border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:18px 22px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
       <div>
-        <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:4px">Broker portal — <em style="font-style:italic;color:var(--gold)" id="dash-greeting-name">loading...</em></div>
+        <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:4px">Trader portal — <em style="font-style:italic;color:var(--gold)" id="dash-greeting-name">loading...</em></div>
         <div style="font-size:11px;color:var(--muted)" id="dash-greeting-sub">Loading live data...</div>
       </div>
       <button class="btn btn-p" onclick="show('negotiations',document.querySelectorAll('.nav')[1])">🤖 View live negotiations →</button>
@@ -365,7 +365,7 @@ select.inp option{background:var(--surface)}
         <div style="display:flex;flex-direction:column;gap:10px">
           <div class="g2">
             <div><label class="flabel">Company name</label><input class="inp" value="Gulf Trade Partners"/></div>
-            <div><label class="flabel">Broker ref</label><input class="inp" value="BRK-UAE-001" readonly style="opacity:.6"/></div>
+            <div><label class="flabel">Trader ref</label><input class="inp" value="BRK-UAE-001" readonly style="opacity:.6"/></div>
           </div>
           <div><label class="flabel">Territory</label><input class="inp" value="UAE / Saudi Arabia / Iraq"/></div>
           <div><label class="flabel">Contact name</label><input class="inp" value="Ali Al-Omari"/></div>
@@ -401,7 +401,7 @@ select.inp option{background:var(--surface)}
 
 <script>
 
-const api = initPortal('broker');
+const api = initPortal('trader');
 
 // Real user info
 (function() {
@@ -427,7 +427,7 @@ async function loadData() {
     _negs = results[0] || [];
     _lois = results[1] || [];
     renderAll();
-  } catch(e) { console.error('[broker] loadData', e); }
+  } catch(e) { console.error('[trader] loadData', e); }
 }
 
 function renderAll() {
@@ -575,7 +575,7 @@ function buildNegCard(n, compact) {
     prices = '<div style="display:grid;'+cols+';gap:8px;font-size:10px;margin-top:8px">'
       +'<div><div style="color:var(--muted)">Target</div><div style="color:var(--white);font-weight:600">$'+parseFloat(n.target_price||0).toFixed(0)+'/'+n.unit+'</div></div>'
       +'<div><div style="color:var(--muted)">Agent offer</div><div style="color:var(--indigo);font-weight:600">$'+parseFloat(n.agent_price).toFixed(0)+'/'+n.unit+'</div></div>'
-      +'<div><div style="color:var(--muted)">Broker counter</div><div style="color:var(--gold);font-weight:600">'+(n.broker_price?'$'+parseFloat(n.broker_price).toFixed(0)+'/'+n.unit:'—')+'</div></div>'
+      +'<div><div style="color:var(--muted)">Trader counter</div><div style="color:var(--gold);font-weight:600">'+(n.broker_price?'$'+parseFloat(n.broker_price).toFixed(0)+'/'+n.unit:'—')+'</div></div>'
       +(!compact ? '<div><div style="color:var(--muted)">Deal price</div><div style="color:var(--violet);font-weight:600">'+(n.deal_price?'$'+parseFloat(n.deal_price).toFixed(0)+'/'+n.unit:'—')+'</div></div>' : '')
       +'</div>';
   }
@@ -630,7 +630,7 @@ var SUPPLIERS_DATA = [
 ];
 
 var TITLES = {
-  dashboard:['Dashboard','Broker portal · live operations'],
+  dashboard:['Dashboard','Trader portal · live operations'],
   negotiations:['Negotiations','Live AI negotiation sessions'],
   lois:['My LOIs','Signed Letters of Intent · fee tracker'],
   pipeline:['Pipeline','Lead tracker · deal flow'],
@@ -698,7 +698,7 @@ function renderSuppliers(){
   if(el) el.innerHTML=html;
 }
 
-function openTG(){window.open('https://t.me/share/url?text='+encodeURIComponent('SLOI AI Broker Update — Powered by SLOI AI · sloiai.com'),'_blank');}
+function openTG(){window.open('https://t.me/share/url?text='+encodeURIComponent('SLOI AI Trader Update — Powered by SLOI AI · sloiai.com'),'_blank');}
 
 function addSupplier(btn) {
   var name    = prompt('Supplier company name:');

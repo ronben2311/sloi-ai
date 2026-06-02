@@ -945,10 +945,38 @@ function submitOrder() {
   btn.textContent = '⏳ Submitting…';
   btn.disabled = true;
 
+  var productLabel = (state.sku
+    ? (CATALOG.find(function(p){ return p.sku===state.sku; })||{name:state.product}).name + ' [' + state.sku + ']'
+    : state.product) + (document.getElementById('product-detail').value ? ' — ' + document.getElementById('product-detail').value : '');
+
+  // ── One-time purchase: skip negotiation, go straight to LOI generator ────────
+  if (state.purchaseType === 'One-time purchase') {
+    var today = new Date();
+    var loiRef = 'LOI-' + today.getFullYear()
+      + String(today.getMonth()+1).padStart(2,'0')
+      + String(today.getDate()).padStart(2,'0') + '-001';
+
+    var loiParams = new URLSearchParams({
+      ref:     loiRef,
+      buyer:   state.name    || '',
+      product: productLabel,
+      qty:     state.qty     || '',
+      unit:    state.unit    || 'MT',
+      location: state.country || '',
+    });
+
+    var maxPrice = state.budget && state.budget !== 'Not specified'
+      ? parseFloat(state.budget.replace(/[^0-9.]/g,'')) || ''
+      : '';
+    if (maxPrice) loiParams.set('price', maxPrice);
+
+    window.location.href = 'loi-generator.html?' + loiParams.toString();
+    return;
+  }
+
+  // ── Recurring contract: existing negotiation flow ────────────────────────────
   var payload = {
-    product:        (state.sku
-      ? (CATALOG.find(function(p){ return p.sku===state.sku; })||{name:state.product}).name + ' [' + state.sku + ']'
-      : state.product) + (document.getElementById('product-detail').value ? ' — ' + document.getElementById('product-detail').value : ''),
+    product:        productLabel,
     qty:            parseFloat(state.qty) || 0,
     unit:           state.unit || 'MT',
     target_price:   null,

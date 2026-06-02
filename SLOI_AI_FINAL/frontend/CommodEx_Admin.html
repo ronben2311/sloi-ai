@@ -205,7 +205,7 @@ select.inp option{background:var(--surface)}
   <div class="sb-section">Revenue</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
   <button class="nav" onclick="show('credits',this)"><span class="nav-icon">⚡</span><span class="nav-label">Credits</span></button>
-  <button class="nav" onclick="show('brokers',this)"><span class="nav-icon">👥</span><span class="nav-label">Brokers</span></button>
+  <button class="nav" onclick="show('traders',this)"><span class="nav-icon">👥</span><span class="nav-label">Traders</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
   <button class="nav" onclick="show('compliance',this)"><span class="nav-icon">🛡️</span><span class="nav-label">Compliance</span></button>
@@ -243,7 +243,7 @@ select.inp option{background:var(--surface)}
     <button class="qa" style="background:rgba(0,136,204,.08);border-color:rgba(0,136,204,.3);color:#0088cc" onclick="openTG()">📲 Telegram blast</button>
     <button class="qa" style="background:var(--teal-dim);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="window.open('price-discovery.html','_blank')">🔍 Price check</button>
     <button class="qa" style="background:var(--surface);border-color:var(--border2);color:var(--muted)" onclick="window.open('exchange.html','_blank')">📊 Exchange</button>
-    <button class="qa" style="background:var(--surface);border-color:var(--border2);color:var(--muted)" onclick="window.open('broker-onboarding.html','_blank')">🌍 Add broker</button>
+    <button class="qa" style="background:var(--surface);border-color:var(--border2);color:var(--muted)" onclick="window.open('broker-onboarding.html','_blank')">🌍 Add trader</button>
   </div>
 
   <div class="content">
@@ -259,40 +259,8 @@ select.inp option{background:var(--surface)}
     </div>
     <div class="g2" style="margin-bottom:14px">
       <div class="card" style="margin-bottom:0">
-        <div class="card-title">// ALERTS <span class="badge br">3 active</span></div>
-        <div class="alert-item al-red">
-          <div class="al-dot" style="background:var(--red)"></div>
-          <div class="al-body">
-            <div class="al-title">🚨 Boss approval needed — $284K deal</div>
-            <div class="al-desc">Steel Rebar G60 · 100 MT · Agent agreed $2,840/MT · waiting your approval</div>
-            <div class="al-actions">
-              <button class="btn btn-xs btn-g" onclick="approveDeal()">✓ Approve → LOI</button>
-              <button class="btn btn-xs btn-r" onclick="rejectDeal()">✗ Reject</button>
-              <button class="btn btn-xs" onclick="show('negotiations',document.querySelectorAll('.nav')[2])">View negotiation</button>
-            </div>
-          </div>
-        </div>
-        <div class="alert-item al-gold">
-          <div class="al-dot" style="background:var(--gold)"></div>
-          <div class="al-body">
-            <div class="al-title">⚡ New broker application — Gulf Metals Trading · UAE</div>
-            <div class="al-desc">Applied 1h ago · Steel sector · waiting KYC review</div>
-            <div class="al-actions">
-              <button class="btn btn-xs btn-p" onclick="show('brokers',document.querySelectorAll('.nav')[5])">Review</button>
-              <button class="btn btn-xs btn-g" onclick="openTG()">📲 Contact</button>
-            </div>
-          </div>
-        </div>
-        <div class="alert-item al-green">
-          <div class="al-dot" style="background:var(--green)"></div>
-          <div class="al-body">
-            <div class="al-title">✓ LOI signed — Hard Wheat 50 MT · $56,000</div>
-            <div class="al-desc">Gulf Cement LLC · SL-LOI-20260501-003 · 4 min negotiation</div>
-            <div class="al-actions">
-              <button class="btn btn-xs" onclick="window.open('loi-generator.html','_blank')">📄 View LOI</button>
-            </div>
-          </div>
-        </div>
+        <div class="card-title">// ALERTS <span class="badge br" id="alerts-header-badge">—</span></div>
+        <div id="alerts-list"><div style="padding:12px;text-align:center;color:var(--muted);font-size:12px">Loading…</div></div>
       </div>
       <div class="card" style="margin-bottom:0">
         <div class="card-title">// LIVE FEED</div>
@@ -302,7 +270,7 @@ select.inp option{background:var(--surface)}
           <div class="feed-row"><div class="feed-time">14:31</div><div class="feed-icon">💬</div><div class="feed-text"><b>NegotiationAgent</b> round 3/5 — $2,840/MT agreed</div></div>
           <div class="feed-row"><div class="feed-time">14:22</div><div class="feed-icon">📄</div><div class="feed-text"><b>LOI signed</b> — Hard Wheat 50 MT · $56,000</div></div>
           <div class="feed-row"><div class="feed-time">14:18</div><div class="feed-icon">⚡</div><div class="feed-text"><b>Credit purchase</b> — $299 · 350 credits · Gulf Cement</div></div>
-          <div class="feed-row"><div class="feed-time">14:09</div><div class="feed-icon">🌍</div><div class="feed-text"><b>Broker applied</b> — Gulf Metals Trading · UAE</div></div>
+          <div class="feed-row"><div class="feed-time">14:09</div><div class="feed-icon">🌍</div><div class="feed-text"><b>Trader applied</b> — Gulf Metals Trading · UAE</div></div>
           <div class="feed-row"><div class="feed-time">13:55</div><div class="feed-icon">🤖</div><div class="feed-text"><b>LeadFinder</b> — 3 new prospects in KSA</div></div>
         </div>
       </div>
@@ -403,7 +371,7 @@ select.inp option{background:var(--surface)}
     <div class="card">
       <div class="card-title">// LOI FEE LEDGER</div>
       <table>
-        <thead><tr><th>Date</th><th>LOI Ref</th><th>Buyer</th><th>Broker</th><th>Deal Value</th><th>LOI Fee</th><th>Status</th><th></th></tr></thead>
+        <thead><tr><th>Date</th><th>LOI Ref</th><th>Buyer</th><th>Trader</th><th>Deal Value</th><th>LOI Fee</th><th>Status</th><th></th></tr></thead>
         <tbody id="loi-ledger-body">
           <tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>
         </tbody>
@@ -440,12 +408,12 @@ select.inp option{background:var(--surface)}
   </div>
 
   <!-- BROKERS -->
-  <div id="view-brokers" class="view">
+  <div id="view-traders" class="view">
     <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Active Brokers</div><div class="stat-val">3</div></div>
+      <div class="stat"><div class="stat-top">Active Traders</div><div class="stat-val">3</div></div>
       <div class="stat"><div class="stat-top">Pending KYC</div><div class="stat-val" style="color:var(--gold)">1</div></div>
       <div class="stat"><div class="stat-top">LOI Fees MTD</div><div class="stat-val" style="color:var(--violet)">$17,450</div></div>
-      <div class="stat"><div class="stat-top">Top Broker Deals</div><div class="stat-val">7</div></div>
+      <div class="stat"><div class="stat-top">Top Trader Deals</div><div class="stat-val">7</div></div>
     </div>
     <div class="alert-item al-gold" id="broker-pending" style="margin-bottom:14px">
       <div class="al-dot" style="background:var(--gold)"></div>
@@ -460,7 +428,7 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
     <div id="broker-list"></div>
-    <button class="btn btn-p btn-sm" onclick="window.open('broker-onboarding.html','_blank')">+ Onboard new broker</button>
+    <button class="btn btn-p btn-sm" onclick="window.open('broker-onboarding.html','_blank')">+ Onboard new trader</button>
   </div>
 
   <!-- SUPPLIERS -->
@@ -510,7 +478,7 @@ select.inp option{background:var(--surface)}
     <!-- BROKER FLOOR PRICES -->
     <div class="g2">
       <div class="card" style="margin-bottom:0">
-        <div class="card-title">// BROKER FLOOR PRICES <span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:6px">what each broker can negotiate down to</span></div>
+        <div class="card-title">// BROKER FLOOR PRICES <span style="font-size:11px;color:var(--muted);font-weight:400;margin-left:6px">what each trader can negotiate down to</span></div>
         <div id="broker-floors"></div>
       </div>
       <div class="card" style="margin-bottom:0">
@@ -599,7 +567,7 @@ select.inp option{background:var(--surface)}
     </div>
     <div class="card">
       <div class="card-title">// USERS</div>
-      <table><thead><tr><th>Company</th><th>Country</th><th>Role</th><th>KYC</th><th>Credits</th><th>LOIs</th><th>Status</th><th></th></tr></thead>
+      <table><thead><tr><th>Company / Name</th><th>Email</th><th>Country</th><th>Role</th><th>Linked</th><th>Credits</th><th>LOIs</th><th>Account</th><th></th></tr></thead>
       <tbody id="user-tbody"></tbody></table>
     </div>
   </div>
@@ -848,7 +816,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={agents:['🧠 AI Agents','LeadFinder · PriceScout · OutreachBot · ComplianceBot'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],brokers:['👥 Brokers','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · broker floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration']};
+var TITLES={agents:['🧠 AI Agents','LeadFinder · PriceScout · OutreachBot · ComplianceBot'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────
@@ -884,8 +852,17 @@ function addLead(){var co=document.getElementById('pl-co').value.trim();var pr=d
 var _pendingNegId = null;
 
 function loadNegotiations() {
-  api.getNegotiations().then(function(negs) {
-    // Stats
+  Promise.all([
+    api.getNegotiations(),
+    api.getLOIs().catch(function(){ return []; }),
+  ]).then(function(results) {
+    var negs = results[0];
+    var lois = results[1];
+
+    // ── Alerts (war room card) ──────────────────────────────────────────────
+    renderAlerts(negs, lois);
+
+    // ── Negotiation stats ───────────────────────────────────────────────────
     var active    = negs.filter(function(n){ return n.status === 'running'; }).length;
     var pending   = negs.filter(function(n){ return n.status === 'awaiting_boss'; }).length;
     var today     = new Date().toISOString().slice(0,10);
@@ -897,7 +874,7 @@ function loadNegotiations() {
     document.getElementById('neg-stat-total').textContent     = negs.length;
     document.getElementById('neg-count').textContent          = pending || '';
 
-    // Approval box — show first awaiting_boss
+    // ── Approval box (negotiations view) ────────────────────────────────────
     var pendingNeg = negs.find(function(n){ return n.status === 'awaiting_boss'; });
     var box = document.getElementById('approval-box');
     if (pendingNeg) {
@@ -905,14 +882,12 @@ function loadNegotiations() {
       document.getElementById('ab-neg-id').textContent  = pendingNeg.id;
       document.getElementById('ab-buyer').textContent   = pendingNeg.buyer_name || '—';
 
-      // supplier_ref holds "TG:@handle · Country" for order-flow entries
       var contactEl = document.getElementById('ab-contact');
       var tgMatch   = pendingNeg.supplier_ref && pendingNeg.supplier_ref.match(/TG:(\S+)/);
       contactEl.textContent = tgMatch ? tgMatch[1] : (pendingNeg.supplier_ref || '—');
 
       document.getElementById('ab-product').textContent = pendingNeg.product + ' · ' + pendingNeg.qty + ' ' + pendingNeg.unit;
 
-      // Order-flow rows have no deal_price yet — show budget ceiling instead
       var priceEl = document.getElementById('ab-price');
       if (pendingNeg.deal_price) {
         priceEl.textContent = '$' + parseFloat(pendingNeg.deal_price).toLocaleString() + '/' + pendingNeg.unit;
@@ -924,21 +899,19 @@ function loadNegotiations() {
         priceEl.textContent = '—';
       }
 
-      document.getElementById('ab-total').textContent   = pendingNeg.deal_price
+      document.getElementById('ab-total').textContent = pendingNeg.deal_price
         ? '$' + (parseFloat(pendingNeg.deal_price) * pendingNeg.qty).toLocaleString()
         : (pendingNeg.max_price && pendingNeg.qty ? '≤ $' + (parseFloat(pendingNeg.max_price) * pendingNeg.qty).toLocaleString() : '—');
 
-      document.getElementById('ab-override').value      = '';
+      document.getElementById('ab-override').value = '';
       box.style.display = 'block';
     } else {
       _pendingNegId = null;
       box.style.display = 'none';
     }
 
-    // Live negotiations list (running only)
+    // ── Live negotiations list + history ────────────────────────────────────
     renderNegotiations(negs.filter(function(n){ return n.status === 'running'; }));
-
-    // Full history table
     renderNegHistory(negs);
   }).catch(function(e) {
     console.error('loadNegotiations:', e);
@@ -970,7 +943,7 @@ function renderNegotiations(negs) {
     html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;margin-bottom:10px">';
     html += '<div><div style="color:var(--muted);margin-bottom:2px">Agent offer</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--indigo)">' + agentP + '</div></div>';
     html += '<div><div style="color:var(--muted);margin-bottom:2px">Gap</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--gold)">' + gap + '</div></div>';
-    html += '<div><div style="color:var(--muted);margin-bottom:2px">Broker price</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--red)">' + brokerP + '</div></div>';
+    html += '<div><div style="color:var(--muted);margin-bottom:2px">Trader price</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--red)">' + brokerP + '</div></div>';
     html += '</div></div>';
   });
   document.getElementById('neg-list').innerHTML = html || '';
@@ -1043,33 +1016,75 @@ function renderUsers() {
   if (!tb) return;
   tb.innerHTML = '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>';
   api.req('GET', '/admin/users').then(function(data) {
-    var total   = data.length;
-    var buyers  = data.filter(function(u){ return u.role !== 'boss'; }).length;
+    var registered  = data.filter(function(u){ return u.status === 'registered'; });
+    var incomplete  = data.filter(function(u){ return u.status === 'incomplete'; });
+    var buyers      = registered.filter(function(u){ return u.role !== 'boss'; }).length;
+    var linkedCount = registered.filter(function(u){ return u.connected === true; }).length;
     var el;
-    el = document.getElementById('usr-stat-total');   if (el) el.textContent = total;
-    el = document.getElementById('usr-stat-active');  if (el) el.textContent = buyers;
-    el = document.getElementById('usr-stat-pending'); if (el) el.textContent = 0;
-    el = document.getElementById('usr-stat-suspended');if (el) el.textContent = 0;
+    el = document.getElementById('usr-stat-total');    if (el) el.textContent = registered.length;
+    el = document.getElementById('usr-stat-active');   if (el) el.textContent = buyers;
+    el = document.getElementById('usr-stat-pending');  if (el) el.textContent = incomplete.length;
+    el = document.getElementById('usr-stat-suspended');if (el) el.textContent = linkedCount;
+
+    // Update labels to match new meaning
+    var labels = document.querySelectorAll('#view-users .stat-top');
+    if (labels[2]) labels[2].textContent = 'Incomplete';
+    if (labels[3]) labels[3].textContent = 'Linked to you';
+
     if (!data.length) {
-      tb.innerHTML = '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">No users</td></tr>';
+      tb.innerHTML = '<tr><td colspan="9" style="padding:16px;text-align:center;color:var(--muted)">No users found</td></tr>';
       return;
     }
-    var roleColor = {buyer:'var(--teal)',broker:'var(--violet)',supplier:'var(--gold)',boss:'var(--red)'};
+
+    var roleColor = {buyer:'var(--teal)',trader:'var(--violet)',supplier:'var(--gold)',boss:'var(--red)'};
+
     tb.innerHTML = data.map(function(u) {
-      var rc = roleColor[u.role] || 'var(--muted)';
-      return '<tr>'
-        + '<td style="color:var(--white);font-weight:600">' + u.name + '</td>'
+      var isIncomplete = u.status === 'incomplete';
+      var rc   = roleColor[u.role] || 'var(--muted)';
+      var nameCell = isIncomplete
+        ? '<span style="color:var(--muted);font-style:italic">' + u.name + '</span>'
+        : '<span style="color:var(--white);font-weight:600">' + u.name + '</span>';
+
+      // Linked-to-this-admin indicator
+      var linkedCell;
+      if (u.connected === null) {
+        linkedCell = '<span style="color:var(--muted);font-size:11px">—</span>';      // admin_id column missing
+      } else if (isIncomplete) {
+        linkedCell = '<span style="color:var(--muted);font-size:11px">—</span>';
+      } else if (u.connected) {
+        linkedCell = '<span class="badge bg">✓ Linked</span>';
+      } else {
+        linkedCell = '<span class="badge ba">Unlinked</span>';
+      }
+
+      // Account status badge
+      var statusCell = isIncomplete
+        ? '<span class="badge br">⚠ Incomplete</span>'
+        : '<span class="badge bg">Active</span>';
+
+      var roleCell = isIncomplete
+        ? '<span style="color:var(--muted)">—</span>'
+        : '<span style="color:' + rc + '">' + u.role + '</span>';
+
+      var created = u.created_at ? new Date(u.created_at).toLocaleDateString() : '—';
+
+      return '<tr' + (isIncomplete ? ' style="opacity:.6"' : '') + '>'
+        + '<td>' + nameCell + '<div style="font-size:11px;color:var(--muted);margin-top:1px">' + created + '</div></td>'
+        + '<td style="font-size:12px;color:var(--muted)">' + (u.email || '—') + '</td>'
         + '<td>' + u.country + '</td>'
-        + '<td><span style="color:' + rc + '">' + u.role + '</span></td>'
-        + '<td><span class="badge bg">Verified</span></td>'
+        + '<td>' + roleCell + '</td>'
+        + '<td>' + linkedCell + '</td>'
         + '<td style="color:var(--teal)">' + u.credits + '</td>'
         + '<td>' + u.loi_count + '</td>'
-        + '<td><span class="badge bg">Active</span></td>'
-        + '<td><div style="display:flex;gap:4px"><button class="btn btn-xs" onclick="openTG()">📲</button></div></td>'
+        + '<td>' + statusCell + '</td>'
+        + '<td><div style="display:flex;gap:4px">'
+        + (isIncomplete ? '<button class="btn btn-xs btn-a" title="Incomplete registration — user is in Auth but users table row is missing">⚠ Fix</button>' : '<button class="btn btn-xs" onclick="openTG()">📲</button>')
+        + '</div></td>'
         + '</tr>';
     }).join('');
-  }).catch(function() {
-    tb.innerHTML = '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">Failed to load users</td></tr>';
+  }).catch(function(e) {
+    console.error('renderUsers:', e);
+    tb.innerHTML = '<tr><td colspan="9" style="padding:16px;text-align:center;color:var(--muted)">Failed to load users — check console</td></tr>';
   });
 }
 
@@ -1167,9 +1182,19 @@ function rejectDeal() {
 function tick(){document.getElementById('tb-clock').textContent=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'})+' UTC';}
 setInterval(tick,1000);tick();
 
-var FEED_MSGS=[['🤖','PriceScout queried REF-MET-002 — $9,200/MT'],['📋','New RFQ — Bauer GmbH · Hard Wheat 200 MT'],['💬','NegotiationAgent — counter offer $2,800/MT'],['✅','KYC verified — Atlas Trading Germany'],['🎯','LeadFinder — 2 new prospects in Egypt'],['📲','OutreachBot — Telegram messages sent to 3 buyers'],['⚡','Credit purchase — $599 · 800 credits'],['📄','LOI generated — $92,000']];
-var feedIdx=0;
-setInterval(function(){var feed=document.getElementById('live-feed');if(!feed)return;var msg=FEED_MSGS[feedIdx%FEED_MSGS.length];feedIdx++;var d=new Date();var time=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');var row=document.createElement('div');row.className='feed-row';row.style.background='rgba(91,95,239,.07)';row.innerHTML='<div class="feed-time">'+time+'</div><div class="feed-icon">'+msg[0]+'</div><div class="feed-text">'+msg[1]+'</div>';feed.insertBefore(row,feed.firstChild);setTimeout(function(){row.style.background='';},2000);if(feed.children.length>10)feed.removeChild(feed.lastChild);},12000);
+function prependFeed(icon, text) {
+  var feed = document.getElementById('live-feed');
+  if (!feed) return;
+  var d = new Date();
+  var time = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+  var row = document.createElement('div');
+  row.className = 'feed-row';
+  row.style.background = 'rgba(91,95,239,.09)';
+  row.innerHTML = '<div class="feed-time">' + time + '</div><div class="feed-icon">' + icon + '</div><div class="feed-text">' + text + '</div>';
+  feed.insertBefore(row, feed.firstChild);
+  setTimeout(function(){ row.style.background = ''; }, 3000);
+  if (feed.children.length > 12) feed.removeChild(feed.lastChild);
+}
 
 
 // ── LEADFINDER ────────────────────────────────────────────────────────────────
@@ -1289,12 +1314,115 @@ function renderAgentLog(){
   el.innerHTML = html;
 }
 
+// ── REAL ALERTS ───────────────────────────────────────────────────────────────
+
+function approveNegById(negId) { _pendingNegId = negId; approveDeal(); }
+function rejectNegById(negId)  { _pendingNegId = negId; rejectDeal();  }
+
+function renderAlerts(negs, lois) {
+  var items = [];
+  var oneDayAgo = Date.now() - 86400000;
+
+  // 🚨 Red: awaiting boss approval
+  negs.filter(function(n){ return n.status === 'awaiting_boss'; }).forEach(function(n) {
+    var totalVal = n.deal_price
+      ? '$' + (parseFloat(n.deal_price) * n.qty).toLocaleString()
+      : (n.max_price && n.qty ? '≤$' + (parseFloat(n.max_price) * n.qty).toLocaleString() : '');
+    var priceStr = n.deal_price
+      ? '$' + parseFloat(n.deal_price).toLocaleString() + '/' + n.unit + ' agreed'
+      : (n.max_price ? 'Budget $' + parseFloat(n.max_price).toLocaleString() + '/' + n.unit : '—');
+    var tgMatch  = n.supplier_ref && n.supplier_ref.match(/TG:(\S+)/);
+    var contact  = tgMatch ? ' · ' + tgMatch[1] : '';
+    var id = n.id;
+    items.push({
+      cls: 'al-red', dot: 'var(--red)',
+      title: '🚨 Boss approval needed' + (totalVal ? ' — ' + totalVal : ''),
+      desc:  n.product + ' · ' + n.qty + ' ' + n.unit + ' · ' + priceStr + ' · ' + (n.buyer_name || '—') + contact,
+      actions: '<button class="btn btn-xs btn-g" onclick="approveNegById(\''+id+'\')">✓ Approve → LOI</button>'
+             + '<button class="btn btn-xs btn-r" onclick="rejectNegById(\''+id+'\')">✗ Reject</button>'
+             + '<button class="btn btn-xs" onclick="show(\'negotiations\',document.querySelectorAll(\'.nav\')[2])">View</button>',
+    });
+  });
+
+  // ✅ Green: LOIs signed in the last 24 h
+  (lois || []).filter(function(l){
+    return l.signed_at && new Date(l.signed_at).getTime() > oneDayAgo;
+  }).forEach(function(l) {
+    var total = l.total_value ? '$' + Number(l.total_value).toLocaleString() : '';
+    items.push({
+      cls: 'al-green', dot: 'var(--green)',
+      title: '✓ LOI signed — ' + l.product + ' ' + l.qty + ' ' + l.unit + (total ? ' · ' + total : ''),
+      desc:  (l.buyer_name || '—') + ' · ' + (l.ref || '—') + ' · $' + (l.loi_fee_usd || 500) + ' fee earned',
+      actions: '<button class="btn btn-xs" onclick="window.open(\'loi-generator.html\',\'_blank\')">📄 View LOI</button>',
+    });
+  });
+
+  // Update sidebar badge
+  var redCount = negs.filter(function(n){ return n.status === 'awaiting_boss'; }).length;
+  var alertCountEl = document.getElementById('alert-count');
+  if (alertCountEl) {
+    alertCountEl.textContent = redCount || '';
+    alertCountEl.style.display = redCount ? '' : 'none';
+  }
+
+  // Update card header badge
+  var headerBadge = document.getElementById('alerts-header-badge');
+  if (headerBadge) headerBadge.textContent = items.length ? items.length + ' active' : 'none';
+
+  var el = document.getElementById('alerts-list');
+  if (!el) return;
+  if (!items.length) {
+    el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--muted);font-size:12px">✓ All clear — no active alerts</div>';
+    return;
+  }
+  el.innerHTML = items.map(function(item) {
+    return '<div class="alert-item ' + item.cls + '">'
+      + '<div class="al-dot" style="background:' + item.dot + '"></div>'
+      + '<div class="al-body">'
+      + '<div class="al-title">' + item.title + '</div>'
+      + '<div class="al-desc">' + item.desc + '</div>'
+      + '<div class="al-actions">' + item.actions + '</div>'
+      + '</div></div>';
+  }).join('');
+}
+
+// ── AG-UI REAL-TIME FEED ──────────────────────────────────────────────────────
+if (api && api.agui) {
+  api.agui
+    .on('AWAIT_HUMAN', function(data) {
+      prependFeed('📋', 'Approval needed — ' + (data.product || '') + (data.buyer_name ? ' · ' + data.buyer_name : ''));
+      loadNegotiations();
+    })
+    .on('LOI_GENERATED', function(data) {
+      prependFeed('📄', 'LOI signed — ' + (data.loi_ref || '') + (data.total_value ? ' · $' + Number(data.total_value).toLocaleString() : ''));
+      loadNegotiations();
+    })
+    .on('PRICE_ALERT', function(data) {
+      prependFeed('📡', 'Price alert: ' + (data.product || '') + (data.current_price ? ' $' + data.current_price : ''));
+    })
+    .on('LEAD_FOUND', function(data) {
+      if (data.relevance === 'very-high' || data.relevance === 'high') {
+        prependFeed('🔭', 'Lead found: ' + (data.name || '') + (data.country ? ' · ' + data.country : ''));
+      }
+    })
+    .on('AUTO_APPROVED', function(data) {
+      prependFeed('🤖', 'Auto-approved — ' + (data.loi_ref || '') + (data.deal_price ? ' · $' + Number(data.deal_price).toLocaleString() : ''));
+      loadNegotiations();
+    })
+    .on('COMPLIANCE_BLOCKED', function(data) {
+      prependFeed('🛡️', 'Blocked: ' + (data.entity || '') + (data.country ? ' · ' + data.country : ''));
+    })
+    .on('PRICE_UPDATE', function(data) {
+      prependFeed('📡', 'Price update: ' + (data.sku || '') + (data.price ? ' $' + data.price : ''));
+    });
+}
+
 renderKanban();renderBrokers();renderProducts();renderUsers();
 renderLeadFinder();renderPriceScoutFeed();renderAgentLog();
 loadCatalogStatus();
 loadNegotiations();
 loadRevenue();
-// Refresh negotiations when boss SSE fires
+// Refresh negotiations + alerts every 15 s
 setInterval(loadNegotiations, 15000);
 
 // ── CATALOG UPLOAD ────────────────────────────────────────────────────────────

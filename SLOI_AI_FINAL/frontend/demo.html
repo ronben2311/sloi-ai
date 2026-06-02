@@ -59,7 +59,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 
 .bubble{max-width:76%;padding:11px 14px;border-radius:8px;font-size:11px;line-height:1.68;animation:slide-in .25s ease}
 .b-agent{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);align-self:flex-start}
-.b-broker{background:rgba(232,169,74,.07);border:1px solid rgba(232,169,74,.2);align-self:flex-end;text-align:right}
+.b-trader{background:rgba(232,169,74,.07);border:1px solid rgba(232,169,74,.2);align-self:flex-end;text-align:right}
 .b-system{background:var(--surface2);border:1px solid var(--border);align-self:center;max-width:95%;text-align:center;font-size:10px;color:var(--muted);padding:6px 16px;border-radius:4px}
 .b-deal{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.25);align-self:center;max-width:95%;text-align:center;padding:14px 20px;border-radius:6px;animation:slide-in .4s ease}
 .b-loi{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.3);align-self:center;max-width:95%;text-align:center;padding:14px 20px;border-radius:6px;animation:slide-in .4s ease}
@@ -194,8 +194,8 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
           </div>
           <div class="gap-pill" id="gap-pill">Gap</div>
           <div class="price-cell">
-            <div class="price-cell-label">🏭 Broker</div>
-            <div class="price-cell-val" id="p-broker" style="color:var(--gold)">—</div>
+            <div class="price-cell-label">🏭 Trader</div>
+            <div class="price-cell-val" id="p-trader" style="color:var(--gold)">—</div>
           </div>
         </div>
       </div>
@@ -246,10 +246,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
         </div>
       </div>
       <div class="loi-note">
-        ✓ LOI emailed to buyer and broker &nbsp;·&nbsp;
+        ✓ LOI emailed to buyer and trader &nbsp;·&nbsp;
         ✓ Compliance cleared (OFAC + EU) &nbsp;·&nbsp;
         ✓ 3 rounds &nbsp;·&nbsp;
-        ✓ Saved <b style="color:var(--green)">$13,500</b> vs broker's opening price
+        ✓ Saved <b style="color:var(--green)">$13,500</b> vs trader's opening price
       </div>
     </div>
 
@@ -281,7 +281,7 @@ var SCRIPT = [
       text: 'Good morning. We are seeking 100 MT of Steel Rebar G60 12mm for an active infrastructure project in the UAE. Based on current MENA market benchmarks and recent trade indices, our opening offer is $2,680/MT FOB.',
       price: 2680
     },
-    broker: {
+    trader: {
       label: '🏭 BROKER → AGENT  ·  Round 1',
       text: 'Thank you for your inquiry. Our certified G60 12mm rebar carries ISO 9001 quality certification with 7-day lead time and full mill documentation. Current market price for this specification is $2,960/MT FOB. We can confirm immediate availability.',
       price: 2960
@@ -294,7 +294,7 @@ var SCRIPT = [
       text: 'We appreciate your response. After reviewing recent MENA trade indices, we are prepared to move to $2,750/MT. We can offer SWIFT TT payment within 5 business days of LOI signing — a firm commitment on 100 MT.',
       price: 2750
     },
-    broker: {
+    trader: {
       label: '🏭 BROKER → AGENT  ·  Round 2',
       text: 'For confirmed SWIFT payment on 100 MT with fast settlement, we can offer $2,870/MT FOB. Full documentation package included — mill certificates, quality reports, and packing list. This reflects genuine cost pressure in the current market.',
       price: 2870
@@ -307,7 +307,7 @@ var SCRIPT = [
       text: 'We are approaching agreement. Our best and final offer is $2,810/MT FOB — aligned with current MENA benchmarks for this specification. We commit to SWIFT payment within 5 days and look forward to a long-term supply relationship.',
       price: 2810
     },
-    broker: {
+    trader: {
       label: '🏭 BROKER → AGENT  ·  Round 3',
       text: 'After consideration of your volume, payment terms, and potential for ongoing business, we can accept $2,840/MT FOB. All certifications and 7-day delivery are included. This is our final price — we have a deal.',
       price: 2840
@@ -333,11 +333,11 @@ function setRound(n) {
   else q('rounds-count').textContent = 'Complete · 3 rounds';
 }
 
-function updatePrices(agent, broker) {
+function updatePrices(agent, trader) {
   if (agent !== null) q('p-agent').textContent = '$' + agent.toLocaleString();
-  if (broker !== null) q('p-broker').textContent = '$' + broker.toLocaleString();
+  if (trader !== null) q('p-trader').textContent = '$' + broker.toLocaleString();
   var a = agent !== null ? agent : parseFloat(q('p-agent').textContent.replace(/[$,]/g,'')) || null;
-  var b = broker !== null ? broker : parseFloat(q('p-broker').textContent.replace(/[$,]/g,'')) || null;
+  var b = trader !== null ? trader : parseFloat(q('p-trader').textContent.replace(/[$,]/g,'')) || null;
   if (a && b) {
     var gapPct = ((b - a) / b * 100).toFixed(1);
     var col = gapPct <= 2.5 ? '#22c55e' : gapPct <= 8 ? '#e8a94a' : '#ef4444';
@@ -358,11 +358,11 @@ function addSystemBubble(text) {
 function addThinking(role) {
   var div = document.createElement('div');
   div.id = 'thinking';
-  div.className = 'b-thinking' + (role === 'broker' ? ' right' : '');
+  div.className = 'b-thinking' + (role === 'trader' ? ' right' : '');
   var sp = document.createElement('div');
   sp.className = 'spinner';
   div.appendChild(sp);
-  var txt = document.createTextNode(role === 'agent' ? '🤖 Agent composing offer…' : '🏭 Broker responding…');
+  var txt = document.createTextNode(role === 'agent' ? '🤖 Agent composing offer…' : '🏭 Trader responding…');
   div.appendChild(txt);
   chatEl.appendChild(div);
   chatEl.scrollTop = chatEl.scrollHeight;
@@ -416,7 +416,7 @@ async function addAgentBubble(item) {
 
 async function addBrokerBubble(item) {
   var div = document.createElement('div');
-  div.className = 'bubble b-broker';
+  div.className = 'bubble b-trader';
 
   var label = document.createElement('div');
   label.className = 'b-label';
@@ -446,7 +446,7 @@ async function runDemo() {
   chatEl = q('chat');
   chatEl.innerHTML = '';
   q('p-agent').textContent = '—';
-  q('p-broker').textContent = '—';
+  q('p-trader').textContent = '—';
   q('rounds-count').textContent = 'Not started';
   q('gap-pill').textContent = 'Gap';
   q('gap-pill').style.cssText = '';
@@ -479,10 +479,10 @@ async function runDemo() {
     await addAgentBubble(entry.agent);
     updatePrices(entry.agent.price, null);
 
-    // Broker turn
+    // Trader turn
     await sleep(900);
-    q('status-text').textContent = 'Round ' + rn + ' · Broker responding…';
-    addThinking('broker');
+    q('status-text').textContent = 'Round ' + rn + ' · Trader responding…';
+    addThinking('trader');
     await sleep(1100);
     removeThinking();
     await addBrokerBubble(entry.broker);
@@ -550,8 +550,8 @@ function approveDeal() {
     loiDiv.innerHTML =
       '<div style="font-size:10px;color:var(--violet);font-weight:700;letter-spacing:.06em;margin-bottom:8px">📄 LOI SIGNED · SL-LOI-20260519-007</div>' +
       '<div style="font-family:\'Fraunces\',serif;font-size:22px;font-weight:900;color:var(--white);margin-bottom:6px">$2,825/MT · 100 MT</div>' +
-      '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Total $282,500 · Emailed to buyer & broker</div>' +
-      '<div style="font-size:10px;color:var(--teal)">Saved $13,500 vs broker\'s opening offer</div>';
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:4px">Total $282,500 · Emailed to buyer & trader</div>' +
+      '<div style="font-size:10px;color:var(--teal)">Saved $13,500 vs trader\'s opening offer</div>';
     chatEl.appendChild(loiDiv);
     chatEl.scrollTop = chatEl.scrollHeight;
 

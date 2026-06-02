@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Join as Broker — SLOI AI</title>
+<title>Join as Trader — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
@@ -157,8 +157,8 @@ select.inp option{background:var(--surface2)}
 
   <!-- HERO -->
   <div class="hero">
-    <div class="eyebrow">Broker Network</div>
-    <h1>Become a SLOI AI<br/><em>broker partner.</em></h1>
+    <div class="eyebrow">Trader Network</div>
+    <h1>Become a SLOI AI<br/><em>trader partner.</em></h1>
     <p class="hero-sub">You source from factories in your region. We connect you to verified buyers globally. AI handles the negotiation. You get paid per signed LOI.</p>
   </div>
 
@@ -320,7 +320,7 @@ select.inp option{background:var(--surface2)}
         </div>
 
         <div class="territory-note">
-          ⚡ SLOI AI compliance note: we do not accept brokers who trade with sanctioned countries. Blocked jurisdictions: Iran, Russia, Belarus, North Korea, Syria, Cuba, Venezuela, Myanmar, Sudan. Iraq and Libya require enhanced KYC.
+          ⚡ SLOI AI compliance note: we do not accept traders who trade with sanctioned countries. Blocked jurisdictions: Iran, Russia, Belarus, North Korea, Syria, Cuba, Venezuela, Myanmar, Sudan. Iraq and Libya require enhanced KYC.
         </div>
 
         <div class="field"><label>Incoterms you support <span class="req">*</span></label>
@@ -480,7 +480,7 @@ select.inp option{background:var(--surface2)}
           <label>How did you hear about SLOI AI?</label>
           <select class="inp" id="b-source">
             <option>— Select —</option>
-            <option>Referral from existing broker</option>
+            <option>Referral from existing trader</option>
             <option>LinkedIn / social media</option>
             <option>Google search</option>
             <option>Trade conference</option>
@@ -517,10 +517,10 @@ select.inp option{background:var(--surface2)}
     </div>
 
     <div class="form-card">
-      <div class="fc-header"><div class="fc-icon">📋</div><div><div class="fc-title">Broker Agreement</div><div class="fc-sub">Please read and confirm before submitting</div></div></div>
+      <div class="fc-header"><div class="fc-icon">📋</div><div><div class="fc-title">Trader Agreement</div><div class="fc-sub">Please read and confirm before submitting</div></div></div>
       <div class="fc-body">
         <div class="terms-box">
-          <h4>1. Broker Obligations</h4>
+          <h4>1. Trader Obligations</h4>
           You agree to supply verified, genuine products as listed. You will respond to RFQ alerts within 24 hours. You will not contact buyers directly outside of SLOI AI for any deal originated on the platform for a period of 24 months.
 
           <h4>2. Non-Circumvention</h4>
@@ -542,7 +542,7 @@ select.inp option{background:var(--surface2)}
         <div style="display:flex;flex-direction:column;gap:10px">
           <label class="check-row">
             <input type="checkbox" id="agree-terms"/>
-            I have read and agree to the SLOI AI Broker Agreement
+            I have read and agree to the SLOI AI Trader Agreement
           </label>
           <label class="check-row">
             <input type="checkbox" id="agree-sanctions"/>
@@ -566,11 +566,11 @@ select.inp option{background:var(--surface2)}
   <div class="success-card" id="success-card">
     <div class="success-icon">🎉</div>
     <div class="success-title">Application <em>submitted.</em></div>
-    <div class="success-sub">Thank you for applying to join the SLOI AI broker network.<br/>We will review your application and contact you within 48 hours.</div>
+    <div class="success-sub">Thank you for applying to join the SLOI AI trader network.<br/>We will review your application and contact you within 48 hours.</div>
     <div class="next-steps">
       <div class="ns-item"><div class="ns-n">1</div>KYC review — we verify your company registration and compliance status (24-48h)</div>
       <div class="ns-item"><div class="ns-n">2</div>Introduction call — a brief call to confirm your product range and territory</div>
-      <div class="ns-item"><div class="ns-n">3</div>Broker agreement signed — countersigned by SLOI AI</div>
+      <div class="ns-item"><div class="ns-n">3</div>Trader agreement signed — countersigned by SLOI AI</div>
       <div class="ns-item"><div class="ns-n">4</div>Account activated — you add your suppliers and go live</div>
       <div class="ns-item"><div class="ns-n">5</div>First RFQ — usually within days of activation</div>
     </div>
@@ -673,7 +673,7 @@ function populateReview(){
 
 function submitApplication(){
   if(!document.getElementById('agree-terms').checked){
-    alert('Please agree to the Broker Agreement.'); return;
+    alert('Please agree to the Trader Agreement.'); return;
   }
   if(!document.getElementById('agree-sanctions').checked){
     alert('Please confirm your sanctions compliance.'); return;
@@ -715,7 +715,7 @@ function submitApplication(){
     about:         g('b-about'),
   };
 
-  var api = window._sloiAPI || (typeof initPortal === 'function' ? initPortal('broker') : null);
+  var api = window._sloiAPI || (typeof initPortal === 'function' ? initPortal('trader') : null);
   var doSubmit = api ? api.registerBroker(profile) : Promise.reject('no_api');
 
   doSubmit

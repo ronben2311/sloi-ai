@@ -1,6 +1,6 @@
 /**
  * SLOI AI — API Client v1.0
- * Shared across all portals: Admin, Buyer, Broker, Agent Console
+ * Shared across all portals: Admin, Buyer, Trader, Agent Console
  * 
  * Usage: <script src="/api-client.js"></script>
  * Then: const api = new SloiAPI();
@@ -110,7 +110,7 @@ class SloiAPI {
   }
 
   async registerBroker(profile) {
-    return this.req('POST', '/brokers/register', profile);
+    return this.req('POST', '/traders/register', profile);
   }
 
   async registerAgent({ name, email, framework, wallet_address }) {
@@ -639,7 +639,7 @@ function redirectByRole(role) {
   const routes = {
     boss:     'CommodEx_Admin.html',
     buyer:    'CommodEx_Platform.html',
-    broker:   'CommodEx_Broker.html',
+    trader:   'CommodEx_Broker.html',
     supplier: 'CommodEx_Supplier.html',
   };
   const dest = routes[role] || 'CommodEx_Platform.html';

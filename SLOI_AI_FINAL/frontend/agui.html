@@ -137,7 +137,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
       <div style="display:flex;flex-direction:column;gap:5px">
         <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">⚡ Admin</div><div style="color:var(--muted)">All sessions</div></div>
         <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">👤 Buyer</div><div style="color:var(--muted)">Own deals</div></div>
-        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">🌍 Broker</div><div style="color:var(--muted)">Assigned</div></div>
+        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">🌍 Trader</div><div style="color:var(--muted)">Assigned</div></div>
         <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">🏭 Supplier</div><div style="color:var(--muted)">RFQ only</div></div>
       </div>
     </div>
@@ -174,7 +174,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
         <div class="event-row">
           <div class="ev-name" style="color:var(--violet)">TEXT_CHUNK</div>
           <div class="ev-dir dir-s2c">S→C</div>
-          <div><div class="ev-desc">Streaming token from Claude. Append to current bubble. Contains: text, role (agent|broker), round.</div><div class="ev-portal">Agent Console · Buyer Platform (read-only)</div></div>
+          <div><div class="ev-desc">Streaming token from Claude. Append to current bubble. Contains: text, role (agent|trader), round.</div><div class="ev-portal">Agent Console · Buyer Platform (read-only)</div></div>
         </div>
         <div class="event-row">
           <div class="ev-name" style="color:var(--violet)">ROUND_COMPLETE</div>
@@ -326,7 +326,7 @@ app.<span class="fn">post</span>(<span class="str">'/v1/negotiate'</span>, <span
     <span class="kw">for await</span> (<span class="kw">const</span> chunk <span class="kw">of</span> brokerStream) {
       <span class="kw">if</span> (chunk.type === <span class="str">'content_block_delta'</span> && chunk.delta.type === <span class="str">'text_delta'</span>) {
         brokerMsg += chunk.delta.text;
-        <span class="fn">emit</span>(<span class="str">'TEXT_CHUNK'</span>, { text: chunk.delta.text, role: <span class="str">'broker'</span>, round });
+        <span class="fn">emit</span>(<span class="str">'TEXT_CHUNK'</span>, { text: chunk.delta.text, role: <span class="str">'trader'</span>, round });
       }
     }
 
@@ -391,7 +391,7 @@ app.<span class="fn">get</span>(<span class="str">'/v1/stream'</span>, <span cla
   res.<span class="fn">setHeader</span>(<span class="str">'X-Accel-Buffering'</span>, <span class="str">'no'</span>);
 
   <span class="kw">const</span> userId = req.caller.id;
-  <span class="kw">const</span> role = req.caller.role; <span class="cm">// boss|buyer|broker|supplier</span>
+  <span class="kw">const</span> role = req.caller.role; <span class="cm">// boss|buyer|trader|supplier</span>
 
   <span class="cm">// Register this connection in event bus</span>
   <span class="kw">const</span> unsubscribe = eventBus.<span class="fn">subscribe</span>(userId, role, (event) => {
@@ -456,7 +456,7 @@ app.<span class="fn">get</span>(<span class="str">'/v1/stream'</span>, <span cla
   updated_at      TIMESTAMPTZ <span class="kw">DEFAULT NOW</span>()
 );
 
-<span class="cm">-- RLS: buyers see own deals, brokers see assigned, boss sees all</span>
+<span class="cm">-- RLS: buyers see own deals, traders see assigned, boss sees all</span>
 <span class="kw">ALTER TABLE</span> negotiations <span class="kw">ENABLE ROW LEVEL SECURITY</span>;
 <span class="kw">CREATE POLICY</span> buyer_own <span class="kw">ON</span> negotiations <span class="kw">FOR SELECT USING</span> (buyer_id = auth.<span class="fn">uid</span>());
 <span class="kw">CREATE POLICY</span> broker_assigned <span class="kw">ON</span> negotiations <span class="kw">FOR SELECT USING</span> (broker_id = auth.<span class="fn">uid</span>());
@@ -597,7 +597,7 @@ app.<span class="fn">get</span>(<span class="str">'/v1/stream'</span>, <span cla
 
         <div class="portal-card">
           <div class="pc-icon">🌍</div>
-          <div class="pc-title">Broker Portal</div>
+          <div class="pc-title">Trader Portal</div>
           <div class="pc-role">Assigned deals only</div>
           <div class="pc-events">
             <div class="pc-event">NEGOTIATION_STARTED → new RFQ alert</div>
@@ -727,7 +727,7 @@ agui.<span class="fn">on</span>(<span class="str">'LOI_GENERATED'</span>, () => 
           <span class="cl-tag">Phase 2</span>
         </div>
         <div class="cl-item"><input type="checkbox"/>
-          <div class="cl-text">Import agui-client.js in all 4 portals: Admin, Buyer, Broker, Supplier</div>
+          <div class="cl-text">Import agui-client.js in all 4 portals: Admin, Buyer, Trader, Supplier</div>
           <span class="cl-tag">Phase 2</span>
         </div>
         <div class="cl-item"><input type="checkbox"/>
@@ -773,7 +773,7 @@ AG_UI_HEARTBEAT_INTERVAL=15000         <span class="cm"># ms between heartbeats<
 
     <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:20px;text-align:center">
       <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">Result: one stream.<br/><em style="font-style:italic;color:var(--indigo)">Four portals. Real time.</em></div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Boss approves on Telegram → Admin popup closes → Buyer sees LOI → Broker gets notification → all from a single SSE stream.</p>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Boss approves on Telegram → Admin popup closes → Buyer sees LOI → Trader gets notification → all from a single SSE stream.</p>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
         <a href="telegram-bot.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Telegram Bot setup →</a>
         <a href="payments.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Payment infra →</a>

@@ -261,7 +261,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
     <div class="calc-row">
       <div class="calc-item"><div class="calc-label">CONTRACT VALUE</div><div class="calc-val total" id="calc-total">$284,000</div></div>
       <div class="calc-item"><div class="calc-label">PLATFORM FEE (1%)</div><div class="calc-val muted" id="calc-fee">$2,840</div></div>
-      <div class="calc-item"><div class="calc-label">BROKER FEE (5%)</div><div class="calc-val muted" id="calc-broker">$14,200</div></div>
+      <div class="calc-item"><div class="calc-label">BROKER FEE (5%)</div><div class="calc-val muted" id="calc-trader">$14,200</div></div>
       <div class="calc-item"><div class="calc-label">SUPPLIER NET</div><div class="calc-val green" id="calc-net">$266,960</div></div>
     </div>
   </div>
@@ -303,12 +303,12 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
   <div class="step">
     <div class="step-header">
       <div class="step-num">5</div>
-      <div class="step-title">Reference & broker</div>
+      <div class="step-title">Reference & trader</div>
     </div>
     <div class="field-grid three">
       <div class="field"><label>LOI reference</label><input id="ref" value="LOI-20260427-001" oninput="updatePreview()"/></div>
-      <div class="field"><label>Broker name</label><input id="broker_name" value="Ali Al-Omari" oninput="updatePreview()"/></div>
-      <div class="field"><label>Broker company</label><input id="broker_company" value="Gulf Trade Partners" oninput="updatePreview()"/></div>
+      <div class="field"><label>Trader name</label><input id="broker_name" value="Ali Al-Omari" oninput="updatePreview()"/></div>
+      <div class="field"><label>Trader company</label><input id="broker_company" value="Gulf Trade Partners" oninput="updatePreview()"/></div>
     </div>
   </div>
 
@@ -420,12 +420,12 @@ function calcTotal(){
   var cur = document.getElementById('currency').value;
   var total = qty * price;
   var fee = Math.round(total * 0.01);
-  var broker = Math.round(total * 0.05);
-  var net = total - fee - broker;
+  var trader = Math.round(total * 0.05);
+  var net = total - fee - trader;
   var sym = cur==='ILS'?'₪':cur==='EUR'?'€':'$';
   document.getElementById('calc-total').textContent = sym+total.toLocaleString();
   document.getElementById('calc-fee').textContent = sym+fee.toLocaleString();
-  document.getElementById('calc-broker').textContent = sym+broker.toLocaleString();
+  document.getElementById('calc-trader').textContent = sym+broker.toLocaleString();
   document.getElementById('calc-net').textContent = sym+net.toLocaleString();
   updatePreview();
 }
@@ -436,8 +436,8 @@ function getVals(){
   var cur = document.getElementById('currency').value;
   var total = qty * price;
   var fee = Math.round(total * 0.01);
-  var broker = Math.round(total * 0.05);
-  var net = total - fee - broker;
+  var trader = Math.round(total * 0.05);
+  var net = total - fee - trader;
   var delDate = document.getElementById('delivery_date').value;
   if(delDate){var d=new Date(delDate);delDate=d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});}
   return {
@@ -461,7 +461,7 @@ function getVals(){
     currency: cur,
     total: total,
     fee: fee,
-    broker_fee: broker,
+    broker_fee: trader,
     net: net,
     incoterm: document.getElementById('incoterm').value,
     payment_method: document.getElementById('payment_method').value,
