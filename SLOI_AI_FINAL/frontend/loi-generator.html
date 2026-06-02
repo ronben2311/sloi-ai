@@ -375,7 +375,6 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
   <div class="preview-header">
     <div class="preview-title">📄 Live Preview</div>
     <div class="preview-actions">
-      <button class="btn-sm" onclick="window.print()">🖨 Print</button>
       <button class="btn-sm btn-download" id="dl-btn" onclick="generatePDF()">⬇ Download PDF</button>
     </div>
   </div>
@@ -612,41 +611,102 @@ function generatePDF(){
   document.getElementById('gen-text').textContent = 'Generating PDF...';
 
   var v = getVals();
-  var element = document.getElementById('loi-preview');
   var filename = (v.ref || 'LOI') + '.pdf';
+  var printContent = document.getElementById('loi-preview').innerHTML;
 
-  html2pdf().set({
-    margin: 0,
-    filename: filename,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#07070f',
-      scrollY: 0,
-      windowWidth: element.scrollWidth,
-    },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    pagebreak: { mode: ['avoid-all', 'css'] },
-  }).from(element).save().then(function(){
-    btn.disabled = false;
-    document.getElementById('gen-icon').textContent = '✅';
-    document.getElementById('gen-text').textContent = 'Downloaded!';
-    document.getElementById('success-banner').classList.add('show');
-    setTimeout(function(){
-      document.getElementById('gen-icon').textContent = '📄';
-      document.getElementById('gen-text').textContent = 'Generate & Download PDF';
-    }, 3000);
-  }).catch(function(err){
-    console.error('[generatePDF]', err);
-    btn.disabled = false;
-    document.getElementById('gen-icon').textContent = '❌';
-    document.getElementById('gen-text').textContent = 'Failed — try again';
-    setTimeout(function(){
-      document.getElementById('gen-icon').textContent = '📄';
-      document.getElementById('gen-text').textContent = 'Generate & Download PDF';
-    }, 3000);
-  });
+  // Render into a hidden off-screen div with concrete hex colors (no CSS variables)
+  // so html2canvas captures it exactly as the popup "looked good"
+  var holder = document.createElement('div');
+  holder.id = '__loi_pdf';
+  holder.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#fff;z-index:-1;';
+  holder.innerHTML = '<style>' +
+    '#__loi_pdf{font-family:"IBM Plex Mono",monospace;font-size:11px;color:#111}' +
+    '#__loi_pdf .doc{background:#fff!important;border:1px solid #1c1c2e;width:100%;border-radius:0}' +
+    '#__loi_pdf .doc-top{background:#07070f!important;padding:18px 22px 12px;border-bottom:2px solid #5b5fef;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .doc-top-row{display:flex;align-items:flex-start;justify-content:space-between}' +
+    '#__loi_pdf .doc-logo{font-family:"Fraunces",serif;font-size:18px;font-weight:900;color:#fff!important}' +
+    '#__loi_pdf .doc-logo em{font-style:italic;color:#5b5fef!important}' +
+    '#__loi_pdf .doc-type{text-align:right}' +
+    '#__loi_pdf .doc-type-label{font-size:16px;font-weight:700;color:#fff!important;text-align:right}' +
+    '#__loi_pdf .doc-ref,#__loi_pdf .doc-date{font-size:9px;color:#8888aa!important;text-align:right}' +
+    '#__loi_pdf .doc-tagline{font-size:7px;color:#5b5fef!important;letter-spacing:2px;text-transform:uppercase;margin-top:4px}' +
+    '#__loi_pdf .doc-body{background:#fff!important;padding:18px 22px}' +
+    '#__loi_pdf .doc-section{font-size:9px;color:#5b5fef!important;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;margin-top:16px}' +
+    '#__loi_pdf .doc-section:first-child{margin-top:0}' +
+    '#__loi_pdf .parties-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #1c1c2e;border-radius:3px;overflow:hidden;margin-bottom:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .party-block{padding:10px;background:#0e0e1a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .party-block+.party-block{border-left:1px solid #1c1c2e}' +
+    '#__loi_pdf .party-role{font-size:7px;color:#52526e!important;letter-spacing:1px;margin-bottom:4px}' +
+    '#__loi_pdf .party-name{font-size:10px;font-weight:700;color:#fff!important;margin-bottom:2px}' +
+    '#__loi_pdf .party-addr{font-size:9px;color:#8888aa!important;line-height:1.4}' +
+    '#__loi_pdf .details-table{width:100%;border-collapse:collapse;border:1px solid #1c1c2e;margin-bottom:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .details-table tr{border-bottom:1px solid #1c1c2e}' +
+    '#__loi_pdf .details-table td{padding:5px 8px;font-size:9px}' +
+    '#__loi_pdf .details-table td:nth-child(odd){background:#0e0e1a!important;color:#52526e!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .details-table td:nth-child(even){background:#07070f!important;color:#fff!important;font-weight:600;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .total-box{background:#0e0e1a!important;border:1px solid #5b5fef;border-radius:3px;padding:10px;text-align:center;margin:8px 0;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .total-label{font-size:8px;color:#52526e!important;letter-spacing:1px;margin-bottom:3px}' +
+    '#__loi_pdf .total-amount{font-family:"Fraunces",serif;font-size:20px;font-weight:900;color:#5b5fef!important}' +
+    '#__loi_pdf .total-fees{font-size:8px;color:#8888aa!important;margin-top:3px}' +
+    '#__loi_pdf .clause{margin-bottom:8px}' +
+    '#__loi_pdf .clause-title{font-size:9px;font-weight:700;color:#111!important;margin-bottom:2px}' +
+    '#__loi_pdf .clause-text{font-size:9px;color:#555!important;line-height:1.6}' +
+    '#__loi_pdf .sig-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #1c1c2e;border-radius:3px;overflow:hidden;margin-top:4px;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .sig-block{padding:10px;background:#0e0e1a!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .sig-block+.sig-block{border-left:1px solid #1c1c2e}' +
+    '#__loi_pdf .sig-role-label{font-size:7px;color:#52526e!important;letter-spacing:1px;margin-bottom:18px}' +
+    '#__loi_pdf .sig-line{height:1px;background:#252538;margin-bottom:4px}' +
+    '#__loi_pdf .sig-name{font-size:10px;font-weight:700;color:#fff!important}' +
+    '#__loi_pdf .sig-title{font-size:8px;color:#8888aa!important}' +
+    '#__loi_pdf .sig-date{font-size:8px;color:#52526e!important;margin-top:6px}' +
+    '#__loi_pdf .escrow-box{background:#0e0e1a!important;border:1px solid #5b5fef;border-radius:3px;padding:10px;margin-top:6px;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '#__loi_pdf .escrow-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #1c1c2e;font-size:9px}' +
+    '#__loi_pdf .escrow-row:last-child{border-bottom:none}' +
+    '#__loi_pdf .escrow-label{color:#52526e!important}' +
+    '#__loi_pdf .escrow-val{color:#fff!important;font-weight:600}' +
+    '#__loi_pdf .doc-footer{padding:8px 22px;background:#07070f!important;border-top:1px solid #1c1c2e;font-size:8px;color:#52526e!important;text-align:center;line-height:1.4;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+    '</style>' + printContent;
+
+  document.body.appendChild(holder);
+
+  setTimeout(function(){
+    var docEl = holder.querySelector('.doc') || holder;
+    html2pdf().set({
+      margin: [8, 10, 8, 10],
+      filename: filename,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: 794,
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] },
+    }).from(docEl).save().then(function(){
+      document.body.removeChild(holder);
+      btn.disabled = false;
+      document.getElementById('gen-icon').textContent = '✅';
+      document.getElementById('gen-text').textContent = 'Downloaded!';
+      document.getElementById('success-banner').classList.add('show');
+      setTimeout(function(){
+        document.getElementById('gen-icon').textContent = '📄';
+        document.getElementById('gen-text').textContent = 'Generate & Download PDF';
+      }, 3000);
+    }).catch(function(err){
+      document.body.removeChild(holder);
+      console.error('[generatePDF]', err);
+      btn.disabled = false;
+      document.getElementById('gen-icon').textContent = '❌';
+      document.getElementById('gen-text').textContent = 'Failed — try again';
+      setTimeout(function(){
+        document.getElementById('gen-icon').textContent = '📄';
+        document.getElementById('gen-text').textContent = 'Generate & Download PDF';
+      }, 3000);
+    });
+  }, 150);
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
