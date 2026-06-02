@@ -639,10 +639,11 @@ function redirectByRole(role) {
   const routes = {
     boss:     'CommodEx_Admin.html',
     buyer:    'CommodEx_Platform.html',
-    trader:   'CommodEx_Broker.html',
+    broker:   'CommodEx_Broker.html',
     supplier: 'CommodEx_Supplier.html',
   };
-  const dest = routes[role] || 'CommodEx_Platform.html';
+  const dest = routes[role];
+  if (!dest) { window.location.href = 'login.html'; return; }
   window.location.href = dest;
 }
 
