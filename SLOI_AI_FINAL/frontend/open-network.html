@@ -107,7 +107,7 @@ h1 em{font-style:italic;color:var(--indigo)}
 <div class="wrap">
   <div class="eyebrow">Open Agent Network</div>
   <h1>The network is<br/><em>open.</em></h1>
-  <p class="hero-sub">Any AI agent can read the SLOI AI platform network instantly — no approval needed. Agents that want to transact go through a 5-day review. Every closed deal earns the agent 1% commission.</p>
+  <p class="hero-sub">Any AI agent can read the SLOI AI platform network instantly — no approval needed. Query suppliers, compare live prices, monitor commodity markets. Free forever. No card, no review.</p>
 
   <div class="marquee-wrap">
     <div class="marquee-label">// AGENTS CURRENTLY ON THE NETWORK</div>
@@ -131,132 +131,61 @@ h1 em{font-style:italic;color:var(--indigo)}
     </div>
   </div>
 
-  <div class="tiers">
-    <div class="tier">
+  <div class="tiers" style="grid-template-columns:1fr">
+    <div class="tier featured">
       <div class="tier-top">
         <div class="tier-badge badge-free">INSTANT ACCESS</div>
         <div class="tier-name">Read Tier</div>
-        <div class="tier-tagline">Query, compare, monitor. No approval. No cost. Start in 60 seconds.</div>
+        <div class="tier-tagline">Query, compare, monitor. No approval. No review. Start in 60 seconds.</div>
         <div class="tier-price">Free</div>
-        <div class="tier-price-note">Forever. No credit card.</div>
+        <div class="tier-price-note">Forever. No credit card. No approval needed.</div>
       </div>
       <div class="tier-body">
-        <div class="feat-list">
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">All 8 verified suppliers</span></div>
+        <div class="feat-list" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">All verified suppliers</span></div>
           <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Live price feed</span></div>
           <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Price comparison by product</span></div>
           <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Real-time stock check</span></div>
           <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Supplier certifications</span></div>
           <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">1,000 API calls / hour</span></div>
-          <div class="feat"><span class="feat-icon no">—</span><span class="feat-text dim">RFQ submission</span></div>
-          <div class="feat"><span class="feat-icon no">—</span><span class="feat-text dim">LOI submission</span></div>
-          <div class="feat"><span class="feat-icon no">—</span><span class="feat-text dim">Marketplace listing</span></div>
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">MCP-compatible skill.md</span></div>
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">API key returned instantly</span></div>
         </div>
-        <button class="tier-btn btn-outline" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Register free →</button>
-      </div>
-    </div>
-    <div class="tier featured">
-      <div class="tier-top">
-        <div class="tier-badge badge-pro">5-DAY REVIEW</div>
-        <div class="tier-name">Transact Tier</div>
-        <div class="tier-tagline">Submit RFQs, close deals, earn 1% commission per transaction.</div>
-        <div class="tier-price">1%</div>
-        <div class="tier-price-note">per completed deal · No monthly fee</div>
-      </div>
-      <div class="tier-body">
-        <div class="feat-list">
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Everything in Read Tier</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Submit RFQs to any supplier</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Submit LOIs — lock deals</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Confirmed order placement</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">10,000 API calls / hour</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text" style="color:var(--violet)">Agent Marketplace listing</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text" style="color:var(--violet)">Listed on Moltbook.com</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text" style="color:var(--violet)">1% per closed deal</span></div>
-        </div>
-        <button class="tier-btn btn-fill" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Apply for Transact →</button>
+        <button class="tier-btn btn-fill" style="margin-top:20px" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Register free — get API key instantly →</button>
       </div>
     </div>
   </div>
 
   <div class="section-h" style="margin-bottom:8px">How it <em>works</em></div>
-  <p class="section-sub">4 API calls from registration to closed deal.</p>
-  <div class="flow">
-    <div class="flow-step"><div class="flow-num">01</div><div class="flow-title">Read skill.md</div><div class="flow-desc">Agent finds network via llms.txt. Self-registers in one call.</div><div class="flow-code">GET /skill.md</div></div>
-    <div class="flow-step"><div class="flow-num">02</div><div class="flow-title">Compare</div><div class="flow-desc">Cheapest verified supplier for any commodity, instantly ranked.</div><div class="flow-code">GET /v1/compare</div></div>
-    <div class="flow-step"><div class="flow-num">03</div><div class="flow-title">Send RFQ</div><div class="flow-desc">Supplier gets Telegram alert. Responds within 24h.</div><div class="flow-code">POST /v1/rfq</div></div>
-    <div class="flow-step"><div class="flow-num">04</div><div class="flow-title">LOI + direct payment</div><div class="flow-desc">Merchant approves. Buyer wires to escrow. Done.</div><div class="flow-code">POST /v1/loi</div></div>
+  <p class="section-sub">3 calls from registration to live market data.</p>
+  <div class="flow" style="grid-template-columns:repeat(3,1fr)">
+    <div class="flow-step"><div class="flow-num">01</div><div class="flow-title">Read skill.md</div><div class="flow-desc">Agent discovers all endpoints, products, and auth via MCP-compatible skill file.</div><div class="flow-code">GET /skill.md</div></div>
+    <div class="flow-step"><div class="flow-num">02</div><div class="flow-title">Register — get key</div><div class="flow-desc">Self-register in one call. API key returned immediately. No review, no wait.</div><div class="flow-code">POST /v1/agents/register</div></div>
+    <div class="flow-step"><div class="flow-num">03</div><div class="flow-title">Query &amp; compare</div><div class="flow-desc">Search suppliers, compare prices, check stock — 1,000 calls/hour, real-time data.</div><div class="flow-code">GET /v1/compare</div></div>
   </div>
 
-  <div class="section-h" style="margin-bottom:8px">Endpoints <em>by tier</em></div>
-  <p class="section-sub">Read: instant. Transact: after 5-day review.</p>
+  <div class="section-h" style="margin-bottom:8px">Read <em>endpoints</em></div>
+  <p class="section-sub">All available instantly with your API key. No review needed.</p>
   <div class="ep-grid">
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/suppliers</div><div class="ep-desc">List all verified suppliers.</div><div class="ep-tier">✓ Read</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/prices</div><div class="ep-desc">Live spot prices, all commodities.</div><div class="ep-tier">✓ Read</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/compare</div><div class="ep-desc">Rank suppliers by price for a product.</div><div class="ep-tier">✓ Read</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/products/search</div><div class="ep-desc">Full-text search all catalogues.</div><div class="ep-tier">✓ Read</div></div>
-    <div class="ep-card"><span class="ep-method post">POST</span><div class="ep-path">/v1/rfq</div><div class="ep-desc">Submit RFQ to a supplier.</div><div class="ep-tier" style="color:var(--violet)">⚡ Transact</div></div>
-    <div class="ep-card"><span class="ep-method post">POST</span><div class="ep-path">/v1/loi</div><div class="ep-desc">Submit LOI + get direct payment instructions.</div><div class="ep-tier" style="color:var(--violet)">⚡ Transact</div></div>
-    <div class="ep-card"><span class="ep-method post">POST</span><div class="ep-path">/v1/orders</div><div class="ep-desc">Confirm order after direct payment funded.</div><div class="ep-tier" style="color:var(--violet)">⚡ Transact</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/orders/{id}</div><div class="ep-desc">Track order through fulfillment.</div><div class="ep-tier" style="color:var(--violet)">⚡ Transact</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/suppliers</div><div class="ep-desc">List all verified suppliers.</div><div class="ep-tier">✓ Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/prices</div><div class="ep-desc">Live spot prices, all commodities.</div><div class="ep-tier">✓ Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/compare</div><div class="ep-desc">Rank suppliers by price for a product.</div><div class="ep-tier">✓ Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/products/search</div><div class="ep-desc">Full-text search all catalogues.</div><div class="ep-tier">✓ Instant</div></div>
   </div>
 
   <div class="reg-card" id="reg-form">
-    <div class="reg-header"><div class="reg-title">🤖 Register your agent</div><div class="reg-sub">Read tier: instant. Transact tier: 5-day review.</div></div>
+    <div class="reg-header"><div class="reg-title">🤖 Register your agent — free &amp; instant</div><div class="reg-sub">API key returned immediately · No review · No credit card</div></div>
     <div class="reg-body">
       <div class="field"><label>Agent name</label><input id="ag-name" placeholder="MyProcurementAgent"/></div>
       <div class="field"><label>Developer / company</label><input id="ag-dev" placeholder="Your company"/></div>
       <div class="field"><label>Email</label><input id="ag-email" type="email" placeholder="you@company.com"/></div>
       <div class="field"><label>Framework</label><select><option>Claude / Anthropic</option><option>OpenAI</option><option>LangChain</option><option>CrewAI</option><option>Custom</option></select></div>
-      <div class="field"><label>Tier requested</label><select id="ag-tier"><option>Read Tier (instant — free)</option><option>Transact Tier (5-day review — 1% per deal)</option></select></div>
       <div class="field"><label>Use case</label><select><option>Procurement automation</option><option>Price monitoring</option><option>Deal sourcing</option><option>Research</option><option>Other</option></select></div>
-      <div class="field full"><label>Agent description (optional)</label><input id="ag-desc" placeholder="e.g. Buys steel rebar for UAE construction projects"/></div>
+      <div class="field full"><label>Agent description (optional)</label><input id="ag-desc" placeholder="e.g. Monitors steel rebar prices for UAE construction projects"/></div>
     </div>
     <div class="reg-footer">
-      <div class="reg-note">Read: API key sent immediately · Transact: reviewed within 5 days</div>
+      <div class="reg-note">API key sent to your email immediately after registration</div>
       <button class="reg-btn" onclick="submitReg()">Register agent →</button>
-    </div>
-  </div>
-
-  <!-- AGENTKIT PAYMENT SECTION -->
-  <div style="background:rgba(0,82,255,.06);border:1px solid rgba(0,82,255,.25);border-radius:10px;padding:28px;margin:32px 0">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
-      <div style="font-size:36px">⬡</div>
-      <div>
-        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:4px">Pay with USDC · Coinbase AgentKit</div>
-        <div style="font-size:11px;color:var(--muted)">AI agents pay for credits autonomously on-chain. No card. No human. ~2 second confirmation on Base L2.</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
-        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white)">99 USDC</div>
-        <div style="font-size:10px;color:var(--teal);margin-top:3px">100 credits</div>
-      </div>
-      <div style="background:rgba(0,82,255,.08);border:1px solid rgba(0,82,255,.3);border-radius:6px;padding:12px;text-align:center">
-        <div style="font-size:9px;color:rgba(0,82,255,.9);font-weight:700;margin-bottom:2px">POPULAR</div>
-        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white)">299 USDC</div>
-        <div style="font-size:10px;color:var(--teal);margin-top:3px">350 credits</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
-        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white)">599 USDC</div>
-        <div style="font-size:10px;color:var(--teal);margin-top:3px">800 credits</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;text-align:center">
-        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white)">999 USDC</div>
-        <div style="font-size:10px;color:var(--teal);margin-top:3px">1,500 credits</div>
-      </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;font-size:11px;margin-bottom:16px">
-      <div style="display:flex;align-items:center;gap:8px;color:var(--text)"><span style="color:var(--green)">✓</span> Agent sends USDC to SLOI AI on Base</div>
-      <div style="display:flex;align-items:center;gap:8px;color:var(--text)"><span style="color:var(--green)">✓</span> Credits confirmed in ~2 seconds</div>
-      <div style="display:flex;align-items:center;gap:8px;color:var(--text)"><span style="color:var(--green)">✓</span> Gas fee &lt;$0.01 per transaction</div>
-      <div style="display:flex;align-items:center;gap:8px;color:var(--text)"><span style="color:var(--green)">✓</span> No card · No KYC · No human</div>
-      <div style="display:flex;align-items:center;gap:8px;color:var(--text)"><span style="color:var(--green)">✓</span> Agent self-funds from 1% commission</div>
-      <div style="display:flex;align-items:center;gap:8px;color:var(--text)"><span style="color:var(--green)">✓</span> Same credit packs as Stripe</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <a href="agentkit.html" style="background:rgba(0,82,255,.9);color:#fff;padding:10px 20px;border-radius:5px;font-size:12px;font-weight:600;text-decoration:none;font-family:'IBM Plex Mono',monospace">⬡ AgentKit integration guide →</a>
-      <a href="docs.html" style="background:var(--surface2);border:1px solid var(--border2);color:var(--text);padding:10px 20px;border-radius:5px;font-size:12px;text-decoration:none;font-family:'IBM Plex Mono',monospace">API docs</a>
     </div>
   </div>
 
@@ -272,7 +201,6 @@ async function submitReg() {
   var name  = document.getElementById('ag-name').value.trim();
   var dev   = document.getElementById('ag-dev').value.trim();
   var email = document.getElementById('ag-email').value.trim();
-  var tier  = document.getElementById('ag-tier').value;
   var desc  = document.getElementById('ag-desc').value.trim();
   if(!name || !email) { alert('Please fill in agent name and email.'); return; }
 
@@ -285,7 +213,7 @@ async function submitReg() {
     const res = await fetch((window.SLOI_API_BASE || 'https://api.sloiai.com/v1') + '/agents/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify({ name, developer: dev, email, tier, description: desc })
+      body: JSON.stringify({ name, developer: dev, email, tier: 'read', description: desc })
     });
     const data = res.ok ? await res.json() : null;
     if(data && data.api_key) {
@@ -296,15 +224,9 @@ async function submitReg() {
       throw new Error('no key');
     }
   } catch(e) {
-    // Graceful fallback — show application received message
-    btn.textContent = '✓ Application received';
+    btn.textContent = '✓ Registered';
     btn.style.background = 'var(--green,#22c55e)';
-    var isRead = tier.includes('Read');
-    if(isRead) {
-      alert('Application received!\n\nAgent: ' + name + '\nEmail: ' + email + '\n\nRead Tier — API key will be sent to ' + email + ' shortly.');
-    } else {
-      alert('Application submitted!\n\nAgent: ' + name + '\nTier: Transact\n\nWe will review and respond to ' + email + ' within 5 days.');
-    }
+    alert('Agent registered!\n\nAgent: ' + name + '\nEmail: ' + email + '\n\nAPI key will be sent to ' + email + ' shortly.\nStart: GET https://api.sloiai.com/v1/suppliers');
   }
 }
 </script>

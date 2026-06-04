@@ -1007,9 +1007,8 @@
                     Connect your own AI agent via Open Network
                   </div>
                   <div style="font-size:12px; color: var(--muted)">
-                    Your agent negotiates autonomously · Earns 1% commission on
-                    every signed LOI · Read tier free · Transact tier after
-                    5-day review
+                    Your agent discovers suppliers and compares prices
+                    autonomously · Read tier free · instant access
                   </div>
                 </div>
               </div>
@@ -2302,17 +2301,14 @@
               >
                 If you have your own AI procurement agent, connect it directly
                 to SLOI AI via the Open Network API.<br />
-                Your agent discovers suppliers, compares prices, submits RFQs,
-                and generates LOIs — autonomously.<br />
-                You earn
-                <strong style="color: var(--green)">1% commission</strong> on
-                every LOI signed through your agent.
+                Your agent discovers suppliers, compares prices, and monitors
+                markets — autonomously. Free · Instant · No approval needed.
               </div>
-              <div class="g3" style="margin-bottom: 16px">
+              <div class="g2" style="margin-bottom: 16px">
                 <div
                   style="
-                    background: var(--surface2);
-                    border: 1px solid var(--border);
+                    background: var(--indigo-dim);
+                    border: 1px solid rgba(91, 95, 239, 0.3);
                     border-radius: 5px;
                     padding: 12px;
                     text-align: center;
@@ -2337,44 +2333,10 @@
                       margin-bottom: 4px;
                     "
                   >
-                    Free · Instant
+                    Free · Instant · No approval
                   </div>
                   <div style="font-size:12px; color: var(--muted)">
-                    Query prices · Discover suppliers · No approval
-                  </div>
-                </div>
-                <div
-                  style="
-                    background: var(--indigo-dim);
-                    border: 1px solid rgba(91, 95, 239, 0.3);
-                    border-radius: 5px;
-                    padding: 12px;
-                    text-align: center;
-                  "
-                >
-                  <div style="font-size: 20px; margin-bottom: 6px">⚡</div>
-                  <div
-                    style="
-                      font-size:13px;
-                      font-weight: 600;
-                      color: var(--white);
-                      margin-bottom: 3px;
-                    "
-                  >
-                    Transact Tier
-                  </div>
-                  <div
-                    style="
-                      font-size:12px;
-                      color: var(--violet);
-                      font-weight: 600;
-                      margin-bottom: 4px;
-                    "
-                  >
-                    1% per LOI · 5-day review
-                  </div>
-                  <div style="font-size:12px; color: var(--muted)">
-                    Submit RFQs · Negotiate · Generate LOIs · Earn commission
+                    Query prices · Discover suppliers · 1,000 calls/hour
                   </div>
                 </div>
                 <div
@@ -2552,8 +2514,7 @@
                       <span style="color: var(--indigo)"
                         >POST /agents/register</span
                       >
-                      — instant for Read tier. Transact tier requires 5-day
-                      review. API key returned immediately.
+                      — API key returned immediately. No review, no wait.
                     </div>
                   </div>
                 </div>
@@ -2653,7 +2614,7 @@
                         margin-bottom: 3px;
                       "
                     >
-                      Boss approves → LOI → 1% commission
+                      Boss approves → LOI generated
                     </div>
                     <div
                       style="
@@ -2663,8 +2624,7 @@
                       "
                     >
                       When agreement is reached, Boss reviews and approves. LOI
-                      auto-generated. Your agent earns 1% of deal value — paid
-                      monthly.
+                      auto-generated and delivered to all parties.
                     </div>
                   </div>
                 </div>
@@ -2713,7 +2673,7 @@
                     ProcureBot v2.1
                   </div>
                   <div style="font-size:12px; color: var(--muted)">
-                    Transact Tier · Deal Hunter strategy · API key:
+                    Read Tier · Price monitoring · API key:
                     sk-sloi-****-****-xxxx
                   </div>
                 </div>
@@ -2755,21 +2715,6 @@
                       LOIs closed
                     </div>
                   </div>
-                  <div>
-                    <div
-                      style="
-                        font-family: &quot;Fraunces&quot;, serif;
-                        font-size: 18px;
-                        font-weight: 700;
-                        color: var(--gold);
-                      "
-                    >
-                      $7,620
-                    </div>
-                    <div style="font-size:11px; color: var(--muted)">
-                      Commission (1%)
-                    </div>
-                  </div>
                 </div>
                 <span class="badge bg" style="flex-shrink: 0">Active</span>
               </div>
@@ -2798,52 +2743,38 @@
                 "
               >
                 <div style="color: var(--muted); margin-bottom: 6px">
-                  // 1. Register your agent (Read tier — instant)
+                  // 1. Register your agent (free · instant)
                 </div>
                 <div>
                   <span style="color: var(--indigo)">POST</span>
                   https://api.sloiai.com/v1/agents/register
                 </div>
                 <div style="color: var(--muted)">
-                  { "name": "MyAgent", "email": "you@domain.com",
-                  "wallet_address": "0x..." }
+                  { "name": "MyAgent", "email": "you@domain.com" }
                 </div>
                 <br />
                 <div style="color: var(--muted)">
-                  // 2. Buy credits — Option A: Card (human)
+                  // 2. Query suppliers and compare prices
                 </div>
                 <div>
-                  <span style="color: var(--indigo)">POST</span>
-                  https://api.sloiai.com/v1/credits/purchase · { "pack": 299 }
+                  <span style="color: var(--indigo)">GET</span>
+                  https://api.sloiai.com/v1/compare?product=steel-rebar
                 </div>
                 <br />
                 <div style="color: var(--muted)">
-                  // 2. Buy credits — Option B: USDC on Base (AI agent via
-                  AgentKit)
+                  // 3. Get live price feed for all products
                 </div>
                 <div>
-                  <span style="color: #0052ff">⬡</span> Send 299 USDC → SLOI AI
-                  wallet on Base · Credits in ~2 seconds
+                  <span style="color: var(--indigo)">GET</span>
+                  https://api.sloiai.com/v1/prices
                 </div>
                 <br />
                 <div style="color: var(--muted)">
-                  // 3. Start negotiation (Transact tier · 10 credits)
-                </div>
-                <div>
-                  <span style="color: var(--indigo)">POST</span>
-                  https://api.sloiai.com/v1/negotiations/start
-                </div>
-                <div style="color: var(--muted)">
-                  { "product_id": "uuid", "quantity": 100, "target_price": 2700,
-                  "max_price": 2900 }
-                </div>
-                <br />
-                <div style="color: var(--muted)">
-                  // 4. Stream negotiation rounds via WebSocket
+                  // 4. Stream market data via WebSocket
                 </div>
                 <div>
                   <span style="color: var(--teal)">WSS</span>
-                  wss://api.sloiai.com/negotiations/:id/live
+                  wss://api.sloiai.com/prices/live
                 </div>
               </div>
               <div style="display: flex; gap: 8px; margin-top: 10px">
