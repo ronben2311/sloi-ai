@@ -201,7 +201,7 @@ select.inp option{background:var(--surface)}
   <button class="nav active" onclick="show('warroom',this)"><span class="nav-icon">🔴</span><span class="nav-label">War Room</span><span class="nav-badge nb-red" id="alert-count">3</span></button>
   <button class="nav" onclick="show('pipeline',this)"><span class="nav-icon">📊</span><span class="nav-label">Pipeline</span></button>
   <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold" id="neg-count">2</span></button>
-  <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Agents</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">4</span></button>
+  <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Agents</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">7</span></button>
   <div class="sb-section">Revenue</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
   <button class="nav" onclick="show('credits',this)"><span class="nav-icon">⚡</span><span class="nav-label">Credits</span></button>
@@ -579,7 +579,7 @@ select.inp option{background:var(--surface)}
     <!-- HEADER -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
       <div>
-        <div style="font-size:13px;color:var(--muted)">4 active agents · running autonomously · all require Boss approval for LOI</div>
+        <div style="font-size:13px;color:var(--muted)">7 active agents · running autonomously · all require Boss approval for LOI</div>
       </div>
       <button class="btn btn-sm btn-p" onclick="runAllAgents()">▶ Run all agents now</button>
     </div>
@@ -709,6 +709,106 @@ select.inp option{background:var(--surface)}
         </div>
         <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
           <button class="btn btn-xs" onclick="window.open('compliance.html','_blank')" style="flex:1;justify-content:center">Run manual check</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- LOGISTICS & FINANCE AGENTS -->
+    <div style="font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:18px 0 10px">// LOGISTICS &amp; TRADE FINANCE AGENTS</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+
+      <!-- LOGISTICSAI -->
+      <div style="background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden">
+        <div style="padding:14px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <div style="width:32px;height:32px;border-radius:6px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🚢</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">LogisticsAI</div>
+              <div style="font-size:12px;color:var(--muted)">Shipment tracking · freight rates · port alerts · Incoterms</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:5px;margin-bottom:10px">
+            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:11px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">
+            6 shipments tracked · 3 routes optimised<br/>
+            <span style="color:var(--gold)">⚠ Port Said congestion +2 days delay</span><br/>
+            <span style="color:var(--green)">↓ Freight rates down 4% this week</span>
+          </div>
+        </div>
+        <div style="padding:10px 14px;font-size:12px;color:var(--muted);max-height:80px;overflow-y:auto">
+          <div style="margin-bottom:4px"><span style="color:var(--teal)">🚢</span> SL-2406-001 · Rebar · AUH→HH · ETA Jun 18</div>
+          <div style="margin-bottom:4px"><span style="color:var(--gold)">⚠</span> Jebel Ali congestion — alt route suggested</div>
+          <div style="margin-bottom:4px"><span style="color:var(--green)">✓</span> Cement OPC · LCL booked · $1,240/CBM</div>
+          <div><span style="color:var(--muted)">–</span> Wheat 50MT · FOB Alexandria · Pending docs</div>
+        </div>
+        <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
+          <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('LogisticsAI — track shipment')">▶ Track shipment</button>
+          <button class="btn btn-xs" onclick="alert('Freight rate dashboard')">Rates</button>
+        </div>
+      </div>
+
+      <!-- CUSTOMSAI -->
+      <div style="background:var(--surface);border:1px solid rgba(139,143,248,.25);border-radius:8px;overflow:hidden">
+        <div style="padding:14px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <div style="width:32px;height:32px;border-radius:6px;background:rgba(139,143,248,.12);display:flex;align-items:center;justify-content:center;font-size:16px">🛃</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">CustomsAI</div>
+              <div style="font-size:12px;color:var(--muted)">HS code lookup · duty calc · permits per destination</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:5px;margin-bottom:10px">
+            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:11px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">
+            22 HS lookups today · 6 countries<br/>
+            <span style="color:var(--gold)">⚠ 2 import permits flagged (KSA)</span><br/>
+            Duty savings identified: <span style="color:var(--green)">$14,200</span>
+          </div>
+        </div>
+        <div style="padding:10px 14px;font-size:12px;color:var(--muted);max-height:80px;overflow-y:auto">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Steel Rebar → UAE</span><span style="color:var(--teal)">7214.20 · 5% duty</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Wheat → Egypt</span><span style="color:var(--green)">1001.99 · 0% duty</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Polypropylene → KSA</span><span style="color:var(--gold)">3902.10 · permit req.</span></div>
+          <div style="display:flex;justify-content:space-between"><span>OPC Cement → Germany</span><span style="color:var(--teal)">2523.29 · 3.7% duty</span></div>
+        </div>
+        <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
+          <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('CustomsAI — HS lookup')">🔍 HS Lookup</button>
+          <button class="btn btn-xs" onclick="alert('Duty calculator')">Duty calc</button>
+        </div>
+      </div>
+
+      <!-- TRADEFINANCEAI -->
+      <div style="background:var(--surface);border:1px solid rgba(232,169,74,.25);border-radius:8px;overflow:hidden">
+        <div style="padding:14px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <div style="width:32px;height:32px;border-radius:6px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:16px">💳</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">TradeFinanceAI</div>
+              <div style="font-size:12px;color:var(--muted)">LC drafting · SBLC · factoring · TradeFinex link</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:5px;margin-bottom:10px">
+            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:11px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
+            <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 8px;border-radius:10px;font-size:11px">TradeFinex ✓</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px">
+            3 LCs drafted today · $2.1M pipeline<br/>
+            Avg approval time: <span style="color:var(--white)">72h</span><br/>
+            <span style="color:var(--green)">↑ Factoring rate: 1.8% — 2 deals eligible</span>
+          </div>
+        </div>
+        <div style="padding:10px 14px;font-size:12px;color:var(--muted);max-height:80px;overflow-y:auto">
+          <div style="margin-bottom:4px"><span style="color:var(--gold)">📄</span> LC drafted — Gulf Cement · $420K · Citi Bank</div>
+          <div style="margin-bottom:4px"><span style="color:var(--teal)">⛓</span> TradeFinex linked — LOI-20260603-002</div>
+          <div style="margin-bottom:4px"><span style="color:var(--green)">✓</span> SBLC verified — Atlas Trading · $800K</div>
+          <div><span style="color:var(--muted)">–</span> Factoring offer sent — Cairo Const. · 1.8%</div>
+        </div>
+        <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
+          <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('TradeFinanceAI — draft LC')">📄 Draft LC</button>
+          <button class="btn btn-xs" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="window.open('https://www.tradefinex.org','_blank')">⛓ TradeFinex</button>
         </div>
       </div>
 
