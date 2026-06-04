@@ -10,7 +10,7 @@
 
 const SLOI_API_BASE = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
   ? 'http://localhost:3000/v1'
-  : 'https://api.sloiai.com/v1';
+  : 'https://sloi-ai-production.up.railway.app/v1';
 
 class SloiAPI {
 
