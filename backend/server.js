@@ -1,9 +1,10 @@
 require("dotenv").config();
 const express = require("express");
-const cors    = require("cors");
-const path    = require("path");
+const cors = require("cors");
+const path = require("path");
+const rateLimit = require("express-rate-limit");
 
-const app  = express();
+const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
@@ -18,17 +19,30 @@ app.get("/", (req, res) => res.redirect("/m2m-homepage.html"));
 app.get("/health", (req, res) => res.json({ ok: true, version: "1.0.0" }));
 
 // API routes
-app.use("/v1/auth",         require("./routes/auth"));
-app.use("/v1/chat",         require("./routes/chat"));
-app.use("/v1/products",     require("./routes/products"));
-app.use("/v1/stream",       require("./routes/stream"));
-app.use("/v1/negotiate",    require("./routes/negotiate"));
+app.use("/v1/auth", require("./routes/auth"));
+app.use("/v1/chat", require("./routes/chat"));
+app.use("/v1/products", require("./routes/products"));
+app.use("/v1/stream", require("./routes/stream"));
+app.use(
+  "/v1/negotiate",
+  rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: {
+      error: "too_many_requests",
+      detail: "Max 10 negotiations per hour per IP.",
+    },
+  }),
+  require("./routes/negotiate"),
+);
 app.use("/v1/negotiations", require("./routes/negotiations"));
-app.use("/v1/lois",         require("./routes/lois"));
-app.use("/v1/credits",      require("./routes/credits"));
-app.use("/v1/admin",        require("./routes/admin"));
-app.use("/v1/contact",      require("./routes/contact"));
-app.use("/v1/orders",       require("./routes/orders"));
+app.use("/v1/lois", require("./routes/lois"));
+app.use("/v1/credits", require("./routes/credits"));
+app.use("/v1/admin", require("./routes/admin"));
+app.use("/v1/contact", require("./routes/contact"));
+app.use("/v1/orders", require("./routes/orders"));
 
 app.listen(port, () => {
   console.log(`SLOI AI Backend running on http://localhost:${port}`);
