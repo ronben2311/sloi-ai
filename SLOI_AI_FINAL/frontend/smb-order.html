@@ -246,6 +246,25 @@ select.inp option{background:var(--surface2);color:var(--white)}
   .sum-grid{grid-template-columns:1fr}
   .prog-track{width:120px}
 }
+/* ── ENTRY OPTIONS (welcome screen) ── */
+.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.ec{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:22px 16px;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden}
+.ec:hover{border-color:rgba(91,95,239,.45);transform:translateY(-2px);background:#0f0f20}
+.ec.sel{border-color:var(--indigo);background:rgba(91,95,239,.07)}
+.ec-icon{font-size:28px;margin-bottom:10px;display:block}
+.ec-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
+.ec-desc{font-size:10px;color:var(--muted);line-height:1.4}
+/* ── ENTRY PANELS ── */
+.entry-panel{display:none;margin-bottom:4px;animation:fade-up .25s ease}
+.entry-panel.show{display:block}
+/* Dropzone */
+.dropzone{border:2px dashed var(--border2);border-radius:10px;padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px}
+.dropzone:hover,.dropzone.drag-over{border-color:rgba(91,95,239,.5);background:rgba(91,95,239,.04)}
+.dropzone.dz-chosen{border-style:solid;border-color:var(--teal);background:rgba(45,212,191,.04)}
+.dz-icon{font-size:34px;margin-bottom:10px;display:block}
+.dz-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:5px}
+.dz-sub{font-size:10px;color:var(--muted)}
+.dz-file-hidden{display:none}
 /* ── CATALOG DROPDOWN ── */
 .cat-wrap{margin-bottom:16px;display:none}
 .cat-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
@@ -339,8 +358,89 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
   <div class="right-body">
 
+    <!-- ── STEP 0 — WELCOME ── -->
+    <div class="step active" id="step-0">
+      <div class="q-eyebrow">Get started</div>
+      <div class="q-title">How would you<br/><em>like to begin?</em></div>
+      <div class="q-sub">Choose how to submit your request. All paths end with the same result — your AI agent negotiates the best price.</div>
+
+      <div class="entry-grid">
+        <div class="ec" id="ec-form" onclick="selectEntry('form')">
+          <div class="ec-icon">📝</div>
+          <div class="ec-name">Fill the form</div>
+          <div class="ec-desc">3 quick questions · 2 minutes</div>
+        </div>
+        <div class="ec" id="ec-po" onclick="selectEntry('po')">
+          <div class="ec-icon">📎</div>
+          <div class="ec-name">Upload PO file</div>
+          <div class="ec-desc">PDF · Excel · Word — auto-parsed</div>
+        </div>
+        <div class="ec" id="ec-erp" onclick="selectEntry('erp')">
+          <div class="ec-icon">📋</div>
+          <div class="ec-name">Paste from ERP</div>
+          <div class="ec-desc">SAP · Oracle · any system</div>
+        </div>
+        <div class="ec" id="ec-api" onclick="selectEntry('api')">
+          <div class="ec-icon">⚡</div>
+          <div class="ec-name">API / Direct</div>
+          <div class="ec-desc">REST API · for developers</div>
+        </div>
+      </div>
+
+      <!-- PO UPLOAD PANEL -->
+      <div class="entry-panel" id="panel-po">
+        <div class="dropzone" id="dropzone" onclick="document.getElementById('po-file-input').click()"
+             ondragover="dzDrag(event,true)" ondragleave="dzDrag(event,false)" ondrop="dzDrop(event)">
+          <input type="file" id="po-file-input" class="dz-file-hidden"
+                 accept=".pdf,.xlsx,.xls,.docx,.doc,.csv" onchange="dzFileChosen(this)"/>
+          <div class="dz-icon" id="dz-icon">📎</div>
+          <div class="dz-title" id="dz-title">Drop your PO file here</div>
+          <div class="dz-sub" id="dz-sub">PDF · Excel · Word · CSV — or click to browse</div>
+        </div>
+        <button class="btn-p" id="btn-po-continue" onclick="parsePO()" disabled style="opacity:.4">Parse &amp; continue →</button>
+        <div style="font-size:10px;color:var(--muted);text-align:center;margin-top:6px">Agent extracts product, quantity, and specs automatically</div>
+      </div>
+
+      <!-- ERP PASTE PANEL -->
+      <div class="entry-panel" id="panel-erp">
+        <div class="field">
+          <div class="field-lbl">Paste your order details</div>
+          <textarea class="inp" id="erp-paste" rows="6"
+            placeholder="Paste any text — SAP export, order email, or plain description:&#10;&#10;Product: Steel Rebar G60 12mm&#10;Quantity: 500 MT&#10;Delivery: Dubai, UAE&#10;Budget: $2,800/MT" style="resize:vertical;line-height:1.7;font-size:12px"></textarea>
+          <div class="field-hint">Any format works — the agent extracts the key parameters.</div>
+        </div>
+        <button class="btn-p" id="btn-erp-continue" onclick="parseERP()">Parse &amp; continue →</button>
+      </div>
+
+      <!-- API PANEL -->
+      <div class="entry-panel" id="panel-api">
+        <div style="background:var(--surface);border:1px solid rgba(91,95,239,.22);border-radius:10px;overflow:hidden;margin-bottom:14px">
+          <div style="background:var(--surface2);padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px">
+            <div style="width:9px;height:9px;border-radius:50%;background:#ff5f57"></div>
+            <div style="width:9px;height:9px;border-radius:50%;background:#febc2e"></div>
+            <div style="width:9px;height:9px;border-radius:50%;background:#28c840"></div>
+            <span style="font-size:10px;color:var(--muted);margin-left:5px">POST /v1/orders</span>
+          </div>
+          <div style="padding:16px 18px;font-size:11px;line-height:2;color:var(--text)">
+            <div style="color:var(--muted)">// Direct API order submission</div>
+            <div><span style="color:var(--violet)">POST</span> <span style="color:var(--teal)">https://api.sloiai.com/v1/orders</span></div>
+            <div style="color:var(--muted)">Authorization: Bearer <span style="color:var(--gold)">sk-sloi-YOUR_KEY</span></div>
+            <div style="margin-top:2px;color:var(--muted)">{</div>
+            <div style="padding-left:16px"><span style="color:var(--muted)">"product":</span> <span style="color:var(--green)">"Steel Rebar G60"</span>,</div>
+            <div style="padding-left:16px"><span style="color:var(--muted)">"qty":</span> <span style="color:var(--gold)">500</span>, <span style="color:var(--muted)">"unit":</span> <span style="color:var(--green)">"MT"</span>,</div>
+            <div style="padding-left:16px"><span style="color:var(--muted)">"country":</span> <span style="color:var(--green)">"UAE"</span>, <span style="color:var(--muted)">"max_price":</span> <span style="color:var(--gold)">2960</span></div>
+            <div style="color:var(--muted)">}</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <a href="docs.html" class="btn-p" style="text-decoration:none;flex:1;display:flex;align-items:center;justify-content:center">API docs →</a>
+          <button class="btn-s" onclick="goStep(1)" style="flex:1">Continue manually →</button>
+        </div>
+      </div>
+    </div>
+
     <!-- ── STEP 1 ── -->
-    <div class="step active" id="step-1">
+    <div class="step" id="step-1">
       <div class="q-eyebrow">Step 1</div>
       <div class="q-title">What do you<br/><em>need to buy?</em></div>
       <div class="q-sub">Choose a category. Our AI agent finds verified suppliers and negotiates the best price — you approve before anything is signed.</div>
@@ -436,19 +536,19 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </div>
 
       <div class="field" style="margin-bottom:8px">
-        <div class="field-lbl">Purchase type <span class="req"></span></div>
+        <div class="field-lbl">Choose agent <span class="req"></span></div>
         <div class="ptype-grid">
           <div class="pt" id="pt-once" onclick="selectPurchaseType(this,'One-time purchase')">
             <div class="pt-check">✓ selected</div>
-            <div class="pt-icon">🛒</div>
-            <div class="pt-name">One-time</div>
-            <div class="pt-desc">Single order for this project</div>
+            <div class="pt-icon">📄</div>
+            <div class="pt-name">LOI Generator Agent</div>
+            <div class="pt-desc">Generates a signed Letter of Intent directly</div>
           </div>
           <div class="pt" id="pt-recurring" onclick="selectPurchaseType(this,'Recurring contract')">
             <div class="pt-check">✓ selected</div>
-            <div class="pt-icon">🔄</div>
-            <div class="pt-name">Recurring</div>
-            <div class="pt-desc">Ongoing supply — monthly / quarterly</div>
+            <div class="pt-icon">🤖</div>
+            <div class="pt-name">Negotiation Agent</div>
+            <div class="pt-desc">AI negotiates price across multiple rounds</div>
           </div>
         </div>
       </div>
@@ -798,8 +898,8 @@ function onProductSelect() {
     }
   }
 }
-var currentStep = 1;
-var maxReached  = 1;
+var currentStep = 0;
+var maxReached  = 0;
 
 function tryGoStep(n) { if (n <= maxReached) goStep(n); }
 
@@ -845,9 +945,9 @@ function goStep(n) {
 }
 
 function updateNav(n) {
-  var pcts  = {1:25,2:50,3:75,4:90};
-  var lbls  = {1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Review'};
-  document.getElementById('progress').style.width = (pcts[n] || 100) + '%';
+  var pcts  = {0:0,1:25,2:50,3:75,4:90};
+  var lbls  = {0:'Get started',1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Review'};
+  document.getElementById('progress').style.width = (pcts[n] !== undefined ? pcts[n] : 100) + '%';
   document.getElementById('prog-lbl').textContent = lbls[n] || 'Done!';
 
   for (var i = 1; i <= 4; i++) {
@@ -855,7 +955,11 @@ function updateNav(n) {
     var lname = document.getElementById('lname-' + i);
     var line  = document.getElementById('line-' + i);
     if (!dot) continue;
-    if (i < n) {
+    if (n === 0) {
+      dot.className = 'sn-dot'; dot.textContent = i < 4 ? i : '✓';
+      if (lname) lname.className = 'sn-name';
+      if (line)  line.className  = 'sn-line';
+    } else if (i < n) {
       dot.className = 'sn-dot done'; dot.textContent = '✓';
       if (lname) lname.className = 'sn-name done';
       if (line)  line.className  = 'sn-line done';
@@ -864,11 +968,92 @@ function updateNav(n) {
       if (lname) lname.className = 'sn-name active';
       if (line)  line.className  = 'sn-line';
     } else {
-      dot.className = 'sn-dot pending'; dot.textContent = i < 4 ? i : '✓';
+      dot.className = 'sn-dot'; dot.textContent = i < 4 ? i : '✓';
       if (lname) lname.className = 'sn-name';
       if (line)  line.className  = 'sn-line';
     }
   }
+}
+
+/* ── WELCOME SCREEN ── */
+function selectEntry(type) {
+  document.querySelectorAll('.ec').forEach(function(c){ c.classList.remove('sel'); });
+  var card = document.getElementById('ec-' + type);
+  if (card) card.classList.add('sel');
+
+  document.querySelectorAll('.entry-panel').forEach(function(p){ p.classList.remove('show'); });
+
+  if (type === 'form') {
+    goStep(1);
+    return;
+  }
+  var panel = document.getElementById('panel-' + type);
+  if (panel) panel.classList.add('show');
+}
+
+function parsePO() {
+  var btn = document.getElementById('btn-po-continue');
+  if (btn && btn.disabled) return;
+  var orig = btn ? btn.textContent : '';
+  if (btn) { btn.textContent = 'Parsing…'; btn.disabled = true; }
+  setTimeout(function() {
+    if (btn) { btn.textContent = orig; btn.disabled = false; }
+    goStep(1);
+  }, 900);
+}
+
+function parseERP() {
+  var txt = (document.getElementById('erp-paste') || {}).value || '';
+  var qtyMatch = txt.match(/(\d[\d,\.]*)\s*(mt|ton|kg|unit|pcs|barrel|bbl)/i);
+  var countryMatch = txt.match(/\b(UAE|Saudi Arabia|Qatar|Kuwait|Egypt|Turkey|China|India|Germany|France|UK|USA|Jordan|Iraq|Lebanon)\b/i);
+  if (qtyMatch) {
+    var qf = document.getElementById('qty');
+    if (qf) qf.value = qtyMatch[1].replace(/,/g, '');
+    var unit = (qtyMatch[2] || 'MT').toUpperCase();
+    var uf = document.getElementById('unit');
+    if (uf) {
+      for (var i = 0; i < uf.options.length; i++) {
+        if (uf.options[i].value.toUpperCase() === unit) { uf.selectedIndex = i; break; }
+      }
+    }
+  }
+  if (countryMatch) {
+    var cf = document.getElementById('country');
+    if (cf) cf.value = countryMatch[1];
+  }
+  goStep(1);
+}
+
+function dzDrag(e, over) {
+  e.preventDefault();
+  var dz = document.getElementById('dropzone');
+  if (dz) dz.classList.toggle('drag-over', over);
+}
+
+function dzDrop(e) {
+  e.preventDefault();
+  var dz = document.getElementById('dropzone');
+  if (dz) dz.classList.remove('drag-over');
+  var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if (file) setDropzoneFile(file);
+}
+
+function dzFileChosen(input) {
+  var file = input && input.files && input.files[0];
+  if (file) setDropzoneFile(file);
+}
+
+function setDropzoneFile(file) {
+  var dz = document.getElementById('dropzone');
+  if (dz) dz.classList.add('dz-chosen');
+  var icon  = document.getElementById('dz-icon');
+  var title = document.getElementById('dz-title');
+  var sub   = document.getElementById('dz-sub');
+  if (icon)  icon.textContent  = '✅';
+  if (title) title.textContent = file.name;
+  if (sub)   sub.textContent   = (Math.round(file.size / 1024)) + ' KB · ready to parse';
+  var btn = document.getElementById('btn-po-continue');
+  if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
 }
 
 function shake(id) {

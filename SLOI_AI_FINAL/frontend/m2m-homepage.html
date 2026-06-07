@@ -30,7 +30,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 /* ── NAV ── */
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;
   background:rgba(6,6,14,.88);border-bottom:1px solid rgba(255,255,255,.05);backdrop-filter:blur(20px)}
-.nav-logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;display:flex;align-items:baseline;gap:7px}
+.nav-logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;display:flex;flex-direction:column;align-items:flex-start;gap:2px}
 .nav-logo em{font-style:italic;color:var(--indigo)}
 .nav-tag{font-size:9px;color:var(--muted);font-weight:400;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
 .nav-links{display:flex;gap:28px;font-size:11px}
@@ -164,7 +164,7 @@ h1 em{font-style:italic;
 .feat-desc{font-size:11px;color:var(--muted);line-height:1.7}
 
 /* ── SECTORS ── */
-.sectors-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sectors-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
 .sector-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px 20px;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;transition:all .22s;position:relative;overflow:hidden;cursor:pointer}
 .sector-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(91,95,239,.07) 0%,transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
 .sector-card:hover{transform:translateY(-4px);border-color:rgba(91,95,239,.4);box-shadow:0 16px 48px rgba(0,0,0,.45)}
@@ -313,7 +313,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   <p class="hero-sub">Tell us what you need. Our agent finds verified traders, negotiates the best price, and generates a signed Letter of Intent — in minutes.</p>
   <div class="hero-actions">
     <a href="smb-order.html" class="btn-primary">🎯 Start — it's free →</a>
-    <a href="loi-preview.html" class="btn-outline">📄 See sample LOI</a>
     <a href="demo.html" class="btn-outline">🤖 Watch live demo</a>
   </div>
   <div class="hero-stats fade-in">
@@ -467,7 +466,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
       </div>
       <a href="CommodEx_Platform.html" class="pc-cta">Buyer platform →</a>
     </div>
-    <div class="persona-card" onclick="window.location.href='CommodEx_Broker.html'">
+    <div class="persona-card" onclick="window.location.href='broker-onboarding.html'">
       <span class="pc-icon">🌍</span>
       <div class="pc-role">Traders</div>
       <div class="pc-desc">Commodity traders with supplier networks. Connect your factories. SLOI AI sends you deals. You set floor prices. We handle the rest.</div>
@@ -482,12 +481,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     <div class="persona-card" onclick="window.location.href='open-network.html'">
       <span class="pc-icon">🤖</span>
       <div class="pc-role">AI Agents</div>
-      <div class="pc-desc">Connect your own AI procurement agent via the Open Network API. Search suppliers, negotiate, generate LOIs — autonomously. Earn 1% per deal.</div>
+      <div class="pc-desc">Connect your own AI procurement agent via the Open Network API. Search suppliers, compare live prices, monitor commodity markets — autonomously.</div>
       <div class="pc-features">
-        <div class="pcf">Read tier: free · instant access</div>
-        <div class="pcf">Transact tier: 1% commission per LOI</div>
-        <div class="pcf">Pay credits with USDC on Base</div>
+        <div class="pcf">Read tier: free · instant API access</div>
+        <div class="pcf">No approval — connect and query instantly</div>
         <div class="pcf">Compatible with Claude, GPT, Telegram Bot</div>
+        <div class="pcf">MCP-compatible skill.md auto-discovery</div>
       </div>
       <a href="open-network.html" class="pc-cta">Open Network →</a>
     </div>
@@ -496,41 +495,34 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 
 <div class="sec-divider"></div>
 
-<!-- FEATURES -->
+<!-- GLOBAL TRADE AI AGENTS -->
 <div class="section">
-  <div class="section-eyebrow fade-in">Platform features</div>
-  <div class="section-title fade-in">Everything in one <em style="font-style:italic;color:var(--indigo)">place.</em></div>
-  <div class="section-sub fade-in" style="margin-bottom:36px">Not a marketplace. Not a SaaS. A negotiation and LOI engine.</div>
-  <div class="features-grid fade-in">
-    <div class="feat">
-      <div class="feat-icon-wrap">🤖</div>
-      <div class="feat-title">AI Negotiation Agent</div>
-      <div class="feat-desc">Claude-powered agent runs up to 7 rounds against verified traders. Deal Hunter or Autopilot strategies. Real-time price feed after every round.</div>
-    </div>
-    <div class="feat">
+  <div class="section-eyebrow fade-in">AI Agents</div>
+  <div class="section-title fade-in">Global Trade <em style="font-style:italic;color:var(--indigo)">AI Agents.</em></div>
+  <div class="section-sub fade-in" style="margin-bottom:36px">Four specialized agents running autonomously — from price discovery to signed LOI.</div>
+  <div class="features-grid fade-in" style="grid-template-columns:repeat(2,1fr)">
+    <div class="feat" style="cursor:pointer" onclick="window.location.href='smb-order.html'">
       <div class="feat-icon-wrap">📄</div>
-      <div class="feat-title">Auto-generated LOI</div>
-      <div class="feat-desc">Legally structured Letter of Intent generated in seconds after Boss approval. Emailed to both parties. ICC-compliant terms.</div>
+      <div class="feat-title">LOI Generator Agent</div>
+      <div class="feat-desc">Drafts and finalizes Letters of Intent in seconds after Boss approval. ICC-compliant terms, supplier anonymization enforced at database level, auto-emailed to both parties. 5 credits per LOI.</div>
+      <div style="margin-top:12px;font-size:10px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</div>
+    </div>
+    <div class="feat" style="cursor:pointer" onclick="window.location.href='smb-order.html'">
+      <div class="feat-icon-wrap">🤖</div>
+      <div class="feat-title">Commodities Negotiations Agent</div>
+      <div class="feat-desc">Claude-powered agent runs up to 7 negotiation rounds against verified traders. Deal Hunter or Autopilot strategies. Real-time price feed after every round. OFAC + EU sanctions screened automatically.</div>
+      <div style="margin-top:12px;font-size:10px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</div>
     </div>
     <div class="feat">
-      <div class="feat-icon-wrap">🔒</div>
-      <div class="feat-title">Supplier anonymization</div>
-      <div class="feat-desc">Factory identities protected at database level. Buyers see only REF codes. Enforced via Supabase RLS — not just API logic.</div>
+      <div class="feat-icon-wrap">💰</div>
+      <div class="feat-title">Global Trade Finance Agent</div>
+      <div class="feat-desc">Structures payment terms, LC requirements, and SWIFT instructions for each deal. Matches buyers with the right trade finance instrument — letter of credit, escrow, or advance payment — based on country and volume.</div>
     </div>
-    <div class="feat">
-      <div class="feat-icon-wrap">🛡️</div>
-      <div class="feat-title">Compliance built-in</div>
-      <div class="feat-desc">OFAC + EU + UN sanctions screening on every deal. Dual-use product classification. Blocked deals cannot be overridden.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon-wrap">⚡</div>
-      <div class="feat-title">Credit system</div>
-      <div class="feat-desc">Pay only for what you use. Credits never expire. Buy by card (Stripe) or USDC on Base. AI agents self-fund from 1% commission.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon-wrap">🌐</div>
-      <div class="feat-title">Open Network API</div>
-      <div class="feat-desc">External AI agents connect via REST + WebSocket. MCP-compatible skill.md. Two tiers: Read (free) and Transact (1% per LOI).</div>
+    <div class="feat" style="cursor:pointer" onclick="window.location.href='logistics-customs-agent.html'">
+      <div class="feat-icon-wrap">🚢</div>
+      <div class="feat-title">Logistics &amp; Customs Agent</div>
+      <div class="feat-desc">Coordinates freight, Incoterms, and port-of-loading logistics. Screens shipments against OFAC, EU, and UN export controls. Generates packing lists, HS codes, and customs declarations automatically.</div>
+      <div style="margin-top:12px;font-size:10px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</div>
     </div>
   </div>
 </div>
@@ -596,6 +588,19 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
       <div class="sc-cta">Explore sector →</div>
     </a>
 
+    <a href="imec.html" class="sector-card">
+      <div class="sc-icon">🏗️</div>
+      <div class="sc-name">Reconstruction</div>
+      <div class="sc-desc">Large-scale post-conflict and infrastructure reconstruction. IMEC corridor-aligned supply chains with verified factory-direct sourcing.</div>
+      <div class="sc-tags">
+        <span class="sc-tag">IMEC Corridor</span>
+        <span class="sc-tag">Infrastructure</span>
+        <span class="sc-tag">Bulk Cement</span>
+        <span class="sc-tag">Steel Structures</span>
+      </div>
+      <div class="sc-cta">Explore sector →</div>
+    </a>
+
   </div>
 </div>
 
@@ -611,7 +616,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
       <div class="price-amount">$99</div>
       <div class="price-credits">100 credits</div>
       <div class="price-rate">$0.99/credit</div>
-      <div class="price-usdc">99 USDC on Base</div>
     </div>
     <div class="pop-wrap price-card" style="padding:0;border:none;background:none">
       <div class="pop-inner" style="background:var(--surface)">
@@ -619,20 +623,17 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
         <div class="price-amount">$299</div>
         <div class="price-credits">350 credits</div>
         <div class="price-rate">$0.85/credit · save 14%</div>
-        <div class="price-usdc">299 USDC on Base</div>
       </div>
     </div>
     <div class="price-card">
       <div class="price-amount">$599</div>
       <div class="price-credits">800 credits</div>
       <div class="price-rate">$0.75/credit · save 24%</div>
-      <div class="price-usdc">599 USDC on Base</div>
     </div>
     <div class="price-card">
       <div class="price-amount">$999</div>
       <div class="price-credits">1,500 credits</div>
       <div class="price-rate">$0.67/credit · save 32%</div>
-      <div class="price-usdc">999 USDC on Base</div>
     </div>
   </div>
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:11px" class="fade-in">
@@ -644,6 +645,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     </div>
     <a href="pricing.html" style="color:var(--violet);text-decoration:none;font-size:11px">Full pricing →</a>
   </div>
+  <div style="text-align:center;margin-top:14px;font-size:10px;color:var(--muted)" class="fade-in">Powered by <span style="color:var(--text)">Stripe</span> · Pay by card · Credits never expire</div>
 </div>
 
 <!-- CTA -->
@@ -683,8 +685,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
             <div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.05em;text-transform:uppercase">Always on</div>
           </div>
           <div style="background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:12px 20px;text-align:center;min-width:90px">
-            <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--green);line-height:1">USDC</div>
-            <div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.05em;text-transform:uppercase">Agent pays</div>
+            <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--green);line-height:1">LOI</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:.05em;text-transform:uppercase">Auto-generated</div>
           </div>
         </div>
 
@@ -747,13 +749,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   </div>
   <div class="footer-right">
     <div class="social-icons">
-      <a href="https://linkedin.com/company/sloiai" target="_blank" rel="noopener" class="social-icon si-li" title="LinkedIn">
+      <a href="https://www.linkedin.com/company/sloiai/" target="_blank" rel="noopener" class="social-icon si-li" title="LinkedIn">
         <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       </a>
-      <a href="https://t.me/sloiai" target="_blank" rel="noopener" class="social-icon si-tg" title="Telegram">
+      <a href="https://t.me/+O97sMN0VlEs0NTNk" target="_blank" rel="noopener" class="social-icon si-tg" title="Telegram">
         <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
       </a>
-      <a href="https://wa.me/sloiai" target="_blank" rel="noopener" class="social-icon si-wa" title="WhatsApp">
+      <a href="https://wa.me/972544664428" target="_blank" rel="noopener" class="social-icon si-wa" title="WhatsApp">
         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       </a>
     </div>
