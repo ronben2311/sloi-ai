@@ -159,7 +159,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
 <body>
 
 <nav class="nav">
-  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
   <div class="nav-links">
     <a href="login.html">← Platform</a>
     <a href="payments.html">Payments</a>
@@ -313,12 +313,12 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
     </div>
   </div>
 
-  <button class="generate-btn" id="gen-btn" onclick="generatePDF()">
+  <button class="generate-btn" id="gen-btn" onclick="openInNewTab()">
     <span id="gen-icon">📄</span>
-    <span id="gen-text">Generate & Download PDF</span>
+    <span id="gen-text">Open Preview &amp; Download PDF</span>
   </button>
   <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px">
-    Generates a professional PDF · Print or send digitally · All three parties sign
+    Opens full preview in a new tab · Click Download PDF · Print or send digitally
   </div>
 
   <!-- TRADEFINEX FINANCING -->
@@ -375,8 +375,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;c
   <div class="preview-header">
     <div class="preview-title">📄 Live Preview</div>
     <div class="preview-actions">
-      <button class="btn-sm" onclick="openInNewTab()">↗ Open</button>
-      <button class="btn-sm btn-download" id="dl-btn" onclick="generatePDF()">⬇ Download PDF</button>
+      <button class="btn-sm btn-download" onclick="openInNewTab()">↗ Open &amp; Download PDF</button>
     </div>
   </div>
   <div class="loi-preview" id="loi-preview">
@@ -426,7 +425,7 @@ function calcTotal(){
   var sym = cur==='ILS'?'₪':cur==='EUR'?'€':'$';
   document.getElementById('calc-total').textContent = sym+total.toLocaleString();
   document.getElementById('calc-fee').textContent = sym+fee.toLocaleString();
-  document.getElementById('calc-trader').textContent = sym+broker.toLocaleString();
+  document.getElementById('calc-trader').textContent = sym+trader.toLocaleString();
   document.getElementById('calc-net').textContent = sym+net.toLocaleString();
   updatePreview();
 }
@@ -604,6 +603,55 @@ function updatePreview(){
   document.getElementById('loi-preview').innerHTML = html;
 }
 
+// ── OPEN IN NEW TAB (with Download PDF button) ────────────────────────────────
+function openInNewTab(){
+  var content = document.getElementById('loi-preview').innerHTML;
+  if(!content.trim()){alert('Preview is empty — fill in the form first.');return;}
+  var styles = '';
+  document.querySelectorAll('style').forEach(function(s){styles += s.textContent;});
+  var filename = (document.getElementById('ref').value || 'LOI') + '.pdf';
+
+  var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
+    + '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">'
+    + '<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>'
+    + '<style>'
+    + styles
+    + 'body{background:#07070f;padding:32px;display:flex;flex-direction:column;align-items:center;font-family:"IBM Plex Mono",monospace;}'
+    + '.dl-bar{width:100%;max-width:794px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:12px 18px;background:#0e0e1a;border:1px solid #1c1c2e;border-radius:6px;}'
+    + '.dl-bar-label{color:#d4d2f0;font-size:11px;}'
+    + '.dl-btn{background:#5b5fef;color:#fff;border:none;padding:10px 24px;border-radius:5px;font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s;}'
+    + '.dl-btn:hover{opacity:.85;}.dl-btn:disabled{opacity:.4;cursor:not-allowed;}'
+    + '.doc-wrap{width:100%;max-width:794px;}'
+    + '</style></head><body>'
+    + '<div class="dl-bar">'
+    + '  <span class="dl-bar-label">📄 LOI Preview — ready to download</span>'
+    + '  <button class="dl-btn" id="dl-btn" onclick="downloadPDF()">⬇ Download PDF</button>'
+    + '</div>'
+    + '<div class="doc-wrap">' + content + '</div>'
+    + '<script>'
+    + 'var _fn=' + JSON.stringify(filename) + ';'
+    + 'function downloadPDF(){'
+    + '  var btn=document.getElementById("dl-btn");'
+    + '  btn.textContent="Generating…";btn.disabled=true;'
+    + '  var el=document.querySelector(".doc-wrap .doc")||document.querySelector(".doc-wrap");'
+    + '  html2pdf().set({'
+    + '    margin:[8,10,8,10],'
+    + '    filename:_fn,'
+    + '    image:{type:"jpeg",quality:0.98},'
+    + '    html2canvas:{scale:2,useCORS:true,scrollX:0,scrollY:0},'
+    + '    jsPDF:{unit:"mm",format:"a4",orientation:"portrait"}'
+    + '  }).from(el).save()'
+    + '  .then(function(){btn.textContent="⬇ Download PDF";btn.disabled=false;})'
+    + '  .catch(function(e){console.error(e);btn.textContent="Failed — retry";btn.disabled=false;});'
+    + '}'
+    + '<\/script>'
+    + '</body></html>';
+
+  var w = window.open('','_blank');
+  w.document.write(html);
+  w.document.close();
+}
+
 // ── PDF GENERATION ──────────────────────────────────────────────────────────────
 function generatePDF(){
   var btn = document.getElementById('gen-btn');
@@ -619,7 +667,7 @@ function generatePDF(){
   // so html2canvas captures it exactly as the popup "looked good"
   var holder = document.createElement('div');
   holder.id = '__loi_pdf';
-  holder.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#fff;z-index:-1;';
+  holder.style.cssText = 'position:absolute;left:-9999px;top:0;width:794px;background:#fff;z-index:-1;';
   holder.innerHTML = '<style>' +
     '#__loi_pdf{font-family:"IBM Plex Mono",monospace;font-size:11px;color:#111}' +
     '#__loi_pdf .doc{background:#fff!important;border:1px solid #1c1c2e;width:100%;border-radius:0}' +
