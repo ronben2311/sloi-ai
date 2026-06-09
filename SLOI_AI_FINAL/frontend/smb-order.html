@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -216,7 +216,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
 .cta-s{background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:13px 24px;border-radius:6px;font-size:12px;text-decoration:none;transition:all .2s}
 .cta-s:hover{border-color:var(--indigo);color:var(--violet)}
 
-/* Purchase type cards */
+/* Agent type cards */
 .ptype-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
 .pt{
   background:var(--surface);border:1px solid var(--border2);border-radius:10px;
@@ -229,7 +229,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
 .pt-icon{font-size:22px;margin-bottom:7px}
 .pt-name{font-size:12px;font-weight:700;color:var(--white);margin-bottom:3px}
 .pt-desc{font-size:10px;color:var(--muted);line-height:1.35}
-/* Annual volume field — shown only when recurring selected */
+/* Annual volume field — shown only when Negotiation Agent selected */
 .annual-reveal{overflow:hidden;max-height:0;transition:max-height .35s ease;margin-bottom:0}
 .annual-reveal.open{max-height:120px;margin-bottom:18px}
 
@@ -246,6 +246,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
   .sum-grid{grid-template-columns:1fr}
   .prog-track{width:120px}
 }
+
 /* ── ENTRY OPTIONS (welcome screen) ── */
 .entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
 .ec{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:22px 16px;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden}
@@ -291,11 +292,11 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
     <div class="sn-row" onclick="tryGoStep(1)">
       <div class="sn-col">
-        <div class="sn-dot active" id="dot-1">1</div>
+        <div class="sn-dot" id="dot-1">1</div>
         <div class="sn-line" id="line-1"></div>
       </div>
       <div class="sn-info">
-        <div class="sn-name active" id="lname-1">What you need</div>
+        <div class="sn-name" id="lname-1">What you need</div>
         <div class="sn-desc">Choose a commodity category</div>
       </div>
     </div>
@@ -303,11 +304,11 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
     <div class="sn-row" onclick="tryGoStep(2)">
       <div class="sn-col">
-        <div class="sn-dot pending" id="dot-2">2</div>
+        <div class="sn-dot" id="dot-2">2</div>
         <div class="sn-line" id="line-2"></div>
       </div>
       <div class="sn-info">
-        <div class="sn-name" id="lname-2">Quantity & budget</div>
+        <div class="sn-name" id="lname-2">Quantity &amp; budget</div>
         <div class="sn-desc">How much, your price target, delivery country</div>
       </div>
     </div>
@@ -315,11 +316,11 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
     <div class="sn-row" onclick="tryGoStep(3)">
       <div class="sn-col">
-        <div class="sn-dot pending" id="dot-3">3</div>
+        <div class="sn-dot" id="dot-3">3</div>
         <div class="sn-line" id="line-3"></div>
       </div>
       <div class="sn-info">
-        <div class="sn-name" id="lname-3">Timeline & contact</div>
+        <div class="sn-name" id="lname-3">Timeline &amp; contact</div>
         <div class="sn-desc">When you need it · how to reach you</div>
       </div>
     </div>
@@ -327,10 +328,10 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
     <div class="sn-row">
       <div class="sn-col">
-        <div class="sn-dot pending" id="dot-4">✓</div>
+        <div class="sn-dot" id="dot-4">✓</div>
       </div>
       <div class="sn-info">
-        <div class="sn-name" id="lname-4">Review & submit</div>
+        <div class="sn-name" id="lname-4">Review &amp; submit</div>
         <div class="sn-desc">Confirm details · launch negotiation</div>
       </div>
     </div>
@@ -350,8 +351,8 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
   <div class="right-head">
     <div class="prog-wrap">
-      <div class="prog-track"><div class="prog-fill" id="progress" style="width:25%"></div></div>
-      <div class="prog-lbl" id="prog-lbl">Step 1 of 4</div>
+      <div class="prog-track"><div class="prog-fill" id="progress" style="width:0%"></div></div>
+      <div class="prog-lbl" id="prog-lbl">Get started</div>
     </div>
     <a href="m2m-homepage.html" class="exit-link">Exit ✕</a>
   </div>
@@ -446,16 +447,16 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <div class="q-sub">Choose a category. Our AI agent finds verified suppliers and negotiates the best price — you approve before anything is signed.</div>
 
       <div class="prod-grid">
-        <div class="pc" onclick="selectProduct(this,'Steel & Metals','steel rebar, coil, aluminum')">
+        <div class="pc" onclick="selectProduct(this,'Steel &amp; Metals','steel rebar, coil, aluminum')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">🔩</span>
-          <div class="pc-name">Steel & Metals</div>
+          <div class="pc-name">Steel &amp; Metals</div>
           <div class="pc-sub">Rebar · Coil · Aluminum · Pipes</div>
         </div>
-        <div class="pc" onclick="selectProduct(this,'Cement & Clinker','OPC, clinker, bulk cement, bagged cement')">
+        <div class="pc" onclick="selectProduct(this,'Cement &amp; Clinker','OPC, clinker, bulk cement, bagged cement')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">🪨</span>
-          <div class="pc-name">Cement & Clinker</div>
+          <div class="pc-name">Cement &amp; Clinker</div>
           <div class="pc-sub">OPC · Clinker · Bulk · Bagged · White</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
@@ -512,7 +513,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
     <!-- ── STEP 2 ── -->
     <div class="step" id="step-2">
       <div class="q-eyebrow">Step 2</div>
-      <div class="q-title">Quantity<br/><em>& budget.</em></div>
+      <div class="q-title">Quantity<br/><em>&amp; budget.</em></div>
       <div class="q-sub">A rough estimate is fine. The AI agent will work within your parameters and push for the best available price.</div>
 
       <div class="qty-row">
@@ -553,7 +554,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
         </div>
       </div>
 
-      <!-- Shown only when Recurring is selected -->
+      <!-- Shown only when Negotiation Agent selected -->
       <div class="annual-reveal" id="annual-reveal">
         <div class="field" style="margin-bottom:0;padding:14px;background:rgba(91,95,239,.04);border:1px solid rgba(91,95,239,.18);border-radius:8px">
           <div class="field-lbl" style="color:var(--violet)">Estimated annual volume <span style="color:var(--muted);font-size:9px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
@@ -565,7 +566,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <div class="field">
         <div class="field-lbl">Delivery country <span class="req"></span></div>
         <select class="inp" id="country">
-          <optgroup label="── Gulf & MENA ──">
+          <optgroup label="── Gulf &amp; MENA ──">
             <option>UAE</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option>
             <option>Bahrain</option><option>Oman</option><option>Egypt</option><option>Jordan</option>
             <option>Iraq</option><option>Yemen</option><option>Lebanon</option><option>Syria</option>
@@ -704,7 +705,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="sum-val" id="sum-budget">—</div>
         </div>
         <div class="sum-cell">
-          <div class="sum-lbl">Purchase type</div>
+          <div class="sum-lbl">Agent</div>
           <div class="sum-val" id="sum-ptype">—</div>
         </div>
         <div class="sum-cell" id="sum-annual-cell" style="display:none">
@@ -768,7 +769,6 @@ select.inp option{background:var(--surface2);color:var(--white)}
 var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', purchaseType:'', annualVolume:'', country:'UAE', urgency:'', name:'', wa:'' };
 
 function saveMandateAndGo(url) {
-  // capture any partially-entered step-3 fields before navigating
   var nm = document.getElementById('contact-name').value.trim();
   var wa = document.getElementById('contact-wa').value.trim();
   if (nm) state.name = nm;
@@ -821,7 +821,7 @@ var SECTOR_MAP = {
   'Agriculture':      'Agriculture',
   'Energy':           'Energy',
   'Chemicals':        'Chemicals',
-  'Other':            null,    // null = show all sectors
+  'Other':            null,
 };
 
 function filterCatalog(categoryName) {
@@ -834,7 +834,6 @@ function filterCatalog(categoryName) {
   sel.innerHTML = '<option value="">— Browse verified products —</option>';
 
   if (!sector) {
-    // group by sector for "Other"
     var sectors = ['Metals','Building','Energy','Agriculture','Chemicals'];
     sectors.forEach(function(s){
       var grp = document.createElement('optgroup');
@@ -884,11 +883,9 @@ function onProductSelect() {
   document.getElementById('ci-moq').textContent   = prod.moq.toLocaleString() + ' ' + prod.unit;
   info.classList.add('show');
 
-  // pre-fill detail placeholder with product name
   var detailInput = document.getElementById('product-detail');
   detailInput.placeholder = prod.name + ' · ' + prod.sku;
 
-  // auto-select matching unit in step 2
   var unitSel = document.getElementById('unit');
   for (var i = 0; i < unitSel.options.length; i++) {
     if (unitSel.options[i].value === prod.unit || unitSel.options[i].text === prod.unit) {
@@ -898,13 +895,13 @@ function onProductSelect() {
     }
   }
 }
+
 var currentStep = 0;
 var maxReached  = 0;
 
 function tryGoStep(n) { if (n <= maxReached) goStep(n); }
 
 function goStep(n) {
-  // Validate on forward moves
   if (n > currentStep) {
     if (currentStep === 1) {
       if (!state.product) { pulse(document.querySelector('.prod-grid')); return; }
@@ -945,8 +942,8 @@ function goStep(n) {
 }
 
 function updateNav(n) {
-  var pcts  = {0:0,1:25,2:50,3:75,4:90};
-  var lbls  = {0:'Get started',1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Review'};
+  var pcts = {0:0,1:25,2:50,3:75,4:90};
+  var lbls = {0:'Get started',1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Review'};
   document.getElementById('progress').style.width = (pcts[n] !== undefined ? pcts[n] : 100) + '%';
   document.getElementById('prog-lbl').textContent = lbls[n] || 'Done!';
 
@@ -1074,7 +1071,6 @@ function selectProduct(el, name) {
   document.querySelectorAll('.pc').forEach(function(c){ c.classList.remove('sel'); });
   el.classList.add('sel');
   state.product = name;
-  // reset catalog selection and repopulate dropdown
   document.getElementById('product-select').value = '';
   document.getElementById('cat-info').classList.remove('show');
   document.getElementById('product-detail').placeholder = 'e.g. ISO certified · 12mm · special grade';
@@ -1133,7 +1129,7 @@ function submitOrder() {
     ? (CATALOG.find(function(p){ return p.sku===state.sku; })||{name:state.product}).name + ' [' + state.sku + ']'
     : state.product) + (document.getElementById('product-detail').value ? ' — ' + document.getElementById('product-detail').value : '');
 
-  // ── One-time purchase: skip negotiation, go straight to LOI generator ────────
+  // LOI Generator Agent: go straight to LOI generator
   if (state.purchaseType === 'One-time purchase') {
     var today = new Date();
     var loiRef = 'LOI-' + today.getFullYear()
@@ -1141,11 +1137,11 @@ function submitOrder() {
       + String(today.getDate()).padStart(2,'0') + '-001';
 
     var loiParams = new URLSearchParams({
-      ref:     loiRef,
-      buyer:   state.name    || '',
-      product: productLabel,
-      qty:     state.qty     || '',
-      unit:    state.unit    || 'MT',
+      ref:      loiRef,
+      buyer:    state.name    || '',
+      product:  productLabel,
+      qty:      state.qty     || '',
+      unit:     state.unit    || 'MT',
       location: state.country || '',
     });
 
@@ -1158,7 +1154,7 @@ function submitOrder() {
     return;
   }
 
-  // ── Recurring contract: existing negotiation flow ────────────────────────────
+  // Negotiation Agent: existing negotiation flow
   var payload = {
     product:        productLabel,
     qty:            parseFloat(state.qty) || 0,
@@ -1168,10 +1164,10 @@ function submitOrder() {
     buyer_name:     state.name,
     buyer_telegram: state.wa,
     country:        state.country,
-    notes:          'Urgency: ' + state.urgency + ' | Purchase type: ' + state.purchaseType + (state.annualVolume ? ' | Annual volume: ' + state.annualVolume : ''),
+    notes:          'Urgency: ' + state.urgency + ' | Agent: ' + state.purchaseType + (state.annualVolume ? ' | Annual volume: ' + state.annualVolume : ''),
   };
 
-  var API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
+  var API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://sloi-ai-production.up.railway.app';
 
   fetch(API_BASE + '/v1/orders', {
     method: 'POST',
