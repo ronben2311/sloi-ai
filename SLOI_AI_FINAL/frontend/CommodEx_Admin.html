@@ -49,6 +49,7 @@ html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:14px;color
 .live-badge{display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 10px;border-radius:12px;font-size:12px}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes spin{to{transform:rotate(360deg)}}
 .qa-bar{display:flex;gap:6px;flex-wrap:wrap;padding:8px 24px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0}
 .qa{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;border:1px solid;transition:all .15s;white-space:nowrap}
 .badge{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px;letter-spacing:.03em}
@@ -377,9 +378,9 @@ select.inp option{background:var(--surface)}
     <div class="card">
       <div class="card-title">// ALL NEGOTIATIONS</div>
       <table>
-        <thead><tr><th>ID</th><th>Buyer</th><th>Product</th><th>Rounds</th><th>Deal Price</th><th>Status</th><th>Time</th></tr></thead>
+        <thead><tr><th>ID</th><th>Buyer</th><th>Product</th><th>Rounds</th><th>Deal Price</th><th>Status</th><th>Time</th><th></th></tr></thead>
         <tbody id="neg-history-body">
-          <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>
+          <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>
         </tbody>
       </table>
     </div>
@@ -839,6 +840,40 @@ select.inp option{background:var(--surface)}
 
     </div>
 
+    <!-- LEGALCONTRACT AI -->
+    <div style="font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:18px 0 10px">// LEGAL AGENT</div>
+    <div style="background:var(--surface);border:1px solid rgba(168,85,247,.3);border-radius:8px;overflow:hidden;margin-bottom:14px">
+      <div style="padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(168,85,247,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚖️</div>
+          <div>
+            <div style="font-size:15px;font-weight:600;color:var(--white)">LegalContract AI</div>
+            <div style="font-size:12px;color:var(--muted)">Drafts ICC/UNIDROIT-compliant commodity sale contracts from negotiation data · sends to partner lawyer for review</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:4px 10px;border-radius:12px;font-size:12px">On-demand</span>
+        </div>
+      </div>
+      <div style="padding:14px 18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:12px">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px">
+          <div style="color:var(--muted);margin-bottom:4px">Contracts generated</div>
+          <div style="font-family:Fraunces,serif;font-size:20px;font-weight:700;color:var(--white)" id="legal-count">0</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px">
+          <div style="color:var(--muted);margin-bottom:4px">Sent for review</div>
+          <div style="font-family:Fraunces,serif;font-size:20px;font-weight:700;color:#c084fc" id="legal-sent">0</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px">
+          <div style="color:var(--muted);margin-bottom:4px">Lawyer email</div>
+          <div style="font-size:11px;color:var(--teal);word-break:break-all" id="legal-lawyer-display">Not set — <a href="#" onclick="show('settings',null);return false" style="color:var(--indigo)">Settings</a></div>
+        </div>
+      </div>
+      <div style="padding:0 18px 14px;font-size:12px;color:var(--muted)">
+        To generate a contract, go to <b style="color:var(--white)">Negotiations</b> and click <b style="color:var(--white)">📜 Contract</b> on any completed negotiation.
+      </div>
+    </div>
+
     <!-- AGENT LOG -->
     <div class="card" style="margin-top:14px">
       <div class="card-title">// AGENT ACTIVITY LOG — TODAY</div>
@@ -877,6 +912,13 @@ select.inp option{background:var(--surface)}
           <div style="display:flex;align-items:center;gap:8px"><span class="badge ba">●</span><span style="color:var(--muted)">TradeFinex — pending</span></div>
         </div>
         <div style="height:1px;background:var(--border);margin:12px 0"></div>
+        <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:8px">LEGAL AGENT</div>
+        <div style="margin-bottom:10px">
+          <label class="flabel">Partner Lawyer Email</label>
+          <input class="inp" id="lawyer-email" placeholder="lawyer@yourfirm.com" oninput="saveLawyerEmail(this.value)"/>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">Contracts generated by LegalContract AI are sent to this address for review.</div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:12px 0"></div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
           <button class="btn btn-sm" onclick="window.open('m2m-homepage.html','_blank')">Homepage</button>
           <button class="btn btn-sm" onclick="window.open('investor.html','_blank')">Investor page</button>
@@ -888,6 +930,41 @@ select.inp option{background:var(--surface)}
 
   </div>
 </div>
+</div>
+
+<!-- CONTRACT MODAL -->
+<div class="modal-bg" id="contract-modal" onclick="if(event.target===this)closeContractModal()">
+  <div class="modal" style="max-width:640px;width:calc(100vw - 32px)">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">⚖️ LegalContract AI</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px" id="contract-modal-sub">Generating contract…</div>
+      </div>
+      <button class="modal-close" onclick="closeContractModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="contract-generating" style="display:flex;align-items:center;gap:10px;padding:20px 0;color:var(--muted);font-size:12px">
+        <div style="width:16px;height:16px;border:2px solid var(--border);border-top-color:#c084fc;border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
+        Claude is drafting your contract…
+      </div>
+      <div id="contract-ready" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <label class="flabel" style="margin:0">Contract draft — review &amp; edit before sending</label>
+          <span style="font-size:10px;color:var(--muted)">ICC / UNIDROIT framework</span>
+        </div>
+        <textarea class="inp" id="contract-text" style="min-height:320px;resize:vertical;font-size:12px;line-height:1.8;font-family:'IBM Plex Mono',monospace"></textarea>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:10px;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;font-size:12px">
+          <span style="color:var(--muted)">Send to:</span>
+          <span id="contract-lawyer-email" style="color:var(--teal)">—</span>
+          <a href="#" onclick="show('settings',null);closeContractModal();return false" style="margin-left:auto;color:var(--indigo);font-size:11px">Change →</a>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeContractModal()">Cancel</button>
+      <button class="btn" id="contract-send-btn" style="background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.4);color:#c084fc;opacity:.4;cursor:not-allowed" disabled onclick="sendContractToLawyer()">📧 Send to Lawyer</button>
+    </div>
+  </div>
 </div>
 
 <!-- TG MODAL -->
@@ -1095,10 +1172,11 @@ function renderNegHistory(negs) {
       '<td style="color:var(--green)">' + price + '</td>' +
       '<td>' + (STATUS_BADGE[n.status]||n.status) + '</td>' +
       '<td style="color:var(--muted);font-size:12px">' + time + '</td>' +
+      '<td><button class="btn btn-xs" onclick="openContractModal(\'' + n.id + '\',this)" style="white-space:nowrap">📜 Contract</button></td>' +
       '</tr>';
   }).join('');
   document.getElementById('neg-history-body').innerHTML = html ||
-    '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">No negotiations yet</td></tr>';
+    '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No negotiations yet</td></tr>';
 }
 
 function renderBrokers(){var html='';BROKERS.forEach(function(b){html+='<div class="broker-row"><div class="br-av" style="background:'+b.color+';color:'+b.ct+'">'+b.init+'</div><div class="br-info"><div class="br-name">'+b.name+'</div><div class="br-meta">'+b.company+' · '+b.territory+'</div></div><div class="br-stats"><div class="brs"><div class="brs-v">'+b.deals+'</div><div class="brs-l">Deals</div></div><div class="brs"><div class="brs-v">'+b.volume+'</div><div class="brs-l">Volume</div></div><div class="brs"><div class="brs-v" style="color:var(--violet)">'+b.fees+'</div><div class="brs-l">LOI fees</div></div><div class="brs"><div class="brs-v" style="color:var(--gold)">'+b.pipeline+'</div><div class="brs-l">Pipeline</div></div></div><div style="display:flex;gap:5px;flex-shrink:0"><span class="badge bg">Active</span><button class="btn btn-xs btn-g" onclick="openTG()">📲</button><button class="btn btn-xs">Edit</button></div></div>';});document.getElementById('broker-list').innerHTML=html;}
@@ -1632,6 +1710,193 @@ function downloadCatalog(e) {
     })
     .catch(function() { showToast('⚠ Could not download catalog', 'gold'); });
 }
+
+// ── LEGAL CONTRACT AI ────────────────────────────────────────────────────────
+
+function getLawyerEmail() {
+  return localStorage.getItem('sloi_lawyer_email') || '';
+}
+
+function saveLawyerEmail(val) {
+  localStorage.setItem('sloi_lawyer_email', val.trim());
+  updateLegalAgentDisplay();
+}
+
+function updateLegalAgentDisplay() {
+  var email = getLawyerEmail();
+  var el = document.getElementById('legal-lawyer-display');
+  if (el) el.innerHTML = email
+    ? '<span style="color:var(--teal)">' + email + '</span>'
+    : 'Not set — <a href="#" onclick="show(\'settings\',null);return false" style="color:var(--indigo)">Settings</a>';
+  var inp = document.getElementById('lawyer-email');
+  if (inp && !inp.value) inp.value = email;
+}
+
+var _contractNegId = null;
+
+function openContractModal(negId, btn) {
+  _contractNegId = negId;
+  var email = getLawyerEmail();
+  document.getElementById('contract-modal-sub').textContent = 'Negotiation #' + negId;
+  document.getElementById('contract-generating').style.display = 'flex';
+  document.getElementById('contract-ready').style.display = 'none';
+  var sendBtn = document.getElementById('contract-send-btn');
+  sendBtn.disabled = true;
+  sendBtn.style.opacity = '.4';
+  sendBtn.style.cursor = 'not-allowed';
+  var lawyerEl = document.getElementById('contract-lawyer-email');
+  lawyerEl.textContent = email || 'No lawyer email — configure in Settings';
+  document.getElementById('contract-modal').classList.add('open');
+
+  // Find neg data from rendered table row
+  var row = btn ? btn.closest('tr') : null;
+  var cells = row ? row.querySelectorAll('td') : [];
+  var negData = {
+    id: negId,
+    buyer: cells[1] ? cells[1].textContent.trim() : '—',
+    product: cells[2] ? cells[2].textContent.trim() : '—',
+    rounds: cells[3] ? cells[3].textContent.trim() : '—',
+    price: cells[4] ? cells[4].textContent.trim() : '—',
+    date: new Date().toLocaleDateString('en-GB', {year:'numeric',month:'long',day:'numeric'})
+  };
+
+  generateContractText(negData);
+}
+
+function generateContractText(data) {
+  fetch(api.base + '/admin/generate-contract', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + api.token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ negotiation_id: data.id, buyer: data.buyer, product: data.product, agreed_price: data.price, rounds: data.rounds, date: data.date })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) {
+    document.getElementById('contract-text').value = res.contract || buildFallbackContract(data);
+    showContractReady();
+  })
+  .catch(function() {
+    document.getElementById('contract-text').value = buildFallbackContract(data);
+    showContractReady();
+  });
+}
+
+function buildFallbackContract(d) {
+  return [
+    'COMMODITY SALE CONTRACT',
+    '═══════════════════════════════════════════════════════',
+    '',
+    'Contract Reference: SLOI-' + d.id,
+    'Date: ' + d.date,
+    '',
+    'PARTIES',
+    '───────',
+    'Buyer: ' + d.buyer,
+    'Seller: [Supplier REF — to be disclosed upon LC confirmation]',
+    'Intermediary: SLOI AI Ltd.',
+    '',
+    'COMMODITY',
+    '─────────',
+    'Product: ' + d.product,
+    'Agreed Price: ' + d.price,
+    'Negotiation Rounds: ' + d.rounds,
+    '',
+    'TERMS & CONDITIONS',
+    '──────────────────',
+    '1. GOVERNING LAW',
+    '   This contract is governed by the ICC Uniform Rules for Demand Guarantees',
+    '   (URDG 758) and UNIDROIT Principles of International Commercial Contracts.',
+    '',
+    '2. PAYMENT',
+    '   Payment shall be made by confirmed, irrevocable Letter of Credit (LC)',
+    '   issued by a first-class bank acceptable to the Seller.',
+    '   LC must be received within 5 banking days of contract execution.',
+    '',
+    '3. DELIVERY',
+    '   Incoterms: To be agreed — CIF destination port or FOB origin port.',
+    '   Delivery schedule: As per addendum.',
+    '',
+    '4. QUALITY & INSPECTION',
+    '   Goods shall conform to international commodity standards.',
+    '   SGS or equivalent third-party inspection at loading port.',
+    '',
+    '5. FORCE MAJEURE',
+    '   Neither party shall be liable for failure due to events beyond reasonable',
+    '   control including acts of God, war, sanctions, or port closures.',
+    '',
+    '6. DISPUTE RESOLUTION',
+    '   Disputes shall be resolved by ICC Arbitration, Paris, under ICC Rules.',
+    '',
+    '7. CONFIDENTIALITY',
+    '   Supplier identity is strictly confidential and protected by SLOI AI RLS.',
+    '   Buyer acknowledges this condition as a material term of this contract.',
+    '',
+    '═══════════════════════════════════════════════════════',
+    'SIGNATURES',
+    '',
+    'Buyer: _________________________ Date: _______________',
+    '',
+    'Seller: ________________________ Date: _______________',
+    '        (via SLOI AI authorised representative)',
+    '',
+    '═══════════════════════════════════════════════════════',
+    '⚠ DRAFT — Pending review by partner lawyer before execution.',
+    '  Generated by SLOI AI LegalContract Agent · ' + d.date,
+  ].join('\n');
+}
+
+function showContractReady() {
+  document.getElementById('contract-generating').style.display = 'none';
+  document.getElementById('contract-ready').style.display = 'block';
+  var sendBtn = document.getElementById('contract-send-btn');
+  sendBtn.disabled = !getLawyerEmail();
+  sendBtn.style.opacity = getLawyerEmail() ? '1' : '.4';
+  sendBtn.style.cursor = getLawyerEmail() ? 'pointer' : 'not-allowed';
+}
+
+function closeContractModal() {
+  document.getElementById('contract-modal').classList.remove('open');
+  _contractNegId = null;
+}
+
+function sendContractToLawyer() {
+  var email = getLawyerEmail();
+  if (!email) { showToast('⚠ No lawyer email configured — go to Settings', 'gold'); return; }
+  var contract = document.getElementById('contract-text').value;
+  var sendBtn = document.getElementById('contract-send-btn');
+  sendBtn.disabled = true;
+  sendBtn.textContent = 'Sending…';
+
+  fetch(api.base + '/admin/send-contract-email', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + api.token, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ to: email, negotiation_id: _contractNegId, contract_text: contract })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function() {
+    var count = parseInt(localStorage.getItem('sloi_legal_sent') || '0') + 1;
+    localStorage.setItem('sloi_legal_sent', count);
+    var el = document.getElementById('legal-sent');
+    if (el) el.textContent = count;
+    showToast('✓ Contract sent to ' + email, 'green');
+    closeContractModal();
+  })
+  .catch(function() {
+    // Fallback: open email client
+    var subject = encodeURIComponent('SLOI AI — Contract Draft #' + _contractNegId);
+    var body = encodeURIComponent(contract);
+    window.open('mailto:' + email + '?subject=' + subject + '&body=' + body);
+    showToast('✓ Opened email client', 'green');
+    closeContractModal();
+  });
+}
+
+// Initialise legal agent display on page load
+(function() {
+  updateLegalAgentDisplay();
+  var count = localStorage.getItem('sloi_legal_sent') || '0';
+  var sentEl = document.getElementById('legal-sent');
+  if (sentEl) sentEl.textContent = count;
+})();
 </script>
 </body>
 </html>

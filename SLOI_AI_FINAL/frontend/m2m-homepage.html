@@ -28,11 +28,10 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   pointer-events:none;z-index:0}
 
 /* ── NAV ── */
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:72px;
   background:rgba(6,6,14,.88);border-bottom:1px solid rgba(255,255,255,.05);backdrop-filter:blur(20px)}
-.nav-logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;display:flex;flex-direction:column;align-items:flex-start;gap:2px}
+.nav-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.03em}
 .nav-logo em{font-style:italic;color:var(--indigo)}
-.nav-tag{font-size:9px;color:var(--muted);font-weight:400;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
 .nav-links{display:flex;gap:28px;font-size:11px}
 .nav-links a{color:var(--muted);text-decoration:none;transition:color .15s}
 .nav-links a:hover{color:var(--white)}
@@ -43,7 +42,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .btn-cta-nav:hover{opacity:.85;transform:translateY(-1px)}
 
 /* ── TICKER ── */
-.ticker-wrap{overflow:hidden;border-bottom:1px solid var(--border);padding:9px 0;background:rgba(13,13,26,.8);position:relative;z-index:1}
+.ticker-wrap{overflow:hidden;border-bottom:1px solid var(--border);padding:11px 0;background:rgba(13,13,26,.8);position:relative;z-index:1;margin-top:10px}
 .ticker-track{display:flex;gap:48px;animation:ticker 35s linear infinite;white-space:nowrap}
 @keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 .ticker-item{font-size:11px;color:var(--muted);flex-shrink:0;display:flex;align-items:center;gap:7px}
@@ -248,7 +247,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     padding-right:16px;
     /* push nav content below the device status bar */
     padding-top:env(safe-area-inset-top,0px);
-    height:calc(56px + env(safe-area-inset-top,0px));
+    height:calc(72px + env(safe-area-inset-top,0px));
     /* remove backdrop-filter on mobile — known to cause sticky issues on Android */
     -webkit-backdrop-filter:none;
     backdrop-filter:none;
@@ -288,7 +287,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 
 <!-- NAV -->
 <nav>
-  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tag">Smart negotiation · LOI generation</span></a>
+  <a href="m2m-homepage.html" class="nav-logo">Sloi<em>AI</em></a>
   <div class="nav-links">
     <a href="#how">How it works</a>
     <a href="#who">Who it's for</a>
