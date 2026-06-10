@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dev Login — SLOI AI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Mono',monospace;background:#06060e;color:#cac8e4;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.wrap{max-width:420px;width:100%;padding:24px}
+.badge{display:inline-block;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#ef4444;font-size:11px;padding:3px 10px;border-radius:3px;letter-spacing:.06em;margin-bottom:24px}
+h1{font-size:22px;font-weight:700;color:#eeedfa;margin-bottom:6px}
+.sub{font-size:12px;color:#6b6b8a;margin-bottom:28px;line-height:1.6}
+.role-btn{display:flex;align-items:center;gap:14px;width:100%;background:#0d0d1a;border:1px solid #1a1a2e;border-radius:8px;padding:14px 16px;margin-bottom:10px;cursor:pointer;text-align:left;transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.role-btn:hover{border-color:rgba(91,95,239,.5);background:#11111e}
+.role-icon{font-size:24px;flex-shrink:0}
+.role-name{font-size:14px;font-weight:600;color:#eeedfa}
+.role-desc{font-size:11px;color:#6b6b8a;margin-top:2px}
+.divider{border:none;border-top:1px solid #1a1a2e;margin:20px 0}
+.clear-btn{width:100%;background:none;border:1px solid rgba(239,68,68,.25);color:#ef4444;border-radius:6px;padding:10px;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.clear-btn:hover{background:rgba(239,68,68,.08)}
+.current{font-size:11px;color:#6b6b8a;text-align:center;margin-top:14px}
+.current span{color:#5b5fef}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="badge">⚠ DEV ONLY — remove before production</div>
+  <h1>Mock Login</h1>
+  <p class="sub">Sets a fake session in localStorage and redirects to the portal. No LinkedIn, no backend call. For UI testing only.</p>
+
+  <button class="role-btn" onclick="mockLogin('buyer')">
+    <span class="role-icon">🏢</span>
+    <div>
+      <div class="role-name">Buyer</div>
+      <div class="role-desc">Gulf Cement LLC · UAE · 340 credits → CommodEx_Platform.html</div>
+    </div>
+  </button>
+
+  <button class="role-btn" onclick="mockLogin('broker')">
+    <span class="role-icon">🌍</span>
+    <div>
+      <div class="role-name">Trader / Broker</div>
+      <div class="role-desc">Atlas Trading · Germany · active → CommodEx_Broker.html</div>
+    </div>
+  </button>
+
+  <button class="role-btn" onclick="mockLogin('boss')">
+    <span class="role-icon">👑</span>
+    <div>
+      <div class="role-name">Boss / Admin</div>
+      <div class="role-desc">SLOI AI HQ · full access → CommodEx_Admin.html</div>
+    </div>
+  </button>
+
+  <hr class="divider"/>
+
+  <button class="clear-btn" onclick="clearSession()">✕ Clear session &amp; go to login</button>
+
+  <div class="current" id="current-session"></div>
+</div>
+
+<script>
+var MOCK_USERS = {
+  buyer: {
+    id: 'mock-buyer-001',
+    name: 'Gulf Cement LLC',
+    email: 'procurement@gulfcement.ae',
+    role: 'buyer',
+    org_name: 'Gulf Cement LLC',
+    country: 'UAE',
+    credits: 340
+  },
+  broker: {
+    id: 'mock-broker-001',
+    name: 'Klaus Weber',
+    email: 'k.weber@atlas-trading.de',
+    role: 'broker',
+    org_name: 'Atlas Trading GmbH',
+    country: 'Germany',
+    credits: 0
+  },
+  boss: {
+    id: 'mock-boss-001',
+    name: 'Boss · SLOI AI',
+    email: 'admin@sloiai.com',
+    role: 'boss',
+    org_name: 'SLOI AI Ltd.',
+    country: 'Global',
+    credits: 9999
+  }
+};
+
+var PORTALS = {
+  buyer:  'CommodEx_Platform.html',
+  broker: 'CommodEx_Broker.html',
+  boss:   'CommodEx_Admin.html'
+};
+
+function mockLogin(role) {
+  var user = MOCK_USERS[role];
+  var fakeJwt = 'mock.' + btoa(JSON.stringify({sub: user.id, role: role, exp: 9999999999})) + '.dev';
+  localStorage.setItem('sloi_jwt', fakeJwt);
+  localStorage.setItem('sloi_refresh', 'mock-refresh-token');
+  localStorage.setItem('sloi_role', role);
+  localStorage.setItem('sloi_user', JSON.stringify(user));
+  localStorage.setItem('sloi_dev_mock', '1');
+  window.location.href = PORTALS[role];
+}
+
+function clearSession() {
+  ['sloi_jwt','sloi_refresh','sloi_role','sloi_user','sloi_api_key','sloi_dev_mock'].forEach(function(k){ localStorage.removeItem(k); });
+  window.location.href = 'login.html';
+}
+
+function showCurrent() {
+  var role = localStorage.getItem('sloi_role');
+  var user = null;
+  try { user = JSON.parse(localStorage.getItem('sloi_user')); } catch(e){}
+  var el = document.getElementById('current-session');
+  if (role && user) {
+    el.innerHTML = 'Current session: <span>' + user.name + ' · ' + role + '</span>';
+  } else {
+    el.textContent = 'No active session';
+  }
+}
+showCurrent();
+</script>
+</body>
+</html>

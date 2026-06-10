@@ -8,19 +8,19 @@
 <style>
 :root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg)}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
 .logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
 .logo em{font-style:italic;color:var(--indigo)}
-.logo-tag{font-size:9px;color:var(--muted);margin-left:6px;font-weight:400}
-.nav-links{display:flex;gap:20px;font-size:11px}
+.logo-tag{font-size:11px;color:var(--muted);margin-left:6px;font-weight:400}
+.nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
 .wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:48px 24px 80px}
 
 /* TABS */
 .tabs-nav{display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:28px}
-.tnav{flex:1;padding:11px 0;text-align:center;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);border:none;background:none;font-family:'IBM Plex Mono',monospace;transition:all .15s;border-right:1px solid var(--border)}
+.tnav{flex:1;padding:11px 0;text-align:center;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border:none;background:none;font-family:'IBM Plex Mono',monospace;transition:all .15s;border-right:1px solid var(--border)}
 .tnav:last-child{border-right:none}
 .tnav:hover{color:var(--white)}
 .tnav.active{background:var(--surface2);color:var(--white)}
@@ -28,30 +28,30 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 
 /* HERO */
 .hero{margin-bottom:40px}
-.eyebrow{font-size:10px;color:var(--indigo);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
 .eyebrow::after{content:'';flex:1;height:1px;background:rgba(91,95,239,.3)}
 h1{font-family:'Fraunces',serif;font-size:clamp(36px,5vw,56px);font-weight:900;line-height:.93;letter-spacing:-.03em;color:var(--white);margin-bottom:14px}
 h1 em{font-style:italic;color:var(--indigo)}
-.hero-sub{font-size:13px;color:var(--muted);line-height:1.85;max-width:620px}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.85;max-width:620px}
 
 /* ARCHITECTURE */
 .arch{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:28px}
-.arch-title{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
+.arch-title{font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;font-weight:600}
 .arch-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:center}
 .af-node{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:10px;text-align:center}
 .af-icon{font-size:20px;margin-bottom:5px}
-.af-label{font-size:10px;font-weight:600;color:var(--white)}
-.af-sub{font-size:9px;color:var(--muted);margin-top:2px;line-height:1.4}
+.af-label{font-size:12px;font-weight:600;color:var(--white)}
+.af-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
 .af-arrow{text-align:center;font-size:18px;color:var(--border2)}
 .af-node.highlight{border-color:rgba(91,95,239,.5);background:rgba(91,95,239,.08)}
 
 /* EVENTS TABLE */
 .events-grid{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
-.event-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:11px}
+.event-row{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:13px}
 .ev-name{font-family:'IBM Plex Mono',monospace;font-weight:700;width:180px;flex-shrink:0}
-.ev-dir{width:80px;flex-shrink:0;font-size:9px;font-weight:700;padding:2px 6px;border-radius:2px;text-align:center;align-self:flex-start}
+.ev-dir{width:80px;flex-shrink:0;font-size:11px;font-weight:700;padding:2px 6px;border-radius:2px;text-align:center;align-self:flex-start}
 .ev-desc{flex:1;color:var(--muted);line-height:1.5}
-.ev-portal{font-size:9px;color:var(--muted);margin-top:4px}
+.ev-portal{font-size:11px;color:var(--muted);margin-top:4px}
 .dir-s2c{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
 .dir-c2s{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
 .dir-both{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
@@ -60,39 +60,39 @@ h1 em{font-style:italic;color:var(--indigo)}
 .portal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
 .portal-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:16px}
 .pc-icon{font-size:24px;margin-bottom:8px}
-.pc-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px}
-.pc-role{font-size:10px;color:var(--muted);margin-bottom:8px}
+.pc-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px}
+.pc-role{font-size:12px;color:var(--muted);margin-bottom:8px}
 .pc-events{display:flex;flex-direction:column;gap:3px}
-.pc-event{font-size:10px;display:flex;align-items:center;gap:5px}
-.pc-event::before{content:'→';color:var(--indigo);font-size:10px}
+.pc-event{font-size:12px;display:flex;align-items:center;gap:5px}
+.pc-event::before{content:'→';color:var(--indigo);font-size:12px}
 
 /* CODE */
 .code-wrap{background:var(--bg);border:1px solid var(--border2);border-radius:6px;overflow:hidden;margin-bottom:14px}
 .code-header{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;border-bottom:1px solid var(--border2);background:var(--surface2)}
-.code-lang{font-size:10px;color:var(--muted);letter-spacing:.06em}
-.code-copy{font-size:10px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:3px;padding:2px 8px;font-family:'IBM Plex Mono',monospace}
+.code-lang{font-size:12px;color:var(--muted);letter-spacing:.06em}
+.code-copy{font-size:12px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:3px;padding:2px 8px;font-family:'IBM Plex Mono',monospace}
 .code-copy:hover{border-color:var(--indigo);color:var(--violet)}
-pre{padding:16px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--text);tab-size:2}
+pre{padding:16px;font-size:13px;line-height:1.85;overflow-x:auto;color:var(--text);tab-size:2}
 .kw{color:var(--violet)}.str{color:var(--green)}.cm{color:var(--muted)}.num{color:var(--gold)}.fn{color:var(--teal)}.cls{color:#e8a94a}
-.sec-title{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.08em;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;text-transform:uppercase}
+.sec-title{font-size:12px;font-weight:600;color:var(--white);letter-spacing:.08em;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;text-transform:uppercase}
 .sec{margin-bottom:28px}
 
 /* CHECKLIST */
 .checklist{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px}
-.cl-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:11px}
+.cl-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);font-size:13px}
 .cl-item:last-child{border-bottom:none}
 .cl-item input{accent-color:var(--indigo);margin-top:2px;flex-shrink:0}
 .cl-text{color:var(--text);line-height:1.5}
-.cl-tag{font-size:9px;padding:1px 6px;border-radius:2px;margin-left:4px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);flex-shrink:0}
+.cl-tag{font-size:11px;padding:1px 6px;border-radius:2px;margin-left:4px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);flex-shrink:0}
 
 /* BADGE */
-.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.badge{display:inline-flex;font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px}
 .bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
 .ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
 .bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
 .bt{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
 
-footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:11px}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:13px}
 .footer-links{display:flex;gap:20px}
 .footer-links a{color:var(--muted);text-decoration:none}.footer-links a:hover{color:var(--white)}
 </style>
@@ -135,13 +135,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
       </div>
       <div class="af-arrow">→</div>
       <div style="display:flex;flex-direction:column;gap:5px">
-        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">⚡ Admin</div><div style="color:var(--muted)">All sessions</div></div>
-        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">👤 Buyer</div><div style="color:var(--muted)">Own deals</div></div>
-        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">🌍 Trader</div><div style="color:var(--muted)">Assigned</div></div>
-        <div class="af-node" style="padding:6px 8px;font-size:9px"><div style="font-weight:600;color:var(--white)">🏭 Supplier</div><div style="color:var(--muted)">RFQ only</div></div>
+        <div class="af-node" style="padding:6px 8px;font-size:11px"><div style="font-weight:600;color:var(--white)">⚡ Admin</div><div style="color:var(--muted)">All sessions</div></div>
+        <div class="af-node" style="padding:6px 8px;font-size:11px"><div style="font-weight:600;color:var(--white)">👤 Buyer</div><div style="color:var(--muted)">Own deals</div></div>
+        <div class="af-node" style="padding:6px 8px;font-size:11px"><div style="font-weight:600;color:var(--white)">🌍 Trader</div><div style="color:var(--muted)">Assigned</div></div>
+        <div class="af-node" style="padding:6px 8px;font-size:11px"><div style="font-weight:600;color:var(--white)">🏭 Supplier</div><div style="color:var(--muted)">RFQ only</div></div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:10px;color:var(--muted)">
+    <div style="display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)">
       <span class="badge bv">SSE stream</span>
       Events: TEXT_CHUNK · ROUND_COMPLETE · AWAIT_HUMAN · LOI_GENERATED · PRICE_UPDATE · LEAD_FOUND · STATE_PATCH
     </div>
@@ -160,11 +160,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <div id="panel-events" class="tab-panel active">
     <div class="sec">
       <div class="sec-title">// AG-UI EVENT TYPES — SLOI AI</div>
-      <p style="font-size:11px;color:var(--muted);margin-bottom:14px">All events are JSON objects streamed over SSE. S→C = server to client. C→S = client to server (via POST).</p>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px">All events are JSON objects streamed over SSE. S→C = server to client. C→S = client to server (via POST).</p>
 
       <div class="events-grid">
         <!-- Negotiation events -->
-        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:4px 0;margin-top:4px">Negotiation</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:4px 0;margin-top:4px">Negotiation</div>
 
         <div class="event-row">
           <div class="ev-name" style="color:var(--violet)">NEGOTIATION_STARTED</div>
@@ -203,7 +203,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
         </div>
 
         <!-- Price events -->
-        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:4px 0;margin-top:8px">Prices & Leads</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:4px 0;margin-top:8px">Prices & Leads</div>
 
         <div class="event-row">
           <div class="ev-name" style="color:var(--teal)">PRICE_UPDATE</div>
@@ -222,7 +222,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
         </div>
 
         <!-- System events -->
-        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:4px 0;margin-top:8px">System</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:4px 0;margin-top:8px">System</div>
         <div class="event-row">
           <div class="ev-name" style="color:var(--muted)">STATE_PATCH</div>
           <div class="ev-dir dir-s2c">S→C</div>
@@ -380,7 +380,7 @@ app.<span class="fn">post</span>(<span class="str">'/v1/negotiations/:id/approve
 
     <div class="sec">
       <div class="sec-title">// GLOBAL SSE STREAM — GET /v1/stream</div>
-      <p style="font-size:11px;color:var(--muted);margin-bottom:12px">All portals connect to a single personal stream filtered by role/user_id. One connection, all events.</p>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">All portals connect to a single personal stream filtered by role/user_id. One connection, all events.</p>
       <div class="code-wrap">
         <div class="code-header"><span class="code-lang">NODE.JS — Global event stream with RLS filtering</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
 <pre><span class="cm">// GET /v1/stream — persistent SSE connection per authenticated user</span>
@@ -469,7 +469,7 @@ app.<span class="fn">get</span>(<span class="str">'/v1/stream'</span>, <span cla
   <div id="panel-frontend" class="tab-panel">
     <div class="sec">
       <div class="sec-title">// AG-UI CLIENT — shared across all portals</div>
-      <p style="font-size:11px;color:var(--muted);margin-bottom:12px">One JS class. Each portal imports it and registers handlers for the events it cares about.</p>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px">One JS class. Each portal imports it and registers handlers for the events it cares about.</p>
       <div class="code-wrap">
         <div class="code-header"><span class="code-lang">JAVASCRIPT — agui-client.js (shared)</span><button class="code-copy" onclick="copyCode(this)">Copy</button></div>
 <pre><span class="cm">// agui-client.js — include in every portal</span>
@@ -691,7 +691,7 @@ agui.<span class="fn">on</span>(<span class="str">'LOI_GENERATED'</span>, () => 
     <div class="sec">
       <div class="sec-title">// SETUP CHECKLIST — developer</div>
       <div class="checklist">
-        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:4px 0;text-transform:uppercase">Backend (Railway)</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:4px 0;text-transform:uppercase">Backend (Railway)</div>
         <div class="cl-item"><input type="checkbox"/>
           <div><div class="cl-text">Install Anthropic SDK: <code style="color:var(--teal)">npm install @anthropic-ai/sdk</code></div></div>
           <span class="cl-tag">Phase 1</span>
@@ -721,7 +721,7 @@ agui.<span class="fn">on</span>(<span class="str">'LOI_GENERATED'</span>, () => 
           <span class="cl-tag">Required</span>
         </div>
 
-        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:8px 0 4px;text-transform:uppercase">Frontend (Vercel)</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:8px 0 4px;text-transform:uppercase">Frontend (Vercel)</div>
         <div class="cl-item"><input type="checkbox"/>
           <div class="cl-text">Create <code style="color:var(--teal)">agui-client.js</code> — shared SloiAGUI class</div>
           <span class="cl-tag">Phase 2</span>
@@ -743,7 +743,7 @@ agui.<span class="fn">on</span>(<span class="str">'LOI_GENERATED'</span>, () => 
           <span class="cl-tag">Phase 2</span>
         </div>
 
-        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:8px 0 4px;text-transform:uppercase">Telegram Bot integration</div>
+        <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.06em;padding:8px 0 4px;text-transform:uppercase">Telegram Bot integration</div>
         <div class="cl-item"><input type="checkbox"/>
           <div class="cl-text">Add <code style="color:var(--teal)">POST /v1/telegram-bot/notify</code> — forwards AWAIT_HUMAN to Telegram Bot webhook</div>
           <span class="cl-tag">Phase 3</span>
@@ -773,11 +773,11 @@ AG_UI_HEARTBEAT_INTERVAL=15000         <span class="cm"># ms between heartbeats<
 
     <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:20px;text-align:center">
       <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">Result: one stream.<br/><em style="font-style:italic;color:var(--indigo)">Four portals. Real time.</em></div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:16px">Boss approves on Telegram → Admin popup closes → Buyer sees LOI → Trader gets notification → all from a single SSE stream.</p>
+      <p style="font-size:14px;color:var(--muted);margin-bottom:16px">Boss approves on Telegram → Admin popup closes → Buyer sees LOI → Trader gets notification → all from a single SSE stream.</p>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-        <a href="telegram-bot.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Telegram Bot setup →</a>
-        <a href="payments.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Payment infra →</a>
-        <a href="docs.html" style="background:var(--indigo);color:#fff;padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Full API docs →</a>
+        <a href="telegram-bot.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:13px;text-decoration:none">Telegram Bot setup →</a>
+        <a href="payments.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:13px;text-decoration:none">Payment infra →</a>
+        <a href="docs.html" style="background:var(--indigo);color:#fff;padding:9px 16px;border-radius:4px;font-size:13px;text-decoration:none">Full API docs →</a>
       </div>
     </div>
   </div>
@@ -793,7 +793,7 @@ AG_UI_HEARTBEAT_INTERVAL=15000         <span class="cm"># ms between heartbeats<
     <a href="agentkit.html">AgentKit</a>
     <a href="terms.html">Terms</a>
   </div>
-  <div style="font-size:10px;color:var(--muted)">© 2026 SLOI AI Ltd.</div>
+  <div style="font-size:12px;color:var(--muted)">© 2026 SLOI AI Ltd.</div>
 </footer>
 
 <script>

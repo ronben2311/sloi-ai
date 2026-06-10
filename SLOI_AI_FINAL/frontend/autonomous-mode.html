@@ -8,40 +8,40 @@
 <style>
 :root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg)}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
 .logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
 .logo em{font-style:italic;color:var(--indigo)}
-.logo-tag{font-size:9px;color:var(--muted);margin-left:6px;font-weight:400}
-.nav-links{display:flex;gap:20px;font-size:11px}
+.logo-tag{font-size:11px;color:var(--muted);margin-left:6px;font-weight:400}
+.nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
 
 /* LAYOUT */
 .layout{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 52px);position:relative;z-index:1}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:20px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
-.sb-section{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:12px 16px 4px;font-weight:700}
-.sb-link{display:block;padding:6px 16px;font-size:11px;color:var(--muted);text-decoration:none;transition:all .1s;border-left:2px solid transparent}
+.sb-section{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:12px 16px 4px;font-weight:700}
+.sb-link{display:block;padding:6px 16px;font-size:13px;color:var(--muted);text-decoration:none;transition:all .1s;border-left:2px solid transparent}
 .sb-link:hover{color:var(--white)}.sb-link.active{color:var(--violet);border-left-color:var(--indigo);background:rgba(91,95,239,.06)}
 .content{padding:40px 40px 80px;max-width:820px}
 
 /* HERO */
-.eyebrow{font-size:10px;color:var(--indigo);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:10px}
 .eyebrow::after{content:'';flex:1;height:1px;background:rgba(91,95,239,.3)}
 h1{font-family:'Fraunces',serif;font-size:clamp(38px,5vw,58px);font-weight:900;line-height:.93;letter-spacing:-.03em;color:var(--white);margin-bottom:14px}
 h1 em{font-style:italic;color:var(--indigo)}
 .lead{font-size:14px;color:var(--muted);line-height:1.85;max-width:600px;margin-bottom:28px}
 h2{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:10px;margin-top:28px;letter-spacing:-.01em}
-p{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px}
+p{font-size:14px;color:var(--text);line-height:1.85;margin-bottom:10px}
 
 /* COMPARE */
 .compare{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
 .cmp-card{border-radius:8px;overflow:hidden}
 .cmp-head{padding:14px 16px;display:flex;align-items:center;gap:10px}
 .cmp-icon{font-size:22px}
-.cmp-title{font-size:13px;font-weight:700}
+.cmp-title{font-size:15px;font-weight:700}
 .cmp-body{padding:12px 16px;display:flex;flex-direction:column;gap:6px}
-.cmp-row{font-size:11px;display:flex;gap:6px;align-items:flex-start}
+.cmp-row{font-size:13px;display:flex;gap:6px;align-items:flex-start}
 .cmp-row::before{content:'→';flex-shrink:0;margin-top:1px}
 .manual-card{background:rgba(82,82,110,.08);border:1px solid rgba(82,82,110,.3)}
 .manual-card .cmp-head{background:rgba(82,82,110,.12)}
@@ -54,12 +54,12 @@ p{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px}
 .flow-auto{display:flex;flex-direction:column;gap:0;background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden;margin-bottom:20px}
 .fa-step{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border)}
 .fa-step:last-child{border-bottom:none}
-.fa-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+.fa-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
 .fa-auto{background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet)}
 .fa-boss{background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.3);color:var(--gold)}
-.fa-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:2px}
-.fa-desc{font-size:10px;color:var(--muted);line-height:1.5}
-.fa-tag{font-size:9px;font-weight:700;padding:1px 6px;border-radius:2px;margin-left:6px}
+.fa-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:2px}
+.fa-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.fa-tag{font-size:11px;font-weight:700;padding:1px 6px;border-radius:2px;margin-left:6px}
 .tag-auto{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
 .tag-boss{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
 .tag-once{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
@@ -67,12 +67,12 @@ p{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px}
 /* MANDATE BUILDER */
 .mandate-builder{background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden;margin-bottom:20px}
 .mb-head{padding:12px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.mb-title{font-size:12px;font-weight:600;color:var(--white)}
+.mb-title{font-size:14px;font-weight:600;color:var(--white)}
 .mb-body{padding:16px;display:flex;flex-direction:column;gap:10px}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .field{display:flex;flex-direction:column;gap:4px}
-.flabel{font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
-.inp{background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:8px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:11px;outline:none;width:100%;transition:border-color .15s}
+.flabel{font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.inp{background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:8px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;width:100%;transition:border-color .15s}
 .inp:focus{border-color:var(--indigo)}.inp::placeholder{color:var(--muted)}
 select.inp option{background:var(--surface)}
 
@@ -85,39 +85,39 @@ select.inp option{background:var(--surface)}
 .toggle-switch input:checked + .toggle-slider{background:var(--indigo)}
 .toggle-switch input:checked + .toggle-slider:before{transform:translateX(20px)}
 .toggle-label{flex:1}
-.tl-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:4px}
-.tl-desc{font-size:10px;color:var(--muted);line-height:1.6}
+.tl-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px}
+.tl-desc{font-size:12px;color:var(--muted);line-height:1.6}
 
 /* AUTO CONDITIONS */
 .conditions{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-.cond-item{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:9px 12px;display:flex;align-items:flex-start;gap:10px;font-size:11px}
+.cond-item{background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:9px 12px;display:flex;align-items:flex-start;gap:10px;font-size:13px}
 .cond-check{width:16px;height:16px;accent-color:var(--indigo);flex-shrink:0;margin-top:1px}
 .cond-body{flex:1}
 .cond-title{font-weight:600;color:var(--white);margin-bottom:2px}
-.cond-desc{font-size:10px;color:var(--muted)}
+.cond-desc{font-size:12px;color:var(--muted)}
 
 /* REPUTATION */
 .rep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
 .rep-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px;text-align:center}
 .rep-val{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:4px}
-.rep-label{font-size:10px;color:var(--muted);line-height:1.4}
-.rep-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px;display:inline-block;margin-top:5px}
+.rep-label{font-size:12px;color:var(--muted);line-height:1.4}
+.rep-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px;display:inline-block;margin-top:5px}
 
 /* CODE */
 .code-wrap{background:var(--bg);border:1px solid var(--border2);border-radius:5px;overflow:hidden;margin-bottom:14px}
 .code-hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--border2);background:var(--surface2)}
-.code-lang{font-size:9px;color:var(--muted);letter-spacing:.06em}
-.code-copy{font-size:9px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:2px;padding:2px 7px;font-family:'IBM Plex Mono',monospace}
+.code-lang{font-size:11px;color:var(--muted);letter-spacing:.06em}
+.code-copy{font-size:11px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:2px;padding:2px 7px;font-family:'IBM Plex Mono',monospace}
 .code-copy:hover{border-color:var(--indigo);color:var(--violet)}
-pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--text)}
+pre{padding:14px;font-size:13px;line-height:1.85;overflow-x:auto;color:var(--text)}
 .kw{color:var(--violet)}.str{color:var(--green)}.cm{color:var(--muted)}.fn{color:var(--teal)}.num{color:var(--gold)}
 
 /* MISC */
-.sec-title{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.08em;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid var(--border);text-transform:uppercase}
+.sec-title{font-size:12px;font-weight:600;color:var(--white);letter-spacing:.08em;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid var(--border);text-transform:uppercase}
 .sec{margin-bottom:36px}
-.note{background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--text);line-height:1.7;margin-bottom:14px}
-.warn{background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.25);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--text);line-height:1.7;margin-bottom:14px}
-.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.note{background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:5px;padding:10px 14px;font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.warn{background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.25);border-radius:5px;padding:10px 14px;font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.badge{display:inline-flex;font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px}
 .bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
 .bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
 .ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
@@ -125,12 +125,12 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 
 /* LIVE DEMO */
-.demo-terminal{background:#050509;border:1px solid var(--border2);border-radius:6px;padding:16px;font-size:11px;line-height:1.9;margin-bottom:14px;font-family:'IBM Plex Mono',monospace}
+.demo-terminal{background:#050509;border:1px solid var(--border2);border-radius:6px;padding:16px;font-size:13px;line-height:1.9;margin-bottom:14px;font-family:'IBM Plex Mono',monospace}
 .dt-comment{color:var(--muted)}
 .dt-event{color:var(--violet)}
 .dt-auto{color:var(--green)}
 .dt-loi{color:var(--gold)}
-.dt-time{color:var(--muted);font-size:9px}
+.dt-time{color:var(--muted);font-size:11px}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 
@@ -196,7 +196,7 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
         <div class="cmp-row" style="color:var(--muted)">Boss reviews deal</div>
         <div class="cmp-row" style="color:var(--muted)">Boss clicks approve</div>
         <div class="cmp-row" style="color:var(--muted)">LOI generated</div>
-        <div style="margin-top:8px;font-size:10px;color:var(--muted)">⏱ Minutes → hours depending on Boss availability</div>
+        <div style="margin-top:8px;font-size:12px;color:var(--muted)">⏱ Minutes → hours depending on Boss availability</div>
       </div>
     </div>
     <div class="cmp-card auto-card">
@@ -207,7 +207,7 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
         <div class="cmp-row" style="color:var(--text)">Conditions checked automatically</div>
         <div class="cmp-row" style="color:var(--text)">LOI auto-generated if within mandate</div>
         <div class="cmp-row" style="color:var(--text)">Boss notified after (not before)</div>
-        <div style="margin-top:8px;font-size:10px;color:var(--green)">⚡ Seconds — 24/7 — no human bottleneck</div>
+        <div style="margin-top:8px;font-size:12px;color:var(--green)">⚡ Seconds — 24/7 — no human bottleneck</div>
       </div>
     </div>
   </div>
@@ -321,8 +321,8 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
       </div>
 
       <div style="display:flex;gap:8px;margin-top:4px">
-        <button style="flex:1;background:var(--indigo);color:#fff;border:none;border-radius:4px;padding:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace" onclick="saveMandateDemo()">💾 Save mandate</button>
-        <button style="background:var(--surface2);border:1px solid var(--border2);color:var(--muted);border-radius:4px;padding:10px 16px;font-size:11px;cursor:pointer;font-family:'IBM Plex Mono',monospace" onclick="alert('Mandate cancelled — autonomous mode disabled for this product.')">✕ Cancel</button>
+        <button style="flex:1;background:var(--indigo);color:#fff;border:none;border-radius:4px;padding:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace" onclick="saveMandateDemo()">💾 Save mandate</button>
+        <button style="background:var(--surface2);border:1px solid var(--border2);color:var(--muted);border-radius:4px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:'IBM Plex Mono',monospace" onclick="alert('Mandate cancelled — autonomous mode disabled for this product.')">✕ Cancel</button>
       </div>
     </div>
   </div>
@@ -390,8 +390,8 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
   <div class="warn">⚠️ These limits exist to protect the Boss. No agent, mandate, or API call can bypass them.</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px">
-      <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:8px">Hard limits (non-configurable)</div>
-      <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted)">
+      <div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:8px">Hard limits (non-configurable)</div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted)">
         <div>• deal_price can never exceed max_price</div>
         <div>• Blocked countries: always rejected</div>
         <div>• Max $1M per single auto-approved LOI</div>
@@ -401,8 +401,8 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
       </div>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px">
-      <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:8px">Configurable limits</div>
-      <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;color:var(--muted)">
+      <div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:8px">Configurable limits</div>
+      <div style="display:flex;flex-direction:column;gap:5px;font-size:13px;color:var(--muted)">
         <div>• max_price (per unit)</div>
         <div>• max_orders_per_day</div>
         <div>• max_daily_value ($)</div>
@@ -454,7 +454,7 @@ pre{padding:14px;font-size:11px;line-height:1.85;overflow-x:auto;color:var(--tex
 
   <div id="floor-prices">
     <div class="sec-title" style="margin-top:20px">// Floor price discounts — applied automatically</div>
-    <p style="font-size:11px;color:var(--muted)">When reputation tier is verified, trader floor prices are adjusted automatically. Agent with Gold tier gets 5% below standard floor on every negotiation — without asking.</p>
+    <p style="font-size:13px;color:var(--muted)">When reputation tier is verified, trader floor prices are adjusted automatically. Agent with Gold tier gets 5% below standard floor on every negotiation — without asking.</p>
     <div class="code-wrap"><div class="code-hdr"><span class="code-lang">LOGIC</span></div>
 <pre><span class="cm">// Applied in buildBrokerSystem() before negotiation starts</span>
 <span class="kw">const</span> repDiscount = {
@@ -674,11 +674,11 @@ AUTO_APPROVED
 
   <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:8px;padding:20px;text-align:center">
     <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">The agent economy<br/>needs a <em style="font-style:italic;color:var(--indigo)">settlement layer.</em></div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:16px;max-width:480px;margin-left:auto;margin-right:auto">AI agents can now procure physical commodities autonomously — within Boss-defined parameters, with compliance, reputation, and cryptographic settlement on Base.</p>
+    <p style="font-size:14px;color:var(--muted);margin-bottom:16px;max-width:480px;margin-left:auto;margin-right:auto">AI agents can now procure physical commodities autonomously — within Boss-defined parameters, with compliance, reputation, and cryptographic settlement on Base.</p>
     <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-      <a href="agentkit.html" style="background:var(--indigo);color:#fff;padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">AgentKit + USDC →</a>
-      <a href="open-network.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">Open Network →</a>
-      <a href="agui.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:11px;text-decoration:none">AG-UI spec →</a>
+      <a href="agentkit.html" style="background:var(--indigo);color:#fff;padding:9px 16px;border-radius:4px;font-size:13px;text-decoration:none">AgentKit + USDC →</a>
+      <a href="open-network.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:13px;text-decoration:none">Open Network →</a>
+      <a href="agui.html" style="background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:9px 16px;border-radius:4px;font-size:13px;text-decoration:none">AG-UI spec →</a>
     </div>
   </div>
 </div>

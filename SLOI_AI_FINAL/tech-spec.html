@@ -8,20 +8,20 @@
 <style>
 :root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--text);background:var(--bg)}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
 .logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
 .logo em{font-style:italic;color:var(--indigo)}
-.logo-tag{font-size:9px;color:var(--muted);margin-left:6px;font-weight:400}
-.nav-links{display:flex;gap:20px;font-size:11px}
+.logo-tag{font-size:11px;color:var(--muted);margin-left:6px;font-weight:400}
+.nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
 
 /* LAYOUT */
 .layout{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 52px);position:relative;z-index:1}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:20px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
-.sb-section{font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:12px 16px 4px;font-weight:700}
-.sb-link{display:block;padding:6px 16px;font-size:11px;color:var(--muted);text-decoration:none;transition:all .1s;border-left:2px solid transparent}
+.sb-section{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:12px 16px 4px;font-weight:700}
+.sb-link{display:block;padding:6px 16px;font-size:13px;color:var(--muted);text-decoration:none;transition:all .1s;border-left:2px solid transparent}
 .sb-link:hover{color:var(--white);border-left-color:var(--border2)}
 .sb-link.active{color:var(--violet);border-left-color:var(--indigo);background:rgba(91,95,239,.06)}
 .content{padding:40px 40px 80px;max-width:760px}
@@ -35,7 +35,7 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .phase-3 .phase-num{background:rgba(232,169,74,.1);border:2px solid rgba(232,169,74,.4);color:var(--gold)}
 .phase-4 .phase-num{background:rgba(45,212,191,.1);border:2px solid rgba(45,212,191,.4);color:var(--teal)}
 .phase-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white);letter-spacing:-.02em;margin-bottom:3px}
-.phase-subtitle{font-size:11px;color:var(--muted)}
+.phase-subtitle{font-size:13px;color:var(--muted)}
 .phase-meta{display:flex;gap:8px;margin-top:6px}
 
 /* TASKS */
@@ -43,10 +43,10 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .task{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px}
 .task-check{width:18px;height:18px;border:2px solid var(--border2);border-radius:3px;flex-shrink:0;margin-top:1px;cursor:pointer;accent-color:var(--indigo)}
 .task-body{flex:1}
-.task-title{font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px}
-.task-desc{font-size:10px;color:var(--muted);line-height:1.6}
-.task-file{font-size:9px;color:var(--indigo);margin-top:3px}
-.task-pri{font-size:9px;font-weight:700;padding:1px 6px;border-radius:2px;flex-shrink:0;align-self:flex-start}
+.task-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:3px}
+.task-desc{font-size:12px;color:var(--muted);line-height:1.6}
+.task-file{font-size:11px;color:var(--indigo);margin-top:3px}
+.task-pri{font-size:11px;font-weight:700;padding:1px 6px;border-radius:2px;flex-shrink:0;align-self:flex-start}
 .pri-1{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:var(--red)}
 .pri-2{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.3);color:var(--gold)}
 .pri-3{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
@@ -54,34 +54,34 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 /* CODE */
 .code-wrap{background:var(--bg);border:1px solid var(--border2);border-radius:5px;overflow:hidden;margin-bottom:12px}
 .code-header{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--border2);background:var(--surface2)}
-.code-lang{font-size:9px;color:var(--muted);letter-spacing:.06em}
-.code-copy{font-size:9px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:2px;padding:2px 7px;font-family:'IBM Plex Mono',monospace}
+.code-lang{font-size:11px;color:var(--muted);letter-spacing:.06em}
+.code-copy{font-size:11px;color:var(--muted);cursor:pointer;background:none;border:1px solid var(--border2);border-radius:2px;padding:2px 7px;font-family:'IBM Plex Mono',monospace}
 .code-copy:hover{border-color:var(--indigo);color:var(--violet)}
-pre{padding:14px;font-size:11px;line-height:1.8;overflow-x:auto;color:var(--text)}
+pre{padding:14px;font-size:13px;line-height:1.8;overflow-x:auto;color:var(--text)}
 .kw{color:var(--violet)}.str{color:var(--green)}.cm{color:var(--muted)}.num{color:var(--gold)}.fn{color:var(--teal)}
 
 /* TABLES */
-.tbl{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:11px}
-.tbl th{font-size:9px;color:var(--muted);letter-spacing:.08em;text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--surface2);text-transform:uppercase}
+.tbl{width:100%;border-collapse:collapse;margin-bottom:14px;font-size:13px}
+.tbl th{font-size:11px;color:var(--muted);letter-spacing:.08em;text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--surface2);text-transform:uppercase}
 .tbl td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr:hover td{background:rgba(91,95,239,.03)}
-.tbl-key{font-family:'IBM Plex Mono',monospace;color:var(--teal);font-size:10px}
-.tbl-type{color:var(--gold);font-size:10px}
+.tbl-key{font-family:'IBM Plex Mono',monospace;color:var(--teal);font-size:12px}
+.tbl-type{color:var(--gold);font-size:12px}
 .tbl-desc{color:var(--muted)}
 
 /* MISC */
-.sec-title{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.08em;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);text-transform:uppercase}
-.badge{display:inline-flex;font-size:9px;font-weight:700;padding:2px 8px;border-radius:2px}
+.sec-title{font-size:12px;font-weight:600;color:var(--white);letter-spacing:.08em;margin:18px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--border);text-transform:uppercase}
+.badge{display:inline-flex;font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px}
 .bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
 .ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
 .bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
 .bt{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
 .br{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)}
-.note{background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--text);line-height:1.7;margin-bottom:14px}
-.warn{background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.25);border-radius:5px;padding:10px 14px;font-size:11px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.note{background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:5px;padding:10px 14px;font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px}
+.warn{background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.25);border-radius:5px;padding:10px 14px;font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px}
 h2{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:10px;letter-spacing:-.01em}
-p{font-size:12px;color:var(--text);line-height:1.85;margin-bottom:10px}
+p{font-size:14px;color:var(--text);line-height:1.85;margin-bottom:10px}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 </style>
 <link rel="stylesheet" href="/main.css"/>
@@ -506,11 +506,11 @@ $$ <span class="kw">LANGUAGE</span> plpgsql;
       <tr><td class="tbl-key">OPENSANCTIONS_API_KEY</td><td class="tbl-type">...</td><td class="tbl-desc">opensanctions.org → API</td></tr>
       <tr><td class="tbl-key">FRONTEND_URL</td><td class="tbl-type">https://sloiai.com</td><td class="tbl-desc">Vercel deploy URL</td></tr>
       <tr><td class="tbl-key">JWT_SECRET</td><td class="tbl-type">random 64 chars</td><td class="tbl-desc">Generate: openssl rand -hex 32</td></tr>
-      <tr><td colspan="3" style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:var(--surface2)">Telegram</td></tr>
+      <tr><td colspan="3" style="padding:6px 10px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:var(--surface2)">Telegram</td></tr>
       <tr><td class="tbl-key">TELEGRAM_BOT_TOKEN</td><td class="tbl-type">from BotFather</td><td class="tbl-desc">BotFather → /newbot → token</td></tr>
       <tr><td class="tbl-key">TELEGRAM_BOSS_CHAT_ID</td><td class="tbl-type">your Telegram user ID</td><td class="tbl-desc">Message @userinfobot to get your ID</td></tr>
       <tr><td class="tbl-key">TELEGRAM_CHANNEL_ID</td><td class="tbl-type">@SloiAIExchange</td><td class="tbl-desc">Create channel via Telegram → add bot as admin</td></tr>
-      <tr><td colspan="3" style="padding:6px 10px;font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:var(--surface2)">TON</td></tr>
+      <tr><td colspan="3" style="padding:6px 10px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:var(--surface2)">TON</td></tr>
       <tr><td class="tbl-key">SLOI_TON_WALLET</td><td class="tbl-type">EQ... address</td><td class="tbl-desc">Create in Tonkeeper · keep private key secure</td></tr>
       <tr><td class="tbl-key">GETBLOCK_WEBHOOK_SECRET</td><td class="tbl-type">from GetBlock</td><td class="tbl-desc">getblock.io → TON mainnet → Webhooks</td></tr>
       <tr><td class="tbl-key">TON_API_KEY</td><td class="tbl-type">from GetBlock</td><td class="tbl-desc">getblock.io → API key</td></tr>

@@ -8,48 +8,48 @@
 <style>
 :root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--text);background:var(--bg)}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
 .nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
 .nav-logo em{font-style:italic;color:var(--indigo)}
-.nav-links{display:flex;gap:20px;font-size:11px}
+.nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}
 .nav-links a:hover{color:var(--violet)}
-.nav-cta{background:var(--indigo);color:#fff;padding:6px 16px;border-radius:4px;font-size:11px;text-decoration:none}
+.nav-cta{background:var(--indigo);color:#fff;padding:6px 16px;border-radius:4px;font-size:13px;text-decoration:none}
 .wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:60px 28px 80px}
 .hero{text-align:center;margin-bottom:52px}
-.eyebrow{font-size:10px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;justify-content:center}
+.eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;justify-content:center}
 .eyebrow::before,.eyebrow::after{content:'';width:24px;height:1px;background:var(--indigo)}
 h1{font-family:'Fraunces',serif;font-size:clamp(42px,6vw,66px);font-weight:900;line-height:.95;letter-spacing:-.03em;color:var(--white);margin-bottom:16px}
 h1 em{font-style:italic;color:var(--indigo)}
-.hero-sub{font-size:13px;color:var(--muted);line-height:1.85;max-width:520px;margin:0 auto}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.85;max-width:520px;margin:0 auto}
 .option-tabs{display:flex;gap:12px;justify-content:center;margin-bottom:48px}
-.opt-tab{padding:10px 28px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;border:1px solid var(--border2);background:var(--surface);color:var(--muted);transition:all .2s}
+.opt-tab{padding:10px 28px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;border:1px solid var(--border2);background:var(--surface);color:var(--muted);transition:all .2s}
 .opt-tab.active{background:rgba(91,95,239,.12);border-color:var(--indigo);color:var(--violet)}
 .option-panel{display:none}
 .option-panel.active{display:block}
-.pay-note{background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:14px 18px;font-size:12px;color:var(--teal);line-height:1.7;margin-bottom:28px;text-align:center}
+.pay-note{background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:14px 18px;font-size:14px;color:var(--teal);line-height:1.7;margin-bottom:28px;text-align:center}
 .open-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
 .tier-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s,transform .2s}
 .tier-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
 .tier-card.featured{border-color:rgba(91,95,239,.5)}
 .tier-top{padding:28px 26px 20px;border-bottom:1px solid var(--border)}
-.tier-badge{display:inline-flex;font-size:10px;font-weight:700;padding:3px 10px;border-radius:3px;margin-bottom:14px;letter-spacing:.06em}
+.tier-badge{display:inline-flex;font-size:12px;font-weight:700;padding:3px 10px;border-radius:3px;margin-bottom:14px;letter-spacing:.06em}
 .badge-i{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:var(--green)}
 .badge-r{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.3);color:var(--violet)}
 .tier-name{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--white);margin-bottom:6px;letter-spacing:-.02em}
-.tier-tagline{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:20px;min-height:40px}
+.tier-tagline{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:20px;min-height:40px}
 .tier-price{font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:var(--white);letter-spacing:-.04em;line-height:1}
-.tier-price-note{font-size:11px;color:var(--muted);margin-top:6px}
+.tier-price-note{font-size:13px;color:var(--muted);margin-top:6px}
 .tier-body{padding:20px 26px 26px}
 .feat-list{display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
-.feat{display:flex;align-items:flex-start;gap:9px;font-size:11px;line-height:1.5}
+.feat{display:flex;align-items:flex-start;gap:9px;font-size:13px;line-height:1.5}
 .fy{color:var(--green);flex-shrink:0}
 .fn{color:var(--border2);flex-shrink:0}
 .ft{color:var(--text)}
 .ftd{color:var(--muted)}
-.tier-cta,.plan-btn{display:block;text-align:center;padding:12px;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;font-family:'IBM Plex Mono',monospace;cursor:pointer;border:none;width:100%;transition:all .15s}
+.tier-cta,.plan-btn{display:block;text-align:center;padding:12px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;font-family:'IBM Plex Mono',monospace;cursor:pointer;border:none;width:100%;transition:all .15s}
 .cta-ghost{background:none;border:1px solid var(--border2);color:var(--text)}
 .cta-ghost:hover{border-color:var(--indigo);color:var(--violet)}
 .cta-solid{background:var(--indigo);color:#fff;border:none}
@@ -58,60 +58,60 @@ h1 em{font-style:italic;color:var(--indigo)}
 .plan-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s;position:relative}
 .plan-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
 .plan-card.pop{border-color:rgba(91,95,239,.5)}
-.pop-tag{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:4px 16px;border-radius:0 0 8px 8px;letter-spacing:.06em}
+.pop-tag{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:4px 16px;border-radius:0 0 8px 8px;letter-spacing:.06em}
 .plan-top{padding:26px 22px 18px;border-bottom:1px solid var(--border)}
 .plan-icon{font-size:28px;margin-bottom:12px}
 .plan-name{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);margin-bottom:4px}
-.plan-tagline{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:18px;min-height:44px}
+.plan-tagline{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px;min-height:44px}
 .plan-price{font-family:'Fraunces',serif;font-size:44px;font-weight:900;color:var(--white);letter-spacing:-.04em;line-height:1}
 .plan-price sup{font-size:18px;vertical-align:top;margin-top:8px;font-family:'IBM Plex Mono',monospace;color:var(--muted)}
-.plan-period{font-size:11px;color:var(--muted);margin-top:5px}
-.plan-loi{font-size:11px;color:var(--teal);margin-top:4px;font-weight:600}
+.plan-period{font-size:13px;color:var(--muted);margin-top:5px}
+.plan-loi{font-size:13px;color:var(--teal);margin-top:4px;font-weight:600}
 .plan-body{padding:18px 22px 22px;flex:1;display:flex;flex-direction:column}
 .plan-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;flex:1}
-.plan-feat{display:flex;align-items:flex-start;gap:8px;font-size:11px;line-height:1.45}
+.plan-feat{display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.45}
 .pfy{color:var(--green);flex-shrink:0}
 .pft{color:var(--text)}
 .flow-diagram{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:28px}
-.flow-title{font-size:10px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:18px}
+.flow-title{font-size:12px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:18px}
 .flow-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
 .flow-steps::before{content:'';position:absolute;top:20px;left:10%;right:10%;height:1px;background:var(--border2);z-index:0}
 .flow-step{text-align:center;position:relative;z-index:1;padding:0 6px}
 .fs-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 10px;border:1px solid var(--border2);background:var(--surface)}
-.fs-label{font-size:10px;color:var(--white);font-weight:600;margin-bottom:3px;line-height:1.3}
-.fs-sub{font-size:9px;color:var(--muted);line-height:1.4}
+.fs-label{font-size:12px;color:var(--white);font-weight:600;margin-bottom:3px;line-height:1.3}
+.fs-sub{font-size:11px;color:var(--muted);line-height:1.4}
 .fs-done .fs-dot{background:rgba(34,197,94,.1);border-color:var(--green)}
 .fs-active .fs-dot{background:rgba(91,95,239,.15);border-color:var(--indigo)}
 .ctable{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:32px}
-.ctable th{background:var(--surface2);padding:9px 14px;font-size:10px;color:var(--muted);letter-spacing:.06em;text-align:left;border-bottom:1px solid var(--border)}
+.ctable th{background:var(--surface2);padding:9px 14px;font-size:12px;color:var(--muted);letter-spacing:.06em;text-align:left;border-bottom:1px solid var(--border)}
 .ctable th:not(:first-child){text-align:center}
-.ctable td{padding:8px 14px;font-size:11px;border-bottom:1px solid var(--border);vertical-align:middle}
+.ctable td{padding:8px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
 .ctable tr:last-child td{border-bottom:none}
 .ctable td:first-child{color:var(--muted)}
 .ctable td:not(:first-child){text-align:center;color:var(--white);font-weight:500}
 .ck{color:var(--green)}
 .cn{color:var(--border2)}
-.cat-row td{background:var(--surface2)!important;color:var(--indigo)!important;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px!important}
+.cat-row td{background:var(--surface2)!important;color:var(--indigo)!important;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px!important}
 .ex-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:28px}
 .faq-item{border-bottom:1px solid var(--border)}
 .faq-q{display:flex;align-items:center;justify-content:space-between;padding:15px 0;cursor:pointer;gap:16px}
-.faq-qt{font-size:13px;font-weight:600;color:var(--white);transition:color .15s}
+.faq-qt{font-size:15px;font-weight:600;color:var(--white);transition:color .15s}
 .faq-q:hover .faq-qt{color:var(--violet)}
 .faq-arr{color:var(--muted);font-size:18px;transition:transform .2s;flex-shrink:0}
-.faq-a{font-size:12px;color:var(--muted);line-height:1.85;padding-bottom:16px;display:none}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.85;padding-bottom:16px;display:none}
 .faq-item.open .faq-a{display:block}
 .faq-item.open .faq-arr{transform:rotate(90deg);color:var(--indigo)}
 .faq-item.open .faq-qt{color:var(--violet)}
 .bottom-cta{background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:10px;padding:48px;text-align:center;margin-top:48px}
 .bcta-h{font-family:'Fraunces',serif;font-size:clamp(30px,4vw,46px);font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:12px;line-height:1.05}
 .bcta-h em{font-style:italic;color:var(--indigo)}
-.bcta-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.7}
+.bcta-sub{font-size:15px;color:var(--muted);margin-bottom:28px;line-height:1.7}
 .bcta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.bb-p{background:var(--indigo);color:#fff;padding:13px 28px;border-radius:5px;font-size:13px;font-weight:600;text-decoration:none}
+.bb-p{background:var(--indigo);color:#fff;padding:13px 28px;border-radius:5px;font-size:15px;font-weight:600;text-decoration:none}
 .bb-p:hover{opacity:.85}
-.bb-s{background:none;border:1px solid var(--border2);color:var(--text);padding:13px 28px;border-radius:5px;font-size:13px;text-decoration:none}
+.bb-s{background:none;border:1px solid var(--border2);color:var(--text);padding:13px 28px;border-radius:5px;font-size:15px;text-decoration:none}
 .bb-s:hover{border-color:var(--indigo);color:var(--violet)}
-.nav-tagline{font-size:9px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+.nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 
@@ -207,12 +207,12 @@ h1 em{font-style:italic;color:var(--indigo)}
     </div>
 
     <div class="ex-box">
-      <div style="font-size:10px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px">// EXAMPLE — TRANSACT TIER EARNINGS</div>
+      <div style="font-size:12px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px">// EXAMPLE — TRANSACT TIER EARNINGS</div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:center">
-        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--white)">$500K</div><div style="font-size:10px;color:var(--muted);margin-top:3px">Deal value</div></div>
-        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--green)">$5,000</div><div style="font-size:10px;color:var(--muted);margin-top:3px">Your commission (1%)</div></div>
-        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--muted)">$0</div><div style="font-size:10px;color:var(--muted);margin-top:3px">Monthly fee</div></div>
-        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--indigo)">One LOI</div><div style="font-size:10px;color:var(--muted);margin-top:3px">One transaction</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--white)">$500K</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Deal value</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--green)">$5,000</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Your commission (1%)</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--muted)">$0</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Monthly fee</div></div>
+        <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--indigo)">One LOI</div><div style="font-size:12px;color:var(--muted);margin-top:3px">One transaction</div></div>
       </div>
     </div>
 
@@ -220,13 +220,13 @@ h1 em{font-style:italic;color:var(--indigo)}
     <div style="background:rgba(0,82,255,.06);border:1px solid rgba(0,82,255,.25);border-radius:8px;padding:18px 22px;margin-bottom:28px;display:flex;align-items:center;gap:16px">
       <div style="font-size:32px;flex-shrink:0">⬡</div>
       <div style="flex:1">
-        <div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:4px">AI agents pay with USDC on Base — Coinbase AgentKit</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.7">Your agent manages its own on-chain wallet. When credits run low, the agent sends USDC to SLOI AI on Base L2. Credits confirmed in ~2 seconds. After the first LOI, the agent earns 1% commission in USDC — enough to fund itself indefinitely.</div>
+        <div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px">AI agents pay with USDC on Base — Coinbase AgentKit</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7">Your agent manages its own on-chain wallet. When credits run low, the agent sends USDC to SLOI AI on Base L2. Credits confirmed in ~2 seconds. After the first LOI, the agent earns 1% commission in USDC — enough to fund itself indefinitely.</div>
       </div>
       <div style="flex-shrink:0;display:flex;flex-direction:column;gap:6px;align-items:flex-end">
-        <span style="font-size:11px;color:var(--teal);font-weight:600">USDC on Base</span>
-        <span style="font-size:10px;color:var(--muted)">&lt;$0.01 gas · ~2s confirm</span>
-        <a href="agentkit.html" style="font-size:10px;color:rgba(0,82,255,.9);text-decoration:none;font-weight:600">AgentKit docs →</a>
+        <span style="font-size:13px;color:var(--teal);font-weight:600">USDC on Base</span>
+        <span style="font-size:12px;color:var(--muted)">&lt;$0.01 gas · ~2s confirm</span>
+        <a href="agentkit.html" style="font-size:12px;color:rgba(0,82,255,.9);text-decoration:none;font-weight:600">AgentKit docs →</a>
       </div>
     </div>
   </div>
@@ -237,80 +237,80 @@ h1 em{font-style:italic;color:var(--indigo)}
 
     <!-- CREDIT PACKS -->
     <div style="margin-bottom:24px">
-      <div style="font-size:10px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:14px;text-align:center">// BUY CREDITS — PAY BY CARD · SPEND AS YOU GO</div>
+      <div style="font-size:12px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:14px;text-align:center">// BUY CREDITS — PAY BY CARD · SPEND AS YOU GO</div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(91,95,239,.4)'" onmouseout="this.style.borderColor='var(--border)'">
           <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white)">$99</div>
-          <div style="font-size:10px;color:var(--teal);font-weight:600;margin:4px 0">100 credits</div>
-          <div style="font-size:10px;color:var(--muted);line-height:1.5">$0.99 / credit</div>
-          <button onclick="buyCredits(99)" style="margin-top:10px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer">Buy →</button>
+          <div style="font-size:12px;color:var(--teal);font-weight:600;margin:4px 0">100 credits</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">$0.99 / credit</div>
+          <button onclick="buyCredits(99)" style="margin-top:10px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer">Buy →</button>
         </div>
         <div style="background:var(--surface);border:1px solid rgba(91,95,239,.4);border-radius:8px;padding:18px;text-align:center;cursor:pointer;position:relative" onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='rgba(91,95,239,.4)'">
-          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:2px 12px;border-radius:0 0 6px 6px">POPULAR</div>
+          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:2px 12px;border-radius:0 0 6px 6px">POPULAR</div>
           <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white)">$299</div>
-          <div style="font-size:10px;color:var(--teal);font-weight:600;margin:4px 0">350 credits</div>
-          <div style="font-size:10px;color:var(--muted);line-height:1.5">$0.85 / credit · save 14%</div>
-          <button onclick="buyCredits(299)" style="margin-top:10px;width:100%;background:var(--indigo);border:none;color:#fff;padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;font-weight:600">Buy →</button>
+          <div style="font-size:12px;color:var(--teal);font-weight:600;margin:4px 0">350 credits</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">$0.85 / credit · save 14%</div>
+          <button onclick="buyCredits(299)" style="margin-top:10px;width:100%;background:var(--indigo);border:none;color:#fff;padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;font-weight:600">Buy →</button>
         </div>
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer" onmouseover="this.style.borderColor='rgba(91,95,239,.4)'" onmouseout="this.style.borderColor='var(--border)'">
           <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white)">$599</div>
-          <div style="font-size:10px;color:var(--teal);font-weight:600;margin:4px 0">800 credits</div>
-          <div style="font-size:10px;color:var(--muted);line-height:1.5">$0.75 / credit · save 24%</div>
-          <button onclick="buyCredits(599)" style="margin-top:10px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer">Buy →</button>
+          <div style="font-size:12px;color:var(--teal);font-weight:600;margin:4px 0">800 credits</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">$0.75 / credit · save 24%</div>
+          <button onclick="buyCredits(599)" style="margin-top:10px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer">Buy →</button>
         </div>
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer" onmouseover="this.style.borderColor='rgba(91,95,239,.4)'" onmouseout="this.style.borderColor='var(--border)'">
           <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white)">$999</div>
-          <div style="font-size:10px;color:var(--teal);font-weight:600;margin:4px 0">1,500 credits</div>
-          <div style="font-size:10px;color:var(--muted);line-height:1.5">$0.67 / credit · save 32%</div>
-          <button onclick="buyCredits(999)" style="margin-top:10px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer">Buy →</button>
+          <div style="font-size:12px;color:var(--teal);font-weight:600;margin:4px 0">1,500 credits</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.5">$0.67 / credit · save 32%</div>
+          <button onclick="buyCredits(999)" style="margin-top:10px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer">Buy →</button>
         </div>
       </div>
-      <div style="font-size:10px;color:var(--muted);text-align:center">Credits never expire · Secured by Stripe · Refundable if unused</div>
+      <div style="font-size:12px;color:var(--muted);text-align:center">Credits never expire · Secured by Stripe · Refundable if unused</div>
     </div>
 
     <!-- AI AGENTS GRID -->
-    <div style="font-size:10px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:14px;text-align:center">// WHAT CREDITS BUY — AI AGENTS</div>
+    <div style="font-size:12px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:14px;text-align:center">// WHAT CREDITS BUY — AI AGENTS</div>
     <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:32px">
 
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s" onclick="window.location.href='smb-order.html'" onmouseover="this.style.borderColor='rgba(91,95,239,.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform=''">
         <div style="position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--indigo),var(--violet));opacity:0;transition:opacity .2s" class="agent-bar"></div>
         <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.18)">📄</div>
-        <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:7px">LOI Generator Agent</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:12px">Drafts and finalizes Letters of Intent in seconds after Boss approval. ICC-compliant terms, supplier anonymization enforced at database level, auto-emailed to both parties.</div>
+        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">LOI Generator Agent</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Drafts and finalizes Letters of Intent in seconds after Boss approval. ICC-compliant terms, supplier anonymization enforced at database level, auto-emailed to both parties.</div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:10px;color:var(--teal);font-weight:600">5 credits per LOI</span>
-          <span style="font-size:10px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
+          <span style="font-size:12px;color:var(--teal);font-weight:600">5 credits per LOI</span>
+          <span style="font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
         </div>
       </div>
 
       <div style="background:var(--surface);border:1px solid rgba(91,95,239,.35);border-radius:8px;padding:20px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s" onclick="window.location.href='smb-order.html'" onmouseover="this.style.borderColor='rgba(91,95,239,.6)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(91,95,239,.35)';this.style.transform=''">
-        <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:2px 14px;border-radius:0 0 6px 6px;letter-spacing:.06em">MOST POPULAR</div>
+        <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:2px 14px;border-radius:0 0 6px 6px;letter-spacing:.06em">MOST POPULAR</div>
         <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.18);margin-top:8px">🤖</div>
-        <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:7px">Commodities Negotiations Agent</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:12px">Claude-powered agent runs up to 7 negotiation rounds against verified traders. Deal Hunter or Autopilot strategies. Real-time price feed after every round. OFAC + EU sanctions screened automatically.</div>
+        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">Commodities Negotiations Agent</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Claude-powered agent runs up to 7 negotiation rounds against verified traders. Deal Hunter or Autopilot strategies. Real-time price feed after every round. OFAC + EU sanctions screened automatically.</div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:10px;color:var(--teal);font-weight:600">10–20 credits per deal</span>
-          <span style="font-size:10px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
+          <span style="font-size:12px;color:var(--teal);font-weight:600">10–20 credits per deal</span>
+          <span style="font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
         </div>
       </div>
 
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;position:relative;overflow:hidden;transition:all .2s" onmouseover="this.style.borderColor='rgba(91,95,239,.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform=''">
         <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.18)">💰</div>
-        <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:7px">Global Trade Finance Agent</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:12px">Structures payment terms, LC requirements, and SWIFT instructions for each deal. Matches buyers with the right trade finance instrument — letter of credit, escrow, or advance payment — based on country and volume.</div>
+        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">Global Trade Finance Agent</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Structures payment terms, LC requirements, and SWIFT instructions for each deal. Matches buyers with the right trade finance instrument — letter of credit, escrow, or advance payment — based on country and volume.</div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:10px;color:var(--muted);font-weight:600">Coming soon</span>
-          <span style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:.05em">1 credit/day</span>
+          <span style="font-size:12px;color:var(--muted);font-weight:600">Coming soon</span>
+          <span style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.05em">1 credit/day</span>
         </div>
       </div>
 
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s" onclick="window.location.href='logistics-customs-agent.html'" onmouseover="this.style.borderColor='rgba(91,95,239,.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform=''">
         <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.18)">🚢</div>
-        <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:7px">Logistics &amp; Customs Agent</div>
-        <div style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:12px">Coordinates freight, Incoterms, and port-of-loading logistics. Screens shipments against OFAC, EU, and UN export controls. Generates packing lists, HS codes, and customs declarations automatically.</div>
+        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">Logistics &amp; Customs Agent</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Coordinates freight, Incoterms, and port-of-loading logistics. Screens shipments against OFAC, EU, and UN export controls. Generates packing lists, HS codes, and customs declarations automatically.</div>
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:10px;color:var(--teal);font-weight:600">5 credits per shipment</span>
-          <span style="font-size:10px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
+          <span style="font-size:12px;color:var(--teal);font-weight:600">5 credits per shipment</span>
+          <span style="font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
         </div>
       </div>
 
@@ -318,26 +318,26 @@ h1 em{font-style:italic;color:var(--indigo)}
 
     <!-- EXAMPLE CALC -->
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:24px">
-      <div style="font-size:10px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px">// EXAMPLE — WHAT $299 GETS YOU (350 credits)</div>
+      <div style="font-size:12px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px">// EXAMPLE — WHAT $299 GETS YOU (350 credits)</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:center">
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px">
           <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white)">35</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:3px">Deal Hunter sessions<br/>(10 credits each)</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px">Deal Hunter sessions<br/>(10 credits each)</div>
         </div>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px">
           <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--green)">Unlimited</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:3px">LOIs generated<br/>(5 credits each = 70 LOIs)</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px">LOIs generated<br/>(5 credits each = 70 LOIs)</div>
         </div>
         <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px">
           <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--indigo)">$8.54</div>
-          <div style="font-size:10px;color:var(--muted);margin-top:3px">Cost per negotiation<br/>+ LOI</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px">Cost per negotiation<br/>+ LOI</div>
         </div>
       </div>
     </div>
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin-bottom:24px;display:flex;align-items:center;gap:14px">
       <div style="font-size:26px;flex-shrink:0">💳</div>
-      <div><div style="font-size:12px;font-weight:600;color:var(--white);margin-bottom:3px">Pay by card — instantly</div><div style="font-size:11px;color:var(--muted);line-height:1.7">Credits purchased via Stripe on the website. Secured checkout. Credits never expire. Unused credits are refundable. No monthly commitment.</div></div>
+      <div><div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:3px">Pay by card — instantly</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Credits purchased via Stripe on the website. Secured checkout. Credits never expire. Unused credits are refundable. No monthly commitment.</div></div>
     </div>
 
     <div class="flow-diagram">
@@ -381,7 +381,7 @@ h1 em{font-style:italic;color:var(--indigo)}
 
   <!-- FAQ -->
   <div style="margin-bottom:48px">
-    <div style="font-size:11px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:20px;text-align:center">// COMMON QUESTIONS</div>
+    <div style="font-size:13px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:20px;text-align:center">// COMMON QUESTIONS</div>
     <div class="faq-item" onclick="tf(this)"><div class="faq-q"><span class="faq-qt">What is the difference between Option A and Option B?</span><span class="faq-arr">›</span></div><div class="faq-a">Option A is for buyers who want SLOI AI to run the agent on their behalf — they buy credits, give us the mandate, and we deliver the LOI. Option B is for developers and AI agents that want to connect their own agent to the SLOI AI API — they build the agent, we provide the trader network.</div></div>
     <div class="faq-item" onclick="tf(this)"><div class="faq-q"><span class="faq-qt">Can the agent close a deal without my approval?</span><span class="faq-arr">›</span></div><div class="faq-a">No. This is a hard rule in SLOI AI. The Boss must approve every deal before a LOI is generated. The agent negotiates and reaches agreement — then stops and waits. The LOI is only generated after explicit Boss approval. This applies to both Option A agents and Option B managed subscriptions.</div></div>
     <div class="faq-item" onclick="tf(this)"><div class="faq-q"><span class="faq-qt">Does SLOI AI handle payments or direct payment?</span><span class="faq-arr">›</span></div><div class="faq-a">No. SLOI AI is a negotiation and LOI platform only. Once the LOI is signed, payment flows directly between the buyer and the trader outside the SLOI AI system. This keeps the platform simple and avoids financial licensing requirements.</div></div>
@@ -417,6 +417,6 @@ function tf(el){
 }
 </script>
 
-<div style="text-align:center;padding:20px;font-size:10px;color:var(--muted)"><a href="terms.html" style="color:var(--muted);text-decoration:none;margin:0 10px">Terms of Service</a><a href="terms.html#privacy" style="color:var(--muted);text-decoration:none;margin:0 10px">Privacy Policy</a><a href="terms.html#trader" style="color:var(--muted);text-decoration:none;margin:0 10px">Trader Agreement</a></div>
+<div style="text-align:center;padding:20px;font-size:12px;color:var(--muted)"><a href="terms.html" style="color:var(--muted);text-decoration:none;margin:0 10px">Terms of Service</a><a href="terms.html#privacy" style="color:var(--muted);text-decoration:none;margin:0 10px">Privacy Policy</a><a href="terms.html#trader" style="color:var(--muted);text-decoration:none;margin:0 10px">Trader Agreement</a></div>
 </body>
 </html>

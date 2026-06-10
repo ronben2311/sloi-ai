@@ -33,7 +33,23 @@ class SloiAPI {
 
   // ── REQUEST HELPER ────────────────────────────────────────────────────────────
 
+  _devMock(path) {
+    const p = path.split("?")[0];
+    if (p.includes("/credits/balance"))  return { balance: 340 };
+    if (p.includes("/negotiations"))     return { negotiations: [] };
+    if (p.includes("/lois"))             return { lois: [] };
+    if (p.includes("/products"))         return { products: [] };
+    if (p.includes("/mandates"))         return { mandates: [] };
+    if (p.includes("/price-watches"))    return { watches: [] };
+    if (p.includes("/pipeline"))         return { pipeline: [] };
+    if (p.includes("/brief"))            return { brief: "Dev mock mode — no live data." };
+    if (p.includes("/revenue"))          return { revenue: 0 };
+    return {};
+  }
+
   async req(method, path, body = null, _retry = false) {
+    if (localStorage.getItem("sloi_dev_mock")) return this._devMock(path);
+
     const opts = { method, headers: this.headers() };
     if (body) opts.body = JSON.stringify(body);
 
@@ -146,6 +162,7 @@ class SloiAPI {
     localStorage.removeItem("sloi_api_key");
     localStorage.removeItem("sloi_role");
     localStorage.removeItem("sloi_user");
+    localStorage.removeItem("sloi_dev_mock");
     this.token = null;
     this.apiKey = null;
     this.role = null;
