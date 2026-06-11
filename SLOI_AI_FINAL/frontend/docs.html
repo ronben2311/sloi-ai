@@ -95,6 +95,27 @@ pre{padding:16px;font-size:14px;line-height:1.7;overflow-x:auto;color:var(--text
 /* INLINE CODE */
 code{background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:1px 6px;font-size:13px;color:var(--teal);font-family:'IBM Plex Mono',monospace}
 .nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+
+/* ── MOBILE ── */
+.mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:768px){
+  nav{padding:0 14px}
+  .nav-tagline{display:none}
+  .nav-cta{display:none}
+  .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px;flex-direction:column;gap:14px;z-index:200}
+  .nav-links.nav-open{display:flex}
+  .mob-nav-btn{display:flex}
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main{padding:28px 16px 60px;max-width:100%}
+  h2{font-size:clamp(22px,6vw,30px)}
+  .tier-grid{grid-template-columns:1fr!important}
+  .ep-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .step-title{font-size:14px}
+  .step-desc{font-size:13px}
+  pre{font-size:12px;padding:12px}
+  .callout{font-size:13px}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 <script src="/seo-geo.js"></script>
@@ -102,8 +123,9 @@ code{background:var(--surface2);border:1px solid var(--border2);border-radius:3p
 <body>
 
 <nav>
-  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
-  <div class="nav-links">
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+  <div class="nav-links" id="mob-nav">
     <a href="about.html">About</a>
     <a href="api-explorer.html">API Explorer</a>
     <a href="docs.html">Suppliers</a>
@@ -578,6 +600,9 @@ commodity suppliers.</span></pre>
 </div>
 
 <script>
+function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open')}
+document.addEventListener('click',function(e){if(!e.target.closest('nav'))document.getElementById('mob-nav').classList.remove('nav-open')});
+
 // Sidebar active state on scroll
 var sections = document.querySelectorAll('.doc-section');
 var links = document.querySelectorAll('.sb-link');

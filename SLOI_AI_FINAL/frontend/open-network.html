@@ -85,6 +85,30 @@ h1 em{font-style:italic;color:var(--indigo)}
 .agent-pill{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:5px 14px;margin:0 6px;white-space:nowrap;font-size:13px;color:var(--text);flex-shrink:0}
 .agent-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
 .nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+
+/* ── MOBILE ── */
+.mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:768px){
+  nav{padding:0 14px}
+  .nav-tagline{display:none}
+  .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:rgba(7,7,15,.98);border-bottom:1px solid var(--border);padding:14px 20px;flex-direction:column;gap:14px;z-index:200}
+  .nav-links.nav-open{display:flex}
+  .mob-nav-btn{display:flex}
+  .wrap{padding:40px 16px 60px}
+  h1{font-size:clamp(34px,10vw,52px)}
+  .hero-sub{font-size:14px;margin-bottom:36px}
+  .tiers{grid-template-columns:1fr!important}
+  .feat-list{grid-template-columns:1fr!important}
+  .flow{grid-template-columns:1fr!important;border-radius:6px}
+  .flow-step{border-right:none!important;border-bottom:1px solid var(--border)}
+  .flow-step:last-child{border-bottom:none}
+  .ep-grid{grid-template-columns:1fr}
+  .reg-body{grid-template-columns:1fr!important}
+  .reg-footer{flex-direction:column;gap:10px;align-items:stretch}
+  .reg-btn{width:100%;text-align:center}
+  .tier-top,.tier-body{padding:20px 18px}
+  .marquee-track{animation:marquee 16s linear infinite}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 
@@ -94,7 +118,8 @@ h1 em{font-style:italic;color:var(--indigo)}
 <body>
 <nav>
   <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
-  <div class="nav-links">
+  <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+  <div class="nav-links" id="mob-nav">
     <a href="docs.html">Docs</a>
     <a href="api-explorer.html">API</a>
     <a href="a2a.html">A2A</a>
@@ -197,6 +222,9 @@ h1 em{font-style:italic;color:var(--indigo)}
 </div>
 
 <script>
+function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open')}
+document.addEventListener('click',function(e){if(!e.target.closest('nav'))document.getElementById('mob-nav').classList.remove('nav-open')});
+
 async function submitReg() {
   var name  = document.getElementById('ag-name').value.trim();
   var dev   = document.getElementById('ag-dev').value.trim();

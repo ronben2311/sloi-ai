@@ -116,6 +116,17 @@ pre{padding:16px;font-size:13px;line-height:1.8;overflow-x:auto;color:var(--text
 /* DIVIDER */
 .divider{border:none;border-top:1px solid var(--border);margin:28px 0}
 .nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+.mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:768px){
+  nav{padding:0 14px}
+  .nav-tagline,.nav-cta{display:none}
+  .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:rgba(7,7,15,.98);border-bottom:1px solid var(--border);padding:14px 20px;flex-direction:column;gap:14px;z-index:200}
+  .nav-links.nav-open{display:flex}
+  .mob-nav-btn{display:flex}
+  .g2,.g3{grid-template-columns:1fr}
+  .pack-grid{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:clamp(30px,9vw,50px)}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 <script src="/seo-geo.js"></script>
@@ -123,8 +134,9 @@ pre{padding:16px;font-size:13px;line-height:1.8;overflow-x:auto;color:var(--text
 <body>
 
 <nav>
-  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
-  <div class="nav-links">
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+  <div class="nav-links" id="mob-nav">
     <a href="docs.html">Docs</a>
     <a href="open-network.html">Open Network</a>
     <a href="pricing.html">Pricing</a>
@@ -487,6 +499,10 @@ document.querySelectorAll('.code-copy').forEach(function(btn){
     }).catch(function(){ btn.textContent = 'Copy'; });
   });
 });
+</script>
+<script>
+function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open');}
+document.addEventListener('click',function(e){var n=document.getElementById('mob-nav');if(n&&n.classList.contains('nav-open')&&!e.target.closest('nav'))n.classList.remove('nav-open');});
 </script>
 </body>
 </html>

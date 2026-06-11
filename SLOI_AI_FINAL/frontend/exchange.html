@@ -154,6 +154,43 @@ select.inp option{background:var(--surface)}
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:var(--bg)}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ── MOBILE ── */
+.mob-back{display:none}
+.mob-only{display:none}
+.mob-hide{}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:90;cursor:pointer}
+.mob-neg-bar{display:none;position:fixed;bottom:0;left:0;right:0;padding:8px 14px;background:var(--surface);border-top:1px solid var(--border);z-index:50;gap:8px;align-items:center}
+@media(max-width:768px){
+  .tb-center{display:none}
+  .tb-tag{display:none}
+  .mob-hide{display:none!important}
+  .mob-back{display:none}
+  .mob-back.mob-active{display:flex!important}
+  .mob-only{display:flex!important}
+  .stats-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .stats-bar::-webkit-scrollbar{display:none}
+  .main{grid-template-columns:1fr}
+  .product-list-panel{height:100%}
+  .product-list-panel.mob-hidden{display:none!important}
+  .center-panel{display:none}
+  .center-panel.mob-active{display:grid;grid-template-rows:auto 1fr auto;padding-bottom:56px}
+  .center-panel > div:nth-child(2){grid-template-rows:40px 1fr!important}
+  .right-panel{position:fixed;bottom:0;left:0;right:0;height:85vh;transform:translateY(100%);transition:transform .28s ease;z-index:100;border-left:none;border-top:2px solid var(--indigo);visibility:hidden;pointer-events:none}
+  .right-panel.mob-open{transform:translateY(0);visibility:visible;pointer-events:auto}
+  .mob-overlay.mob-active{display:block}
+  .mob-neg-bar.mob-active{display:flex}
+  .order-book{grid-template-columns:1fr}
+  .ob-side:first-child{border-right:none;border-bottom:1px solid var(--border)}
+  .product-header{flex-wrap:wrap;gap:8px}
+  .ph-actions{display:none}
+  .ph-stats{flex-wrap:wrap;gap:10px}
+  .ph-price{font-size:26px!important}
+  .ph-name{font-size:16px!important}
+  .spark-title{display:none}
+  .spark-wrap{height:32px}
+  .trades-section{max-height:130px!important}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 
@@ -165,16 +202,17 @@ select.inp option{background:var(--surface)}
 
 <!-- TOPBAR -->
 <div class="topbar">
+  <button id="mob-back" class="mob-back btn" onclick="mobBack()">← Back</button>
   <a href="m2m-homepage.html" class="tb-logo">SLOI <em>AI</em> <span class="tb-tag">/ Exchange</span></a>
   <div class="tb-center">
     <div class="live-badge"><div class="live-dot"></div>Live Market</div>
     <span style="font-size:12px;color:var(--muted)">13 products · verified suppliers · MENA corridor</span>
   </div>
   <div class="tb-right">
-    <span id="clock" style="font-size:12px;color:var(--muted)"></span>
-    <a href="m2m-homepage.html" class="btn">← Home</a>
+    <span id="clock" class="mob-hide" style="font-size:12px;color:var(--muted)"></span>
+    <a href="m2m-homepage.html" class="btn mob-hide">← Home</a>
     <a href="login.html" class="btn">Sign in</a>
-    <a href="login.html" class="btn btn-p">🤖 Start negotiating →</a>
+    <a href="login.html" class="btn btn-p mob-hide">🤖 Start negotiating →</a>
   </div>
 </div>
 
@@ -264,8 +302,13 @@ select.inp option{background:var(--surface)}
 <!-- RIGHT: NEGOTIATE -->
 <div class="right-panel">
   <div class="rp-head">
-    <div class="rp-title">🤖 Start Negotiation</div>
-    <div class="rp-sub">Set mandate · Agent negotiates · You approve</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+      <div>
+        <div class="rp-title">🤖 Start Negotiation</div>
+        <div class="rp-sub">Set mandate · Agent negotiates · You approve</div>
+      </div>
+      <button class="mob-only btn" onclick="closeNegDrawer()" style="flex-shrink:0;padding:5px 10px">✕</button>
+    </div>
   </div>
   <div class="rp-body" id="rp-body">
     <div class="empty-state">
@@ -281,6 +324,12 @@ select.inp option{background:var(--surface)}
 </div>
 
 </div><!-- /main -->
+
+<div id="mob-overlay" class="mob-overlay" onclick="closeNegDrawer()"></div>
+<div id="mob-neg-bar" class="mob-neg-bar">
+  <button class="btn-neg" style="flex:1" onclick="openNegDrawer()">🤖 Configure &amp; Negotiate</button>
+</div>
+
 </div><!-- /app -->
 
 <script>
@@ -403,6 +452,7 @@ function selectProduct(id){
 
   // Negotiate panel
   renderNegPanel(p);
+  mobShowDetail();
 }
 
 function renderSpark(p, dir){
@@ -578,6 +628,35 @@ setInterval(liveUpdate,20000);
 
 // Select first product on load
 setTimeout(function(){selectProduct(1)},100);
+
+// ── MOBILE HELPERS ─────────────────────────────────────────────────────────────
+function isMob(){return window.innerWidth<=768}
+
+function mobShowDetail(){
+  if(!isMob()) return;
+  document.querySelector('.product-list-panel').classList.add('mob-hidden');
+  document.querySelector('.center-panel').classList.add('mob-active');
+  document.getElementById('mob-neg-bar').classList.add('mob-active');
+  document.getElementById('mob-back').classList.add('mob-active');
+}
+
+function mobBack(){
+  document.querySelector('.product-list-panel').classList.remove('mob-hidden');
+  document.querySelector('.center-panel').classList.remove('mob-active');
+  document.getElementById('mob-neg-bar').classList.remove('mob-active');
+  document.getElementById('mob-back').classList.remove('mob-active');
+  closeNegDrawer();
+}
+
+function openNegDrawer(){
+  document.querySelector('.right-panel').classList.add('mob-open');
+  document.getElementById('mob-overlay').classList.add('mob-active');
+}
+
+function closeNegDrawer(){
+  document.querySelector('.right-panel').classList.remove('mob-open');
+  document.getElementById('mob-overlay').classList.remove('mob-active');
+}
 </script>
 </body>
 </html>

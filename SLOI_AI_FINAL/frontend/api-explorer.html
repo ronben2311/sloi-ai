@@ -86,12 +86,23 @@ pre{white-space:pre-wrap;word-break:break-word}
 
 /* EMPTY */
 .empty-resp{padding:40px;text-align:center;color:var(--muted);font-size:14px}
+.mob-nav-btn{display:none;background:none;border:1px solid #252538;border-radius:4px;color:#d4d2f0;font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center;flex-shrink:0}
+@media(max-width:768px){
+  .mob-nav-btn{display:flex}
+  nav[style]{flex-wrap:nowrap}
+  nav[style] span{display:none}
+  .layout{grid-template-columns:1fr!important;height:auto!important;overflow:visible}
+  .sidebar{display:none}
+  .main{padding:16px}
+  .param-row{grid-template-columns:1fr 1fr;gap:8px}
+  .send-row{flex-wrap:wrap}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 </head>
 <body>
 <nav style="position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:50px;background:rgba(7,7,15,.96);border-bottom:1px solid #1c1c2e;backdrop-filter:blur(12px)">
-  <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#eeedf8;text-decoration:none;letter-spacing:-.02em;display:flex;align-items:baseline;gap:6px">SLOI <em style="font-style:italic;color:#5b5fef">AI</em><span style="font-size:11px;color:#52526e;font-weight:400;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em">Smart negotiation · LOI generation</span></a>
+  <a href="m2m-homepage.html" class="nav-logo" style="font-family:'Fraunces',serif;font-weight:900;color:#eeedf8;text-decoration:none;letter-spacing:-.02em;display:flex;align-items:baseline;gap:6px">SLOI <em style="font-style:italic;color:#5b5fef">AI</em><span class="nav-tagline" style="font-size:11px;color:#52526e;font-weight:400;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em">Smart negotiation · LOI generation</span></a>
   <a href="CommodEx_Admin.html" style="font-size:13px;color:#52526e;text-decoration:none">← Admin</a>
 </nav>
 

@@ -53,6 +53,16 @@ h1 em{font-style:italic;color:var(--indigo)}
 .success-sub{font-size:14px;color:var(--muted);line-height:1.7}
 .divider{border:none;border-top:1px solid var(--border);margin:48px 0}
 .nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+.mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:768px){
+  nav{padding:0 14px}
+  .nav-tagline{display:none}
+  .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:rgba(7,7,15,.98);border-bottom:1px solid var(--border);padding:14px 20px;flex-direction:column;gap:14px;z-index:200}
+  .nav-links.nav-open{display:flex}
+  .mob-nav-btn{display:flex}
+  .grid-2{grid-template-columns:1fr}
+  h1{font-size:clamp(32px,10vw,52px)}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 <script src="/seo-geo.js"></script>
@@ -60,7 +70,8 @@ h1 em{font-style:italic;color:var(--indigo)}
 <body>
 <nav>
   <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation � LOI generation</span></a>
-  <div class="nav-links">
+  <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+  <div class="nav-links" id="mob-nav">
     <a href="about.html">About</a>
     <a href="docs.html">Docs</a>
     <a href="CommodEx_Admin.html">Join as supplier</a>
@@ -216,6 +227,8 @@ async function submitContact(){
     alert('Failed to send. Please try again or email us directly at hello@sloiai.com');
   }
 }
+function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open');}
+document.addEventListener('click',function(e){var n=document.getElementById('mob-nav');if(n&&n.classList.contains('nav-open')&&!e.target.closest('nav'))n.classList.remove('nav-open');});
 </script>
 </body>
 </html>

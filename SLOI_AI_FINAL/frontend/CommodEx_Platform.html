@@ -819,6 +819,27 @@
         .cbc-val{font-size:36px}
         .modal{width:calc(100vw - 32px)}
       }
+      /* ── AGENT ROWS ── */
+      .agent-rows{display:flex;flex-direction:column;gap:4px;margin-bottom:4px}
+      .agent-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:border-color .15s;user-select:none}
+      .agent-row:hover{border-color:var(--border2)}
+      .agent-row.open{border-color:var(--border2);border-bottom-left-radius:0;border-bottom-right-radius:0}
+      .ar-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+      .ar-name{font-size:14px;font-weight:600;color:var(--white);width:148px;flex-shrink:0}
+      .ar-metric{flex:1;font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+      .ar-actions{display:flex;align-items:center;gap:5px;flex-shrink:0}
+      .ar-chev{color:var(--muted);font-size:11px;transition:transform .2s;flex-shrink:0;margin-left:2px}
+      .agent-row.open .ar-chev{transform:rotate(180deg)}
+      .agent-detail{display:none;background:var(--surface);border:1px solid var(--border2);border-top:none;border-bottom-left-radius:6px;border-bottom-right-radius:6px;padding:12px 14px;margin-bottom:4px}
+      .agent-detail.open{display:block}
+      .ad-log{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+      .ad-log-row{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:var(--bg);border-radius:4px;font-size:13px;color:var(--muted)}
+      .ad-btns{display:flex;gap:5px;flex-wrap:wrap}
+      .ag-section{font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;padding:14px 0 6px;display:flex;align-items:center;gap:8px}
+      .ag-section::after{content:'';flex:1;height:1px;background:var(--border)}
+      .mandate-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none}
+      .mandate-chev{color:var(--muted);font-size:11px;transition:transform .2s}
+      .mandate-chev.open{transform:rotate(180deg)}
     </style>
 <link rel="stylesheet" href="/main.css"/>
 
@@ -1620,357 +1641,284 @@
           <!-- AI AGENTS -->
           <div id="view-agents" class="view">
 
-            <!-- AGENT MANDATE -->
-            <div class="card" style="border-color:rgba(91,95,239,.35);margin-bottom:20px">
-              <div class="card-title" style="margin-bottom:14px">
-                &#9881;&#65039; AGENT MANDATE &mdash; set your targets &amp; limits for all agents
-                <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:2px 9px;border-radius:10px;font-size:13px;font-weight:700">&#9679; Active</span>
-              </div>
-              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px">
-                <div>
-                  <label class="flabel">Target Products</label>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;min-height:36px;align-items:center">
-                    <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Steel Rebar &times;</span>
-                    <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Hard Wheat &times;</span>
-                    <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">OPC Cement &times;</span>
-                    <span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>
-                  </div>
-                </div>
-                <div>
-                  <label class="flabel">Strategy</label>
-                  <div style="display:flex;gap:5px">
-                    <button class="btn btn-xs" id="ms-watcher" onclick="setMS('watcher')" style="flex:1;justify-content:center">&#128065; Watcher</button>
-                    <button class="btn btn-xs btn-p" id="ms-standard" onclick="setMS('standard')" style="flex:1;justify-content:center">&#127919; Standard</button>
-                    <button class="btn btn-xs" id="ms-aggressive" onclick="setMS('aggressive')" style="flex:1;justify-content:center">&#129302; Aggressive</button>
-                  </div>
-                </div>
-                <div>
-                  <label class="flabel">Target Regions</label>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;min-height:36px;align-items:center">
-                    <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">UAE &times;</span>
-                    <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">KSA &times;</span>
-                    <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Egypt &times;</span>
-                    <span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>
-                  </div>
-                </div>
-              </div>
-              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
-                <div>
-                  <label class="flabel">Max price / unit ($)</label>
-                  <input class="inp" placeholder="e.g. 2900" value="2,900">
-                </div>
-                <div>
-                  <label class="flabel">Target quantity (MT)</label>
-                  <input class="inp" placeholder="e.g. 100" value="100">
-                </div>
-                <div>
-                  <label class="flabel">Auto-LOI below ($K)</label>
-                  <input class="inp" placeholder="e.g. 50" value="50">
-                </div>
-                <div>
-                  <label class="flabel">Max deals / day</label>
-                  <input class="inp" placeholder="e.g. 3" value="3">
-                </div>
-              </div>
-              <div style="display:flex;gap:8px;align-items:center">
-                <button class="btn btn-sm btn-p" onclick="alert('Mandate saved &mdash; all 9 agents updated.')">&#128190; Save mandate</button>
-                <button class="btn btn-sm" onclick="alert('Reset to defaults.')">Reset</button>
-                <span style="font-size:14px;color:var(--muted);margin-left:6px">Last saved: Today 09:15 AM &middot; Applied to 9 agents</span>
-              </div>
-            </div>
-
-            <!-- PAGE HEADER -->
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
-              <div style="font-size:15px;color:var(--muted)">9 agents running autonomously &middot; boss approval required before any LOI</div>
-              <button class="btn btn-sm btn-p" onclick="alert('Running all agents&hellip;')">&#9654; Run all now</button>
-            </div>
-
-            <!-- // SOURCING & MARKET INTELLIGENCE -->
-            <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// SOURCING &amp; MARKET INTELLIGENCE</div>
-
-            <!-- LeadFinder full width -->
-            <div style="background:var(--surface);border:1px solid rgba(45,212,191,.3);border-radius:8px;overflow:hidden;margin-bottom:10px">
-              <div style="padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+            <!-- MANDATE — collapsible -->
+            <div style="background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:8px;margin-bottom:18px;overflow:hidden">
+              <div class="mandate-hdr" onclick="toggleMandate()">
                 <div style="display:flex;align-items:center;gap:10px">
-                  <div style="width:36px;height:36px;border-radius:8px;background:rgba(45,212,191,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">&#128301;</div>
+                  <span style="font-size:18px">&#9881;&#65039;</span>
                   <div>
-                    <div style="font-size:15px;font-weight:600;color:var(--white)">LeadFinder</div>
-                    <div style="font-size:14px;color:var(--muted)">Searches for suppliers, tender opportunities and import/export partners &middot; Web + LinkedIn + Tenders</div>
+                    <div style="font-size:14px;font-weight:600;color:var(--white)">Agent Mandate</div>
+                    <div style="font-size:13px;color:var(--muted)">Steel Rebar &middot; Hard Wheat &middot; OPC Cement &nbsp;&middot;&nbsp; Standard strategy &nbsp;&middot;&nbsp; Max $2,900/unit &nbsp;&middot;&nbsp; 3 regions</div>
                   </div>
                 </div>
                 <div style="display:flex;align-items:center;gap:8px">
-                  <span style="display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 10px;border-radius:12px;font-size:14px"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
-                  <button class="btn btn-xs btn-t" onclick="alert('Running LeadFinder&hellip;')">&#9654; Run now</button>
+                  <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:2px 9px;border-radius:10px;font-size:13px;font-weight:700">&#9679; Active</span>
+                  <span id="mandate-chev" class="mandate-chev">&#9660;</span>
                 </div>
               </div>
-              <div style="padding:10px 18px;border-bottom:1px solid var(--border);background:rgba(45,212,191,.03);display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:14px">
-                <div style="display:flex;align-items:center;gap:6px;color:var(--muted)">&#128269; Keywords: <span style="color:var(--teal)">steel &middot; cement &middot; grain &middot; UAE construction &middot; NEOM</span></div>
-                <div style="display:flex;align-items:center;gap:6px;color:var(--muted)">&#127757; Regions: <span style="color:var(--teal)">UAE &middot; KSA &middot; Egypt &middot; Germany</span></div>
-                <div style="display:flex;align-items:center;gap:6px;color:var(--muted)">&#8987; Schedule: <span style="color:var(--teal)">Every 6 hours</span></div>
-                <div style="display:flex;align-items:center;gap:6px;color:var(--muted)">&#128202; Sources: <span style="color:var(--teal)">News &middot; LinkedIn &middot; Tender sites &middot; Trade portals</span></div>
-              </div>
-              <div style="padding:14px 18px">
-                <div style="font-size:14px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:10px">// LATEST SUPPLIERS &mdash; 6 found in last 6h</div>
-                <div style="display:flex;flex-direction:column;gap:7px">
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;font-size:14px">
-                    <div><span style="color:var(--white);font-weight:600">Gulf Steel Industries</span> <span style="color:var(--muted)">&middot; UAE &middot; Steel Rebar &middot; Verified</span></div>
-                    <div style="display:flex;gap:5px"><span class="badge bg">High relevance</span><button class="btn btn-xs btn-p">Contact &rarr;</button></div>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;font-size:14px">
-                    <div><span style="color:var(--white);font-weight:600">Atlas Grain Trading</span> <span style="color:var(--muted)">&middot; Egypt &middot; Hard Wheat &middot; OPC Certified</span></div>
-                    <div style="display:flex;gap:5px"><span class="badge bg">High relevance</span><button class="btn btn-xs btn-p">Contact &rarr;</button></div>
-                  </div>
-                  <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:5px;font-size:14px">
-                    <div><span style="color:var(--white);font-weight:600">NEOM Cement Partners</span> <span style="color:var(--muted)">&middot; KSA &middot; OPC Cement &middot; Tender open</span></div>
-                    <div style="display:flex;gap:5px"><span class="badge ba">Medium</span><button class="btn btn-xs">View &rarr;</button></div>
-                  </div>
-                </div>
-                <div style="display:flex;gap:8px;margin-top:10px">
-                  <button class="btn btn-xs btn-p" onclick="alert('Adding all to pipeline&hellip;')">+ Add all to pipeline</button>
-                  <button class="btn btn-xs" onclick="alert('Exporting CSV&hellip;')">&#8595; Export CSV</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- PriceScout full width compact -->
-            <div style="background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden;margin-bottom:22px">
-              <div style="padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
-                <div style="display:flex;align-items:center;gap:10px">
-                  <div style="width:32px;height:32px;border-radius:6px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">&#128225;</div>
+              <div id="mandate-body" style="display:none;border-top:1px solid var(--border);padding:16px">
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px">
                   <div>
-                    <div style="font-size:14px;font-weight:600;color:var(--white)">PriceScout</div>
-                    <div style="font-size:14px;color:var(--muted)">Monitors 11 products &middot; alerts on price movement &middot; last scan 4 min ago &middot; <span style="color:var(--gold)">&#9888; Steel Rebar +2.3% vs yesterday</span></div>
+                    <label class="flabel">Target Products</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;min-height:36px;align-items:center">
+                      <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Steel Rebar &times;</span>
+                      <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Hard Wheat &times;</span>
+                      <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">OPC Cement &times;</span>
+                      <span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="flabel">Strategy</label>
+                    <div style="display:flex;gap:5px">
+                      <button class="btn btn-xs" id="ms-watcher" onclick="setMS('watcher')" style="flex:1;justify-content:center">&#128065; Watcher</button>
+                      <button class="btn btn-xs btn-p" id="ms-standard" onclick="setMS('standard')" style="flex:1;justify-content:center">&#127919; Standard</button>
+                      <button class="btn btn-xs" id="ms-aggressive" onclick="setMS('aggressive')" style="flex:1;justify-content:center">&#129302; Aggressive</button>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="flabel">Target Regions</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;min-height:36px;align-items:center">
+                      <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">UAE &times;</span>
+                      <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">KSA &times;</span>
+                      <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Egypt &times;</span>
+                      <span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>
+                    </div>
                   </div>
                 </div>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 10px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
-                  <button class="btn btn-xs btn-p" onclick="alert('Scanning prices&hellip;')">&#9654; Scan now</button>
-                  <button class="btn btn-xs" onclick="window.open('price-discovery.html','_blank')">View all</button>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+                  <div><label class="flabel">Max price / unit ($)</label><input class="inp" value="2,900"></div>
+                  <div><label class="flabel">Target quantity (MT)</label><input class="inp" value="100"></div>
+                  <div><label class="flabel">Auto-LOI below ($K)</label><input class="inp" value="50"></div>
+                  <div><label class="flabel">Max deals / day</label><input class="inp" value="3"></div>
                 </div>
-              </div>
-              <div style="padding:10px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:14px">
-                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--surface2);border-radius:4px"><span style="color:var(--muted)">Steel Rebar G60</span><span style="color:var(--gold);font-weight:600">$2,840 &#8593;</span></div>
-                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--surface2);border-radius:4px"><span style="color:var(--muted)">Hard Wheat</span><span style="color:var(--green);font-weight:600">$1,120 &#8595;</span></div>
-                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--surface2);border-radius:4px"><span style="color:var(--muted)">Cement OPC</span><span style="color:var(--muted);font-weight:600">$89 &ndash;</span></div>
-                <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--surface2);border-radius:4px"><span style="color:var(--muted)">Aluminum 6061</span><span style="color:var(--green);font-weight:600">$9,100 &#8595;</span></div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <button class="btn btn-sm btn-p" onclick="alert('Mandate saved — all 9 agents updated.')">&#128190; Save mandate</button>
+                  <button class="btn btn-sm" onclick="alert('Reset to defaults.')">Reset</button>
+                  <span style="font-size:13px;color:var(--muted);margin-left:6px">Last saved: Today 09:15 AM &middot; Applied to 9 agents</span>
+                </div>
               </div>
             </div>
 
-            <!-- // OUTREACH & NEGOTIATION -->
-            <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// OUTREACH &amp; NEGOTIATION</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px">
-
-              <!-- OutreachBot -->
-              <div style="background:var(--surface);border:1px solid rgba(37,211,102,.2);border-radius:8px;overflow:hidden">
-                <div style="padding:14px;border-bottom:1px solid var(--border)">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:32px;height:32px;border-radius:6px;background:rgba(37,211,102,.1);display:flex;align-items:center;justify-content:center;font-size:16px">&#128241;</div>
-                    <div>
-                      <div style="font-size:14px;font-weight:600;color:var(--white)">OutreachBot</div>
-                      <div style="font-size:14px;color:var(--muted)">Auto-sends RFQs to qualified suppliers &middot; personalised per product</div>
-                    </div>
-                  </div>
-                  <div style="display:flex;gap:5px;margin-bottom:10px">
-                    <span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 8px;border-radius:10px;font-size:13px;font-weight:700">&#9208; Paused</span>
-                  </div>
-                  <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-                    18 RFQs sent this week &middot; Response rate: <span style="color:var(--green)">42%</span><br>
-                    Next batch: <span style="color:var(--white)">Tomorrow 9:00 AM</span>
-                  </div>
-                </div>
-                <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-                  <div style="margin-bottom:4px"><span style="color:var(--green)">&#10003;</span> Gulf Steel &mdash; replied, sent quote</div>
-                  <div style="margin-bottom:4px"><span style="color:var(--green)">&#10003;</span> Atlas Grain &mdash; quote received</div>
-                  <div style="margin-bottom:4px"><span style="color:var(--muted)">&ndash;</span> EuroSteel GmbH &mdash; no reply</div>
-                  <div><span style="color:var(--green)">&#10003;</span> Cairo Cement &mdash; interested</div>
-                </div>
-                <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-                  <button class="btn btn-xs btn-g" onclick="alert('Resuming OutreachBot&hellip;')" style="flex:1;justify-content:center">&#9654; Resume</button>
-                  <button class="btn btn-xs" onclick="alert('Opening templates&hellip;')">Templates</button>
-                </div>
-              </div>
-
-              <!-- NegotiationAgent -->
-              <div style="background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:8px;overflow:hidden">
-                <div style="padding:14px;border-bottom:1px solid var(--border)">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:32px;height:32px;border-radius:6px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:16px">&#129302;</div>
-                    <div>
-                      <div style="font-size:14px;font-weight:600;color:var(--white)">NegotiationAgent</div>
-                      <div style="font-size:14px;color:var(--muted)">AI negotiates on your behalf &middot; up to 7 rounds &middot; mandate-guided</div>
-                    </div>
-                  </div>
-                  <div style="display:flex;gap:5px;margin-bottom:10px">
-                    <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>2 active rounds</span>
-                  </div>
-                  <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-                    Steel Rebar &mdash; Round 3/5 &middot; gap: <span style="color:var(--gold)">$30/MT</span><br>
-                    Hard Wheat &mdash; Round 1/5 &middot; <span style="color:var(--teal)">opening offer sent</span>
-                  </div>
-                </div>
-                <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-                  <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Steel Rebar G60</span><span style="color:var(--indigo)">Offer $2,820 / Ask $2,850</span></div>
-                  <div style="display:flex;justify-content:space-between"><span>Hard Wheat</span><span style="color:var(--teal)">Offer $1,100 / Ask $1,140</span></div>
-                </div>
-                <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-                  <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="window.open('negotiation-agent.html','_blank')">&#9654; View live</button>
-                  <button class="btn btn-xs" onclick="show('negotiate')">+ New</button>
-                </div>
-              </div>
-
+            <!-- HEADER -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+              <div style="font-size:14px;color:var(--muted)">9 agents &nbsp;&middot;&nbsp; <span style="color:var(--green)">7 running</span> &nbsp;&middot;&nbsp; <span style="color:var(--gold)">2 paused</span></div>
+              <button class="btn btn-xs btn-p" onclick="alert('Running all agents…')">&#9654; Run all now</button>
             </div>
 
-            <!-- // COMPLIANCE & DOCUMENTS -->
-            <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// COMPLIANCE &amp; DOCUMENTS</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px">
+            <!-- ── SOURCING ── -->
+            <div class="ag-section">Sourcing &amp; Market Intelligence</div>
+            <div class="agent-rows">
 
-              <!-- ComplianceBot -->
-              <div style="background:var(--surface);border:1px solid rgba(239,68,68,.2);border-radius:8px;overflow:hidden">
-                <div style="padding:14px;border-bottom:1px solid var(--border)">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:32px;height:32px;border-radius:6px;background:rgba(239,68,68,.1);display:flex;align-items:center;justify-content:center;font-size:16px">&#128737;&#65039;</div>
-                    <div>
-                      <div style="font-size:14px;font-weight:600;color:var(--white)">ComplianceBot</div>
-                      <div style="font-size:14px;color:var(--muted)">Auto-screens all suppliers &middot; OFAC + EU sanctions + dual-use check</div>
-                    </div>
+              <div>
+                <div class="agent-row" id="row-lead" onclick="toggleAgent('lead')">
+                  <div class="ar-icon" style="background:rgba(45,212,191,.12)">&#128301;</div>
+                  <div class="ar-name">LeadFinder</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
+                  <div class="ar-metric">6 leads found &middot; 3 high-relevance &middot; Web + LinkedIn + Tenders</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-t" onclick="event.stopPropagation();alert('Running LeadFinder…')">&#9654; Run</button>
                   </div>
-                  <div style="display:flex;gap:5px;margin-bottom:10px">
-                    <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
-                  </div>
-                  <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-                    9 checks today &middot; <span style="color:var(--green)">8 cleared</span> &middot; <span style="color:var(--gold)">1 review pending</span>
-                  </div>
+                  <span class="ar-chev">&#9660;</span>
                 </div>
-                <div style="padding:10px 14px;font-size:14px;max-height:80px;overflow-y:auto">
-                  <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--muted)">Gulf Steel Industries</span><span class="badge bg" style="font-size:12px">Cleared</span></div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--muted)">Atlas Grain Trading</span><span class="badge bg" style="font-size:12px">Cleared</span></div>
-                  <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">EuroSteel GmbH</span><span class="badge ba" style="font-size:12px">Review</span></div>
-                </div>
-                <div style="padding:10px 14px;border-top:1px solid var(--border)">
-                  <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="alert('Running manual compliance check&hellip;')">Run manual check</button>
+                <div class="agent-detail" id="detail-lead">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span><span style="color:var(--white);font-weight:600">Gulf Steel Industries</span> &middot; UAE &middot; Steel Rebar &middot; Verified</span><div style="display:flex;gap:5px"><span class="badge bg">High relevance</span><button class="btn btn-xs btn-p" onclick="event.stopPropagation()">Contact &rarr;</button></div></div>
+                    <div class="ad-log-row"><span><span style="color:var(--white);font-weight:600">Atlas Grain Trading</span> &middot; Egypt &middot; Hard Wheat &middot; OPC Certified</span><div style="display:flex;gap:5px"><span class="badge bg">High relevance</span><button class="btn btn-xs btn-p" onclick="event.stopPropagation()">Contact &rarr;</button></div></div>
+                    <div class="ad-log-row"><span><span style="color:var(--white);font-weight:600">NEOM Cement Partners</span> &middot; KSA &middot; OPC Cement &middot; Tender open</span><div style="display:flex;gap:5px"><span class="badge ba">Medium</span><button class="btn btn-xs" onclick="event.stopPropagation()">View &rarr;</button></div></div>
+                  </div>
+                  <div class="ad-btns">
+                    <button class="btn btn-xs btn-p" onclick="alert('Adding all to pipeline…')">+ Add all to pipeline</button>
+                    <button class="btn btn-xs" onclick="alert('Exporting CSV…')">&#8595; Export CSV</button>
+                  </div>
                 </div>
               </div>
 
-              <!-- LOI Generator -->
-              <div style="background:var(--surface);border:1px solid rgba(34,197,94,.25);border-radius:8px;overflow:hidden">
-                <div style="padding:14px;border-bottom:1px solid var(--border)">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:32px;height:32px;border-radius:6px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;font-size:16px">&#128196;</div>
-                    <div>
-                      <div style="font-size:14px;font-weight:600;color:var(--white)">LOI Generator</div>
-                      <div style="font-size:14px;color:var(--muted)">Auto-generates LOI docs on deal closure &middot; e-signs &middot; delivers to counterparty</div>
-                    </div>
+              <div>
+                <div class="agent-row" id="row-price" onclick="toggleAgent('price')">
+                  <div class="ar-icon" style="background:rgba(91,95,239,.12)">&#128225;</div>
+                  <div class="ar-name">PriceScout</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
+                  <div class="ar-metric">11 products &middot; <span style="color:var(--gold)">&#9888; Steel +2.3% today</span> &middot; last scan 4 min ago</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();alert('Scanning prices…')">&#9654; Scan</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();window.open('price-discovery.html','_blank')">View all</button>
                   </div>
-                  <div style="display:flex;gap:5px;margin-bottom:10px">
-                    <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
-                  </div>
-                  <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-                    3 LOIs this week &middot; Total signed: <span style="color:var(--green)">$148,000</span><br>
-                    Avg generation time: <span style="color:var(--white)">~12 sec</span>
-                  </div>
+                  <span class="ar-chev">&#9660;</span>
                 </div>
-                <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-                  <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--green)">&#10003;</span><span>SL-LOI-20260603 &middot; Hard Wheat &middot; $56K</span></div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--green)">&#10003;</span><span>SL-LOI-20260602 &middot; Aluminum &middot; $46K</span></div>
-                  <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">&#8987;</span><span>SL-LOI-20260604 &middot; Steel Rebar &middot; pending</span></div>
-                </div>
-                <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-                  <button class="btn btn-xs btn-g" style="flex:1;justify-content:center" onclick="window.open('loi-generator.html','_blank')">&#128196; Generate LOI</button>
-                  <button class="btn btn-xs" onclick="show('lois',document.querySelectorAll('.nav')[3])">View all</button>
+                <div class="agent-detail" id="detail-price">
+                  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+                    <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:13px"><span style="color:var(--muted)">Steel Rebar G60</span><span style="color:var(--gold);font-weight:600">$2,840 &#8593;</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:13px"><span style="color:var(--muted)">Hard Wheat</span><span style="color:var(--green);font-weight:600">$1,120 &#8595;</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:13px"><span style="color:var(--muted)">Cement OPC</span><span style="color:var(--muted);font-weight:600">$89 &ndash;</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:13px"><span style="color:var(--muted)">Aluminum 6061</span><span style="color:var(--green);font-weight:600">$9,100 &#8595;</span></div>
+                  </div>
                 </div>
               </div>
 
             </div>
 
-            <!-- // LOGISTICS & TRADE FINANCE -->
-            <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// LOGISTICS &amp; TRADE FINANCE</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <!-- ── OUTREACH & NEGOTIATION ── -->
+            <div class="ag-section">Outreach &amp; Negotiation</div>
+            <div class="agent-rows">
 
-              <!-- LogisticsAI -->
-              <div style="background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden">
-                <div style="padding:14px;border-bottom:1px solid var(--border)">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:32px;height:32px;border-radius:6px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:16px">&#128674;</div>
-                    <div>
-                      <div style="font-size:14px;font-weight:600;color:var(--white)">LogisticsAI</div>
-                      <div style="font-size:14px;color:var(--muted)">Shipment tracking &middot; freight rates &middot; port alerts &middot; Incoterms</div>
-                    </div>
+              <div>
+                <div class="agent-row" id="row-outreach" onclick="toggleAgent('outreach')">
+                  <div class="ar-icon" style="background:rgba(37,211,102,.1)">&#128241;</div>
+                  <div class="ar-name">OutreachBot</div>
+                  <span style="background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.2);color:var(--gold);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">&#9208; Paused</span>
+                  <div class="ar-metric">18 RFQs sent this week &middot; Reply rate: <span style="color:var(--green)">42%</span> &middot; Next batch: Tomorrow 9:00 AM</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-g" onclick="event.stopPropagation();alert('Resuming OutreachBot…')">&#9654; Resume</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();alert('Opening templates…')">Templates</button>
                   </div>
-                  <div style="display:flex;gap:5px;margin-bottom:10px">
-                    <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
-                  </div>
-                  <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-                    6 shipments tracked &middot; 3 routes optimised<br>
-                    <span style="color:var(--gold)">&#9888; Port Said congestion +2 days</span>
-                  </div>
+                  <span class="ar-chev">&#9660;</span>
                 </div>
-                <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-                  <div style="margin-bottom:4px"><span style="color:var(--teal)">&#128674;</span> SL-2406-001 &middot; Rebar &middot; AUH&rarr;HH &middot; ETA Jun 18</div>
-                  <div style="margin-bottom:4px"><span style="color:var(--gold)">&#9888;</span> Jebel Ali congestion &mdash; alt route suggested</div>
-                  <div><span style="color:var(--green)">&#10003;</span> Cement OPC &middot; LCL booked &middot; $1,240/CBM</div>
-                </div>
-                <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-                  <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('Track shipment&hellip;')">&#9654; Track shipment</button>
-                  <button class="btn btn-xs" onclick="alert('Freight rate dashboard&hellip;')">Rates</button>
+                <div class="agent-detail" id="detail-outreach">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Gulf Steel &mdash; replied, sent quote</span></div>
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Atlas Grain &mdash; quote received</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">&ndash;</span><span>EuroSteel GmbH &mdash; no reply</span></div>
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Cairo Cement &mdash; interested</span></div>
+                  </div>
                 </div>
               </div>
 
-              <!-- CustomsAI -->
-              <div style="background:var(--surface);border:1px solid rgba(139,143,248,.25);border-radius:8px;overflow:hidden">
-                <div style="padding:14px;border-bottom:1px solid var(--border)">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:32px;height:32px;border-radius:6px;background:rgba(139,143,248,.12);display:flex;align-items:center;justify-content:center;font-size:16px">&#128707;</div>
-                    <div>
-                      <div style="font-size:14px;font-weight:600;color:var(--white)">CustomsAI</div>
-                      <div style="font-size:14px;color:var(--muted)">HS code lookup &middot; duty calc &middot; permits per destination</div>
-                    </div>
+              <div>
+                <div class="agent-row" id="row-neg" onclick="toggleAgent('neg')">
+                  <div class="ar-icon" style="background:rgba(91,95,239,.12)">&#129302;</div>
+                  <div class="ar-name">NegotiationAgent</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>2 active rounds</span>
+                  <div class="ar-metric">Steel R3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; Hard Wheat R1/5 &middot; opening offer sent</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('negotiation-agent.html','_blank')">&#9654; View live</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('negotiate')">+ New</button>
                   </div>
-                  <div style="display:flex;gap:5px;margin-bottom:10px">
-                    <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
-                  </div>
-                  <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-                    22 HS lookups today &middot; 6 countries<br>
-                    Duty savings identified: <span style="color:var(--green)">$14,200</span>
-                  </div>
+                  <span class="ar-chev">&#9660;</span>
                 </div>
-                <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-                  <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Steel Rebar &rarr; UAE</span><span style="color:var(--teal)">7214.20 &middot; 5%</span></div>
-                  <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Wheat &rarr; Egypt</span><span style="color:var(--green)">1001.99 &middot; 0%</span></div>
-                  <div style="display:flex;justify-content:space-between"><span>Polypropylene &rarr; KSA</span><span style="color:var(--gold)">3902.10 &middot; permit</span></div>
-                </div>
-                <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-                  <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('HS code lookup&hellip;')">&#128269; HS Lookup</button>
-                  <button class="btn btn-xs" onclick="alert('Duty calculator&hellip;')">Duty calc</button>
+                <div class="agent-detail" id="detail-neg">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Steel Rebar</span><span>Round 3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; counter-offer pending</span></div>
+                    <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Hard Wheat</span><span>Round 1/5 &middot; opening offer sent &middot; awaiting reply</span></div>
+                  </div>
+                  <div class="ad-btns">
+                    <button class="btn btn-xs btn-p" onclick="window.open('negotiation-agent.html','_blank')">Open negotiation board &rarr;</button>
+                  </div>
                 </div>
               </div>
 
-              <!-- TradeFinanceAI -->
-              <div style="background:var(--surface);border:1px solid rgba(232,169,74,.25);border-radius:8px;overflow:hidden">
-                <div style="padding:14px;border-bottom:1px solid var(--border)">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:32px;height:32px;border-radius:6px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:16px">&#128179;</div>
-                    <div>
-                      <div style="font-size:14px;font-weight:600;color:var(--white)">TradeFinanceAI</div>
-                      <div style="font-size:14px;color:var(--muted)">LC drafting &middot; SBLC &middot; factoring &middot; TradeFinex link</div>
-                    </div>
+            </div>
+
+            <!-- ── COMPLIANCE & DOCUMENTS ── -->
+            <div class="ag-section">Compliance &amp; Documents</div>
+            <div class="agent-rows">
+
+              <div>
+                <div class="agent-row" id="row-compliance" onclick="toggleAgent('compliance')">
+                  <div class="ar-icon" style="background:rgba(239,68,68,.1)">&#128737;&#65039;</div>
+                  <div class="ar-name">ComplianceBot</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">9 checks today &middot; <span style="color:var(--green)">8 cleared</span> &middot; <span style="color:var(--gold)">1 review pending</span></div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs" onclick="event.stopPropagation();alert('Running manual compliance check…')">Run check</button>
                   </div>
-                  <div style="display:flex;gap:5px;margin-bottom:10px">
-                    <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
-                    <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 8px;border-radius:10px;font-size:13px">TradeFinex &#10003;</span>
-                  </div>
-                  <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-                    2 LCs drafted today &middot; $1.4M pipeline<br>
-                    <span style="color:var(--green)">&#8593; Factoring rate: 1.8% &mdash; 2 deals eligible</span>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-compliance">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--muted)">Gulf Steel Industries</span><span class="badge bg">Cleared</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">Atlas Grain Trading</span><span class="badge bg">Cleared</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">EuroSteel GmbH</span><span class="badge ba">Review</span></div>
                   </div>
                 </div>
-                <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-                  <div style="margin-bottom:4px"><span style="color:var(--gold)">&#128196;</span> LC drafted &mdash; Steel Rebar &middot; $284K &middot; Citi Bank</div>
-                  <div style="margin-bottom:4px"><span style="color:var(--teal)">&#9939;</span> TradeFinex linked &mdash; LOI-20260603-001</div>
-                  <div><span style="color:var(--green)">&#10003;</span> Factoring offer &mdash; Hard Wheat LOI &middot; 1.8%</div>
+              </div>
+
+              <div>
+                <div class="agent-row" id="row-loi" onclick="toggleAgent('loi')">
+                  <div class="ar-icon" style="background:rgba(34,197,94,.1)">&#128196;</div>
+                  <div class="ar-name">LOI Generator</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">3 LOIs this week &middot; <span style="color:var(--green)">$148K signed</span> &middot; avg ~12 sec</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-g" onclick="event.stopPropagation();window.open('loi-generator.html','_blank')">&#128196; Generate</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('lois',document.querySelectorAll('.nav')[3])">View all</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
                 </div>
-                <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-                  <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('Drafting LC&hellip;')">&#128196; Draft LC</button>
-                  <button class="btn btn-xs" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="window.open('https://www.tradefinex.org','_blank')">&#9939; TradeFinex</button>
+                <div class="agent-detail" id="detail-loi">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>SL-LOI-20260603 &middot; Hard Wheat &middot; $56K &middot; Signed</span></div>
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>SL-LOI-20260602 &middot; Aluminum &middot; $46K &middot; Signed</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">&#8987;</span><span>SL-LOI-20260604 &middot; Steel Rebar &middot; pending signature</span></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ── LOGISTICS & TRADE FINANCE ── -->
+            <div class="ag-section">Logistics &amp; Trade Finance</div>
+            <div class="agent-rows">
+
+              <div>
+                <div class="agent-row" id="row-logistics" onclick="toggleAgent('logistics')">
+                  <div class="ar-icon" style="background:rgba(91,95,239,.15)">&#128674;</div>
+                  <div class="ar-name">LogisticsAI</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
+                  <div class="ar-metric">6 shipments tracked &middot; 3 routes optimised &middot; <span style="color:var(--gold)">&#9888; Port Said +2d</span></div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();alert('Track shipment…')">&#9654; Track</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();alert('Freight rate dashboard…')">Rates</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-logistics">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--teal)">&#128674;</span><span>SL-2406-001 &middot; Rebar &middot; AUH&rarr;HH &middot; ETA Jun 18</span></div>
+                    <div class="ad-log-row"><span style="color:var(--gold)">&#9888;</span><span>Jebel Ali congestion &mdash; alt route suggested</span></div>
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Cement OPC &middot; LCL booked &middot; $1,240/CBM</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="agent-row" id="row-customs" onclick="toggleAgent('customs')">
+                  <div class="ar-icon" style="background:rgba(139,143,248,.12)">&#128707;</div>
+                  <div class="ar-name">CustomsAI</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">22 HS lookups today &middot; 6 countries &middot; <span style="color:var(--green)">$14.2K duty savings</span></div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();alert('HS code lookup…')">&#128269; HS Lookup</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();alert('Duty calculator…')">Duty calc</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-customs">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--muted)">Steel Rebar &rarr; UAE</span><span style="color:var(--teal)">7214.20 &middot; 5%</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">Wheat &rarr; Egypt</span><span style="color:var(--green)">1001.99 &middot; 0%</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">Polypropylene &rarr; KSA</span><span style="color:var(--gold)">3902.10 &middot; permit</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div class="agent-row" id="row-tf" onclick="toggleAgent('tf')">
+                  <div class="ar-icon" style="background:rgba(232,169,74,.12)">&#128179;</div>
+                  <div class="ar-name">TradeFinanceAI</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
+                  <div class="ar-metric">2 LCs drafted &middot; $1.4M pipeline &middot; <span style="color:var(--green)">Factoring 1.8%</span></div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();alert('Drafting LC…')">&#128196; Draft LC</button>
+                    <button class="btn btn-xs" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="event.stopPropagation();window.open('https://www.tradefinex.org','_blank')">&#9939; TradeFinex</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-tf">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--gold)">&#128196;</span><span>LC drafted &mdash; Steel Rebar &middot; $284K &middot; Citi Bank</span></div>
+                    <div class="ad-log-row"><span style="color:var(--teal)">&#9939;</span><span>TradeFinex linked &mdash; LOI-20260603-001</span></div>
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Factoring offer &mdash; Hard Wheat LOI &middot; 1.8%</span></div>
+                  </div>
                 </div>
               </div>
 
@@ -3296,6 +3244,24 @@
       };
       var selectedStrategy = "standard";
       var strategyCosts = { watcher: 1, standard: 10, aggressive: 20 };
+
+      function toggleAgent(id) {
+        var row = document.getElementById('row-' + id);
+        var detail = document.getElementById('detail-' + id);
+        if (!row || !detail) return;
+        var open = row.classList.contains('open');
+        row.classList.toggle('open', !open);
+        detail.classList.toggle('open', !open);
+      }
+
+      function toggleMandate() {
+        var body = document.getElementById('mandate-body');
+        var chev = document.getElementById('mandate-chev');
+        if (!body) return;
+        var hidden = body.style.display === 'none' || body.style.display === '';
+        body.style.display = hidden ? 'block' : 'none';
+        if (chev) chev.classList.toggle('open', hidden);
+      }
 
       function setMS(s) {
         ["watcher","standard","aggressive"].forEach(function(k) {

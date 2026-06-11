@@ -361,30 +361,40 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
     <!-- ── STEP 0 — WELCOME ── -->
     <div class="step active" id="step-0">
-      <div class="q-eyebrow">Get started</div>
-      <div class="q-title">How would you<br/><em>like to begin?</em></div>
-      <div class="q-sub">Choose how to submit your request. All paths end with the same result — your AI agent negotiates the best price.</div>
+      <div class="q-eyebrow">Get started — it's free</div>
+      <div class="q-title">Get the best<br/>commodity price.<br/><em>In minutes.</em></div>
+      <div class="q-sub">Our AI agent negotiates with verified suppliers on your behalf. You review the price — and only sign what you approve.</div>
 
-      <div class="entry-grid">
-        <div class="ec" id="ec-form" onclick="selectEntry('form')">
-          <div class="ec-icon">📝</div>
-          <div class="ec-name">Fill the form</div>
-          <div class="ec-desc">3 quick questions · 2 minutes</div>
+      <!-- PRIMARY CTA -->
+      <div onclick="selectEntry('form')" id="ec-form-hero" style="background:linear-gradient(135deg,rgba(91,95,239,.12),rgba(139,143,248,.06));border:1px solid rgba(91,95,239,.4);border-radius:12px;padding:22px 22px;cursor:pointer;margin-bottom:12px;transition:all .2s;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden" onmouseover="this.style.borderColor='rgba(91,95,239,.7)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(91,95,239,.4)';this.style.transform=''">
+        <div style="width:52px;height:52px;border-radius:10px;background:var(--indigo);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">📝</div>
+        <div style="flex:1">
+          <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px">Fill in 3 quick questions</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.5">Product · quantity · budget. Takes 2 minutes. Agent starts immediately.</div>
         </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
+          <span style="background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.05em">RECOMMENDED</span>
+          <span style="font-size:20px;color:var(--violet)">→</span>
+        </div>
+      </div>
+
+      <!-- SECONDARY OPTIONS -->
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px">Or import your order</div>
+      <div class="entry-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
         <div class="ec" id="ec-po" onclick="selectEntry('po')">
-          <div class="ec-icon">📎</div>
-          <div class="ec-name">Upload PO file</div>
-          <div class="ec-desc">PDF · Excel · Word — auto-parsed</div>
+          <div class="ec-icon" style="font-size:22px">📎</div>
+          <div class="ec-name" style="font-size:13px">Upload PO</div>
+          <div class="ec-desc">PDF · Excel · Word</div>
         </div>
         <div class="ec" id="ec-erp" onclick="selectEntry('erp')">
-          <div class="ec-icon">📋</div>
-          <div class="ec-name">Paste from ERP</div>
-          <div class="ec-desc">SAP · Oracle · any system</div>
+          <div class="ec-icon" style="font-size:22px">📋</div>
+          <div class="ec-name" style="font-size:13px">Paste from ERP</div>
+          <div class="ec-desc">SAP · Oracle · any</div>
         </div>
         <div class="ec" id="ec-api" onclick="selectEntry('api')">
-          <div class="ec-icon">⚡</div>
-          <div class="ec-name">API / Direct</div>
-          <div class="ec-desc">REST API · for developers</div>
+          <div class="ec-icon" style="font-size:22px">⚡</div>
+          <div class="ec-name" style="font-size:13px">API / Direct</div>
+          <div class="ec-desc">For developers</div>
         </div>
       </div>
 
@@ -452,36 +462,42 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <span class="pc-icon">🔩</span>
           <div class="pc-name">Steel &amp; Metals</div>
           <div class="pc-sub">Rebar · Coil · Aluminum · Pipes</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $38/m · $2,840/MT</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Cement &amp; Clinker','OPC, clinker, bulk cement, bagged cement')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">🪨</span>
           <div class="pc-name">Cement &amp; Clinker</div>
           <div class="pc-sub">OPC · Clinker · Bulk · Bagged · White</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $58/MT · 8 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">🌾</span>
           <div class="pc-name">Agriculture</div>
           <div class="pc-sub">Wheat · Corn · Grain · Feed</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $560/MT · 5 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Energy','diesel, LPG, fuel oil')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">⚡</span>
           <div class="pc-name">Energy</div>
           <div class="pc-sub">Diesel · LPG · Fuel oil · Gas</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $4.92/L · 3 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Chemicals','industrial chemicals, fertilizers')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">🧪</span>
           <div class="pc-name">Chemicals</div>
           <div class="pc-sub">Industrial · Fertilizers · Acids</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $420/MT · 6 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Other','other commodities')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">📦</span>
-          <div class="pc-name">Other</div>
-          <div class="pc-sub">Tell us exactly what you need</div>
+          <div class="pc-name">Other commodity</div>
+          <div class="pc-sub">Describe exactly what you need</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--muted)">Any product · custom RFQ</div>
         </div>
       </div>
 
@@ -661,15 +677,27 @@ select.inp option{background:var(--surface2);color:var(--white)}
         </div>
       </div>
 
-      <div class="field">
-        <div class="field-lbl">Your name <span class="req"></span></div>
-        <input class="inp" id="contact-name" placeholder="Mohammed Al-Rashidi"/>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
+        <div class="field" style="margin-bottom:0">
+          <div class="field-lbl">Your name <span class="req"></span></div>
+          <input class="inp" id="contact-name" placeholder="Mohammed Al-Rashidi"/>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <div class="field-lbl">Company</div>
+          <input class="inp" id="contact-company" placeholder="Gulf Cement LLC"/>
+        </div>
       </div>
 
       <div class="field">
-        <div class="field-lbl">Telegram username <span class="req"></span></div>
+        <div class="field-lbl">Email <span class="req"></span></div>
+        <input class="inp" id="contact-email" type="email" placeholder="you@company.com"/>
+        <div class="field-hint">Price offers and LOI documents are sent here.</div>
+      </div>
+
+      <div class="field">
+        <div class="field-lbl">Telegram <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional — faster updates)</span></div>
         <input class="inp" id="contact-wa" placeholder="@yourhandle"/>
-        <div class="field-hint">Price offers and deal updates arrive on Telegram. Response within 24 hours.</div>
+        <div class="field-hint">Get deal alerts instantly on Telegram. Response within 24h.</div>
       </div>
 
       <button class="btn-p" onclick="goStep(4)">Review my order →</button>
@@ -721,6 +749,10 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="sum-val" id="sum-urgency">—</div>
         </div>
         <div class="sum-cell">
+          <div class="sum-lbl">Email</div>
+          <div class="sum-val" id="sum-email" style="font-size:13px">—</div>
+        </div>
+        <div class="sum-cell" id="sum-wa-cell">
           <div class="sum-lbl">Telegram</div>
           <div class="sum-val" id="sum-wa">—</div>
         </div>
@@ -766,13 +798,17 @@ select.inp option{background:var(--surface2);color:var(--white)}
 </div><!-- /shell -->
 
 <script>
-var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', purchaseType:'', annualVolume:'', country:'UAE', urgency:'', name:'', wa:'' };
+var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', purchaseType:'', annualVolume:'', country:'UAE', urgency:'', name:'', company:'', email:'', wa:'' };
 
 function saveMandateAndGo(url) {
   var nm = document.getElementById('contact-name').value.trim();
+  var em = document.getElementById('contact-email').value.trim();
   var wa = document.getElementById('contact-wa').value.trim();
-  if (nm) state.name = nm;
-  if (wa) state.wa   = wa;
+  var co = document.getElementById('contact-company').value.trim();
+  if (nm) state.name    = nm;
+  if (em) state.email   = em;
+  if (wa) state.wa      = wa;
+  if (co) state.company = co;
   localStorage.setItem('sloiMandate', JSON.stringify(state));
   window.location.href = url;
 }
@@ -919,12 +955,16 @@ function goStep(n) {
     }
     if (currentStep === 3) {
       if (!state.urgency) { pulse(document.querySelector('.tl-grid')); return; }
-      var nm = document.getElementById('contact-name').value.trim();
-      var wa = document.getElementById('contact-wa').value.trim();
+      var nm  = document.getElementById('contact-name').value.trim();
+      var em  = document.getElementById('contact-email').value.trim();
+      var wa  = document.getElementById('contact-wa').value.trim();
+      var co  = document.getElementById('contact-company').value.trim();
       if (!nm) { shake('contact-name'); return; }
-      if (!wa) { shake('contact-wa'); return; }
-      state.name = nm;
-      state.wa   = wa;
+      if (!em || !em.includes('@')) { shake('contact-email'); return; }
+      state.name    = nm;
+      state.company = co;
+      state.email   = em;
+      state.wa      = wa;
     }
   }
 
@@ -1096,7 +1136,10 @@ function populateSummary() {
   document.getElementById('sum-ptype').textContent   = state.purchaseType;
   document.getElementById('sum-country').textContent = state.country;
   document.getElementById('sum-urgency').textContent = state.urgency;
-  document.getElementById('sum-wa').textContent      = state.wa;
+  document.getElementById('sum-email').textContent   = state.email || '—';
+  document.getElementById('sum-wa').textContent      = state.wa || '—';
+  var waCell = document.getElementById('sum-wa-cell');
+  if (waCell) waCell.style.display = state.wa ? 'block' : 'none';
   var annualCell = document.getElementById('sum-annual-cell');
   if (state.annualVolume) {
     document.getElementById('sum-annual').textContent = state.annualVolume;
@@ -1162,6 +1205,8 @@ function submitOrder() {
     target_price:   null,
     max_price:      state.budget && state.budget !== 'Not specified' ? parseFloat(state.budget.replace(/[^0-9.]/g,'')) || null : null,
     buyer_name:     state.name,
+    buyer_email:    state.email,
+    buyer_company:  state.company,
     buyer_telegram: state.wa,
     country:        state.country,
     notes:          'Urgency: ' + state.urgency + ' | Agent: ' + state.purchaseType + (state.annualVolume ? ' | Annual volume: ' + state.annualVolume : ''),

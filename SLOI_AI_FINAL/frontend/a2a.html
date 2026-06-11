@@ -12,9 +12,9 @@
 html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
-.logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
-.logo em{font-style:italic;color:var(--indigo)}
-.logo-tag{font-size:11px;color:var(--muted);margin-left:6px;font-weight:400}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-tagline{font-size:11px;color:var(--muted);margin-left:6px;font-weight:400}
 .nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
 
@@ -87,13 +87,35 @@ pre{padding:14px;font-size:13px;line-height:1.85;overflow-x:auto;color:var(--tex
 .lc-arrow{font-size:20px;color:var(--border2);flex-shrink:0;padding:0 4px;margin-bottom:20px}
 
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+
+/* ── MOBILE ── */
+.mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:768px){
+  nav{padding:0 14px}
+  .nav-tagline{display:none}
+  .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:rgba(7,7,15,.98);border-bottom:1px solid var(--border);padding:14px 20px;flex-direction:column;gap:14px;z-index:200}
+  .nav-links.nav-open{display:flex}
+  .mob-nav-btn{display:flex}
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .content{padding:24px 16px 60px;max-width:100%}
+  h1{font-size:clamp(30px,9vw,46px)}
+  .ac-body{grid-template-columns:1fr!important}
+  .lc-state{min-width:70px}
+  /* all inline grid containers */
+  [style*="grid-template-columns:1fr 1fr"],[style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr 1fr"]{grid-template-columns:1fr!important}
+  pre{font-size:12px}
+  .lifecycle{padding:10px 8px}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 </head>
 <body>
 <nav>
-  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">A2A Protocol</span></a>
-  <div class="nav-links">
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">A2A Protocol</span></a>
+  <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+  <div class="nav-links" id="mob-nav">
     <a href="open-network.html">Open Network</a>
     <a href="agui.html">AG-UI</a>
     <a href="docs.html">Docs</a>
@@ -549,6 +571,9 @@ mandate = httpx.<span class="fn">post</span>(<span class="str">f"{BASE}/mandates
 </div>
 
 <script>
+function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open')}
+document.addEventListener('click',function(e){if(!e.target.closest('nav'))document.getElementById('mob-nav').classList.remove('nav-open')});
+
 function copyCode(btn){
   var pre=btn.closest('.code-wrap').querySelector('pre');
   navigator.clipboard.writeText(pre.textContent.trim()).then(()=>{

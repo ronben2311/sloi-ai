@@ -11,9 +11,9 @@
 html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(7,7,15,.92);border-bottom:1px solid var(--border);backdrop-filter:blur(16px)}
-.logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
-.logo em{font-style:italic;color:var(--indigo)}
-.logo-tag{font-size:11px;color:var(--muted);margin-left:7px;font-weight:400;font-family:'IBM Plex Mono',monospace}
+.nav-logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-tagline{font-size:11px;color:var(--muted);margin-left:7px;font-weight:400;font-family:'IBM Plex Mono',monospace}
 .nav-links{display:flex;gap:24px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
 .btn-cta{background:var(--indigo);color:#fff;padding:8px 18px;border-radius:4px;font-size:13px;font-weight:600;text-decoration:none}
@@ -43,14 +43,27 @@ p{font-size:15px;color:var(--text);line-height:1.9;margin-bottom:14px}
 footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:13px}
 .footer-links{display:flex;gap:20px}
 .footer-links a{color:var(--muted);text-decoration:none}.footer-links a:hover{color:var(--white)}
+.mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
+@media(max-width:768px){
+  nav{padding:0 14px}
+  .nav-tagline,.btn-cta{display:none}
+  .nav-links{display:none;position:absolute;top:56px;left:0;right:0;background:rgba(7,7,15,.98);border-bottom:1px solid var(--border);padding:14px 20px;flex-direction:column;gap:14px;z-index:200}
+  .nav-links.nav-open{display:flex}
+  .mob-nav-btn{display:flex}
+  .stat-row{grid-template-columns:repeat(2,1fr)}
+  .tech-grid{grid-template-columns:1fr}
+  .cta-box{padding:24px 16px}
+  h1{font-size:clamp(36px,10vw,56px)}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 <script src="/seo-geo.js"></script>
 </head>
 <body>
 <nav>
-  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
-  <div class="nav-links">
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+  <div class="nav-links" id="mob-nav">
     <a href="m2m-homepage.html">Home</a>
     <a href="pricing.html">Pricing</a>
     <a href="docs.html">Docs</a>
@@ -142,5 +155,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   </div>
   <div style="font-size:12px;color:var(--muted)">© 2026 SLOI AI Ltd.</div>
 </footer>
+<script>
+function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open');}
+document.addEventListener('click',function(e){var n=document.getElementById('mob-nav');if(n&&n.classList.contains('nav-open')&&!e.target.closest('nav'))n.classList.remove('nav-open');});
+</script>
 </body>
 </html>
