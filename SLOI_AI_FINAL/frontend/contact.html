@@ -63,6 +63,42 @@ h1 em{font-style:italic;color:var(--indigo)}
   .grid-2{grid-template-columns:1fr}
   h1{font-size:clamp(32px,10vw,52px)}
 }
+
+/* ── AI CHAT CARD ── */
+.online-badge{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--green);margin-left:auto}
+.online-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:cc-pulse 2s infinite}
+@keyframes cc-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.chat-msgs{padding:16px;min-height:280px;max-height:320px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
+.chat-msgs::-webkit-scrollbar{width:3px}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.cc-msg{display:flex;gap:8px;align-items:flex-start;animation:cc-in .18s ease}
+@keyframes cc-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.cc-msg.user{flex-direction:row-reverse}
+.cc-av{width:24px;height:24px;border-radius:6px;font-size:8px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:0}
+.cc-av.ai{background:rgba(91,95,239,.18);color:var(--indigo);border:0.5px solid rgba(91,95,239,.3)}
+.cc-av.you{background:var(--surface2);color:var(--muted);border:1px solid var(--border2)}
+.cc-bubble{font-size:13px;line-height:1.65;padding:8px 12px;border-radius:8px;max-width:84%}
+.cc-msg.ai .cc-bubble{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:3px 8px 8px 8px}
+.cc-msg.user .cc-bubble{background:rgba(91,95,239,.18);border:1px solid rgba(91,95,239,.28);color:var(--white);border-radius:8px 3px 8px 8px}
+.cc-typing{display:flex;align-items:center;gap:3px;padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:3px 8px 8px 8px;width:fit-content}
+.cc-typing span{width:4px;height:4px;border-radius:50%;background:var(--muted);animation:cc-bounce 1.2s infinite}
+.cc-typing span:nth-child(2){animation-delay:.2s}
+.cc-typing span:nth-child(3){animation-delay:.4s}
+@keyframes cc-bounce{0%,80%,100%{transform:translateY(0)}40%{transform:translateY(-4px)}}
+.cc-quick{display:flex;flex-wrap:wrap;gap:5px;padding:0 16px 10px;border-top:1px solid var(--border);padding-top:10px}
+.cc-qbtn{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:4px 11px;cursor:pointer;color:var(--muted);transition:all .15s}
+.cc-qbtn:hover{color:var(--violet);border-color:rgba(91,95,239,.4);background:rgba(91,95,239,.08)}
+.cc-input-wrap{position:relative;padding:10px 16px 10px}
+.cc-input{width:100%;font-family:'IBM Plex Mono',monospace;font-size:13px;resize:none;min-height:42px;max-height:90px;padding:9px 40px 9px 12px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--white);outline:none;line-height:1.45;transition:border-color .15s}
+.cc-input:focus{border-color:var(--indigo)}
+.cc-input::placeholder{color:var(--muted);opacity:.6}
+.cc-send-btn{position:absolute;right:22px;bottom:16px;width:30px;height:30px;border-radius:7px;border:1px solid var(--border2);background:var(--surface);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.cc-send-btn:hover{color:var(--white);border-color:var(--indigo);background:rgba(91,95,239,.2)}
+.cc-send-btn:disabled{opacity:.35;cursor:not-allowed}
+.cc-escalate{padding:10px 16px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface2)}
+.cc-escalate span{font-size:11px;color:var(--muted)}
+.cc-escalate a{font-size:11px;color:var(--violet);text-decoration:none;transition:opacity .15s}
+.cc-escalate a:hover{opacity:.75;text-decoration:underline}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 <script src="/seo-geo.js"></script>
@@ -84,30 +120,37 @@ h1 em{font-style:italic;color:var(--indigo)}
   <p class="hero-sub">Questions about the protocol, supplier onboarding, API access, or a deal you want to run through M2M � we respond within 24 hours.</p>
 
   <div class="grid-2">
-    <!-- FORM -->
+    <!-- AI CHAT AGENT -->
     <div class="card">
-      <div class="card-h"><div class="card-icon">??</div><div><div class="card-title">Send a message</div><div class="card-sub">We respond within 24 hours</div></div></div>
-      <div class="card-body" id="contact-form">
-        <div class="field"><label>Your name</label><input id="c-name" placeholder="Mohammed Al-Rashidi"/></div>
-        <div class="field"><label>Email</label><input id="c-email" type="email" placeholder="mohammed@neom.sa"/></div>
-        <div class="field"><label>I am a...</label>
-          <select id="c-role">
-            <option>Buyer looking to source commodities</option>
-            <option>Supplier wanting to join the network</option>
-            <option>Trader / trading company</option>
-            <option>Developer building an AI agent</option>
-            <option>Investor / press</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="field"><label>Subject</label><input id="c-subject" placeholder="e.g. I need 500 MT of steel rebar for a project in Dubai"/></div>
-        <div class="field"><label>Message</label><textarea id="c-message" placeholder="Tell us what you need. Include quantity, timeline, and destination if relevant."></textarea></div>
-        <button class="submit-btn" onclick="submitContact()">Send message ?</button>
+      <div class="card-h">
+        <div class="card-icon">🤖</div>
+        <div><div class="card-title">Ask our AI agent</div><div class="card-sub">Instant answers · Available 24/7</div></div>
+        <div class="online-badge"><div class="online-dot"></div>Online</div>
       </div>
-      <div class="success" id="contact-success">
-        <div class="success-icon">?</div>
-        <div class="success-title">Message sent.</div>
-        <p class="success-sub">We'll respond to your email within 24 hours.<br/>For urgent deals, WhatsApp is faster.</p>
+      <div class="card-body" style="padding:0;display:flex;flex-direction:column">
+        <div class="chat-msgs" id="cc-msgs">
+          <div class="cc-msg ai">
+            <div class="cc-av ai">AI</div>
+            <div class="cc-bubble">Hi — I'm the SLOI AI agent. Ask me about sourcing commodities, joining as a trader, the API, or anything else. How can I help?</div>
+          </div>
+        </div>
+        <div class="cc-quick" id="cc-quick">
+          <button class="cc-qbtn" onclick="ccQuick('How do I source commodities?')">Sourcing commodities</button>
+          <button class="cc-qbtn" onclick="ccQuick('How do I join as a trader?')">Join as trader</button>
+          <button class="cc-qbtn" onclick="ccQuick('Tell me about the Open Network API')">API access</button>
+          <button class="cc-qbtn" onclick="ccQuick('How does LOI generation work?')">LOI generation</button>
+          <button class="cc-qbtn" onclick="ccQuick('How do credits and pricing work?')">Pricing</button>
+        </div>
+        <div class="cc-input-wrap">
+          <textarea class="cc-input" id="cc-input" placeholder="Ask anything..." rows="1" onkeydown="ccKey(event)" oninput="ccResize(this)"></textarea>
+          <button class="cc-send-btn" id="cc-send-btn" onclick="ccSend()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="cc-escalate">
+          <span>Need a human?</span>
+          <a href="mailto:hello@sloiai.com">hello@sloiai.com →</a>
+        </div>
       </div>
     </div>
 
@@ -196,39 +239,93 @@ h1 em{font-style:italic;color:var(--indigo)}
 </div>
 
 <script>
-var API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://sloi-ai-production.up.railway.app';
-
-async function submitContact(){
-  var name    = document.getElementById('c-name').value.trim();
-  var email   = document.getElementById('c-email').value.trim();
-  var role    = document.getElementById('c-role').value;
-  var subject = document.getElementById('c-subject').value.trim();
-  var message = document.getElementById('c-message').value.trim();
-
-  if(!name || !email){ alert('Please fill in your name and email.'); return; }
-  if(!message){ alert('Please write a message.'); return; }
-
-  var btn = document.querySelector('.submit-btn');
-  btn.disabled = true;
-  btn.textContent = 'Sending�';
-
-  try {
-    var res = await fetch(API_BASE + '/v1/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, role, subject, message })
-    });
-    if(!res.ok) throw new Error('server error');
-    document.getElementById('contact-form').style.display = 'none';
-    document.getElementById('contact-success').classList.add('show');
-  } catch(e) {
-    btn.disabled = false;
-    btn.textContent = 'Send message ?';
-    alert('Failed to send. Please try again or email us directly at hello@sloiai.com');
-  }
-}
 function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open');}
 document.addEventListener('click',function(e){var n=document.getElementById('mob-nav');if(n&&n.classList.contains('nav-open')&&!e.target.closest('nav'))n.classList.remove('nav-open');});
+
+/* AI CONTACT AGENT */
+const CC_SYSTEM = `You are the SLOI AI contact agent - the first point of contact for people reaching out to SLOI AI. Be helpful, concise, and professional. Reply in 1-3 sentences max.
+
+Platform knowledge:
+- AI-powered B2B commodity procurement and LOI (Letter of Intent) generator
+- Three roles: Buyers (source commodities via AI negotiation), Traders (join network, earn $500 per signed deal), AI Agents (Open Network API)
+- Credits: Deal Hunter = 10 credits (up to 7 rounds, Boss approval), Autopilot = 20 credits (autonomous), LOI = 5 credits, Price Watcher = 1/day
+- Commodity sectors: Petrochemicals, Critical Minerals, Building Materials, Reconstruction/IMEC corridor
+- Trader LOI fee: $500 per signed deal. Traders set floor prices, platform negotiates
+- Open Network API: free Read tier, MCP-compatible, skill.md auto-discovery, compatible with Claude/GPT bots
+- OFAC + EU sanctions screening on every negotiation round
+- Supplier identities anonymized throughout negotiation
+- Contacts: hello@sloiai.com (general), api@sloiai.com (developer), legal@sloiai.com (compliance), WhatsApp +972-50-XXX-XXXX (urgent)
+- Support desk: support.html
+- Platform login: login.html
+
+Routing:
+- Buyer wanting to start a deal: direct to login.html or negotiation-agent.html
+- Supplier or trader wanting to join: direct to broker-onboarding.html
+- Developer or API question: direct to docs.html or api@sloiai.com
+- Billing or urgent deal: WhatsApp +972-50-XXX-XXXX
+- Support issue: support.html
+- Legal or compliance: legal@sloiai.com
+
+If you cannot answer, say: "Let me connect you with the right person - email hello@sloiai.com and we'll respond within 24 hours."`;
+
+let ccHistory = [];
+let ccLoading = false;
+
+function ccAddMsg(role, text) {
+  const msgs = document.getElementById('cc-msgs');
+  const div = document.createElement('div');
+  div.className = 'cc-msg ' + (role === 'user' ? 'user' : 'ai');
+  div.innerHTML = '<div class="cc-av ' + (role==='user'?'you':'ai') + '">' + (role==='user'?'You':'AI') + '</div><div class="cc-bubble">' + text.replace(/\n/g,'<br>') + '</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function ccShowTyping() {
+  const msgs = document.getElementById('cc-msgs');
+  const div = document.createElement('div');
+  div.className = 'cc-msg ai'; div.id = 'cc-typing';
+  div.innerHTML = '<div class="cc-av ai">AI</div><div class="cc-typing"><span></span><span></span><span></span></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function ccRemoveTyping() { const t=document.getElementById('cc-typing'); if(t) t.remove(); }
+
+async function ccSend() {
+  const input = document.getElementById('cc-input');
+  const text = input.value.trim();
+  if (!text || ccLoading) return;
+  input.value = ''; input.style.height = 'auto';
+  ccLoading = true;
+  document.getElementById('cc-send-btn').disabled = true;
+  document.getElementById('cc-quick').style.opacity = '0.4';
+  ccAddMsg('user', text);
+  ccHistory.push({ role:'user', content:text });
+  ccShowTyping();
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:400, system:CC_SYSTEM, messages:ccHistory })
+    });
+    const data = await res.json();
+    const reply = data.content && data.content.find(function(b){return b.type==='text';});
+    const replyText = (reply && reply.text) || "I'm having trouble connecting. Please email hello@sloiai.com directly.";
+    ccRemoveTyping();
+    ccAddMsg('ai', replyText);
+    ccHistory.push({ role:'assistant', content:replyText });
+  } catch(e) {
+    ccRemoveTyping();
+    ccAddMsg('ai', "Connection issue. Please email hello@sloiai.com or reach us on WhatsApp.");
+  }
+  ccLoading = false;
+  document.getElementById('cc-send-btn').disabled = false;
+  document.getElementById('cc-quick').style.opacity = '1';
+}
+
+function ccQuick(text) { document.getElementById('cc-input').value = text; ccSend(); }
+function ccKey(e) { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); ccSend(); } }
+function ccResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,90)+'px'; }
 </script>
 </body>
 </html>
