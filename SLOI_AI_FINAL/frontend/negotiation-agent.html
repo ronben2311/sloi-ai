@@ -2022,7 +2022,7 @@
             📱 OutreachBot
           </div>
           <div style="font-size: 12px; color: var(--muted)">
-            Telegram outreach · Requires Telegram Bot API
+            WhatsApp outreach · Requires WhatsApp Business API
           </div>
           <div style="margin-left: auto; display: flex; gap: 6px">
             <button
@@ -3848,7 +3848,7 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
       function addToOutreach() {
         var name = prompt("Lead name or company:");
         if (!name) return;
-        var tg = prompt("Telegram handle (optional):") || "";
+        var tg = prompt("WhatsApp number (optional):") || "";
         OUTREACH_DATA.unshift({
           name: name.trim(),
           handle: tg.trim(),
@@ -3878,7 +3878,7 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
           })
           .catch(function () {
             showToast(
-              "OutreachBot requires Telegram Bot API — see docs.html",
+              "OutreachBot requires WhatsApp Business API — see docs.html",
               "gold",
             );
             btn.textContent = orig;

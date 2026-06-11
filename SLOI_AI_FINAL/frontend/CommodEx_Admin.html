@@ -258,7 +258,7 @@ select.inp option{background:var(--surface)}
     <div class="tb-right">
       <div class="live-badge"><div class="live-dot"></div>LIVE</div>
       <div id="tb-clock" style="font-size:15px;color:var(--muted)"></div>
-      <button class="btn btn-sm btn-a" onclick="openTG()">📲 Telegram</button>
+      <button class="btn btn-sm btn-a" onclick="openTG()">📲 WhatsApp</button>
     </div>
   </div>
 
@@ -266,7 +266,7 @@ select.inp option{background:var(--surface)}
     <button class="qa" style="background:var(--indigo-dim);border-color:rgba(91,95,239,.35);color:var(--violet)" onclick="window.open('loi-generator.html','_blank')">📄 Generate LOI</button>
     <button class="qa" style="background:var(--gold-dim);border-color:rgba(232,169,74,.35);color:var(--gold)" onclick="approveDeal()">⚡ Approve pending</button>
     <button class="qa" style="background:var(--red-dim);border-color:rgba(239,68,68,.3);color:var(--red)" onclick="window.open('compliance.html','_blank')">🛡️ Compliance check</button>
-    <button class="qa" style="background:rgba(0,136,204,.08);border-color:rgba(0,136,204,.3);color:#0088cc" onclick="openTG()">📲 Telegram blast</button>
+    <button class="qa" style="background:rgba(0,136,204,.08);border-color:rgba(0,136,204,.3);color:#0088cc" onclick="openTG()">📲 WhatsApp blast</button>
     <button class="qa" style="background:var(--teal-dim);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="window.open('price-discovery.html','_blank')">🔍 Price check</button>
     <button class="qa" style="background:var(--surface);border-color:var(--border2);color:var(--muted)" onclick="window.open('exchange.html','_blank')">📊 Exchange</button>
     <button class="qa" style="background:var(--surface);border-color:var(--border2);color:var(--muted)" onclick="window.open('broker-onboarding.html','_blank')">🌍 Add trader</button>
@@ -685,7 +685,7 @@ select.inp option{background:var(--surface)}
             <div style="width:32px;height:32px;border-radius:6px;background:rgba(37,211,102,.1);display:flex;align-items:center;justify-content:center;font-size:16px">📱</div>
             <div>
               <div style="font-size:14px;font-weight:600;color:var(--white)">OutreachBot</div>
-              <div style="font-size:14px;color:var(--muted)">Sends Telegram messages to leads · personalised per sector</div>
+              <div style="font-size:14px;color:var(--muted)">Sends WhatsApp messages to leads · personalised per sector</div>
             </div>
           </div>
           <div style="display:flex;gap:5px;margin-bottom:10px">
@@ -908,7 +908,7 @@ select.inp option{background:var(--surface)}
           <div style="display:flex;align-items:center;gap:8px"><span class="badge bg">●</span><span style="color:var(--muted)">Supabase — connected</span></div>
           <div style="display:flex;align-items:center;gap:8px"><span class="badge bg">●</span><span style="color:var(--muted)">Claude API — connected</span></div>
           <div style="display:flex;align-items:center;gap:8px"><span class="badge bg">●</span><span style="color:var(--muted)">Stripe — connected</span></div>
-          <div style="display:flex;align-items:center;gap:8px"><span class="badge ba">●</span><span style="color:var(--muted)">Telegram Bot — pending</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><span class="badge ba">●</span><span style="color:var(--muted)">WhatsApp — pending</span></div>
           <div style="display:flex;align-items:center;gap:8px"><span class="badge ba">●</span><span style="color:var(--muted)">TradeFinex — pending</span></div>
         </div>
         <div style="height:1px;background:var(--border);margin:12px 0"></div>
@@ -970,7 +970,7 @@ select.inp option{background:var(--surface)}
 <!-- TG MODAL -->
 <div class="modal-bg" id="tg-modal" onclick="if(event.target===this)closeTG()">
   <div class="modal">
-    <div class="modal-hd"><div class="modal-title">📲 Send via Telegram</div><button class="modal-close" onclick="closeTG()">×</button></div>
+    <div class="modal-hd"><div class="modal-title">📲 Send via WhatsApp</div><button class="modal-close" onclick="closeTG()">×</button></div>
     <div class="modal-body">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
         <div><label class="flabel">Recipient</label>
@@ -993,7 +993,7 @@ select.inp option{background:var(--surface)}
     </div>
     <div class="modal-ft">
       <button class="btn" onclick="closeTG()">Cancel</button>
-      <button class="btn" style="background:#0088cc;color:#fff;border-color:#0088cc" onclick="sendTG()">Open in Telegram</button>
+      <button class="btn" style="background:#0088cc;color:#fff;border-color:#0088cc" onclick="sendTG()">Open in WhatsApp</button>
     </div>
   </div>
 </div>
@@ -1338,7 +1338,7 @@ function openTG(){document.getElementById('tg-modal').classList.add('open');load
 function closeTG(){document.getElementById('tg-modal').classList.remove('open');}
 function loadTpl(){var k=document.getElementById('tg-tpl').value;var m=TG_TPLS[k]||'';document.getElementById('tg-msg').value=m;document.getElementById('tg-preview').textContent=m||'Custom message...';}
 document.addEventListener('input',function(e){if(e.target.id==='tg-msg')document.getElementById('tg-preview').textContent=e.target.value;});
-function sendTG(){var m=document.getElementById('tg-msg').value;if(!m){alert('Enter a message.');return;}window.open('https://t.me/share/url?text='+encodeURIComponent(m),'_blank');closeTG();}
+function sendTG(){var m=document.getElementById('tg-msg').value;if(!m){alert('Enter a message.');return;}window.open('https://wa.me/?text='+encodeURIComponent(m),'_blank');closeTG();}
 
 function approveDeal() {
   if (!_pendingNegId) return;
@@ -1422,7 +1422,7 @@ function renderLeadFinder(){
     var actionBtn = l.action === 'rfq'
       ? '<button class="btn btn-xs btn-p" onclick="addToPipeline('+i+')">+ Add to pipeline</button>'
       : l.action === 'outreach'
-      ? '<button class="btn btn-xs btn-g" onclick="openTG()">📲 Telegram</button>'
+      ? '<button class="btn btn-xs btn-g" onclick="openTG()">📲 WhatsApp</button>'
       : '<button class="btn btn-xs btn-a" onclick="alert(\'Iraq requires enhanced KYC. Boss review needed before outreach.\')">⚠ Review first</button>';
 
     html += '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:15px">';
@@ -1504,7 +1504,7 @@ function renderAgentLog(){
     {time:'14:22',agent:'🛡️ ComplianceBot',action:'Gulf Cement LLC — CLEARED · Al-Rashid Group — REVIEW required'},
     {time:'14:09',agent:'🔭 LeadFinder',action:'Baghdad Airport project found · Iraq flag · Boss review recommended'},
     {time:'13:55',agent:'📡 PriceScout',action:'Scanned 11 products · All within normal range except Steel Rebar'},
-    {time:'13:40',agent:'📱 OutreachBot',action:'Sent 6 Telegram messages · 2 replies received · Cairo Constructions interested'},
+    {time:'13:40',agent:'📱 OutreachBot',action:'Sent 6 WhatsApp messages · 2 replies received · Cairo Constructions interested'},
     {time:'12:00',agent:'🔭 LeadFinder',action:'Routine scan · 3 leads found · Added to pipeline'},
     {time:'11:05',agent:'🛡️ ComplianceBot',action:'Iran entity blocked · OFAC match · Deal rejected automatically'},
   ];

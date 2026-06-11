@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support · SLOI AI</title>
+  <meta name="description" content="Get help with SLOI AI — credits, negotiations, LOI generation, trader onboarding, and API access. AI-powered support desk with live chat and ticket submission.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0b0d14;
+      --bg-surface: #12151f;
+      --bg-raised: #181c28;
+      --border: rgba(255,255,255,0.08);
+      --border-mid: rgba(255,255,255,0.14);
+      --text: #e8eaf2;
+      --text-muted: #7a7f96;
+      --text-dim: #3e4259;
+      --accent: #5b6af0;
+      --accent-dim: rgba(91,106,240,0.15);
+      --green: #3ecf8e;
+      --green-dim: rgba(62,207,142,0.12);
+      --mono: 'IBM Plex Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 28px 28px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,13,20,0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 0.5px solid var(--border);
+      padding: 0 2rem; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-size: 15px; font-weight: 600; color: var(--text); text-decoration: none; letter-spacing: -0.3px; }
+    .nav-logo em { color: var(--accent); font-style: normal; }
+    .nav-links { display: flex; gap: 1.5rem; align-items: center; }
+    .nav-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-links a.active { color: var(--text); }
+    .nav-cta { font-size: 12px; padding: 6px 14px; border: 0.5px solid var(--border-mid); border-radius: 6px; color: var(--text); text-decoration: none; transition: all 0.15s; }
+    .nav-cta:hover { background: var(--bg-raised); }
+
+    /* ── LAYOUT ── */
+    .page { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      position: relative;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: -60px;
+      width: 420px; height: 300px;
+      background: radial-gradient(ellipse, rgba(91,106,240,0.1) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .page-header > * { position: relative; z-index: 1; }
+
+    .breadcrumb { font-size: 12px; color: var(--text-muted); margin-bottom: 1.25rem; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+    .breadcrumb a:hover { color: var(--text); }
+    .breadcrumb span { margin: 0 8px; opacity: 0.35; }
+
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; color: var(--green);
+      background: var(--green-dim); border: 0.5px solid rgba(62,207,142,0.2);
+      padding: 4px 12px; border-radius: 20px; margin-bottom: 1rem;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+    .page-header h1 { font-size: 36px; font-weight: 600; letter-spacing: -0.7px; line-height: 1.15; margin-bottom: 12px; }
+    .page-header h1 em { color: var(--accent); font-style: normal; }
+    .page-header p { font-size: 14px; color: var(--text-muted); max-width: 500px; line-height: 1.7; margin-bottom: 1.75rem; }
+
+    .header-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+    .h-stat {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 12px; color: var(--text-muted);
+      background: var(--bg-surface); border: 0.5px solid var(--border);
+      padding: 6px 12px; border-radius: 8px;
+    }
+    .h-stat svg { color: var(--accent); flex-shrink: 0; }
+
+    /* ── TAB BAR ── */
+    .tab-bar {
+      display: inline-flex; gap: 3px;
+      background: var(--bg-surface); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 4px; margin-bottom: 2rem;
+    }
+    .tab {
+      font-family: var(--mono); font-size: 12px; font-weight: 500;
+      background: none; border: none; border-radius: 9px;
+      padding: 8px 18px; cursor: pointer; color: var(--text-muted);
+      transition: all 0.15s; display: flex; align-items: center; gap: 7px;
+      white-space: nowrap;
+    }
+    .tab:hover { color: var(--text); background: var(--bg-raised); }
+    .tab.active {
+      color: var(--text); background: var(--bg-raised);
+      border: 0.5px solid var(--border-mid);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+    }
+    .tab svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* ── CHAT ── */
+    .chat-wrap { display: flex; flex-direction: column; gap: 12px; }
+
+    .messages {
+      background: var(--bg-surface); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 1.25rem;
+      min-height: 380px; max-height: 480px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 16px;
+      scroll-behavior: smooth;
+    }
+    .messages::-webkit-scrollbar { width: 3px; }
+    .messages::-webkit-scrollbar-track { background: transparent; }
+    .messages::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+
+    .msg { display: flex; gap: 10px; align-items: flex-start; animation: msgIn 0.2s ease; }
+    @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .msg.user { flex-direction: row-reverse; }
+
+    .avatar {
+      width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 600; letter-spacing: 0;
+    }
+    .avatar.ai { background: var(--accent-dim); color: var(--accent); border: 0.5px solid rgba(91,106,240,0.3); }
+    .avatar.you { background: var(--bg-raised); color: var(--text-muted); border: 0.5px solid var(--border-mid); }
+
+    .bubble-wrap { display: flex; flex-direction: column; gap: 4px; max-width: 85%; }
+    .msg.user .bubble-wrap { align-items: flex-end; }
+
+    .bubble { font-size: 13px; line-height: 1.7; padding: 10px 14px; border-radius: 10px; }
+    .msg.ai .bubble {
+      background: var(--bg-raised); border: 0.5px solid var(--border); color: var(--text);
+      border-radius: 4px 10px 10px 10px;
+    }
+    .msg.user .bubble {
+      background: linear-gradient(135deg, rgba(91,106,240,0.22), rgba(91,106,240,0.13));
+      border: 0.5px solid rgba(91,106,240,0.28); color: var(--text);
+      border-radius: 10px 4px 10px 10px;
+    }
+    .msg-meta { font-size: 10px; color: var(--text-dim); padding: 0 2px; }
+
+    .typing-bubble {
+      display: flex; align-items: center; gap: 4px;
+      padding: 12px 16px; background: var(--bg-raised);
+      border: 0.5px solid var(--border); border-radius: 4px 10px 10px 10px; width: fit-content;
+    }
+    .typing-bubble span { width: 4px; height: 4px; border-radius: 50%; background: var(--text-muted); animation: bounce 1.2s infinite; }
+    .typing-bubble span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-bubble span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-4px)} }
+
+    .quick-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+    .qbtn {
+      font-family: var(--mono); font-size: 11px;
+      background: var(--bg-surface); border: 0.5px solid var(--border);
+      border-radius: 20px; padding: 5px 13px; cursor: pointer; color: var(--text-muted);
+      transition: all 0.15s;
+    }
+    .qbtn:hover { color: var(--accent); border-color: rgba(91,106,240,0.4); background: var(--accent-dim); }
+
+    .input-box {
+      position: relative; background: var(--bg-surface);
+      border: 0.5px solid var(--border-mid); border-radius: 10px; transition: border-color 0.15s;
+    }
+    .input-box:focus-within { border-color: var(--accent); }
+    .chat-input {
+      width: 100%; font-family: var(--mono); font-size: 13px; resize: none;
+      min-height: 50px; max-height: 110px;
+      padding: 14px 52px 14px 14px;
+      border: none; background: transparent;
+      color: var(--text); line-height: 1.5; outline: none;
+    }
+    .chat-input::placeholder { color: var(--text-dim); }
+    .send-btn {
+      position: absolute; right: 9px; bottom: 9px;
+      width: 34px; height: 34px; border-radius: 8px;
+      border: 0.5px solid var(--border-mid); background: var(--bg-raised); color: var(--text-muted);
+      cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+    }
+    .send-btn:hover { color: var(--text); border-color: var(--accent); background: var(--accent-dim); }
+    .send-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .escalate-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; background: var(--bg-surface);
+      border: 0.5px solid var(--border); border-radius: 8px;
+    }
+    .escalate-bar span { font-size: 12px; color: var(--text-muted); }
+    .escalate-link { font-size: 12px; color: var(--accent); cursor: pointer; background: none; border: none; font-family: var(--mono); transition: opacity 0.15s; }
+    .escalate-link:hover { opacity: 0.75; text-decoration: underline; }
+
+    /* ── TICKET ── */
+    .ticket-wrap { display: flex; flex-direction: column; gap: 10px; max-width: 680px; }
+    .ticket-section {
+      padding: 1.5rem; background: var(--bg-surface);
+      border: 0.5px solid var(--border); border-radius: 12px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .section-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 2px; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 11px; color: var(--text-muted); }
+    .field input, .field select, .field textarea {
+      font-family: var(--mono); font-size: 13px;
+      padding: 10px 14px; border-radius: 8px;
+      border: 0.5px solid var(--border-mid); background: var(--bg-raised);
+      color: var(--text); outline: none; transition: border-color 0.15s; appearance: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
+    .field input::placeholder, .field textarea::placeholder { color: var(--text-dim); }
+    .field textarea { resize: vertical; min-height: 100px; line-height: 1.65; }
+    .field select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a7f96' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
+    }
+    .field select option { background: var(--bg-raised); }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .ticket-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; padding-top: 2px;
+    }
+    .ticket-note { font-size: 11px; color: var(--text-dim); }
+    .submit-btn {
+      font-family: var(--mono); font-size: 13px; padding: 11px 22px;
+      border-radius: 8px; border: 0.5px solid rgba(91,106,240,0.4);
+      background: var(--accent-dim); color: var(--text);
+      cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.15s;
+    }
+    .submit-btn:hover { background: rgba(91,106,240,0.25); border-color: var(--accent); }
+    .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .success-card {
+      background: var(--bg-surface); border: 0.5px solid var(--border);
+      border-radius: 12px; padding: 3rem 2rem; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+    }
+    .success-ring {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: var(--green-dim); border: 0.5px solid rgba(62,207,142,0.25);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .success-card h3 { font-size: 18px; font-weight: 500; }
+    .success-card p { font-size: 13px; color: var(--text-muted); max-width: 360px; line-height: 1.7; }
+    .ref-badge {
+      font-size: 13px; background: var(--bg-raised);
+      border: 0.5px solid var(--border-mid); border-radius: 8px;
+      padding: 8px 20px; color: var(--text-muted); letter-spacing: 2px;
+    }
+    .reset-btn {
+      font-family: var(--mono); font-size: 12px; background: none;
+      border: 0.5px solid var(--border-mid); border-radius: 20px;
+      padding: 6px 16px; color: var(--text-muted); cursor: pointer; transition: all 0.15s; margin-top: 4px;
+    }
+    .reset-btn:hover { color: var(--text); }
+
+    /* ── FAQ ── */
+    .faq-wrap { display: flex; flex-direction: column; gap: 4px; max-width: 720px; }
+    .faq-category {
+      font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.2px;
+      margin: 1.75rem 0 8px; padding-left: 2px;
+    }
+    .faq-category:first-child { margin-top: 0; }
+    .faq-item {
+      border: 0.5px solid var(--border); border-radius: 10px;
+      overflow: hidden; transition: border-color 0.15s; background: var(--bg-surface);
+    }
+    .faq-item.open { border-color: var(--border-mid); }
+    .faq-q {
+      font-family: var(--mono); font-size: 13px; padding: 14px 16px;
+      cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+      color: var(--text); background: transparent; gap: 12px;
+      border: none; width: 100%; text-align: left; transition: background 0.15s;
+    }
+    .faq-q:hover { background: var(--bg-raised); }
+    .faq-a {
+      font-size: 13px; line-height: 1.75; color: var(--text-muted);
+      background: var(--bg-raised); border-top: 0.5px solid var(--border);
+      max-height: 0; overflow: hidden; padding: 0 16px;
+      transition: max-height 0.28s ease, padding 0.28s ease;
+    }
+    .faq-a.open { max-height: 320px; padding: 14px 16px 18px; }
+    .chevron { flex-shrink: 0; transition: transform 0.25s; color: var(--text-dim); }
+    .chevron.open { transform: rotate(180deg); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 0.5px solid var(--border);
+      background: var(--bg-surface);
+      padding: 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-brand { font-size: 13px; color: var(--text-muted); }
+    .footer-brand em { color: var(--accent); font-style: normal; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 12px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+    .footer-links a:hover { color: var(--text); }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 600px) {
+      nav { padding: 0 1rem; }
+      .page { padding: 2rem 1rem 4rem; }
+      .page-header h1 { font-size: 26px; }
+      .row2 { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      footer { flex-direction: column; gap: 0.75rem; }
+      .tab-bar { width: 100%; }
+      .tab { flex: 1; justify-content: center; padding: 8px 10px; font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">SLOI <em>AI</em></a>
+  <div class="nav-links">
+    <a href="index.html">How it works</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html" class="active">Contact</a>
+    <a href="login.html" class="nav-cta">Sign in</a>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<main class="page">
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="contact.html">Contact</a>
+      <span>/</span>
+      Support desk
+    </div>
+
+    <div class="status-pill"><div class="status-dot"></div>AI support online</div>
+    <h1>Support <em>desk.</em></h1>
+    <p>Get instant answers from our AI agent, or submit a ticket for billing, compliance, and deal issues.</p>
+
+    <div class="header-stats">
+      <div class="h-stat">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        &lt; 2 min AI response
+      </div>
+      <div class="h-stat">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        24h ticket SLA
+      </div>
+      <div class="h-stat">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        OFAC compliant
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab active" onclick="switchTab('chat', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/></svg>
+      AI Chat
+    </button>
+    <button class="tab" onclick="switchTab('ticket', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16.5 6v.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V6m10.5 0A2.25 2.25 0 0014.25 3.75h-4.5A2.25 2.25 0 007.5 6m9 0H21M3 6h4.5M7.5 21h9M7.5 21V6m9 0v15"/></svg>
+      Submit Ticket
+    </button>
+    <button class="tab" onclick="switchTab('faq', this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/></svg>
+      FAQ
+    </button>
+  </div>
+
+  <!-- CHAT PANEL -->
+  <div id="tab-chat" class="chat-wrap">
+    <div class="messages" id="messages">
+      <div class="msg ai">
+        <div class="avatar ai">AI</div>
+        <div class="bubble-wrap">
+          <div class="bubble">Hi — I'm the SLOI AI support agent. I can help with credits, negotiations, LOI generation, trader onboarding, the Open Network API, and anything else on the platform. What do you need?</div>
+          <div class="msg-meta">Now</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quick-btns" id="quick-btns">
+      <button class="qbtn" onclick="sendQuick('How do credits work?')">How do credits work?</button>
+      <button class="qbtn" onclick="sendQuick('How is an LOI generated?')">How is an LOI generated?</button>
+      <button class="qbtn" onclick="sendQuick('Deal Hunter vs Autopilot?')">Deal Hunter vs Autopilot?</button>
+      <button class="qbtn" onclick="sendQuick('How do I become a trader?')">Become a trader</button>
+      <button class="qbtn" onclick="sendQuick('What payment methods are accepted?')">Payment methods</button>
+      <button class="qbtn" onclick="sendQuick('How does the Open Network API work?')">Open Network API</button>
+    </div>
+
+    <div class="input-box">
+      <textarea class="chat-input" id="chat-input" placeholder="Ask anything about the platform..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+
+    <div class="escalate-bar">
+      <span>AI can't resolve it?</span>
+      <button class="escalate-link" onclick="switchTab('ticket', document.querySelectorAll('.tab')[1])">Submit a ticket →</button>
+    </div>
+  </div>
+
+  <!-- TICKET PANEL -->
+  <div id="tab-ticket" class="hidden">
+    <div id="ticket-form" class="ticket-wrap">
+
+      <div class="ticket-section">
+        <div class="section-label">Contact info</div>
+        <div class="row2">
+          <div class="field">
+            <label>Your name</label>
+            <input type="text" id="t-name" placeholder="Full name">
+          </div>
+          <div class="field">
+            <label>Email address</label>
+            <input type="email" id="t-email" placeholder="you@company.com">
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket-section">
+        <div class="section-label">Issue details</div>
+        <div class="row2">
+          <div class="field">
+            <label>Category</label>
+            <select id="t-cat">
+              <option value="">Select category...</option>
+              <option>Credits &amp; Billing</option>
+              <option>Negotiation Issue</option>
+              <option>LOI Generation</option>
+              <option>Account &amp; Login</option>
+              <option>Trader Onboarding</option>
+              <option>API / Open Network</option>
+              <option>KYC / Compliance</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Priority</label>
+            <select id="t-priority">
+              <option>Normal</option>
+              <option>High — deal in progress</option>
+              <option>Urgent — LOI blocked</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>Subject</label>
+          <input type="text" id="t-subject" placeholder="Brief description of your issue">
+        </div>
+        <div class="field">
+          <label>Message</label>
+          <textarea id="t-message" placeholder="Describe your issue. Include any LOI reference numbers, deal IDs, or error messages."></textarea>
+        </div>
+      </div>
+
+      <div class="ticket-footer">
+        <span class="ticket-note">We respond within 24 hours · hello@sloiai.com</span>
+        <button class="submit-btn" onclick="submitTicket()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Submit ticket
+        </button>
+      </div>
+    </div>
+
+    <div id="ticket-success" class="success-card hidden">
+      <div class="success-ring">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Ticket submitted</h3>
+      <p>We'll respond to your email within 24 hours. For urgent deals, reach us on WhatsApp.</p>
+      <div class="ref-badge" id="ref-code">TKT-XXXXXX</div>
+      <button class="reset-btn" onclick="resetTicket()">Submit another ticket</button>
+    </div>
+  </div>
+
+  <!-- FAQ PANEL -->
+  <div id="tab-faq" class="faq-wrap hidden"></div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">SLOI <em>AI</em> · Smart negotiation · LOI generation</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="contact.html">Contact</a>
+    <a href="docs.html">Docs</a>
+    <a href="terms.html">Legal</a>
+    <a href="https://wa.me/97250XXXXXX">WhatsApp</a>
+  </div>
+</footer>
+
+<script>
+const FAQS = [
+  { cat: "Credits & Billing", items: [
+    { q: "How do credits work?", a: "Credits are the platform currency — buy them once and they never expire. Deal Hunter costs 10 credits per negotiation (up to 7 rounds). Autopilot costs 20 credits. LOI generation costs 5 credits. Price Watcher alerts cost 1 credit per day. Purchase in bulk for a lower per-credit rate — from $0.99 down to $0.67 per credit." },
+    { q: "What payment methods are accepted?", a: "Credit and debit cards via Stripe, and USDC on Base L2 (Ethereum Layer 2). All card payments are processed securely by Stripe. Credits are added to your account instantly after payment." },
+    { q: "Can I get a refund on unused credits?", a: "Credits are non-refundable once purchased, but they never expire — so there's no pressure to use them by a deadline. If you have a billing issue, submit a ticket under the 'Credits & Billing' category and we'll review it." },
+  ]},
+  { cat: "Negotiation", items: [
+    { q: "What is the difference between Deal Hunter and Autopilot?", a: "Deal Hunter (10 credits) runs the negotiation and pauses for your Boss approval before finalizing — you stay in control of every deal. Autopilot (20 credits) runs fully autonomously within your set price ceiling. With auto_approve enabled, the LOI is generated without any human step. Both modes screen for OFAC and EU sanctions on every round." },
+    { q: "How many negotiation rounds happen?", a: "Up to 7 rounds per negotiation. If the agent cannot reach an agreed price within 7 rounds, no LOI is generated. Negotiation credits are consumed regardless of outcome, as the agent work has been performed." },
+    { q: "Is the supplier's identity visible during negotiation?", a: "No. Supplier identities are anonymized at the database level throughout the negotiation. You see only a reference code (e.g. REF-MET-001). Full identity is only shared after a deal is formally signed and both parties agree to proceed." },
+  ]},
+  { cat: "LOI Generation", items: [
+    { q: "How is an LOI generated?", a: "After the AI agent reaches an agreed price and Boss approval is given (or Autopilot auto-approves), the LOI is generated as a PDF instantly. It includes the product, quantity, agreed price, Incoterms, payment method, delivery date, compliance clearance (OFAC + EU), and a unique reference number. It costs 5 credits and is emailed to both parties." },
+    { q: "What happens if I dispute an LOI?", a: "SLOI AI is a facilitation platform — we are not a party to the transaction. LOI disputes between buyer and supplier are handled directly between the parties. If you believe an LOI was generated in error due to a platform issue, submit a ticket under 'KYC / Compliance' and we will investigate." },
+  ]},
+  { cat: "Traders & Onboarding", items: [
+    { q: "How do I become a trader on the platform?", a: "Go to the Trader Onboarding page and submit your company details, commodity focus, and supplier network overview. Once approved, you receive RFQs from verified buyers. You set your own floor prices — SLOI AI handles the negotiation. The LOI fee is $500 per signed deal. Supplier identities are always protected." },
+    { q: "What commodities does SLOI AI cover?", a: "Four sectors: Petrochemicals (sulfuric acid, caustic soda, HDPE, polypropylene), Critical Minerals (lithium, cobalt, graphite, rare earths), Building Materials (steel rebar, hollow block, floor tile, PVC pipe), and Reconstruction/IMEC corridor commodities (bulk cement, steel structures)." },
+  ]},
+  { cat: "API & Open Network", items: [
+    { q: "How does the Open Network API work?", a: "The Open Network lets external AI agents connect to SLOI AI programmatically. The Read tier is free with instant access — no approval needed. It supports supplier search and live price feeds. The API is MCP-compatible with skill.md auto-discovery, and works with Claude, GPT, and WhatsApp bots. See /docs for the full OpenAPI spec." },
+    { q: "How does OFAC and sanctions screening work?", a: "Every negotiation round is automatically screened against OFAC and EU sanctions lists. If a counterparty or shipment destination triggers a match, the deal is blocked before the next round can proceed and before any LOI can be generated. This is not a one-time check — it runs continuously across all rounds." },
+  ]},
+];
+
+function buildFAQ() {
+  const panel = document.getElementById('tab-faq');
+  let html = '';
+  let idx = 0;
+  FAQS.forEach(group => {
+    html += `<div class="faq-category">${group.cat}</div>`;
+    group.items.forEach(item => {
+      html += `
+        <div class="faq-item" id="faq-item-${idx}">
+          <button class="faq-q" onclick="toggleFAQ(${idx})">
+            <span>${item.q}</span>
+            <svg class="chevron" id="chev-${idx}" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="faq-a" id="faq-a-${idx}">${item.a}</div>
+        </div>`;
+      idx++;
+    });
+  });
+  panel.innerHTML = html;
+}
+
+function toggleFAQ(i) {
+  const ans = document.getElementById('faq-a-' + i);
+  const chev = document.getElementById('chev-' + i);
+  const item = document.getElementById('faq-item-' + i);
+  const isOpen = ans.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.chevron').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.faq-item').forEach(fi => fi.classList.remove('open'));
+  if (!isOpen) { ans.classList.add('open'); chev.classList.add('open'); item.classList.add('open'); }
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-chat').classList.toggle('hidden', name !== 'chat');
+  document.getElementById('tab-ticket').classList.toggle('hidden', name !== 'ticket');
+  document.getElementById('tab-faq').classList.toggle('hidden', name !== 'faq');
+}
+
+const SYSTEM = `You are the SLOI AI support agent — a specialist support assistant for the SLOI AI commodity trading and LOI negotiation platform. You are precise, concise, and professional. You answer in plain English.
+
+Platform knowledge:
+- AI-powered B2B commodity procurement and LOI (Letter of Intent) generator
+- Three user roles: Buyers, Traders, AI Agents
+- Credits: Deal Hunter = 10 credits (up to 7 rounds, Boss approval required), Autopilot = 20 credits (autonomous, auto_approve option), LOI generation = 5 credits, Price Watcher = 1 credit/day
+- Credits never expire. Purchased via Stripe or USDC on Base L2
+- Supplier identities anonymized at DB level throughout negotiations
+- OFAC + EU sanctions screening on every negotiation round
+- Commodity sectors: Petrochemicals, Critical Minerals, Building Materials, Reconstruction/IMEC
+- Trader LOI fee: $500 per signed deal. Traders set floor prices, platform negotiates
+- Open Network API: free Read tier, MCP-compatible, skill.md auto-discovery, compatible with Claude/GPT/WhatsApp bots
+- Boss approval: required before LOI generation unless auto_approve=true
+- Contact: hello@sloiai.com, api@sloiai.com, legal@sloiai.com, WhatsApp +972-50-XXX-XXXX
+
+Answer only questions about the platform. Keep answers under 4 sentences unless more detail is needed. If you cannot answer, say: "I don't have details on that — please submit a support ticket and our team will assist within 24 hours."`;
+
+let history = [];
+let isLoading = false;
+
+function addMessage(role, text) {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg ' + (role === 'user' ? 'user' : 'ai');
+  const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  div.innerHTML = `
+    <div class="avatar ${role === 'user' ? 'you' : 'ai'}">${role === 'user' ? 'You' : 'AI'}</div>
+    <div class="bubble-wrap">
+      <div class="bubble">${text.replace(/\n/g, '<br>')}</div>
+      <div class="msg-meta">${now}</div>
+    </div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg ai'; div.id = 'typing-ind';
+  div.innerHTML = `<div class="avatar ai">AI</div><div class="bubble-wrap"><div class="typing-bubble"><span></span><span></span><span></span></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-ind');
+  if (t) t.remove();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || isLoading) return;
+  input.value = ''; input.style.height = 'auto';
+  isLoading = true;
+  document.getElementById('send-btn').disabled = true;
+  document.getElementById('quick-btns').style.opacity = '0.4';
+  addMessage('user', text);
+  history.push({ role: 'user', content: text });
+  showTyping();
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: SYSTEM,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.find(b => b.type === 'text')?.text || "I'm having trouble connecting. Please try again or submit a ticket.";
+    removeTyping();
+    addMessage('ai', reply);
+    history.push({ role: 'assistant', content: reply });
+  } catch (e) {
+    removeTyping();
+    addMessage('ai', "Connection error. Please try again, or submit a support ticket for assistance.");
+  }
+  isLoading = false;
+  document.getElementById('send-btn').disabled = false;
+  document.getElementById('quick-btns').style.opacity = '1';
+}
+
+function sendQuick(text) {
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+}
+
+function submitTicket() {
+  const name = document.getElementById('t-name').value.trim();
+  const email = document.getElementById('t-email').value.trim();
+  const cat = document.getElementById('t-cat').value;
+  const subject = document.getElementById('t-subject').value.trim();
+  const msg = document.getElementById('t-message').value.trim();
+  if (!name || !email || !cat || !subject || !msg) {
+    alert('Please fill in all fields before submitting.');
+    return;
+  }
+  const ref = 'TKT-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+  document.getElementById('ref-code').textContent = ref;
+  document.getElementById('ticket-form').classList.add('hidden');
+  document.getElementById('ticket-success').classList.remove('hidden');
+}
+
+function resetTicket() {
+  ['t-name','t-email','t-subject','t-message'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('t-cat').value = '';
+  document.getElementById('t-priority').value = 'Normal';
+  document.getElementById('ticket-form').classList.remove('hidden');
+  document.getElementById('ticket-success').classList.add('hidden');
+}
+
+buildFAQ();
+</script>
+</body>
+</html>

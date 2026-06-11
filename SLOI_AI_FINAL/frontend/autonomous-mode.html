@@ -158,7 +158,7 @@ pre{padding:14px;font-size:13px;line-height:1.85;overflow-x:auto;color:var(--tex
   <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
   <div class="nav-links" id="mob-nav">
     <a href="agui.html">AG-UI</a>
-    <a href="telegram-bot.html">Telegram Bot</a>
+    <a href="telegram-bot.html">WhatsApp</a>
     <a href="docs.html">Docs</a>
   </div>
 </nav>
@@ -272,7 +272,7 @@ pre{padding:14px;font-size:13px;line-height:1.85;overflow-x:auto;color:var(--tex
       <div class="fa-num fa-boss">6</div>
       <div>
         <div class="fa-title">Boss notified after <span class="fa-tag tag-boss">notification only</span></div>
-        <div class="fa-desc">Telegram Bot sends message: "✅ LOI auto-generated · $284,000 · Steel Rebar G60 · Gulf Cement LLC". Boss reviews after the fact. Can revoke mandate anytime.</div>
+        <div class="fa-desc">WhatsApp sends message: "✅ LOI auto-generated · $284,000 · Steel Rebar G60 · Gulf Cement LLC". Boss reviews after the fact. Can revoke mandate anytime.</div>
       </div>
     </div>
   </div>
@@ -601,7 +601,7 @@ AUTO_APPROVED
     <span class="kw">await</span> <span class="fn">incrementMandateCounters</span>(mandate.id, dealPrice * mandate.qty);
     <span class="fn">emit</span>(<span class="str">'AUTO_APPROVED'</span>, { deal_price: dealPrice, loi_ref: loiRef, conditions_met: check.conditions_met });
     <span class="cm">// Notify Boss AFTER (not before)</span>
-    <span class="fn">notifyTelegram Bot</span>({ type: <span class="str">'LOI_AUTO_GENERATED'</span>, data: { loiRef, dealPrice, mandate_id: mandate.id } });
+    <span class="fn">notifyWhatsApp</span>({ type: <span class="str">'LOI_AUTO_GENERATED'</span>, data: { loiRef, dealPrice, mandate_id: mandate.id } });
   } <span class="kw">else</span> {
     <span class="cm">// Fallback to manual</span>
     <span class="fn">emit</span>(<span class="str">'AWAIT_HUMAN'</span>, { deal_price: dealPrice, reason: check.reason });
@@ -683,7 +683,7 @@ AUTO_APPROVED
     <br/>
     <div class="dt-time">14:32:13</div> <span class="dt-auto">← AUTO_APPROVED · deal_price:$2,830 · loi_ref:SL-LOI-20260501-007</span>
     <div class="dt-time">14:32:13</div> <span class="dt-loi">← LOI_GENERATED · $283,000 · PDF ready · both parties emailed</span>
-    <div class="dt-time">14:32:14</div> <span class="dt-comment">→ Boss Telegram: "✅ Auto-LOI · SL-LOI-007 · $283,000 · Steel Rebar"</span>
+    <div class="dt-time">14:32:14</div> <span class="dt-comment">→ Boss WhatsApp: "✅ Auto-LOI · SL-LOI-007 · $283,000 · Steel Rebar"</span>
     <br/>
     <div class="dt-comment"># Total time: 13 seconds · Zero human intervention</div>
   </div>
