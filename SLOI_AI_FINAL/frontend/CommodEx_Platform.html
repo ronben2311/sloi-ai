@@ -819,6 +819,24 @@
         .cbc-val{font-size:36px}
         .modal{width:calc(100vw - 32px)}
       }
+      /* ── LOGISTICS MODAL ── */
+      .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;align-items:center;justify-content:center;padding:16px}
+      .modal-bg.open{display:flex}
+      .modal{background:var(--surface);border:1px solid var(--border2);border-radius:10px;width:580px;max-width:100%;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+      .modal-hd{display:flex;align-items:flex-start;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+      .modal-title{font-size:15px;font-weight:700;color:var(--white)}
+      .modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0;line-height:1}
+      .modal-close:hover{color:var(--white)}
+      .modal-body{flex:1;overflow-y:auto;padding:16px 20px}
+      .modal-ft{display:flex;gap:8px;justify-content:flex-end;padding:12px 20px;border-top:1px solid var(--border);flex-shrink:0}
+      .lc-report{font-size:13px;line-height:1.9;color:var(--text);white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:14px 16px;min-height:200px}
+      .lc-field-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px}
+      .lc-field-row:last-child{border-bottom:none}
+      .lc-field-lbl{color:var(--muted);flex-shrink:0;width:160px}
+      .lc-field-val{color:var(--white);font-weight:600;text-align:right;flex:1}
+      .lc-flag{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:5px;font-size:13px;margin-bottom:6px}
+      .lc-flag.ok{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2)}
+      .lc-flag.warn{background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.2);color:var(--gold)}
       /* ── AGENT ROWS ── */
       .agent-rows{display:flex;flex-direction:column;gap:4px;margin-bottom:4px}
       .agent-row{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;cursor:pointer;transition:border-color .15s;user-select:none}
@@ -913,7 +931,7 @@
           <span class="nav-icon">📋</span
           ><span class="nav-label">Terms & Privacy</span>
         </button>
-        <button class="nav" onclick="window.location.href='support.html'">
+        <button class="nav" onclick="window.open('support.html','_blank')">
           <span class="nav-icon">🎧</span><span class="nav-label">Support</span>
         </button>
         <button class="nav" onclick="api.logout(); window.location.href = 'login.html'">
@@ -3175,7 +3193,7 @@
                 date: new Date(l.signed_at).toLocaleDateString(),
                 emoji: SECTOR_EMOJI["Metals"],
                 fresh: false,
-                _raw: { ref: l.ref, product: l.product, qty: l.qty, unit: l.unit || "MT", price: l.deal_price, buyer: l.buyer_name },
+                _raw: { ref: l.ref, product: l.product, qty: l.qty, unit: l.unit || "MT", price: l.deal_price, buyer: l.buyer_name, country: l.country || l.destination_country || l.buyer_country || 'UAE' },
                 _val: parseFloat(l.total_value) || 0,
                 _signed_at: l.signed_at,
               };
@@ -3679,7 +3697,10 @@
             l.date +
             '</div></div><div style="text-align:right;flex-shrink:0"><div class="lc-val">' +
             l.total +
-            '</div><div style="margin-top:4px"><span class="badge bg">Signed</span></div><button class="btn btn-xs btn-g" style="margin-top:6px" onclick="openLOI(this)" data-ref="' + (l._raw.ref||'') + '" data-product="' + (l._raw.product||'') + '" data-qty="' + (l._raw.qty||'') + '" data-unit="' + (l._raw.unit||'') + '" data-price="' + (l._raw.price||'') + '" data-buyer="' + (l._raw.buyer||'') + '">📄 Download</button></div></div>';
+            '</div><div style="margin-top:4px"><span class="badge bg">Signed</span></div><button class="btn btn-xs btn-g" style="margin-top:6px" onclick="openLOI(this)" data-ref="' + (l._raw.ref||'') + '" data-product="' + (l._raw.product||'') + '" data-qty="' + (l._raw.qty||'') + '" data-unit="' + (l._raw.unit||'') + '" data-price="' + (l._raw.price||'') + '" data-buyer="' + (l._raw.buyer||'') + '">📄 Download</button>' +
+            '<button class="btn btn-xs" style="margin-top:4px;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="openLogisticsModal(this)" ' +
+            'data-ref="' + (l._raw.ref||'') + '" data-product="' + (l._raw.product||'') + '" data-qty="' + (l._raw.qty||'') + '" data-unit="' + (l._raw.unit||'') + '" data-price="' + (l._raw.price||'') + '" data-buyer="' + (l._raw.buyer||'') + '" data-country="' + (l._raw.country||'UAE') + '">🚢 Logistics</button>' +
+            '</div></div>';
         });
         document.getElementById("loi-list").innerHTML = html;
       }
@@ -4128,7 +4149,172 @@
           if (exSelectedId) exSelect(exSelectedId);
         }
       }, 25000);
+
+      // ── LOGISTICS & CUSTOMS AI ────────────────────────────────────────────
+      var _lcData = null;
+      var _lcReportText = '';
+
+      function openLogisticsModal(btn) {
+        var d = btn.dataset;
+        _lcData = { ref: d.ref, product: d.product, qty: d.qty, unit: d.unit, price: d.price, buyer: d.buyer, country: d.country || 'UAE' };
+        _lcReportText = '';
+        document.getElementById('lc-modal-sub').textContent = (d.product || '—') + ' · ' + (d.qty||'') + ' ' + (d.unit||'MT') + ' → ' + (d.country||'UAE');
+        document.getElementById('lc-loading').style.display = 'flex';
+        document.getElementById('lc-result').style.display = 'none';
+        document.getElementById('lc-copy-btn').style.display = 'none';
+        document.getElementById('lc-agent-btn').style.display = 'none';
+        document.getElementById('lc-modal').classList.add('open');
+        generateLogisticsReport(_lcData);
+      }
+
+      function closeLogisticsModal() {
+        document.getElementById('lc-modal').classList.remove('open');
+      }
+
+      function lcCopyReport() {
+        if (_lcReportText) navigator.clipboard.writeText(_lcReportText).then(function(){ alert('Report copied to clipboard.'); });
+      }
+
+      function generateLogisticsReport(d) {
+        var prompt = 'You are a logistics and customs specialist for bulk commodity trade.\n\n' +
+          'LOI data:\n' +
+          '- LOI ref: ' + d.ref + '\n' +
+          '- Product: ' + d.product + '\n' +
+          '- Quantity: ' + d.qty + ' ' + d.unit + '\n' +
+          '- Deal price: $' + d.price + '/' + d.unit + '\n' +
+          '- Destination country: ' + d.country + '\n' +
+          '- Buyer: ' + d.buyer + '\n\n' +
+          'Provide a structured logistics & customs briefing with exactly these sections:\n' +
+          'HS CODE: [6-digit HS code for this commodity]\n' +
+          'IMPORT DUTY: [duty rate for ' + d.country + ']\n' +
+          'RECOMMENDED INCOTERM: [e.g. CIF, FOB — with one-sentence reason]\n' +
+          'PORT OF LOADING: [most likely origin port for this commodity]\n' +
+          'PORT OF DISCHARGE: [main port for ' + d.country + ']\n' +
+          'FREIGHT ESTIMATE: [USD range per MT or per container]\n' +
+          'LEAD TIME: [estimated days from loading to delivery]\n' +
+          'SANCTIONS STATUS: [OFAC/EU/UN status for ' + d.country + ']\n' +
+          'REQUIRED DOCS: [comma-separated list of key documents]\n\n' +
+          'After the structured fields, add a SHORT COMPLIANCE NOTES section (2–3 bullet points) covering any tariff, permit, or regulatory flags for this product and destination.\n' +
+          'Be concise and specific. No disclaimers.';
+
+        fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': (window.ANTHROPIC_API_KEY || ''),
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-calls': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 600,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        })
+        .then(function(r){ return r.json(); })
+        .then(function(res){
+          var text = (res.content && res.content[0] && res.content[0].text) || '';
+          if (!text) throw new Error('no content');
+          _lcReportText = text;
+          renderLogisticsResult(text);
+        })
+        .catch(function(){
+          _lcReportText = buildFallbackLogistics(d);
+          renderLogisticsResult(_lcReportText);
+        });
+      }
+
+      function renderLogisticsResult(text) {
+        var fieldKeys = ['HS CODE','IMPORT DUTY','RECOMMENDED INCOTERM','PORT OF LOADING','PORT OF DISCHARGE','FREIGHT ESTIMATE','LEAD TIME','SANCTIONS STATUS','REQUIRED DOCS'];
+        var fieldsHtml = '';
+        fieldKeys.forEach(function(k) {
+          var rx = new RegExp(k + ':\\s*(.+)', 'i');
+          var m = text.match(rx);
+          var val = m ? m[1].trim() : '—';
+          var color = '';
+          if (k === 'SANCTIONS STATUS') {
+            color = /clear|none|no restriction/i.test(val) ? 'var(--green)' : 'var(--gold)';
+          }
+          fieldsHtml += '<div class="lc-field-row"><span class="lc-field-lbl">' + k.charAt(0) + k.slice(1).toLowerCase().replace(' ',' ') + '</span>' +
+            '<span class="lc-field-val"' + (color ? ' style="color:' + color + '"' : '') + '>' + val + '</span></div>';
+        });
+        document.getElementById('lc-fields').innerHTML = fieldsHtml;
+
+        var flagsHtml = '';
+        var notesMatch = text.match(/COMPLIANCE NOTES[:\s]*([\s\S]*)/i);
+        if (notesMatch) {
+          var notes = notesMatch[1].trim().split('\n').filter(function(l){ return l.trim(); });
+          notes.forEach(function(n) {
+            var isWarn = /permit|restrict|control|flag|check|duty|quota/i.test(n);
+            flagsHtml += '<div class="lc-flag ' + (isWarn ? 'warn' : 'ok') + '">' +
+              '<span>' + (isWarn ? '⚠️' : '✅') + '</span>' +
+              '<span style="color:var(--text)">' + n.replace(/^[-•*]\s*/,'') + '</span></div>';
+          });
+        }
+        if (!flagsHtml) {
+          flagsHtml = '<div class="lc-flag ok"><span>✅</span><span style="color:var(--text)">No major compliance flags detected for this shipment.</span></div>';
+        }
+        document.getElementById('lc-flags').innerHTML = flagsHtml;
+        document.getElementById('lc-report-text').textContent = text;
+
+        document.getElementById('lc-loading').style.display = 'none';
+        document.getElementById('lc-result').style.display = 'block';
+        document.getElementById('lc-copy-btn').style.display = '';
+        document.getElementById('lc-agent-btn').style.display = '';
+      }
+
+      function buildFallbackLogistics(d) {
+        return 'HS CODE: [requires product classification]\n' +
+          'IMPORT DUTY: Standard rate applies for ' + d.country + '\n' +
+          'RECOMMENDED INCOTERM: CIF — cost, insurance, freight included to destination\n' +
+          'PORT OF LOADING: Subject to supplier location\n' +
+          'PORT OF DISCHARGE: Main commercial port of ' + d.country + '\n' +
+          'FREIGHT ESTIMATE: Contact freight forwarder for live rates\n' +
+          'LEAD TIME: 14–21 days from loading\n' +
+          'SANCTIONS STATUS: Please verify against current OFAC/EU lists\n' +
+          'REQUIRED DOCS: Commercial Invoice, Packing List, Bill of Lading, Certificate of Origin\n\n' +
+          'COMPLIANCE NOTES:\n' +
+          '- Verify HS code with your customs broker before shipment\n' +
+          '- Confirm import licence requirements for ' + d.country + '\n' +
+          '- Ensure all documents match LOI ref ' + d.ref + ' exactly';
+      }
     </script>
-  
+
+<!-- LOGISTICS & CUSTOMS MODAL -->
+<div class="modal-bg" id="lc-modal" onclick="if(event.target===this)closeLogisticsModal()">
+  <div class="modal">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">🚢 Logistics &amp; Customs AI</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px" id="lc-modal-sub">Analysing shipment…</div>
+      </div>
+      <button class="modal-close" onclick="closeLogisticsModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <!-- loading -->
+      <div id="lc-loading" style="display:flex;align-items:center;gap:10px;padding:24px 0;color:var(--muted);font-size:14px">
+        <div style="width:15px;height:15px;border:2px solid var(--border2);border-top-color:var(--teal);border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
+        Analysing shipment requirements…
+      </div>
+      <!-- result -->
+      <div id="lc-result" style="display:none">
+        <!-- key fields -->
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:4px 14px;margin-bottom:14px" id="lc-fields"></div>
+        <!-- flags -->
+        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Compliance &amp; alerts</div>
+        <div id="lc-flags" style="margin-bottom:14px"></div>
+        <!-- full report -->
+        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">Full briefing</div>
+        <div class="lc-report" id="lc-report-text"></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeLogisticsModal()">Close</button>
+      <button class="btn" id="lc-copy-btn" style="display:none" onclick="lcCopyReport()">📋 Copy report</button>
+      <button class="btn" id="lc-agent-btn" style="display:none;background:var(--indigo);color:#fff;border-color:var(--indigo)" onclick="window.open('logistics-customs-agent.html','_blank')">🚢 Open full agent →</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

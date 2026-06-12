@@ -339,10 +339,10 @@ select.inp option{background:var(--surface2);color:var(--white)}
   </div>
 
   <div class="left-trust">
-    <div class="trust-row"><div class="t-dot t-green"></div>AI negotiates — you approve before anything is signed</div>
-    <div class="trust-row"><div class="t-dot t-green"></div>No credit card to get started</div>
-    <div class="trust-row"><div class="t-dot t-green"></div>Price offer on WhatsApp within 24 hours</div>
-    <div class="trust-row"><div class="t-dot t-violet"></div>Verified suppliers · MENA corridor specialists</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>Automation engine negotiates — you review and approve every offer</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>No commitment to start · full audit trail included</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>Documented price offer within 24 hours</div>
+    <div class="trust-row"><div class="t-dot t-violet"></div>Pre-qualified suppliers · MENA &amp; global corridors</div>
   </div>
 </div>
 
@@ -361,16 +361,16 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
     <!-- ── STEP 0 — WELCOME ── -->
     <div class="step active" id="step-0">
-      <div class="q-eyebrow">Get started — it's free</div>
-      <div class="q-title">Get the best<br/>commodity price.<br/><em>In minutes.</em></div>
-      <div class="q-sub">Our AI agent negotiates with verified suppliers on your behalf. You review the price — and only sign what you approve.</div>
+      <div class="q-eyebrow">Automate your sourcing — no commitment</div>
+      <div class="q-title">Streamline<br/>commodity sourcing.<br/><em>Cut cycle time.</em></div>
+      <div class="q-sub">Our procurement automation engine sources from pre-qualified suppliers, negotiates against your mandate, and delivers a fully documented price offer. You approve before anything is committed.</div>
 
       <!-- PRIMARY CTA -->
       <div onclick="selectEntry('form')" id="ec-form-hero" style="background:linear-gradient(135deg,rgba(91,95,239,.12),rgba(139,143,248,.06));border:1px solid rgba(91,95,239,.4);border-radius:12px;padding:22px 22px;cursor:pointer;margin-bottom:12px;transition:all .2s;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden" onmouseover="this.style.borderColor='rgba(91,95,239,.7)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(91,95,239,.4)';this.style.transform=''">
         <div style="width:52px;height:52px;border-radius:10px;background:var(--indigo);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">📝</div>
         <div style="flex:1">
-          <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px">Fill in 3 quick questions</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.5">Product · quantity · budget. Takes 2 minutes. Agent starts immediately.</div>
+          <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px">Submit sourcing specification</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.5">Commodity · volume · budget. 2 minutes. Sourcing engine activates immediately.</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
           <span style="background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.05em">RECOMMENDED</span>
@@ -379,7 +379,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </div>
 
       <!-- SECONDARY OPTIONS -->
-      <div style="font-size:11px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px">Or import your order</div>
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px">Or import from existing documents</div>
       <div class="entry-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
         <div class="ec" id="ec-po" onclick="selectEntry('po')">
           <div class="ec-icon" style="font-size:22px">📎</div>
@@ -408,8 +408,8 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="dz-title" id="dz-title">Drop your PO file here</div>
           <div class="dz-sub" id="dz-sub">PDF · Excel · Word · CSV — or click to browse</div>
         </div>
-        <button class="btn-p" id="btn-po-continue" onclick="parsePO()" disabled style="opacity:.4">Parse &amp; continue →</button>
-        <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:6px">Agent extracts product, quantity, and specs automatically</div>
+        <button class="btn-p" id="btn-po-continue" onclick="parsePO()" disabled style="opacity:.4">Extract &amp; continue →</button>
+        <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:6px">Automation engine extracts commodity, volume, and specifications automatically</div>
       </div>
 
       <!-- ERP PASTE PANEL -->
@@ -453,8 +453,8 @@ select.inp option{background:var(--surface2);color:var(--white)}
     <!-- ── STEP 1 ── -->
     <div class="step" id="step-1">
       <div class="q-eyebrow">Step 1</div>
-      <div class="q-title">What do you<br/><em>need to buy?</em></div>
-      <div class="q-sub">Choose a category. Our AI agent finds verified suppliers and negotiates the best price — you approve before anything is signed.</div>
+      <div class="q-title">What do you<br/><em>need to procure?</em></div>
+      <div class="q-sub">Select a commodity category. The sourcing engine matches pre-qualified suppliers and negotiates against your mandate — you review every offer before commitment.</div>
 
       <div class="prod-grid">
         <div class="pc" onclick="selectProduct(this,'Steel &amp; Metals','steel rebar, coil, aluminum')">
@@ -504,7 +504,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <!-- catalog product dropdown — shown after category pick -->
       <div class="cat-wrap" id="cat-wrap">
         <div class="cat-hdr">
-          <div class="field-lbl" style="margin:0">Select product from catalog</div>
+          <div class="field-lbl" style="margin:0">Select commodity from pre-qualified catalog</div>
           <span class="cat-badge" id="cat-count"></span>
         </div>
         <select class="inp" id="product-select" onchange="onProductSelect()">
@@ -530,7 +530,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
     <div class="step" id="step-2">
       <div class="q-eyebrow">Step 2</div>
       <div class="q-title">Quantity<br/><em>&amp; budget.</em></div>
-      <div class="q-sub">A rough estimate is fine. The AI agent will work within your parameters and push for the best available price.</div>
+      <div class="q-sub">A working estimate is sufficient. The automation engine sources within your parameters and drives the best available market price.</div>
 
       <div class="qty-row">
         <div class="field" style="margin-bottom:0">
@@ -553,19 +553,19 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </div>
 
       <div class="field" style="margin-bottom:8px">
-        <div class="field-lbl">Choose agent <span class="req"></span></div>
+        <div class="field-lbl">Sourcing mode <span class="req"></span></div>
         <div class="ptype-grid">
           <div class="pt" id="pt-once" onclick="selectPurchaseType(this,'One-time purchase')">
             <div class="pt-check">✓ selected</div>
             <div class="pt-icon">📄</div>
-            <div class="pt-name">LOI Generator Agent</div>
-            <div class="pt-desc">Generates a signed Letter of Intent directly</div>
+            <div class="pt-name">LOI Generator</div>
+            <div class="pt-desc">Generates a compliant Letter of Intent directly</div>
           </div>
           <div class="pt" id="pt-recurring" onclick="selectPurchaseType(this,'Recurring contract')">
             <div class="pt-check">✓ selected</div>
             <div class="pt-icon">🤖</div>
-            <div class="pt-name">Negotiation Agent</div>
-            <div class="pt-desc">AI negotiates price across multiple rounds</div>
+            <div class="pt-name">AI Negotiation Engine</div>
+            <div class="pt-desc">Automated multi-round price negotiation</div>
           </div>
         </div>
       </div>
@@ -575,7 +575,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
         <div class="field" style="margin-bottom:0;padding:14px;background:rgba(91,95,239,.04);border:1px solid rgba(91,95,239,.18);border-radius:8px">
           <div class="field-lbl" style="color:var(--violet)">Estimated annual volume <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
           <input class="inp" id="annual-volume" placeholder="e.g. 1,200 MT/year  or  $3.5M/year" style="background:var(--surface2);margin-top:4px"/>
-          <div class="field-hint" style="margin-top:4px">Recurring buyers get better rates — share your yearly volume to unlock volume pricing.</div>
+          <div class="field-hint" style="margin-top:4px">High-volume procurement unlocks preferential supplier rates — share your annual volume to qualify.</div>
         </div>
       </div>
 
@@ -650,8 +650,8 @@ select.inp option{background:var(--surface2);color:var(--white)}
     <!-- ── STEP 3 ── -->
     <div class="step" id="step-3">
       <div class="q-eyebrow">Step 3</div>
-      <div class="q-title">When do you<br/><em>need it?</em></div>
-      <div class="q-sub">This shapes the negotiation mode. A tighter deadline means the agent pushes harder on availability — a looser one maximises savings.</div>
+      <div class="q-title">Procurement<br/><em>timeline.</em></div>
+      <div class="q-sub">Timeline determines the sourcing strategy. Urgent procurement activates aggressive supplier outreach — flexible timelines allow maximum price optimisation.</div>
 
       <div class="tl-grid">
         <div class="tc" onclick="selectUrgency(this,'ASAP — within 2 weeks')">
@@ -706,8 +706,8 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <a href="javascript:void(0)" onclick="saveMandateAndGo('negotiation-agent.html')" class="agent-link">
         <div class="al-icon">🤖</div>
         <div class="al-body">
-          <div class="al-title">Skip the queue — negotiate right now</div>
-          <div class="al-desc">Open the live agent console · Claude negotiates instantly in your browser</div>
+          <div class="al-title">Launch live negotiation engine</div>
+          <div class="al-desc">Activate the live sourcing console · real-time negotiation in your browser</div>
         </div>
         <div class="al-arrow">→</div>
       </a>
@@ -716,12 +716,12 @@ select.inp option{background:var(--surface2);color:var(--white)}
     <!-- ── STEP 4 — REVIEW ── -->
     <div class="step" id="step-4">
       <div class="q-eyebrow">Review</div>
-      <div class="q-title">Your order<br/><em>summary.</em></div>
-      <div class="q-sub">Confirm the details below. Our AI agent will negotiate with verified suppliers and send you price offers on WhatsApp within 24 hours.</div>
+      <div class="q-title">Sourcing request<br/><em>summary.</em></div>
+      <div class="q-sub">Review your procurement specification below. The sourcing engine will engage pre-qualified suppliers and deliver a documented price offer within 24 hours.</div>
 
       <div class="sum-grid">
         <div class="sum-cell hi">
-          <div class="sum-lbl">What you need</div>
+          <div class="sum-lbl">Commodity</div>
           <div class="sum-val" id="sum-product">—</div>
         </div>
         <div class="sum-cell">
@@ -733,7 +733,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="sum-val" id="sum-budget">—</div>
         </div>
         <div class="sum-cell">
-          <div class="sum-lbl">Agent</div>
+          <div class="sum-lbl">Sourcing mode</div>
           <div class="sum-val" id="sum-ptype">—</div>
         </div>
         <div class="sum-cell" id="sum-annual-cell" style="display:none">
@@ -759,13 +759,13 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </div>
 
       <div class="gbox">
-        <div class="g-row"><span class="g-chk">✓</span>AI agent negotiates the best price with verified suppliers</div>
-        <div class="g-row"><span class="g-chk">✓</span>Price offer delivered on WhatsApp within 24 hours</div>
-        <div class="g-row"><span class="g-chk">✓</span>You approve before anything is signed — zero commitment now</div>
-        <div class="g-row"><span class="g-chk">✓</span>No credit card required to get started</div>
+        <div class="g-row"><span class="g-chk">✓</span>Automation engine negotiates against your mandate with pre-qualified suppliers</div>
+        <div class="g-row"><span class="g-chk">✓</span>Documented price offer delivered within 24 hours — WhatsApp or email</div>
+        <div class="g-row"><span class="g-chk">✓</span>You review and approve every offer — zero commitment at this stage</div>
+        <div class="g-row"><span class="g-chk">✓</span>No credit card required · full audit trail provided</div>
       </div>
 
-      <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Find me the best price →</button>
+      <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Submit RFQ →</button>
       <button class="btn-s" onclick="goStep(3)">← Back</button>
     </div>
 
@@ -774,20 +774,20 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <div class="suc-wrap">
         <div class="suc-head">
           <div class="suc-icon">🎯</div>
-          <div class="suc-title">We're on it,<br/><em>right now.</em></div>
-          <div class="suc-sub">Our AI agent is scanning the verified supplier network for your order. Expect a price offer on WhatsApp within 24 hours.</div>
+          <div class="suc-title">Sourcing request<br/><em>received.</em></div>
+          <div class="suc-sub">Our procurement engine is now scanning the pre-qualified supplier network for your specification. Expect a documented price offer within 24 hours.</div>
         </div>
 
         <div class="flow-list">
-          <div class="fl-item"><div class="fl-num">1</div><div class="fl-text">Agent searches verified supplier network for your product and quantity</div></div>
-          <div class="fl-item"><div class="fl-num">2</div><div class="fl-text">Agent negotiates the best available price — targeting your budget</div></div>
-          <div class="fl-item"><div class="fl-num">3</div><div class="fl-text">Price offer sent to you on WhatsApp — you approve or decline, no pressure</div></div>
+          <div class="fl-item"><div class="fl-num">1</div><div class="fl-text">Sourcing engine matches pre-qualified suppliers to your commodity specification and volume</div></div>
+          <div class="fl-item"><div class="fl-num">2</div><div class="fl-text">Automation engine negotiates best available price — within your budget mandate</div></div>
+          <div class="fl-item"><div class="fl-num">3</div><div class="fl-text">Documented price offer delivered — review and approve or decline, no obligation</div></div>
           <div class="fl-item"><div class="fl-num">4</div><div class="fl-text">If approved — a professional Letter of Intent (LOI) is generated and sent to all parties</div></div>
           <div class="fl-item"><div class="fl-num g">✓</div><div class="fl-text" style="color:var(--green)">You deal directly with the supplier — SLOI AI never touches your funds</div></div>
         </div>
 
         <div class="cta-row">
-          <a href="javascript:void(0)" onclick="saveMandateAndGo('negotiation-agent.html')" class="cta-p">🤖 Open Negotiation Agent</a>
+          <a href="javascript:void(0)" onclick="saveMandateAndGo('negotiation-agent.html')" class="cta-p">🤖 Open Negotiation Engine</a>
           <a href="demo.html" class="cta-s">Watch demo</a>
         </div>
       </div>
@@ -983,9 +983,9 @@ function goStep(n) {
 
 function updateNav(n) {
   var pcts = {0:0,1:25,2:50,3:75,4:90};
-  var lbls = {0:'Get started',1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Review'};
+  var lbls = {0:'Start sourcing',1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Review RFQ'};
   document.getElementById('progress').style.width = (pcts[n] !== undefined ? pcts[n] : 100) + '%';
-  document.getElementById('prog-lbl').textContent = lbls[n] || 'Done!';
+  document.getElementById('prog-lbl').textContent = lbls[n] || 'RFQ submitted';
 
   for (var i = 1; i <= 4; i++) {
     var dot   = document.getElementById('dot-' + i);
