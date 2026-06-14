@@ -16,13 +16,30 @@
 /* ── Base font size ─────────────────────────────────────────────────────── */
 html, body { font-size: 15px !important; }
 
+/* ── Navigation — standardised across all pages (matches m2m-homepage) ─── */
+nav {
+  height: 72px !important;
+  padding: 0 40px !important;
+  background: rgba(6,6,14,.88) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid rgba(255,255,255,.05) !important;
+}
+.nav-links { gap: 28px !important; }
+.nav-logo  { font-size: 28px !important; color: #eeedfa !important; letter-spacing: -.03em !important; }
+
+/* mobile: compact height, mobile dropdown offset */
+@media (max-width: 768px) {
+  nav { height: 60px !important; padding: 0 16px !important; }
+  #mob-nav { top: 60px !important; }
+}
+
 /* ── Navigation links — all nav contexts ────────────────────────────────── */
 nav a, .nav-right a, .nav-links a,
 .nav-links a:visited {
   color: #b8b6e8 !important;
   font-size: 14px !important;
 }
-.nav-logo { font-size: 28px !important; color: #eeedfa !important; }
 nav a:hover, .nav-right a:hover, .nav-links a:hover {
   color: #f5f4ff !important;
 }

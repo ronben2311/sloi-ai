@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -12,11 +12,12 @@
 html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
-.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;flex:1}
 .nav-logo em{font-style:italic;color:var(--indigo)}
 .nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}
 .nav-links a:hover{color:var(--violet)}
+.nav-right{flex:1;display:flex;justify-content:flex-end;align-items:center;gap:10px}
 .wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:60px 28px 80px}
 .eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .eyebrow::before{content:'';width:24px;height:1px;background:var(--indigo)}
@@ -106,13 +107,15 @@ h1 em{font-style:italic;color:var(--indigo)}
 </head>
 <body>
 <nav>
-  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation � LOI generation</span></a>
-  <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em></a>
   <div class="nav-links" id="mob-nav">
     <a href="about.html">About</a>
     <a href="docs.html">Docs</a>
     <a href="CommodEx_Admin.html">Join as supplier</a>
     <a href="login.html">Platform</a>
+  </div>
+  <div class="nav-right">
+    <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
   </div>
 </nav>
 <div class="wrap">
