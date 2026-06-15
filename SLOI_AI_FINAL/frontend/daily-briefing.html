@@ -176,6 +176,8 @@ nav{
   .page{padding:20px}
 }
 .nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+body.embedded nav{display:none}
+body.embedded .page{padding-top:24px}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 </head>
@@ -430,6 +432,8 @@ nav{
 </div><!-- /page -->
 
 <script>
+if(new URLSearchParams(location.search).get('embed')==='1'){document.body.classList.add('embedded');}
+
 // ── CLOCK & DATE ──────────────────────────────────────────────────────────────
 function initDate(){
   var now = new Date();

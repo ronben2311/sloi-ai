@@ -222,12 +222,12 @@ select.inp option{background:var(--surface)}
     <span class="sb-badge">BOSS</span>
     <div class="sb-logo-text">SLOI <em>AI</em><span style="font-size:13px;color:var(--muted);display:block;margin-top:2px;font-weight:400;letter-spacing:.04em">Smart negotiation · LOI generation</span></div>
   </div>
-  <button class="nav" onclick="window.open('daily-briefing.html','_blank')" style="margin:8px 10px 4px;border-radius:5px;border:1px solid rgba(232,169,74,.3);background:rgba(232,169,74,.06);color:var(--gold);width:calc(100% - 20px);padding:9px 12px"><span class="nav-icon">☀️</span><span class="nav-label" style="font-weight:600">Daily Briefing</span><span style="font-size:11px;color:var(--muted);margin-left:auto">↗</span></button>
+  <button class="nav" onclick="show('briefing',this)" style="margin:8px 10px 4px;border-radius:5px;border:1px solid rgba(232,169,74,.3);background:rgba(232,169,74,.06);color:var(--gold);width:calc(100% - 20px);padding:9px 12px"><span class="nav-icon">☀️</span><span class="nav-label" style="font-weight:600">Daily Briefing</span></button>
   <div class="sb-section">Command</div>
   <button class="nav active" onclick="show('warroom',this)"><span class="nav-icon">🔴</span><span class="nav-label">War Room</span><span class="nav-badge nb-red" id="alert-count">3</span></button>
   <button class="nav" onclick="show('pipeline',this)"><span class="nav-icon">📊</span><span class="nav-label">Pipeline</span></button>
   <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold" id="neg-count">2</span></button>
-  <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Agents</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">7</span></button>
+  <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">8</span></button>
   <div class="sb-section">Revenue</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
   <button class="nav" onclick="show('credits',this)"><span class="nav-icon">⚡</span><span class="nav-label">Credits</span></button>
@@ -259,17 +259,14 @@ select.inp option{background:var(--surface)}
     </div>
   </div>
 
-  <div class="qa-bar">
-    <button class="qa" style="background:var(--indigo-dim);border-color:rgba(91,95,239,.35);color:var(--violet)" onclick="window.open('loi-generator.html','_blank')">📄 Generate LOI</button>
-    <button class="qa" style="background:var(--gold-dim);border-color:rgba(232,169,74,.35);color:var(--gold)" onclick="approveDeal()">⚡ Approve pending</button>
-    <button class="qa" style="background:var(--red-dim);border-color:rgba(239,68,68,.3);color:var(--red)" onclick="window.open('compliance.html','_blank')">🛡️ Compliance check</button>
-    <button class="qa" style="background:rgba(0,136,204,.08);border-color:rgba(0,136,204,.3);color:#0088cc" onclick="openTG()">📲 WhatsApp blast</button>
-    <button class="qa" style="background:var(--teal-dim);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="window.open('price-discovery.html','_blank')">🔍 Price check</button>
-    <button class="qa" style="background:var(--surface);border-color:var(--border2);color:var(--muted)" onclick="window.open('exchange.html','_blank')">📊 Exchange</button>
-    <button class="qa" style="background:var(--surface);border-color:var(--border2);color:var(--muted)" onclick="window.open('broker-onboarding.html','_blank')">🌍 Add trader</button>
-  </div>
-
   <div class="content">
+
+  <!-- DAILY BRIEFING -->
+  <div id="view-briefing" class="view" style="padding:0;overflow:hidden">
+    <iframe src="daily-briefing.html?embed=1"
+      style="width:100%;height:calc(100vh - 48px);border:none;display:block"
+      title="Daily Briefing"></iframe>
+  </div>
 
   <!-- WAR ROOM -->
   <div id="view-warroom" class="view active">
@@ -342,44 +339,157 @@ select.inp option{background:var(--surface)}
 
   <!-- NEGOTIATIONS -->
   <div id="view-negotiations" class="view">
-    <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Active Now</div><div class="stat-val" id="neg-stat-active" style="color:var(--green)">—</div></div>
-      <div class="stat"><div class="stat-top">Pending Boss</div><div class="stat-val" id="neg-stat-pending" style="color:var(--gold)">—</div></div>
-      <div class="stat"><div class="stat-top">Completed Today</div><div class="stat-val" id="neg-stat-completed">—</div></div>
-      <div class="stat"><div class="stat-top">Total</div><div class="stat-val" id="neg-stat-total">—</div></div>
-    </div>
+    <div style="display:grid;grid-template-columns:1fr 230px;gap:20px;align-items:start">
 
-    <!-- Approval box — shown only when there's a pending deal -->
-    <div class="approval-box" id="approval-box" style="display:none">
-      <div class="ab-title">⚡ Boss approval required · <span id="ab-neg-id" style="font-weight:400;opacity:.7"></span></div>
-      <div class="ab-grid">
-        <div><div class="abg-label">Buyer</div><div class="abg-val" id="ab-buyer">—</div></div>
-        <div><div class="abg-label">Contact</div><div class="abg-val" id="ab-contact" style="color:var(--teal)">—</div></div>
-        <div><div class="abg-label">Product</div><div class="abg-val" id="ab-product">—</div></div>
-        <div><div class="abg-label">Budget / Deal price</div><div class="abg-val" id="ab-price" style="color:var(--green)">—</div></div>
-        <div><div class="abg-label">Total value</div><div class="abg-val" id="ab-total">—</div></div>
-        <div><div class="abg-label">LOI fee</div><div class="abg-val" style="color:var(--indigo)">$500</div></div>
-      </div>
-      <div style="margin-bottom:8px">
-        <label style="font-size:14px;color:var(--muted);display:block;margin-bottom:4px">Override price (optional — leave blank to use agent deal price)</label>
-        <input class="inp" id="ab-override" type="number" placeholder="e.g. 2800" style="max-width:180px;padding:6px 10px;font-size:15px">
-      </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-g" onclick="approveDeal()">✅ Approve — Generate LOI</button>
-        <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗ Reject</button>
-      </div>
-    </div>
+      <!-- LEFT: main negotiation content -->
+      <div>
+        <div class="g4" style="margin-bottom:14px">
+          <div class="stat"><div class="stat-top">Active Now</div><div class="stat-val" id="neg-stat-active" style="color:var(--green)">—</div></div>
+          <div class="stat"><div class="stat-top">Pending Boss</div><div class="stat-val" id="neg-stat-pending" style="color:var(--gold)">—</div></div>
+          <div class="stat"><div class="stat-top">Completed Today</div><div class="stat-val" id="neg-stat-completed">—</div></div>
+          <div class="stat"><div class="stat-top">Total</div><div class="stat-val" id="neg-stat-total">—</div></div>
+        </div>
 
-    <div id="neg-list"></div>
+        <!-- Approval box — shown only when there's a pending deal -->
+        <div class="approval-box" id="approval-box" style="display:none">
+          <div class="ab-title">⚡ Boss approval required · <span id="ab-neg-id" style="font-weight:400;opacity:.7"></span></div>
+          <div class="ab-grid">
+            <div><div class="abg-label">Buyer</div><div class="abg-val" id="ab-buyer">—</div></div>
+            <div><div class="abg-label">Contact</div><div class="abg-val" id="ab-contact" style="color:var(--teal)">—</div></div>
+            <div><div class="abg-label">Product</div><div class="abg-val" id="ab-product">—</div></div>
+            <div><div class="abg-label">Budget / Deal price</div><div class="abg-val" id="ab-price" style="color:var(--green)">—</div></div>
+            <div><div class="abg-label">Total value</div><div class="abg-val" id="ab-total">—</div></div>
+            <div><div class="abg-label">LOI fee</div><div class="abg-val" style="color:var(--indigo)">$500</div></div>
+          </div>
+          <div style="margin-bottom:8px">
+            <label style="font-size:14px;color:var(--muted);display:block;margin-bottom:4px">Override price (optional — leave blank to use agent deal price)</label>
+            <input class="inp" id="ab-override" type="number" placeholder="e.g. 2800" style="max-width:180px;padding:6px 10px;font-size:15px">
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-g" onclick="approveDeal()">✅ Approve — Generate LOI</button>
+            <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗ Reject</button>
+          </div>
+        </div>
 
-    <div class="card">
-      <div class="card-title">// ALL NEGOTIATIONS</div>
-      <table>
-        <thead><tr><th>ID</th><th>Buyer</th><th>Product</th><th>Rounds</th><th>Deal Price</th><th>Status</th><th>Time</th><th></th></tr></thead>
-        <tbody id="neg-history-body">
-          <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>
-        </tbody>
-      </table>
+        <div id="neg-list"></div>
+
+        <div class="card">
+          <div class="card-title">// ALL NEGOTIATIONS</div>
+          <table>
+            <thead><tr><th>ID</th><th>Buyer</th><th>Product</th><th>Rounds</th><th>Deal Price</th><th>Status</th><th>Time</th><th></th></tr></thead>
+            <tbody id="neg-history-body">
+              <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RIGHT: sticky AI agents column -->
+      <div style="position:sticky;top:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">AI Tools</span>
+          <span style="flex:1;height:1px;background:var(--border);display:block"></span>
+        </div>
+
+        <!-- PriceScout -->
+        <div style="background:var(--surface);border:1px solid rgba(45,212,191,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <div style="width:26px;height:26px;border-radius:5px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">💰</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">PriceScout</div>
+              <div style="font-size:11px;color:var(--muted)">Market price · counter-offer</div>
+            </div>
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
+          </div>
+          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">Avg spread today: <span style="color:var(--teal)">+4.2%</span></div>
+          <div style="padding:0 8px 8px">
+            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="alert('PriceScout — pull live market price for active deal')">💰 Price check</button>
+          </div>
+        </div>
+
+        <!-- ComplianceBot -->
+        <div style="background:var(--surface);border:1px solid rgba(34,197,94,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <div style="width:26px;height:26px;border-radius:5px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🛡️</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">ComplianceBot</div>
+              <div style="font-size:11px;color:var(--muted)">OFAC · sanctions · dual-use</div>
+            </div>
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
+          </div>
+          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">Last scan: <span style="color:var(--green)">All clear</span></div>
+          <div style="padding:0 8px 8px">
+            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:var(--green)" onclick="show('compliance',null)">🛡️ Run check</button>
+          </div>
+        </div>
+
+        <!-- OutreachBot -->
+        <div style="background:var(--surface);border:1px solid rgba(99,102,241,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <div style="width:26px;height:26px;border-radius:5px;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📨</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">OutreachBot</div>
+              <div style="font-size:11px;color:var(--muted)">Follow-up · re-engage buyer</div>
+            </div>
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></span>
+          </div>
+          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">2 buyers idle <span style="color:var(--gold)">&gt;24h</span></div>
+          <div style="padding:0 8px 8px">
+            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(99,102,241,.08);border-color:rgba(99,102,241,.25);color:var(--indigo)" onclick="alert('OutreachBot — send follow-up to idle buyers')">📨 Follow up</button>
+          </div>
+        </div>
+
+        <!-- PO Generator -->
+        <div style="background:var(--surface);border:1px solid rgba(232,169,74,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <div style="width:26px;height:26px;border-radius:5px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🧾</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">PO Generator</div>
+              <div style="font-size:11px;color:var(--muted)">Issue PO from signed LOI</div>
+            </div>
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
+          </div>
+          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">2 POs pending · <span style="color:var(--gold)">$102K</span></div>
+          <div style="padding:0 8px 8px">
+            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="openPOModal()">🧾 Generate PO</button>
+          </div>
+        </div>
+
+        <!-- LegalContract AI -->
+        <div style="background:var(--surface);border:1px solid rgba(168,85,247,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <div style="width:26px;height:26px;border-radius:5px;background:rgba(168,85,247,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">⚖️</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">LegalContract AI</div>
+              <div style="font-size:11px;color:var(--muted)">ICC contract · send to lawyer</div>
+            </div>
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0"></span>
+          </div>
+          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">On-demand · <span style="color:#c084fc">0 pending</span></div>
+          <div style="padding:0 8px 8px">
+            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.25);color:#c084fc" onclick="alert('LegalContract AI — select a completed deal to generate contract')">⚖️ Draft contract</button>
+          </div>
+        </div>
+
+        <!-- TradeFinanceAI -->
+        <div style="background:var(--surface);border:1px solid rgba(232,169,74,.15);border-radius:7px;overflow:hidden;margin-bottom:8px">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <div style="width:26px;height:26px;border-radius:5px;background:rgba(232,169,74,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">💳</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">TradeFinanceAI</div>
+              <div style="font-size:11px;color:var(--muted)">LC · SBLC · factoring</div>
+            </div>
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
+          </div>
+          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">3 LCs active · <span style="color:var(--gold)">$2.1M</span></div>
+          <div style="padding:0 8px 8px">
+            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.2);color:var(--gold)" onclick="alert('TradeFinanceAI — draft LC for active deal')">💳 Draft LC</button>
+          </div>
+        </div>
+
+        <button class="btn btn-xs" style="width:100%;justify-content:center;color:var(--muted);border-color:var(--border)" onclick="show('agents',null)">View all AI Tools →</button>
+      </div>
+
     </div>
   </div>
 
@@ -601,7 +711,7 @@ select.inp option{background:var(--surface)}
 
     <!-- HEADER -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-size:15px;color:var(--muted)">7 agents running autonomously · all LOIs require Boss approval</div>
+      <div style="font-size:15px;color:var(--muted)">8 agents running autonomously · all LOIs require Boss approval</div>
       <button class="btn btn-sm btn-p" onclick="runAllAgents()">▶ Run all agents now</button>
     </div>
 
@@ -615,6 +725,7 @@ select.inp option{background:var(--surface)}
       <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🚢 LogisticsAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🛃 CustomsAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">💳 TradeFinanceAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">🧾 PO Generator <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px">⚖️ LegalContract</div>
     </div>
 
@@ -756,7 +867,7 @@ select.inp option{background:var(--surface)}
       <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">EXECUTE — LOGISTICS, CUSTOMS &amp; TRADE FINANCE</span>
       <span style="flex:1;height:1px;background:var(--border)"></span>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
 
       <!-- LOGISTICSAI -->
       <div style="background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
@@ -836,6 +947,34 @@ select.inp option{background:var(--surface)}
         </div>
       </div>
 
+      <!-- PO GENERATOR -->
+      <div style="background:var(--surface);border:1px solid rgba(232,169,74,.3);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="width:30px;height:30px;border-radius:6px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🧾</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">PO Generator</div>
+              <div style="font-size:13px;color:var(--muted)">Auto-generates POs from signed LOIs · links to Platform buyers</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
+            <span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:2px 8px;border-radius:10px;font-size:13px">Synced ✓</span>
+          </div>
+        </div>
+        <div style="padding:10px 14px;flex:1;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px">
+          <div>12 POs issued · $3.4M total value · 2 pending signature</div>
+          <div style="color:var(--green)">↑ 3 new POs this week</div>
+          <div><span style="color:var(--gold)">🧾</span> PO-2026-012 — Gulf Cement · $56K · Sent</div>
+          <div><span style="color:var(--gold)">🧾</span> PO-2026-011 — Atlas Trading · $210K · Signed</div>
+          <div><span style="color:var(--muted)">⏳</span> PO-2026-010 — NovaTrade · $88K · Pending</div>
+        </div>
+        <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
+          <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="openPOModal()">🧾 Generate PO</button>
+          <button class="btn btn-xs" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="alert('Export all POs as PDF / CSV')">📥 Export</button>
+        </div>
+      </div>
+
     </div>
 
     <!-- STAGE 04: LEGAL -->
@@ -879,6 +1018,176 @@ select.inp option{background:var(--surface)}
       <div class="card-title">// AGENT ACTIVITY LOG — TODAY</div>
       <div style="max-height:180px;overflow-y:auto" id="agent-log">
         <!-- rendered by JS -->
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- AUTOMATION SETUP -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <!-- SECTION A: Per-agent schedule -->
+    <div style="display:flex;align-items:center;gap:8px;margin:28px 0 12px">
+      <span style="background:rgba(91,95,239,.85);color:#fff;font-size:10px;padding:2px 8px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">AUTOMATION</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Agent schedule &amp; triggers</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">// PER-AGENT CONTROLS</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600;text-transform:uppercase">Agent</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600;text-transform:uppercase">Enabled</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600;text-transform:uppercase">Run frequency</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600;text-transform:uppercase">Active window</th>
+              <th style="text-align:left;padding:8px 10px;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600;text-transform:uppercase">Next run</th>
+            </tr>
+          </thead>
+          <tbody id="automation-agent-rows">
+            <!-- LeadFinder -->
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🔭</span><span style="font-size:13px;font-weight:600;color:var(--white)">LeadFinder</span></div></td>
+              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option>Every 6 hours</option><option>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="08:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="20:00" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--teal)">in 2h 14m</td>
+            </tr>
+            <!-- PriceScout -->
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">📡</span><span style="font-size:13px;font-weight:600;color:var(--white)">PriceScout</span></div></td>
+              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option>Every 6 hours</option><option selected>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="06:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="22:00" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--teal)">in 5h 40m</td>
+            </tr>
+            <!-- OutreachBot -->
+            <tr style="border-bottom:1px solid var(--border);opacity:.55" id="auto-outreachbot-row">
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">📨</span><span style="font-size:13px;font-weight:600;color:var(--white)">OutreachBot</span></div></td>
+              <td style="padding:10px"><div class="sw" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.55'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option>Every 6 hours</option><option>Every 12 hours</option><option selected>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="09:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="18:00" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--muted)">Paused</td>
+            </tr>
+            <!-- ComplianceBot -->
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🛡️</span><span style="font-size:13px;font-weight:600;color:var(--white)">ComplianceBot</span></div></td>
+              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option selected>Every 6 hours</option><option>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="00:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="23:59" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--teal)">Always on</td>
+            </tr>
+            <!-- LogisticsAI -->
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🚢</span><span style="font-size:13px;font-weight:600;color:var(--white)">LogisticsAI</span></div></td>
+              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option>Every 6 hours</option><option selected>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="07:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="21:00" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--teal)">in 3h 08m</td>
+            </tr>
+            <!-- CustomsAI -->
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🛃</span><span style="font-size:13px;font-weight:600;color:var(--white)">CustomsAI</span></div></td>
+              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option>Every 6 hours</option><option selected>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="07:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="21:00" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--teal)">in 3h 08m</td>
+            </tr>
+            <!-- TradeFinanceAI -->
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">💳</span><span style="font-size:13px;font-weight:600;color:var(--white)">TradeFinanceAI</span></div></td>
+              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option>Every 6 hours</option><option selected>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="08:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="20:00" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--teal)">in 5h 40m</td>
+            </tr>
+            <!-- PO Generator -->
+            <tr>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🧾</span><span style="font-size:13px;font-weight:600;color:var(--white)">PO Generator</span></div></td>
+              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option selected>Every 6 hours</option><option>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="00:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="23:59" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--teal)">Always on</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="padding:12px 0 4px;display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-xs" onclick="alert('Automation schedule saved.')">💾 Save schedule</button>
+      </div>
+    </div>
+
+    <!-- SECTION B: Workflow rules -->
+    <div class="card">
+      <div class="card-title">// WORKFLOW RULES — TRIGGER CHAINS</div>
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px">When a condition is met, the linked agents fire automatically in sequence.</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+
+        <!-- Rule 1 -->
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:7px">
+          <div class="sw on" style="flex-shrink:0;margin-top:2px" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">Lead discovered → Compliance check → Outreach</div>
+            <div style="font-size:12px;color:var(--muted)">LeadFinder finds a new lead <span style="color:var(--indigo)">→</span> ComplianceBot runs OFAC check <span style="color:var(--indigo)">→</span> if cleared, OutreachBot sends intro email</div>
+          </div>
+          <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Active</span>
+        </div>
+
+        <!-- Rule 2 -->
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:7px">
+          <div class="sw on" style="flex-shrink:0;margin-top:2px" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">Price request → PriceScout → Counter-offer sent</div>
+            <div style="font-size:12px;color:var(--muted)">Buyer submits RFQ <span style="color:var(--indigo)">→</span> PriceScout pulls live market price <span style="color:var(--indigo)">→</span> OutreachBot sends AI-drafted counter-offer</div>
+          </div>
+          <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Active</span>
+        </div>
+
+        <!-- Rule 3 -->
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:7px">
+          <div class="sw on" style="flex-shrink:0;margin-top:2px" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">Deal closed → LOI generated → PO issued</div>
+            <div style="font-size:12px;color:var(--muted)">Boss approves deal <span style="color:var(--indigo)">→</span> LOI auto-generated &amp; sent <span style="color:var(--indigo)">→</span> PO Generator fires within 15 min of LOI signature</div>
+          </div>
+          <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Active</span>
+        </div>
+
+        <!-- Rule 4 -->
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:7px">
+          <div class="sw" style="flex-shrink:0;margin-top:2px" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">LOI signed → LegalContract AI → TradeFinanceAI</div>
+            <div style="font-size:12px;color:var(--muted)">LOI signed <span style="color:var(--indigo)">→</span> LegalContract AI drafts ICC sale contract <span style="color:var(--indigo)">→</span> TradeFinanceAI proposes LC/SBLC to buyer</div>
+          </div>
+          <span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.2);color:var(--gold);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Paused</span>
+        </div>
+
+        <!-- Rule 5 -->
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:7px">
+          <div class="sw" style="flex-shrink:0;margin-top:2px" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">Buyer idle &gt;24h → OutreachBot re-engage</div>
+            <div style="font-size:12px;color:var(--muted)">No buyer response in 24h <span style="color:var(--indigo)">→</span> OutreachBot sends AI follow-up <span style="color:var(--indigo)">→</span> if no response in 48h, flags in Pipeline as cold</div>
+          </div>
+          <span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.2);color:var(--gold);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Paused</span>
+        </div>
+
+        <!-- Rule 6 -->
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:7px">
+          <div class="sw" style="flex-shrink:0;margin-top:2px" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">Shipment confirmed → LogisticsAI + CustomsAI</div>
+            <div style="font-size:12px;color:var(--muted)">PO acknowledged by supplier <span style="color:var(--indigo)">→</span> LogisticsAI books freight <span style="color:var(--indigo)">→</span> CustomsAI prepares HS codes &amp; export docs</div>
+          </div>
+          <span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.2);color:var(--gold);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Paused</span>
+        </div>
+
+      </div>
+      <div style="padding:14px 0 4px;display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn btn-xs" onclick="alert('Workflow rules saved.')">💾 Save rules</button>
+        <button class="btn btn-xs btn-p" onclick="alert('New rule builder — coming soon.')">+ New rule</button>
       </div>
     </div>
 
@@ -1036,7 +1345,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={agents:['🧠 AI Agents','LeadFinder · PriceScout · OutreachBot · ComplianceBot'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
+var TITLES={agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────
@@ -1913,6 +2222,108 @@ function sendContractToLawyer() {
   var sentEl = document.getElementById('legal-sent');
   if (sentEl) sentEl.textContent = count;
 })();
+
+var poSelected = {};
+function openPOModal() {
+  document.getElementById('po-step-1').style.display = 'block';
+  document.getElementById('po-step-2').style.display = 'none';
+  document.getElementById('po-step-3').style.display = 'none';
+  document.getElementById('po-action-btn').style.display = 'none';
+  document.getElementById('po-modal-ft').style.display = 'flex';
+  document.getElementById('po-modal-bg').classList.add('open');
+}
+function closePOModal() {
+  document.getElementById('po-modal-bg').classList.remove('open');
+}
+function selectPOLoi(ref, product, qty, price, supplier, total) {
+  poSelected = { ref: ref, product: product, qty: qty, price: price, supplier: supplier, total: total };
+  var poRef = 'PO-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 900) + 100);
+  document.getElementById('po-ref-val').textContent = poRef;
+  document.getElementById('po-loi-val').textContent = ref;
+  document.getElementById('po-product-val').textContent = product;
+  document.getElementById('po-qty-val').textContent = qty;
+  document.getElementById('po-price-val').textContent = price;
+  document.getElementById('po-supplier-val').textContent = supplier;
+  document.getElementById('po-total-val').textContent = total;
+  document.getElementById('po-step-1').style.display = 'none';
+  document.getElementById('po-step-2').style.display = 'block';
+  document.getElementById('po-action-btn').style.display = 'inline-flex';
+}
+function poProceed() {
+  document.getElementById('po-step-2').style.display = 'none';
+  document.getElementById('po-step-3').style.display = 'block';
+  document.getElementById('po-modal-ft').style.display = 'none';
+  document.getElementById('po-sent-msg').textContent =
+    'PO delivered to ' + (poSelected.supplier || 'supplier') + '. A confirmation copy has been emailed to you.';
+  setTimeout(function () { closePOModal(); document.getElementById('po-modal-ft').style.display = 'flex'; }, 3500);
+}
 </script>
+
+<!-- PO GENERATOR MODAL -->
+<div class="modal-bg" id="po-modal-bg" onclick="if(event.target===this)closePOModal()">
+  <div class="modal">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">&#129534; Purchase Order Generator</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Reads from signed LOI &mdash; generates and sends PO to supplier</div>
+      </div>
+      <button class="modal-close" onclick="closePOModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div id="po-step-1">
+        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">// Select source LOI</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer" onclick="selectPOLoi('SL-LOI-20260501-003','Hard Wheat','50 MT','$1,120/MT','Atlas Grain Trading','$56,000')">
+            <div style="font-size:20px">&#128196;</div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">SL-LOI-20260501-003</div>
+              <div style="font-size:12px;color:var(--muted)">Hard Wheat &middot; 50 MT &middot; $1,120/MT</div>
+              <div style="font-size:12px;color:var(--muted)">Atlas Grain Trading &middot; Signed today</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:15px;font-weight:700;color:var(--white)">$56K</div>
+              <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:1px 7px;border-radius:8px;font-size:11px">Signed</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;cursor:pointer" onclick="selectPOLoi('SL-LOI-20260430-002','Aluminum 6061','5 MT','$9,200/MT','Gulf Steel Industries','$46,000')">
+            <div style="font-size:20px">&#128196;</div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">SL-LOI-20260430-002</div>
+              <div style="font-size:12px;color:var(--muted)">Aluminum 6061 &middot; 5 MT &middot; $9,200/MT</div>
+              <div style="font-size:12px;color:var(--muted)">Gulf Steel Industries &middot; Signed yesterday</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:15px;font-weight:700;color:var(--white)">$46K</div>
+              <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:1px 7px;border-radius:8px;font-size:11px">Signed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="po-step-2" style="display:none">
+        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">// Purchase Order Preview</div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--muted)">PO Reference</span><span style="font-size:13px;color:var(--white);font-weight:600" id="po-ref-val">—</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--muted)">Source LOI</span><span style="font-size:13px;color:var(--indigo)" id="po-loi-val">—</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--muted)">Product</span><span style="font-size:13px;color:var(--white)" id="po-product-val">—</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--muted)">Quantity</span><span style="font-size:13px;color:var(--white)" id="po-qty-val">—</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--muted)">Unit price</span><span style="font-size:13px;color:var(--white)" id="po-price-val">—</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--muted)">Supplier</span><span style="font-size:13px;color:var(--white)" id="po-supplier-val">—</span></div>
+          <div style="display:flex;justify-content:space-between;padding:8px 14px;background:rgba(34,197,94,.04)"><span style="font-size:12px;font-weight:700;color:var(--white)">Total value</span><span style="font-size:16px;color:var(--green);font-weight:700" id="po-total-val">—</span></div>
+        </div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7">PO will be sent to the supplier email on record from the LOI. A confirmation copy is sent to you.</div>
+      </div>
+      <div id="po-step-3" style="display:none;text-align:center;padding:28px 0">
+        <div style="font-size:40px;margin-bottom:12px">&#9989;</div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">Purchase Order sent.</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7" id="po-sent-msg">PO delivered to supplier. A copy has been emailed to you.</div>
+      </div>
+    </div>
+    <div class="modal-ft" id="po-modal-ft">
+      <button class="btn" onclick="closePOModal()">Cancel</button>
+      <button class="btn btn-p" id="po-action-btn" onclick="poProceed()" style="display:none">Send PO to supplier &rarr;</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

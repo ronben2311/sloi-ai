@@ -472,19 +472,12 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <div class="q-sub">Select a commodity category. The sourcing engine matches pre-qualified suppliers and negotiates against your mandate — you review every offer before commitment.</div>
 
       <div class="prod-grid">
-        <div class="pc" onclick="selectProduct(this,'Steel &amp; Metals','steel rebar, coil, aluminum')">
+        <div class="pc" onclick="selectProduct(this,'Building materials','steel, cement, concrete, rebar, clinker')">
           <div class="pc-check">✓ selected</div>
-          <span class="pc-icon">🔩</span>
-          <div class="pc-name">Steel &amp; Metals</div>
-          <div class="pc-sub">Rebar · Coil · Aluminum · Pipes</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $38/m · $2,840/MT</div>
-        </div>
-        <div class="pc" onclick="selectProduct(this,'Cement &amp; Clinker','OPC, clinker, bulk cement, bagged cement')">
-          <div class="pc-check">✓ selected</div>
-          <span class="pc-icon">🪨</span>
-          <div class="pc-name">Cement &amp; Clinker</div>
-          <div class="pc-sub">OPC · Clinker · Bulk · Bagged · White</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $58/MT · 8 products</div>
+          <span class="pc-icon">🏗️</span>
+          <div class="pc-name">Building materials</div>
+          <div class="pc-sub">Steel · Cement · Concrete · Rebar · Clinker</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $4.8/Unit · 21 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
           <div class="pc-check">✓ selected</div>
@@ -507,12 +500,19 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="pc-sub">PVC · HDPE · Solvents · Polymers · Fertilizers</div>
           <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $420/MT · 6 products</div>
         </div>
-        <div class="pc" onclick="selectProduct(this,'Other','other commodities')">
+        <div class="pc" onclick="selectProduct(this,'Engineering equipment','generators, pumps, compressors, cranes')">
           <div class="pc-check">✓ selected</div>
-          <span class="pc-icon">📦</span>
-          <div class="pc-name">Other commodity</div>
-          <div class="pc-sub">Describe exactly what you need</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--muted)">Any product · custom RFQ</div>
+          <span class="pc-icon">⚙️</span>
+          <div class="pc-name">Engineering equipment</div>
+          <div class="pc-sub">Generators, pumps, compressors &amp; more</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--muted)">Heavy machinery · industrial units</div>
+        </div>
+        <div class="pc" onclick="selectProduct(this,'Reconstruction','cement, steel, generators, cranes, concrete')">
+          <div class="pc-check">✓ selected</div>
+          <span class="pc-icon">🏛️</span>
+          <div class="pc-name">Reconstruction</div>
+          <div class="pc-sub">Steel · Cement · Concrete · Cranes · Generators</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">Full package · 33 products</div>
         </div>
       </div>
 
@@ -886,29 +886,62 @@ var CATALOG = [
   {sector:'Chemicals', sku:'DAP-F',     name:'DAP Fertilizer 18-46-0',       unit:'MT',    market:620,   moq:50},
   {sector:'Chemicals', sku:'PP-GRN',    name:'PP Granules Homopolymer',      unit:'MT',    market:1280,  moq:20},
   {sector:'Chemicals', sku:'HDPE-BLW',  name:'HDPE Blow Grade',              unit:'MT',    market:1220,  moq:20},
+  {sector:'Engineering', sku:'GEN-100',  name:'Diesel Generator 100 kVA',     unit:'Unit',  market:8500,  moq:1},
+  {sector:'Engineering', sku:'GEN-500',  name:'Diesel Generator 500 kVA',     unit:'Unit',  market:38000, moq:1},
+  {sector:'Engineering', sku:'PMP-CTF',  name:'Centrifugal Pump 50HP',        unit:'Unit',  market:2200,  moq:2},
+  {sector:'Engineering', sku:'PMP-SUB',  name:'Submersible Pump 30HP',        unit:'Unit',  market:1800,  moq:2},
+  {sector:'Engineering', sku:'CMP-AIR',  name:'Air Compressor 50L 3HP',       unit:'Unit',  market:950,   moq:5},
+  {sector:'Engineering', sku:'CMP-SCR',  name:'Screw Compressor 75kW',        unit:'Unit',  market:22000, moq:1},
+  {sector:'Engineering', sku:'CRN-MOB',  name:'Mobile Crane 50T',             unit:'Unit',  market:185000,moq:1},
+  {sector:'Engineering', sku:'EXC-320',  name:'Hydraulic Excavator 20T',      unit:'Unit',  market:142000,moq:1},
+  {sector:'Engineering', sku:'FRK-3T',   name:'Forklift 3T Diesel',           unit:'Unit',  market:28000, moq:1},
+  {sector:'Engineering', sku:'TRF-1MV',  name:'Dry-type Transformer 1 MVA',   unit:'Unit',  market:32000, moq:1},
+  {sector:'Engineering', sku:'MTR-75',   name:'Electric Motor 75 kW IE3',     unit:'Unit',  market:4800,  moq:2},
+  {sector:'Engineering', sku:'HVAC-CH',  name:'HVAC Chiller 200 TR',          unit:'Unit',  market:58000, moq:1},
 ];
 
 var SECTOR_MAP = {
-  'Steel & Metals':   'Metals',
-  'Cement & Clinker': 'Cement',
-  'Agriculture':      'Agriculture',
-  'Energy':           'Energy',
-  'Petrochemicals':   'Chemicals',
-  'Other':            null,
+  'Building materials':    ['Metals','Cement','Building'],
+  'Agriculture':           'Agriculture',
+  'Energy':                'Energy',
+  'Petrochemicals':        'Chemicals',
+  'Engineering equipment': 'Engineering',
 };
 
 function filterCatalog(categoryName) {
-  var sector  = SECTOR_MAP[categoryName] || null;
-  var items   = sector ? CATALOG.filter(function(p){ return p.sector === sector; }) : CATALOG;
-  var sel     = document.getElementById('product-select');
-  var wrap    = document.getElementById('cat-wrap');
-  var badge   = document.getElementById('cat-count');
+  var sectorVal = SECTOR_MAP[categoryName] || null;
+  var items;
+  if (Array.isArray(sectorVal)) {
+    items = CATALOG.filter(function(p){ return sectorVal.indexOf(p.sector) !== -1; });
+  } else if (sectorVal) {
+    items = CATALOG.filter(function(p){ return p.sector === sectorVal; });
+  } else {
+    items = CATALOG;
+  }
+
+  var sel   = document.getElementById('product-select');
+  var wrap  = document.getElementById('cat-wrap');
+  var badge = document.getElementById('cat-count');
 
   sel.innerHTML = '<option value="">— Browse verified products —</option>';
 
-  if (!sector) {
-    var sectors = ['Metals','Building','Energy','Agriculture','Chemicals'];
-    sectors.forEach(function(s){
+  if (Array.isArray(sectorVal)) {
+    sectorVal.forEach(function(s){
+      var grpItems = CATALOG.filter(function(p){ return p.sector === s; });
+      if (!grpItems.length) return;
+      var grp = document.createElement('optgroup');
+      grp.label = s;
+      grpItems.forEach(function(p){
+        var opt = document.createElement('option');
+        opt.value = p.sku;
+        opt.textContent = p.name + '  ·  ' + p.sku + '  ·  ~$' + p.market + '/' + p.unit;
+        grp.appendChild(opt);
+      });
+      sel.appendChild(grp);
+    });
+  } else if (!sectorVal) {
+    var allSectors = ['Metals','Building','Energy','Agriculture','Chemicals','Engineering'];
+    allSectors.forEach(function(s){
       var grp = document.createElement('optgroup');
       grp.label = s;
       CATALOG.filter(function(p){ return p.sector === s; }).forEach(function(p){
