@@ -133,7 +133,7 @@ pre{padding:14px;font-size:13px;line-height:1.85;overflow-x:auto;color:var(--tex
     <span class="badge bv">x-api-key header</span>
     <span class="badge bg">One-time registration</span>
     <span class="badge bt">No sessions or cookies</span>
-    <span class="badge ba">USDC/TON for credits</span>
+    <span class="badge ba">USDC on Base for credits</span>
   </div>
 
   <!-- HUMAN VS AGENT -->
@@ -157,7 +157,7 @@ pre{padding:14px;font-size:13px;line-height:1.85;overflow-x:auto;color:var(--tex
         Sends x-api-key: sk-sloi-... header<br/>
         Works forever, 24/7<br/>
         No re-auth, no browser<br/>
-        Pays with USDC on Base or TON
+        Pays with USDC on Base
       </div>
     </div>
   </div>
@@ -186,9 +186,9 @@ pre{padding:14px;font-size:13px;line-height:1.85;overflow-x:auto;color:var(--tex
     <div class="flow-step">
       <div class="fs-num">3</div>
       <div>
-        <div class="fs-title">Top up credits (USDC or TON)</div>
-        <div class="fs-desc">Send USDC to sloi_wallet on Base mainnet, or TON to TON wallet. Credits appear in ~2 seconds. No API call needed.</div>
-        <div class="fs-code">99 USDC → 100 credits · 9.9 TON → 100 credits</div>
+        <div class="fs-title">Top up credits (USDC on Base)</div>
+        <div class="fs-desc">Send USDC to sloi_wallet on Base mainnet. Credits appear in ~2 seconds. No API call needed.</div>
+        <div class="fs-code">99 USDC → 100 credits</div>
       </div>
     </div>
     <div class="flow-step">
@@ -222,7 +222,6 @@ Content-Type: application/json
   <span class="str">"email"</span>:          <span class="str">"agent@mycompany.com"</span>, <span class="cm">// required · for notifications</span>
   <span class="str">"framework"</span>:      <span class="str">"claude"</span>,             <span class="cm">// claude|openai|gemini|custom</span>
   <span class="str">"wallet_address"</span>: <span class="str">"0x..."</span>,             <span class="cm">// optional · Base wallet for USDC</span>
-  <span class="str">"ton_wallet"</span>:     <span class="str">"EQ..."</span>              <span class="cm">// optional · TON wallet</span>
 }</pre>
   </div>
 
@@ -231,8 +230,7 @@ Content-Type: application/json
   <span class="str">"api_key"</span>:    <span class="str">"sk-sloi-a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6"</span>,
   <span class="str">"agent_id"</span>:   <span class="str">"agt_abc123def456"</span>,
   <span class="str">"tier"</span>:       <span class="str">"read"</span>,              <span class="cm">// read (instant) | transact (5-day review)</span>
-  <span class="str">"sloi_wallet"</span>: <span class="str">"0x742d35Cc6634C0532925a3b8D4C9b7b3e4E9D2A"</span>, <span class="cm">// send USDC here</span>
-  <span class="str">"ton_wallet"</span>:  <span class="str">"EQBvI0aFLnw2QbZgjMPwyv1cWX3wEnK7x0..."</span>,    <span class="cm">// send TON here</span>
+  <span class="str">"sloi_wallet"</span>: <span class="str">"0x742d35Cc6634C0532925a3b8D4C9b7b3e4E9D2A"</span>, <span class="cm">// send USDC on Base here</span>
   <span class="str">"credits"</span>:     <span class="num">0</span>,
   <span class="str">"created_at"</span>:  <span class="str">"2026-05-01T14:30:00Z"</span>
 }</pre>
@@ -528,18 +526,13 @@ curl https://api.sloiai.com/v1/lois/SL-LOI-001/pdf \
       <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">USDC on Base</div>
       <div style="font-size:12px;color:var(--muted);line-height:1.6">Send to sloi_wallet on Base mainnet · 99/299/599/999 USDC → 100/350/800/1500 credits · ~2 seconds</div>
     </div>
-    <div style="background:var(--surface);border:1px solid rgba(0,152,234,.2);border-radius:6px;padding:14px">
-      <div style="font-size:18px;margin-bottom:6px">💎</div>
-      <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">TON</div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.6">Send to ton_wallet · 9.9/29.9/59.9/99.9 TON → 100/350/800/1500 credits · ~2 seconds</div>
-    </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px">
       <div style="font-size:18px;margin-bottom:6px">💳</div>
       <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">Stripe (humans)</div>
-      <div style="font-size:12px;color:var(--muted);line-height:1.6">POST /v1/credits/purchase → Stripe URL · Agents use USDC/TON instead</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.6">POST /v1/credits/purchase → Stripe URL · Agents use USDC on Base instead</div>
     </div>
   </div>
-  <div class="note">USDC and TON payments are monitored automatically by SLOI AI. No webhook call from your agent needed. Just send the exact amount and credits appear in your account in ~2 seconds.</div>
+  <div class="note">USDC on Base payments are monitored automatically by SLOI AI. No webhook call from your agent needed. Just send the exact amount and credits appear in your account in ~2 seconds.</div>
 </div>
 
 <!-- SECURITY -->

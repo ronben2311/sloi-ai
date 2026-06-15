@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Get the best price — SLOI AI</title>
+<title>Source. Negotiate. Close. — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -326,12 +326,24 @@ select.inp option{background:var(--surface2);color:var(--white)}
     </div>
     <div class="sn-spacer"></div>
 
-    <div class="sn-row">
+    <div class="sn-row" onclick="tryGoStep(4)">
       <div class="sn-col">
-        <div class="sn-dot" id="dot-4">✓</div>
+        <div class="sn-dot" id="dot-4">4</div>
+        <div class="sn-line" id="line-4"></div>
       </div>
       <div class="sn-info">
-        <div class="sn-name" id="lname-4">Review &amp; submit</div>
+        <div class="sn-name" id="lname-4">How to proceed</div>
+        <div class="sn-desc">Choose your workflow</div>
+      </div>
+    </div>
+    <div class="sn-spacer"></div>
+
+    <div class="sn-row">
+      <div class="sn-col">
+        <div class="sn-dot" id="dot-5">✓</div>
+      </div>
+      <div class="sn-info">
+        <div class="sn-name" id="lname-5">Review &amp; submit</div>
         <div class="sn-desc">Confirm details · launch negotiation</div>
       </div>
     </div>
@@ -341,7 +353,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
   <div class="left-trust">
     <div class="trust-row"><div class="t-dot t-green"></div>Automation engine negotiates — you review and approve every offer</div>
     <div class="trust-row"><div class="t-dot t-green"></div>No commitment to start · full audit trail included</div>
-    <div class="trust-row"><div class="t-dot t-green"></div>Documented price offer within 24 hours</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>Price indication within 24 hours based on pre-qualified supplier network</div>
     <div class="trust-row"><div class="t-dot t-violet"></div>Pre-qualified suppliers · MENA &amp; global corridors</div>
   </div>
 </div>
@@ -381,17 +393,20 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <!-- SECONDARY OPTIONS -->
       <div style="font-size:11px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px">Or import from existing documents</div>
       <div class="entry-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
-        <div class="ec" id="ec-po" onclick="selectEntry('po')">
+        <div class="ec" id="ec-po" style="opacity:0.4;pointer-events:none;position:relative">
+          <div style="position:absolute;top:6px;right:6px;background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;letter-spacing:.05em">COMING SOON</div>
           <div class="ec-icon" style="font-size:22px">📎</div>
           <div class="ec-name" style="font-size:13px">Upload PO</div>
           <div class="ec-desc">PDF · Excel · Word</div>
         </div>
-        <div class="ec" id="ec-erp" onclick="selectEntry('erp')">
+        <div class="ec" id="ec-erp" style="opacity:0.4;pointer-events:none;position:relative">
+          <div style="position:absolute;top:6px;right:6px;background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;letter-spacing:.05em">COMING SOON</div>
           <div class="ec-icon" style="font-size:22px">📋</div>
           <div class="ec-name" style="font-size:13px">Paste from ERP</div>
           <div class="ec-desc">SAP · Oracle · any</div>
         </div>
-        <div class="ec" id="ec-api" onclick="selectEntry('api')">
+        <div class="ec" id="ec-api" style="opacity:0.4;pointer-events:none;position:relative">
+          <div style="position:absolute;top:6px;right:6px;background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;letter-spacing:.05em">COMING SOON</div>
           <div class="ec-icon" style="font-size:22px">⚡</div>
           <div class="ec-name" style="font-size:13px">API / Direct</div>
           <div class="ec-desc">For developers</div>
@@ -437,7 +452,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
             <div><span style="color:var(--violet)">POST</span> <span style="color:var(--teal)">https://api.sloiai.com/v1/orders</span></div>
             <div style="color:var(--muted)">Authorization: Bearer <span style="color:var(--gold)">sk-sloi-YOUR_KEY</span></div>
             <div style="margin-top:2px;color:var(--muted)">{</div>
-            <div style="padding-left:16px"><span style="color:var(--muted)">"product":</span> <span style="color:var(--green)">"Steel Rebar G60"</span>,</div>
+            <div style="padding-left:16px"><span style="color:var(--muted)">"product":</span> <span style="color:var(--green)">"HDPE Pipe Grade"</span>,</div>
             <div style="padding-left:16px"><span style="color:var(--muted)">"qty":</span> <span style="color:var(--gold)">500</span>, <span style="color:var(--muted)">"unit":</span> <span style="color:var(--green)">"MT"</span>,</div>
             <div style="padding-left:16px"><span style="color:var(--muted)">"country":</span> <span style="color:var(--green)">"UAE"</span>, <span style="color:var(--muted)">"max_price":</span> <span style="color:var(--gold)">2960</span></div>
             <div style="color:var(--muted)">}</div>
@@ -485,11 +500,11 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="pc-sub">Diesel · LPG · Fuel oil · Gas</div>
           <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $4.92/L · 3 products</div>
         </div>
-        <div class="pc" onclick="selectProduct(this,'Chemicals','industrial chemicals, fertilizers')">
+        <div class="pc" onclick="selectProduct(this,'Petrochemicals','PVC, HDPE, solvents, polymers, fertilizers')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">🧪</span>
-          <div class="pc-name">Chemicals</div>
-          <div class="pc-sub">Industrial · Fertilizers · Acids</div>
+          <div class="pc-name">Petrochemicals</div>
+          <div class="pc-sub">PVC · HDPE · Solvents · Polymers · Fertilizers</div>
           <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $420/MT · 6 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Other','other commodities')">
@@ -552,40 +567,29 @@ select.inp option{background:var(--surface2);color:var(--white)}
         <div class="field-hint">Helps the agent negotiate harder toward your number. Not a commitment.</div>
       </div>
 
-      <div class="field" style="margin-bottom:8px">
-        <div class="field-lbl">Sourcing mode <span class="req"></span></div>
-        <div class="ptype-grid">
-          <div class="pt" id="pt-once" onclick="selectPurchaseType(this,'One-time purchase')">
-            <div class="pt-check">✓ selected</div>
-            <div class="pt-icon">📄</div>
-            <div class="pt-name">LOI Generator</div>
-            <div class="pt-desc">Generates a compliant Letter of Intent directly</div>
-          </div>
-          <div class="pt" id="pt-recurring" onclick="selectPurchaseType(this,'Recurring contract')">
-            <div class="pt-check">✓ selected</div>
-            <div class="pt-icon">🤖</div>
-            <div class="pt-name">AI Negotiation Engine</div>
-            <div class="pt-desc">Automated multi-round price negotiation</div>
-          </div>
-        </div>
+      <div class="field">
+        <div class="field-lbl">Project name / PO reference <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+        <input class="inp" id="project-ref" placeholder="e.g. Reconstruction Phase 2 / PO-2024-0187"/>
       </div>
 
-      <!-- Shown only when Negotiation Agent selected -->
-      <div class="annual-reveal" id="annual-reveal">
-        <div class="field" style="margin-bottom:0;padding:14px;background:rgba(91,95,239,.04);border:1px solid rgba(91,95,239,.18);border-radius:8px">
-          <div class="field-lbl" style="color:var(--violet)">Estimated annual volume <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
-          <input class="inp" id="annual-volume" placeholder="e.g. 1,200 MT/year  or  $3.5M/year" style="background:var(--surface2);margin-top:4px"/>
-          <div class="field-hint" style="margin-top:4px">High-volume procurement unlocks preferential supplier rates — share your annual volume to qualify.</div>
-        </div>
+      <div class="field">
+        <div class="field-lbl">Incoterms <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+        <select class="inp" id="incoterms">
+          <option value="">— Select Incoterms —</option>
+          <option>FOB</option><option>CIF</option><option>DAP</option><option>DDP</option><option>EXW</option>
+        </select>
       </div>
 
       <div class="field">
         <div class="field-lbl">Delivery country <span class="req"></span></div>
         <select class="inp" id="country">
+          <optgroup label="── Reconstruction Markets ──">
+            <option>Ukraine</option><option>Palestine</option><option>Iraq</option><option>Syria</option>
+          </optgroup>
           <optgroup label="── Gulf &amp; MENA ──">
             <option>UAE</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option>
             <option>Bahrain</option><option>Oman</option><option>Egypt</option><option>Jordan</option>
-            <option>Iraq</option><option>Yemen</option><option>Lebanon</option><option>Syria</option>
+            <option>Iraq</option><option>Yemen</option><option>Lebanon</option>
             <option>Palestine</option><option>Libya</option><option>Tunisia</option><option>Algeria</option>
             <option>Morocco</option><option>Sudan</option><option>Iran</option><option>Turkey</option>
           </optgroup>
@@ -658,7 +662,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="tc-check">✓ selected</div>
           <div class="tc-icon">🚨</div>
           <div class="tc-name">ASAP</div>
-          <div class="tc-desc">Within 2 weeks — urgent procurement</div>
+          <div class="tc-desc">Urgent — under 30 days</div>
           <div class="tc-mode">Aggressive mode</div>
         </div>
         <div class="tc" onclick="selectUrgency(this,'1–2 months')">
@@ -695,9 +699,9 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </div>
 
       <div class="field">
-        <div class="field-lbl">WhatsApp <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional — faster updates)</span></div>
-        <input class="inp" id="contact-wa" placeholder="+972-50-XXX-XXXX"/>
-        <div class="field-hint">Get deal alerts instantly on WhatsApp. Response within 24h.</div>
+        <div class="field-lbl">Phone / WhatsApp <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional — faster updates)</span></div>
+        <input class="inp" id="contact-wa" placeholder="+1-XXX-XXX-XXXX"/>
+        <div class="field-hint">Get deal alerts via phone or WhatsApp. Response within 24h.</div>
       </div>
 
       <button class="btn-p" onclick="goStep(4)">Review my order →</button>
@@ -713,8 +717,34 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </a>
     </div>
 
-    <!-- ── STEP 4 — REVIEW ── -->
+    <!-- ── STEP 4 — HOW TO PROCEED ── -->
     <div class="step" id="step-4">
+      <div class="q-eyebrow">Step 4</div>
+      <div class="q-title">How would you like<br/><em>to proceed?</em></div>
+      <div class="q-sub">Choose the workflow that fits your current situation.</div>
+
+      <div class="ptype-grid" id="proceed-grid" style="margin-bottom:28px">
+        <div class="pt sel" id="pt-proceed-negotiate" onclick="selectProceed(this,'negotiate')">
+          <div class="pt-check">✓ selected</div>
+          <div class="pt-icon">🤖</div>
+          <div class="pt-name">AI Negotiation Engine</div>
+          <div class="pt-desc">Automated multi-round negotiation — you approve every offer before commitment</div>
+          <div style="margin-top:8px"><span style="background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:3px;letter-spacing:.05em">RECOMMENDED</span></div>
+        </div>
+        <div class="pt" id="pt-proceed-loi" onclick="selectProceed(this,'loi')">
+          <div class="pt-check">✓ selected</div>
+          <div class="pt-icon">📄</div>
+          <div class="pt-name">LOI Generator</div>
+          <div class="pt-desc">Instant LOI draft — use if you already have a supplier and agreed price</div>
+        </div>
+      </div>
+
+      <button class="btn-p" onclick="goStep(5)">Continue →</button>
+      <button class="btn-s" onclick="goStep(3)">← Back</button>
+    </div>
+
+    <!-- ── STEP 5 — REVIEW ── -->
+    <div class="step" id="step-5">
       <div class="q-eyebrow">Review</div>
       <div class="q-title">Sourcing request<br/><em>summary.</em></div>
       <div class="q-sub">Review your procurement specification below. The sourcing engine will engage pre-qualified suppliers and deliver a documented price offer within 24 hours.</div>
@@ -760,13 +790,13 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
       <div class="gbox">
         <div class="g-row"><span class="g-chk">✓</span>Automation engine negotiates against your mandate with pre-qualified suppliers</div>
-        <div class="g-row"><span class="g-chk">✓</span>Documented price offer delivered within 24 hours — WhatsApp or email</div>
+        <div class="g-row"><span class="g-chk">✓</span>Price indication within 24 hours based on pre-qualified supplier network</div>
         <div class="g-row"><span class="g-chk">✓</span>You review and approve every offer — zero commitment at this stage</div>
         <div class="g-row"><span class="g-chk">✓</span>No credit card required · full audit trail provided</div>
       </div>
 
       <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Submit RFQ →</button>
-      <button class="btn-s" onclick="goStep(3)">← Back</button>
+      <button class="btn-s" onclick="goStep(4)">← Back</button>
     </div>
 
     <!-- ── SUCCESS ── -->
@@ -786,9 +816,16 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="fl-item"><div class="fl-num g">✓</div><div class="fl-text" style="color:var(--green)">You deal directly with the supplier — SLOI AI never touches your funds</div></div>
         </div>
 
-        <div class="cta-row">
-          <a href="javascript:void(0)" onclick="saveMandateAndGo('negotiation-agent.html')" class="cta-p">🤖 Open Negotiation Engine</a>
-          <a href="demo.html" class="cta-s">Watch demo</a>
+        <div style="margin-bottom:8px">
+          <div class="cta-p" style="text-align:center;cursor:default;user-select:none">📧 Check your email for confirmation</div>
+        </div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin:12px 0">Every LOI includes tamper-proof XDC blockchain verification — no extra steps required.</p>
+        <a href="demo.html" style="display:inline-block;font-size:13px;color:var(--violet);text-decoration:none">Watch demo →</a>
+
+        <div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.18);border-radius:8px;padding:16px 18px;margin-top:24px;text-align:left">
+          <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:6px">💰 Need financing for this deal?</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px">Connect to TradeFinex → Get funded against your LOI</div>
+          <a href="https://tradefinex.org" target="_blank" rel="noopener" style="color:var(--green);font-size:13px;font-weight:600;text-decoration:none">tradefinex.org →</a>
         </div>
       </div>
     </div>
@@ -798,7 +835,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
 </div><!-- /shell -->
 
 <script>
-var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', purchaseType:'', annualVolume:'', country:'UAE', urgency:'', name:'', company:'', email:'', wa:'' };
+var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', purchaseType:'Recurring contract', annualVolume:'', country:'UAE', urgency:'', name:'', company:'', email:'', wa:'', projectRef:'', incoterms:'' };
 
 function saveMandateAndGo(url) {
   var nm = document.getElementById('contact-name').value.trim();
@@ -856,7 +893,7 @@ var SECTOR_MAP = {
   'Cement & Clinker': 'Cement',
   'Agriculture':      'Agriculture',
   'Energy':           'Energy',
-  'Chemicals':        'Chemicals',
+  'Petrochemicals':   'Chemicals',
   'Other':            null,
 };
 
@@ -946,12 +983,12 @@ function goStep(n) {
     if (currentStep === 2) {
       var qv = document.getElementById('qty').value;
       if (!qv || parseFloat(qv) <= 0) { shake('qty'); return; }
-      if (!state.purchaseType) { pulse(document.querySelector('.ptype-grid')); return; }
-      state.qty          = qv;
-      state.unit         = document.getElementById('unit').value;
-      state.budget       = document.getElementById('budget').value || 'Not specified';
-      state.annualVolume = document.getElementById('annual-volume').value || '';
-      state.country      = document.getElementById('country').value;
+      state.qty        = qv;
+      state.unit       = document.getElementById('unit').value;
+      state.budget     = document.getElementById('budget').value || 'Not specified';
+      state.country    = document.getElementById('country').value;
+      state.projectRef   = document.getElementById('project-ref').value || '';
+      state.incoterms    = document.getElementById('incoterms').value || '';
     }
     if (currentStep === 3) {
       if (!state.urgency) { pulse(document.querySelector('.tl-grid')); return; }
@@ -972,8 +1009,8 @@ function goStep(n) {
   currentStep = n;
   if (n > maxReached) maxReached = n;
 
-  if (n === 4) populateSummary();
-  var el = document.getElementById(n <= 4 ? 'step-' + n : 'step-success');
+  if (n === 5) populateSummary();
+  var el = document.getElementById(n <= 5 ? 'step-' + n : 'step-success');
   if (el) el.classList.add('active');
 
   updateNav(n);
@@ -982,18 +1019,18 @@ function goStep(n) {
 }
 
 function updateNav(n) {
-  var pcts = {0:0,1:25,2:50,3:75,4:90};
-  var lbls = {0:'Start sourcing',1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Review RFQ'};
+  var pcts = {0:0,1:20,2:40,3:60,4:80,5:90};
+  var lbls = {0:'Start sourcing',1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Step 4 of 4',5:'Review RFQ'};
   document.getElementById('progress').style.width = (pcts[n] !== undefined ? pcts[n] : 100) + '%';
   document.getElementById('prog-lbl').textContent = lbls[n] || 'RFQ submitted';
 
-  for (var i = 1; i <= 4; i++) {
+  for (var i = 1; i <= 5; i++) {
     var dot   = document.getElementById('dot-' + i);
     var lname = document.getElementById('lname-' + i);
     var line  = document.getElementById('line-' + i);
     if (!dot) continue;
     if (n === 0) {
-      dot.className = 'sn-dot'; dot.textContent = i < 4 ? i : '✓';
+      dot.className = 'sn-dot'; dot.textContent = i < 5 ? i : '✓';
       if (lname) lname.className = 'sn-name';
       if (line)  line.className  = 'sn-line';
     } else if (i < n) {
@@ -1001,11 +1038,11 @@ function updateNav(n) {
       if (lname) lname.className = 'sn-name done';
       if (line)  line.className  = 'sn-line done';
     } else if (i === n) {
-      dot.className = 'sn-dot active'; dot.textContent = i < 4 ? i : '✓';
+      dot.className = 'sn-dot active'; dot.textContent = i < 5 ? i : '✓';
       if (lname) lname.className = 'sn-name active';
       if (line)  line.className  = 'sn-line';
     } else {
-      dot.className = 'sn-dot'; dot.textContent = i < 4 ? i : '✓';
+      dot.className = 'sn-dot'; dot.textContent = i < 5 ? i : '✓';
       if (lname) lname.className = 'sn-name';
       if (line)  line.className  = 'sn-line';
     }
@@ -1149,19 +1186,12 @@ function populateSummary() {
   }
 }
 
-function selectPurchaseType(el, val) {
-  document.querySelectorAll('.pt').forEach(function(c){ c.classList.remove('sel'); });
+function selectProceed(el, choice) {
+  document.querySelectorAll('#proceed-grid .pt').forEach(function(c){ c.classList.remove('sel'); });
   el.classList.add('sel');
-  state.purchaseType = val;
-  var reveal = document.getElementById('annual-reveal');
-  if (val === 'Recurring contract') {
-    reveal.classList.add('open');
-  } else {
-    reveal.classList.remove('open');
-    document.getElementById('annual-volume').value = '';
-    state.annualVolume = '';
-  }
+  state.purchaseType = (choice === 'loi') ? 'One-time purchase' : 'Recurring contract';
 }
+
 
 function submitOrder() {
   var btn = document.getElementById('submit-btn');
@@ -1225,7 +1255,7 @@ function submitOrder() {
     btn.disabled = false;
     document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
     document.getElementById('step-success').classList.add('active');
-    for (var i = 1; i <= 4; i++) {
+    for (var i = 1; i <= 5; i++) {
       var dot   = document.getElementById('dot-' + i);
       var lname = document.getElementById('lname-' + i);
       var line  = document.getElementById('line-' + i);

@@ -896,8 +896,8 @@
         </button>
         <button class="nav" onclick="show('agents', this)">
           <span class="nav-icon">🧠</span
-          ><span class="nav-label">AI Agents</span
-          ><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">9</span>
+          ><span class="nav-label">AI Tools</span
+          ><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">6</span>
         </button>
         <div class="sb-section">Deals</div>
         <button class="nav" onclick="show('lois', this)">
@@ -927,11 +927,11 @@
           <span class="nav-icon">↗</span
           ><span class="nav-label">SLOI AI home</span>
         </button>
-        <button class="nav" onclick="window.open('terms.html', '_blank')">
+        <button class="nav" onclick="show('terms', this)">
           <span class="nav-icon">📋</span
           ><span class="nav-label">Terms & Privacy</span>
         </button>
-        <button class="nav" onclick="window.open('support.html','_blank')">
+        <button class="nav" onclick="show('support', this)">
           <span class="nav-icon">🎧</span><span class="nav-label">Support</span>
         </button>
         <button class="nav" onclick="api.logout(); window.location.href = 'login.html'">
@@ -1659,7 +1659,7 @@
             </div>
           </div>
 
-          <!-- AI AGENTS -->
+          <!-- AI TOOLS -->
           <div id="view-agents" class="view">
 
             <!-- MANDATE — collapsible -->
@@ -1715,96 +1715,22 @@
                 <div style="display:flex;gap:8px;align-items:center">
                   <button class="btn btn-sm btn-p" onclick="alert('Mandate saved — all 9 agents updated.')">&#128190; Save mandate</button>
                   <button class="btn btn-sm" onclick="alert('Reset to defaults.')">Reset</button>
-                  <span style="font-size:13px;color:var(--muted);margin-left:6px">Last saved: Today 09:15 AM &middot; Applied to 9 agents</span>
+                  <span style="font-size:13px;color:var(--muted);margin-left:6px">Last saved: Today 09:15 AM &middot; Applied to 6 agents</span>
                 </div>
               </div>
             </div>
 
             <!-- HEADER -->
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-              <div style="font-size:14px;color:var(--muted)">9 agents &nbsp;&middot;&nbsp; <span style="color:var(--green)">7 running</span> &nbsp;&middot;&nbsp; <span style="color:var(--gold)">2 paused</span></div>
+              <div style="font-size:14px;color:var(--muted)">6 agents &nbsp;&middot;&nbsp; <span style="color:var(--green)">5 running</span> &nbsp;&middot;&nbsp; <span style="color:var(--gold)">1 paused</span></div>
               <button class="btn btn-xs btn-p" onclick="alert('Running all agents…')">&#9654; Run all now</button>
             </div>
 
-            <!-- ── SOURCING ── -->
-            <div class="ag-section">Sourcing &amp; Market Intelligence</div>
-            <div class="agent-rows">
-
-              <div>
-                <div class="agent-row" id="row-lead" onclick="toggleAgent('lead')">
-                  <div class="ar-icon" style="background:rgba(45,212,191,.12)">&#128301;</div>
-                  <div class="ar-name">LeadFinder</div>
-                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
-                  <div class="ar-metric">6 leads found &middot; 3 high-relevance &middot; Web + LinkedIn + Tenders</div>
-                  <div class="ar-actions">
-                    <button class="btn btn-xs btn-t" onclick="event.stopPropagation();alert('Running LeadFinder…')">&#9654; Run</button>
-                  </div>
-                  <span class="ar-chev">&#9660;</span>
-                </div>
-                <div class="agent-detail" id="detail-lead">
-                  <div class="ad-log">
-                    <div class="ad-log-row"><span><span style="color:var(--white);font-weight:600">Gulf Steel Industries</span> &middot; UAE &middot; Steel Rebar &middot; Verified</span><div style="display:flex;gap:5px"><span class="badge bg">High relevance</span><button class="btn btn-xs btn-p" onclick="event.stopPropagation()">Contact &rarr;</button></div></div>
-                    <div class="ad-log-row"><span><span style="color:var(--white);font-weight:600">Atlas Grain Trading</span> &middot; Egypt &middot; Hard Wheat &middot; OPC Certified</span><div style="display:flex;gap:5px"><span class="badge bg">High relevance</span><button class="btn btn-xs btn-p" onclick="event.stopPropagation()">Contact &rarr;</button></div></div>
-                    <div class="ad-log-row"><span><span style="color:var(--white);font-weight:600">NEOM Cement Partners</span> &middot; KSA &middot; OPC Cement &middot; Tender open</span><div style="display:flex;gap:5px"><span class="badge ba">Medium</span><button class="btn btn-xs" onclick="event.stopPropagation()">View &rarr;</button></div></div>
-                  </div>
-                  <div class="ad-btns">
-                    <button class="btn btn-xs btn-p" onclick="alert('Adding all to pipeline…')">+ Add all to pipeline</button>
-                    <button class="btn btn-xs" onclick="alert('Exporting CSV…')">&#8595; Export CSV</button>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div class="agent-row" id="row-price" onclick="toggleAgent('price')">
-                  <div class="ar-icon" style="background:rgba(91,95,239,.12)">&#128225;</div>
-                  <div class="ar-name">PriceScout</div>
-                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
-                  <div class="ar-metric">11 products &middot; <span style="color:var(--gold)">&#9888; Steel +2.3% today</span> &middot; last scan 4 min ago</div>
-                  <div class="ar-actions">
-                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();alert('Scanning prices…')">&#9654; Scan</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();window.open('price-discovery.html','_blank')">View all</button>
-                  </div>
-                  <span class="ar-chev">&#9660;</span>
-                </div>
-                <div class="agent-detail" id="detail-price">
-                  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
-                    <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:13px"><span style="color:var(--muted)">Steel Rebar G60</span><span style="color:var(--gold);font-weight:600">$2,840 &#8593;</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:13px"><span style="color:var(--muted)">Hard Wheat</span><span style="color:var(--green);font-weight:600">$1,120 &#8595;</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:13px"><span style="color:var(--muted)">Cement OPC</span><span style="color:var(--muted);font-weight:600">$89 &ndash;</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:6px 8px;background:var(--bg);border-radius:4px;font-size:13px"><span style="color:var(--muted)">Aluminum 6061</span><span style="color:var(--green);font-weight:600">$9,100 &#8595;</span></div>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
             <!-- ── OUTREACH & NEGOTIATION ── -->
-            <div class="ag-section">Outreach &amp; Negotiation</div>
+            <div class="ag-section">Negotiation</div>
             <div class="agent-rows">
 
-              <div>
-                <div class="agent-row" id="row-outreach" onclick="toggleAgent('outreach')">
-                  <div class="ar-icon" style="background:rgba(37,211,102,.1)">&#128241;</div>
-                  <div class="ar-name">OutreachBot</div>
-                  <span style="background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.2);color:var(--gold);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">&#9208; Paused</span>
-                  <div class="ar-metric">18 RFQs sent this week &middot; Reply rate: <span style="color:var(--green)">42%</span> &middot; Next batch: Tomorrow 9:00 AM</div>
-                  <div class="ar-actions">
-                    <button class="btn btn-xs btn-g" onclick="event.stopPropagation();alert('Resuming OutreachBot…')">&#9654; Resume</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();alert('Opening templates…')">Templates</button>
-                  </div>
-                  <span class="ar-chev">&#9660;</span>
-                </div>
-                <div class="agent-detail" id="detail-outreach">
-                  <div class="ad-log">
-                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Gulf Steel &mdash; replied, sent quote</span></div>
-                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Atlas Grain &mdash; quote received</span></div>
-                    <div class="ad-log-row"><span style="color:var(--muted)">&ndash;</span><span>EuroSteel GmbH &mdash; no reply</span></div>
-                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Cairo Cement &mdash; interested</span></div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
+                            <div>
                 <div class="agent-row" id="row-neg" onclick="toggleAgent('neg')">
                   <div class="ar-icon" style="background:rgba(91,95,239,.12)">&#129302;</div>
                   <div class="ar-name">NegotiationAgent</div>
@@ -1874,10 +1800,36 @@
                 </div>
               </div>
 
+              <!-- PO GENERATOR AGENT -->
+              <div>
+                <div class="agent-row" id="row-po" onclick="toggleAgent('po')">
+                  <div class="ar-icon" style="background:rgba(232,169,74,.12)">&#129534;</div>
+                  <div class="ar-name">PO Generator</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">2 POs sent this week &middot; <span style="color:var(--green)">$102K covered</span> &middot; reads from signed LOI</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-g" onclick="event.stopPropagation();openPOModal()">&#129534; Generate PO</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('lois',document.querySelectorAll('.nav')[3])">View LOIs</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-po">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>PO-2026-001 &middot; Hard Wheat &middot; $56K &middot; Sent to Atlas Grain Trading</span></div>
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>PO-2026-002 &middot; Aluminum &middot; $46K &middot; Sent to Gulf Steel Industries</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">&#8987;</span><span>PO-2026-003 &middot; Steel Rebar &middot; LOI pending signature — PO on hold</span></div>
+                  </div>
+                  <div class="ad-btns">
+                    <button class="btn btn-xs btn-p" onclick="openPOModal()">&#129534; Generate PO from LOI &rarr;</button>
+                    <button class="btn btn-xs" onclick="alert('Exporting PO history…')">&#8595; Export</button>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             <!-- ── LOGISTICS & TRADE FINANCE ── -->
-            <div class="ag-section">Logistics &amp; Trade Finance</div>
+            <div class="ag-section">Logistics &amp; Customs</div>
             <div class="agent-rows">
 
               <div>
@@ -1922,27 +1874,6 @@
                 </div>
               </div>
 
-              <div>
-                <div class="agent-row" id="row-tf" onclick="toggleAgent('tf')">
-                  <div class="ar-icon" style="background:rgba(232,169,74,.12)">&#128179;</div>
-                  <div class="ar-name">TradeFinanceAI</div>
-                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
-                  <div class="ar-metric">2 LCs drafted &middot; $1.4M pipeline &middot; <span style="color:var(--green)">Factoring 1.8%</span></div>
-                  <div class="ar-actions">
-                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();alert('Drafting LC…')">&#128196; Draft LC</button>
-                    <button class="btn btn-xs" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="event.stopPropagation();window.open('https://www.tradefinex.org','_blank')">&#9939; TradeFinex</button>
-                  </div>
-                  <span class="ar-chev">&#9660;</span>
-                </div>
-                <div class="agent-detail" id="detail-tf">
-                  <div class="ad-log">
-                    <div class="ad-log-row"><span style="color:var(--gold)">&#128196;</span><span>LC drafted &mdash; Steel Rebar &middot; $284K &middot; Citi Bank</span></div>
-                    <div class="ad-log-row"><span style="color:var(--teal)">&#9939;</span><span>TradeFinex linked &mdash; LOI-20260603-001</span></div>
-                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Factoring offer &mdash; Hard Wheat LOI &middot; 1.8%</span></div>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
 
@@ -1954,55 +1885,157 @@
             </iframe>
           </div>
 
+          <!-- TERMS & PRIVACY -->
+          <div id="view-terms" class="view" style="padding:0;overflow:hidden">
+            <iframe src="terms.html?embed=1"
+              style="width:100%;height:calc(100vh - 48px);border:none;display:block"
+              title="Terms & Privacy">
+            </iframe>
+          </div>
+
+          <!-- SUPPORT -->
+          <div id="view-support" class="view" style="padding:0;overflow:hidden">
+            <iframe src="support.html?embed=1"
+              style="width:100%;height:calc(100vh - 48px);border:none;display:block"
+              title="Support">
+            </iframe>
+          </div>
+
           <!-- RFQs & LOIs (merged) -->
           <div id="view-lois" class="view">
-            <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// RFQ TRACKER</div>
-            <div class="g4" style="margin-bottom: 14px">
-              <div class="stat">
-                <div class="stat-top">Sent this month</div>
-                <div class="stat-val" id="rfq-stat-sent">12</div>
-              </div>
-              <div class="stat">
-                <div class="stat-top">Awaiting reply</div>
-                <div class="stat-val" style="color: var(--gold)" id="rfq-stat-pending">4</div>
-              </div>
-              <div class="stat">
-                <div class="stat-top">Quoted</div>
-                <div class="stat-val" style="color: var(--green)" id="rfq-stat-quoted">6</div>
-              </div>
-              <div class="stat">
-                <div class="stat-top">Converted to LOI</div>
-                <div class="stat-val" style="color: var(--indigo)" id="rfq-stat-converted">3</div>
-              </div>
-            </div>
-            <div class="card" style="margin-bottom:18px">
-              <div class="card-title">
-                // ACTIVE RFQs
-                <button class="btn btn-xs btn-p" onclick="show('negotiate')">+ New RFQ</button>
-              </div>
-              <div id="rfq-list"></div>
-            </div>
+            <div style="display:grid;grid-template-columns:1fr 230px;gap:20px;align-items:start">
 
-            <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// MY LOIs</div>
-            <div class="g4" style="margin-bottom: 14px">
-              <div class="stat">
-                <div class="stat-top">Total LOIs</div>
-                <div class="stat-val" id="loi-stat-total">—</div>
+              <!-- LEFT: main content -->
+              <div>
+                <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// RFQ TRACKER</div>
+                <div class="g4" style="margin-bottom: 14px">
+                  <div class="stat">
+                    <div class="stat-top">Sent this month</div>
+                    <div class="stat-val" id="rfq-stat-sent">12</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-top">Awaiting reply</div>
+                    <div class="stat-val" style="color: var(--gold)" id="rfq-stat-pending">4</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-top">Quoted</div>
+                    <div class="stat-val" style="color: var(--green)" id="rfq-stat-quoted">6</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-top">Converted to LOI</div>
+                    <div class="stat-val" style="color: var(--indigo)" id="rfq-stat-converted">3</div>
+                  </div>
+                </div>
+                <div class="card" style="margin-bottom:18px">
+                  <div class="card-title">
+                    // ACTIVE RFQs
+                    <button class="btn btn-xs btn-p" onclick="show('negotiate')">+ New RFQ</button>
+                  </div>
+                  <div id="rfq-list"></div>
+                </div>
+
+                <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// MY LOIs</div>
+                <div class="g4" style="margin-bottom: 14px">
+                  <div class="stat">
+                    <div class="stat-top">Total LOIs</div>
+                    <div class="stat-val" id="loi-stat-total">—</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-top">This month</div>
+                    <div class="stat-val" style="color: var(--green)" id="loi-stat-month">—</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-top">Total value</div>
+                    <div class="stat-val" id="loi-stat-value">—</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-top">Credits spent</div>
+                    <div class="stat-val" style="color: var(--teal)" id="loi-stat-credits">—</div>
+                  </div>
+                </div>
+                <div id="loi-list"></div>
               </div>
-              <div class="stat">
-                <div class="stat-top">This month</div>
-                <div class="stat-val" style="color: var(--green)" id="loi-stat-month">—</div>
+
+              <!-- RIGHT: AI Tools column -->
+              <div style="position:sticky;top:0">
+                <div style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px">AI Tools<span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
+
+                <!-- NegotiationAgent -->
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#129302;</div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">NegotiationAgent</div>
+                      <div style="display:flex;align-items:center;gap:4px;margin-top:2px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span><span style="font-size:11px;color:var(--green)">2 active</span></div>
+                    </div>
+                  </div>
+                  <button class="btn btn-xs btn-p" style="width:100%;justify-content:center" onclick="show('negotiate')">+ New negotiation</button>
+                </div>
+
+                <!-- ComplianceBot -->
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(239,68,68,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128737;&#65039;</div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">ComplianceBot</div>
+                      <div style="font-size:11px;color:var(--muted);margin-top:2px">1 review pending</div>
+                    </div>
+                  </div>
+                  <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="alert('Running compliance check…')">Run check</button>
+                </div>
+
+                <!-- LOI Generator -->
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128196;</div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LOI Generator</div>
+                      <div style="font-size:11px;color:var(--muted);margin-top:2px">3 LOIs this week</div>
+                    </div>
+                  </div>
+                  <button class="btn btn-xs btn-g" style="width:100%;justify-content:center" onclick="window.open('loi-generator.html','_blank')">&#128196; Generate LOI</button>
+                </div>
+
+                <!-- PO Generator -->
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#129534;</div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PO Generator</div>
+                      <div style="font-size:11px;color:var(--muted);margin-top:2px">2 POs sent this week</div>
+                    </div>
+                  </div>
+                  <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="openPOModal()">&#129534; Generate PO</button>
+                </div>
+
+                <!-- LogisticsAI -->
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128674;</div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LogisticsAI</div>
+                      <div style="font-size:11px;color:var(--gold);margin-top:2px">&#9888; Port Said +2d</div>
+                    </div>
+                  </div>
+                  <button class="btn btn-xs btn-p" style="width:100%;justify-content:center" onclick="alert('Track shipment…')">&#9654; Track shipment</button>
+                </div>
+
+                <!-- CustomsAI -->
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(139,143,248,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128707;</div>
+                    <div style="flex:1;min-width:0">
+                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">CustomsAI</div>
+                      <div style="font-size:11px;color:var(--muted);margin-top:2px">$14.2K duty savings</div>
+                    </div>
+                  </div>
+                  <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="alert('HS code lookup…')">&#128269; HS Lookup</button>
+                </div>
+
+                <button class="btn btn-xs" style="width:100%;justify-content:center;margin-top:4px" onclick="show('agents')">View all AI Tools →</button>
               </div>
-              <div class="stat">
-                <div class="stat-top">Total value</div>
-                <div class="stat-val" id="loi-stat-value">—</div>
-              </div>
-              <div class="stat">
-                <div class="stat-top">Credits spent</div>
-                <div class="stat-val" style="color: var(--teal)" id="loi-stat-credits">—</div>
-              </div>
+
             </div>
-            <div id="loi-list"></div>
           </div>
 
           <!-- NOTIFICATIONS -->
@@ -3243,7 +3276,7 @@
           });
       }
       var TITLES = {
-        agents: ["&#129504; AI Agents", "9 agents running autonomously on your behalf"],
+        agents: ["&#129504; AI Tools", "6 tools running autonomously on your behalf"],
         opennetwork: [
           "Open Network",
           "Connect your AI agent · earn 1% per LOI",
@@ -3262,6 +3295,8 @@
         notifications: ["Notifications", "Alerts and updates"],
         credits: ["Credits", "Buy credits · history"],
         profile: ["Profile", "Account settings"],
+        support: ["🎧 Support", "AI chat · submit a ticket · FAQ"],
+        terms: ["📋 Terms & Privacy", "Terms of service · Privacy policy · Legal"],
       };
       var selectedStrategy = "standard";
       var strategyCosts = { watcher: 1, standard: 10, aggressive: 20 };
@@ -3273,6 +3308,46 @@
         var open = row.classList.contains('open');
         row.classList.toggle('open', !open);
         detail.classList.toggle('open', !open);
+      }
+
+      /* ── PO GENERATOR MODAL ── */
+      var poSelected = {};
+
+      function openPOModal() {
+        document.getElementById('po-step-1').style.display = 'block';
+        document.getElementById('po-step-2').style.display = 'none';
+        document.getElementById('po-step-3').style.display = 'none';
+        document.getElementById('po-action-btn').style.display = 'none';
+        document.getElementById('po-modal-ft').style.display = 'flex';
+        document.getElementById('po-modal-bg').classList.add('open');
+      }
+
+      function closePOModal() {
+        document.getElementById('po-modal-bg').classList.remove('open');
+      }
+
+      function selectPOLoi(ref, product, qty, price, supplier, total) {
+        poSelected = { ref: ref, product: product, qty: qty, price: price, supplier: supplier, total: total };
+        var poRef = 'PO-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random() * 900) + 100);
+        document.getElementById('po-ref-val').textContent = poRef;
+        document.getElementById('po-loi-val').textContent = ref;
+        document.getElementById('po-product-val').textContent = product;
+        document.getElementById('po-qty-val').textContent = qty;
+        document.getElementById('po-price-val').textContent = price;
+        document.getElementById('po-supplier-val').textContent = supplier;
+        document.getElementById('po-total-val').textContent = total || '—';
+        document.getElementById('po-step-1').style.display = 'none';
+        document.getElementById('po-step-2').style.display = 'block';
+        document.getElementById('po-action-btn').style.display = 'inline-flex';
+      }
+
+      function poProceed() {
+        document.getElementById('po-step-2').style.display = 'none';
+        document.getElementById('po-step-3').style.display = 'block';
+        document.getElementById('po-modal-ft').style.display = 'none';
+        document.getElementById('po-sent-msg').textContent =
+          'PO delivered to ' + (poSelected.supplier || 'supplier') + '. A confirmation copy has been emailed to you.';
+        setTimeout(function () { closePOModal(); document.getElementById('po-modal-ft').style.display = 'flex'; }, 3500);
       }
 
       function toggleMandate() {
@@ -4280,6 +4355,69 @@
       }
     </script>
 
+<!-- PO GENERATOR MODAL -->
+<div class="modal-bg" id="po-modal-bg" onclick="if(event.target===this)closePOModal()">
+  <div class="modal">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">&#129534; Purchase Order Generator</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Reads from signed LOI &mdash; generates and sends PO to supplier</div>
+      </div>
+      <button class="modal-close" onclick="closePOModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <!-- Step 1: Select LOI -->
+      <div id="po-step-1">
+        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">// Select source LOI</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="loi-card" style="cursor:pointer" onclick="selectPOLoi('SL-LOI-20260501-003','Hard Wheat','50 MT','$1,120/MT','Atlas Grain Trading','$56,000')">
+            <div class="lc-icon">&#128196;</div>
+            <div class="lc-body">
+              <div class="lc-ref">SL-LOI-20260501-003</div>
+              <div class="lc-product">Hard Wheat &middot; 50 MT &middot; $1,120/MT</div>
+              <div class="lc-meta">Atlas Grain Trading &middot; Signed today</div>
+            </div>
+            <div><div class="lc-val">$56K</div><span class="badge bg">Signed</span></div>
+          </div>
+          <div class="loi-card" style="cursor:pointer" onclick="selectPOLoi('SL-LOI-20260430-002','Aluminum 6061','5 MT','$9,200/MT','Gulf Steel Industries','$46,000')">
+            <div class="lc-icon">&#128196;</div>
+            <div class="lc-body">
+              <div class="lc-ref">SL-LOI-20260430-002</div>
+              <div class="lc-product">Aluminum 6061 &middot; 5 MT &middot; $9,200/MT</div>
+              <div class="lc-meta">Gulf Steel Industries &middot; Signed yesterday</div>
+            </div>
+            <div><div class="lc-val">$46K</div><span class="badge bg">Signed</span></div>
+          </div>
+        </div>
+      </div>
+      <!-- Step 2: Review PO -->
+      <div id="po-step-2" style="display:none">
+        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">// Purchase Order Preview</div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:12px">
+          <div class="lc-field-row" style="padding:8px 14px"><span class="lc-field-lbl">PO Reference</span><span class="lc-field-val" id="po-ref-val">—</span></div>
+          <div class="lc-field-row" style="padding:8px 14px"><span class="lc-field-lbl">Source LOI</span><span class="lc-field-val" id="po-loi-val" style="color:var(--indigo)">—</span></div>
+          <div class="lc-field-row" style="padding:8px 14px"><span class="lc-field-lbl">Product</span><span class="lc-field-val" id="po-product-val">—</span></div>
+          <div class="lc-field-row" style="padding:8px 14px"><span class="lc-field-lbl">Quantity</span><span class="lc-field-val" id="po-qty-val">—</span></div>
+          <div class="lc-field-row" style="padding:8px 14px"><span class="lc-field-lbl">Unit price</span><span class="lc-field-val" id="po-price-val">—</span></div>
+          <div class="lc-field-row" style="padding:8px 14px"><span class="lc-field-lbl">Supplier</span><span class="lc-field-val" id="po-supplier-val">—</span></div>
+          <div class="lc-field-row" style="padding:8px 14px;background:rgba(34,197,94,.04)"><span class="lc-field-lbl" style="font-weight:700;color:var(--white)">Total value</span><span class="lc-field-val" id="po-total-val" style="color:var(--green);font-size:16px">—</span></div>
+        </div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7">PO will be sent to the supplier email on record from the LOI. A confirmation copy is sent to you.</div>
+      </div>
+      <!-- Step 3: Sent confirmation -->
+      <div id="po-step-3" style="display:none;text-align:center;padding:28px 0">
+        <div style="font-size:40px;margin-bottom:12px">&#9989;</div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">Purchase Order sent.</div>
+        <div style="font-size:14px;color:var(--muted);line-height:1.7" id="po-sent-msg">PO delivered to supplier. A copy has been emailed to you.</div>
+      </div>
+    </div>
+    <div class="modal-ft" id="po-modal-ft">
+      <button class="btn" onclick="closePOModal()">Cancel</button>
+      <button class="btn btn-p" id="po-action-btn" onclick="poProceed()" style="display:none">Send PO to supplier &rarr;</button>
+    </div>
+  </div>
+</div>
+
 <!-- LOGISTICS & CUSTOMS MODAL -->
 <div class="modal-bg" id="lc-modal" onclick="if(event.target===this)closeLogisticsModal()">
   <div class="modal">
@@ -4318,3 +4456,4 @@
 
 </body>
 </html>
+

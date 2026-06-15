@@ -150,6 +150,30 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;c
 .success-banner{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:16px;display:none}
 .success-banner.show{display:flex}
 .nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
+
+/* ── MOBILE ────────────────────────────────────────────────────────── */
+.mobile-preview-btn{display:none;position:fixed;bottom:20px;right:20px;z-index:200;background:var(--indigo);color:#fff;border:none;padding:12px 20px;border-radius:24px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;box-shadow:0 4px 20px rgba(91,95,239,.45);align-items:center;gap:7px;transition:opacity .15s}
+.mobile-preview-btn:hover{opacity:.85}
+.preview-close-btn{display:none!important}
+@media(max-width:768px){
+  .nav-tagline{display:none}
+  .layout{grid-template-columns:1fr;min-height:unset}
+  .form-side{padding:20px 16px;border-right:none}
+  .preview-side{display:none}
+  .preview-side.mob-open{display:block;position:fixed;inset:0;z-index:150;overflow-y:auto;background:var(--surface2)}
+  .mobile-preview-btn{display:flex}
+  .preview-close-btn{display:flex!important}
+  .field-grid{grid-template-columns:1fr!important}
+  .field input,.field select,.field textarea{font-size:16px}
+  .calc-row{grid-template-columns:1fr 1fr}
+  .tf-grid3{grid-template-columns:1fr!important}
+  .parties-grid,.sig-grid{grid-template-columns:1fr}
+  .party-block+.party-block{border-left:none;border-top:1px solid var(--border)}
+  .sig-block+.sig-block{border-left:none;border-top:1px solid var(--border)}
+  .page-title{font-size:22px}
+  .generate-btn{font-size:15px;padding:15px}
+  .nav-links a:last-child{display:none}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 
@@ -333,7 +357,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;c
     <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">
       Take your signed LOI to <strong style="color:var(--teal)">TradeFinex.org</strong> and apply for trade financing. The LOI is tokenized on the XDC Network and listed for institutional investors. Funding in days, not weeks.
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+    <div class="tf-grid3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center">
         <div style="font-size:15px;margin-bottom:3px">🔒</div>
         <div style="font-size:12px;color:var(--white);font-weight:600">LOI tokenized</div>
@@ -375,6 +399,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;c
   <div class="preview-header">
     <div class="preview-title">📄 Live Preview</div>
     <div class="preview-actions">
+      <button class="btn-sm preview-close-btn" onclick="toggleMobilePreview()">✕ Close</button>
       <button class="btn-sm btn-download" onclick="openInNewTab()">↗ Open &amp; Download PDF</button>
     </div>
   </div>
@@ -383,6 +408,7 @@ html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;c
   </div>
 </div>
 
+<button class="mobile-preview-btn" id="mob-preview-btn" onclick="toggleMobilePreview()">👁 Preview LOI</button>
 </div><!-- /layout -->
 
 <script>
@@ -756,6 +782,24 @@ function generatePDF(){
       }, 3000);
     });
   }, 150);
+}
+
+// ── MOBILE PREVIEW TOGGLE ─────────────────────────────────────────────────────
+function toggleMobilePreview(){
+  var ps = document.querySelector('.preview-side');
+  var btn = document.getElementById('mob-preview-btn');
+  var open = ps.classList.contains('mob-open');
+  if(open){
+    ps.classList.remove('mob-open');
+    btn.textContent = '👁 Preview LOI';
+    document.body.style.overflow = '';
+  } else {
+    updatePreview();
+    ps.classList.add('mob-open');
+    btn.textContent = '✕ Close';
+    document.body.style.overflow = 'hidden';
+    ps.scrollTop = 0;
+  }
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────

@@ -19,8 +19,8 @@
       --text: #e8eaf2;
       --text-muted: #7a7f96;
       --text-dim: #3e4259;
-      --accent: #5b6af0;
-      --accent-dim: rgba(91,106,240,0.15);
+      --accent: #7b8fff;
+      --accent-dim: rgba(123,143,255,0.15);
       --green: #3ecf8e;
       --green-dim: rgba(62,207,142,0.12);
       --mono: 'IBM Plex Mono', monospace;
@@ -327,6 +327,10 @@
     .footer-links a:hover { color: var(--text); }
 
     .hidden { display: none !important; }
+    body.embedded nav { display: none; }
+    body.embedded footer { display: none; }
+    body.embedded { background: var(--bg); }
+    body.embedded .page { padding-top: 1.5rem; }
 
     @media (max-width: 600px) {
       nav { padding: 0 1rem; }
@@ -501,7 +505,7 @@
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3ecf8e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
       <h3>Ticket submitted</h3>
-      <p>We'll respond to your email within 24 hours. For urgent deals, reach us on WhatsApp.</p>
+      <p>We'll respond to your email within 24 hours. For urgent deals, email api@sloiai.com directly.</p>
       <div class="ref-badge" id="ref-code">TKT-XXXXXX</div>
       <button class="reset-btn" onclick="resetTicket()">Submit another ticket</button>
     </div>
@@ -713,6 +717,9 @@ function resetTicket() {
   document.getElementById('ticket-success').classList.add('hidden');
 }
 
+if (new URLSearchParams(location.search).get('embed') === '1') {
+  document.body.classList.add('embedded');
+}
 buildFAQ();
 </script>
 </body>

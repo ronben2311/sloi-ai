@@ -235,11 +235,8 @@ select.inp option{background:var(--surface)}
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
   <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & KYC</span></button>
-  <div class="sb-section">Tools</div>
-  <button class="nav" onclick="window.open('loi-generator.html','_blank')"><span class="nav-icon">📄</span><span class="nav-label">LOI Generator</span></button>
-  <button class="nav" onclick="window.open('compliance.html','_blank')"><span class="nav-icon">✅</span><span class="nav-label">Compliance Check</span></button>
+  <div class="sb-section">System</div>
   <button class="nav" onclick="show('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
-  <button class="nav" onclick="window.open('terms.html','_blank')"><span class="nav-icon">📋</span><span class="nav-label">Terms & Privacy</span></button>
   <button class="nav" onclick="api.logout(); window.location.href='login.html'"><span class="nav-icon">←</span><span class="nav-label">Sign out</span></button>
   <div class="sb-footer">
     <div class="sf-label">LOI VOLUME MTD</div>
@@ -603,236 +600,237 @@ select.inp option{background:var(--surface)}
   <div id="view-agents" class="view">
 
     <!-- HEADER -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div>
-        <div style="font-size:15px;color:var(--muted)">7 active agents · running autonomously · all require Boss approval for LOI</div>
-      </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="font-size:15px;color:var(--muted)">7 agents running autonomously · all LOIs require Boss approval</div>
       <button class="btn btn-sm btn-p" onclick="runAllAgents()">▶ Run all agents now</button>
     </div>
 
-    <!-- LEADFINDER AGENT -->
-    <div style="background:var(--surface);border:1px solid rgba(45,212,191,.3);border-radius:8px;overflow:hidden;margin-bottom:14px">
-      <div style="padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:36px;height:36px;border-radius:8px;background:rgba(45,212,191,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🔭</div>
-          <div>
-            <div style="font-size:15px;font-weight:600;color:var(--white)">LeadFinder</div>
-            <div style="font-size:14px;color:var(--muted)">Searches for relevant projects, buyers, and import/export companies · Web + LinkedIn + Tenders</div>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 10px;border-radius:12px;font-size:14px"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
-          <button class="btn btn-xs btn-t" onclick="openConsole('lead')">▶ Run now</button>
-          <button class="btn btn-xs" onclick="configLeadFinder()">⚙ Configure</button>
-        </div>
-      </div>
-
-      <!-- CONFIG BAR -->
-      <div style="padding:10px 18px;border-bottom:1px solid var(--border);background:rgba(45,212,191,.03);display:flex;align-items:center;gap:16px;flex-wrap:wrap;font-size:14px">
-        <div style="display:flex;align-items:center;gap:6px;color:var(--muted)">🔍 Keywords: <span style="color:var(--teal)">NEOM · steel · cement · grain · UAE construction</span></div>
-        <div style="display:flex;align-items:center;gap:6px;color:var(--muted)">🌍 Regions: <span style="color:var(--teal)">UAE · KSA · Egypt · Germany</span></div>
-        <div style="display:flex;align-items:center;gap:6px;color:var(--muted)">⏱ Schedule: <span style="color:var(--teal)">Every 6 hours</span></div>
-        <div style="display:flex;align-items:center;gap:6px;color:var(--muted)">📊 Sources: <span style="color:var(--teal)">News · LinkedIn · Tender sites · Trade portals</span></div>
-      </div>
-
-      <!-- LEADS OUTPUT -->
-      <div style="padding:14px 18px">
-        <div style="font-size:14px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:10px">// LATEST LEADS — 8 found in last 6h</div>
-        <div id="lead-finder-results">
-          <!-- Rendered by JS -->
-        </div>
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button class="btn btn-xs btn-p" onclick="addAllLeads()">+ Add all to pipeline</button>
-          <button class="btn btn-xs" onclick="exportLeads()">↓ Export CSV</button>
-        </div>
-      </div>
+    <!-- AGENT STATUS BAR -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:18px;align-items:center">
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-right:4px;flex-shrink:0">Status</div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🔭 LeadFinder <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">📡 PriceScout <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">📱 OutreachBot ⏸</div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🛡️ ComplianceBot <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🚢 LogisticsAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🛃 CustomsAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">💳 TradeFinanceAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px">⚖️ LegalContract</div>
     </div>
 
-    <!-- OTHER AGENTS GRID -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+    <!-- STAGE 01: DISCOVER & QUALIFY -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:var(--teal);color:var(--bg);font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">01</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">DISCOVER &amp; QUALIFY</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
 
-      <!-- PRICESCOUT -->
-      <div style="background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden">
-        <div style="padding:14px;border-bottom:1px solid var(--border)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <div style="width:32px;height:32px;border-radius:6px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:16px">📡</div>
+      <!-- LEADFINDER -->
+      <div style="background:var(--surface);border:1px solid rgba(45,212,191,.3);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:32px;height:32px;border-radius:7px;background:rgba(45,212,191,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🔭</div>
             <div>
-              <div style="font-size:14px;font-weight:600;color:var(--white)">PriceScout</div>
-              <div style="font-size:14px;color:var(--muted)">Monitors market prices · alerts on movement</div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">LeadFinder</div>
+              <div style="font-size:13px;color:var(--muted)">Web · LinkedIn · Tenders · Every 6h</div>
             </div>
           </div>
-          <div style="display:flex;gap:5px;margin-bottom:10px">
-            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
-          </div>
-          <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-            Tracking 11 products · Last scan: 4 min ago<br/>
-            <span style="color:var(--gold)">⚠ Steel Rebar up 2.3% vs yesterday</span>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
+            <button class="btn btn-xs" onclick="configLeadFinder()">⚙</button>
           </div>
         </div>
-        <div style="padding:10px 14px;display:flex;flex-direction:column;gap:5px;max-height:160px;overflow-y:auto" id="pricescout-feed">
-          <!-- rendered by JS -->
+        <div style="padding:7px 16px;border-bottom:1px solid var(--border);background:rgba(45,212,191,.03);font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+          🔍 <span style="color:var(--teal)">NEOM · steel · cement · grain · UAE</span> &nbsp;·&nbsp; 🌍 <span style="color:var(--teal)">UAE · KSA · Egypt · Germany</span>
         </div>
-        <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-          <button class="btn btn-xs btn-p" onclick="openConsole('price')" style="flex:1;justify-content:center">▶ Scan now</button>
-          <button class="btn btn-xs" onclick="window.open('price-discovery.html','_blank')">View all</button>
-        </div>
-      </div>
-
-      <!-- OUTREACHBOT -->
-      <div style="background:var(--surface);border:1px solid rgba(37,211,102,.2);border-radius:8px;overflow:hidden">
-        <div style="padding:14px;border-bottom:1px solid var(--border)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <div style="width:32px;height:32px;border-radius:6px;background:rgba(37,211,102,.1);display:flex;align-items:center;justify-content:center;font-size:16px">📱</div>
-            <div>
-              <div style="font-size:14px;font-weight:600;color:var(--white)">OutreachBot</div>
-              <div style="font-size:14px;color:var(--muted)">Sends WhatsApp messages to leads · personalised per sector</div>
-            </div>
+        <div style="padding:12px 16px;flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--white);letter-spacing:.05em;margin-bottom:8px">// LATEST — 8 leads in last 6h</div>
+          <div id="lead-finder-results"></div>
+          <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+            <button class="btn btn-xs btn-p" onclick="addAllLeads()">+ Add all to pipeline</button>
+            <button class="btn btn-xs" onclick="openConsole('lead')">▶ Run now</button>
+            <button class="btn btn-xs" onclick="exportLeads()">↓ CSV</button>
           </div>
-          <div style="display:flex;gap:5px;margin-bottom:10px">
-            <span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 8px;border-radius:10px;font-size:13px;font-weight:700">⏸ Paused</span>
-          </div>
-          <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-            24 messages sent this week<br/>
-            Response rate: <span style="color:var(--green)">38%</span><br/>
-            Next batch: <span style="color:var(--white)">Tomorrow 9:00 AM</span>
-          </div>
-        </div>
-        <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-          <div style="margin-bottom:4px"><span style="color:var(--green)">✓</span> Gulf Cement LLC — replied, interested</div>
-          <div style="margin-bottom:4px"><span style="color:var(--green)">✓</span> Atlas Trading — requested quote</div>
-          <div style="margin-bottom:4px"><span style="color:var(--muted)">–</span> NEOM Procurement — no reply</div>
-          <div style="margin-bottom:4px"><span style="color:var(--green)">✓</span> Cairo Constructions — interested</div>
-        </div>
-        <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-          <button class="btn btn-xs btn-g" onclick="resumeOutreach()" style="flex:1;justify-content:center">▶ Resume</button>
-          <button class="btn btn-xs" onclick="window.open('telegram-templates.html','_blank')">Templates</button>
         </div>
       </div>
 
       <!-- COMPLIANCEBOT -->
-      <div style="background:var(--surface);border:1px solid rgba(239,68,68,.2);border-radius:8px;overflow:hidden">
-        <div style="padding:14px;border-bottom:1px solid var(--border)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <div style="width:32px;height:32px;border-radius:6px;background:rgba(239,68,68,.1);display:flex;align-items:center;justify-content:center;font-size:16px">🛡️</div>
+      <div style="background:var(--surface);border:1px solid rgba(239,68,68,.2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:32px;height:32px;border-radius:7px;background:rgba(239,68,68,.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🛡️</div>
             <div>
               <div style="font-size:14px;font-weight:600;color:var(--white)">ComplianceBot</div>
-              <div style="font-size:14px;color:var(--muted)">Auto-screens all new leads · OFAC + EU + dual-use</div>
+              <div style="font-size:13px;color:var(--muted)">Auto-screens all leads · OFAC + EU + dual-use</div>
             </div>
           </div>
-          <div style="display:flex;gap:5px;margin-bottom:10px">
-            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
-          </div>
-          <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-            12 checks today<br/>
-            <span style="color:var(--green)">10 cleared</span> · <span style="color:var(--gold)">1 review</span> · <span style="color:var(--red)">1 blocked</span>
-          </div>
+          <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
         </div>
-        <div style="padding:10px 14px;font-size:14px;max-height:80px;overflow-y:auto">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--muted)">Gulf Cement LLC</span><span class="badge bg" style="font-size:12px">Cleared</span></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--muted)">Al-Rashid Group</span><span class="badge ba" style="font-size:12px">Review</span></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="color:var(--muted)">Unknown Iran</span><span class="badge br" style="font-size:12px">Blocked</span></div>
-          <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Atlas Trading</span><span class="badge bg" style="font-size:12px">Cleared</span></div>
-        </div>
-        <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-          <button class="btn btn-xs" onclick="window.open('compliance.html','_blank')" style="flex:1;justify-content:center">Run manual check</button>
+        <div style="padding:12px 16px;flex:1">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--green)">10</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Cleared</div></div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--gold)">1</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Review</div></div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--red)">1</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Blocked</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:14px;max-height:160px;overflow-y:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:var(--muted)">Gulf Cement LLC</span><span class="badge bg" style="font-size:12px">Cleared</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:var(--muted)">Al-Rashid Group</span><span class="badge ba" style="font-size:12px">Review</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:var(--muted)">Unknown Iran</span><span class="badge br" style="font-size:12px">Blocked</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span style="color:var(--muted)">Atlas Trading</span><span class="badge bg" style="font-size:12px">Cleared</span></div>
+          </div>
+          <button class="btn btn-xs" style="margin-top:12px;width:100%;justify-content:center" onclick="window.open('compliance.html','_blank')">Run manual check →</button>
         </div>
       </div>
 
     </div>
 
-    <!-- LOGISTICS & FINANCE AGENTS -->
-    <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:18px 0 10px">// LOGISTICS &amp; TRADE FINANCE AGENTS</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px">
+    <!-- STAGE 02: PRICE & OUTREACH -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:var(--indigo);color:#fff;font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">02</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">PRICE &amp; OUTREACH</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
 
-      <!-- LOGISTICSAI -->
-      <div style="background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden">
-        <div style="padding:14px;border-bottom:1px solid var(--border)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <div style="width:32px;height:32px;border-radius:6px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:16px">🚢</div>
+      <!-- PRICESCOUT -->
+      <div style="background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:32px;height:32px;border-radius:7px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">📡</div>
             <div>
-              <div style="font-size:14px;font-weight:600;color:var(--white)">LogisticsAI</div>
-              <div style="font-size:14px;color:var(--muted)">Shipment tracking · freight rates · port alerts · Incoterms</div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">PriceScout</div>
+              <div style="font-size:13px;color:var(--muted)">Monitors market prices · alerts on movement</div>
             </div>
           </div>
-          <div style="display:flex;gap:5px;margin-bottom:10px">
-            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
-          </div>
-          <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-            6 shipments tracked · 3 routes optimised<br/>
-            <span style="color:var(--gold)">⚠ Port Said congestion +2 days delay</span><br/>
-            <span style="color:var(--green)">↓ Freight rates down 4% this week</span>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
+            <button class="btn btn-xs btn-p" onclick="openConsole('price')">▶ Scan</button>
           </div>
         </div>
-        <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-          <div style="margin-bottom:4px"><span style="color:var(--teal)">🚢</span> SL-2406-001 · Rebar · AUH→HH · ETA Jun 18</div>
-          <div style="margin-bottom:4px"><span style="color:var(--gold)">⚠</span> Jebel Ali congestion — alt route suggested</div>
-          <div style="margin-bottom:4px"><span style="color:var(--green)">✓</span> Cement OPC · LCL booked · $1,240/CBM</div>
-          <div><span style="color:var(--muted)">–</span> Wheat 50MT · FOB Alexandria · Pending docs</div>
+        <div style="padding:7px 16px;border-bottom:1px solid var(--border);background:rgba(232,169,74,.04);font-size:13px;color:var(--gold)">
+          ⚠ Steel Rebar +2.3% vs yesterday · 11 products · Last scan: 4 min ago
         </div>
-        <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
+        <div style="padding:10px 16px;flex:1" id="pricescout-feed"></div>
+        <div style="padding:8px 16px;border-top:1px solid var(--border)">
+          <button class="btn btn-xs" onclick="window.open('price-discovery.html','_blank')" style="width:100%;justify-content:center">View full price board →</button>
+        </div>
+      </div>
+
+      <!-- OUTREACHBOT -->
+      <div style="background:var(--surface);border:1px solid rgba(37,211,102,.2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:32px;height:32px;border-radius:7px;background:rgba(37,211,102,.1);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">📱</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">OutreachBot</div>
+              <div style="font-size:13px;color:var(--muted)">Sends WhatsApp messages to leads · personalised per sector</div>
+            </div>
+          </div>
+          <span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 8px;border-radius:10px;font-size:13px;font-weight:700">⏸ Paused</span>
+        </div>
+        <div style="padding:12px 16px;flex:1">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--white)">24</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Sent this week</div></div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--green)">38%</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Response rate</div></div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center"><div style="font-size:14px;font-weight:600;color:var(--white)">9:00 AM</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Next batch</div></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:5px;font-size:14px;color:var(--muted);max-height:100px;overflow-y:auto">
+            <div><span style="color:var(--green)">✓</span> Gulf Cement LLC — replied, interested</div>
+            <div><span style="color:var(--green)">✓</span> Atlas Trading — requested quote</div>
+            <div><span style="color:var(--muted)">–</span> NEOM Procurement — no reply</div>
+            <div><span style="color:var(--green)">✓</span> Cairo Constructions — interested</div>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:12px">
+            <button class="btn btn-xs btn-g" onclick="resumeOutreach()" style="flex:1;justify-content:center">▶ Resume</button>
+            <button class="btn btn-xs" onclick="window.open('telegram-templates.html','_blank')">Templates</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- STAGE 03: EXECUTE -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:var(--gold);color:var(--bg);font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">03</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">EXECUTE — LOGISTICS, CUSTOMS &amp; TRADE FINANCE</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px">
+
+      <!-- LOGISTICSAI -->
+      <div style="background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="width:30px;height:30px;border-radius:6px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🚢</div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">LogisticsAI</div>
+              <div style="font-size:13px;color:var(--muted)">Tracking · freight · port alerts · Incoterms</div>
+            </div>
+          </div>
+          <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:13px;width:fit-content"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
+        </div>
+        <div style="padding:10px 14px;flex:1;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px">
+          <div>6 shipments tracked · 3 routes optimised</div>
+          <div style="color:var(--gold)">⚠ Port Said congestion +2 days</div>
+          <div style="color:var(--green)">↓ Freight rates -4% this week</div>
+          <div><span style="color:var(--teal)">🚢</span> SL-2406-001 Rebar · AUH→HH · Jun 18</div>
+          <div><span style="color:var(--green)">✓</span> Cement OPC · LCL booked · $1,240/CBM</div>
+        </div>
+        <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
           <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('LogisticsAI — track shipment')">▶ Track shipment</button>
           <button class="btn btn-xs" onclick="alert('Freight rate dashboard')">Rates</button>
         </div>
       </div>
 
       <!-- CUSTOMSAI -->
-      <div style="background:var(--surface);border:1px solid rgba(139,143,248,.25);border-radius:8px;overflow:hidden">
-        <div style="padding:14px;border-bottom:1px solid var(--border)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <div style="width:32px;height:32px;border-radius:6px;background:rgba(139,143,248,.12);display:flex;align-items:center;justify-content:center;font-size:16px">🛃</div>
+      <div style="background:var(--surface);border:1px solid rgba(139,143,248,.25);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="width:30px;height:30px;border-radius:6px;background:rgba(139,143,248,.12);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🛃</div>
             <div>
               <div style="font-size:14px;font-weight:600;color:var(--white)">CustomsAI</div>
-              <div style="font-size:14px;color:var(--muted)">HS code lookup · duty calc · permits per destination</div>
+              <div style="font-size:13px;color:var(--muted)">HS codes · duty calc · permits per destination</div>
             </div>
           </div>
-          <div style="display:flex;gap:5px;margin-bottom:10px">
-            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
-          </div>
-          <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-            22 HS lookups today · 6 countries<br/>
-            <span style="color:var(--gold)">⚠ 2 import permits flagged (KSA)</span><br/>
-            Duty savings identified: <span style="color:var(--green)">$14,200</span>
-          </div>
+          <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:13px;width:fit-content"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
         </div>
-        <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Steel Rebar → UAE</span><span style="color:var(--teal)">7214.20 · 5% duty</span></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Wheat → Egypt</span><span style="color:var(--green)">1001.99 · 0% duty</span></div>
-          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span>Polypropylene → KSA</span><span style="color:var(--gold)">3902.10 · permit req.</span></div>
-          <div style="display:flex;justify-content:space-between"><span>OPC Cement → Germany</span><span style="color:var(--teal)">2523.29 · 3.7% duty</span></div>
+        <div style="padding:10px 14px;flex:1;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px">
+          <div>22 HS lookups · 6 countries · <span style="color:var(--green)">$14,200 duty savings</span></div>
+          <div style="color:var(--gold)">⚠ 2 import permits flagged (KSA)</div>
+          <div style="display:flex;justify-content:space-between"><span>Steel Rebar → UAE</span><span style="color:var(--teal)">7214.20 · 5%</span></div>
+          <div style="display:flex;justify-content:space-between"><span>Wheat → Egypt</span><span style="color:var(--green)">1001.99 · 0%</span></div>
+          <div style="display:flex;justify-content:space-between"><span>OPC Cement → Germany</span><span style="color:var(--teal)">2523.29 · 3.7%</span></div>
         </div>
-        <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
+        <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
           <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('CustomsAI — HS lookup')">🔍 HS Lookup</button>
           <button class="btn btn-xs" onclick="alert('Duty calculator')">Duty calc</button>
         </div>
       </div>
 
       <!-- TRADEFINANCEAI -->
-      <div style="background:var(--surface);border:1px solid rgba(232,169,74,.25);border-radius:8px;overflow:hidden">
-        <div style="padding:14px;border-bottom:1px solid var(--border)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-            <div style="width:32px;height:32px;border-radius:6px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:16px">💳</div>
+      <div style="background:var(--surface);border:1px solid rgba(232,169,74,.25);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+        <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+            <div style="width:30px;height:30px;border-radius:6px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">💳</div>
             <div>
               <div style="font-size:14px;font-weight:600;color:var(--white)">TradeFinanceAI</div>
-              <div style="font-size:14px;color:var(--muted)">LC drafting · SBLC · factoring · TradeFinex link</div>
+              <div style="font-size:13px;color:var(--muted)">LC drafting · SBLC · factoring · TradeFinex</div>
             </div>
           </div>
-          <div style="display:flex;gap:5px;margin-bottom:10px">
-            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
-            <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 8px;border-radius:10px;font-size:13px">TradeFinex ✓</span>
-          </div>
-          <div style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:10px">
-            3 LCs drafted today · $2.1M pipeline<br/>
-            Avg approval time: <span style="color:var(--white)">72h</span><br/>
-            <span style="color:var(--green)">↑ Factoring rate: 1.8% — 2 deals eligible</span>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
+            <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:10px;font-size:13px">TradeFinex ✓</span>
           </div>
         </div>
-        <div style="padding:10px 14px;font-size:14px;color:var(--muted);max-height:80px;overflow-y:auto">
-          <div style="margin-bottom:4px"><span style="color:var(--gold)">📄</span> LC drafted — Gulf Cement · $420K · Citi Bank</div>
-          <div style="margin-bottom:4px"><span style="color:var(--teal)">⛓</span> TradeFinex linked — LOI-20260603-002</div>
-          <div style="margin-bottom:4px"><span style="color:var(--green)">✓</span> SBLC verified — Atlas Trading · $800K</div>
-          <div><span style="color:var(--muted)">–</span> Factoring offer sent — Cairo Const. · 1.8%</div>
+        <div style="padding:10px 14px;flex:1;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px">
+          <div>3 LCs drafted · $2.1M pipeline · Avg 72h approval</div>
+          <div style="color:var(--green)">↑ Factoring 1.8% — 2 deals eligible</div>
+          <div><span style="color:var(--gold)">📄</span> LC drafted — Gulf Cement · $420K · Citi</div>
+          <div><span style="color:var(--teal)">⛓</span> TradeFinex linked — LOI-20260603-002</div>
+          <div><span style="color:var(--green)">✓</span> SBLC verified — Atlas Trading · $800K</div>
         </div>
-        <div style="padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
+        <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
           <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('TradeFinanceAI — draft LC')">📄 Draft LC</button>
           <button class="btn btn-xs" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="window.open('https://www.tradefinex.org','_blank')">⛓ TradeFinex</button>
         </div>
@@ -840,44 +838,46 @@ select.inp option{background:var(--surface)}
 
     </div>
 
-    <!-- LEGALCONTRACT AI -->
-    <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:18px 0 10px">// LEGAL AGENT</div>
-    <div style="background:var(--surface);border:1px solid rgba(168,85,247,.3);border-radius:8px;overflow:hidden;margin-bottom:14px">
-      <div style="padding:14px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+    <!-- STAGE 04: LEGAL -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:rgba(168,85,247,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">04</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">CLOSE — LEGAL &amp; CONTRACT</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(168,85,247,.3);border-radius:8px;overflow:hidden;margin-bottom:18px">
+      <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
         <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:36px;height:36px;border-radius:8px;background:rgba(168,85,247,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚖️</div>
+          <div style="width:34px;height:34px;border-radius:8px;background:rgba(168,85,247,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚖️</div>
           <div>
-            <div style="font-size:15px;font-weight:600;color:var(--white)">LegalContract AI</div>
-            <div style="font-size:14px;color:var(--muted)">Drafts ICC/UNIDROIT-compliant commodity sale contracts from negotiation data · sends to partner lawyer for review</div>
+            <div style="font-size:14px;font-weight:600;color:var(--white)">LegalContract AI</div>
+            <div style="font-size:13px;color:var(--muted)">Drafts ICC/UNIDROIT-compliant commodity sale contracts · sends to partner lawyer for review</div>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:4px 10px;border-radius:12px;font-size:14px">On-demand</span>
-        </div>
+        <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:4px 10px;border-radius:10px;font-size:13px;flex-shrink:0">On-demand</span>
       </div>
-      <div style="padding:14px 18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:14px">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px">
-          <div style="color:var(--muted);margin-bottom:4px">Contracts generated</div>
-          <div style="font-family:Fraunces,serif;font-size:20px;font-weight:700;color:var(--white)" id="legal-count">0</div>
+      <div style="padding:12px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:center">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
+          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--white)" id="legal-count">0</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Contracts generated</div>
         </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px">
-          <div style="color:var(--muted);margin-bottom:4px">Sent for review</div>
-          <div style="font-family:Fraunces,serif;font-size:20px;font-weight:700;color:#c084fc" id="legal-sent">0</div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
+          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:#c084fc" id="legal-sent">0</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Sent for review</div>
         </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px">
-          <div style="color:var(--muted);margin-bottom:4px">Lawyer email</div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:3px">Lawyer email</div>
           <div style="font-size:13px;color:var(--teal);word-break:break-all" id="legal-lawyer-display">Not set — <a href="#" onclick="show('settings',null);return false" style="color:var(--indigo)">Settings</a></div>
         </div>
-      </div>
-      <div style="padding:0 18px 14px;font-size:14px;color:var(--muted)">
-        To generate a contract, go to <b style="color:var(--white)">Negotiations</b> and click <b style="color:var(--white)">📜 Contract</b> on any completed negotiation.
+        <div style="font-size:13px;color:var(--muted);line-height:1.7">
+          Go to <b style="color:var(--white)">Negotiations</b> → click <b style="color:var(--white)">📜 Contract</b> on any completed deal to generate &amp; send.
+        </div>
       </div>
     </div>
 
     <!-- AGENT LOG -->
-    <div class="card" style="margin-top:14px">
+    <div class="card">
       <div class="card-title">// AGENT ACTIVITY LOG — TODAY</div>
-      <div style="max-height:200px;overflow-y:auto" id="agent-log">
+      <div style="max-height:180px;overflow-y:auto" id="agent-log">
         <!-- rendered by JS -->
       </div>
     </div>
@@ -926,6 +926,22 @@ select.inp option{background:var(--surface)}
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- TERMS & PRIVACY -->
+  <div id="view-terms" class="view" style="padding:0;overflow:hidden">
+    <iframe src="terms.html?embed=1"
+      style="width:100%;height:calc(100vh - 48px);border:none;display:block"
+      title="Terms & Privacy">
+    </iframe>
+  </div>
+
+  <!-- SUPPORT -->
+  <div id="view-support" class="view" style="padding:0;overflow:hidden">
+    <iframe src="support.html?embed=1"
+      style="width:100%;height:calc(100vh - 48px);border:none;display:block"
+      title="Support">
+    </iframe>
   </div>
 
   </div>
@@ -1020,7 +1036,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={agents:['🧠 AI Agents','LeadFinder · PriceScout · OutreachBot · ComplianceBot'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration']};
+var TITLES={agents:['🧠 AI Agents','LeadFinder · PriceScout · OutreachBot · ComplianceBot'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────

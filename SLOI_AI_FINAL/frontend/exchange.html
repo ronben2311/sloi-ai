@@ -405,7 +405,7 @@ function renderList(){
       html+='<div class="pl-icon">'+p.emoji+'</div>';
       html+='<div class="pl-name"><div class="pl-product">'+p.name+'</div><div class="pl-sku">'+p.sku+'</div></div>';
       html+='<div class="pl-right"><div class="pl-price">$'+p.price.toLocaleString()+'</div>';
-      html+='<div class="pl-chg '+dir+'">'+arrow+' '+Math.abs(chg).toFixed(1)+'%</div>';
+      html+='<div class="pl-chg '+dir+'"><span class="'+(dir==='flat'?'price-stable':'price-'+dir)+'">'+arrow+'</span> '+Math.abs(chg).toFixed(1)+'%</div>';
       if(p.deals>0) html+='<div class="pl-deals">'+p.deals+' LOIs</div>';
       html+='</div></div>';
     });
@@ -566,7 +566,8 @@ function buildTicker(){
     var chg=((p.price-p.prev)/p.prev)*100;
     var dir=chg>0.05?'up':chg<-0.05?'down':'flat';
     var arrow=dir==='up'?'↑':dir==='down'?'↓':'→';
-    return '<div class="ti">'+p.emoji+' <b>'+p.name+'</b> $'+p.price.toLocaleString()+'/'+p.unit+' <span class="ti-'+dir+'">'+arrow+' '+Math.abs(chg).toFixed(1)+'%</span></div>';
+    var priceCls=dir==='flat'?'price-stable':'price-'+dir;
+    return '<div class="ti">'+p.emoji+' <b>'+p.name+'</b> $'+p.price.toLocaleString()+'/'+p.unit+' <span class="ti-'+dir+' '+priceCls+'">'+arrow+' '+Math.abs(chg).toFixed(1)+'%</span></div>';
   }).join('');
   document.getElementById('ticker').innerHTML=items+items;
 }

@@ -605,21 +605,21 @@ function buyCredits() {
   if (tg) {
     tg.showPopup({
       title: 'Buy ' + pack.credits + ' credits',
-      message: 'Choose payment method:\n\n💳 Card: $' + pack.price + '\n💎 TON: ' + pack.ton + '\n⬡ USDC on Base: ' + pack.price + ' USDC',
+      message: 'Choose payment method:\n\n💳 Card: $' + pack.price + '\n⬡ USDC on Base: ' + pack.price + ' USDC',
       buttons: [
         {id:'stripe', type:'default', text:'💳 Pay $' + pack.price},
-        {id:'ton', type:'default', text:'💎 Pay ' + pack.ton + ' TON'},
+        {id:'usdc', type:'default', text:'⬡ Pay ' + pack.price + ' USDC on Base'},
         {id:'cancel', type:'cancel', text:'Cancel'},
       ]
     }, (btnId) => {
       if (btnId === 'stripe') {
         tg.openLink('https://sloiai.com/pricing.html?pack=' + pack.price);
-      } else if (btnId === 'ton') {
-        tg.openLink('ton://transfer/SLOI_TON_WALLET?amount=' + Math.round(parseFloat(pack.ton)*1e9) + '&text=SLOI+Credits+' + pack.credits);
+      } else if (btnId === 'usdc') {
+        tg.openLink('https://sloiai.com/pricing.html?usdc=' + pack.price);
       }
     });
   } else {
-    alert('Buy ' + pack.credits + ' credits for $' + pack.price + ' / ' + pack.ton + ' TON');
+    alert('Buy ' + pack.credits + ' credits for $' + pack.price + ' USDC on Base');
   }
 }
 

@@ -134,26 +134,11 @@ h1 em{font-style:italic;color:var(--indigo)}
   <h1>The network is<br/><em>open.</em></h1>
   <p class="hero-sub">Any AI agent can read the SLOI AI platform network instantly — no approval needed. Query suppliers, compare live prices, monitor commodity markets. Free forever. No card, no review.</p>
 
-  <div class="marquee-wrap">
-    <div class="marquee-label">// AGENTS CURRENTLY ON THE NETWORK</div>
-    <div class="marquee-track">
-      <div class="agent-pill"><div class="agent-dot"></div>SteelHunter-9</div>
-      <div class="agent-pill"><div class="agent-dot"></div>EnergyArb-Alpha</div>
-      <div class="agent-pill"><div class="agent-dot"></div>CementBot-3</div>
-      <div class="agent-pill"><div class="agent-dot"></div>GrainLogic-3</div>
-      <div class="agent-pill"><div class="agent-dot"></div>AluminumAI-1</div>
-      <div class="agent-pill"><div class="agent-dot"></div>BuildMaterial-X</div>
-      <div class="agent-pill"><div class="agent-dot"></div>ChemTrader-7</div>
-      <div class="agent-pill"><div class="agent-dot"></div>MENAProcure-2</div>
-      <div class="agent-pill"><div class="agent-dot"></div>SteelHunter-9</div>
-      <div class="agent-pill"><div class="agent-dot"></div>EnergyArb-Alpha</div>
-      <div class="agent-pill"><div class="agent-dot"></div>CementBot-3</div>
-      <div class="agent-pill"><div class="agent-dot"></div>GrainLogic-3</div>
-      <div class="agent-pill"><div class="agent-dot"></div>AluminumAI-1</div>
-      <div class="agent-pill"><div class="agent-dot"></div>BuildMaterial-X</div>
-      <div class="agent-pill"><div class="agent-dot"></div>ChemTrader-7</div>
-      <div class="agent-pill"><div class="agent-dot"></div>MENAProcure-2</div>
-    </div>
+  <div style="text-align:center;margin-bottom:48px">
+    <span style="display:inline-flex;align-items:center;gap:10px;background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.35);border-radius:20px;padding:9px 22px;font-size:13px;color:var(--violet);font-weight:600;letter-spacing:.01em">
+      <span style="width:7px;height:7px;border-radius:50%;background:var(--indigo);flex-shrink:0;display:inline-block"></span>
+      Open Network launching Q3 2026 — register now for early access
+    </span>
   </div>
 
   <div class="tiers" style="grid-template-columns:1fr">
@@ -200,7 +185,7 @@ h1 em{font-style:italic;color:var(--indigo)}
 
   <div class="reg-card" id="reg-form">
     <div class="reg-header"><div class="reg-title">🤖 Register your agent — free &amp; instant</div><div class="reg-sub">API key returned immediately · No review · No credit card</div></div>
-    <div class="reg-body">
+    <div class="reg-body" id="reg-body">
       <div class="field"><label>Agent name</label><input id="ag-name" placeholder="MyProcurementAgent"/></div>
       <div class="field"><label>Developer / company</label><input id="ag-dev" placeholder="Your company"/></div>
       <div class="field"><label>Email</label><input id="ag-email" type="email" placeholder="you@company.com"/></div>
@@ -208,9 +193,15 @@ h1 em{font-style:italic;color:var(--indigo)}
       <div class="field"><label>Use case</label><select><option>Procurement automation</option><option>Price monitoring</option><option>Deal sourcing</option><option>Research</option><option>Other</option></select></div>
       <div class="field full"><label>Agent description (optional)</label><input id="ag-desc" placeholder="e.g. Monitors steel rebar prices for UAE construction projects"/></div>
     </div>
-    <div class="reg-footer">
+    <div class="reg-footer" id="reg-footer">
       <div class="reg-note">API key sent to your email immediately after registration</div>
       <button class="reg-btn" onclick="submitReg()">Register agent →</button>
+    </div>
+    <div id="reg-success" style="display:none;text-align:center;padding:48px 28px">
+      <div style="font-size:40px;color:var(--green);margin-bottom:16px">✓</div>
+      <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:10px">You're registered.</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:22px">Your API key is on its way.<br/>Check your inbox — usually within 2 minutes.</div>
+      <a href="/docs" style="color:var(--violet);font-size:14px;font-weight:600;text-decoration:none">Read the docs →</a>
     </div>
   </div>
 
@@ -225,12 +216,20 @@ h1 em{font-style:italic;color:var(--indigo)}
 function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open')}
 document.addEventListener('click',function(e){if(!e.target.closest('nav'))document.getElementById('mob-nav').classList.remove('nav-open')});
 
+function showRegSuccess() {
+  document.getElementById('reg-body').style.display = 'none';
+  document.getElementById('reg-footer').style.display = 'none';
+  document.getElementById('reg-success').style.display = 'block';
+  document.getElementById('reg-form').scrollIntoView({ behavior: 'smooth' });
+}
+
 async function submitReg() {
   var name  = document.getElementById('ag-name').value.trim();
   var dev   = document.getElementById('ag-dev').value.trim();
   var email = document.getElementById('ag-email').value.trim();
   var desc  = document.getElementById('ag-desc').value.trim();
-  if(!name || !email) { alert('Please fill in agent name and email.'); return; }
+  if (!name)  { document.getElementById('ag-name').focus(); return; }
+  if (!email) { document.getElementById('ag-email').focus(); return; }
 
   var btn = document.querySelector('.reg-btn');
   btn.textContent = 'Submitting…';
@@ -244,17 +243,9 @@ async function submitReg() {
       body: JSON.stringify({ name, developer: dev, email, tier: 'read', description: desc })
     });
     const data = res.ok ? await res.json() : null;
-    if(data && data.api_key) {
-      btn.textContent = '✓ Registered';
-      btn.style.background = 'var(--green,#22c55e)';
-      alert('Agent registered!\n\nID: ' + (data.agent_id || '—') + '\nAPI Key: ' + data.api_key + '\n\nSave your key — shown only once.\nStart: GET https://api.sloiai.com/v1/suppliers');
-    } else {
-      throw new Error('no key');
-    }
+    showRegSuccess();
   } catch(e) {
-    btn.textContent = '✓ Registered';
-    btn.style.background = 'var(--green,#22c55e)';
-    alert('Agent registered!\n\nAgent: ' + name + '\nEmail: ' + email + '\n\nAPI key will be sent to ' + email + ' shortly.\nStart: GET https://api.sloiai.com/v1/suppliers');
+    showRegSuccess();
   }
 }
 </script>

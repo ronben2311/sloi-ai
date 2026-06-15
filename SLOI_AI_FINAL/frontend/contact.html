@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="description" content="Get in touch with the SLOI AI team. Questions about our procurement automation platform, enterprise plans, or partnerships — we respond fast."/>
-<title>Contact� SLOI AI</title>
+<title>Contact — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
@@ -111,7 +111,7 @@ h1 em{font-style:italic;color:var(--indigo)}
   <div class="nav-links" id="mob-nav">
     <a href="about.html">About</a>
     <a href="docs.html">Docs</a>
-    <a href="CommodEx_Admin.html">Join as supplier</a>
+    <a href="CommodEx_Admin.html">Become a Trader</a>
     <a href="login.html">Platform</a>
   </div>
   <div class="nav-right">
@@ -167,7 +167,7 @@ h1 em{font-style:italic;color:var(--indigo)}
           <div>
             <div class="co-label">WHATSAPP (FASTEST)</div>
             <div class="co-value"><a href="https://wa.me/97250XXXXXX" class="co-link">+972-50-XXX-XXXX</a></div>
-            <div class="co-desc">For urgent deals, RFQs, or supplier questions. Response within 2 hours during business hours (Sun�Thu, 8am�6pm UTC).</div>
+            <div class="co-desc">For urgent deals, RFQs, or supplier questions. Response within 2 hours during business hours (Mon–Fri, 8am–6pm UTC).</div>
           </div>
         </div>
         <div class="contact-option">
@@ -206,7 +206,7 @@ h1 em{font-style:italic;color:var(--indigo)}
           <div class="co-icon">??</div>
           <div>
             <div class="co-label">LOCATION</div>
-            <div class="co-value">Hadera</div>
+            <div class="co-value">Global — UAE · Egypt · Europe · MENA corridor</div>
             <div class="co-desc">Operating across the MENA corridor � Global, UAE, KSA, Egypt, Europe.</div>
           </div>
         </div>
@@ -215,6 +215,52 @@ h1 em{font-style:italic;color:var(--indigo)}
   </div>
 
   <div class="divider"/>
+
+  <!-- CONTACT FORM -->
+  <div class="card" style="margin-bottom:40px">
+    <div class="card-h">
+      <div class="card-icon">✉️</div>
+      <div><div class="card-title">Send us a message</div><div class="card-sub">We respond within 24 hours</div></div>
+    </div>
+    <div class="card-body" id="cf-wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="field">
+        <label>Your name *</label>
+        <input type="text" id="cf-name" placeholder="Jane Smith"/>
+      </div>
+      <div class="field">
+        <label>Company name *</label>
+        <input type="text" id="cf-company" placeholder="ACME Trading LLC"/>
+      </div>
+      <div class="field">
+        <label>Email *</label>
+        <input type="email" id="cf-email" placeholder="jane@company.com"/>
+      </div>
+      <div class="field">
+        <label>Subject</label>
+        <select id="cf-subject">
+          <option value="">— Select topic —</option>
+          <option>Sourcing / RFQ</option>
+          <option>Trader onboarding</option>
+          <option>API &amp; developer access</option>
+          <option>Enterprise pricing</option>
+          <option>Compliance / legal</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field" style="grid-column:1/-1">
+        <label>Message *</label>
+        <textarea id="cf-message" placeholder="Describe what you need — commodity, quantity, timeline, destination..."></textarea>
+      </div>
+      <div style="grid-column:1/-1">
+        <button class="submit-btn" onclick="cfSubmit()">Send message →</button>
+      </div>
+    </div>
+    <div class="success" id="cf-success">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Message received</div>
+      <div class="success-sub">We'll get back to you at your email within 24 hours.<br/>For urgent deals, call or WhatsApp us directly.</div>
+    </div>
+  </div>
 
   <!-- QUICK ACTIONS -->
   <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px">// Quick actions</div>
@@ -330,6 +376,25 @@ async function ccSend() {
 function ccQuick(text) { document.getElementById('cc-input').value = text; ccSend(); }
 function ccKey(e) { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); ccSend(); } }
 function ccResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,90)+'px'; }
+
+function cfSubmit() {
+  var name    = document.getElementById('cf-name').value.trim();
+  var company = document.getElementById('cf-company').value.trim();
+  var email   = document.getElementById('cf-email').value.trim();
+  var message = document.getElementById('cf-message').value.trim();
+  if (!name)    { document.getElementById('cf-name').focus(); return; }
+  if (!company) { document.getElementById('cf-company').focus(); return; }
+  if (!email || !email.includes('@')) { document.getElementById('cf-email').focus(); return; }
+  if (!message) { document.getElementById('cf-message').focus(); return; }
+  var subject  = document.getElementById('cf-subject').value || 'General inquiry';
+  var mailto   = 'mailto:hello@sloiai.com?subject=' + encodeURIComponent('[' + subject + '] from ' + company) +
+                 '&body=' + encodeURIComponent('Name: ' + name + '\nCompany: ' + company + '\nEmail: ' + email + '\n\n' + message);
+  window.location.href = mailto;
+  document.getElementById('cf-wrap').style.display = 'none';
+  document.getElementById('cf-success').classList.add('show');
+}
 </script>
 </body>
 </html>
+
+
