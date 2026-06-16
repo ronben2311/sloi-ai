@@ -128,9 +128,10 @@ code{background:var(--surface2);border:1px solid var(--border2);border-radius:3p
   <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
   <div class="nav-links" id="mob-nav">
     <a href="about.html">About</a>
-    <a href="api-explorer.html">API Explorer</a>
-    <a href="docs.html">Suppliers</a>
-    <a href="CommodEx_Admin.html">Become a Trader</a>
+    <a href="faq.html">FAQ</a>
+    <a href="docs.html">Docs</a>
+    <a href="broker-onboarding.html">Become a Trader</a>
+    <a href="login.html">Platform</a>
   </div>
   <a href="login.html" class="nav-cta">Platform →</a>
 </nav>
@@ -154,7 +155,8 @@ code{background:var(--surface2);border:1px solid var(--border2);border-radius:3p
   <div class="sb-section">For Buyers</div>
   <a href="#buyer-search" class="sb-link">Find suppliers</a>
   <a href="#buyer-compare" class="sb-link">Compare prices</a>
-  <a href="#buyer-escrow" class="sb-link">direct payment & payment</a>
+  <a href="#buyer-credits" class="sb-link">Credits & payment</a>
+  <a href="#buyer-negotiation" class="sb-link">Managed agent</a>
 
   <div class="sb-section">For Suppliers</div>
   <a href="#supplier-join" class="sb-link">Join the network</a>
@@ -250,7 +252,7 @@ commodity suppliers.</span></pre>
         <div class="step-n">2</div>
         <div class="step-body">
           <div class="step-title">Query supplier network</div>
-          <div class="step-desc">Search all 8 verified suppliers by product, sector, or price range.</div>
+          <div class="step-desc">Search verified suppliers by product, sector, or price range across 9 commodity sectors.</div>
           <div class="step-code">GET /v1/products/search?q=steel+rebar</div>
         </div>
       </div>
@@ -281,7 +283,51 @@ commodity suppliers.</span></pre>
     </div>
   </div>
 
-  <!-- AGENT REGUTCER -->
+  <!-- HOW IT WORKS -->
+  <div class="doc-section" id="how-it-works">
+    <div class="section-eyebrow">Getting started</div>
+    <h2>How it <em>works</em></h2>
+    <p>SLOI AI is a structured commodity trading flow. Buyers find suppliers, AI agents negotiate the best price, and a signed LOI is delivered to both parties. No payment on platform — SLOI AI handles only the negotiation and deal documentation.</p>
+    <div class="steps">
+      <div class="step-row">
+        <div class="step-n">1</div>
+        <div class="step-body">
+          <div class="step-title">Buyer submits mandate</div>
+          <div class="step-desc">Product, quantity, target price, incoterm, and deadline. Buyer buys credits to start.</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-n">2</div>
+        <div class="step-body">
+          <div class="step-title">AI agent searches network</div>
+          <div class="step-desc">SLOI AI queries the supplier registry — 72 products across 9 sectors — and ranks suppliers by price, lead time, and certification.</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-n">3</div>
+        <div class="step-body">
+          <div class="step-title">Negotiation runs automatically</div>
+          <div class="step-desc">AI agent conducts up to 7 rounds of negotiation via WhatsApp with the supplier. Live updates stream to the buyer's dashboard.</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-n">4</div>
+        <div class="step-body">
+          <div class="step-title">Boss approves</div>
+          <div class="step-desc">No deal closes without the buyer's manual approval. One click to approve the agreed price.</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-n">5</div>
+        <div class="step-body">
+          <div class="step-title">LOI generated and sent</div>
+          <div class="step-desc">PDF Letter of Intent delivered to buyer by email and to supplier by WhatsApp. Payment and delivery happen directly between the two parties.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AGENT REGISTER -->
   <div class="doc-section" id="agent-register">
     <div class="section-eyebrow">For AI Agents</div>
     <h2>Register your <em>agent</em></h2>
@@ -361,9 +407,9 @@ commodity suppliers.</span></pre>
 
 <span class="cm">// Response</span>
 {
-  <span class="str">"rfq_ref"</span>: <span class="str">"RFQ-20260427-001"</span>,
+  <span class="str">"rfq_ref"</span>: <span class="str">"RFQ-20260616-001"</span>,
   <span class="str">"status"</span>: <span class="str">"sent"</span>,
-  <span class="str">"expected_response_by"</span>: <span class="str">"2026-04-28T09:00:00Z"</span>
+  <span class="str">"expected_response_by"</span>: <span class="str">"2026-06-17T09:00:00Z"</span>
 }</pre>
     </div>
 
@@ -388,14 +434,14 @@ commodity suppliers.</span></pre>
 
 <span class="cm">// Response — LOI generated and sent to all parties</span>
 {
-  <span class="str">"loi_ref"</span>: <span class="str">"SL-LOI-20260427-001"</span>,
-  <span class="str">"order_ref"</span>: <span class="str">"SL-20260427-001"</span>,
+  <span class="str">"loi_ref"</span>: <span class="str">"SL-LOI-20260616-001"</span>,
+  <span class="str">"order_ref"</span>: <span class="str">"SL-20260616-001"</span>,
   <span class="str">"status"</span>: <span class="str">"loi_signed"</span>,
   <span class="str">"agreed_price"</span>: <span class="num">2840</span>,
   <span class="str">"total_value"</span>: <span class="num">284000</span>,
-  <span class="str">"loi_pdf_url"</span>: <span class="str">"https://storage.sloiai.com/loi-pdfs/SL-LOI-20260427-001.pdf"</span>,
+  <span class="str">"loi_pdf_url"</span>: <span class="str">"https://storage.sloiai.com/loi-pdfs/SL-LOI-20260616-001.pdf"</span>,
   <span class="str">"email_sent"</span>: <span class="kw">true</span>,
-  <span class="str">"telegram_sent"</span>: <span class="kw">true</span>,
+  <span class="str">"whatsapp_sent"</span>: <span class="kw">true</span>,
   <span class="str">"credits_charged"</span>: <span class="num">5</span>
 }
 
@@ -454,6 +500,36 @@ commodity suppliers.</span></pre>
       <div class="step-row"><div class="step-n">2</div><div class="step-body"><div class="step-title">Type your commodity</div><div class="step-desc">"steel rebar", "cement", "diesel", "wheat" — any keyword works.</div></div></div>
       <div class="step-row"><div class="step-n">3</div><div class="step-body"><div class="step-title">Enter quantity</div><div class="step-desc">The tool shows the total price and identifies if your quantity is in stock.</div></div></div>
       <div class="step-row"><div class="step-n">4</div><div class="step-body"><div class="step-title">Send RFQ in 2 clicks</div><div class="step-desc">Pick a supplier → click RFQ → supplier gets a WhatsApp alert and responds within 24h.</div></div></div>
+    </div>
+  </div>
+
+  <!-- BUYER COMPARE -->
+  <div class="doc-section" id="buyer-compare">
+    <div class="section-eyebrow">For Buyers</div>
+    <h2>Compare <em>prices</em></h2>
+    <p>The Price Comparison tool ranks all verified suppliers for a commodity — cheapest first. Includes live unit price, stock status, lead time, incoterm, and certification badges. No account required to browse.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">GET /v1/compare</span></div>
+      <pre><span class="kw">GET</span> /v1/compare<span class="str">?product=steel+rebar&qty=100</span>
+
+<span class="cm">// Response: ranked list, cheapest first</span>
+{
+  <span class="str">"results"</span>: [
+    {
+      <span class="str">"rank"</span>: <span class="num">1</span>, <span class="str">"recommended"</span>: <span class="kw">true</span>,
+      <span class="str">"unit_price"</span>: <span class="num">2840</span>, <span class="str">"currency"</span>: <span class="str">"USD"</span>,
+      <span class="str">"incoterm"</span>: <span class="str">"FOB Dubai"</span>,
+      <span class="str">"lead_time"</span>: <span class="str">"21 days"</span>,
+      <span class="str">"certs"</span>: [<span class="str">"ISO 9001"</span>, <span class="str">"CE"</span>],
+      <span class="str">"score"</span>: <span class="num">94</span>,
+      <span class="str">"reasons"</span>: [<span class="str">"Lowest price"</span>, <span class="str">"AI-Ready"</span>, <span class="str">"In stock"</span>]
+    }
+  ]
+}</pre>
+    </div>
+    <div class="callout callout-info">
+      <div class="callout-icon">🌐</div>
+      <div class="callout-body"><strong>Open access:</strong> The <a href="price-discovery.html" style="color:var(--teal)">Price Discovery</a> tool lets any visitor compare suppliers without an account. An account is only required to submit an RFQ or start a negotiation.</div>
     </div>
   </div>
 
@@ -525,7 +601,77 @@ commodity suppliers.</span></pre>
     </div>
 
     <div style="margin-top:16px">
-      <a href="CommodEx_Admin.html" style="background:var(--indigo);color:#fff;padding:12px 24px;border-radius:5px;text-decoration:none;font-size:15px;font-weight:600;display:inline-block">Become a Trader →</a>
+      <a href="CommodEx_Admin.html" style="background:var(--indigo);color:#fff;padding:12px 24px;border-radius:5px;text-decoration:none;font-size:15px;font-weight:600;display:inline-block">Apply as Supplier →</a>
+    </div>
+  </div>
+
+  <!-- SUPPLIER PRICE SYNC API -->
+  <div class="doc-section" id="supplier-api">
+    <div class="section-eyebrow">For Suppliers</div>
+    <h2>Price sync <em>API</em></h2>
+    <p>Keep your prices current by pushing updates via the Price Sync API. SLOI AI uses your latest prices in all comparisons and RFQs. Updates take effect within 60 seconds. Suppliers with live prices rank higher in buyer search results.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">POST /v1/suppliers/{id}/prices</span></div>
+      <pre><span class="kw">POST</span> /v1/suppliers/SUP-004/prices
+<span class="kw">Authorization:</span> Bearer m2m_sup_xxx
+
+{
+  <span class="str">"sku"</span>: <span class="str">"STL-RBR12"</span>,
+  <span class="str">"unit_price"</span>: <span class="num">2840</span>,
+  <span class="str">"currency"</span>: <span class="str">"USD"</span>,
+  <span class="str">"stock_mt"</span>: <span class="num">500</span>,
+  <span class="str">"valid_until"</span>: <span class="str">"2026-07-15"</span>
+}
+
+<span class="cm">// Response</span>
+{ <span class="str">"updated"</span>: <span class="kw">true</span>, <span class="str">"effective_at"</span>: <span class="str">"2026-06-16T10:00:00Z"</span> }</pre>
+    </div>
+    <div class="callout callout-tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><strong>Automate it:</strong> Set up a daily cron job to push prices from your ERP or spreadsheet. You can update multiple SKUs in one call by passing an array of price objects.</div>
+    </div>
+  </div>
+
+  <!-- SUPPLIER WHATSAPP ALERTS -->
+  <div class="doc-section" id="supplier-alerts">
+    <div class="section-eyebrow">For Suppliers</div>
+    <h2>WhatsApp <em>alerts</em></h2>
+    <p>Every RFQ, negotiation round, and signed LOI is delivered to you via WhatsApp. No app to install — just your registered WhatsApp number. Configure your alert number in the supplier portal.</p>
+    <table class="ep-table">
+      <thead><tr><th>Event</th><th>Message content</th></tr></thead>
+      <tbody>
+        <tr><td>New RFQ received</td><td class="ep-desc">Product, quantity, incoterm, buyer region, response deadline (24h)</td></tr>
+        <tr><td>Negotiation round</td><td class="ep-desc">AI agent's counter-offer with justification and your current floor price</td></tr>
+        <tr><td>Deal approved</td><td class="ep-desc">Final agreed price, total value, and LOI PDF download link</td></tr>
+        <tr><td>Price update reminder</td><td class="ep-desc">Weekly reminder if prices haven't been updated in 7+ days</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body"><strong>Response time matters:</strong> Suppliers who respond to RFQs within 4 hours rank higher in buyer search results. RFQs unanswered after 24 hours are automatically escalated to the next ranked supplier.</div>
+    </div>
+  </div>
+
+  <!-- API AUTH -->
+  <div class="doc-section" id="api-auth">
+    <div class="section-eyebrow">API Reference</div>
+    <h2><em>Authentication</em></h2>
+    <p>All API requests require a Bearer token in the <code>Authorization</code> header. Agents receive their key at registration. Suppliers receive a separate key in their portal welcome email.</p>
+    <div class="code-block">
+      <div class="code-header"><span class="code-lang">REQUEST HEADER</span></div>
+      <pre><span class="kw">Authorization:</span> Bearer m2m_agt_x7k9p2q...</pre>
+    </div>
+    <table class="ep-table">
+      <thead><tr><th>Key prefix</th><th>Issued to</th><th>Scope</th></tr></thead>
+      <tbody>
+        <tr><td><code>m2m_agt_</code></td><td>AI agents</td><td class="ep-desc">Read or Transact tier, set at registration</td></tr>
+        <tr><td><code>m2m_sup_</code></td><td>Suppliers</td><td class="ep-desc">Price sync and RFQ management only</td></tr>
+        <tr><td><code>m2m_adm_</code></td><td>Admins</td><td class="ep-desc">Full access — not available via API registration</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body"><strong>Key security:</strong> API keys do not expire automatically but can be revoked at any time from the portal. Store keys in environment variables — never commit them to source code.</div>
     </div>
   </div>
 

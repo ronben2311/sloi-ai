@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="Place a commodity order with SLOI AI without an account. Fast, AI-assisted sourcing for small and medium businesses across MENA markets."/>
 <title>Source. Negotiate. Close. — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
@@ -479,12 +480,12 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="pc-sub">Steel · Cement · Concrete · Rebar · Clinker</div>
           <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $4.8/Unit · 21 products</div>
         </div>
-        <div class="pc" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
+        <div class="pc" onclick="selectProduct(this,'Reconstruction','cement, steel, generators, cranes, concrete')">
           <div class="pc-check">✓ selected</div>
-          <span class="pc-icon">🌾</span>
-          <div class="pc-name">Agriculture</div>
-          <div class="pc-sub">Wheat · Corn · Grain · Feed</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $560/MT · 5 products</div>
+          <span class="pc-icon">🏛️</span>
+          <div class="pc-name">Reconstruction</div>
+          <div class="pc-sub">Steel · Cement · Concrete · Cranes · Generators</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">Full package · 33 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Energy','diesel, LPG, fuel oil')">
           <div class="pc-check">✓ selected</div>
@@ -500,19 +501,19 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="pc-sub">PVC · HDPE · Solvents · Polymers · Fertilizers</div>
           <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $420/MT · 6 products</div>
         </div>
+        <div class="pc" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
+          <div class="pc-check">✓ selected</div>
+          <span class="pc-icon">🌾</span>
+          <div class="pc-name">Agriculture</div>
+          <div class="pc-sub">Wheat · Corn · Grain · Feed</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $560/MT · 5 products</div>
+        </div>
         <div class="pc" onclick="selectProduct(this,'Engineering equipment','generators, pumps, compressors, cranes')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">⚙️</span>
           <div class="pc-name">Engineering equipment</div>
           <div class="pc-sub">Generators, pumps, compressors &amp; more</div>
           <div style="margin-top:8px;font-size:11px;color:var(--muted)">Heavy machinery · industrial units</div>
-        </div>
-        <div class="pc" onclick="selectProduct(this,'Reconstruction','cement, steel, generators, cranes, concrete')">
-          <div class="pc-check">✓ selected</div>
-          <span class="pc-icon">🏛️</span>
-          <div class="pc-name">Reconstruction</div>
-          <div class="pc-sub">Steel · Cement · Concrete · Cranes · Generators</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">Full package · 33 products</div>
         </div>
       </div>
 
@@ -906,6 +907,7 @@ var SECTOR_MAP = {
   'Energy':                'Energy',
   'Petrochemicals':        'Chemicals',
   'Engineering equipment': 'Engineering',
+  'Reconstruction':        ['Metals','Cement','Building','Engineering'],
 };
 
 function filterCatalog(categoryName) {

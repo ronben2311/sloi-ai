@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="Frequently asked questions about SLOI AI — commodity sourcing, LOI generation, traders, payments, compliance, and geo-specific coverage across MENA, UAE, Egypt, and Europe."/>
+<title>FAQ — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--text);background:var(--bg)}
+body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;flex:1}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-links{display:flex;gap:20px;font-size:13px}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--violet)}
+.nav-right{flex:1;display:flex;justify-content:flex-end;align-items:center;gap:10px}
+.mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
+.wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:60px 28px 100px}
+.eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:'';width:24px;height:1px;background:var(--indigo)}
+h1{font-family:'Fraunces',serif;font-size:clamp(40px,6vw,64px);font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--white);margin-bottom:16px}
+h1 em{font-style:italic;color:var(--indigo)}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:48px;max-width:560px}
+
+/* TAB FILTER */
+.tab-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:36px}
+.tab{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;padding:6px 14px;border-radius:3px;border:1px solid var(--border2);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.04em;text-transform:uppercase}
+.tab:hover{color:var(--text);border-color:rgba(91,95,239,.4)}
+.tab.active{background:rgba(91,95,239,.15);border-color:var(--indigo);color:var(--violet)}
+
+/* SECTION */
+.faq-section{margin-bottom:44px}
+.faq-section-title{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.faq-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+.faq-section-icon{font-size:16px}
+
+/* ACCORDION */
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:6px;transition:border-color .15s}
+.faq-item:hover{border-color:rgba(91,95,239,.3)}
+.faq-item.open{border-color:rgba(91,95,239,.45)}
+.faq-q{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:12px;user-select:none}
+.faq-q-text{font-size:14px;font-weight:600;color:var(--white);line-height:1.4;flex:1}
+.faq-chevron{font-size:14px;color:var(--muted);flex-shrink:0;transition:transform .2s;display:inline-block}
+.faq-item.open .faq-chevron{transform:rotate(180deg);color:var(--violet)}
+.faq-a{display:none;padding:0 20px 16px;font-size:13px;color:var(--text);line-height:1.8;border-top:1px solid var(--border)}
+.faq-a.show{display:block}
+.faq-a a{color:var(--violet);text-decoration:none}
+.faq-a a:hover{text-decoration:underline}
+.faq-a ul{margin:8px 0 8px 16px;display:flex;flex-direction:column;gap:4px}
+.faq-a li{color:var(--text)}
+.tag{display:inline-flex;font-size:11px;font-weight:700;padding:2px 7px;border-radius:2px;margin-left:8px;vertical-align:middle}
+.tag-geo{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:#e8a94a}
+.tag-new{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:#8b8ff8}
+
+/* GEO CARDS */
+.geo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-top:24px}
+.geo-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.geo-flag{font-size:28px;margin-bottom:8px}
+.geo-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px}
+.geo-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.geo-status{display:inline-flex;font-size:10px;font-weight:700;padding:2px 7px;border-radius:2px;margin-top:8px}
+.geo-live{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:#22c55e}
+.geo-soon{background:rgba(82,82,110,.1);border:1px solid rgba(82,82,110,.3);color:#52526e}
+
+/* CTA */
+.cta-strip{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:48px}
+.cta-text h3{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:4px}
+.cta-text p{font-size:13px;color:var(--muted)}
+.cta-btns{display:flex;gap:10px;flex-shrink:0}
+.btn-primary{background:var(--indigo);color:#fff;border:none;padding:10px 20px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;white-space:nowrap}
+.btn-ghost{background:transparent;color:var(--violet);border:1px solid rgba(91,95,239,.4);padding:10px 20px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;white-space:nowrap;transition:all .15s}
+.btn-ghost:hover{background:rgba(91,95,239,.1)}
+
+/* SEARCH */
+.search-wrap{position:relative;margin-bottom:28px}
+.search-input{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:7px;padding:12px 16px 12px 40px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;transition:border-color .15s}
+.search-input:focus{border-color:var(--indigo)}
+.search-input::placeholder{color:var(--muted)}
+.search-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--muted);pointer-events:none}
+.no-results{text-align:center;padding:40px;color:var(--muted);font-size:13px;display:none}
+
+@media(max-width:768px){
+  nav{padding:0 14px}
+  .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:rgba(7,7,15,.98);border-bottom:1px solid var(--border);padding:14px 20px;flex-direction:column;gap:14px;z-index:200}
+  .nav-links.nav-open{display:flex}
+  .mob-nav-btn{display:flex}
+  h1{font-size:clamp(32px,10vw,48px)}
+  .cta-strip{flex-direction:column;align-items:flex-start}
+  .cta-btns{width:100%}
+  .btn-primary,.btn-ghost{flex:1;text-align:center}
+  .geo-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+<link rel="stylesheet" href="/main.css"/>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+<nav>
+  <a href="m2m-homepage.html" class="nav-logo">SLOI <em>AI</em></a>
+  <div class="nav-links" id="mob-nav">
+    <a href="about.html">About</a>
+    <a href="docs.html">Docs</a>
+    <a href="faq.html" class="active">FAQ</a>
+    <a href="CommodEx_Admin.html">Become a Trader</a>
+    <a href="login.html">Platform</a>
+  </div>
+  <div class="nav-right">
+    <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="eyebrow">Help Center</div>
+  <h1>Frequently asked <em>questions.</em></h1>
+  <p class="hero-sub">Everything you need to know about commodity sourcing, LOI generation, trader onboarding, payments, and our geographic coverage across MENA, UAE, Egypt, and Europe.</p>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="faq-search" placeholder="Search questions…" oninput="faqSearch(this.value)" autocomplete="off"/>
+  </div>
+
+  <!-- TAB FILTER -->
+  <div class="tab-bar" id="tab-bar">
+    <button class="tab active" onclick="filterTab('all',this)">All</button>
+    <button class="tab" onclick="filterTab('platform',this)">Platform</button>
+    <button class="tab" onclick="filterTab('sourcing',this)">Sourcing & Deals</button>
+    <button class="tab" onclick="filterTab('traders',this)">Traders & Suppliers</button>
+    <button class="tab" onclick="filterTab('payments',this)">Payments & Credits</button>
+    <button class="tab" onclick="filterTab('compliance',this)">Compliance & Legal</button>
+    <button class="tab" onclick="filterTab('geo',this)">Geographic Coverage</button>
+  </div>
+
+  <!-- PLATFORM -->
+  <div class="faq-section" data-cat="platform">
+    <div class="faq-section-title"><span class="faq-section-icon">🖥️</span> Platform</div>
+
+    <div class="faq-item" data-cat="platform">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is SLOI AI?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        SLOI AI is an AI-powered B2B commodity procurement platform. Buyers submit an RFQ, our AI agents run multi-round negotiations with vetted suppliers, and a legally formatted Letter of Intent (LOI) is generated — all without manual back-and-forth. The platform covers Energy, Petrochemicals, Building Materials, Agriculture, Reconstruction, and Engineering Equipment.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="platform">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Who is SLOI AI for?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Three types of users:
+        <ul>
+          <li><strong style="color:var(--white)">Buyers</strong> — companies that need commodities and want AI to handle negotiation and LOI drafting.</li>
+          <li><strong style="color:var(--white)">Traders / Suppliers</strong> — commodity traders who join the network to receive RFQs and earn per signed deal.</li>
+          <li><strong style="color:var(--white)">AI Agents</strong> — external LLM bots that connect via the Open Network API to participate in the exchange autonomously.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="platform">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What commodity sectors do you cover?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        We cover six sectors with 150+ SKUs:
+        <ul>
+          <li>🏗️ <strong style="color:var(--white)">Building Materials</strong> — steel, rebar, cement, clinker, concrete</li>
+          <li>🏛️ <strong style="color:var(--white)">Reconstruction</strong> — bundled packages (steel + cement + generators + cranes) for post-conflict rebuilding</li>
+          <li>⚡ <strong style="color:var(--white)">Energy</strong> — diesel, fuel oil, LPG, bitumen, crude</li>
+          <li>🧪 <strong style="color:var(--white)">Petrochemicals</strong> — urea, methanol, ethylene</li>
+          <li>🌾 <strong style="color:var(--white)">Agriculture</strong> — wheat, sugar, palm oil, soybean</li>
+          <li>⚙️ <strong style="color:var(--white)">Engineering Equipment</strong> — generators, pumps, compressors, cranes, excavators</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="platform">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Is there a demo or sample LOI I can view?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Yes — visit <a href="loi-preview.html">loi-preview.html</a> to see a live sample LOI. You can also start a no-commitment order via <a href="smb-order.html">SMB Order</a> to see the full 5-step flow before any deal is created.
+      </div>
+    </div>
+  </div>
+
+  <!-- SOURCING & DEALS -->
+  <div class="faq-section" data-cat="sourcing">
+    <div class="faq-section-title"><span class="faq-section-icon">📦</span> Sourcing & Deals</div>
+
+    <div class="faq-item" data-cat="sourcing">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How does the LOI generation process work?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        <strong style="color:var(--white)">Step 1</strong> — You submit an RFQ: commodity, quantity, destination, and target price.<br/>
+        <strong style="color:var(--white)">Step 2</strong> — Our AI NegotiationAgent runs up to 7 rounds of automated negotiation with matched suppliers (identities hidden).<br/>
+        <strong style="color:var(--white)">Step 3</strong> — The boss reviews and approves the best offer.<br/>
+        <strong style="color:var(--white)">Step 4</strong> — An LOI is auto-generated with all agreed terms, signed by both parties.<br/>
+        The whole process typically takes 24–72 hours.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="sourcing">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is the minimum order quantity (MOQ)?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        MOQ varies by commodity:
+        <ul>
+          <li>Diesel / Fuel Oil: 1,000 MT minimum</li>
+          <li>Cement / Clinker: 500 MT minimum</li>
+          <li>Steel / Rebar: 100 MT minimum</li>
+          <li>Wheat / Sugar: 250 MT minimum</li>
+          <li>Engineering Equipment: 1 unit minimum</li>
+        </ul>
+        SMB buyers can start with smaller test orders — contact us to discuss.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="sourcing">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Are supplier identities revealed during negotiation?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        No. Supplier identities are fully anonymized throughout the negotiation rounds. They are only disclosed once both parties have agreed on terms and the LOI is being finalized. This protects both sides and keeps negotiations fair.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="sourcing">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Can I set a target price or maximum budget?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Yes. During the RFQ step you specify your target price and the AI negotiates to get as close to it as possible across multiple rounds. You also set a walk-away threshold — if no supplier meets it, the deal is not finalized and no credits are charged.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="sourcing">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What does the Reconstruction package include?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        The Reconstruction category is specifically designed for post-conflict rebuilding (IMEC corridor, MENA reconstruction projects). It bundles 33 products across Building Materials + Engineering Equipment in a single RFQ — steel, cement, concrete, cranes, generators, excavators, and more — with a single negotiation round and unified LOI. <span class="tag tag-geo">MENA-focused</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRADERS & SUPPLIERS -->
+  <div class="faq-section" data-cat="traders">
+    <div class="faq-section-title"><span class="faq-section-icon">🤝</span> Traders & Suppliers</div>
+
+    <div class="faq-item" data-cat="traders">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How do I join as a trader or supplier?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Complete the 5-step <a href="broker-onboarding.html">Trader Onboarding</a> form — it takes about 10 minutes. You'll submit KYC documents, select your commodity specializations, set your floor prices, and sign the trader agreement. Applications are reviewed within 48 hours.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="traders">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How much do traders earn per deal?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Traders earn <strong style="color:var(--white)">$500 per signed LOI</strong>. You set your own floor prices — everything negotiated above that floor is your margin. The platform charges no additional commission from the trader side. Volume bonuses apply for traders closing 10+ deals per month.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="traders">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Do traders need to be present during negotiations?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        No. The AI NegotiationAgent handles all rounds automatically based on the floor prices you set. You only need to confirm the final deal before the LOI is generated. You can monitor live rounds via the <a href="CommodEx_Broker.html">Trader Portal</a>.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="traders">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What happens if a deal falls through after the LOI is signed?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        The LOI is non-binding by default (standard commodity LOI terms). However, if both parties have agreed to a binding LOI with escrow, payment release is handled via the platform. Disputes go to <a href="mailto:legal@sloiai.com">legal@sloiai.com</a>. The $500 trader fee is still paid on signature regardless of whether the full trade executes.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAYMENTS & CREDITS -->
+  <div class="faq-section" data-cat="payments">
+    <div class="faq-section-title"><span class="faq-section-icon">💳</span> Payments & Credits</div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How does the credit system work?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Credits are the platform currency. You buy packs and spend them per action:
+        <ul>
+          <li><strong style="color:var(--white)">NegotiationAgent</strong> — 10 credits (up to 7 rounds, boss approval required)</li>
+          <li><strong style="color:var(--white)">Autopilot</strong> — 20 credits (fully autonomous, no human needed)</li>
+          <li><strong style="color:var(--white)">LOI Generation</strong> — 5 credits</li>
+          <li><strong style="color:var(--white)">Price Watcher</strong> — 1 credit/day</li>
+          <li><strong style="color:var(--white)">ComplianceBot</strong> — 3 credits per screening</li>
+        </ul>
+        Credits never expire. See <a href="pricing.html">Pricing</a> for pack options.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What payment methods do you accept?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        <ul>
+          <li><strong style="color:var(--white)">USDC on Base</strong> — crypto payments via Coinbase AgentKit, instant settlement</li>
+          <li><strong style="color:var(--white)">Stripe</strong> — credit card, bank transfer, SEPA (USD / EUR / AED)</li>
+          <li><strong style="color:var(--white)">Wire transfer</strong> — for enterprise plans ($10,000+ credit packs)</li>
+        </ul>
+        AI agents using the Open Network API can purchase credits autonomously via USDC on Base.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Are there refunds if a negotiation fails to produce a deal?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        If no supplier meets your walk-away price and no LOI is generated, the negotiation credits are refunded in full. Credits are only consumed on a successful match. LOI generation credits (5 credits) are consumed only when an LOI is actually produced.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Is there a free tier or trial?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        The <strong style="color:var(--white)">Open Network Read API</strong> is completely free — no credits needed for price discovery and market data. New accounts receive a small starter credit allocation to run one test negotiation. Contact <a href="mailto:hello@sloiai.com">hello@sloiai.com</a> for enterprise trial arrangements.
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE & LEGAL -->
+  <div class="faq-section" data-cat="compliance">
+    <div class="faq-section-title"><span class="faq-section-icon">⚖️</span> Compliance & Legal</div>
+
+    <div class="faq-item" data-cat="compliance">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Is the LOI legally binding?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Standard LOIs generated by SLOI AI are <strong style="color:var(--white)">non-binding by default</strong> — they document agreed terms and intent but do not constitute a final purchase contract. Both parties can optionally upgrade to a binding LOI with escrow through the platform. Always consult your legal team before treating an LOI as a binding contract in your jurisdiction.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="compliance">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What sanctions screening do you perform?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Every negotiation round passes through our <a href="compliance.html">ComplianceBot</a> which screens against:
+        <ul>
+          <li>OFAC (US) sanctions list</li>
+          <li>EU consolidated sanctions list</li>
+          <li>Dual-use goods restrictions</li>
+          <li>Destination country embargoes</li>
+        </ul>
+        Flagged deals are automatically blocked and escalated to the boss for manual review. A compliance report is attached to every generated LOI.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="compliance">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What data do you store and for how long?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        We store deal history, negotiation logs, and LOI documents for 7 years (standard trade documentation requirement). Personal data is handled per our <a href="privacy.html">Privacy Policy</a> under GDPR and UAE PDPL. You can request data deletion for personal data not subject to regulatory retention requirements.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="compliance">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Can AI agents sign deals autonomously without human approval?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Yes, with <a href="autonomous-mode.html">Autonomous Mode</a> enabled (20 credits / Autopilot tier). The agent operates under a pre-set mandate with approval thresholds — no human sign-off needed per round. Autonomous mode requires an elevated account trust tier and carries full audit logging. See <a href="risk-disclosure.html">Risk Disclosure</a> for autonomous mode limitations.
+      </div>
+    </div>
+  </div>
+
+  <!-- GEO COVERAGE -->
+  <div class="faq-section" data-cat="geo">
+    <div class="faq-section-title"><span class="faq-section-icon">🌍</span> Geographic Coverage</div>
+
+    <div class="faq-item" data-cat="geo">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Which countries and regions do you operate in?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        SLOI AI operates across the MENA corridor and connects buyers and suppliers globally. Primary coverage:
+        <ul>
+          <li>🇦🇪 UAE — headquarters, primary operations</li>
+          <li>🇸🇦 KSA — energy, petrochemicals, building materials</li>
+          <li>🇪🇬 Egypt — reconstruction, agriculture, cement</li>
+          <li>🇮🇶 Iraq — reconstruction, energy, engineering equipment</li>
+          <li>🇱🇾 Libya — reconstruction, building materials</li>
+          <li>🇹🇷 Turkey — manufacturing, building materials, engineering</li>
+          <li>🇪🇺 Europe — petrochemicals, agricultural commodities</li>
+        </ul>
+        Suppliers ship globally. Buyers from any country are accepted (subject to sanctions screening).
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="geo">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Do you support the IMEC corridor and post-conflict reconstruction?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Yes — the <strong style="color:var(--white)">Reconstruction</strong> category is specifically designed for IMEC corridor and post-conflict rebuilding procurement. It bundles building materials + engineering equipment in unified RFQs, with streamlined compliance for reconstruction project buyers and NGO procurement. <span class="tag tag-geo">MENA-focused</span>
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="geo">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What currencies and languages are supported?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        <strong style="color:var(--white)">Currencies:</strong> USD (primary), AED, EUR. Crypto: USDC on Base.<br/>
+        <strong style="color:var(--white)">Languages:</strong> English is the platform language. LOI documents can be generated in Arabic, French, or Turkish on request (enterprise plans). The AI chat agent on the contact page responds in the language you write in.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="geo">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Are there restrictions on which countries can buy or sell?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Buyers and suppliers from OFAC and EU-sanctioned countries are automatically blocked by the ComplianceBot. Dual-use commodities (certain chemicals, equipment) are subject to additional origin/destination checks. If your deal is flagged, you'll receive a compliance report explaining the reason. Contact <a href="mailto:legal@sloiai.com">legal@sloiai.com</a> for jurisdiction-specific questions.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="geo">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Do you have local agents or representatives in the region?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        We have representatives active in the UAE and Egypt. For KSA, Iraq, Turkey, and Europe, the platform operates fully remotely — all negotiations and LOI generation are handled digitally. For complex deals requiring in-country presence, contact <a href="mailto:hello@sloiai.com">hello@sloiai.com</a>.
+      </div>
+    </div>
+
+    <!-- GEO COVERAGE CARDS -->
+    <div class="geo-grid">
+      <div class="geo-card">
+        <div class="geo-flag">🇦🇪</div>
+        <div class="geo-name">UAE</div>
+        <div class="geo-desc">HQ · All sectors · AED payments · local rep</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-flag">🇸🇦</div>
+        <div class="geo-name">Saudi Arabia</div>
+        <div class="geo-desc">Energy · Petrochemicals · Building Materials</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-flag">🇪🇬</div>
+        <div class="geo-name">Egypt</div>
+        <div class="geo-desc">Reconstruction · Agriculture · Cement · local rep</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-flag">🇮🇶</div>
+        <div class="geo-name">Iraq</div>
+        <div class="geo-desc">Reconstruction · Energy · Engineering</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-flag">🇱🇾</div>
+        <div class="geo-name">Libya</div>
+        <div class="geo-desc">Reconstruction · Building Materials</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-flag">🇹🇷</div>
+        <div class="geo-name">Turkey</div>
+        <div class="geo-desc">Engineering · Building Materials · Metals</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-flag">🇪🇺</div>
+        <div class="geo-name">Europe</div>
+        <div class="geo-desc">Petrochemicals · Agriculture · EUR payments</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-flag">🇵🇰</div>
+        <div class="geo-name">Pakistan</div>
+        <div class="geo-desc">Agriculture · Energy · Engineering</div>
+        <div class="geo-status geo-soon">Coming soon</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="no-results" class="no-results">No questions match your search. Try a different term or <a href="contact.html" style="color:var(--violet)">contact us</a>.</div>
+
+  <!-- CTA -->
+  <div class="cta-strip">
+    <div class="cta-text">
+      <h3>Still have questions?</h3>
+      <p>Our AI agent answers instantly, or reach a human within 24 hours.</p>
+    </div>
+    <div class="cta-btns">
+      <a href="contact.html" class="btn-primary">Contact us →</a>
+      <a href="smb-order.html" class="btn-ghost">Start an order</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open');}
+document.addEventListener('click',function(e){var n=document.getElementById('mob-nav');if(n&&n.classList.contains('nav-open')&&!e.target.closest('nav'))n.classList.remove('nav-open');});
+
+function toggleFaq(el) {
+  var item = el.closest('.faq-item');
+  var answer = item.querySelector('.faq-a');
+  var isOpen = item.classList.contains('open');
+  // close all
+  document.querySelectorAll('.faq-item.open').forEach(function(i){
+    i.classList.remove('open');
+    i.querySelector('.faq-a').classList.remove('show');
+  });
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.classList.add('show');
+  }
+}
+
+function filterTab(cat, btn) {
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  document.getElementById('faq-search').value = '';
+  var items = document.querySelectorAll('.faq-item');
+  var sections = document.querySelectorAll('.faq-section');
+  if (cat === 'all') {
+    items.forEach(function(i){i.style.display='';});
+    sections.forEach(function(s){s.style.display='';});
+  } else {
+    sections.forEach(function(s){
+      var match = s.getAttribute('data-cat') === cat;
+      s.style.display = match ? '' : 'none';
+    });
+    items.forEach(function(i){i.style.display='';});
+  }
+  document.getElementById('no-results').style.display = 'none';
+}
+
+function faqSearch(val) {
+  var q = val.toLowerCase().trim();
+  // reset tabs
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelector('.tab').classList.add('active');
+  var items = document.querySelectorAll('.faq-item');
+  var sections = document.querySelectorAll('.faq-section');
+  var anyVisible = false;
+  if (!q) {
+    items.forEach(function(i){i.style.display='';});
+    sections.forEach(function(s){s.style.display='';});
+    document.getElementById('no-results').style.display = 'none';
+    return;
+  }
+  items.forEach(function(item){
+    var text = item.textContent.toLowerCase();
+    var match = text.indexOf(q) !== -1;
+    item.style.display = match ? '' : 'none';
+    if (match) anyVisible = true;
+  });
+  sections.forEach(function(s){
+    var hasVisible = Array.from(s.querySelectorAll('.faq-item')).some(function(i){return i.style.display !== 'none';});
+    s.style.display = hasVisible ? '' : 'none';
+  });
+  document.getElementById('no-results').style.display = anyVisible ? 'none' : 'block';
+}
+</script>
+</body>
+</html>

@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover" />
+<meta name="description" content="Buyer platform for commodity procurement on SLOI AI. Source building materials, minerals, and bulk commodities across MENA and global markets."/>
     <title>SLOI AI — Buyer Platform</title>
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap"
@@ -894,6 +895,11 @@
           <span class="nav-icon">📊</span
           ><span class="nav-label">Exchange</span>
         </button>
+        <button class="nav" onclick="show('products', this)">
+          <span class="nav-icon">📦</span
+          ><span class="nav-label">Products</span
+          ><span class="nav-badge nb-ind" style="font-size:11px">72</span>
+        </button>
         <button class="nav" onclick="show('agents', this)">
           <span class="nav-icon">🧠</span
           ><span class="nav-label">AI Tools</span
@@ -998,57 +1004,41 @@
               </button>
             </div>
             <div class="action-cards">
-              <div
-                class="action-card"
-                onclick="show('negotiate');
-                "
-              >
-                <div class="ac-icon">👁️</div>
-                <div class="ac-title">Start LOI</div>
-                <div class="ac-desc">
-                  Monitor prices. Get alerted when target is hit.
-                </div>
-                <div
-                  class="ac-cost bt"
-                  style="border: 1px solid rgba(45, 212, 191, 0.25)"
-                >
-                  1 credit / day
-                </div>
-              </div>
-              <div
-                class="action-card"
-                style="border-color: rgba(91, 95, 239, 0.3)"
-                onclick="show('negotiate');
-                "
-              >
-                <div class="ac-icon">🎯</div>
-                <div class="ac-title">Deal Hunter</div>
-                <div class="ac-desc">
-                  AI agent negotiates on your behalf. Up to 5 rounds.
-                </div>
-                <div
-                  class="ac-cost bv"
-                  style="border: 1px solid rgba(91, 95, 239, 0.25)"
-                >
-                  10 credits / session
-                </div>
-              </div>
-              <div
-                class="action-card"
-                onclick="show('negotiate');
-                "
-              >
+              <div class="action-card" onclick="show('negotiate')" style="border-color:rgba(91,95,239,.3)">
                 <div class="ac-icon">🤖</div>
-                <div class="ac-title">Autopilot</div>
-                <div class="ac-desc">
-                  Aggressive strategy. Up to 7 rounds. Max performance.
-                </div>
-                <div
-                  class="ac-cost ba"
-                  style="border: 1px solid rgba(232, 169, 74, 0.25)"
-                >
-                  20 credits / session
-                </div>
+                <div class="ac-title">NegotiationAgent</div>
+                <div class="ac-desc">Automated multi-round negotiation with pre-qualified suppliers.</div>
+                <div class="ac-cost bv" style="border:1px solid rgba(91,95,239,.25);margin-top:8px">● 2 active rounds</div>
+              </div>
+              <div class="action-card" onclick="alert('Running compliance check…')" style="border-color:rgba(239,68,68,.2)">
+                <div class="ac-icon">🛡️</div>
+                <div class="ac-title">ComplianceBot</div>
+                <div class="ac-desc">Screens counterparties, flags sanctions & documentation gaps.</div>
+                <div class="ac-cost bg" style="border:1px solid rgba(34,197,94,.25);margin-top:8px">● Always on · 1 pending</div>
+              </div>
+              <div class="action-card" onclick="window.open('loi-generator.html','_blank')" style="border-color:rgba(34,197,94,.25)">
+                <div class="ac-icon">📄</div>
+                <div class="ac-title">LOI Generator</div>
+                <div class="ac-desc">Instant LOI draft from agreed terms — blockchain verified.</div>
+                <div class="ac-cost bg" style="border:1px solid rgba(34,197,94,.25);margin-top:8px">● Always on · 3 this week</div>
+              </div>
+              <div class="action-card" onclick="openPOModal()" style="border-color:rgba(232,169,74,.25)">
+                <div class="ac-icon">🧾</div>
+                <div class="ac-title">PO Generator</div>
+                <div class="ac-desc">Generates purchase orders directly from signed LOIs.</div>
+                <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.25);margin-top:8px">● Always on · 2 POs sent</div>
+              </div>
+              <div class="action-card" onclick="alert('Logistics dashboard coming soon…')" style="border-color:rgba(91,95,239,.2)">
+                <div class="ac-icon">🚢</div>
+                <div class="ac-title">LogisticsAI</div>
+                <div class="ac-desc">Tracks shipments, optimises routes, monitors port delays.</div>
+                <div class="ac-cost bt" style="border:1px solid rgba(45,212,191,.25);margin-top:8px">● Running · 6 tracked</div>
+              </div>
+              <div class="action-card" onclick="alert('HS lookup coming soon…')" style="border-color:rgba(139,143,248,.2)">
+                <div class="ac-icon">🌿</div>
+                <div class="ac-title">CustomsAI</div>
+                <div class="ac-desc">HS code lookup, duty calc, import permits across 6 countries.</div>
+                <div class="ac-cost bv" style="border:1px solid rgba(91,95,239,.25);margin-top:8px">● Always on · $14.2K saved</div>
               </div>
             </div>
             <!-- CONNECT AGENT BANNER -->
@@ -1656,6 +1646,53 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <!-- PRODUCTS -->
+          <div id="view-products" class="view">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
+              <div>
+                <div style="font-size:15px;font-weight:600;color:var(--white)">📦 Product Catalog</div>
+                <div style="font-size:13px;color:var(--muted)" id="prod-count-label">72 products · 9 sectors · MENA &amp; global supply chain</div>
+              </div>
+              <div style="display:flex;gap:8px;align-items:center">
+                <input class="inp" id="prod-search" placeholder="Search name, origin, cert..." oninput="renderCatalog()" style="width:240px;font-size:13px;padding:6px 10px"/>
+                <button class="btn btn-sm btn-p" onclick="window.open('smb-order.html','_blank')">🤖 New RFQ →</button>
+              </div>
+            </div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px">
+<button class="btn btn-xs" onclick="catalogSetSector('all',this)" style="border-color:var(--indigo);color:var(--violet)">All (72)</button>
+    <button class="btn btn-xs" onclick="catalogSetSector('Metals',this)">🔩 Metals (6)</button>
+    <button class="btn btn-xs" onclick="catalogSetSector('Building',this)">🏗️ Building (5)</button>
+    <button class="btn btn-xs" onclick="catalogSetSector('Building Materials',this)">🧱 B. Materials (13)</button>
+    <button class="btn btn-xs" onclick="catalogSetSector('Energy',this)">⚡ Energy (3)</button>
+    <button class="btn btn-xs" onclick="catalogSetSector('Agriculture',this)">🌾 Agriculture (5)</button>
+    <button class="btn btn-xs" onclick="catalogSetSector('Chemicals',this)">🧪 Chemicals (6)</button>
+    <button class="btn btn-xs" onclick="catalogSetSector('Cement & Clinker',this)">🏛️ Cement (7)</button>
+    <button class="btn btn-xs" onclick="catalogSetSector('Critical Minerals',this)">⛏️ Minerals (9)</button>
+    <button class="btn btn-xs" onclick="catalogSetSector('Petrochemicals',this)">🛢️ Petrochem (18)</button>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width:240px">Product</th>
+                    <th>Sector</th>
+                    <th>Price / Unit</th>
+                    <th>Origin</th>
+                    <th>Incoterm</th>
+                    <th>MOQ</th>
+                    <th>Min Deal</th>
+                    <th>Lead</th>
+                    <th>Payment</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="prod-tbody">
+                  <tr><td colspan="10" style="text-align:center;padding:32px;color:var(--muted)">Loading catalog…</td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -3286,6 +3323,7 @@
           "📊 Exchange",
           "Live commodity market · order book · negotiate",
         ],
+        products: ["📦 Products", "72 products · 9 sectors · MENA &amp; global supply chain"],
         prices: ["Price Discovery", "Compare verified suppliers · live prices"],
         negotiate: [
           "Start Negotiation",
@@ -3379,6 +3417,7 @@
         var t = TITLES[v] || [v, ""];
         document.getElementById("tb-title").textContent = t[0];
         document.getElementById("tb-sub").textContent = t[1];
+        if (v === 'products') setTimeout(renderCatalog, 0);
       }
 
       function renderProducts(filter, sector) {
@@ -4353,6 +4392,68 @@
           '- Confirm import licence requirements for ' + d.country + '\n' +
           '- Ensure all documents match LOI ref ' + d.ref + ' exactly';
       }
+      // ── PRODUCT CATALOG ──────────────────────────────────────────────────────────
+      var CATALOG=[{"ref":"REF-MET-001","sku":"STL-12","name":"Steel Rebar G60 12mm","sector":"Metals","emoji":"🔩","unit":"MT","price":2840,"origin":"UAE/Turkey","incoterm":"FOB","moq":10,"min_deal":50000,"certs":"ISO 3834, CE, ASTM A615","lead":7,"payment":"LC at sight"},{"ref":"REF-MET-001","sku":"STL-HRC","name":"Steel HR Coil SS400","sector":"Metals","emoji":"🔩","unit":"MT","price":3100,"origin":"UAE/Turkey","incoterm":"FOB","moq":20,"min_deal":80000,"certs":"ISO 3834, JIS G3101","lead":10,"payment":"LC at sight"},{"ref":"REF-MET-001","sku":"STL-CRC","name":"Steel CR Coil DC01","sector":"Metals","emoji":"🔩","unit":"MT","price":3400,"origin":"Germany","incoterm":"FOB","moq":20,"min_deal":80000,"certs":"EN 10130, ISO 3834","lead":12,"payment":"LC 30 days"},{"ref":"REF-MET-002","sku":"ALU-6061","name":"Aluminum 6061-T6","sector":"Metals","emoji":"🔩","unit":"MT","price":9200,"origin":"UAE/China","incoterm":"FOB","moq":5,"min_deal":50000,"certs":"CE, REACH, AMS 2770","lead":8,"payment":"TT in advance"},{"ref":"REF-MET-002","sku":"ALU-PRF","name":"Aluminum Profiles","sector":"Metals","emoji":"🔩","unit":"m","price":38,"origin":"UAE/China","incoterm":"FOB","moq":500,"min_deal":20000,"certs":"CE, REACH","lead":8,"payment":"TT in advance"},{"ref":"REF-MET-003","sku":"CPR-ETP","name":"Copper ETP Rod 8mm","sector":"Metals","emoji":"🔩","unit":"MT","price":9800,"origin":"Chile/UAE","incoterm":"CIF","moq":5,"min_deal":50000,"certs":"ASTM B187, EN 13599","lead":10,"payment":"LC at sight"},{"ref":"REF-BLD-001","sku":"BLK-200","name":"Concrete Block 20cm","sector":"Building","emoji":"🏗️","unit":"Unit","price":4.8,"origin":"UAE","incoterm":"DAP","moq":1000,"min_deal":5000,"certs":"ISO 9001, ASTM C90","lead":3,"payment":"TT in advance"},{"ref":"REF-BLD-001","sku":"CNC-B25","name":"Ready-Mix Concrete B25","sector":"Building","emoji":"🏗️","unit":"m³","price":380,"origin":"UAE","incoterm":"DAP","moq":10,"min_deal":5000,"certs":"ISO 9001, BS 8500","lead":2,"payment":"TT in advance"},{"ref":"REF-BLD-002","sku":"TLE-6060","name":"Porcelain Tile 60×60cm","sector":"Building","emoji":"🏗️","unit":"m²","price":62,"origin":"Italy/Spain","incoterm":"CIF","moq":100,"min_deal":5000,"certs":"ISO 9001, CE","lead":5,"payment":"LC 60 days"},{"ref":"REF-BLD-003","sku":"PVC-110","name":"PVC Pipe 110mm SDR34","sector":"Building","emoji":"🏗️","unit":"m","price":28,"origin":"UAE/Egypt","incoterm":"DAP","moq":500,"min_deal":5000,"certs":"CE, ISO 4422","lead":4,"payment":"TT in advance"},{"ref":"REF-BLD-004","sku":"STL-STR","name":"Structural Steel H-Beam","sector":"Building","emoji":"🏗️","unit":"MT","price":3200,"origin":"Turkey","incoterm":"FOB","moq":10,"min_deal":50000,"certs":"EN 10034, ISO 9001","lead":8,"payment":"LC at sight"},{"ref":"REF-ENE-001","sku":"DSL-B2","name":"Industrial Diesel B2","sector":"Energy","emoji":"⚡","unit":"Liter","price":4.92,"origin":"UAE","incoterm":"DAP","moq":5000,"min_deal":25000,"certs":"ISO 14001, EN 590","lead":2,"payment":"TT in advance"},{"ref":"REF-ENE-001","sku":"DSL-B5","name":"Biodiesel B5","sector":"Energy","emoji":"⚡","unit":"Liter","price":5.15,"origin":"UAE","incoterm":"DAP","moq":5000,"min_deal":25000,"certs":"ISO 14001, EN 14214","lead":3,"payment":"TT in advance"},{"ref":"REF-ENE-002","sku":"LFO-380","name":"Fuel Oil 380 CST","sector":"Energy","emoji":"⚡","unit":"MT","price":510,"origin":"UAE","incoterm":"FOB","moq":100,"min_deal":50000,"certs":"ISO 8217","lead":5,"payment":"CAD"},{"ref":"REF-AGR-001","sku":"WHT-HRD","name":"Hard Wheat 14% Protein","sector":"Agriculture","emoji":"🌾","unit":"MT","price":1120,"origin":"Ukraine","incoterm":"CIF","moq":50,"min_deal":50000,"certs":"ISO 22000, HACCP","lead":14,"payment":"LC at sight"},{"ref":"REF-AGR-001","sku":"WHT-SFT","name":"Soft Wheat 11% Protein","sector":"Agriculture","emoji":"🌾","unit":"MT","price":1050,"origin":"France","incoterm":"CIF","moq":50,"min_deal":50000,"certs":"ISO 22000, HACCP","lead":14,"payment":"LC 30 days"},{"ref":"REF-AGR-001","sku":"CRN-YLW","name":"Yellow Corn No.2","sector":"Agriculture","emoji":"🌾","unit":"MT","price":980,"origin":"Brazil","incoterm":"CIF","moq":50,"min_deal":50000,"certs":"ISO 22000, HACCP, Non-GMO","lead":14,"payment":"LC at sight"},{"ref":"REF-AGR-002","sku":"SOY-GMO","name":"Soybean GMO 48% Protein","sector":"Agriculture","emoji":"🌾","unit":"MT","price":1200,"origin":"Brazil","incoterm":"CIF","moq":50,"min_deal":50000,"certs":"ISO 22000","lead":14,"payment":"LC at sight"},{"ref":"REF-AGR-003","sku":"SGR-RAW","name":"Raw Cane Sugar VHP","sector":"Agriculture","emoji":"🌾","unit":"MT","price":560,"origin":"Brazil","incoterm":"CIF","moq":50,"min_deal":25000,"certs":"ISO 22000, Bonsucro","lead":21,"payment":"LC 60 days"},{"ref":"REF-CHM-001","sku":"H2SO4","name":"Sulfuric Acid 98%","sector":"Chemicals","emoji":"🧪","unit":"MT","price":580,"origin":"UAE/Germany","incoterm":"DAP","moq":5,"min_deal":5000,"certs":"REACH, ISO 9001","lead":7,"payment":"LC at sight"},{"ref":"REF-CHM-001","sku":"NaOH","name":"Caustic Soda 50% Liquid","sector":"Chemicals","emoji":"🧪","unit":"MT","price":420,"origin":"UAE/Germany","incoterm":"DAP","moq":5,"min_deal":5000,"certs":"REACH, ISO 9001","lead":7,"payment":"LC at sight"},{"ref":"REF-CHM-002","sku":"UREA","name":"Urea 46% Prilled","sector":"Chemicals","emoji":"🧪","unit":"MT","price":450,"origin":"UAE/Egypt","incoterm":"FOB","moq":50,"min_deal":25000,"certs":"ISO 9001","lead":14,"payment":"LC at sight"},{"ref":"REF-CHM-002","sku":"DAP-F","name":"DAP Fertilizer 18-46-0","sector":"Chemicals","emoji":"🧪","unit":"MT","price":620,"origin":"Morocco/UAE","incoterm":"FOB","moq":50,"min_deal":25000,"certs":"ISO 9001","lead":14,"payment":"LC 30 days"},{"ref":"REF-CHM-003","sku":"PP-GRN","name":"PP Granules Homopolymer","sector":"Chemicals","emoji":"🧪","unit":"MT","price":1280,"origin":"UAE/Saudi","incoterm":"CIF","moq":20,"min_deal":20000,"certs":"REACH, RoHS","lead":10,"payment":"TT in advance"},{"ref":"REF-CHM-003","sku":"HDPE-BLW","name":"HDPE Blow Grade","sector":"Chemicals","emoji":"🧪","unit":"MT","price":1220,"origin":"UAE/Saudi","incoterm":"CIF","moq":20,"min_deal":20000,"certs":"REACH, RoHS","lead":10,"payment":"TT in advance"},{"ref":"REF-CMT-001","sku":"CLK-KSA","name":"Clinker FOB Yanbu","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":62,"origin":"Saudi Arabia","incoterm":"FOB","moq":5000,"min_deal":310000,"certs":"ISO 9001, ASTM C150","lead":6,"payment":"LC at sight"},{"ref":"REF-CMT-001","sku":"CLK-EGY","name":"Clinker FOB Alexandria","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":56,"origin":"Egypt","incoterm":"FOB","moq":3000,"min_deal":168000,"certs":"ISO 9001, ASTM C150","lead":3,"payment":"LC at sight"},{"ref":"REF-CMT-001","sku":"CLK-ALG","name":"Clinker FOB Oran","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":54,"origin":"Algeria","incoterm":"FOB","moq":5000,"min_deal":270000,"certs":"ISO 9001","lead":12,"payment":"LC at sight"},{"ref":"REF-CMT-002","sku":"OPC-KSA","name":"OPC Cement 42.5 Saudi","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":77,"origin":"Saudi Arabia","incoterm":"FOB","moq":3000,"min_deal":231000,"certs":"EN 197-1, ASTM C150","lead":5,"payment":"LC at sight"},{"ref":"REF-CMT-002","sku":"OPC-EGY","name":"OPC Cement 42.5 Egypt","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":70,"origin":"Egypt","incoterm":"FOB","moq":3000,"min_deal":210000,"certs":"EN 197-1, ASTM C150","lead":3,"payment":"LC at sight"},{"ref":"REF-CMT-003","sku":"WHT-KSA","name":"White Cement 52.5 Saudi","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":155,"origin":"Saudi Arabia","incoterm":"FOB","moq":500,"min_deal":77500,"certs":"EN 197-1, ASTM C150","lead":4,"payment":"TT in advance"},{"ref":"REF-CMT-003","sku":"WHT-EGY","name":"White Cement 52.5 Egypt","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":140,"origin":"Egypt","incoterm":"FOB","moq":500,"min_deal":70000,"certs":"EN 197-1","lead":5,"payment":"TT in advance"},{"ref":"REF-BLD-010","sku":"RBR-TUR","name":"Steel Rebar G60 Turkey","sector":"Building Materials","emoji":"🧱","unit":"MT","price":558,"origin":"Turkey","incoterm":"FOB","moq":500,"min_deal":279000,"certs":"ASTM A615, EN 10080","lead":5,"payment":"LC at sight"},{"ref":"REF-BLD-011","sku":"WRD-EGY","name":"Wire Rod SAE1008 Egypt","sector":"Building Materials","emoji":"🧱","unit":"MT","price":542,"origin":"Egypt","incoterm":"FOB","moq":500,"min_deal":271000,"certs":"ASTM A510","lead":7,"payment":"LC at sight"},{"ref":"REF-BLD-012","sku":"ALU-BLT","name":"Aluminum Billet 6061 UAE","sector":"Building Materials","emoji":"🧱","unit":"MT","price":2450,"origin":"UAE","incoterm":"FOB","moq":20,"min_deal":49000,"certs":"EN AW-6061, ASTM B221","lead":6,"payment":"TT advance / LC"},{"ref":"REF-BLD-013","sku":"GYP-EGY","name":"Gypsum Board 12.5mm Egypt","sector":"Building Materials","emoji":"🧱","unit":"m²","price":3.6,"origin":"Egypt","incoterm":"FOB","moq":20000,"min_deal":72000,"certs":"ASTM C36, EN 520","lead":3,"payment":"LC at sight"},{"ref":"REF-BLD-014","sku":"GYP-KSA","name":"Gypsum Board 12.5mm Saudi","sector":"Building Materials","emoji":"🧱","unit":"m²","price":3.8,"origin":"Saudi Arabia","incoterm":"FOB","moq":20000,"min_deal":76000,"certs":"ASTM C36, SASO","lead":4,"payment":"LC at sight"},{"ref":"REF-BLD-015","sku":"GLS-KSA","name":"Float Glass 6mm Saudi","sector":"Building Materials","emoji":"🧱","unit":"m²","price":10.5,"origin":"Saudi Arabia","incoterm":"CIF","moq":500,"min_deal":5250,"certs":"EN 572, ASTM C1036","lead":5,"payment":"LC 30 days"},{"ref":"REF-BLD-016","sku":"TLE-TUR","name":"Porcelain Tile 60×60 Turkey","sector":"Building Materials","emoji":"🧱","unit":"m²","price":7.5,"origin":"Turkey","incoterm":"FOB","moq":500,"min_deal":3750,"certs":"ISO 13006, CE","lead":6,"payment":"LC 60 days"},{"ref":"REF-BLD-017","sku":"MRB-EGY","name":"Marble Slab Galala Cream","sector":"Building Materials","emoji":"🧱","unit":"m²","price":26,"origin":"Egypt","incoterm":"FOB","moq":50,"min_deal":1300,"certs":"ISO 1341","lead":7,"payment":"TT advance / LC"},{"ref":"REF-BLD-018","sku":"MRB-TUR","name":"Marble Slab Afyon White","sector":"Building Materials","emoji":"🧱","unit":"m²","price":42,"origin":"Turkey","incoterm":"FOB","moq":50,"min_deal":2100,"certs":"ISO 1341","lead":8,"payment":"TT advance / LC"},{"ref":"REF-BLD-019","sku":"RCW-TUR","name":"Rock Wool Insulation 100kg/m³","sector":"Building Materials","emoji":"🧱","unit":"MT","price":360,"origin":"Turkey","incoterm":"FOB","moq":20,"min_deal":7200,"certs":"EN 13162, A1 non-combustible","lead":7,"payment":"LC at sight"},{"ref":"REF-BLD-020","sku":"AGG-ALG","name":"Aggregates Limestone 3/4\" Algeria","sector":"Building Materials","emoji":"🧱","unit":"MT","price":9,"origin":"Algeria","incoterm":"FOB","moq":5000,"min_deal":45000,"certs":"ASTM C33","lead":4,"payment":"TT in advance"},{"ref":"REF-BLD-021","sku":"HDPE-PP","name":"HDPE Pipe PE100 SDR11 Saudi","sector":"Building Materials","emoji":"🧱","unit":"m","price":2.8,"origin":"Saudi Arabia","incoterm":"FOB","moq":2000,"min_deal":5600,"certs":"ISO 4427, ASTM F714","lead":7,"payment":"LC at sight"},{"ref":"REF-BLD-022","sku":"CBL-UAE","name":"Copper Electrical Cable 16mm²","sector":"Building Materials","emoji":"🧱","unit":"m","price":5.8,"origin":"UAE","incoterm":"DAP","moq":500,"min_deal":2900,"certs":"IEC 60228, BS 7671","lead":6,"payment":"LC at sight"},{"ref":"REF-MIN-001","sku":"PHO-KSA","name":"Phosphate Rock BPL 68% Saudi","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":95,"origin":"Saudi Arabia","incoterm":"FOB","moq":10000,"min_deal":950000,"certs":"ISO 9001, HACCP","lead":10,"payment":"LC at sight"},{"ref":"REF-MIN-001","sku":"PHO-EGY","name":"Phosphate Rock BPL 70% Egypt","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":90,"origin":"Egypt","incoterm":"FOB","moq":10000,"min_deal":900000,"certs":"ISO 9001","lead":12,"payment":"LC at sight"},{"ref":"REF-MIN-002","sku":"IRN-ALG","name":"Iron Ore Fe 58% Algeria","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":98,"origin":"Algeria","incoterm":"FOB","moq":25000,"min_deal":2450000,"certs":"ISO 9001, EN","lead":10,"payment":"LC at sight"},{"ref":"REF-MIN-003","sku":"CPR-KSA","name":"Copper Concentrate 25% Saudi","sector":"Critical Minerals","emoji":"⛏️","unit":"DMT","price":1350,"origin":"Saudi Arabia","incoterm":"CIF","moq":5000,"min_deal":6750000,"certs":"ASTM, LME spec","lead":12,"payment":"LC at sight"},{"ref":"REF-MIN-004","sku":"SIL-EGY","name":"Silica Sand SiO₂ 99.5% Egypt","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":58,"origin":"Egypt","incoterm":"FOB","moq":5000,"min_deal":290000,"certs":"REACH, ISO 9001","lead":10,"payment":"LC at sight"},{"ref":"REF-MIN-005","sku":"KAO-EGY","name":"Kaolin Brightness 85 ISO Egypt","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":72,"origin":"Egypt","incoterm":"FOB","moq":1000,"min_deal":72000,"certs":"REACH, EN","lead":9,"payment":"LC at sight"},{"ref":"REF-MIN-006","sku":"GLD-KSA","name":"Gold Doré 75% Au Saudi","sector":"Critical Minerals","emoji":"⛏️","unit":"oz","price":3200,"origin":"Saudi Arabia","incoterm":"TT advance","moq":100,"min_deal":320000,"certs":"LBMA, ISO 9001","lead":3,"payment":"TT in advance"},{"ref":"REF-MIN-007","sku":"ZNC-ALG","name":"Zinc Concentrate 50% Algeria","sector":"Critical Minerals","emoji":"⛏️","unit":"DMT","price":1650,"origin":"Algeria","incoterm":"CIF","moq":5000,"min_deal":8250000,"certs":"LME spec","lead":12,"payment":"LC at sight"},{"ref":"REF-MIN-008","sku":"BAR-ALG","name":"Barite API Grade SG 4.2 Algeria","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":155,"origin":"Algeria","incoterm":"FOB","moq":2000,"min_deal":310000,"certs":"API 13A","lead":16,"payment":"LC at sight"},{"ref":"REF-PET-001","sku":"PP-HOM","name":"PP Homopolymer Raffia Grade","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":920,"origin":"Saudi Arabia","incoterm":"FOB","moq":500,"min_deal":460000,"certs":"REACH, RoHS","lead":7,"payment":"LC at sight / TT"},{"ref":"REF-PET-002","sku":"PP-COP","name":"PP Copolymer Impact Grade","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":970,"origin":"UAE","incoterm":"FOB","moq":100,"min_deal":97000,"certs":"REACH","lead":8,"payment":"LC at sight"},{"ref":"REF-PET-003","sku":"HDPE-PG","name":"HDPE Pipe Grade PE100","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":920,"origin":"Saudi Arabia","incoterm":"FOB","moq":500,"min_deal":460000,"certs":"REACH, ISO 4427","lead":8,"payment":"LC at sight"},{"ref":"REF-PET-004","sku":"HDPE-BL","name":"HDPE Blow Grade","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":900,"origin":"Saudi Arabia","incoterm":"FOB","moq":500,"min_deal":450000,"certs":"REACH, RoHS","lead":7,"payment":"LC at sight"},{"ref":"REF-PET-005","sku":"LDPE-FG","name":"LDPE Film Grade Qatar","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":900,"origin":"Qatar","incoterm":"FOB","moq":200,"min_deal":180000,"certs":"REACH","lead":9,"payment":"LC at sight"},{"ref":"REF-PET-006","sku":"LLDPE4","name":"LLDPE C4 Butene Borouge","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":920,"origin":"UAE","incoterm":"FOB","moq":200,"min_deal":184000,"certs":"REACH","lead":12,"payment":"LC at sight"},{"ref":"REF-PET-007","sku":"PVCR-K","name":"PVC Resin S-PVC K67","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":820,"origin":"Saudi Arabia","incoterm":"FOB","moq":200,"min_deal":164000,"certs":"REACH, ISO","lead":8,"payment":"LC at sight"},{"ref":"REF-PET-010","sku":"UREA-F","name":"Urea 46% Granular Fertiglobe","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":408,"origin":"UAE","incoterm":"FOB","moq":5000,"min_deal":2040000,"certs":"ISO 9001","lead":9,"payment":"LC at sight"},{"ref":"REF-PET-011","sku":"AMN-FG","name":"Anhydrous Ammonia Fertiglobe","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":345,"origin":"UAE","incoterm":"FOB","moq":5000,"min_deal":1725000,"certs":"ISO 9001","lead":8,"payment":"LC at sight"},{"ref":"REF-PET-012","sku":"DAP-MA","name":"DAP Fertilizer 18-46-0 Ma'aden","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":610,"origin":"Saudi Arabia","incoterm":"FOB","moq":5000,"min_deal":3050000,"certs":"ISO 9001","lead":9,"payment":"LC at sight / 30d"},{"ref":"REF-PET-020","sku":"MET-KS","name":"Methanol IMPCA Grade Saudi","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":310,"origin":"Saudi Arabia","incoterm":"FOB","moq":5000,"min_deal":1550000,"certs":"REACH, IMPCA spec","lead":14,"payment":"LC at sight"},{"ref":"REF-PET-021","sku":"MEG-SA","name":"MEG Fiber Grade ≥99.9%","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":520,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":520000,"certs":"REACH","lead":10,"payment":"LC at sight"},{"ref":"REF-PET-022","sku":"BNZ-SA","name":"Benzene Petrochemical ≥99.9%","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":730,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":730000,"certs":"REACH, ADR","lead":12,"payment":"LC at sight"},{"ref":"REF-PET-023","sku":"PX-SAU","name":"Paraxylene Fiber Grade ≥99.7%","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":870,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":870000,"certs":"REACH","lead":14,"payment":"LC at sight"},{"ref":"REF-PET-024","sku":"CBN33","name":"Carbon Black N330 HAF Grade","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":870,"origin":"Saudi Arabia","incoterm":"FOB","moq":100,"min_deal":87000,"certs":"ASTM D1765","lead":8,"payment":"LC at sight"},{"ref":"REF-PET-030","sku":"BIT-60","name":"Bitumen 60/70 Pen Saudi","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":355,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":355000,"certs":"ASTM D946, EN 12591","lead":6,"payment":"LC at sight"},{"ref":"REF-PET-031","sku":"BIT-UA","name":"Bitumen 80/100 Pen UAE","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":365,"origin":"UAE","incoterm":"FOB","moq":1000,"min_deal":365000,"certs":"EN 12591","lead":14,"payment":"LC at sight"},{"ref":"REF-PET-032","sku":"BOG2","name":"Base Oil Group II SN150","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":720,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":720000,"certs":"API Group II","lead":10,"payment":"LC 30 days"}];
+
+      var catalogSector = 'all';
+
+      function renderCatalog() {
+        var q = ((document.getElementById('prod-search') || {}).value || '').toLowerCase();
+        var filtered = CATALOG.filter(function(p) {
+          return (catalogSector === 'all' || p.sector === catalogSector) &&
+                 (!q || p.name.toLowerCase().indexOf(q) >= 0 ||
+                  p.ref.toLowerCase().indexOf(q) >= 0 ||
+                  (p.origin || '').toLowerCase().indexOf(q) >= 0 ||
+                  (p.certs || '').toLowerCase().indexOf(q) >= 0 ||
+                  p.sector.toLowerCase().indexOf(q) >= 0);
+        });
+        var lbl = document.getElementById('prod-count-label');
+        if (lbl) lbl.textContent = filtered.length + ' of 72 products shown';
+        var tbody = document.getElementById('prod-tbody');
+        if (!tbody) return;
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--muted)">No products match your search</td></tr>';
+          return;
+        }
+        var sColors = {
+          'Metals':'rgba(91,95,239,.08)','Building':'rgba(45,212,191,.08)',
+          'Building Materials':'rgba(45,212,191,.06)','Energy':'rgba(232,169,74,.08)',
+          'Agriculture':'rgba(34,197,94,.08)','Chemicals':'rgba(139,143,248,.08)',
+          'Cement & Clinker':'rgba(232,169,74,.06)','Critical Minerals':'rgba(45,212,191,.08)',
+          'Petrochemicals':'rgba(91,95,239,.06)'
+        };
+        tbody.innerHTML = filtered.map(function(p) {
+          var pr = typeof p.price === 'number' ? '$' + p.price.toLocaleString() : String(p.price);
+          var md = p.min_deal >= 1000000 ? '$' + (p.min_deal/1000000).toFixed(1) + 'M'
+                 : p.min_deal >= 1000 ? '$' + Math.round(p.min_deal/1000) + 'K'
+                 : p.min_deal ? '$' + p.min_deal : '—';
+          var sc = sColors[p.sector] || 'rgba(82,82,110,.08)';
+          return '<tr><td style="min-width:200px"><div style="font-size:13px;font-weight:600;color:var(--white)">' + p.emoji + ' ' + p.name + '</div><div style="font-size:11px;color:var(--indigo);margin-top:2px">' + p.ref + ' · ' + p.sku + '</div></td>' +
+            '<td><span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:2px;background:' + sc + ';border:1px solid rgba(91,95,239,.15);color:var(--text);white-space:nowrap">' + p.sector + '</span></td>' +
+            '<td style="font-weight:600;color:var(--white);white-space:nowrap">' + pr + '<span style="color:var(--muted);font-size:11px">/' + p.unit + '</span></td>' +
+            '<td style="color:var(--muted);font-size:13px">' + (p.origin || '—') + '</td>' +
+            '<td><span class="badge bm" style="font-size:11px">' + (p.incoterm || '—') + '</span></td>' +
+            '<td style="color:var(--muted);font-size:13px;white-space:nowrap">' + (p.moq || 1).toLocaleString() + ' ' + p.unit + '</td>' +
+            '<td style="color:var(--muted);font-size:13px">' + md + '</td>' +
+            '<td style="color:var(--muted);font-size:13px">' + (p.lead || '—') + 'd</td>' +
+            '<td style="color:var(--muted);font-size:11px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (p.payment || '—') + '</td>' +
+            '<td><button class="btn btn-xs btn-p" onclick="catalogRFQ(' + JSON.stringify(p.name) + ',' + JSON.stringify(p.ref) + ')">RFQ →</button></td></tr>';
+        }).join('');
+      }
+
+      function catalogSetSector(sector, btn) {
+        catalogSector = sector;
+        var prods = document.getElementById('view-products');
+        if (prods) prods.querySelectorAll('.btn').forEach(function(b) { b.style.borderColor = ''; b.style.color = ''; });
+        if (btn) { btn.style.borderColor = 'var(--indigo)'; btn.style.color = 'var(--violet)'; }
+        renderCatalog();
+      }
+
+      function catalogRFQ(name, ref) {
+        var url = 'smb-order.html' + (name ? '?product=' + encodeURIComponent(name) + '&ref=' + encodeURIComponent(ref || '') : '');
+        window.open(url, '_blank');
+      }
+
     </script>
 
 <!-- PO GENERATOR MODAL -->
