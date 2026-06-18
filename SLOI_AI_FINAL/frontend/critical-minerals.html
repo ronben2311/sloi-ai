@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="description" content="Source critical minerals for energy transition projects through SLOI AI. AI-powered procurement of lithium, cobalt, copper, and rare earths across MENA."/>
 <title>Critical Minerals — Energy Transition | SLOI AI</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{
   --bg:#06080f;--surface:#0c0f1c;--surface2:#111422;
   --border:#181c2e;--border2:#20253a;
   --indigo:#5b5fef;--violet:#8b8ff8;
-  --muted:#4e5270;--text:#cdd0f0;--white:#eceef8;
+  --muted:#8888a8;--text:#cdd0f0;--white:#eceef8;
   --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
   --emerald:#34d399;--sky:#38bdf8;--amber:#fbbf24;
   --copper:#b87333;--copper-l:#d4956a;
   --phosphor:#a3e635;--iron:#94a3b8;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--text);background:var(--bg)}
+html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg)}
 
 /* animated particle grid */
 body::before{content:'';position:fixed;inset:0;z-index:0;
@@ -31,13 +31,18 @@ body::before{content:'';position:fixed;inset:0;z-index:0;
   pointer-events:none}
 
 /* NAV */
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(6,8,15,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:56px;background:rgba(6,8,15,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);font-family:'IBM Plex Mono',monospace;}
 .logo{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
 .logo em{font-style:italic;color:var(--indigo)}
 .logo-tag{font-size:11px;color:var(--muted);margin-left:7px;font-family:'IBM Plex Mono',monospace}
 .nav-links{display:flex;gap:24px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}.nav-links a:hover{color:var(--white)}
 .btn-cta{background:var(--emerald);color:#06080f;padding:8px 18px;border-radius:4px;font-size:13px;font-weight:700;text-decoration:none;font-family:'IBM Plex Mono',monospace}
+.nav-toggle{display:none;background:none;border:1px solid var(--border2);color:var(--text);padding:5px 10px;border-radius:4px;cursor:pointer;font-size:18px;line-height:1;font-family:'IBM Plex Mono',monospace}
+.nav-mobile{display:none;position:fixed;top:56px;left:0;right:0;background:rgba(6,8,15,.98);border-bottom:1px solid var(--border);flex-direction:column;padding:16px 20px;z-index:99;backdrop-filter:blur(20px)}
+.nav-mobile a{color:var(--text);text-decoration:none;font-size:14px;padding:11px 0;border-bottom:1px solid var(--border);display:block}
+.nav-mobile a.nav-mobile-cta{background:var(--emerald);color:#06080f;padding:11px 16px;border-radius:4px;font-weight:700;text-align:center;border-bottom:none;margin-top:6px}
+.nav-mobile.open{display:flex;flex-direction:column}
 
 .wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:72px 24px 80px}
 
@@ -184,6 +189,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   .stat-bar,.country-strip,.mineral-grid,.why-grid,.crm-grid,.mc-specs{grid-template-columns:1fr}
   nav{padding:0 16px}.wrap{padding:48px 16px 60px}
   h1{font-size:clamp(34px,10vw,52px)}
+  .nav-links,.btn-cta{display:none}.nav-toggle{display:block}
 }
 </style>
 <link rel="stylesheet" href="/main.css"/>
@@ -191,7 +197,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <body>
 
 <nav>
-  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
+  <a href="sloiai-home.html" class="logo">SLOI <em>AI</em><span class="logo-tag">Smart negotiation · LOI generation</span></a>
   <div class="nav-links">
     <a href="about.html">About</a>
     <a href="faq.html">FAQ</a>
@@ -200,7 +206,16 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <a href="login.html">Platform</a>
   </div>
   <a href="smb-order.html" class="btn-cta">Request LOI →</a>
+  <button class="nav-toggle" id="nav-toggle" onclick="toggleNav()">☰</button>
 </nav>
+<div class="nav-mobile" id="nav-mobile">
+  <a href="about.html">About</a>
+  <a href="faq.html">FAQ</a>
+  <a href="docs.html">Docs</a>
+  <a href="broker-onboarding.html">Become a Trader</a>
+  <a href="login.html">Platform</a>
+  <a href="smb-order.html" class="nav-mobile-cta">Request LOI →</a>
+</div>
 
 <div class="wrap">
 
@@ -881,9 +896,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 </div>
 
 <footer>
-  <a href="m2m-homepage.html" style="font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white);text-decoration:none">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
+  <a href="sloiai-home.html" style="font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white);text-decoration:none">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
   <div class="footer-links">
-    <a href="m2m-homepage.html">Home</a>
+    <a href="sloiai-home.html">Home</a>
     <a href="imec.html">IMEC</a>
     <a href="cement-clinker.html">Cement</a>
     <a href="investor.html">Investors</a>
@@ -893,5 +908,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <div style="font-size:12px;color:var(--muted)">© 2026 SLOI AI Ltd. · Prices indicative · Subject to market conditions</div>
 </footer>
 
+<script>
+function toggleNav(){var m=document.getElementById('nav-mobile'),t=document.getElementById('nav-toggle');m.classList.toggle('open');t.textContent=m.classList.contains('open')?'✕':'☰';}
+</script>
 </body>
 </html>

@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="description" content="SLOI AI LinkedIn authentication. Secure sign-in to the commodity trading platform using your professional LinkedIn identity."/>
 <title>Signing in — SLOI AI</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
-:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#52526e;--text:#d4d2f0;--white:#eeedf8;--green:#22c55e;--red:#ef4444;}
+:root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#8888a8;--text:#d4d2f0;--white:#eeedf8;--green:#22c55e;--red:#ef4444;}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--text);background:var(--bg)}
+html,body{height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
 .shell{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
 .logo{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;margin-bottom:36px;display:block;text-align:center}
@@ -50,7 +50,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear
 </head>
 <body>
 <div class="shell">
-  <a href="m2m-homepage.html" class="logo">SLOI <em>AI</em></a>
+  <a href="sloiai-home.html" class="logo">SLOI <em>AI</em></a>
 
   <!-- Loading state -->
   <div class="card" id="loading">
@@ -158,12 +158,12 @@ async function loginWithSession(session, role) {
   localStorage.setItem('sloi_user',          JSON.stringify(data.user));
 
   var portals = {
-    buyer:    'CommodEx_Platform.html',
-    trader:   'CommodEx_Broker.html',
-    boss:     'CommodEx_Admin.html',
+    buyer:    'sloiai-platform.html',
+    trader:   'sloiai-trader.html',
+    boss:     'sloiai-admin.html',
     supplier: 'CommodEx_Supplier.html',
   };
-  window.location.href = portals[data.role] || 'CommodEx_Platform.html';
+  window.location.href = portals[data.role] || 'sloiai-platform.html';
 }
 
 function showOnboarding(profile) {

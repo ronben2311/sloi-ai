@@ -5,20 +5,20 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <meta name="description" content="Supplier admin portal for SLOI AI commodity trading. Register, manage RFQs, and track deal activity across UAE, Egypt, KSA, and MENA markets."/>
 <title>SLOI AI — Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{
   --bg:#050509;--surface:#0c0c14;--surface2:#10101a;--surface3:#14141f;
   --border:#1a1a2a;--border2:#222234;
   --indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);
-  --muted:#52526e;--text:#c8c6e0;--white:#f0eff8;
+  --muted:#8888a8;--text:#c8c6e0;--white:#f0eff8;
   --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;--blue:#3b82f6;
   --green-dim:rgba(34,197,94,.1);--red-dim:rgba(239,68,68,.1);
   --gold-dim:rgba(232,169,74,.1);--teal-dim:rgba(45,212,191,.1);
   --sidebar:220px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text);background:var(--bg);overflow:hidden}
+html,body{height:100%;font-family:'Inter',system-ui,sans-serif;font-size:14px;color:var(--text);background:var(--bg);overflow:hidden}
 .shell{display:flex;height:100vh;overflow:hidden}
 .sidebar{width:var(--sidebar);flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
@@ -232,7 +232,6 @@ select.inp option{background:var(--surface)}
   <div class="sb-section">Revenue</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
   <button class="nav" onclick="show('credits',this)"><span class="nav-icon">⚡</span><span class="nav-label">Credits</span></button>
-  <button class="nav" onclick="show('invoice',this)"><span class="nav-icon">🧾</span><span class="nav-label">Invoice Generator</span></button>
   <button class="nav" onclick="show('traders',this)"><span class="nav-icon">👥</span><span class="nav-label">Traders</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
@@ -454,6 +453,22 @@ select.inp option{background:var(--surface)}
           <div style="padding:8px 12px;font-size:12px;color:var(--muted)">2 POs pending · <span style="color:var(--gold)">$102K</span></div>
           <div style="padding:0 8px 8px">
             <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="openPOModal()">🧾 Generate PO</button>
+          </div>
+        </div>
+
+        <!-- Invoice Generator -->
+        <div style="background:var(--surface);border:1px solid rgba(45,212,191,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
+          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+            <div style="width:26px;height:26px;border-radius:5px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🧾</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">Invoice Generator</div>
+              <div style="font-size:11px;color:var(--muted)">Invoice from signed PO</div>
+            </div>
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
+          </div>
+          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">3 invoices · <span style="color:var(--teal)">$384K total</span></div>
+          <div style="padding:0 8px 8px">
+            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="openInvoiceModal()">🧾 New invoice</button>
           </div>
         </div>
 
@@ -728,7 +743,7 @@ select.inp option{background:var(--surface)}
       <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🛃 CustomsAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">💳 TradeFinanceAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">🧾 PO Generator <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="show('invoice',null)">🧾 InvoiceGen <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="openInvoiceModal()">🧾 InvoiceGen <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px">⚖️ LegalContract</div>
     </div>
 
@@ -980,10 +995,10 @@ select.inp option{background:var(--surface)}
 
     </div>
 
-    <!-- STAGE 04: LEGAL -->
+    <!-- STAGE 04: LEGAL + BILLING -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <span style="background:rgba(168,85,247,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">04</span>
-      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">CLOSE — LEGAL &amp; CONTRACT</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">CLOSE — LEGAL, CONTRACT &amp; BILLING</span>
       <span style="flex:1;height:1px;background:var(--border)"></span>
     </div>
     <div style="background:var(--surface);border:1px solid rgba(168,85,247,.3);border-radius:8px;overflow:hidden;margin-bottom:18px">
@@ -1012,6 +1027,38 @@ select.inp option{background:var(--surface)}
         </div>
         <div style="font-size:13px;color:var(--muted);line-height:1.7">
           Go to <b style="color:var(--white)">Negotiations</b> → click <b style="color:var(--white)">📜 Contract</b> on any completed deal to generate &amp; send.
+        </div>
+      </div>
+    </div>
+
+    <!-- INVOICE GENERATOR AGENT -->
+    <div style="background:var(--surface);border:1px solid rgba(45,212,191,.3);border-radius:8px;overflow:hidden;margin-bottom:18px">
+      <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:34px;height:34px;border-radius:8px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🧾</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--white)">Invoice Generator</div>
+            <div style="font-size:13px;color:var(--muted)">Generates commercial invoices from signed POs · download PDF · send to buyer</div>
+          </div>
+        </div>
+        <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 10px;border-radius:10px;font-size:13px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Always on</span>
+      </div>
+      <div style="padding:12px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:center">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
+          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--teal)">3</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Invoices this week</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
+          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--white)">$384K</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Total invoiced</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
+          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--gold)">1</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Awaiting payment</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn btn-xs btn-g" onclick="openInvoiceModal()" style="width:100%;justify-content:center">🧾 New invoice from PO</button>
+          <button class="btn btn-xs" onclick="alert('Invoice history — showing all 3 invoices')" style="width:100%;justify-content:center">↓ Invoice history</button>
         </div>
       </div>
     </div>
@@ -1195,176 +1242,6 @@ select.inp option{background:var(--surface)}
     </div>
 
   </div>
-  <!-- INVOICE GENERATOR -->
-  <div id="view-invoice" class="view">
-
-    <!-- HEADER ROW -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-      <div>
-        <div style="font-size:15px;font-weight:600;color:var(--white)">🧾 Invoice Generator</div>
-        <div style="font-size:13px;color:var(--muted)">Select a signed PO · AI fills the invoice · send or download</div>
-      </div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-sm" onclick="invoiceReset()">↺ Reset</button>
-        <button class="btn btn-sm btn-p" onclick="invoiceDownload()">↓ Download PDF</button>
-        <button class="btn btn-sm btn-g" onclick="invoiceSend()">✉ Send to buyer</button>
-      </div>
-    </div>
-
-    <div class="g2" style="align-items:start">
-
-      <!-- LEFT: PO selector + fields -->
-      <div>
-        <div class="card" style="margin-bottom:12px">
-          <div class="card-title">// 1. SELECT SOURCE PO</div>
-          <div style="display:flex;flex-direction:column;gap:6px" id="inv-po-list">
-
-            <div class="inv-po-row" onclick="selectInvPO('PO-2026-001','Hard Wheat · 50 MT','Atlas Grain Trading','$1,120/MT','FOB','$56,000','SL-LOI-20260501-003',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid rgba(34,197,94,.35);border-radius:5px;cursor:pointer;transition:border-color .15s">
-              <div style="font-size:18px">📦</div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600;color:var(--white)">PO-2026-001 · Hard Wheat · 50 MT</div>
-                <div style="font-size:12px;color:var(--muted)">Atlas Grain Trading · $56,000 · Signed</div>
-              </div>
-              <span class="badge bg" style="font-size:12px">✓ Signed</span>
-            </div>
-
-            <div class="inv-po-row" onclick="selectInvPO('PO-2026-002','Aluminum 6061-T6 · 5 MT','Gulf Steel Industries','$9,200/MT','FOB','$46,000','SL-LOI-20260430-002',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;cursor:pointer;transition:border-color .15s">
-              <div style="font-size:18px">📦</div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600;color:var(--white)">PO-2026-002 · Aluminum 6061-T6 · 5 MT</div>
-                <div style="font-size:12px;color:var(--muted)">Gulf Steel Industries · $46,000 · Signed</div>
-              </div>
-              <span class="badge bg" style="font-size:12px">✓ Signed</span>
-            </div>
-
-            <div class="inv-po-row" onclick="selectInvPO('PO-2026-003','Steel Rebar G60 · 100 MT','EuroSteel GmbH','$2,820/MT','CIF','$282,000','SL-LOI-20260604-004',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;cursor:pointer;transition:border-color .15s">
-              <div style="font-size:18px">📦</div>
-              <div style="flex:1">
-                <div style="font-size:13px;font-weight:600;color:var(--white)">PO-2026-003 · Steel Rebar G60 · 100 MT</div>
-                <div style="font-size:12px;color:var(--muted)">EuroSteel GmbH · $282,000 · Pending</div>
-              </div>
-              <span class="badge ba" style="font-size:12px">⏳ Pending</span>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- INVOICE FIELDS -->
-        <div class="card" id="inv-fields-card" style="display:none">
-          <div class="card-title">// 2. INVOICE DETAILS</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-            <div><label class="flabel">Invoice Ref</label><input class="inp" id="inv-ref" readonly style="color:var(--indigo)"/></div>
-            <div><label class="flabel">Invoice Date</label><input class="inp" id="inv-date" type="date"/></div>
-            <div><label class="flabel">Due Date</label><input class="inp" id="inv-due" type="date"/></div>
-            <div><label class="flabel">Payment Terms</label>
-              <select class="inp" id="inv-terms">
-                <option>Net 30</option><option>Net 15</option><option>Net 60</option>
-                <option>50% upfront · 50% on delivery</option><option>LC at sight</option>
-              </select>
-            </div>
-            <div><label class="flabel">Seller (Issuer)</label><input class="inp" id="inv-seller" value="SLOI AI Trading LLC"/></div>
-            <div><label class="flabel">Buyer (Bill To)</label><input class="inp" id="inv-buyer"/></div>
-          </div>
-          <div style="margin-bottom:10px">
-            <label class="flabel">Bank / Payment details</label>
-            <textarea class="inp" id="inv-bank" rows="3" style="resize:vertical;line-height:1.6">IBAN: AE07 0331 2345 6789 0123 456
-Bank: Emirates NBD · Dubai, UAE
-SWIFT: EBILAEAD</textarea>
-          </div>
-          <div style="margin-bottom:10px">
-            <label class="flabel">Notes (optional)</label>
-            <textarea class="inp" id="inv-notes" rows="2" style="resize:vertical;line-height:1.6" placeholder="e.g. please reference invoice number on transfer…"></textarea>
-          </div>
-          <button class="btn btn-p btn-sm" onclick="invoiceGenerate()" style="width:100%;justify-content:center">🧾 Generate invoice preview →</button>
-        </div>
-      </div>
-
-      <!-- RIGHT: invoice preview -->
-      <div id="inv-preview-wrap" style="display:none">
-        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px">
-          Invoice preview
-          <span style="flex:1;height:1px;background:var(--border)"></span>
-          <span class="badge bg" style="font-size:12px" id="inv-status-badge">Draft</span>
-        </div>
-
-        <!-- Simulated invoice document -->
-        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;box-shadow:0 0 0 1px rgba(91,95,239,.15),0 20px 60px rgba(0,0,0,.7)">
-          <!-- doc header -->
-          <div style="background:linear-gradient(135deg,#14142a,#1a1a35);padding:18px 24px;display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:#fff;letter-spacing:-.02em">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
-            <div>
-              <div style="font-size:12px;color:#7b7ff8;text-align:right" id="inv-doc-ref">INV-—</div>
-              <div style="font-size:11px;color:#52526e;text-align:right" id="inv-doc-date">—</div>
-            </div>
-          </div>
-          <!-- title bar -->
-          <div style="background:#f0eff8;border-bottom:2px solid #e0deef;padding:10px 24px;text-align:center;font-size:14px;font-weight:700;color:#14142a;letter-spacing:.12em;text-transform:uppercase">COMMERCIAL INVOICE</div>
-          <!-- from / to -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid #e0deef">
-            <div style="padding:14px 20px;border-right:1px solid #e0deef">
-              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">FROM (Seller)</div>
-              <div style="font-size:13px;font-weight:600;color:#14142a" id="inv-doc-seller">—</div>
-              <div style="font-size:12px;color:#52526e;margin-top:3px">Dubai, UAE · TRN: 100-123-456</div>
-            </div>
-            <div style="padding:14px 20px">
-              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">BILL TO (Buyer)</div>
-              <div style="font-size:13px;font-weight:600;color:#14142a" id="inv-doc-buyer">—</div>
-            </div>
-          </div>
-          <!-- line items -->
-          <div style="padding:0">
-            <table style="font-size:12px">
-              <thead>
-                <tr style="background:#e8e6f8">
-                  <th style="padding:8px 16px;font-size:11px;color:#52526e;background:#e8e6f8;border:none">Description</th>
-                  <th style="padding:8px 10px;font-size:11px;color:#52526e;background:#e8e6f8;border:none">Unit Price</th>
-                  <th style="padding:8px 10px;font-size:11px;color:#52526e;background:#e8e6f8;border:none">Incoterm</th>
-                  <th style="padding:8px 10px;font-size:11px;color:#52526e;background:#e8e6f8;border:none;text-align:right">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td style="padding:10px 16px;color:#14142a;border-bottom:1px solid #e0deef" id="inv-doc-product">—</td>
-                  <td style="padding:10px;color:#14142a;border-bottom:1px solid #e0deef" id="inv-doc-price">—</td>
-                  <td style="padding:10px;color:#14142a;border-bottom:1px solid #e0deef" id="inv-doc-incoterm">—</td>
-                  <td style="padding:10px 16px;color:#14142a;border-bottom:1px solid #e0deef;text-align:right;font-weight:700" id="inv-doc-total">—</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <!-- totals -->
-          <div style="display:flex;justify-content:flex-end;padding:12px 20px;border-bottom:1px solid #e0deef">
-            <div style="min-width:220px">
-              <div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;color:#52526e"><span>Subtotal</span><span id="inv-doc-sub">—</span></div>
-              <div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;color:#52526e"><span>VAT (0% — export)</span><span>$0.00</span></div>
-              <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700;padding:8px 0 0;border-top:1px solid #e0deef;margin-top:4px;color:#14142a"><span>Total Due</span><span id="inv-doc-due">—</span></div>
-            </div>
-          </div>
-          <!-- payment + loi ref -->
-          <div style="padding:12px 20px;border-bottom:1px solid #e0deef;font-size:12px">
-            <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">PAYMENT DETAILS</div>
-            <div style="color:#14142a;white-space:pre-line;line-height:1.7" id="inv-doc-bank">—</div>
-          </div>
-          <div style="padding:10px 20px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#6b6b8e">
-            <span>Source LOI: <span id="inv-doc-loi" style="color:#5b5fef">—</span></span>
-            <span>Source PO: <span id="inv-doc-po" style="color:#5b5fef">—</span></span>
-            <span>Terms: <span id="inv-doc-terms" style="color:#14142a;font-weight:600">—</span></span>
-          </div>
-          <div style="padding:10px 20px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e;border-top:1px solid #e0deef">
-            Generated by SLOI AI · sloiai.com · This is a legally binding commercial invoice.
-          </div>
-        </div>
-
-        <!-- action buttons below preview -->
-        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-          <button class="btn btn-sm btn-p" onclick="invoiceDownload()" style="flex:1;justify-content:center">↓ Download PDF</button>
-          <button class="btn btn-sm btn-g" onclick="invoiceSend()" style="flex:1;justify-content:center">✉ Send to buyer</button>
-          <button class="btn btn-sm" onclick="alert('Invoice copied to clipboard.')" style="flex:1;justify-content:center">⎘ Copy ref</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
 
   <!-- SETTINGS -->
   <div id="view-settings" class="view">
@@ -1403,7 +1280,7 @@ SWIFT: EBILAEAD</textarea>
         </div>
         <div style="height:1px;background:var(--border);margin:12px 0"></div>
         <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="btn btn-sm" onclick="window.open('m2m-homepage.html','_blank')">Homepage</button>
+          <button class="btn btn-sm" onclick="window.open('sloiai-home.html','_blank')">Homepage</button>
           <button class="btn btn-sm" onclick="window.open('investor.html','_blank')">Investor page</button>
           <button class="btn btn-sm btn-r" onclick="api.logout(); window.location.href='login.html'">Sign out</button>
         </div>
@@ -1519,7 +1396,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={invoice:['🧾 Invoice Generator','Generate invoices from signed POs · send to buyer'],agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
+var TITLES={agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────
@@ -1964,76 +1841,6 @@ function exportLeads(){ alert('Exporting '+LEADS.length+' leads to CSV...\n\nIn 
 function runLeadFinder(){ alert('LeadFinder running...\n\nSearching: news · LinkedIn · tender sites\nKeywords: NEOM · steel · cement · UAE construction\n\nResults will appear in 30 seconds.'); }
 function runAllAgents(){ alert('Running all 4 agents simultaneously...\n\n🔭 LeadFinder — searching\n📡 PriceScout — scanning\n📱 OutreachBot — queued\n🛡️ ComplianceBot — always running'); }
 
-// ── INVOICE GENERATOR ─────────────────────────────────────────────────────────
-var _invPO = null;
-
-function selectInvPO(po, product, buyer, price, incoterm, total, loi, el) {
-  _invPO = {po:po, product:product, buyer:buyer, price:price, incoterm:incoterm, total:total, loi:loi};
-  document.querySelectorAll('.inv-po-row').forEach(function(r) {
-    r.style.borderColor = 'var(--border2)';
-    r.style.background = 'var(--surface2)';
-  });
-  el.style.borderColor = 'rgba(91,95,239,.5)';
-  el.style.background = 'rgba(91,95,239,.06)';
-  var today = new Date();
-  var due = new Date(today); due.setDate(due.getDate() + 30);
-  var fmt = function(d){ return d.toISOString().split('T')[0]; };
-  var invNum = 'INV-' + today.getFullYear() + '-' + String(Math.floor(Math.random()*900)+100);
-  document.getElementById('inv-ref').value = invNum;
-  document.getElementById('inv-date').value = fmt(today);
-  document.getElementById('inv-due').value = fmt(due);
-  document.getElementById('inv-buyer').value = buyer;
-  document.getElementById('inv-fields-card').style.display = 'block';
-  document.getElementById('inv-preview-wrap').style.display = 'none';
-}
-
-function invoiceGenerate() {
-  if (!_invPO) { alert('Select a PO first.'); return; }
-  var ref = document.getElementById('inv-ref').value;
-  var date = document.getElementById('inv-date').value;
-  var seller = document.getElementById('inv-seller').value;
-  var buyer = document.getElementById('inv-buyer').value;
-  var bank = document.getElementById('inv-bank').value;
-  var terms = document.getElementById('inv-terms').value;
-  document.getElementById('inv-doc-ref').textContent = ref;
-  document.getElementById('inv-doc-date').textContent = 'Date: ' + date;
-  document.getElementById('inv-doc-seller').textContent = seller;
-  document.getElementById('inv-doc-buyer').textContent = buyer;
-  document.getElementById('inv-doc-product').textContent = _invPO.product;
-  document.getElementById('inv-doc-price').textContent = _invPO.price;
-  document.getElementById('inv-doc-incoterm').textContent = _invPO.incoterm;
-  document.getElementById('inv-doc-total').textContent = _invPO.total;
-  document.getElementById('inv-doc-sub').textContent = _invPO.total;
-  document.getElementById('inv-doc-due').textContent = _invPO.total;
-  document.getElementById('inv-doc-bank').textContent = bank;
-  document.getElementById('inv-doc-loi').textContent = _invPO.loi;
-  document.getElementById('inv-doc-po').textContent = _invPO.po;
-  document.getElementById('inv-doc-terms').textContent = terms;
-  document.getElementById('inv-status-badge').textContent = 'Generated';
-  document.getElementById('inv-preview-wrap').style.display = 'block';
-  document.getElementById('inv-preview-wrap').scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function invoiceDownload() {
-  if (!_invPO) { alert('Generate an invoice first.'); return; }
-  alert('Downloading ' + document.getElementById('inv-ref').value + '.pdf\n\nIn production this exports a print-ready PDF.');
-}
-
-function invoiceSend() {
-  if (!_invPO) { alert('Generate an invoice first.'); return; }
-  var buyer = document.getElementById('inv-buyer').value || _invPO.buyer;
-  alert('Invoice sent to ' + buyer + ' via email and WhatsApp.\n\nRef: ' + document.getElementById('inv-ref').value);
-}
-
-function invoiceReset() {
-  _invPO = null;
-  document.querySelectorAll('.inv-po-row').forEach(function(r) {
-    r.style.borderColor = 'var(--border2)';
-    r.style.background = 'var(--surface2)';
-  });
-  document.getElementById('inv-fields-card').style.display = 'none';
-  document.getElementById('inv-preview-wrap').style.display = 'none';
-}
 function configLeadFinder(){ alert('LeadFinder configuration\n\nKeywords: NEOM · steel · cement · grain · UAE construction\nRegions: UAE · KSA · Egypt · Germany\nSchedule: Every 6 hours\nSources: News · LinkedIn · Tenders\n\nEdit in Settings → Agents'); }
 function runPriceScout(){ openConsole('price'); }
 function resumeOutreach2_old(){
@@ -2569,6 +2376,210 @@ function poProceed() {
     </div>
   </div>
 </div>
+
+<!-- INVOICE GENERATOR MODAL -->
+<div class="modal-bg" id="inv-modal-bg" onclick="if(event.target===this)closeInvoiceModal()">
+  <div class="modal" style="max-width:680px;width:calc(100vw - 32px)">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">🧾 Invoice Generator</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Generate a commercial invoice from a signed PO</div>
+      </div>
+      <button class="modal-close" onclick="closeInvoiceModal()">×</button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Step 1: Select PO -->
+      <div id="inv-step-1">
+        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">// Select source PO</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div class="inv-po-row" onclick="selectInvPO('PO-2026-001','Hard Wheat · 50 MT','Atlas Grain Trading','$1,120/MT','FOB','$56,000','SL-LOI-20260501-003',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid rgba(34,197,94,.35);border-radius:5px;cursor:pointer;transition:border-color .15s">
+            <div style="font-size:18px">📦</div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">PO-2026-001 · Hard Wheat · 50 MT</div>
+              <div style="font-size:12px;color:var(--muted)">Atlas Grain Trading · $56,000 · Signed</div>
+            </div>
+            <span class="badge bg" style="font-size:12px">✓ Signed</span>
+          </div>
+          <div class="inv-po-row" onclick="selectInvPO('PO-2026-002','Aluminum 6061-T6 · 5 MT','Gulf Steel Industries','$9,200/MT','FOB','$46,000','SL-LOI-20260430-002',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;cursor:pointer;transition:border-color .15s">
+            <div style="font-size:18px">📦</div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">PO-2026-002 · Aluminum 6061-T6 · 5 MT</div>
+              <div style="font-size:12px;color:var(--muted)">Gulf Steel Industries · $46,000 · Signed</div>
+            </div>
+            <span class="badge bg" style="font-size:12px">✓ Signed</span>
+          </div>
+          <div class="inv-po-row" onclick="selectInvPO('PO-2026-003','Steel Rebar G60 · 100 MT','EuroSteel GmbH','$2,820/MT','CIF','$282,000','SL-LOI-20260604-004',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;cursor:pointer;transition:border-color .15s">
+            <div style="font-size:18px">📦</div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:600;color:var(--white)">PO-2026-003 · Steel Rebar G60 · 100 MT</div>
+              <div style="font-size:12px;color:var(--muted)">EuroSteel GmbH · $282,000 · Pending</div>
+            </div>
+            <span class="badge ba" style="font-size:12px">⏳ Pending</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Invoice fields -->
+      <div id="inv-step-2" style="display:none">
+        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">// Invoice details</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+          <div><label class="flabel">Invoice Ref</label><input class="inp" id="inv-ref" readonly style="color:var(--teal)"/></div>
+          <div><label class="flabel">Invoice Date</label><input class="inp" id="inv-date" type="date"/></div>
+          <div><label class="flabel">Due Date</label><input class="inp" id="inv-due" type="date"/></div>
+          <div><label class="flabel">Payment Terms</label>
+            <select class="inp" id="inv-terms">
+              <option>Net 30</option><option>Net 15</option><option>Net 60</option>
+              <option>50% upfront · 50% on delivery</option><option>LC at sight</option>
+            </select>
+          </div>
+          <div><label class="flabel">Seller (Issuer)</label><input class="inp" id="inv-seller" value="SLOI AI Trading LLC"/></div>
+          <div><label class="flabel">Buyer (Bill To)</label><input class="inp" id="inv-buyer"/></div>
+        </div>
+        <div style="margin-bottom:10px">
+          <label class="flabel">Bank / Payment details</label>
+          <textarea class="inp" id="inv-bank" rows="3" style="resize:vertical;line-height:1.6">IBAN: AE07 0331 2345 6789 0123 456
+Bank: Emirates NBD · Dubai, UAE
+SWIFT: EBILAEAD</textarea>
+        </div>
+        <div>
+          <label class="flabel">Notes (optional)</label>
+          <textarea class="inp" id="inv-notes" rows="2" style="resize:vertical;line-height:1.6" placeholder="e.g. please reference invoice number on transfer…"></textarea>
+        </div>
+      </div>
+
+      <!-- Step 3: Preview -->
+      <div id="inv-step-3" style="display:none">
+        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px">Invoice preview <span style="flex:1;height:1px;background:var(--border)"></span><span class="badge bg" style="font-size:12px">Generated</span></div>
+        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px">
+          <div style="background:linear-gradient(135deg,#14142a,#1a1a35);padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#7b7ff8;font-size:12px" id="inv-doc-ref">—</div><div style="color:#52526e;font-size:11px" id="inv-doc-date">—</div></div>
+          </div>
+          <div style="background:#f0eff8;border-bottom:2px solid #e0deef;padding:8px 20px;text-align:center;font-size:13px;font-weight:700;color:#14142a;letter-spacing:.12em;text-transform:uppercase">COMMERCIAL INVOICE</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e0deef">
+            <div style="padding:12px 16px;border-right:1px solid #e0deef">
+              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">FROM</div>
+              <div style="font-size:12px;font-weight:600;color:#14142a" id="inv-doc-seller">—</div>
+              <div style="font-size:11px;color:#52526e">Dubai, UAE · TRN: 100-123-456</div>
+            </div>
+            <div style="padding:12px 16px">
+              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">BILL TO</div>
+              <div style="font-size:12px;font-weight:600;color:#14142a" id="inv-doc-buyer">—</div>
+            </div>
+          </div>
+          <table style="font-size:11px">
+            <thead><tr style="background:#e8e6f8">
+              <th style="padding:7px 14px;background:#e8e6f8;border:none;color:#52526e">Description</th>
+              <th style="padding:7px 10px;background:#e8e6f8;border:none;color:#52526e">Unit Price</th>
+              <th style="padding:7px 10px;background:#e8e6f8;border:none;color:#52526e">Incoterm</th>
+              <th style="padding:7px 14px;background:#e8e6f8;border:none;color:#52526e;text-align:right">Total</th>
+            </tr></thead>
+            <tbody><tr>
+              <td style="padding:9px 14px;color:#14142a;border-bottom:1px solid #e0deef" id="inv-doc-product">—</td>
+              <td style="padding:9px 10px;color:#14142a;border-bottom:1px solid #e0deef" id="inv-doc-price">—</td>
+              <td style="padding:9px 10px;color:#14142a;border-bottom:1px solid #e0deef" id="inv-doc-incoterm">—</td>
+              <td style="padding:9px 14px;color:#14142a;border-bottom:1px solid #e0deef;text-align:right;font-weight:700" id="inv-doc-total">—</td>
+            </tr></tbody>
+          </table>
+          <div style="display:flex;justify-content:flex-end;padding:10px 16px;border-bottom:1px solid #e0deef">
+            <div style="min-width:200px">
+              <div style="display:flex;justify-content:space-between;padding:3px 0;color:#52526e"><span>Subtotal</span><span id="inv-doc-sub">—</span></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0;color:#52526e"><span>VAT (0% — export)</span><span>$0.00</span></div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0 0;border-top:1px solid #e0deef;margin-top:3px;font-weight:700;color:#14142a"><span>Total Due</span><span id="inv-doc-due">—</span></div>
+            </div>
+          </div>
+          <div style="padding:10px 16px;border-bottom:1px solid #e0deef">
+            <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">PAYMENT</div>
+            <div style="color:#14142a;white-space:pre-line;line-height:1.6" id="inv-doc-bank">—</div>
+          </div>
+          <div style="padding:8px 16px;display:flex;justify-content:space-between;font-size:11px;color:#6b6b8e">
+            <span>LOI: <span id="inv-doc-loi" style="color:#5b5fef">—</span></span>
+            <span>PO: <span id="inv-doc-po" style="color:#5b5fef">—</span></span>
+            <span>Terms: <span id="inv-doc-terms" style="color:#14142a;font-weight:600">—</span></span>
+          </div>
+          <div style="padding:8px 16px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e;border-top:1px solid #e0deef">Generated by SLOI AI · sloiai.com</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-ft" id="inv-modal-ft">
+      <button class="btn" onclick="closeInvoiceModal()">Cancel</button>
+      <button class="btn btn-g" id="inv-action-btn" onclick="invProceed()" style="display:none">Generate invoice →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var _invPO = null;
+
+function openInvoiceModal() {
+  _invPO = null;
+  document.getElementById('inv-step-1').style.display = 'block';
+  document.getElementById('inv-step-2').style.display = 'none';
+  document.getElementById('inv-step-3').style.display = 'none';
+  document.getElementById('inv-action-btn').style.display = 'none';
+  document.getElementById('inv-modal-ft').style.display = 'flex';
+  document.querySelectorAll('.inv-po-row').forEach(function(r){
+    r.style.borderColor = 'var(--border2)'; r.style.background = 'var(--surface2)';
+  });
+  document.getElementById('inv-modal-bg').classList.add('open');
+}
+
+function closeInvoiceModal() {
+  document.getElementById('inv-modal-bg').classList.remove('open');
+}
+
+function selectInvPO(po, product, buyer, price, incoterm, total, loi, el) {
+  _invPO = {po:po, product:product, buyer:buyer, price:price, incoterm:incoterm, total:total, loi:loi};
+  document.querySelectorAll('.inv-po-row').forEach(function(r){
+    r.style.borderColor = 'var(--border2)'; r.style.background = 'var(--surface2)';
+  });
+  el.style.borderColor = 'rgba(91,95,239,.5)';
+  el.style.background = 'rgba(91,95,239,.06)';
+  var today = new Date();
+  var due = new Date(today); due.setDate(due.getDate() + 30);
+  var fmt = function(d){ return d.toISOString().split('T')[0]; };
+  document.getElementById('inv-ref').value = 'INV-' + today.getFullYear() + '-' + String(Math.floor(Math.random()*900)+100);
+  document.getElementById('inv-date').value = fmt(today);
+  document.getElementById('inv-due').value = fmt(due);
+  document.getElementById('inv-buyer').value = buyer;
+  document.getElementById('inv-step-2').style.display = 'block';
+  document.getElementById('inv-action-btn').style.display = 'inline-flex';
+}
+
+function invProceed() {
+  if (!_invPO) return;
+  var ref = document.getElementById('inv-ref').value;
+  var date = document.getElementById('inv-date').value;
+  document.getElementById('inv-doc-ref').textContent = ref;
+  document.getElementById('inv-doc-date').textContent = 'Date: ' + date;
+  document.getElementById('inv-doc-seller').textContent = document.getElementById('inv-seller').value;
+  document.getElementById('inv-doc-buyer').textContent = document.getElementById('inv-buyer').value;
+  document.getElementById('inv-doc-product').textContent = _invPO.product;
+  document.getElementById('inv-doc-price').textContent = _invPO.price;
+  document.getElementById('inv-doc-incoterm').textContent = _invPO.incoterm;
+  document.getElementById('inv-doc-total').textContent = _invPO.total;
+  document.getElementById('inv-doc-sub').textContent = _invPO.total;
+  document.getElementById('inv-doc-due').textContent = _invPO.total;
+  document.getElementById('inv-doc-bank').textContent = document.getElementById('inv-bank').value;
+  document.getElementById('inv-doc-loi').textContent = _invPO.loi;
+  document.getElementById('inv-doc-po').textContent = _invPO.po;
+  document.getElementById('inv-doc-terms').textContent = document.getElementById('inv-terms').value;
+  document.getElementById('inv-step-1').style.display = 'none';
+  document.getElementById('inv-step-2').style.display = 'none';
+  document.getElementById('inv-step-3').style.display = 'block';
+  document.getElementById('inv-action-btn').textContent = '↓ Download PDF';
+  document.getElementById('inv-action-btn').onclick = function(){ alert('Downloading ' + ref + '.pdf'); };
+  document.getElementById('inv-modal-ft').innerHTML +=
+    '<button class="btn btn-g" onclick="alert(\'Invoice sent to \' + document.getElementById(\'inv-buyer\').value + \' via email.\')">✉ Send to buyer</button>';
+}
+
+function invoiceDownload() { alert('Generate an invoice first.'); }
+function invoiceSend() { alert('Generate an invoice first.'); }
+function invoiceReset() { openInvoiceModal(); }
+function invoiceGenerate() { invProceed(); }
+</script>
 
 </body>
 </html>

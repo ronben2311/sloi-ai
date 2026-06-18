@@ -5,17 +5,17 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>SLOI AI — Procurement automation · LOI generation</title>
 <meta name="description" content="AI-powered commodity procurement automation. Your sourcing engine negotiates with pre-qualified suppliers within your mandate. You approve. LOI generated instantly."/>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{
   --bg:#06060e;--surface:#0d0d1a;--surface2:#11111e;--border:#1a1a2e;--border2:#22223a;
   --indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);
-  --muted:#4e4e6a;--text:#cac8e4;--white:#eeedfa;
+  --muted:#8888a8;--text:#cac8e4;--white:#eeedfa;
   --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--text);background:var(--bg);overflow-x:clip}
+body{font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg);overflow-x:clip}
 
 /* ── GRID BG ── */
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
@@ -29,7 +29,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
 
 /* ── NAV ── */
 nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:72px;
-  background:rgba(6,6,14,.88);border-bottom:1px solid rgba(255,255,255,.05);backdrop-filter:blur(20px)}
+  background:rgba(6,6,14,.88);border-bottom:1px solid rgba(255,255,255,.05);backdrop-filter:blur(20px);font-family:'IBM Plex Mono',monospace;}
 .nav-logo{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.03em}
 .nav-logo em{font-style:italic;color:var(--indigo)}
 .nav-links{display:flex;gap:28px;font-size:13px}
@@ -143,13 +143,10 @@ h1 em{font-style:italic;
 .persona-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(91,95,239,.06) 0%,transparent 70%);opacity:0;transition:opacity .3s}
 .persona-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
 .persona-card:hover::before{opacity:1}
-.pc-icon{font-size:38px;margin-bottom:16px;display:block}
-.pc-role{font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px}
-.pc-desc{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:16px}
-.pc-features{display:flex;flex-direction:column;gap:6px}
-.pcf{font-size:12px;color:var(--text);display:flex;align-items:flex-start;gap:7px}
-.pcf::before{content:'✓';color:var(--green);flex-shrink:0;margin-top:1px;font-weight:700}
-.pc-cta{display:block;margin-top:18px;padding:9px 14px;border:1px solid var(--border2);border-radius:5px;font-size:13px;color:var(--muted);text-align:center;text-decoration:none;transition:all .15s;font-family:'IBM Plex Mono',monospace}
+.pc-icon{font-size:44px;margin-bottom:18px;display:block;line-height:1}
+.pc-role{font-size:17px;font-weight:700;color:var(--white);margin-bottom:10px;letter-spacing:-.01em}
+.pc-desc{font-size:13px;color:var(--muted);line-height:1.8}
+.pc-cta{display:block;margin-top:20px;padding:9px 14px;border:1px solid var(--border2);border-radius:5px;font-size:13px;color:var(--muted);text-align:center;text-decoration:none;transition:all .15s;font-family:'IBM Plex Mono',monospace}
 .pc-cta:hover{border-color:rgba(91,95,239,.45);color:var(--violet);background:var(--indigo-dim)}
 
 /* ── FEATURES ── */
@@ -168,10 +165,9 @@ h1 em{font-style:italic;
 .sector-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(91,95,239,.07) 0%,transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
 .sector-card:hover{transform:translateY(-4px);border-color:rgba(91,95,239,.4);box-shadow:0 16px 48px rgba(0,0,0,.45)}
 .sector-card:hover::before{opacity:1}
-.sc-icon{font-size:40px;margin-bottom:14px;line-height:1}
-.sc-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:8px}
-.sc-desc{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:14px;flex:1}
-.sc-tags{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:16px}
+.sc-icon{font-size:44px;margin-bottom:16px;line-height:1}
+.sc-name{font-size:15px;font-weight:700;color:var(--white);margin-bottom:14px}
+.sc-tags{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:16px;flex:1;align-content:flex-start}
 .sc-tag{font-size:11px;padding:2px 8px;background:var(--indigo-dim);border:1px solid rgba(91,95,239,.18);border-radius:3px;color:var(--text);letter-spacing:.03em}
 .sc-cta{font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:4px;margin-top:auto;transition:color .15s}
 .sector-card:hover .sc-cta{color:var(--violet)}
@@ -263,6 +259,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   .features-grid{grid-template-columns:1fr}
   .sectors-grid{grid-template-columns:1fr 1fr!important;}
   .nav-links{display:none}
+  .btn-cta-nav{padding:6px 12px;font-size:12px}
   .ld-body{grid-template-columns:1fr}
   .ld-header{padding:16px 18px}
   .ld-body{padding:18px}
@@ -287,7 +284,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 
 <!-- NAV -->
 <nav>
-  <a href="m2m-homepage.html" class="nav-logo">Sloi<em>AI</em></a>
+  <a href="sloiai-home.html" class="nav-logo">Sloi<em>AI</em></a>
   <div class="nav-links">
     <a href="#how">How it works</a>
     <a href="#who">Who it's for</a>
@@ -327,8 +324,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <div class="hero">
   <div class="hero-badge"><div class="hero-badge-dot"></div>Procurement automation platform · 24 deals closed this month</div>
   <h1>Automated<br/>procurement.<br/><em>You approve.</em></h1>
-  <p style="font-size:16px;color:var(--muted);font-weight:400;margin-bottom:10px;line-height:1.6">Commodity procurement for construction &amp; reconstruction projects — MENA, Ukraine, global.</p>
-  <p class="hero-sub">Define your mandate. Our sourcing engine engages pre-qualified suppliers, negotiates within your parameters, and delivers a compliant Letter of Intent — in minutes.</p>
+  <p style="font-size:16px;color:var(--muted);font-weight:400;margin-bottom:10px;line-height:1.6">AI procurement for construction &amp; reconstruction — MENA, Ukraine, global.</p>
+  <p class="hero-sub">Set your mandate. We negotiate with verified suppliers and deliver a signed LOI — in minutes.</p>
   <div class="hero-actions">
     <a href="smb-order.html" class="btn-primary">🎯 Submit sourcing request →</a>
     <a href="demo.html" class="btn-outline">🤖 Watch live demo</a>
@@ -391,42 +388,27 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <div class="section" id="who">
   <div class="section-eyebrow fade-in">Who it's for</div>
   <div class="section-title fade-in">Built for the <em style="font-style:italic;color:var(--indigo)">whole chain.</em></div>
-  <div class="section-sub fade-in">One platform — three roles. The first system where procurement teams, traders, and AI agents all close compliant LOIs in one place.</div>
+  <div class="section-sub fade-in">Buyers, traders, and AI agents — all closing compliant LOIs in one place.</div>
   <div class="personas fade-in">
-    <div class="persona-card" onclick="window.location.href='CommodEx_Platform.html'">
+    <div class="persona-card" onclick="window.location.href='sloiai-platform.html'">
       <span class="pc-icon">🏢</span>
       <div class="pc-role">Buyers</div>
-      <div class="pc-desc">Procurement teams sourcing steel, cement, grain, and energy. Define your mandate. The engine negotiates within your parameters. Approve the price. Receive the LOI.</div>
-      <div class="pc-features">
-        <div class="pcf">Automation engine negotiates within your mandate — up to 7 rounds</div>
-        <div class="pcf">Price Watcher — alert on target price</div>
-        <div class="pcf">Credits never expire · buy as you go</div>
-        <div class="pcf">Pay by card or USDC on Base</div>
-      </div>
-      <a href="CommodEx_Platform.html" class="pc-cta">Buyer platform →</a>
+      <div class="pc-desc">Set your mandate. The engine negotiates with verified suppliers — up to 7 rounds. You approve the price and receive the LOI.</div>
+      <div style="font-size:12px;color:var(--teal);font-weight:600;margin-top:14px">Credits never expire · pay by card or USDC</div>
+      <a href="sloiai-platform.html" class="pc-cta">Buyer platform →</a>
     </div>
     <div class="persona-card" onclick="window.location.href='broker-onboarding.html'">
       <span class="pc-icon">🌍</span>
       <div class="pc-role">Traders</div>
-      <div class="pc-desc">Commodity traders with supplier networks. Connect your inventory. SLOI AI routes verified RFQs to you. Set your floor price. The engine handles negotiation.</div>
-      <div class="pc-features">
-        <div class="pcf">Receive qualified RFQs from verified procurement teams</div>
-        <div class="pcf">Automation engine negotiates within your floor price</div>
-        <div class="pcf">LOI fee: $500 per signed deal</div>
-        <div class="pcf">Supplier identity always protected</div>
-      </div>
+      <div class="pc-desc">List your inventory. Receive verified RFQs. The engine negotiates within your floor price — your supplier identity always protected.</div>
+      <div style="font-size:12px;color:var(--teal);font-weight:600;margin-top:14px">$500 LOI fee per signed deal · no monthly cost</div>
       <a href="broker-onboarding.html" class="pc-cta">Become a trader →</a>
     </div>
     <div class="persona-card" onclick="window.location.href='open-network.html'">
       <span class="pc-icon">🤖</span>
       <div class="pc-role">AI Agents</div>
-      <div class="pc-desc">Connect your own AI procurement agent via the Open Network API. Search suppliers, compare live prices, monitor commodity markets — autonomously.</div>
-      <div class="pc-features">
-        <div class="pcf">Read tier: free · instant API access</div>
-        <div class="pcf">No approval — connect and query instantly</div>
-        <div class="pcf">Compatible with Claude, GPT, WhatsApp</div>
-        <div class="pcf">MCP-compatible skill.md auto-discovery</div>
-      </div>
+      <div class="pc-desc">Connect via the Open Network API. Search suppliers, compare live prices, and close commodity deals — autonomously, 24/7.</div>
+      <div style="font-size:12px;color:var(--teal);font-weight:600;margin-top:14px">Read tier free · MCP-compatible · earns 1% per LOI</div>
       <a href="open-network.html" class="pc-cta">Open Network →</a>
     </div>
   </div>
@@ -438,13 +420,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <div class="section" id="sectors">
   <div class="section-eyebrow fade-in">Sectors we serve</div>
   <div class="section-title fade-in">Deep coverage across<br/><em style="font-style:italic;color:var(--indigo)">four commodity sectors.</em></div>
-  <div class="section-sub fade-in">Verified suppliers, pre-loaded price data, and sector-specific negotiation parameters — ready to use.</div>
+  <div class="section-sub fade-in">Verified suppliers and sector-specific negotiation — ready to use.</div>
   <div class="sectors-grid fade-in">
 
     <a href="petrochemicals.html" class="sector-card">
       <div class="sc-icon">🧪</div>
       <div class="sc-name">Petrochemicals</div>
-      <div class="sc-desc">Base chemicals, industrial solvents, and polymer feedstocks. Bulk and IBC supply. REACH-compliant verified suppliers.</div>
       <div class="sc-tags">
         <span class="sc-tag">Sulfuric Acid</span>
         <span class="sc-tag">Caustic Soda</span>
@@ -457,7 +438,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     <a href="critical-minerals.html" class="sector-card">
       <div class="sc-icon">⛏️</div>
       <div class="sc-name">Critical Minerals</div>
-      <div class="sc-desc">Lithium, cobalt, rare earths, and graphite. Strategically vital materials from verified mines and processing facilities.</div>
       <div class="sc-tags">
         <span class="sc-tag">Lithium</span>
         <span class="sc-tag">Cobalt</span>
@@ -470,12 +450,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     <a href="building-materials.html" class="sector-card">
       <div class="sc-icon">🧱</div>
       <div class="sc-name">Building Materials</div>
-      <div class="sc-desc">Rebar, hollow blocks, structural steel, floor tiles, PVC pipes, OPC cement and clinker. Full procurement for large-scale construction projects.</div>
       <div class="sc-tags">
         <span class="sc-tag">Steel Rebar</span>
         <span class="sc-tag">OPC Cement</span>
         <span class="sc-tag">Clinker</span>
-        <span class="sc-tag">Hollow Block</span>
         <span class="sc-tag">PVC Pipe</span>
       </div>
       <div class="sc-cta">Explore sector →</div>
@@ -484,12 +462,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     <a href="imec.html" class="sector-card">
       <div class="sc-icon">🏗️</div>
       <div class="sc-name">Reconstruction</div>
-      <div class="sc-desc">Large-scale post-conflict and infrastructure reconstruction. IMEC corridor-aligned supply chains with verified factory-direct sourcing.</div>
       <div class="sc-tags">
         <span class="sc-tag">IMEC Corridor</span>
         <span class="sc-tag">Infrastructure</span>
         <span class="sc-tag">Bulk Cement</span>
-        <span class="sc-tag">Steel Structures</span>
+        <span class="sc-tag">Steel</span>
       </div>
       <div class="sc-cta">Explore sector →</div>
     </a>

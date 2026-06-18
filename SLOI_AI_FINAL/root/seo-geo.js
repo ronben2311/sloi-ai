@@ -47,19 +47,30 @@
 
   // ── PAGE DEFINITIONS ─────────────────────────────────────────────────────────
   const PAGES = {
-    '/':                    { title: 'SLOI AI — AI Commodity Negotiation & LOI Generation', desc: 'Your AI agent negotiates commodity prices with verified suppliers. You approve. LOI generated in minutes. Steel, wheat, aluminum, energy — MENA corridor.' },
-    '/m2m-homepage':        { title: 'SLOI AI — AI Commodity Negotiation & LOI Generation', desc: 'Your AI agent negotiates commodity prices with verified suppliers. You approve. LOI generated in minutes. Steel, wheat, aluminum, energy — MENA corridor.' },
-    '/exchange':            { title: 'SLOI AI Exchange — Live Commodity Prices & Order Book', desc: 'Live commodity price board with order book. Steel, wheat, aluminum, diesel, chemicals. Negotiate directly from price board.' },
-    '/pricing':             { title: 'Pricing — SLOI AI Credits & Plans', desc: 'Buy credits from $99. Pay per negotiation. Never expires. Card or USDC on Base. AI agents pay autonomously.' },
-    '/about':               { title: 'About SLOI AI — The Procurement Layer for the AI Economy', desc: 'SLOI AI is the settlement layer for physical commodity procurement in the AI agent economy. Built in UAE, serving the IMEC corridor.' },
-    '/investor':            { title: 'Investors — SLOI AI Pitch Deck', desc: 'Pre-seed commodity procurement AI. $1.84M LOI volume. 98% gross margin. Break-even at 1 LOI/month.' },
-    '/imec':                { title: 'IMEC Corridor — SLOI AI Procurement Infrastructure', desc: '$300B+ infrastructure investment. 3.2B people connected. SLOI AI is the procurement layer of the India-Middle East-Europe Economic Corridor.' },
-    '/docs':                { title: 'API Documentation — SLOI AI', desc: 'Full API reference. Negotiate commodities, generate LOIs, manage credits. REST + SSE (AG-UI). Supports autonomous mode for AI agents.' },
-    '/open-network':        { title: 'Open Network — AI Agent Commodity API', desc: 'External AI agents earn 1% commission per LOI. Read tier free. Transact tier earns. USDC payments on Base.' },
-    '/autonomous-mode':     { title: 'Autonomous Mode — SLOI AI Agent Economy', desc: 'Set mandate once. AI agent closes commodity deals automatically. Auto-approve within parameters. 24/7, no human bottleneck.' },
-    '/agui':                { title: 'AG-UI Integration — SLOI AI Real-time Events', desc: 'AG-UI SSE protocol for real-time negotiation events across all portals. TEXT_CHUNK, AWAIT_HUMAN, AUTO_APPROVED, LOI_GENERATED.' },
-    '/login':               { title: 'Sign In — SLOI AI', desc: 'Sign in to your SLOI AI account. Buyer, trader, supplier, or admin.' },
-    '/smb-order':           { title: 'Get a Price — SLOI AI', desc: '3 questions. Our agent finds you the best price. No account needed to start.' },
+    '/':                      { title: 'SLOI AI — AI Commodity Negotiation & LOI Generation', desc: 'Your AI agent negotiates commodity prices with verified suppliers. You approve. LOI generated in minutes. Steel, wheat, aluminum, energy — MENA corridor.' },
+    '/sloiai-home':           { title: 'SLOI AI — AI Commodity Negotiation & LOI Generation', desc: 'Your AI agent negotiates commodity prices with verified suppliers. You approve. LOI generated in minutes. Steel, wheat, aluminum, energy — MENA corridor.' },
+    '/exchange':              { title: 'SLOI AI Exchange — Live Commodity Prices & Order Book', desc: 'Live commodity price board with order book. Steel, wheat, aluminum, diesel, chemicals. Negotiate directly from price board.' },
+    '/pricing':               { title: 'Pricing — SLOI AI Credits & Plans', desc: 'Buy credits from $99. Pay per negotiation. Never expires. Card or USDC on Base. AI agents pay autonomously.' },
+    '/about':                 { title: 'About SLOI AI — The Procurement Layer for the AI Economy', desc: 'SLOI AI is the settlement layer for physical commodity procurement in the AI agent economy. Built in UAE, serving the IMEC corridor.' },
+    '/investor':              { title: 'Investors — SLOI AI Pitch Deck', desc: 'Pre-seed commodity procurement AI. $1.84M LOI volume. 98% gross margin. Break-even at 1 LOI/month.' },
+    '/imec':                  { title: 'IMEC Corridor — SLOI AI Procurement Infrastructure', desc: '$300B+ infrastructure investment. 3.2B people connected. SLOI AI is the procurement layer of the India-Middle East-Europe Economic Corridor.' },
+    '/docs':                  { title: 'API Documentation — SLOI AI', desc: 'Full API reference. Negotiate commodities, generate LOIs, manage credits. REST + SSE (AG-UI). Supports autonomous mode for AI agents.' },
+    '/open-network':          { title: 'Open Network — AI Agent Commodity API', desc: 'External AI agents earn 1% commission per LOI. Read tier free. Transact tier earns. USDC payments on Base.' },
+    '/autonomous-mode':       { title: 'Autonomous Mode — SLOI AI Agent Economy', desc: 'Set mandate once. AI agent closes commodity deals automatically. Auto-approve within parameters. 24/7, no human bottleneck.' },
+    '/agui':                  { title: 'AG-UI Integration — SLOI AI Real-time Events', desc: 'AG-UI SSE protocol for real-time negotiation events across all portals. TEXT_CHUNK, AWAIT_HUMAN, AUTO_APPROVED, LOI_GENERATED.' },
+    '/agentkit':              { title: 'AgentKit — AI Agents Pay with USDC on Base', desc: 'AI agents buy SLOI AI credits autonomously using USDC on Base via Coinbase AgentKit. Credits confirm in ~2 seconds. No human needed.' },
+    '/login':                 { title: 'Sign In — SLOI AI', desc: 'Sign in to your SLOI AI account. Buyer, trader, supplier, or admin.' },
+    '/smb-order':             { title: 'Get a Price — SLOI AI', desc: '3 questions. Our agent finds you the best price. No account needed to start.' },
+    '/building-materials':    { title: 'Building Materials Procurement — SLOI AI', desc: 'AI-powered sourcing for steel rebar, OPC cement, clinker, hollow blocks, PVC pipes, and structural steel. MENA corridor, verified suppliers.' },
+    '/critical-minerals':     { title: 'Critical Minerals Procurement — SLOI AI', desc: 'Source lithium, cobalt, copper, rare earths, and graphite from verified mines. AI negotiation, LOI in minutes.' },
+    '/cement-clinker':        { title: 'Cement & Clinker Procurement — SLOI AI', desc: 'Bulk OPC cement and clinker sourcing at scale. White cement, slag, pozzolanic — factory-direct pricing, MENA & global.' },
+    '/petrochemicals':        { title: 'Petrochemicals & Industrial Chemicals — SLOI AI', desc: 'Procure sulfuric acid, caustic soda, HDPE, polypropylene, and other base chemicals. REACH-compliant verified suppliers.' },
+    '/faq':                   { title: 'FAQ — SLOI AI Commodity Procurement', desc: 'Frequently asked questions about AI commodity negotiation, LOI generation, credits, compliance, and the SLOI AI platform.' },
+    '/broker-onboarding':     { title: 'Become a Trader — Join SLOI AI Network', desc: 'Join the SLOI AI trader network. Receive verified RFQs. AI negotiates within your floor price. $500 LOI fee per signed deal.' },
+    '/contact':               { title: 'Contact — SLOI AI', desc: 'Contact the SLOI AI team. Procurement, partnerships, API access, investor relations.' },
+    '/compliance':            { title: 'Compliance — SLOI AI Sanctions Screening', desc: 'OFAC, EU, and UN sanctions screening built into every SLOI AI transaction. Every counterparty checked before LOI generation.' },
+    '/support':               { title: 'Support — SLOI AI Help Center', desc: 'Get help with SLOI AI. Credits, negotiations, LOIs, API, and account issues.' },
+    '/terms':                 { title: 'Terms of Service — SLOI AI', desc: 'Terms of service, privacy policy, and trader agreement for SLOI AI Ltd.' },
   };
 
   // ── DETECT CURRENT PAGE ───────────────────────────────────────────────────────
@@ -200,7 +211,7 @@
         'OFAC/EU/UN compliance screening',
         'Autonomous agent mode',
         'USDC payments on Base',
-        'OpenClaw Telegram integration',
+        'WhatsApp deal notifications',
       ],
     });
 
@@ -216,7 +227,7 @@
     });
 
     // FAQ for key pages
-    if (pageKey === '/' || pageKey === '/m2m-homepage') {
+    if (pageKey === '/' || pageKey === '/sloiai-home') {
       graph.push({
         '@type': 'FAQPage',
         mainEntity: [

@@ -1,21 +1,21 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="description" content="Place a commodity order with SLOI AI without an account. Fast, AI-assisted sourcing for small and medium businesses across MENA markets."/>
 <title>Source. Negotiate. Close. — SLOI AI</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{
   --bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;
   --border:#1a1a2c;--border2:#24243a;
   --indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);
-  --muted:#52526e;--text:#c8c6e0;--white:#f0eff8;
+  --muted:#8888a8;--text:#c8c6e0;--white:#f0eff8;
   --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:15px;color:var(--text);background:var(--bg);overflow:hidden}
+html,body{height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg);overflow:hidden}
 
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes fade-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -287,7 +287,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
 <!-- ════════════════════════ LEFT PANEL ════════════════════════ -->
 <div class="left">
-  <a href="m2m-homepage.html" class="left-logo">SLOI <em>AI</em><span class="left-logo-sub">Commodity procurement</span></a>
+  <a href="sloiai-home.html" class="left-logo">SLOI <em>AI</em><span class="left-logo-sub">Commodity procurement</span></a>
 
   <div class="steps-nav">
 
@@ -367,7 +367,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <div class="prog-track"><div class="prog-fill" id="progress" style="width:0%"></div></div>
       <div class="prog-lbl" id="prog-lbl">Get started</div>
     </div>
-    <a href="m2m-homepage.html" class="exit-link">Exit ✕</a>
+    <a href="sloiai-home.html" class="exit-link">Exit ✕</a>
   </div>
 
   <div class="right-body">
@@ -400,14 +400,12 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="ec-name" style="font-size:13px">Upload PO</div>
           <div class="ec-desc">PDF · Excel · Word</div>
         </div>
-        <div class="ec" id="ec-erp" style="opacity:0.4;pointer-events:none;position:relative">
-          <div style="position:absolute;top:6px;right:6px;background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;letter-spacing:.05em">COMING SOON</div>
+        <div class="ec" id="ec-erp" onclick="selectEntry('erp')" style="position:relative">
           <div class="ec-icon" style="font-size:22px">📋</div>
           <div class="ec-name" style="font-size:13px">Paste from ERP</div>
-          <div class="ec-desc">SAP · Oracle · any</div>
+          <div class="ec-desc">SAP · Oracle · any text</div>
         </div>
-        <div class="ec" id="ec-api" style="opacity:0.4;pointer-events:none;position:relative">
-          <div style="position:absolute;top:6px;right:6px;background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;letter-spacing:.05em">COMING SOON</div>
+        <div class="ec" id="ec-api" onclick="selectEntry('api')" style="position:relative">
           <div class="ec-icon" style="font-size:22px">⚡</div>
           <div class="ec-name" style="font-size:13px">API / Direct</div>
           <div class="ec-desc">For developers</div>
@@ -480,11 +478,11 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="pc-sub">Steel · Cement · Concrete · Rebar · Clinker</div>
           <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $4.8/Unit · 21 products</div>
         </div>
-        <div class="pc" onclick="selectProduct(this,'Reconstruction','cement, steel, generators, cranes, concrete')">
+        <div class="pc" onclick="selectProduct(this,'Reconstruction Packages','generators, cranes, modular units, prefab, infrastructure')">
           <div class="pc-check">✓ selected</div>
           <span class="pc-icon">🏛️</span>
-          <div class="pc-name">Reconstruction</div>
-          <div class="pc-sub">Steel · Cement · Concrete · Cranes · Generators</div>
+          <div class="pc-name">Reconstruction Packages</div>
+          <div class="pc-sub">Modular Units · Prefab · Cranes · Generators · Infra</div>
           <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">Full package · 33 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Energy','diesel, LPG, fuel oil')">
@@ -494,19 +492,19 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="pc-sub">Diesel · LPG · Fuel oil · Gas</div>
           <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $4.92/L · 3 products</div>
         </div>
-        <div class="pc" onclick="selectProduct(this,'Petrochemicals','PVC, HDPE, solvents, polymers, fertilizers')">
+        <div class="pc" onclick="selectProduct(this,'Critical Minerals','lithium, cobalt, copper, rare earth, graphite, nickel')">
           <div class="pc-check">✓ selected</div>
-          <span class="pc-icon">🧪</span>
-          <div class="pc-name">Petrochemicals</div>
-          <div class="pc-sub">PVC · HDPE · Solvents · Polymers · Fertilizers</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $420/MT · 6 products</div>
+          <span class="pc-icon">💎</span>
+          <div class="pc-name">Critical Minerals</div>
+          <div class="pc-sub">Lithium · Cobalt · Copper · Rare Earth · Graphite</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $8,200/MT · 8 products</div>
         </div>
-        <div class="pc" onclick="selectProduct(this,'Agriculture','wheat, corn, grain')">
+        <div class="pc" onclick="selectProduct(this,'Cement &amp; Clinker','cement, clinker, OPC, white cement, slag')">
           <div class="pc-check">✓ selected</div>
-          <span class="pc-icon">🌾</span>
-          <div class="pc-name">Agriculture</div>
-          <div class="pc-sub">Wheat · Corn · Grain · Feed</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $560/MT · 5 products</div>
+          <span class="pc-icon">🏔️</span>
+          <div class="pc-name">Cement &amp; Clinker</div>
+          <div class="pc-sub">OPC · Clinker · White Cement · Slag · Pozzolanic</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $58/MT · 10 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Engineering equipment','generators, pumps, compressors, cranes')">
           <div class="pc-check">✓ selected</div>
@@ -903,11 +901,11 @@ var CATALOG = [
 
 var SECTOR_MAP = {
   'Building materials':    ['Metals','Cement','Building'],
-  'Agriculture':           'Agriculture',
+  'Cement & Clinker':      'Cement',
   'Energy':                'Energy',
-  'Petrochemicals':        'Chemicals',
+  'Critical Minerals':     'Chemicals',
   'Engineering equipment': 'Engineering',
-  'Reconstruction':        ['Metals','Cement','Building','Engineering'],
+  'Reconstruction Packages': ['Metals','Cement','Building','Engineering'],
 };
 
 function filterCatalog(categoryName) {
@@ -1113,23 +1111,72 @@ function parsePO() {
 
 function parseERP() {
   var txt = (document.getElementById('erp-paste') || {}).value || '';
-  var qtyMatch = txt.match(/(\d[\d,\.]*)\s*(mt|ton|kg|unit|pcs|barrel|bbl)/i);
-  var countryMatch = txt.match(/\b(UAE|Saudi Arabia|Qatar|Kuwait|Egypt|Turkey|China|India|Germany|France|UK|USA|Jordan|Iraq|Lebanon)\b/i);
+  if (!txt.trim()) { alert('Please paste your order text first.'); return; }
+
+  // ── Quantity & unit ──
+  var qtyMatch = txt.match(/(?:qty|quantity|volume|amount)[:\s]*([0-9][0-9,\.]*)\s*(mt|ton|tons|kg|unit|units|pcs|barrel|bbl|liter|liters|m2|m3|m)/i)
+                 || txt.match(/([0-9][0-9,\.]*)\s*(mt|ton|tons|kg|unit|units|pcs|barrel|bbl|liter|liters)\b/i);
   if (qtyMatch) {
     var qf = document.getElementById('qty');
     if (qf) qf.value = qtyMatch[1].replace(/,/g, '');
-    var unit = (qtyMatch[2] || 'MT').toUpperCase();
+    var rawUnit = (qtyMatch[2] || 'MT').toUpperCase().replace('TONS','MT').replace('TON','MT').replace('LITERS','Liters').replace('LITER','Liters').replace('UNITS','Units').replace('UNIT','Units').replace('PCS','Units');
     var uf = document.getElementById('unit');
     if (uf) {
       for (var i = 0; i < uf.options.length; i++) {
-        if (uf.options[i].value.toUpperCase() === unit) { uf.selectedIndex = i; break; }
+        if (uf.options[i].value.toUpperCase() === rawUnit || uf.options[i].text.toUpperCase() === rawUnit) { uf.selectedIndex = i; break; }
       }
     }
   }
+
+  // ── Price / budget ──
+  var priceMatch = txt.match(/(?:price|budget|rate|unit price|max price|target)[:\s]*\$?([\d,\.]+)/i)
+                   || txt.match(/\$\s*([\d,\.]+)\s*(?:\/\s*(?:mt|ton|kg|unit|liter))?/i);
+  if (priceMatch) {
+    var bf = document.getElementById('budget');
+    if (bf) bf.value = '$' + priceMatch[1].replace(/,/g,'').replace(/\.00$/,'');
+  }
+
+  // ── Country ──
+  var countryList = ['UAE','Saudi Arabia','Qatar','Kuwait','Bahrain','Oman','Egypt','Jordan','Iraq','Lebanon','Palestine','Libya','Turkey','China','India','Germany','France','Netherlands','UK','USA','United States','Morocco','Tunisia','Algeria'];
+  var countryMatch = null;
+  for (var ci = 0; ci < countryList.length; ci++) {
+    var re = new RegExp('\\b' + countryList[ci].replace(' ','\\s') + '\\b', 'i');
+    if (re.test(txt)) { countryMatch = countryList[ci]; break; }
+  }
   if (countryMatch) {
     var cf = document.getElementById('country');
-    if (cf) cf.value = countryMatch[1];
+    if (cf) {
+      for (var oi = 0; oi < cf.options.length; oi++) {
+        if (cf.options[oi].text.toLowerCase() === countryMatch.toLowerCase()) { cf.selectedIndex = oi; break; }
+      }
+    }
   }
+
+  // ── Product / spec line → pre-fill detail field ──
+  var productMatch = txt.match(/(?:product|item|commodity|material|description)[:\s]+([^\n\r,;]{3,60})/i);
+  if (productMatch) {
+    var df = document.getElementById('product-detail');
+    if (df) df.value = productMatch[1].trim();
+  }
+
+  // ── PO / project reference ──
+  var refMatch = txt.match(/(?:po|purchase order|ref|reference|order no|order#)[:\s#]*([A-Z0-9\-\/]{3,30})/i);
+  if (refMatch) {
+    var rf = document.getElementById('project-ref');
+    if (rf) rf.value = refMatch[1].trim();
+  }
+
+  // ── Incoterms ──
+  var incoMatch = txt.match(/\b(FOB|CIF|DAP|DDP|EXW|CFR|FAS|FCA)\b/i);
+  if (incoMatch) {
+    var inf = document.getElementById('incoterms');
+    if (inf) {
+      for (var ii = 0; ii < inf.options.length; ii++) {
+        if (inf.options[ii].value.toUpperCase() === incoMatch[1].toUpperCase()) { inf.selectedIndex = ii; break; }
+      }
+    }
+  }
+
   goStep(1);
 }
 
