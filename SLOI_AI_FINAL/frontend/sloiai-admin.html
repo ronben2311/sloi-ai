@@ -228,7 +228,7 @@ select.inp option{background:var(--surface)}
   <button class="nav active" onclick="show('warroom',this)"><span class="nav-icon">🔴</span><span class="nav-label">War Room</span><span class="nav-badge nb-red" id="alert-count">3</span></button>
   <button class="nav" onclick="show('pipeline',this)"><span class="nav-icon">📊</span><span class="nav-label">Pipeline</span></button>
   <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold" id="neg-count">2</span></button>
-  <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">8</span></button>
+  <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">10</span></button>
   <div class="sb-section">Revenue</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
   <button class="nav" onclick="show('credits',this)"><span class="nav-icon">⚡</span><span class="nav-label">Credits</span></button>
@@ -728,7 +728,7 @@ select.inp option{background:var(--surface)}
 
     <!-- HEADER -->
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-size:15px;color:var(--muted)">8 agents running autonomously · all LOIs require Boss approval</div>
+      <div style="font-size:15px;color:var(--muted)">10 agents running autonomously · all LOIs require Boss approval</div>
       <button class="btn btn-sm btn-p" onclick="runAllAgents()">▶ Run all agents now</button>
     </div>
 
@@ -745,6 +745,8 @@ select.inp option{background:var(--surface)}
       <div style="display:flex;align-items:center;gap:4px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">🧾 PO Generator <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="openInvoiceModal()">🧾 InvoiceGen <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px">⚖️ LegalContract</div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:var(--blue);padding:3px 9px;border-radius:10px;font-size:13px">🏭 SupplierFinder <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px">💬 TraderComms <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
     </div>
 
     <!-- STAGE 01: DISCOVER & QUALIFY -->
@@ -814,6 +816,71 @@ select.inp option{background:var(--surface)}
 
     </div>
 
+    <!-- SUPPLIERFINDER -->
+    <div style="background:var(--surface);border:1px solid rgba(59,130,246,.3);border-radius:8px;overflow:hidden;margin-bottom:18px">
+      <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:34px;height:34px;border-radius:8px;background:rgba(59,130,246,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🏭</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--white)">SupplierFinder</div>
+            <div style="font-size:13px;color:var(--muted)">Scans trade directories, factory registries &amp; MENA sourcing networks — surfaces verified suppliers before you need them</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
+          <button class="btn btn-xs" onclick="alert('SupplierFinder — configure sectors, geographies, and source databases')">⚙ Configure</button>
+          <button class="btn btn-xs btn-p" onclick="openConsole('supplier')">▶ Run now</button>
+        </div>
+      </div>
+      <div style="padding:14px 18px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+        <div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--blue)">47</div><div style="font-size:12px;color:var(--muted);margin-top:2px">In network</div></div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--green)">5</div><div style="font-size:12px;color:var(--muted);margin-top:2px">New today</div></div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--gold)">2</div><div style="font-size:12px;color:var(--muted);margin-top:2px">KYC pending</div></div>
+          </div>
+          <div style="font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;font-weight:600">Sectors monitored</div>
+          <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+            <span style="font-size:12px;padding:2px 8px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:3px;color:var(--blue)">🔩 Steel</span>
+            <span style="font-size:12px;padding:2px 8px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:3px;color:var(--blue)">🏗️ Cement</span>
+            <span style="font-size:12px;padding:2px 8px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:3px;color:var(--blue)">🌾 Grain</span>
+            <span style="font-size:12px;padding:2px 8px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:3px;color:var(--blue)">🧪 Chemicals</span>
+            <span style="font-size:12px;padding:2px 8px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);border-radius:3px;color:var(--blue)">⛏️ Minerals</span>
+          </div>
+          <div style="font-size:12px;color:var(--muted)">Sources: <span style="color:var(--text)">UAE Chamber · ZATCA · GlobalSpec · TradeBridge · LinkedIn</span></div>
+        </div>
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--white);letter-spacing:.05em;margin-bottom:8px">// LATEST — pre-screened by ComplianceBot</div>
+          <div style="display:flex;flex-direction:column;gap:0;max-height:170px;overflow-y:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+              <div><span style="color:var(--white)">Emirates Steel</span><span style="color:var(--muted);margin-left:8px">UAE · Steel Rebar</span></div>
+              <div style="display:flex;gap:5px;align-items:center"><span class="badge bg" style="font-size:11px">Verified</span><button class="btn btn-xs btn-g" style="padding:1px 7px;font-size:12px" onclick="alert('Add Emirates Steel to trader network')">+ Add</button></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+              <div><span style="color:var(--white)">Al-Ghurair Grain</span><span style="color:var(--muted);margin-left:8px">UAE · Wheat</span></div>
+              <div style="display:flex;gap:5px;align-items:center"><span class="badge bg" style="font-size:11px">Verified</span><button class="btn btn-xs btn-g" style="padding:1px 7px;font-size:12px" onclick="alert('Add Al-Ghurair to trader network')">+ Add</button></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+              <div><span style="color:var(--white)">Arabian Cement Co</span><span style="color:var(--muted);margin-left:8px">KSA · OPC Cement</span></div>
+              <div style="display:flex;gap:5px;align-items:center"><span class="badge ba" style="font-size:11px">KYC pending</span><button class="btn btn-xs" style="padding:1px 7px;font-size:12px" onclick="alert('Start KYC for Arabian Cement Co')">KYC →</button></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+              <div><span style="color:var(--white)">EQUATE Petrochemical</span><span style="color:var(--muted);margin-left:8px">Kuwait · HDPE</span></div>
+              <div style="display:flex;gap:5px;align-items:center"><span class="badge bg" style="font-size:11px">Verified</span><button class="btn btn-xs btn-g" style="padding:1px 7px;font-size:12px" onclick="alert('Add EQUATE to trader network')">+ Add</button></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px">
+              <div><span style="color:var(--white)">Ma'aden</span><span style="color:var(--muted);margin-left:8px">KSA · Critical Minerals</span></div>
+              <div style="display:flex;gap:5px;align-items:center"><span class="badge bv" style="font-size:11px">Screening</span><button class="btn btn-xs" style="padding:1px 7px;font-size:12px" onclick="alert('ComplianceBot screening in progress')">View</button></div>
+            </div>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:10px">
+            <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('Add all verified suppliers to trader network')">+ Add all verified</button>
+            <button class="btn btn-xs" onclick="alert('Export supplier list as CSV')">↓ Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- STAGE 02: PRICE & OUTREACH -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <span style="background:var(--indigo);color:#fff;font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">02</span>
@@ -872,7 +939,6 @@ select.inp option{background:var(--surface)}
           </div>
           <div style="display:flex;gap:6px;margin-top:12px">
             <button class="btn btn-xs btn-g" onclick="resumeOutreach()" style="flex:1;justify-content:center">▶ Resume</button>
-            <button class="btn btn-xs" onclick="window.open('telegram-templates.html','_blank')">Templates</button>
           </div>
         </div>
       </div>
@@ -993,6 +1059,85 @@ select.inp option{background:var(--surface)}
         </div>
       </div>
 
+    </div>
+
+    <!-- TRADERCOMMS AI -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:var(--teal);color:var(--bg);font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">03.5</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">POST-LOI — TRADER COMMUNICATIONS</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(45,212,191,.3);border-radius:8px;overflow:hidden;margin-bottom:18px">
+      <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:34px;height:34px;border-radius:8px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">💬</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--white)">TraderCommsAI</div>
+            <div style="font-size:13px;color:var(--muted)">Manages all communication with traders after LOI is signed — document requests, delivery milestones &amp; payment notifications via WhatsApp</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Active · 3 deals</span>
+          <button class="btn btn-xs btn-p" onclick="alert('Send WhatsApp update to all active traders')">📲 Send update</button>
+        </div>
+      </div>
+      <div style="padding:14px 18px">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--teal)">3</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Active post-LOI</div></div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--gold)">2</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Docs overdue</div></div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--green)">7</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Messages sent</div></div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center"><div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--white)">100%</div><div style="font-size:12px;color:var(--muted);margin-top:2px">Reply rate</div></div>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:var(--white);letter-spacing:.05em;margin-bottom:8px">// DEAL TRACKER — post-LOI milestones</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+
+          <!-- Deal 1 -->
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div><span style="font-size:13px;font-weight:600;color:var(--white)">Atlas Trading</span><span style="font-size:12px;color:var(--muted);margin-left:8px">Steel Rebar 200MT · $508K · LOI-20260603-001</span></div>
+              <button class="btn btn-xs" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="alert('Send WhatsApp to Atlas Trading')">📲 Message</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;font-size:11px">
+              <div style="text-align:center"><div style="height:4px;background:var(--green);border-radius:2px 0 0 2px;margin-bottom:4px"></div><span style="color:var(--green)">✓ LOI Signed</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--green);margin-bottom:4px"></div><span style="color:var(--green)">✓ Docs requested</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--gold);margin-bottom:4px"></div><span style="color:var(--gold)">⏳ Awaiting B/L</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--border2);margin-bottom:4px"></div><span style="color:var(--muted)">– Payment</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--border2);border-radius:0 2px 2px 0;margin-bottom:4px"></div><span style="color:var(--muted)">– Shipped</span></div>
+            </div>
+          </div>
+
+          <!-- Deal 2 -->
+          <div style="background:var(--surface2);border:1px solid rgba(239,68,68,.2);border-radius:6px;padding:10px 14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div><span style="font-size:13px;font-weight:600;color:var(--white)">Gulf Cement LLC</span><span style="font-size:12px;color:var(--muted);margin-left:8px">OPC Cement 500MT · $31,500 · LOI-20260601-003</span></div>
+              <button class="btn btn-xs" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.25);color:var(--red)" onclick="alert('Chase Gulf Cement for overdue B/L — sending WhatsApp now')">⚠ Chase docs</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;font-size:11px">
+              <div style="text-align:center"><div style="height:4px;background:var(--green);border-radius:2px 0 0 2px;margin-bottom:4px"></div><span style="color:var(--green)">✓ LOI Signed</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--green);margin-bottom:4px"></div><span style="color:var(--green)">✓ Docs requested</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--red);margin-bottom:4px"></div><span style="color:var(--red)">✗ B/L overdue 48h</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--border2);margin-bottom:4px"></div><span style="color:var(--muted)">– Payment</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--border2);border-radius:0 2px 2px 0;margin-bottom:4px"></div><span style="color:var(--muted)">– Shipped</span></div>
+            </div>
+          </div>
+
+          <!-- Deal 3 -->
+          <div style="background:var(--surface2);border:1px solid rgba(34,197,94,.15);border-radius:6px;padding:10px 14px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <div><span style="font-size:13px;font-weight:600;color:var(--white)">NovaTrade GmbH</span><span style="font-size:12px;color:var(--muted);margin-left:8px">Hard Wheat 50MT · $56,000 · LOI-20260522-007</span></div>
+              <button class="btn btn-xs btn-g" onclick="alert('Archive — deal complete')">✓ Complete</button>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;font-size:11px">
+              <div style="text-align:center"><div style="height:4px;background:var(--green);border-radius:2px 0 0 2px;margin-bottom:4px"></div><span style="color:var(--green)">✓ LOI Signed</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--green);margin-bottom:4px"></div><span style="color:var(--green)">✓ Docs received</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--green);margin-bottom:4px"></div><span style="color:var(--green)">✓ Docs received</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--green);margin-bottom:4px"></div><span style="color:var(--green)">✓ Payment sent</span></div>
+              <div style="text-align:center"><div style="height:4px;background:var(--teal);border-radius:0 2px 2px 0;margin-bottom:4px;animation:pulse-bar 1.5s infinite"></div><span style="color:var(--teal)">🚢 In transit</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
 
     <!-- STAGE 04: LEGAL + BILLING -->
@@ -1153,8 +1298,24 @@ select.inp option{background:var(--surface)}
               <td style="padding:10px;font-size:13px;color:var(--teal)">in 5h 40m</td>
             </tr>
             <!-- PO Generator -->
-            <tr>
+            <tr style="border-bottom:1px solid var(--border)">
               <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🧾</span><span style="font-size:13px;font-weight:600;color:var(--white)">PO Generator</span></div></td>
+              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option selected>Every 6 hours</option><option>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="00:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="23:59" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--teal)">Always on</td>
+            </tr>
+            <!-- SupplierFinder -->
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🏭</span><span style="font-size:13px;font-weight:600;color:var(--white)">SupplierFinder</span></div></td>
+              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
+              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option>Every 6 hours</option><option selected>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="06:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="22:00" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
+              <td style="padding:10px;font-size:13px;color:var(--teal)">in 6h 30m</td>
+            </tr>
+            <!-- TraderCommsAI -->
+            <tr>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">💬</span><span style="font-size:13px;font-weight:600;color:var(--white)">TraderCommsAI</span></div></td>
               <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
               <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option selected>Every 6 hours</option><option>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
               <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="00:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="23:59" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
@@ -1202,6 +1363,26 @@ select.inp option{background:var(--surface)}
             <div style="font-size:12px;color:var(--muted)">Boss approves deal <span style="color:var(--indigo)">→</span> LOI auto-generated &amp; sent <span style="color:var(--indigo)">→</span> PO Generator fires within 15 min of LOI signature</div>
           </div>
           <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Active</span>
+        </div>
+
+        <!-- Rule 4 — NEW -->
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid rgba(45,212,191,.2);border-radius:7px">
+          <div class="sw on" style="flex-shrink:0;margin-top:2px" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">LOI signed → TraderCommsAI activates → doc chase every 24h</div>
+            <div style="font-size:12px;color:var(--muted)">LOI signed by both parties <span style="color:var(--teal)">→</span> TraderCommsAI sends confirmation WhatsApp to trader <span style="color:var(--teal)">→</span> requests B/L, COO, SGS docs <span style="color:var(--teal)">→</span> chases every 24h until received</div>
+          </div>
+          <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.2);color:var(--teal);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Active</span>
+        </div>
+
+        <!-- Rule 5 — NEW -->
+        <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid rgba(59,130,246,.2);border-radius:7px">
+          <div class="sw on" style="flex-shrink:0;margin-top:2px" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">SupplierFinder finds supplier → ComplianceBot screens → add to network</div>
+            <div style="font-size:12px;color:var(--muted)">SupplierFinder surfaces new supplier <span style="color:var(--blue)">→</span> ComplianceBot runs OFAC + dual-use check <span style="color:var(--blue)">→</span> if cleared, auto-added to pending trader network</div>
+          </div>
+          <span style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);color:var(--blue);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Active</span>
         </div>
 
         <!-- Rule 4 -->
