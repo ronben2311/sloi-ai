@@ -736,20 +736,62 @@ function openInNewTab(){
   document.querySelectorAll('style').forEach(function(s){styles += s.textContent;});
   var filename = (document.getElementById('ref').value || 'LOI') + '.pdf';
 
+  var printOverride = [
+    /* ── light theme: reset all CSS variables ── */
+    ':root{',
+    '  --bg:#ffffff;--surface:#f4f4fb;--surface2:#eaeaf6;',
+    '  --border:#dcdcf0;--border2:#cccce6;',
+    '  --text:#1a1a2e;--white:#0f0f1e;--muted:#60608a;',
+    '  --indigo:#4b50e6;--violet:#6366f1;--teal:#0d9488;',
+    '  --green:#15803d;--gold:#b45309;--red:#dc2626;',
+    '}',
+    /* ── page chrome ── */
+    'body{background:#e8e8f8;padding:40px 32px;display:flex;flex-direction:column;align-items:center;font-family:"Inter",system-ui,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;}',
+    '.dl-bar{width:100%;max-width:794px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding:12px 20px;background:#fff;border:1px solid #dcdcf0;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,50,.06);}',
+    '.dl-bar-label{color:#1a1a2e;font-size:13px;font-family:"IBM Plex Mono",monospace;}',
+    '.dl-btn{background:#4b50e6;color:#fff;border:none;padding:10px 24px;border-radius:6px;font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;}',
+    '.dl-btn:hover{opacity:.85;}.dl-btn:disabled{opacity:.4;cursor:not-allowed;}',
+    '.doc-wrap{width:100%;max-width:794px;}',
+    /* ── document shell ── */
+    '.doc{background:#fff!important;border:1px solid #dcdcf0!important;box-shadow:0 6px 40px rgba(0,0,50,.10);border-radius:8px;}',
+    /* keep brand header dark */
+    '.doc-top{background:#0f0f1e!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}',
+    '.doc-logo{color:#eeedf8!important;}.doc-logo em{color:#6366f1!important;}',
+    '.doc-type-label{color:#eeedf8!important;}.doc-ref,.doc-date{color:#8888a8!important;}',
+    '.doc-tagline{color:#6366f1!important;}',
+    /* white body */
+    '.doc-body{background:#fff!important;padding:24px 28px;font-family:"Inter",system-ui,sans-serif;}',
+    '.doc-section{color:#4b50e6!important;font-size:10px;letter-spacing:.12em;}',
+    /* parties */
+    '.party-block{background:#f4f4fb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}',
+    '.party-role{color:#60608a!important;}.party-name{color:#0f0f1e!important;}.party-addr{color:#60608a!important;font-family:"Inter",system-ui,sans-serif;}',
+    /* products + logistics tables */
+    '.details-table td{font-family:"IBM Plex Mono",monospace;font-size:12px;}',
+    /* total box */
+    '.total-box{background:#f0f0ff!important;border-color:#9090e0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}',
+    '.total-label{color:#60608a!important;}.total-amount{color:#4b50e6!important;}.total-fees{color:#60608a!important;font-family:"Inter",system-ui,sans-serif;}',
+    /* clauses */
+    '.clause-title{color:#0f0f1e!important;font-family:"Inter",system-ui,sans-serif;font-size:12.5px;}',
+    '.clause-text{color:#3a3a5e!important;font-family:"Inter",system-ui,sans-serif;font-size:12.5px;line-height:1.7;}',
+    /* sigs */
+    '.sig-block{background:#f4f4fb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}',
+    '.sig-role-label{color:#60608a!important;}.sig-name{color:#0f0f1e!important;}.sig-title{color:#60608a!important;font-family:"Inter",system-ui,sans-serif;}.sig-date{color:#9090b0!important;}',
+    '.sig-line{background:#cccce6!important;}',
+    /* payment terms */
+    '.escrow-box{background:#f4f4fb!important;border-color:#9090e0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}',
+    '.escrow-label{color:#60608a!important;font-family:"Inter",system-ui,sans-serif;}.escrow-val{color:#0f0f1e!important;font-family:"IBM Plex Mono",monospace;}',
+    '.escrow-row{border-color:#dcdcf0!important;}',
+    /* footer */
+    '.doc-footer{background:#f4f4fb!important;color:#9090b0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}',
+  ].join('');
+
   var html = '<!DOCTYPE html><html><head><meta charset="UTF-8">'
-    + '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">'
+    + '<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600;700&family=Fraunces:wght@700;900&display=swap" rel="stylesheet">'
     + '<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>'
-    + '<style>'
-    + styles
-    + 'body{background:#07070f;padding:32px;display:flex;flex-direction:column;align-items:center;font-family:"IBM Plex Mono",monospace;}'
-    + '.dl-bar{width:100%;max-width:794px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:12px 18px;background:#0e0e1a;border:1px solid #1c1c2e;border-radius:6px;}'
-    + '.dl-bar-label{color:#d4d2f0;font-size:13px;}'
-    + '.dl-btn{background:#5b5fef;color:#fff;border:none;padding:10px 24px;border-radius:5px;font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s;}'
-    + '.dl-btn:hover{opacity:.85;}.dl-btn:disabled{opacity:.4;cursor:not-allowed;}'
-    + '.doc-wrap{width:100%;max-width:794px;}'
-    + '</style></head><body>'
+    + '<style>' + styles + printOverride + '</style>'
+    + '</head><body>'
     + '<div class="dl-bar">'
-    + '  <span class="dl-bar-label">📄 LOI Preview — ready to download</span>'
+    + '  <span class="dl-bar-label">📄 ' + (document.getElementById('ref').value||'LOI') + ' — ready to download</span>'
     + '  <button class="dl-btn" id="dl-btn" onclick="downloadPDF()">⬇ Download PDF</button>'
     + '</div>'
     + '<div class="doc-wrap">' + content + '</div>'
@@ -760,10 +802,10 @@ function openInNewTab(){
     + '  btn.textContent="Generating…";btn.disabled=true;'
     + '  var el=document.querySelector(".doc-wrap .doc")||document.querySelector(".doc-wrap");'
     + '  html2pdf().set({'
-    + '    margin:[8,10,8,10],'
+    + '    margin:[10,12,10,12],'
     + '    filename:_fn,'
     + '    image:{type:"jpeg",quality:0.98},'
-    + '    html2canvas:{scale:2,useCORS:true,scrollX:0,scrollY:0},'
+    + '    html2canvas:{scale:2,useCORS:true,scrollX:0,scrollY:0,backgroundColor:"#ffffff"},'
     + '    jsPDF:{unit:"mm",format:"a4",orientation:"portrait"}'
     + '  }).from(el).save()'
     + '  .then(function(){btn.textContent="⬇ Download PDF";btn.disabled=false;})'
