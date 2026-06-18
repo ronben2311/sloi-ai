@@ -285,36 +285,27 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
     </div>
   </div>
 
-  <!-- STEP 3: COMMODITY -->
+  <!-- STEP 3: COMMODITY (multi-product) -->
   <div class="step">
     <div class="step-header">
       <div class="step-num">3</div>
-      <div class="step-title">Commodity & pricing</div>
-    </div>
-    <div class="field-grid">
-      <div class="field"><label>Product name</label><input id="product" value="Deformed Steel Bar (Rebar) G60" oninput="updatePreview()"/></div>
-      <div class="field"><label>SKU / Grade</label><input id="sku" value="STL-RBR12 · ASTM A615 G60" oninput="updatePreview()"/></div>
-      <div class="field"><label>Quantity</label><input id="quantity" type="number" value="100" oninput="calcTotal()"/></div>
-      <div class="field">
-        <label>Unit</label>
-        <select id="unit" onchange="updatePreview()">
-          <option>Metric Tons (MT)</option>
-          <option>Tons</option>
-          <option>m³</option>
-          <option>m²</option>
-          <option>Liters</option>
-          <option>kg</option>
-          <option>Units</option>
-        </select>
-      </div>
-      <div class="field"><label>Unit price</label><input id="unit_price" type="number" value="2840" oninput="calcTotal()"/></div>
-      <div class="field">
-        <label>Currency</label>
-        <select id="currency" onchange="calcTotal()">
+      <div class="step-title">Products & pricing</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:6px">
+        <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Currency</label>
+        <select id="currency" onchange="calcTotal()" style="background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:5px 8px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;cursor:pointer">
           <option>USD</option><option>AED</option><option>SAR</option><option>ILS</option><option>EUR</option>
         </select>
       </div>
     </div>
+
+    <div id="product-rows"><!-- rendered by renderProducts() --></div>
+
+    <button onclick="addProduct()"
+      style="width:100%;background:none;border:1px dashed var(--border2);color:var(--muted);padding:10px;border-radius:5px;font-size:13px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s;margin-bottom:14px"
+      onmouseover="this.style.borderColor='var(--indigo)';this.style.color='var(--violet)'"
+      onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">
+      + Add product
+    </button>
 
     <!-- AUTO CALC -->
     <div class="calc-row">
@@ -446,6 +437,61 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
 </div><!-- /layout -->
 
 <script>
+// ── PRODUCTS (multi-product support) ──────────────────────────────────────────
+var products = [
+  { product:'Deformed Steel Bar (Rebar) G60', sku:'STL-RBR12 · ASTM A615 G60', quantity:100, unit:'Metric Tons (MT)', unit_price:2840 }
+];
+
+var UNITS = ['Metric Tons (MT)','Tons','m³','m²','Liters','kg','Units'];
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function unitOpts(selected){
+  return UNITS.map(function(u){ return '<option'+(u===selected?' selected':'')+'>'+u+'</option>'; }).join('');
+}
+
+function renderProducts(){
+  var cur = document.getElementById('currency') ? document.getElementById('currency').value : 'USD';
+  var sym = cur==='ILS'?'₪':cur==='EUR'?'€':'$';
+  var container = document.getElementById('product-rows');
+  if(!container) return;
+  container.innerHTML = '';
+  products.forEach(function(p,i){
+    var sub = (p.quantity||0)*(p.unit_price||0);
+    var div = document.createElement('div');
+    div.style.cssText = 'background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:12px 14px;margin-bottom:10px';
+    div.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+        +'<span style="font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.07em;text-transform:uppercase">Product '+(i+1)+'</span>'
+        +(products.length>1?'<button onclick="removeProduct('+i+')" style="background:none;border:none;color:var(--muted);font-size:12px;cursor:pointer;padding:2px 8px;border-radius:3px;font-family:\'IBM Plex Mono\',monospace;transition:color .15s" onmouseover="this.style.color=\'var(--red)\'" onmouseout="this.style.color=\'var(--muted)\'">✕ Remove</button>':'')
+      +'</div>'
+      +'<div class="field-grid">'
+        +'<div class="field"><label>Product name</label><input value="'+esc(p.product)+'" oninput="products['+i+'].product=this.value;updatePreview()" style="background:var(--surface2)"/></div>'
+        +'<div class="field"><label>SKU / Grade</label><input value="'+esc(p.sku)+'" oninput="products['+i+'].sku=this.value;updatePreview()" style="background:var(--surface2)"/></div>'
+        +'<div class="field"><label>Quantity</label><input type="number" value="'+esc(p.quantity)+'" oninput="products['+i+'].quantity=parseFloat(this.value)||0;calcTotal()" style="background:var(--surface2)"/></div>'
+        +'<div class="field"><label>Unit</label><select onchange="products['+i+'].unit=this.value;updatePreview()" style="background:var(--surface2)">'+unitOpts(p.unit)+'</select></div>'
+        +'<div class="field"><label>Unit price</label><input type="number" value="'+esc(p.unit_price)+'" oninput="products['+i+'].unit_price=parseFloat(this.value)||0;calcTotal()" style="background:var(--surface2)"/></div>'
+        +'<div class="field"><label>Subtotal</label><div id="sub-'+i+'" style="font-family:\'Fraunces\',serif;font-size:16px;font-weight:700;color:var(--indigo);padding-top:10px">'+sym+sub.toLocaleString()+'</div></div>'
+      +'</div>';
+    container.appendChild(div);
+  });
+}
+
+function addProduct(){
+  products.push({ product:'', sku:'', quantity:1, unit:'Metric Tons (MT)', unit_price:0 });
+  renderProducts();
+  calcTotal();
+}
+
+function removeProduct(i){
+  if(products.length<=1) return;
+  products.splice(i,1);
+  renderProducts();
+  calcTotal();
+}
+
 // ── SUPPLIER PRESETS ──────────────────────────────────────────────────────────
 var PRESETS = {
   sup004:{name:'Supplier REF-MET-001',addr:'Verified Industrial Zone',country:'Verified',contact:'Verified Contact',title:'Export Manager'},
@@ -475,14 +521,18 @@ function getSupplierName(){
 
 // ── CALC ──────────────────────────────────────────────────────────────────────
 function calcTotal(){
-  var qty = parseFloat(document.getElementById('quantity').value)||0;
-  var price = parseFloat(document.getElementById('unit_price').value)||0;
   var cur = document.getElementById('currency').value;
-  var total = qty * price;
+  var sym = cur==='ILS'?'₪':cur==='EUR'?'€':'$';
+  var total = 0;
+  products.forEach(function(p){ total += (p.quantity||0)*(p.unit_price||0); });
   var fee = Math.round(total * 0.01);
   var trader = Math.round(total * 0.05);
   var net = total - fee - trader;
-  var sym = cur==='ILS'?'₪':cur==='EUR'?'€':'$';
+  // update per-row subtotals without full re-render
+  products.forEach(function(p,i){
+    var el = document.getElementById('sub-'+i);
+    if(el) el.textContent = sym+((p.quantity||0)*(p.unit_price||0)).toLocaleString();
+  });
   document.getElementById('calc-total').textContent = sym+total.toLocaleString();
   document.getElementById('calc-fee').textContent = sym+fee.toLocaleString();
   document.getElementById('calc-trader').textContent = sym+trader.toLocaleString();
@@ -491,10 +541,9 @@ function calcTotal(){
 }
 
 function getVals(){
-  var qty = parseFloat(document.getElementById('quantity').value)||0;
-  var price = parseFloat(document.getElementById('unit_price').value)||0;
   var cur = document.getElementById('currency').value;
-  var total = qty * price;
+  var total = 0;
+  products.forEach(function(p){ total += (p.quantity||0)*(p.unit_price||0); });
   var fee = Math.round(total * 0.01);
   var trader = Math.round(total * 0.05);
   var net = total - fee - trader;
@@ -513,11 +562,7 @@ function getVals(){
     supplier_title: document.getElementById('supplier_title').value,
     supplier_country: document.getElementById('supplier_country').value,
     supplier_address: document.getElementById('supplier_address').value,
-    product: document.getElementById('product').value,
-    sku: document.getElementById('sku').value,
-    quantity: qty,
-    unit: document.getElementById('unit').value,
-    unit_price: price,
+    products: products,
     currency: cur,
     total: total,
     fee: fee,
@@ -575,10 +620,30 @@ function updatePreview(){
       </div>
     </div>
 
-    <div class="doc-section">Commodity & Transaction</div>
+    <div class="doc-section">Products</div>
+    <table class="details-table" style="table-layout:fixed">
+      <tr>
+        <td style="background:var(--surface2);color:var(--muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase;width:28%">Product</td>
+        <td style="background:var(--surface2);color:var(--muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase;width:20%">SKU / Grade</td>
+        <td style="background:var(--surface2);color:var(--muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase;width:16%">Quantity</td>
+        <td style="background:var(--surface2);color:var(--muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase;width:18%">Unit Price</td>
+        <td style="background:var(--surface2);color:var(--indigo);font-size:10px;letter-spacing:.06em;text-transform:uppercase;width:18%;text-align:right">Subtotal</td>
+      </tr>
+      ${v.products.map(function(p){
+        var sub=(p.quantity||0)*(p.unit_price||0);
+        var us=p.unit?p.unit.split(' ')[0]:'MT';
+        return '<tr>'
+          +'<td style="background:var(--surface);color:var(--white);font-weight:600">'+(p.product||'—')+'</td>'
+          +'<td style="background:var(--bg);color:var(--muted)">'+(p.sku||'—')+'</td>'
+          +'<td style="background:var(--surface);color:var(--white);font-weight:600">'+(p.quantity||0).toLocaleString()+' '+(p.unit||'MT')+'</td>'
+          +'<td style="background:var(--bg);color:var(--muted)">'+cur+' '+(p.unit_price||0).toLocaleString()+'/'+us+'</td>'
+          +'<td style="background:var(--surface);color:var(--indigo);font-weight:700;text-align:right">'+cur+' '+sub.toLocaleString()+'</td>'
+          +'</tr>';
+      }).join('')}
+    </table>
+
+    <div class="doc-section">Logistics & Payment</div>
     <table class="details-table">
-      <tr><td>Product</td><td>${v.product}</td><td>SKU / Grade</td><td>${v.sku}</td></tr>
-      <tr><td>Quantity</td><td>${v.quantity.toLocaleString()} ${v.unit}</td><td>Unit Price</td><td>${cur} ${v.unit_price.toLocaleString()}/${v.unit.split(' ')[0]}</td></tr>
       <tr><td>Incoterm</td><td>${v.incoterm}</td><td>Payment</td><td>${v.payment_method}</td></tr>
       <tr><td>Port of Loading</td><td>${v.port_loading}</td><td>Destination</td><td>${v.port_destination}</td></tr>
       <tr><td>Delivery By</td><td>${v.delivery_date}</td><td>LOI Valid</td><td>${v.loi_validity} calendar days</td></tr>
@@ -597,7 +662,7 @@ function updatePreview(){
     <div class="doc-section">Terms (Summary)</div>
     <div class="clause">
       <div class="clause-title">1. Intent</div>
-      <div class="clause-text">${v.buyer_name} intends to purchase ${v.quantity.toLocaleString()} ${v.unit} of ${v.product} from ${v.supplier_name} through SLOI AI Ltd. This LOI is binding upon countersignature by all parties.</div>
+      <div class="clause-text">${v.buyer_name} intends to purchase ${v.products.length===1?((v.products[0].quantity||0).toLocaleString()+' '+v.products[0].unit+' of '+(v.products[0].product||'the commodity')):('the '+v.products.length+' commodities listed in the Products table above, total value '+cur+' '+v.total.toLocaleString())} from ${v.supplier_name} through SLOI AI Ltd. This LOI is binding upon countersignature by all parties.</div>
     </div>
     <div class="clause">
       <div class="clause-title">2. Payment</div>
@@ -844,8 +909,6 @@ function toggleSmartFill() {
   document.getElementById('sf-caret').textContent = _sfOpen ? '▾' : '▸';
 }
 
-function _sfEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
 function parseOffer() {
   var text = document.getElementById('offer-text').value.trim();
   if (!text) { sfMsg('error','Paste an offer first.'); return; }
@@ -920,13 +983,27 @@ function parseOffer() {
   }
 }
 
-function showSfPicker(products, meta) {
+function showSfPicker(sfProds, meta) {
   var list = document.getElementById('sf-picker-list');
   list.innerHTML = '';
-  products.forEach(function(p) {
+
+  // "Add all" button
+  var allBtn = document.createElement('button');
+  allBtn.style.cssText = 'width:100%;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.35);border-radius:5px;padding:10px 14px;color:var(--teal);font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;transition:background .15s';
+  allBtn.innerHTML = '<span>⊕ Add all '+sfProds.length+' products</span><span style="font-size:11px;opacity:.7">fills '+sfProds.length+' rows</span>';
+  allBtn.onmouseover = function(){ this.style.background='rgba(45,212,191,.22)'; };
+  allBtn.onmouseout  = function(){ this.style.background='rgba(45,212,191,.12)'; };
+  allBtn.onclick = function() {
+    document.getElementById('sf-picker').style.display='none';
+    applyAllParsed(sfProds, meta);
+  };
+  list.appendChild(allBtn);
+
+  // individual product buttons
+  sfProds.forEach(function(p) {
     var btn = document.createElement('button');
     btn.style.cssText = 'width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:10px 14px;color:var(--white);font-family:"IBM Plex Mono",monospace;font-size:13px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:border-color .15s;text-align:left';
-    btn.innerHTML = '<span>'+_sfEsc(p.name)+'</span><span style="color:var(--teal);font-weight:600">'+_sfEsc(meta.cur)+' '+p.price.toLocaleString()+' / MT</span>';
+    btn.innerHTML = '<span>'+esc(p.name)+'</span><span style="color:var(--teal);font-weight:600">'+esc(meta.cur)+' '+p.price.toLocaleString()+' / MT</span>';
     btn.onmouseover = function(){ this.style.borderColor='rgba(45,212,191,.4)'; };
     btn.onmouseout  = function(){ this.style.borderColor='var(--border2)'; };
     (function(prod){ btn.onclick = function() { document.getElementById('sf-picker').style.display='none'; applyParsed(prod, meta); }; })(p);
@@ -936,47 +1013,57 @@ function showSfPicker(products, meta) {
 }
 
 function applyParsed(product, meta) {
-  var filled = [];
+  // Write into the first product row
+  products[0] = {
+    product: product.name || products[0].product,
+    sku: products[0].sku,
+    quantity: products[0].quantity,
+    unit: meta.unit || products[0].unit,
+    unit_price: product.price || products[0].unit_price
+  };
+  _applyMeta(meta);
+  renderProducts();
+  var filled = ['product','price'];
+  if(meta.incoterm) filled.push('incoterm');
+  if(meta.delivDate) filled.push('delivery date');
+  if(meta.portLoad) filled.push('port of loading');
+  calcTotal();
+  sfMsg('success','✅ Filled: '+filled.join(', '));
+}
 
-  if (product.name)  { document.getElementById('product').value    = product.name;  filled.push('product'); }
-  if (product.price) { document.getElementById('unit_price').value = product.price; filled.push('price'); }
+function applyAllParsed(sfProds, meta) {
+  // Replace products array with all parsed products
+  products = sfProds.map(function(p){ return { product:p.name, sku:'', quantity:1, unit:meta.unit||'Metric Tons (MT)', unit_price:p.price }; });
+  _applyMeta(meta);
+  renderProducts();
+  var filled = [sfProds.length+' products'];
+  if(meta.incoterm) filled.push('incoterm');
+  if(meta.delivDate) filled.push('delivery date');
+  if(meta.portLoad) filled.push('port of loading');
+  calcTotal();
+  sfMsg('success','✅ Filled: '+filled.join(', '));
+}
 
+function _applyMeta(meta) {
   // Currency
   var curEl = document.getElementById('currency');
   for (var i=0; i<curEl.options.length; i++) {
-    if (curEl.options[i].text === meta.cur) { curEl.selectedIndex = i; filled.push('currency'); break; }
+    if (curEl.options[i].text === meta.cur) { curEl.selectedIndex = i; break; }
   }
-
-  // Unit
-  var unitEl = document.getElementById('unit');
-  var unitKey = meta.unit.split(' ')[0].toLowerCase();
-  for (var i=0; i<unitEl.options.length; i++) {
-    if (unitEl.options[i].text.toLowerCase().includes(unitKey)) { unitEl.selectedIndex = i; filled.push('unit'); break; }
-  }
-
   // Incoterm
   if (meta.incoterm) {
     var incEl = document.getElementById('incoterm');
     var prefix = meta.incoterm.split(' ')[0];
     for (var i=0; i<incEl.options.length; i++) {
-      if (incEl.options[i].text.startsWith(prefix)) { incEl.selectedIndex = i; filled.push('incoterm'); break; }
+      if (incEl.options[i].text.startsWith(prefix)) { incEl.selectedIndex = i; break; }
     }
   }
-
   // Delivery date
-  if (meta.delivDate) { document.getElementById('delivery_date').value = meta.delivDate; filled.push('delivery date'); }
-
+  if (meta.delivDate) document.getElementById('delivery_date').value = meta.delivDate;
   // LOI validity days
-  if (meta.loiDays) { document.getElementById('loi_validity').value = meta.loiDays; filled.push('LOI validity'); }
-
+  if (meta.loiDays) document.getElementById('loi_validity').value = meta.loiDays;
   // Port of loading
-  if (meta.portLoad) {
-    document.getElementById('port_loading').value = meta.portLoad;
-    filled.push('port of loading');
-  }
-
-  calcTotal();
-  sfMsg('success','✅ Filled: '+filled.join(', '));
+  if (meta.portLoad) document.getElementById('port_loading').value = meta.portLoad;
 }
 
 function sfMsg(type, msg) {
@@ -992,20 +1079,12 @@ function sfMsg(type, msg) {
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
+renderProducts();
 calcTotal();
 
 // ── READ URL PARAMS FROM AGENT CONSOLE ────────────────────────────────────────
 (function(){
   var params = new URLSearchParams(window.location.search);
-  var fields = {
-    ref:      document.getElementById('ref'),
-    product:  document.getElementById('product'),
-    qty:      document.getElementById('quantity'),
-    unit:     document.getElementById('unit'),
-    price:    document.getElementById('unit_price'),
-    buyer:    document.getElementById('buyer_name'),
-    location: document.getElementById('port_destination'),
-  };
   // deadline comes as a formatted string (e.g. "15 Jun 2026") — convert back to YYYY-MM-DD for the date input
   var deadlineParam = params.get('deadline');
   if (deadlineParam && deadlineParam !== 'TBD') {
@@ -1017,21 +1096,23 @@ calcTotal();
       if (deliveryEl) { deliveryEl.value = parsed.getFullYear() + '-' + mm + '-' + dd; }
     }
   }
-  Object.entries(fields).forEach(function([k,el]){
-    if(el && params.get(k)) {
-      if(el.tagName === 'SELECT') {
-        for(var i=0;i<el.options.length;i++){
-          if(el.options[i].value===params.get(k)||el.options[i].text.includes(params.get(k))){
-            el.selectedIndex=i; break;
-          }
-        }
-      } else {
-        el.value = params.get(k);
-      }
-    }
+  // Simple fields
+  var simpleFields = { ref:'ref', buyer:'buyer_name', location:'port_destination' };
+  Object.keys(simpleFields).forEach(function(k){
+    var el = document.getElementById(simpleFields[k]);
+    if(el && params.get(k)) el.value = params.get(k);
   });
-  if(params.get('ref')||params.get('buyer')||params.get('product')) updatePreview();
-  if(params.get('price')) calcTotal();
+  // Product fields → go into products[0]
+  if(params.get('product')) products[0].product = params.get('product');
+  if(params.get('price'))   products[0].unit_price = parseFloat(params.get('price'))||0;
+  if(params.get('qty'))     products[0].quantity = parseFloat(params.get('qty'))||1;
+  if(params.get('unit')) {
+    var unitKey = params.get('unit');
+    UNITS.forEach(function(u){ if(u.toLowerCase().includes(unitKey.toLowerCase())) products[0].unit=u; });
+  }
+  var needsUpdate = params.get('ref')||params.get('buyer')||params.get('product')||params.get('price');
+  if(needsUpdate) renderProducts();
+  if(needsUpdate) calcTotal();
   if(params.get('ref')) {
     var note = document.createElement('div');
     note.style.cssText = 'background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:5px;padding:10px 14px;font-size:13px;color:var(--green);margin-bottom:14px';
