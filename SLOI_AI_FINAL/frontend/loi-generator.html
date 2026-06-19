@@ -225,8 +225,26 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
         onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--border2)'"
         placeholder="● Prilled Urea: USD 530 / MT in bulk FOB.&#10;● Granular Urea: USD 550 / MT in bulk FOB.&#10;● Validity: 18/06/2026 at 13:00 CLT."></textarea>
 
+      <!-- AI settings -->
+      <div style="margin-top:8px">
+        <div onclick="toggleAiSettings()" style="font-size:12px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 0;user-select:none;transition:color .15s" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='var(--muted)'">
+          <span id="sf-ai-caret" style="font-size:10px">▸</span> ⚙ AI-powered parsing (optional — uses Claude API)
+        </div>
+        <div id="sf-ai-body" style="display:none;margin-top:8px;background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:12px">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Your Claude API key — stored only in your browser, never sent to our servers</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <input id="sf-api-key" type="password" placeholder="sk-ant-api03-…"
+              style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:8px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;transition:border-color .15s"
+              onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--border2)'"
+              oninput="saveSfApiKey(this.value)"/>
+            <button onclick="clearSfApiKey()" style="background:transparent;border:1px solid var(--border2);border-radius:4px;color:var(--muted);padding:7px 12px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:'IBM Plex Mono',monospace">Clear</button>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px">Uses <em>claude-haiku-4-5</em> · fast &amp; cheap · handles any offer format. <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--teal);text-decoration:none">Get key →</a></div>
+        </div>
+      </div>
+
       <div id="sf-picker" style="display:none;margin-top:10px;background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:12px">
-        <div style="font-size:11px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">Multiple products found — select one:</div>
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">Products found — pick one or add all:</div>
         <div id="sf-picker-list" style="display:flex;flex-direction:column;gap:6px"></div>
       </div>
 
@@ -951,10 +969,85 @@ function toggleSmartFill() {
   document.getElementById('sf-caret').textContent = _sfOpen ? '▾' : '▸';
 }
 
-function parseOffer() {
+async function parseOffer() {
   var text = document.getElementById('offer-text').value.trim();
   if (!text) { sfMsg('error','Paste an offer first.'); return; }
 
+  var btn = document.getElementById('sf-btn');
+  btn.disabled = true; btn.textContent = '⏳ Parsing…';
+  document.getElementById('sf-picker').style.display = 'none';
+  sfMsg('','');
+
+  var apiKey = (localStorage.getItem('sf_claude_key') || '').trim();
+  var result = null;
+
+  if (apiKey) {
+    sfMsg('info','⏳ Parsing with AI…');
+    try {
+      result = await parseWithClaude(text, apiKey);
+    } catch(e) {
+      sfMsg('info','⚠️ AI error: '+e.message+'. Using smart regex fallback…');
+      result = parseWithRegex(text);
+    }
+  } else {
+    result = parseWithRegex(text);
+  }
+
+  btn.disabled = false; btn.textContent = '✨ Parse & Fill Form';
+
+  var sfProds = (result.products || []).filter(function(p){ return p.name && p.price > 0; });
+  if (!sfProds.length) {
+    sfMsg('error','Could not extract a product and price. Try a different format, or add an AI key (⚙ above) for free-form text.');
+    return;
+  }
+
+  sfMsg('','');
+  var meta = {
+    cur:      result.currency  || 'USD',
+    unit:     result.unit      || 'Metric Tons (MT)',
+    incoterm: result.incoterm  || null,
+    delivDate:result.delivDate || null,
+    loiDays:  result.loiDays   || null,
+    portLoad: result.portLoad  || null
+  };
+
+  if (sfProds.length > 1) {
+    showSfPicker(sfProds, meta);
+  } else {
+    applyParsed(sfProds[0], meta);
+  }
+}
+
+async function parseWithClaude(text, apiKey) {
+  var incMap = { 'FOB':'FOB — Free On Board','CIF':'CIF — Cost Insurance Freight','DAP':'DAP — Delivered At Place','EXW':'EXW — Ex Works','CFR':'CFR — Cost and Freight' };
+  var prompt = 'Extract commodity trade offer details. Return ONLY valid JSON (no markdown, no explanation).\n\nFields:\n- products: array of {name: string, price: number} — each commodity with its price per unit\n- currency: "USD" | "EUR" | "AED" | "SAR" | "ILS"\n- unit: "Metric Tons (MT)" | "Tons" | "kg" | "Liters" | "Units" | "m³" | "m²"\n- incoterm: null | "FOB" | "CIF" | "DAP" | "EXW" | "CFR"\n- delivDate: null or ISO date "YYYY-MM-DD" (from validity/expiry/delivery date)\n- loiDays: null or integer (LOI validity in days)\n- portLoad: null or string (port of loading)\n\nOffer text:\n"""\n'+text+'\n"""\n\nJSON:';
+  var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 600,
+      messages: [{ role:'user', content:prompt }]
+    })
+  });
+  if (!resp.ok) {
+    var e = await resp.json().catch(function(){ return {}; });
+    throw new Error((e.error && e.error.message) || ('HTTP '+resp.status));
+  }
+  var data = await resp.json();
+  var raw = ((data.content && data.content[0] && data.content[0].text) || '{}').trim();
+  raw = raw.replace(/^```(?:json)?\s*/i,'').replace(/\s*```$/,'');
+  var parsed = JSON.parse(raw);
+  if (parsed.incoterm && incMap[parsed.incoterm]) parsed.incoterm = incMap[parsed.incoterm];
+  return parsed;
+}
+
+function parseWithRegex(text) {
   // Currency
   var cur = /\bILS\b|₪/.test(text) ? 'ILS'
           : /\bEUR\b|€/.test(text)  ? 'EUR'
@@ -963,66 +1056,76 @@ function parseOffer() {
 
   // Unit
   var unit = 'Metric Tons (MT)';
-  if      (/\bm³\b/.test(text))    unit = 'm³';
-  else if (/\bm²\b/.test(text))    unit = 'm²';
-  else if (/\bkg\b/i.test(text))   unit = 'kg';
-  else if (/liter/i.test(text))    unit = 'Liters';
-  else if (/\bunit/i.test(text))   unit = 'Units';
+  if      (/\bm³\b/.test(text))   unit = 'm³';
+  else if (/\bm²\b/.test(text))   unit = 'm²';
+  else if (/\bkg\b/i.test(text))  unit = 'kg';
+  else if (/liter/i.test(text))   unit = 'Liters';
+  else if (/\bunit/i.test(text))  unit = 'Units';
 
   // Incoterm
-  var incMap = { FOB:'FOB — Free On Board', CIF:'CIF — Cost Insurance Freight', DAP:'DAP — Delivered At Place', EXW:'EXW — Ex Works', CFR:'CFR — Cost and Freight' };
+  var incMap = { FOB:'FOB — Free On Board',CIF:'CIF — Cost Insurance Freight',DAP:'DAP — Delivered At Place',EXW:'EXW — Ex Works',CFR:'CFR — Cost and Freight' };
   var incoterm = null;
   Object.keys(incMap).forEach(function(k){ if(new RegExp('\\b'+k+'\\b').test(text)) incoterm = incMap[k]; });
 
-  // Validity/delivery date — DD/MM/YYYY
+  // Date — DD/MM/YYYY, YYYY-MM-DD, "18 June 2026"
   var delivDate = null;
   var dm = text.match(/validity[:\s]+(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})/i)
-         || text.match(/valid(?:ity)?\s+(?:until|till|to)?:?\s*(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})/i);
-  if (dm) delivDate = dm[3]+'-'+dm[2].padStart(2,'0')+'-'+dm[1].padStart(2,'0');
+         || text.match(/valid(?:ity)?\s+(?:until|till|to)?:?\s*(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})/i)
+         || text.match(/expir\w*[:\s]+(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})/i)
+         || text.match(/(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})/);
+  if (dm) delivDate = dm[3]+'-'+String(dm[2]).padStart(2,'0')+'-'+String(dm[1]).padStart(2,'0');
 
-  // LOI validity in days — "valid for 14 days"
+  // LOI validity days
   var loiDays = null;
   var ldm = text.match(/valid(?:ity)?\s+(?:for\s+)?(\d+)\s*(?:calendar\s+)?days/i);
   if (ldm) loiDays = ldm[1];
 
-  // Port of loading — "FOB Port Said" or "port of loading: ..."
+  // Port of loading
   var portLoad = null;
   var polm2 = text.match(/port of loading[:\s]+([A-Za-z\s\-,]+?)(?:\.|,|\n|$)/i);
   if (polm2) portLoad = polm2[1].trim();
   if (!portLoad) {
-    var polm = text.match(/FOB\s+([A-Za-z][A-Za-z\s\-]+?)(?:\s*[\.\,\n]|$)/i);
-    if (polm && polm[1].trim()) portLoad = polm[1].trim().replace(/\s+/g,' ');
+    var polm = text.match(/\bFOB\b\s+([A-Za-z][A-Za-z\s\-]+?)(?:\s*[\.\,\n\/]|$)/i);
+    if (polm && polm[1].trim() && !/^\d|^price|^usd|^eur|^aed|^sar/i.test(polm[1].trim())) {
+      portLoad = polm[1].trim().replace(/\s+/g,' ');
+    }
   }
 
-  // Products — lines like "• Product Name: USD 530 / MT ..."
-  var products = [];
+  // Products — try multiple patterns per line
+  var sfProds = [];
   text.split('\n').forEach(function(line) {
-    line = line.replace(/^[^\w؀-ۿ(]+/, '').trim();
-    if (!line) return;
-    var m = line.match(/^(.+?):\s*(?:USD|EUR|AED|SAR|ILS|₪|€|\$)?\s*([\d,]+(?:\.\d+)?)\s*\/\s*(MT|ton|m³|m²|kg|liter|unit)/i);
-    if (m && !/^validity/i.test(m[1]) && !/^port/i.test(m[1])) {
-      products.push({ name: m[1].trim().replace(/\s*\.$/, ''), price: parseFloat(m[2].replace(/,/g,'')) });
+    // Strip leading bullets/symbols
+    line = line.replace(/^[\s●•▪▸▹–—\-\*#]+/, '').trim();
+    if (!line || /^validity/i.test(line) || /^port of/i.test(line) || /^delivery/i.test(line) || /^price:/i.test(line)) return;
+
+    var m = null;
+    // Pattern 1: "Product Name: CURR 1234 / UNIT"
+    m = m || line.match(/^(.+?):\s*(?:USD|EUR|AED|SAR|ILS|₪|€|\$)?\s*([\d,]+(?:\.\d+)?)\s*\/\s*(MT|ton|m³|m²|kg|liter|unit)/i);
+    // Pattern 2: "Product Name @ CURR 1234 / UNIT"
+    m = m || line.match(/^(.+?)\s*@\s*(?:USD|EUR|AED|SAR|ILS|₪|€|\$)?\s*([\d,]+(?:\.\d+)?)\s*\/\s*(MT|ton|m³|m²|kg|liter|unit)/i);
+    // Pattern 3: "Product Name — CURR 1234 / UNIT"
+    m = m || line.match(/^(.+?)\s+(?:—|-{2})\s*(?:USD|EUR|AED|SAR|ILS|₪|€|\$)?\s*([\d,]+(?:\.\d+)?)\s*\/\s*(MT|ton|m³|m²|kg|liter|unit)/i);
+    // Pattern 4: "Product Name USD 1234 / UNIT"
+    m = m || line.match(/^(.+?)\s+(?:USD|EUR|AED|SAR|ILS)\s+([\d,]+(?:\.\d+)?)\s*\/\s*(MT|ton|m³|m²|kg|liter|unit)/i);
+    // Pattern 5: "Product Name 1234/UNIT" (bare price)
+    m = m || line.match(/^(.+?)\s+([\d,]+(?:\.\d+)?)\s*\/\s*(MT|ton|kg)/i);
+
+    if (m) {
+      var name = m[1].trim().replace(/[,;.]+$/, '');
+      var price = parseFloat(m[2].replace(/,/g,''));
+      if (name && price > 0 && !/^validity/i.test(name) && !/^port/i.test(name)) {
+        sfProds.push({ name:name, price:price });
+      }
     }
   });
 
-  // Fallback: any PRICE / UNIT anywhere in text
-  if (!products.length) {
+  // Fallback: any PRICE / UNIT in the whole text
+  if (!sfProds.length) {
     var pm = text.match(/([\d,]+(?:\.\d+)?)\s*\/\s*(MT|ton|kg)/i);
-    if (pm) products.push({ name:'Commodity', price: parseFloat(pm[1].replace(/,/g,'')) });
+    if (pm) sfProds.push({ name:'Commodity', price:parseFloat(pm[1].replace(/,/g,'')) });
   }
 
-  var meta = { cur:cur, unit:unit, incoterm:incoterm, delivDate:delivDate, loiDays:loiDays, portLoad:portLoad };
-
-  document.getElementById('sf-picker').style.display = 'none';
-  sfMsg('','');
-
-  if (products.length > 1) {
-    showSfPicker(products, meta);
-  } else if (products.length === 1) {
-    applyParsed(products[0], meta);
-  } else {
-    sfMsg('error','Could not extract a product and price. Check the format.');
-  }
+  return { products:sfProds, currency:cur, unit:unit, incoterm:incoterm, delivDate:delivDate, loiDays:loiDays, portLoad:portLoad };
 }
 
 function showSfPicker(sfProds, meta) {
@@ -1111,14 +1214,45 @@ function _applyMeta(meta) {
 function sfMsg(type, msg) {
   var el = document.getElementById('sf-msg');
   if (!msg) { el.style.display='none'; return; }
-  el.style.display = 'block';
+  var base = 'display:block;margin-top:10px;padding:10px 14px;border-radius:5px;font-size:13px;';
   if (type==='success') {
-    el.style.cssText = 'display:block;margin-top:10px;padding:10px 14px;border-radius:5px;font-size:13px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green)';
+    el.style.cssText = base+'background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green)';
+  } else if (type==='info') {
+    el.style.cssText = base+'background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)';
   } else {
-    el.style.cssText = 'display:block;margin-top:10px;padding:10px 14px;border-radius:5px;font-size:13px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:var(--red)';
+    el.style.cssText = base+'background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:var(--red)';
   }
   el.textContent = msg;
 }
+
+function toggleAiSettings() {
+  var body = document.getElementById('sf-ai-body');
+  var caret = document.getElementById('sf-ai-caret');
+  var open = body.style.display === 'block';
+  body.style.display = open ? 'none' : 'block';
+  caret.textContent = open ? '▸' : '▾';
+  if (!open) setTimeout(function(){ document.getElementById('sf-api-key').focus(); }, 50);
+}
+
+function saveSfApiKey(val) {
+  val = val.trim();
+  if (val) localStorage.setItem('sf_claude_key', val);
+  else localStorage.removeItem('sf_claude_key');
+}
+
+function clearSfApiKey() {
+  localStorage.removeItem('sf_claude_key');
+  document.getElementById('sf-api-key').value = '';
+}
+
+// Restore saved API key on load
+(function(){
+  var saved = localStorage.getItem('sf_claude_key');
+  if (saved) {
+    var inp = document.getElementById('sf-api-key');
+    if (inp) { inp.value = saved; }
+  }
+})();
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderProducts();
