@@ -776,10 +776,10 @@ function initLogin() {
 
 function redirectByRole(role) {
   const routes = {
-    boss: "CommodEx_Admin.html",
+    boss: "sloiai-admin.html",
     buyer: "CommodEx_Platform.html",
-    broker: "CommodEx_Broker.html",
-    supplier: "CommodEx_Supplier.html",
+    broker: "sloiai-trader.html",
+    supplier: "sloiai-admin.html",
   };
   const dest = routes[role];
   if (!dest) {
