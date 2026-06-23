@@ -204,7 +204,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
   </div>
 
   <!-- SMART FILL FROM OFFER TEXT -->
-  <div style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.25);border-radius:8px;margin-bottom:28px;overflow:hidden">
+  <div id="sf-panel" style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.25);border-radius:8px;margin-bottom:28px;overflow:hidden">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none" onclick="toggleSmartFill()">
       <div style="display:flex;align-items:center;gap:10px">
         <span style="font-size:20px">✨</span>
@@ -398,6 +398,15 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
       Share via Email
     </button>
+  </div>
+
+  <button id="copy-link-btn" onclick="copyClientLink()"
+    style="width:100%;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:9px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.3);color:var(--gold);padding:12px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s"
+    onmouseover="this.style.background='rgba(232,169,74,.18)'" onmouseout="this.style.background='rgba(232,169,74,.08)'">
+    🔗 Copy Client Link — send to buyer to fill their details
+  </button>
+  <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:6px;line-height:1.5">
+    Product, price &amp; logistics are pre-filled · Client only fills in their company name
   </div>
 
 </div>
@@ -1260,6 +1269,53 @@ function shareEmail() {
   window.location.href = 'mailto:?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
 }
 
+function buildShareURL() {
+  var base = window.location.origin + window.location.pathname;
+  var p = new URLSearchParams();
+  p.set('mode', 'client');
+  p.set('ref', document.getElementById('ref').value || '');
+  p.set('currency', document.getElementById('currency').value);
+  p.set('incoterm', document.getElementById('incoterm').value);
+  p.set('payment', document.getElementById('payment_method').value);
+  p.set('port_loading', document.getElementById('port_loading').value);
+  p.set('port_dest', document.getElementById('port_destination').value);
+  p.set('deadline', document.getElementById('delivery_date').value);
+  p.set('validity', document.getElementById('loi_validity').value);
+  p.set('broker', document.getElementById('broker_name').value);
+  p.set('broker_co', document.getElementById('broker_company').value);
+  p.set('supplier', document.getElementById('supplier_preset').value);
+  if (products.length) {
+    p.set('product', products[0].product || '');
+    p.set('price', products[0].unit_price || '');
+    p.set('qty', products[0].quantity || 1);
+    p.set('unit', products[0].unit || 'Metric Tons (MT)');
+  }
+  return base + '?' + p.toString();
+}
+
+function copyClientLink() {
+  var url = buildShareURL();
+  var btn = document.getElementById('copy-link-btn');
+  var orig = btn.innerHTML;
+  function onCopied() {
+    btn.innerHTML = '✅ Copied! Paste this link in WhatsApp or email to your client';
+    btn.style.background = 'rgba(34,197,94,.1)';
+    btn.style.borderColor = 'rgba(34,197,94,.35)';
+    btn.style.color = 'var(--green)';
+    setTimeout(function(){
+      btn.innerHTML = orig;
+      btn.style.background = 'rgba(232,169,74,.08)';
+      btn.style.borderColor = 'rgba(232,169,74,.3)';
+      btn.style.color = 'var(--gold)';
+    }, 3500);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(onCopied).catch(function(){ prompt('Copy this link and send to your client:', url); });
+  } else {
+    prompt('Copy this link and send to your client:', url);
+  }
+}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderProducts();
 calcTotal();
@@ -1292,10 +1348,74 @@ calcTotal();
     var unitKey = params.get('unit');
     UNITS.forEach(function(u){ if(u.toLowerCase().includes(unitKey.toLowerCase())) products[0].unit=u; });
   }
-  var needsUpdate = params.get('ref')||params.get('buyer')||params.get('product')||params.get('price');
+  // Extended params from share link
+  if (params.get('currency')) {
+    var curEl2 = document.getElementById('currency');
+    for (var ci=0; ci<curEl2.options.length; ci++) {
+      if (curEl2.options[ci].value === params.get('currency')) { curEl2.selectedIndex = ci; break; }
+    }
+  }
+  if (params.get('incoterm')) {
+    var incEl2 = document.getElementById('incoterm');
+    var pInc = params.get('incoterm');
+    for (var ii=0; ii<incEl2.options.length; ii++) {
+      if (incEl2.options[ii].text === pInc || incEl2.options[ii].value === pInc) { incEl2.selectedIndex = ii; break; }
+    }
+  }
+  if (params.get('payment')) {
+    var payEl = document.getElementById('payment_method');
+    var pPay = params.get('payment');
+    for (var pi=0; pi<payEl.options.length; pi++) {
+      if (payEl.options[pi].text === pPay || payEl.options[pi].value === pPay) { payEl.selectedIndex = pi; break; }
+    }
+  }
+  if (params.get('port_loading')) document.getElementById('port_loading').value = params.get('port_loading');
+  if (params.get('port_dest'))    document.getElementById('port_destination').value = params.get('port_dest');
+  if (params.get('validity'))     document.getElementById('loi_validity').value = params.get('validity');
+  if (params.get('broker'))       document.getElementById('broker_name').value = params.get('broker');
+  if (params.get('broker_co'))    document.getElementById('broker_company').value = params.get('broker_co');
+  if (params.get('supplier') && params.get('supplier') !== 'custom') {
+    var supEl = document.getElementById('supplier_preset');
+    var pSup = params.get('supplier');
+    for (var si=0; si<supEl.options.length; si++) {
+      if (supEl.options[si].value === pSup) { supEl.selectedIndex = si; break; }
+    }
+    fillSupplier();
+  }
+
+  var needsUpdate = params.get('ref')||params.get('buyer')||params.get('product')||params.get('price')||params.get('currency')||params.get('port_loading');
   if(needsUpdate) renderProducts();
   if(needsUpdate) calcTotal();
-  if(params.get('ref')) {
+
+  // Client mode — shown when admin shares a link with ?mode=client
+  if (params.get('mode') === 'client') {
+    // Clear buyer fields so client fills their own details
+    ['buyer_name','buyer_contact','buyer_title','buyer_country','buyer_address'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    // Hide smart-fill (not useful for client)
+    var sfPanel = document.getElementById('sf-panel');
+    if (sfPanel) sfPanel.style.display = 'none';
+    // Hide the copy-link button (client doesn't need it)
+    var clBtn = document.getElementById('copy-link-btn');
+    if (clBtn) { clBtn.style.display='none'; if(clBtn.nextElementSibling) clBtn.nextElementSibling.style.display='none'; }
+    // Show client portal banner
+    var formSide = document.querySelector('.form-side');
+    var banner = document.createElement('div');
+    banner.style.cssText = 'background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.3);border-radius:8px;padding:16px 18px;margin-bottom:20px;display:flex;align-items:flex-start;gap:13px';
+    banner.innerHTML = '<span style="font-size:24px;flex-shrink:0">📋</span>'
+      + '<div><div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:4px">LOI Form — fill in your details</div>'
+      + '<div style="font-size:13px;color:var(--muted);line-height:1.6">The product, price and logistics have been prepared for you. Please complete <strong style="color:var(--violet)">Step 1 — Buyer details</strong> with your company information, then click <strong style="color:var(--violet)">Open Preview &amp; Download PDF</strong> to get your signed-ready document.</div>'
+      + '</div>';
+    var pageTitle = formSide.querySelector('.page-title');
+    if (pageTitle) formSide.insertBefore(banner, pageTitle);
+    // Scroll to buyer step after render
+    setTimeout(function(){
+      var step1 = document.querySelector('.step');
+      if (step1) step1.scrollIntoView({ behavior:'smooth', block:'start' });
+    }, 400);
+  } else if (params.get('ref') && params.get('mode') !== 'client') {
     var note = document.createElement('div');
     note.style.cssText = 'background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:5px;padding:10px 14px;font-size:13px;color:var(--green);margin-bottom:14px';
     note.innerHTML = '✅ Pre-filled from Agent Console · ' + (params.get('ref')||'') + ' · Review and generate';

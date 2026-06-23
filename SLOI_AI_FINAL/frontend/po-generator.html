@@ -436,27 +436,53 @@ var SHIP_LABELS = {
     document.getElementById('sf-ai-caret').textContent = '▾';
   }
 
-  // Pre-fill from URL params (from catalog buttons)
+  // Pre-fill from URL params (from LOI cards, negotiation rows, or catalog buttons)
   var p = new URLSearchParams(location.search);
-  var product = p.get('product') || '';
-  var ref     = p.get('ref') || '';
-  var qty     = p.get('qty') || '';
-  if (product) {
-    lineItems[0].desc = product;
-    if (ref) lineItems[0].sku = ref;
-    if (qty) lineItems[0].qty = parseFloat(qty) || 1;
-    var hint = product + (ref ? ' (SKU: ' + ref + ')' : '') + (qty ? ', qty: ' + qty : '');
-    document.getElementById('po-desc').value = hint;
-  }
+  var product  = p.get('product')  || '';
+  var ref      = p.get('ref')      || '';
+  var qty      = p.get('qty')      || '';
+  var price    = p.get('price')    || '';
+  var buyer    = p.get('buyer')    || '';
+  var supplier = p.get('supplier') || '';
+  var incoterm = p.get('incoterm') || '';
+  var currency = p.get('currency') || '';
+  var hasData  = false;
 
-  // Pre-fill buyer info from session
+  if (product) {
+    hasData = true;
+    lineItems[0].desc = product;
+    if (ref)   lineItems[0].sku        = ref;
+    if (qty)   lineItems[0].qty        = parseFloat(qty) || 1;
+    if (price) lineItems[0].unit_price = parseFloat(price) || 0;
+    document.getElementById('po-desc').value = product + (ref ? ' · ref: ' + ref : '');
+  }
+  if (buyer)    { hasData = true; document.getElementById('po-bill-to').value = buyer; }
+  if (supplier) { hasData = true; document.getElementById('po-supplier').value = supplier; }
+  if (incoterm) {
+    var sEl = document.getElementById('po-ship-terms');
+    var pKey = incoterm.split(/[\s—]/)[0].trim().toUpperCase();
+    for (var si = 0; si < sEl.options.length; si++) {
+      if (sEl.options[si].value === pKey) { sEl.selectedIndex = si; break; }
+    }
+  }
+  if (currency) {
+    var cEl = document.getElementById('po-currency');
+    for (var ci = 0; ci < cEl.options.length; ci++) {
+      if (cEl.options[ci].value === currency) { cEl.selectedIndex = ci; break; }
+    }
+  }
+  if (ref && !product) document.getElementById('po-notes').value = 'Linked LOI / Ref: ' + ref;
+
+  // Pre-fill buyer info from session (only if not already set by URL params)
   try {
     var u = JSON.parse(localStorage.getItem('sloi_user') || '{}');
-    if (u.org_name) document.getElementById('po-bill-to').value = u.org_name;
-    if (u.country)  document.getElementById('po-ship-addr').value = u.country;
+    if (!buyer && u.org_name) document.getElementById('po-bill-to').value = u.org_name;
+    if (u.country && !document.getElementById('po-ship-addr').value) document.getElementById('po-ship-addr').value = u.country;
   } catch(e) {}
 
   renderLineItems();
+  updateCalc();
+  if (hasData) setTimeout(renderPreview, 80);
 })();
 
 // ── PO NUMBER ─────────────────────────────────────────────────────────────────
@@ -679,6 +705,33 @@ function setStatus(msg, color) {
   el.style.color = colors[color] || 'var(--muted)';
 }
 
+// ── SAVE PO TO localStorage (readable by admin panel) ─────────────────────────
+function savePOToStorage() {
+  var poNum   = document.getElementById('po-num').value;
+  var dateVal = document.getElementById('po-date').value;
+  var sub = lineItems.reduce(function(a,r){ return a+(parseFloat(r.qty)||0)*(parseFloat(r.unit_price)||0); },0);
+  var taxRate = parseFloat(document.getElementById('po-tax').value) || 0;
+  var params  = new URLSearchParams(location.search);
+  var item = {
+    po_num:   poNum,
+    date:     dateVal,
+    product:  lineItems[0] ? (lineItems[0].desc || '—') : '—',
+    buyer:    document.getElementById('po-bill-to').value || '—',
+    supplier: document.getElementById('po-supplier').value || '—',
+    currency: document.getElementById('po-currency').value || 'USD',
+    incoterm: document.getElementById('po-ship-terms').value || '',
+    total:    sub + sub * taxRate / 100,
+    status:   'draft',
+    loi_ref:  params.get('ref') || params.get('loi_ref') || '',
+    created_at: new Date().toISOString()
+  };
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  var idx = pos.findIndex(function(x){ return x.po_num === poNum; });
+  if (idx >= 0) pos[idx] = item; else pos.unshift(item);
+  localStorage.setItem('sloi_pos', JSON.stringify(pos));
+}
+
 // ── RENDER PREVIEW ────────────────────────────────────────────────────────────
 function renderPreview() {
   var poNum     = document.getElementById('po-num').value         || genPONum();
@@ -788,6 +841,7 @@ function renderPreview() {
     + '</div></div>';
 
   document.getElementById('po-preview-wrap').innerHTML = html;
+  savePOToStorage();
 }
 
 // ── PRINT & PDF ───────────────────────────────────────────────────────────────

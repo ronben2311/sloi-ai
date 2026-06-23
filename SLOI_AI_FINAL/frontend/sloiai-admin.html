@@ -232,10 +232,11 @@ select.inp option{background:var(--surface)}
   <div class="sb-section">Revenue</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
   <button class="nav" onclick="show('credits',this)"><span class="nav-icon">⚡</span><span class="nav-label">Credits</span></button>
+  <button class="nav" onclick="show('contracts',this)"><span class="nav-icon">📄</span><span class="nav-label">Contracts</span></button>
   <button class="nav" onclick="show('traders',this)"><span class="nav-icon">👥</span><span class="nav-label">Traders</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
-  <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & KYC</span></button>
+  <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & CRM</span></button>
   <div class="sb-section">System</div>
   <button class="nav" onclick="show('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
   <button class="nav" onclick="api.logout(); window.location.href='login.html'"><span class="nav-icon">←</span><span class="nav-label">Sign out</span></button>
@@ -344,11 +345,17 @@ select.inp option{background:var(--surface)}
 
       <!-- LEFT: main negotiation content -->
       <div>
-        <div class="g4" style="margin-bottom:14px">
+        <div class="g4" style="margin-bottom:10px">
           <div class="stat"><div class="stat-top">Active Now</div><div class="stat-val" id="neg-stat-active" style="color:var(--green)">—</div></div>
           <div class="stat"><div class="stat-top">Pending Boss</div><div class="stat-val" id="neg-stat-pending" style="color:var(--gold)">—</div></div>
           <div class="stat"><div class="stat-top">Completed Today</div><div class="stat-val" id="neg-stat-completed">—</div></div>
-          <div class="stat"><div class="stat-top">Total</div><div class="stat-val" id="neg-stat-total">—</div></div>
+          <div class="stat"><div class="stat-top">Win Rate</div><div class="stat-val" id="neg-stat-winrate" style="color:var(--violet)">—</div></div>
+        </div>
+        <div style="display:flex;gap:14px;padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:14px;font-size:13px;align-items:center">
+          <div style="color:var(--muted)">All-time: <b style="color:var(--white)" id="neg-stat-total">—</b></div>
+          <div style="width:1px;height:14px;background:var(--border);flex-shrink:0"></div>
+          <div style="color:var(--muted)">Revenue today: <b style="color:var(--green)" id="neg-stat-revenue">$0</b></div>
+          <div style="margin-left:auto;font-size:12px;color:var(--muted)">⟳ Auto-refresh every 15s</div>
         </div>
 
         <!-- Approval box — shown only when there's a pending deal -->
@@ -372,16 +379,51 @@ select.inp option{background:var(--surface)}
           </div>
         </div>
 
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;animation:blink 2s infinite" id="live-pulse"></span>
+          <span style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Live Negotiations</span>
+          <span style="flex:1;height:1px;background:var(--border);display:block"></span>
+          <span class="badge bg" id="live-neg-count" style="font-size:11px;padding:1px 8px">—</span>
+        </div>
         <div id="neg-list"></div>
 
         <div class="card">
-          <div class="card-title">// ALL NEGOTIATIONS</div>
+          <div class="card-title">
+            // ALL NEGOTIATIONS
+            <div style="display:flex;gap:6px;align-items:center">
+              <input class="inp" id="neg-search" placeholder="Search ID, buyer, product…" oninput="negApplyFilter()" style="width:220px;font-size:13px;padding:5px 9px">
+            </div>
+          </div>
+          <div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">
+            <button class="btn btn-xs" id="nf-all" onclick="negFilter('all',this)" style="border-color:var(--indigo);color:var(--violet)">All</button>
+            <button class="btn btn-xs" id="nf-running" onclick="negFilter('running',this)">● Live</button>
+            <button class="btn btn-xs" id="nf-awaiting_boss" onclick="negFilter('awaiting_boss',this)">⏳ Awaiting Boss</button>
+            <button class="btn btn-xs" id="nf-completed" onclick="negFilter('completed',this)">✓ Completed</button>
+            <button class="btn btn-xs" id="nf-failed" onclick="negFilter('failed',this)">✗ Failed</button>
+          </div>
           <table>
-            <thead><tr><th>ID</th><th>Buyer</th><th>Product</th><th>Rounds</th><th>Deal Price</th><th>Status</th><th>Time</th><th></th></tr></thead>
+            <thead><tr><th>ID</th><th>Buyer</th><th>Product</th><th style="text-align:center">Rounds</th><th>Deal Price</th><th>Value</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
             <tbody id="neg-history-body">
-              <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>
+              <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>
             </tbody>
           </table>
+        </div>
+
+        <!-- PURCHASE ORDERS (saved from PO Generator) -->
+        <div class="card" style="margin-top:16px">
+          <div class="card-title">
+            // PURCHASE ORDERS
+            <button class="btn btn-xs btn-g" onclick="window.open('po-generator.html','_blank')" style="font-size:12px">+ New PO</button>
+          </div>
+          <div class="g4" style="margin-bottom:12px">
+            <div class="stat"><div class="stat-top">Total POs</div><div class="stat-val" id="admin-po-stat-total">—</div></div>
+            <div class="stat"><div class="stat-top">This Month</div><div class="stat-val" style="color:var(--green)" id="admin-po-stat-month">—</div></div>
+            <div class="stat"><div class="stat-top">PO Value</div><div class="stat-val" id="admin-po-stat-value">—</div></div>
+            <div class="stat"><div class="stat-top">Draft</div><div class="stat-val" style="color:var(--gold)" id="admin-po-stat-draft">—</div></div>
+          </div>
+          <div id="admin-po-list">
+            <div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">No purchase orders yet — click + New PO or use the 🧾 PO button on a negotiation row above</div>
+          </div>
         </div>
       </div>
 
@@ -557,6 +599,28 @@ select.inp option{background:var(--surface)}
     </div>
   </div>
 
+  <!-- CONTRACTS -->
+  <div id="view-contracts" class="view">
+    <div class="g4" style="margin-bottom:14px">
+      <div class="stat"><div class="stat-top">Total POs</div><div class="stat-val" style="color:var(--white)" id="ct-stat-count">—</div><div class="stat-sub">All purchase orders</div></div>
+      <div class="stat"><div class="stat-top">Total Value</div><div class="stat-val" style="color:var(--violet)" id="ct-stat-value">—</div><div class="stat-sub">Across all deals</div></div>
+      <div class="stat"><div class="stat-top">Cleared</div><div class="stat-val" style="color:var(--green)" id="ct-stat-cleared">—</div><div class="stat-sub">Payment received</div></div>
+      <div class="stat"><div class="stat-top">Overdue / Pending</div><div class="stat-val" style="color:var(--red)" id="ct-stat-overdue">—</div><div class="stat-sub">Requires action</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">// PURCHASE ORDERS
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-xs btn-p" onclick="window.open('po-generator.html','_blank')">+ New PO</button>
+          <button class="btn btn-xs" onclick="exportContractsCsv()">&#8595; Export CSV</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>PO No.</th><th>Product</th><th>Buyer</th><th>Value</th><th>Payment Terms</th><th>LOI Ref</th><th>Status</th><th></th></tr></thead>
+        <tbody id="ct-po-tbody"><tr><td colspan="8" style="padding:18px;text-align:center;color:var(--muted)">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- BROKERS -->
   <div id="view-traders" class="view">
     <div class="g4" style="margin-bottom:14px">
@@ -614,12 +678,10 @@ select.inp option{background:var(--surface)}
           <tr style="background:var(--surface2)">
             <th style="padding:8px 12px;text-align:left;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">PRODUCT</th>
             <th style="padding:8px 12px;text-align:left;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">SKU · REF</th>
-            <th style="padding:8px 12px;text-align:right;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">COST PRICE</th>
-            <th style="padding:8px 12px;text-align:right;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">MARKET PRICE</th>
-            <th style="padding:8px 12px;text-align:right;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">BROKER FLOOR</th>
-            <th style="padding:8px 12px;text-align:right;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">MARGIN</th>
+            <th style="padding:8px 12px;text-align:right;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">PRICE / UNIT</th>
             <th style="padding:8px 12px;text-align:right;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">MOQ · LEAD</th>
-            <th style="padding:8px 12px;text-align:right;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700"></th>
+            <th style="padding:8px 12px;text-align:center;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">STATUS</th>
+            <th style="padding:8px 12px;text-align:left;font-size:13px;color:var(--muted);letter-spacing:.06em;font-weight:700">AI TOOLS</th>
           </tr>
         </thead>
         <tbody id="products-tbody"></tbody>
@@ -712,13 +774,26 @@ select.inp option{background:var(--surface)}
   <div id="view-users" class="view">
     <div class="g4" style="margin-bottom:14px">
       <div class="stat"><div class="stat-top">Total Users</div><div class="stat-val" id="usr-stat-total">—</div></div>
-      <div class="stat"><div class="stat-top">Active</div><div class="stat-val" style="color:var(--green)" id="usr-stat-active">—</div></div>
-      <div class="stat"><div class="stat-top">Pending KYC</div><div class="stat-val" style="color:var(--gold)" id="usr-stat-pending">—</div></div>
-      <div class="stat"><div class="stat-top">Suspended</div><div class="stat-val" style="color:var(--red)" id="usr-stat-suspended">—</div></div>
+      <div class="stat"><div class="stat-top">Active Buyers</div><div class="stat-val" style="color:var(--green)" id="usr-stat-active">—</div></div>
+      <div class="stat"><div class="stat-top">High Value</div><div class="stat-val" style="color:var(--violet)" id="usr-stat-pending">—</div><div class="stat-sub">≥ 3 LOIs</div></div>
+      <div class="stat"><div class="stat-top">Est. Revenue</div><div class="stat-val" style="color:var(--teal)" id="usr-stat-suspended">—</div><div class="stat-sub">LOI fees</div></div>
     </div>
     <div class="card">
-      <div class="card-title">// USERS</div>
-      <table><thead><tr><th>Company / Name</th><th>Email</th><th>Country</th><th>Role</th><th>Linked</th><th>Credits</th><th>LOIs</th><th>Account</th><th></th></tr></thead>
+      <div class="card-title">
+        // USERS &amp; CRM
+        <div style="display:flex;gap:6px;align-items:center">
+          <input class="inp" id="user-search" placeholder="Search name, email, country…" oninput="userApplyFilter()" style="width:220px;font-size:13px;padding:5px 9px">
+        </div>
+      </div>
+      <div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">
+        <button class="btn btn-xs" id="uf-all" onclick="userFilter('all',this)" style="border-color:var(--indigo);color:var(--violet)">All</button>
+        <button class="btn btn-xs" id="uf-buyer" onclick="userFilter('buyer',this)">Buyers</button>
+        <button class="btn btn-xs" id="uf-trader" onclick="userFilter('trader',this)">Traders</button>
+        <button class="btn btn-xs" id="uf-supplier" onclick="userFilter('supplier',this)">Suppliers</button>
+        <button class="btn btn-xs" id="uf-vip" onclick="userFilter('vip',this)">⭐ VIP</button>
+        <button class="btn btn-xs" id="uf-incomplete" onclick="userFilter('incomplete',this)">⚠ Incomplete</button>
+      </div>
+      <table><thead><tr><th>Company / Name</th><th>Email</th><th>Country</th><th>Role</th><th>CRM Stage</th><th>Credits</th><th>LOIs</th><th>Account</th><th>Actions</th></tr></thead>
       <tbody id="user-tbody"></tbody></table>
     </div>
   </div>
@@ -1471,7 +1546,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
+var TITLES={agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────
@@ -1496,7 +1571,7 @@ function resumeOutreach(){
   openConsole('outreach');
 }
 
-function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];}
+function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];if(v==='contracts')loadContracts();}
 
 function renderKanban(){var cols=[{key:'new',label:'New',color:'var(--muted)'},{key:'contacted',label:'Contacted',color:'var(--blue)'},{key:'rfq',label:'RFQ sent',color:'var(--teal)'},{key:'negotiating',label:'Negotiating',color:'var(--gold)'},{key:'closed',label:'Closed ✓',color:'var(--green)'}];var html='';cols.forEach(function(col){var cards=PIPELINE[col.key]||[];html+='<div class="kc"><div class="kc-head" style="color:'+col.color+'">'+col.label+'<span class="kc-count">'+cards.length+'</span></div>';cards.forEach(function(c){html+='<div class="kcard'+(c.hot?' hot':'')+'"><div class="kcard-name">'+(c.hot?'🔥 ':'')+c.name+'</div><div class="kcard-sub">'+c.product+' · '+c.country+'</div><div class="kcard-val">$'+c.value.toLocaleString()+'</div><div class="kcard-actions">';if(col.key==='new')html+='<button class="btn btn-xs btn-g" onclick="openTG()">WA</button><button class="btn btn-xs btn-p" onclick="moveCard(\'new\',\'contacted\',\''+c.name+'\')">Contact</button>';else if(col.key==='contacted')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'contacted\',\'rfq\',\''+c.name+'\')">Send RFQ</button>';else if(col.key==='rfq')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'rfq\',\'negotiating\',\''+c.name+'\')">Negotiate</button>';else if(col.key==='negotiating')html+='<button class="btn btn-xs btn-g" onclick="moveCard(\'negotiating\',\'closed\',\''+c.name+'\')">Close ✓</button>';else html+='<button class="btn btn-xs" onclick="window.open(\'loi-generator.html\',\'_blank\')">LOI</button>';html+='</div></div>';});html+='</div>';});document.getElementById('kanban').innerHTML=html;}
 
@@ -1505,6 +1580,27 @@ function moveCard(from,to,name){var idx=PIPELINE[from].findIndex(function(c){ret
 function addLead(){var co=document.getElementById('pl-co').value.trim();var pr=document.getElementById('pl-prod').value.trim();var val=parseInt(document.getElementById('pl-val').value)||0;var cty=document.getElementById('pl-cty').value;if(!co||!pr){alert('Enter company and product.');return;}PIPELINE.new.push({name:co,product:pr,value:val,country:cty,hot:false});document.getElementById('pl-co').value='';document.getElementById('pl-prod').value='';document.getElementById('pl-val').value='';renderKanban();}
 
 var _pendingNegId = null;
+var _NEG_ALL = [];
+var _NEG_FILTER = 'all';
+
+function negFilter(status, btn) {
+  _NEG_FILTER = status;
+  document.querySelectorAll('[id^="nf-"]').forEach(function(b){
+    b.style.borderColor = ''; b.style.color = '';
+  });
+  if (btn) { btn.style.borderColor = 'var(--indigo)'; btn.style.color = 'var(--violet)'; }
+  negApplyFilter();
+}
+
+function negApplyFilter() {
+  var q = ((document.getElementById('neg-search')||{}).value||'').toLowerCase();
+  var filtered = _NEG_ALL.filter(function(n){
+    if (_NEG_FILTER !== 'all' && n.status !== _NEG_FILTER) return false;
+    if (q) { var s = ((n.id||'') + (n.buyer_name||'') + (n.product||'')).toLowerCase(); if (s.indexOf(q) < 0) return false; }
+    return true;
+  });
+  renderNegHistory(filtered);
+}
 
 function loadNegotiations() {
   Promise.all([
@@ -1518,16 +1614,24 @@ function loadNegotiations() {
     renderAlerts(negs, lois);
 
     // ── Negotiation stats ───────────────────────────────────────────────────
+    _NEG_ALL = negs;
     var active    = negs.filter(function(n){ return n.status === 'running'; }).length;
     var pending   = negs.filter(function(n){ return n.status === 'awaiting_boss'; }).length;
     var today     = new Date().toISOString().slice(0,10);
     var completed = negs.filter(function(n){ return n.status === 'completed' && n.updated_at && n.updated_at.slice(0,10) === today; }).length;
+    var done      = negs.filter(function(n){ return ['completed','failed','rejected'].indexOf(n.status) > -1; }).length;
+    var won       = negs.filter(function(n){ return n.status === 'completed'; }).length;
+    var winRate   = done ? Math.round(won / done * 100) + '%' : '—';
+    var revToday  = negs.filter(function(n){ return n.status === 'completed' && n.updated_at && n.updated_at.slice(0,10) === today; })
+      .reduce(function(s,n){ return s + (parseFloat(n.deal_price)||0) * (parseFloat(n.qty)||0); }, 0);
 
     document.getElementById('neg-stat-active').textContent    = active;
     document.getElementById('neg-stat-pending').textContent   = pending;
     document.getElementById('neg-stat-completed').textContent = completed;
     document.getElementById('neg-stat-total').textContent     = negs.length;
     document.getElementById('neg-count').textContent          = pending || '';
+    var wEl = document.getElementById('neg-stat-winrate'); if(wEl) wEl.textContent = winRate;
+    var rEl = document.getElementById('neg-stat-revenue'); if(rEl) rEl.textContent = revToday ? '$' + Math.round(revToday).toLocaleString() : '$0';
 
     // ── Approval box (negotiations view) ────────────────────────────────────
     var pendingNeg = negs.find(function(n){ return n.status === 'awaiting_boss'; });
@@ -1568,9 +1672,165 @@ function loadNegotiations() {
     // ── Live negotiations list + history ────────────────────────────────────
     renderNegotiations(negs.filter(function(n){ return n.status === 'running'; }));
     renderNegHistory(negs);
+    renderAdminPOs();
   }).catch(function(e) {
     console.error('loadNegotiations:', e);
   });
+}
+
+function renderAdminPOs() {
+  var container = document.getElementById('admin-po-list');
+  if (!container) return;
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+
+  var now = new Date();
+  var month = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');
+  var thisMonth = pos.filter(function(p){ return (p.date||'').startsWith(month); });
+  var totalVal  = pos.reduce(function(s,p){ return s + (parseFloat(p.total)||0); }, 0);
+  var drafts    = pos.filter(function(p){ return p.status === 'draft'; });
+
+  var totEl = document.getElementById('admin-po-stat-total');
+  var monEl = document.getElementById('admin-po-stat-month');
+  var valEl = document.getElementById('admin-po-stat-value');
+  var drfEl = document.getElementById('admin-po-stat-draft');
+  if (totEl) totEl.textContent = pos.length || '—';
+  if (monEl) monEl.textContent = thisMonth.length || '0';
+  if (valEl) valEl.textContent = totalVal ? '$' + Math.round(totalVal).toLocaleString() : '—';
+  if (drfEl) drfEl.textContent = drafts.length || '0';
+
+  if (!pos.length) {
+    container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">No purchase orders yet — click + New PO or use the 🧾 PO button on a negotiation row above</div>';
+    return;
+  }
+
+  var rows = pos.map(function(p) {
+    var badge = p.status === 'sent'
+      ? '<span class="badge bg">Sent</span>'
+      : p.status === 'confirmed'
+      ? '<span class="badge bv">Confirmed</span>'
+      : '<span class="badge bm">Draft</span>';
+    var d = new Date(p.created_at || p.date);
+    var dateStr = isNaN(d.getTime()) ? '—' : d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+    var loiCell = p.loi_ref
+      ? '<span style="font-size:12px;color:var(--teal);font-family:\'IBM Plex Mono\',monospace">' + p.loi_ref + '</span>'
+      : '—';
+    var params = 'product=' + encodeURIComponent(p.product||'')
+      + '&buyer='    + encodeURIComponent(p.buyer||'')
+      + '&supplier=' + encodeURIComponent(p.supplier||'')
+      + '&currency=' + encodeURIComponent(p.currency||'USD')
+      + '&incoterm=' + encodeURIComponent(p.incoterm||'')
+      + '&ref='      + encodeURIComponent(p.loi_ref||'');
+    return '<tr>'
+      + '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--indigo)">' + p.po_num + '</td>'
+      + '<td style="font-size:13px">' + (p.product||'—') + '</td>'
+      + '<td style="font-size:13px;color:var(--muted)">' + (p.buyer||'—') + '</td>'
+      + '<td style="font-size:13px;color:var(--muted)">' + (p.supplier||'—') + '</td>'
+      + '<td style="font-size:12px;color:var(--teal)">' + (p.incoterm||'—') + '</td>'
+      + '<td style="text-align:right;font-family:\'Fraunces\',serif;font-weight:700;color:var(--violet)">' + (p.total ? '$' + Math.round(p.total).toLocaleString() : '—') + '</td>'
+      + '<td>' + badge + '</td>'
+      + '<td>' + loiCell + '</td>'
+      + '<td style="font-size:12px;color:var(--muted)">' + dateStr + '</td>'
+      + '<td><div style="display:flex;gap:4px">'
+        + '<button class="btn btn-xs" style="font-size:11px" onclick="window.open(\'po-generator.html?' + params + '\',\'_blank\')">📄 Open</button>'
+        + '<button class="btn btn-xs btn-r" style="font-size:11px" onclick="deletePO(\'' + p.po_num + '\')">✕</button>'
+      + '</div></td>'
+      + '</tr>';
+  }).join('');
+
+  container.innerHTML = '<table>'
+    + '<thead><tr><th>PO #</th><th>Product</th><th>Buyer</th><th>Supplier</th>'
+    + '<th>Incoterm</th><th style="text-align:right">Total</th><th>Status</th>'
+    + '<th>LOI Ref</th><th>Date</th><th>Actions</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody></table>';
+}
+
+function deletePO(poNum) {
+  var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
+  localStorage.setItem('sloi_pos', JSON.stringify(pos.filter(function(p){ return p.po_num !== poNum; })));
+  renderAdminPOs();
+}
+
+// ── CONTRACTS VIEW ────────────────────────────────────────────────────────────
+var DEMO_POS = [
+  {po_num:'PO-2024-001',product:'Steel Rebar',buyer:'Gulf Cement LLC',value:84000,terms:'T/T 30d',loi_ref:'SL-LOI-2024-001',status:'lc_issued'},
+  {po_num:'PO-2024-002',product:'Wheat Grade A',buyer:'Atlas Trading',value:112500,terms:'T/T advance',loi_ref:'SL-LOI-2024-002',status:'cleared'},
+  {po_num:'PO-2024-003',product:'Cement OPC',buyer:'Al Najma Supplies',value:43200,terms:'LC at sight',loi_ref:'SL-LOI-2024-003',status:'overdue'},
+  {po_num:'PO-2024-004',product:'Polypropylene',buyer:'Delta Polymers',value:156000,terms:'DP 60d',loi_ref:'SL-LOI-2024-004',status:'pending'}
+];
+
+var STATUS_CFG = {
+  cleared:  {label:'✓ Cleared',  cls:'bg'},
+  lc_issued:{label:'LC Issued',  cls:'ba'},
+  overdue:  {label:'⚠ Overdue', cls:'br'},
+  pending:  {label:'Pending LC', cls:'bm'},
+  draft:    {label:'Draft',      cls:'bm'}
+};
+
+function loadContracts() {
+  var stored = [];
+  try { stored = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  // merge: stored POs take precedence; demo fills the rest
+  var storedNums = stored.map(function(p){ return p.po_num; });
+  var demos = DEMO_POS.filter(function(d){ return storedNums.indexOf(d.po_num) === -1; });
+  var all = demos.map(function(d){
+    return {po_num:d.po_num,product:d.product,buyer:d.buyer,total:d.value,incoterm:d.terms,loi_ref:d.loi_ref,status:d.status};
+  }).concat(stored.map(function(p){
+    return {po_num:p.po_num,product:p.product,buyer:p.buyer,total:p.total||0,incoterm:p.incoterm||'—',loi_ref:p.loi_ref||'—',status:p.status||'draft'};
+  }));
+
+  var totalVal = all.reduce(function(s,p){ return s + (p.total||0); }, 0);
+  var cleared  = all.filter(function(p){ return p.status==='cleared'; }).reduce(function(s,p){ return s+(p.total||0); }, 0);
+  var overdue  = all.filter(function(p){ return p.status==='overdue'; }).reduce(function(s,p){ return s+(p.total||0); }, 0);
+
+  var fmt = function(n){ return '$'+Math.round(n).toLocaleString(); };
+  document.getElementById('ct-stat-count').textContent   = all.length;
+  document.getElementById('ct-stat-value').textContent   = fmt(totalVal);
+  document.getElementById('ct-stat-cleared').textContent = fmt(cleared);
+  document.getElementById('ct-stat-overdue').textContent = fmt(overdue);
+
+  var rows = all.map(function(p) {
+    var sc = STATUS_CFG[p.status] || STATUS_CFG.draft;
+    return '<tr>'
+      + '<td style="font-family:\'IBM Plex Mono\',monospace;color:var(--violet)">' + p.po_num + '</td>'
+      + '<td style="color:var(--white)">' + p.product + '</td>'
+      + '<td>' + p.buyer + '</td>'
+      + '<td style="font-family:\'IBM Plex Mono\',monospace;text-align:right">' + fmt(p.total) + '</td>'
+      + '<td>' + p.incoterm + '</td>'
+      + '<td style="color:var(--muted);font-size:13px">' + (p.loi_ref||'—') + '</td>'
+      + '<td><span class="badge ' + sc.cls + '">' + sc.label + '</span></td>'
+      + '<td style="white-space:nowrap">'
+        + '<button class="btn btn-xs btn-p" onclick="window.open(\'po-generator.html\',\'_blank\')" style="margin-right:4px">Open</button>'
+        + '<button class="btn btn-xs btn-g" onclick="markPOCleared(\'' + p.po_num + '\')">Mark Paid</button>'
+      + '</td>'
+      + '</tr>';
+  }).join('');
+
+  document.getElementById('ct-po-tbody').innerHTML = rows || '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">No purchase orders yet.</td></tr>';
+}
+
+function markPOCleared(poNum) {
+  var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
+  var found = false;
+  pos = pos.map(function(p){ if(p.po_num===poNum){p.status='cleared';found=true;} return p; });
+  if (!found) {
+    var demo = DEMO_POS.find(function(d){ return d.po_num===poNum; });
+    if (demo) { var copy = Object.assign({},demo); copy.status='cleared'; pos.push(copy); }
+  }
+  localStorage.setItem('sloi_pos', JSON.stringify(pos));
+  loadContracts();
+}
+
+function exportContractsCsv() {
+  var stored = [];
+  try { stored = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  var storedNums = stored.map(function(p){ return p.po_num; });
+  var demos = DEMO_POS.filter(function(d){ return storedNums.indexOf(d.po_num) === -1; });
+  var all = demos.concat(stored);
+  var hdr = 'PO No.,Product,Buyer,Value,Terms,LOI Ref,Status\n';
+  var body = all.map(function(p){ return [p.po_num,p.product,p.buyer,p.total||p.value||0,p.incoterm||p.terms||'',p.loi_ref||'',p.status||''].join(','); }).join('\n');
+  var blob = new Blob([hdr+body],{type:'text/csv'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'contracts.csv'; a.click();
 }
 
 function renderNegotiations(negs) {
@@ -1581,6 +1841,16 @@ function renderNegotiations(negs) {
     failed:        '<span class="badge br">✗ Failed</span>',
     rejected:      '<span class="badge br">✗ Rejected</span>',
   };
+  var lc = document.getElementById('live-neg-count');
+  if (lc) lc.textContent = negs.length;
+  if (!negs.length) {
+    document.getElementById('neg-list').innerHTML =
+      '<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:28px;text-align:center;color:var(--muted);margin-bottom:14px">' +
+      '<div style="font-size:28px;margin-bottom:8px">🤖</div>' +
+      '<div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:3px">No live negotiations</div>' +
+      '<div style="font-size:13px">Agents standing by · all rounds closed or idle</div></div>';
+    return;
+  }
   var html = '';
   negs.forEach(function(n) {
     var bars = '';
@@ -1592,16 +1862,44 @@ function renderNegotiations(negs) {
     var gap     = (n.agent_price && n.broker_price)
       ? '$' + Math.abs(parseFloat(n.broker_price) - parseFloat(n.agent_price)).toLocaleString()
       : '—';
-    html += '<div class="neg-card live" style="margin-bottom:10px">';
-    html += '<div class="nc-top"><div class="nc-avatar">🤖</div><div style="flex:1"><div class="nc-ref">' + n.id + ' · ' + (n.strategy||'standard') + '</div><div class="nc-product">' + n.product + ' · ' + n.buyer_name + '</div></div>' + (STATUS_BADGE[n.status]||'') + '</div>';
-    html += '<div style="background:var(--surface2);border-radius:4px;padding:10px;margin-bottom:10px"><div class="rounds-bar">' + bars + '</div><div style="font-size:13px;color:var(--muted)">Round ' + (n.current_round||1) + ' of ' + (n.max_rounds||5) + '</div></div>';
-    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:14px;margin-bottom:10px">';
-    html += '<div><div style="color:var(--muted);margin-bottom:2px">Agent offer</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--indigo)">' + agentP + '</div></div>';
-    html += '<div><div style="color:var(--muted);margin-bottom:2px">Gap</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--gold)">' + gap + '</div></div>';
-    html += '<div><div style="color:var(--muted);margin-bottom:2px">Trader price</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--red)">' + brokerP + '</div></div>';
+    var potVal  = n.broker_price && n.qty
+      ? '$' + Math.round(parseFloat(n.broker_price) * parseFloat(n.qty)).toLocaleString()
+      : '—';
+    var isAwaiting = n.status === 'awaiting_boss';
+    html += '<div class="neg-card live" style="margin-bottom:12px">';
+    // Header
+    html += '<div class="nc-top">';
+    html += '<div class="nc-avatar">🤖</div>';
+    html += '<div style="flex:1;min-width:0">';
+    html += '<div class="nc-ref">' + n.id + ' · ' + (n.strategy||'standard') + '</div>';
+    html += '<div class="nc-product">' + n.product + ' · ' + n.qty + ' ' + (n.unit||'MT') + ' · ' + n.buyer_name + '</div>';
+    html += '</div>' + (STATUS_BADGE[n.status]||'') + '</div>';
+    // Round progress bar
+    html += '<div style="background:var(--surface2);border-radius:4px;padding:10px;margin-bottom:10px">';
+    html += '<div class="rounds-bar">' + bars + '</div>';
+    html += '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px">';
+    html += '<div style="font-size:13px;color:var(--muted)">Round <b style="color:var(--white)">' + (n.current_round||1) + '</b> of ' + (n.max_rounds||5) + '</div>';
+    html += '<div style="font-size:13px;color:var(--muted)">Deal potential: <b style="color:var(--teal)">' + potVal + '</b></div>';
     html += '</div></div>';
+    // 4-column price grid
+    html += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;font-size:14px;margin-bottom:12px">';
+    html += '<div><div style="color:var(--muted);font-size:12px;margin-bottom:2px">Quantity</div><div style="font-size:15px;font-weight:700;color:var(--white)">' + n.qty + ' ' + (n.unit||'MT') + '</div></div>';
+    html += '<div><div style="color:var(--muted);font-size:12px;margin-bottom:2px">Agent offer</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--indigo)">' + agentP + '</div></div>';
+    html += '<div><div style="color:var(--muted);font-size:12px;margin-bottom:2px">Gap</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--gold)">' + gap + '</div></div>';
+    html += '<div><div style="color:var(--muted);font-size:12px;margin-bottom:2px">Trader price</div><div style="font-family:Fraunces,serif;font-size:16px;font-weight:700;color:var(--red)">' + brokerP + '</div></div>';
+    html += '</div>';
+    // Action buttons
+    html += '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">';
+    html += '<button class="btn btn-xs btn-p" onclick="window.open(\'negotiation-agent.html\',\'_blank\')">▶ View Live</button>';
+    if (isAwaiting) {
+      html += '<button class="btn btn-xs btn-g" onclick="approveDeal()">✅ Approve LOI</button>';
+      html += '<button class="btn btn-xs btn-r" onclick="rejectDeal()">✗ Reject</button>';
+    }
+    html += '<button class="btn btn-xs" style="margin-left:auto" onclick="openContractModal(\'' + n.id + '\',this)">📜 Contract</button>';
+    html += '</div>';
+    html += '</div>';
   });
-  document.getElementById('neg-list').innerHTML = html || '';
+  document.getElementById('neg-list').innerHTML = html;
 }
 
 function renderNegHistory(negs) {
@@ -1613,24 +1911,35 @@ function renderNegHistory(negs) {
     rejected:      '<span class="badge br">Rejected</span>',
   };
   var html = negs.map(function(n) {
-    var time = n.created_at ? new Date(n.created_at).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '—';
+    var dt = n.created_at ? new Date(n.created_at) : null;
+    var dateStr = dt
+      ? dt.toLocaleDateString([], {month:'short', day:'numeric'}) + ' ' + dt.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+      : '—';
     var price = n.deal_price ? '$' + parseFloat(n.deal_price).toLocaleString() + '/' + n.unit : '—';
+    var value = n.deal_price && n.qty
+      ? '$' + Math.round(parseFloat(n.deal_price) * parseFloat(n.qty)).toLocaleString()
+      : '—';
     return '<tr>' +
-      '<td style="color:var(--indigo);font-size:14px">' + n.id + '</td>' +
+      '<td style="color:var(--indigo);font-size:13px;white-space:nowrap">' + n.id + '</td>' +
       '<td><b style="color:var(--white)">' + (n.buyer_name||'—') + '</b></td>' +
       '<td>' + n.product + ' · ' + n.qty + ' ' + n.unit +
-      '<br><button class="btn btn-xs" style="margin-top:5px;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal);font-size:12px" ' +
+      '<br><div style="display:flex;gap:4px;margin-top:5px">' +
+      '<button class="btn btn-xs" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal);font-size:12px" ' +
       'data-id="' + n.id + '" data-product="' + (n.product||'').replace(/"/g,'&quot;') + '" data-qty="' + (n.qty||0) + '" data-unit="' + (n.unit||'MT') + '" data-buyer="' + (n.buyer_name||'').replace(/"/g,'&quot;') + '" data-price="' + (n.deal_price||0) + '" ' +
-      'onclick="openInvoiceFromNeg(this)">🧾 Invoice</button></td>' +
-      '<td>' + (n.current_round||0) + '/' + (n.max_rounds||5) + '</td>' +
+      'onclick="openInvoiceFromNeg(this)">🧾 Invoice</button>' +
+      '<button class="btn btn-xs" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold);font-size:12px" ' +
+      'onclick="window.open(\'po-generator.html?product=' + encodeURIComponent(n.product||'') + '&ref=' + encodeURIComponent(n.id||'') + '\',\'_blank\')">🧾 PO</button>' +
+      '</div></td>' +
+      '<td style="text-align:center">' + (n.current_round||0) + '/' + (n.max_rounds||5) + '</td>' +
       '<td style="color:var(--green)">' + price + '</td>' +
+      '<td style="color:var(--teal);font-weight:600">' + value + '</td>' +
       '<td>' + (STATUS_BADGE[n.status]||n.status) + '</td>' +
-      '<td style="color:var(--muted);font-size:14px">' + time + '</td>' +
+      '<td style="color:var(--muted);font-size:13px;white-space:nowrap">' + dateStr + '</td>' +
       '<td><button class="btn btn-xs" onclick="openContractModal(\'' + n.id + '\',this)" style="white-space:nowrap">📜 Contract</button></td>' +
       '</tr>';
   }).join('');
   document.getElementById('neg-history-body').innerHTML = html ||
-    '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No negotiations yet</td></tr>';
+    '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:20px">No negotiations match</td></tr>';
 }
 
 function renderBrokers(){var html='';BROKERS.forEach(function(b){html+='<div class="broker-row"><div class="br-av" style="background:'+b.color+';color:'+b.ct+'">'+b.init+'</div><div class="br-info"><div class="br-name">'+b.name+'</div><div class="br-meta">'+b.company+' · '+b.territory+'</div></div><div class="br-stats"><div class="brs"><div class="brs-v">'+b.deals+'</div><div class="brs-l">Deals</div></div><div class="brs"><div class="brs-v">'+b.volume+'</div><div class="brs-l">Volume</div></div><div class="brs"><div class="brs-v" style="color:var(--violet)">'+b.fees+'</div><div class="brs-l">LOI fees</div></div><div class="brs"><div class="brs-v" style="color:var(--gold)">'+b.pipeline+'</div><div class="brs-l">Pipeline</div></div></div><div style="display:flex;gap:5px;flex-shrink:0"><span class="badge bg">Active</span><button class="btn btn-xs btn-g" onclick="openTG()">📲</button><button class="btn btn-xs">Edit</button></div></div>';});document.getElementById('broker-list').innerHTML=html;}
@@ -1639,6 +1948,14 @@ function approveBroker(){alert('KYC approved. Gulf Metals Trading is now active.
 
 
 // ── PRODUCTS & PRICING ────────────────────────────────────────────────────────
+
+function prodSource(name) {
+  show('agents', null);
+  setTimeout(function(){ siTab('leads'); }, 220);
+}
+function prodOutreach(name) {
+  show('agents', null);
+}
 
 function renderProducts() {
   var tbody = document.getElementById('products-tbody');
@@ -1654,13 +1971,18 @@ function renderProducts() {
     tbody.innerHTML = data.map(function(p) {
       var emoji = EMOJI[p.sector] || '📦';
       var certs = (p.certs||[]).join(' · ') || '—';
+      var pname = encodeURIComponent(p.name||'');
       return '<tr>'
         + '<td style="padding:8px 12px"><div style="font-size:14px;font-weight:600;color:var(--white)">' + emoji + ' ' + p.name + '</div><div style="font-size:13px;color:var(--muted);margin-top:2px">' + certs + '</div></td>'
         + '<td style="padding:8px 12px"><div style="font-size:14px;color:var(--indigo)">' + p.sku + '</div><div style="font-size:13px;color:var(--muted)">' + p.ref + '</div></td>'
         + '<td style="padding:8px 12px;text-align:right"><div style="font-family:Fraunces,serif;font-size:15px;font-weight:700;color:var(--violet)">$' + Number(p.current_price||0).toLocaleString() + '</div><div style="font-size:13px;color:var(--muted)">/' + p.unit + '</div></td>'
-        + '<td style="padding:8px 12px;text-align:right;color:var(--muted)">' + Number(p.moq||0).toLocaleString() + ' ' + p.unit + '</td>'
-        + '<td style="padding:8px 12px;text-align:right;color:var(--muted)">' + (p.lead_time_days||'—') + ' days</td>'
-        + '<td style="padding:8px 12px"><span class="badge bg">Active</span></td>'
+        + '<td style="padding:8px 12px;text-align:right;color:var(--muted);font-size:14px">' + Number(p.moq||0).toLocaleString() + ' ' + p.unit + '<br><span style="font-size:13px">' + (p.lead_time_days||'—') + ' days</span></td>'
+        + '<td style="padding:8px 12px;text-align:center"><span class="badge bg">Active</span></td>'
+        + '<td style="padding:8px 12px"><div style="display:flex;gap:4px;flex-wrap:wrap">'
+        + '<button class="btn btn-xs" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal);font-size:12px" onclick="prodSource(\'' + pname + '\')">🔭 Source</button>'
+        + '<button class="btn btn-xs" style="background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.25);color:#25d366;font-size:12px" onclick="prodOutreach(\'' + pname + '\')">📱 Outreach</button>'
+        + '<button class="btn btn-xs btn-p" style="font-size:12px" onclick="window.open(\'negotiation-agent.html\',\'_blank\')">🤖 Negotiate</button>'
+        + '</div></td>'
         + '</tr>';
     }).join('');
   }).catch(function() {
@@ -1670,77 +1992,93 @@ function renderProducts() {
 
 function forceSync() { loadCatalogStatus(); renderProducts(); }
 
+var _USER_ALL = [];
+var _USER_FILTER = 'all';
+
+function crmStage(u) {
+  if (u.status === 'incomplete') return { badge: '<span class="badge br" style="font-size:11px">⚠ KYC</span>', cls: 'incomplete' };
+  if ((u.loi_count||0) >= 5) return { badge: '<span style="background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.3);color:var(--violet);font-size:11px;padding:1px 8px;border-radius:2px;font-weight:700;display:inline-block">⭐ VIP</span>', cls: 'vip' };
+  if ((u.loi_count||0) >= 1) return { badge: '<span class="badge bg" style="font-size:11px">✓ Active</span>', cls: 'active' };
+  return { badge: '<span class="badge bm" style="font-size:11px">○ Lead</span>', cls: 'lead' };
+}
+
+function userFilter(type, btn) {
+  _USER_FILTER = type;
+  document.querySelectorAll('[id^="uf-"]').forEach(function(b){ b.style.borderColor=''; b.style.color=''; });
+  if (btn) { btn.style.borderColor='var(--indigo)'; btn.style.color='var(--violet)'; }
+  userApplyFilter();
+}
+
+function userApplyFilter() {
+  var q = ((document.getElementById('user-search')||{}).value||'').toLowerCase();
+  var filtered = _USER_ALL.filter(function(u){
+    var s = crmStage(u);
+    if (_USER_FILTER === 'vip'        && s.cls !== 'vip') return false;
+    if (_USER_FILTER === 'incomplete' && u.status !== 'incomplete') return false;
+    if (_USER_FILTER !== 'all' && _USER_FILTER !== 'vip' && _USER_FILTER !== 'incomplete' && u.role !== _USER_FILTER) return false;
+    if (q) { var t = ((u.name||'')+(u.email||'')+(u.country||'')).toLowerCase(); if (t.indexOf(q)<0) return false; }
+    return true;
+  });
+  renderUserTable(filtered);
+}
+
+function renderUserTable(data) {
+  var tb = document.getElementById('user-tbody');
+  if (!tb) return;
+  if (!data.length) {
+    tb.innerHTML = '<tr><td colspan="9" style="padding:20px;text-align:center;color:var(--muted)">No users match</td></tr>';
+    return;
+  }
+  var roleColor = {buyer:'var(--teal)',trader:'var(--violet)',supplier:'var(--gold)',boss:'var(--red)'};
+  tb.innerHTML = data.map(function(u) {
+    var isIncomplete = u.status === 'incomplete';
+    var rc    = roleColor[u.role] || 'var(--muted)';
+    var stage = crmStage(u);
+    var nameCell   = isIncomplete
+      ? '<span style="color:var(--muted);font-style:italic">' + u.name + '</span>'
+      : '<span style="color:var(--white);font-weight:600">' + u.name + '</span>';
+    var roleCell   = isIncomplete
+      ? '<span style="color:var(--muted)">—</span>'
+      : '<span style="color:' + rc + ';text-transform:capitalize">' + u.role + '</span>';
+    var statusCell = isIncomplete
+      ? '<span class="badge br">⚠ Incomplete</span>'
+      : '<span class="badge bg">Active</span>';
+    var created    = u.created_at ? new Date(u.created_at).toLocaleDateString() : '—';
+    var loiColor   = (u.loi_count||0) > 0 ? 'var(--white)' : 'var(--muted)';
+    var actBtns    = isIncomplete
+      ? '<button class="btn btn-xs" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.25);color:var(--red)" title="Incomplete registration">⚠ Fix</button>'
+      : '<button class="btn btn-xs" onclick="openTG()" title="WhatsApp">📲</button>'
+        + (u.email ? '<a href="mailto:' + u.email + '" class="btn btn-xs" title="Email" style="text-decoration:none">✉️</a>' : '')
+        + '<button class="btn btn-xs btn-p" onclick="show(\'negotiations\',document.querySelectorAll(\'.nav\')[2])" title="Start negotiation" style="font-size:12px">🤖</button>';
+    return '<tr' + (isIncomplete ? ' style="opacity:.6"' : '') + '>'
+      + '<td>' + nameCell + '<div style="font-size:13px;color:var(--muted);margin-top:1px">' + created + '</div></td>'
+      + '<td style="font-size:13px;color:var(--muted)">' + (u.email||'—') + '</td>'
+      + '<td>' + (u.country||'—') + '</td>'
+      + '<td>' + roleCell + '</td>'
+      + '<td>' + stage.badge + '</td>'
+      + '<td style="color:var(--teal)">' + (u.credits||0) + '</td>'
+      + '<td style="font-weight:600;color:' + loiColor + '">' + (u.loi_count||0) + '</td>'
+      + '<td>' + statusCell + '</td>'
+      + '<td><div style="display:flex;gap:4px;align-items:center">' + actBtns + '</div></td>'
+      + '</tr>';
+  }).join('');
+}
+
 function renderUsers() {
   var tb = document.getElementById('user-tbody');
   if (!tb) return;
-  tb.innerHTML = '<tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>';
+  tb.innerHTML = '<tr><td colspan="9" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>';
   api.req('GET', '/admin/users').then(function(data) {
-    var registered  = data.filter(function(u){ return u.status === 'registered'; });
-    var incomplete  = data.filter(function(u){ return u.status === 'incomplete'; });
-    var buyers      = registered.filter(function(u){ return u.role !== 'boss'; }).length;
-    var linkedCount = registered.filter(function(u){ return u.connected === true; }).length;
+    _USER_ALL = data;
+    var buyers     = data.filter(function(u){ return u.role === 'buyer' && u.status === 'registered'; }).length;
+    var highValue  = data.filter(function(u){ return (u.loi_count||0) >= 3; }).length;
+    var estRev     = data.reduce(function(s,u){ return s + (u.loi_count||0) * 500; }, 0);
     var el;
-    el = document.getElementById('usr-stat-total');    if (el) el.textContent = registered.length;
+    el = document.getElementById('usr-stat-total');    if (el) el.textContent = data.length;
     el = document.getElementById('usr-stat-active');   if (el) el.textContent = buyers;
-    el = document.getElementById('usr-stat-pending');  if (el) el.textContent = incomplete.length;
-    el = document.getElementById('usr-stat-suspended');if (el) el.textContent = linkedCount;
-
-    // Update labels to match new meaning
-    var labels = document.querySelectorAll('#view-users .stat-top');
-    if (labels[2]) labels[2].textContent = 'Incomplete';
-    if (labels[3]) labels[3].textContent = 'Linked to you';
-
-    if (!data.length) {
-      tb.innerHTML = '<tr><td colspan="9" style="padding:16px;text-align:center;color:var(--muted)">No users found</td></tr>';
-      return;
-    }
-
-    var roleColor = {buyer:'var(--teal)',trader:'var(--violet)',supplier:'var(--gold)',boss:'var(--red)'};
-
-    tb.innerHTML = data.map(function(u) {
-      var isIncomplete = u.status === 'incomplete';
-      var rc   = roleColor[u.role] || 'var(--muted)';
-      var nameCell = isIncomplete
-        ? '<span style="color:var(--muted);font-style:italic">' + u.name + '</span>'
-        : '<span style="color:var(--white);font-weight:600">' + u.name + '</span>';
-
-      // Linked-to-this-admin indicator
-      var linkedCell;
-      if (u.connected === null) {
-        linkedCell = '<span style="color:var(--muted);font-size:13px">—</span>';      // admin_id column missing
-      } else if (isIncomplete) {
-        linkedCell = '<span style="color:var(--muted);font-size:13px">—</span>';
-      } else if (u.connected) {
-        linkedCell = '<span class="badge bg">✓ Linked</span>';
-      } else {
-        linkedCell = '<span class="badge ba">Unlinked</span>';
-      }
-
-      // Account status badge
-      var statusCell = isIncomplete
-        ? '<span class="badge br">⚠ Incomplete</span>'
-        : '<span class="badge bg">Active</span>';
-
-      var roleCell = isIncomplete
-        ? '<span style="color:var(--muted)">—</span>'
-        : '<span style="color:' + rc + '">' + u.role + '</span>';
-
-      var created = u.created_at ? new Date(u.created_at).toLocaleDateString() : '—';
-
-      return '<tr' + (isIncomplete ? ' style="opacity:.6"' : '') + '>'
-        + '<td>' + nameCell + '<div style="font-size:13px;color:var(--muted);margin-top:1px">' + created + '</div></td>'
-        + '<td style="font-size:14px;color:var(--muted)">' + (u.email || '—') + '</td>'
-        + '<td>' + u.country + '</td>'
-        + '<td>' + roleCell + '</td>'
-        + '<td>' + linkedCell + '</td>'
-        + '<td style="color:var(--teal)">' + u.credits + '</td>'
-        + '<td>' + u.loi_count + '</td>'
-        + '<td>' + statusCell + '</td>'
-        + '<td><div style="display:flex;gap:4px">'
-        + (isIncomplete ? '<button class="btn btn-xs btn-a" title="Incomplete registration — user is in Auth but users table row is missing">⚠ Fix</button>' : '<button class="btn btn-xs" onclick="openTG()">📲</button>')
-        + '</div></td>'
-        + '</tr>';
-    }).join('');
+    el = document.getElementById('usr-stat-pending');  if (el) el.textContent = highValue;
+    el = document.getElementById('usr-stat-suspended');if (el) el.textContent = estRev ? '$' + estRev.toLocaleString() : '$0';
+    userApplyFilter();
   }).catch(function(e) {
     console.error('renderUsers:', e);
     tb.innerHTML = '<tr><td colspan="9" style="padding:16px;text-align:center;color:var(--muted)">Failed to load users — check console</td></tr>';

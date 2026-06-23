@@ -910,6 +910,9 @@
           <span class="nav-icon">📋</span><span class="nav-label">RFQs &amp; LOIs</span
           ><span class="nav-badge nb-gold">7</span>
         </button>
+        <button class="nav" id="nav-contracts" onclick="show('contracts', this)">
+          <span class="nav-icon">📄</span><span class="nav-label">Contracts</span>
+        </button>
         <button class="nav" onclick="show('notifications', this)">
           <span class="nav-icon">🔔</span
           ><span class="nav-label">Notifications</span
@@ -1028,17 +1031,17 @@
                 <div class="ac-desc">Generates purchase orders directly from signed LOIs.</div>
                 <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.25);margin-top:8px">● Always on · 2 POs sent</div>
               </div>
-              <div class="action-card" onclick="window.open('logistics-customs-agent.html','_blank')" style="border-color:rgba(91,95,239,.2)">
+              <div class="action-card" onclick="window.open('logistics-customs-agent.html','_blank')" style="border-color:rgba(45,212,191,.25)">
                 <div class="ac-icon">🚢</div>
-                <div class="ac-title">LogisticsAI</div>
-                <div class="ac-desc">Tracks shipments, optimises routes, monitors port delays.</div>
-                <div class="ac-cost bt" style="border:1px solid rgba(45,212,191,.25);margin-top:8px">● Running · 6 tracked</div>
+                <div class="ac-title">Logistics &amp; Customs</div>
+                <div class="ac-desc">Shipment tracking, route optimisation, HS codes, duty calc &amp; import permits.</div>
+                <div class="ac-cost bt" style="border:1px solid rgba(45,212,191,.25);margin-top:8px">● Running · 6 tracked · $14.2K saved</div>
               </div>
-              <div class="action-card" onclick="window.open('logistics-customs-agent.html','_blank')" style="border-color:rgba(139,143,248,.2)">
-                <div class="ac-icon">🌿</div>
-                <div class="ac-title">CustomsAI</div>
-                <div class="ac-desc">HS code lookup, duty calc, import permits across 6 countries.</div>
-                <div class="ac-cost bv" style="border:1px solid rgba(91,95,239,.25);margin-top:8px">● Always on · $14.2K saved</div>
+              <div class="action-card" onclick="toggleAgent('payment')" style="border-color:rgba(232,169,74,.3)">
+                <div class="ac-icon">💳</div>
+                <div class="ac-title">PaymentAI</div>
+                <div class="ac-desc">LC tracking, T/T confirmations, payment milestones &amp; overdue alerts.</div>
+                <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.3);margin-top:8px">● Running · 3 LCs open · 1 overdue</div>
               </div>
             </div>
             <!-- CONNECT AGENT BANNER -->
@@ -1875,42 +1878,96 @@
 
               <div>
                 <div class="agent-row" id="row-logistics" onclick="toggleAgent('logistics')">
-                  <div class="ar-icon" style="background:rgba(91,95,239,.15)">&#128674;</div>
-                  <div class="ar-name">LogisticsAI</div>
+                  <div class="ar-icon" style="background:rgba(45,212,191,.12)">&#128674;</div>
+                  <div class="ar-name">Logistics &amp; Customs</div>
                   <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
-                  <div class="ar-metric">6 shipments tracked &middot; 3 routes optimised &middot; <span style="color:var(--gold)">&#9888; Port Said +2d</span></div>
+                  <div class="ar-metric">6 shipments &middot; <span style="color:var(--gold)">&#9888; Port Said +2d</span> &middot; 22 HS lookups &middot; <span style="color:var(--green)">$14.2K saved</span></div>
                   <div class="ar-actions">
                     <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('logistics-customs-agent.html','_blank')">&#9654; Track</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();window.open('logistics-customs-agent.html','_blank')">Rates</button>
-                  </div>
-                  <span class="ar-chev">&#9660;</span>
-                </div>
-                <div class="agent-detail" id="detail-logistics">
-                  <div class="ad-log">
-                    <div class="ad-log-row"><span style="color:var(--teal)">&#128674;</span><span>SL-2406-001 &middot; Rebar &middot; AUH&rarr;HH &middot; ETA Jun 18</span></div>
-                    <div class="ad-log-row"><span style="color:var(--gold)">&#9888;</span><span>Jebel Ali congestion &mdash; alt route suggested</span></div>
-                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Cement OPC &middot; LCL booked &middot; $1,240/CBM</span></div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div class="agent-row" id="row-customs" onclick="toggleAgent('customs')">
-                  <div class="ar-icon" style="background:rgba(139,143,248,.12)">&#128707;</div>
-                  <div class="ar-name">CustomsAI</div>
-                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
-                  <div class="ar-metric">22 HS lookups today &middot; 6 countries &middot; <span style="color:var(--green)">$14.2K duty savings</span></div>
-                  <div class="ar-actions">
-                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('logistics-customs-agent.html','_blank')">&#128269; HS Lookup</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();window.open('logistics-customs-agent.html','_blank')">HS Lookup</button>
                     <button class="btn btn-xs" onclick="event.stopPropagation();window.open('logistics-customs-agent.html','_blank')">Duty calc</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
-                <div class="agent-detail" id="detail-customs">
-                  <div class="ad-log">
-                    <div class="ad-log-row"><span style="color:var(--muted)">Steel Rebar &rarr; UAE</span><span style="color:var(--teal)">7214.20 &middot; 5%</span></div>
-                    <div class="ad-log-row"><span style="color:var(--muted)">Wheat &rarr; Egypt</span><span style="color:var(--green)">1001.99 &middot; 0%</span></div>
-                    <div class="ad-log-row"><span style="color:var(--muted)">Polypropylene &rarr; KSA</span><span style="color:var(--gold)">3902.10 &middot; permit</span></div>
+                <div class="agent-detail" id="detail-logistics">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div>
+                      <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Shipments</div>
+                      <div class="ad-log">
+                        <div class="ad-log-row"><span style="color:var(--teal)">&#128674;</span><span>SL-2406-001 &middot; Rebar &middot; AUH&rarr;HH &middot; ETA Jun 18</span></div>
+                        <div class="ad-log-row"><span style="color:var(--gold)">&#9888;</span><span>Jebel Ali congestion &mdash; alt route suggested</span></div>
+                        <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>Cement OPC &middot; LCL booked &middot; $1,240/CBM</span></div>
+                      </div>
+                    </div>
+                    <div>
+                      <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Customs &amp; HS Codes</div>
+                      <div class="ad-log">
+                        <div class="ad-log-row"><span style="color:var(--muted)">Steel Rebar &rarr; UAE</span><span style="color:var(--teal)">7214.20 &middot; 5%</span></div>
+                        <div class="ad-log-row"><span style="color:var(--muted)">Wheat &rarr; Egypt</span><span style="color:var(--green)">1001.99 &middot; 0%</span></div>
+                        <div class="ad-log-row"><span style="color:var(--muted)">Polypropylene &rarr; KSA</span><span style="color:var(--gold)">3902.10 &middot; permit</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="ad-btns" style="margin-top:10px">
+                    <button class="btn btn-xs btn-p" onclick="window.open('logistics-customs-agent.html','_blank')">Open board &rarr;</button>
+                    <button class="btn btn-xs" onclick="window.open('logistics-customs-agent.html','_blank')">&#128269; HS Lookup</button>
+                    <button class="btn btn-xs" onclick="window.open('logistics-customs-agent.html','_blank')">Duty calc</button>
+                    <button class="btn btn-xs" onclick="alert('Exporting shipment &amp; customs log…')">&#8595; Export</button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- ── PAYMENTS & FINANCE ── -->
+            <div class="ag-section">Payments &amp; Finance</div>
+            <div class="agent-rows">
+
+              <div>
+                <div class="agent-row" id="row-payment" onclick="toggleAgent('payment')">
+                  <div class="ar-icon" style="background:rgba(232,169,74,.12)">💳</div>
+                  <div class="ar-name">PaymentAI</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
+                  <div class="ar-metric">3 LCs open &middot; $240K pending &middot; <span style="color:var(--red)">&#9888; 1 overdue</span> &middot; <span style="color:var(--green)">$112.5K cleared</span></div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();alert('Opening payment board…')">&#9654; Review</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();alert('Sending payment reminder…')">Remind</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-payment">
+                  <div class="ad-log" style="margin-bottom:10px">
+                    <div class="ad-log-row" style="grid-template-columns:1fr auto auto;gap:8px">
+                      <span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Deal</span>
+                      <span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Amount</span>
+                      <span style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">Status</span>
+                    </div>
+                    <div class="ad-log-row" style="grid-template-columns:1fr auto auto;gap:8px">
+                      <span>PO-2024-001 &middot; Steel Rebar &middot; T/T 30d</span>
+                      <span style="color:var(--white);font-family:'IBM Plex Mono',monospace">$84,000</span>
+                      <span class="badge ba">LC Issued</span>
+                    </div>
+                    <div class="ad-log-row" style="grid-template-columns:1fr auto auto;gap:8px">
+                      <span>PO-2024-002 &middot; Wheat Grade A &middot; T/T advance</span>
+                      <span style="color:var(--white);font-family:'IBM Plex Mono',monospace">$112,500</span>
+                      <span class="badge bg">&#10003; Cleared</span>
+                    </div>
+                    <div class="ad-log-row" style="grid-template-columns:1fr auto auto;gap:8px">
+                      <span>PO-2024-003 &middot; Cement OPC &middot; LC at sight</span>
+                      <span style="color:var(--white);font-family:'IBM Plex Mono',monospace">$43,200</span>
+                      <span class="badge br">&#9888; Overdue</span>
+                    </div>
+                    <div class="ad-log-row" style="grid-template-columns:1fr auto auto;gap:8px">
+                      <span>PO-2024-004 &middot; Polypropylene &middot; DP 60d</span>
+                      <span style="color:var(--white);font-family:'IBM Plex Mono',monospace">$156,000</span>
+                      <span class="badge bm">Pending LC</span>
+                    </div>
+                  </div>
+                  <div class="ad-btns">
+                    <button class="btn btn-xs btn-p" onclick="alert('Opening payment board…')">Open board &rarr;</button>
+                    <button class="btn btn-xs" onclick="alert('Sending overdue reminder to buyer…')">Send reminder</button>
+                    <button class="btn btn-xs" onclick="alert('Generating MT103 SWIFT draft…')">MT103 draft</button>
+                    <button class="btn btn-xs" onclick="alert('Exporting payment ledger…')">&#8595; Export</button>
                   </div>
                 </div>
               </div>
@@ -2088,6 +2145,105 @@
                 </div>
 
                 <button class="btn btn-xs" style="width:100%;justify-content:center;margin-top:4px" onclick="show('agents')">View all AI Tools →</button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- CONTRACTS & DOCUMENTS -->
+          <div id="view-contracts" class="view">
+            <div style="display:grid;grid-template-columns:1fr 220px;gap:20px;align-items:start">
+
+              <!-- LEFT -->
+              <div>
+                <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px">// CONTRACTS &amp; DOCUMENTS</div>
+
+                <!-- Stats -->
+                <div class="g4" style="margin-bottom:16px">
+                  <div class="stat"><div class="stat-top">Purchase Orders</div><div class="stat-val" id="ct-stat-pos">—</div></div>
+                  <div class="stat"><div class="stat-top">PO Value</div><div class="stat-val" id="ct-stat-val">—</div></div>
+                  <div class="stat"><div class="stat-top">Signed Contracts</div><div class="stat-val" style="color:var(--green)" id="ct-stat-signed">—</div></div>
+                  <div class="stat"><div class="stat-top">Pending Signature</div><div class="stat-val" style="color:var(--gold)" id="ct-stat-pending">—</div></div>
+                </div>
+
+                <!-- Deal Flow Timeline -->
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:20px">
+                  <div style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px">Deal Flow</div>
+                  <div id="ct-timeline" style="display:flex;align-items:center"></div>
+                </div>
+
+                <!-- Purchase Orders -->
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                  <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">// PURCHASE ORDERS</div>
+                  <button class="btn btn-xs" onclick="window.open('po-generator.html','_blank')" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold);font-size:12px">🧾 New PO</button>
+                </div>
+                <div id="ct-po-list" style="margin-bottom:24px"></div>
+
+                <!-- Signed Contracts -->
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                  <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">// SIGNED CONTRACTS</div>
+                </div>
+                <div id="ct-contracts-list"></div>
+                <!-- Upload area -->
+                <div id="ct-upload-area"
+                  onclick="document.getElementById('ct-file-input').click()"
+                  ondragover="event.preventDefault();this.style.borderColor='var(--indigo)'"
+                  ondragleave="this.style.borderColor='var(--border2)'"
+                  ondrop="event.preventDefault();this.style.borderColor='var(--border2)';uploadContract(event.dataTransfer.files[0])"
+                  style="border:1px dashed var(--border2);border-radius:6px;padding:24px;text-align:center;cursor:pointer;transition:border-color .15s;margin-top:8px"
+                  onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='var(--border2)'">
+                  <div style="font-size:22px;margin-bottom:6px">📁</div>
+                  <div style="font-size:13px;color:var(--muted)">Drop a signed contract PDF here, or click to upload</div>
+                  <div style="font-size:12px;color:var(--muted);margin-top:3px;opacity:.6">PDF only · stored in your browser</div>
+                  <input type="file" id="ct-file-input" accept=".pdf" style="display:none" onchange="uploadContract(this.files[0])"/>
+                </div>
+              </div>
+
+              <!-- RIGHT: Quick Actions -->
+              <div style="position:sticky;top:0">
+                <div style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px">
+                  Quick Actions<span style="flex:1;height:1px;background:var(--border);display:block"></span>
+                </div>
+
+                <!-- PO Generator -->
+                <div style="background:var(--surface);border:1px solid rgba(232,169,74,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
+                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🧾</div>
+                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">PO Generator</div><div style="font-size:11px;color:var(--muted)">Issue from signed LOI</div></div>
+                  </div>
+                  <div style="padding:8px">
+                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="window.open('po-generator.html','_blank')">🧾 New PO</button>
+                  </div>
+                </div>
+
+                <!-- LOI Generator -->
+                <div style="background:var(--surface);border:1px solid rgba(91,95,239,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
+                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📋</div>
+                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">LOI Generator</div><div style="font-size:11px;color:var(--muted)">Draft a Letter of Intent</div></div>
+                  </div>
+                  <div style="padding:8px">
+                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="window.open('loi-generator.html','_blank')">📋 Generate LOI</button>
+                  </div>
+                </div>
+
+                <!-- Invoice Generator -->
+                <div style="background:var(--surface);border:1px solid rgba(45,212,191,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
+                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🧾</div>
+                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">Invoice Generator</div><div style="font-size:11px;color:var(--muted)">Bill from signed PO</div></div>
+                  </div>
+                  <div style="padding:8px">
+                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="show('lois',document.getElementById('nav-contracts'))">🧾 View LOIs</button>
+                  </div>
+                </div>
+
+                <!-- LOIs shortcut -->
+                <div style="background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:10px 12px;margin-bottom:8px">
+                  <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Linked Documents</div>
+                  <button class="btn btn-xs" style="width:100%;justify-content:center;margin-bottom:4px" onclick="show('lois',document.querySelectorAll('.nav')[3])">📋 View RFQs &amp; LOIs</button>
+                  <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="show('notifications',document.querySelectorAll('.nav')[4])">🔔 Notifications</button>
+                </div>
               </div>
 
             </div>
@@ -3330,6 +3486,144 @@
             renderLOIs();
           });
       }
+      // ── CONTRACTS VIEW ────────────────────────────────────────────────────────
+      function renderContractsView() {
+        var pos = [];
+        try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+        var cnts = [];
+        try { cnts = JSON.parse(localStorage.getItem('sloi_contracts') || '[]'); } catch(e) {}
+
+        var totalVal = pos.reduce(function(s,p){ return s+(parseFloat(p.total)||0); }, 0);
+        var signed   = cnts.filter(function(c){ return c.status === 'signed'; }).length;
+        var pending  = cnts.filter(function(c){ return c.status !== 'signed'; }).length;
+
+        var el = function(id){ return document.getElementById(id); };
+        if(el('ct-stat-pos'))     el('ct-stat-pos').textContent     = pos.length  || '—';
+        if(el('ct-stat-val'))     el('ct-stat-val').textContent     = totalVal ? '$' + Math.round(totalVal/1000) + 'K' : '—';
+        if(el('ct-stat-signed'))  el('ct-stat-signed').textContent  = signed  || '—';
+        if(el('ct-stat-pending')) el('ct-stat-pending').textContent = pending || '—';
+
+        // Deal flow timeline
+        var hasPOs     = pos.length > 0;
+        var hasSigned  = signed > 0;
+        var tlEl = el('ct-timeline');
+        if (tlEl) {
+          var steps = [
+            { label: 'RFQ',      done: true,     active: false },
+            { label: 'LOI',      done: true,     active: false },
+            { label: 'PO',       done: hasPOs,   active: !hasPOs },
+            { label: 'Contract', done: hasSigned, active: hasPOs && !hasSigned },
+            { label: 'Invoice',  done: false,    active: hasSigned },
+          ];
+          tlEl.innerHTML = steps.map(function(s, i) {
+            var col = s.done ? 'var(--green)' : s.active ? 'var(--indigo)' : 'var(--muted)';
+            var bg  = s.done ? 'rgba(34,197,94,.1)' : s.active ? 'rgba(91,95,239,.1)' : 'transparent';
+            var ico = s.done ? '✓' : s.active ? '●' : '○';
+            var lineCol = s.done ? 'var(--green)' : 'var(--border)';
+            var line = i < steps.length - 1
+              ? '<div style="flex:1;height:1px;background:' + lineCol + ';margin-bottom:18px;margin-left:2px;margin-right:2px"></div>'
+              : '';
+            return '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:52px">'
+              + '<div style="width:30px;height:30px;border-radius:50%;border:1px solid ' + col + ';display:flex;align-items:center;justify-content:center;font-size:13px;color:' + col + ';background:' + bg + '">' + ico + '</div>'
+              + '<div style="font-size:10px;color:' + col + ';letter-spacing:.04em;text-align:center">' + s.label + '</div>'
+              + '</div>' + line;
+          }).join('');
+        }
+
+        renderContractsPOs(pos);
+        renderContractsList(cnts);
+      }
+
+      function renderContractsPOs(pos) {
+        var container = document.getElementById('ct-po-list');
+        if (!container) return;
+        if (!pos.length) {
+          container.innerHTML = '<div style="border:1px dashed var(--border2);border-radius:6px;padding:28px;text-align:center;color:var(--muted);font-size:13px">'
+            + 'No POs yet · <button class="btn btn-xs" onclick="window.open(\'po-generator.html\',\'_blank\')" style="margin-left:8px;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)">🧾 Generate PO from LOI</button></div>';
+          return;
+        }
+        container.innerHTML = pos.map(function(p) {
+          var badge = p.status === 'confirmed'
+            ? '<span class="badge bv" style="font-size:11px">Confirmed</span>'
+            : p.status === 'sent'
+            ? '<span class="badge bg" style="font-size:11px">Sent</span>'
+            : '<span class="badge bm" style="font-size:11px">Draft</span>';
+          var params = 'product=' + encodeURIComponent(p.product||'')
+            + '&buyer='    + encodeURIComponent(p.buyer||'')
+            + '&supplier=' + encodeURIComponent(p.supplier||'')
+            + '&currency=' + encodeURIComponent(p.currency||'USD')
+            + '&incoterm=' + encodeURIComponent(p.incoterm||'')
+            + '&ref='      + encodeURIComponent(p.loi_ref||'');
+          var d = new Date(p.created_at||p.date);
+          var dateStr = isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+          return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:8px">'
+            + '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">'
+            + '<div><div style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--indigo);font-weight:600">' + p.po_num + '</div>'
+            + '<div style="font-size:13px;color:var(--white);font-weight:600;margin-top:3px">' + (p.product||'—') + '</div>'
+            + '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + (p.supplier||'—') + (p.incoterm?' · '+p.incoterm:'') + '</div></div>'
+            + '<div style="text-align:right;flex-shrink:0">'
+            + '<div style="font-family:\'Fraunces\',serif;font-size:20px;font-weight:700;color:var(--violet)">' + (p.total?'$'+Math.round(p.total).toLocaleString():'—') + '</div>'
+            + '<div style="margin-top:4px">' + badge + '</div>'
+            + '<div style="font-size:11px;color:var(--muted);margin-top:3px">' + dateStr + '</div></div></div>'
+            + '<div style="display:flex;gap:6px;flex-wrap:wrap">'
+            + '<button class="btn btn-xs" onclick="window.open(\'po-generator.html?' + params + '\',\'_blank\')" style="font-size:12px">📄 Open PO</button>'
+            + '<button class="btn btn-xs" onclick="window.open(\'po-generator.html?' + params + '\',\'_blank\')" style="font-size:12px;background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:var(--green)">↓ Download PDF</button>'
+            + (p.loi_ref?'<span style="margin-left:auto;font-size:11px;color:var(--muted);align-self:center">Ref: '+p.loi_ref+'</span>':'')
+            + '</div></div>';
+        }).join('');
+      }
+
+      function renderContractsList(cnts) {
+        var container = document.getElementById('ct-contracts-list');
+        if (!container) return;
+        if (!cnts.length) { container.innerHTML = ''; return; }
+        container.innerHTML = cnts.map(function(c) {
+          var badge = c.status === 'signed'
+            ? '<span class="badge bg" style="font-size:11px">✓ Signed</span>'
+            : '<span class="badge ba" style="font-size:11px">⏳ Pending</span>';
+          var signBtn = c.status !== 'signed'
+            ? '<button class="btn btn-xs btn-g" style="font-size:11px" onclick="markContractSigned(\'' + c.id + '\')">✓ Mark Signed</button>'
+            : '';
+          return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px">'
+            + '<div style="font-size:28px;flex-shrink:0">📄</div>'
+            + '<div style="flex:1;min-width:0">'
+            + '<div style="font-size:13px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + (c.name||'Contract') + '</div>'
+            + '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + (c.date||'') + '</div></div>'
+            + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">'
+            + badge + signBtn
+            + '<button class="btn btn-xs btn-r" style="font-size:11px" onclick="deleteContract(\'' + c.id + '\')">✕ Remove</button>'
+            + '</div></div>';
+        }).join('');
+      }
+
+      function uploadContract(file) {
+        if (!file || file.type !== 'application/pdf') return;
+        var cnts = [];
+        try { cnts = JSON.parse(localStorage.getItem('sloi_contracts') || '[]'); } catch(e) {}
+        cnts.unshift({
+          id: 'CNT-' + Date.now(),
+          name: file.name.replace(/\.pdf$/i, ''),
+          date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
+          status: 'pending'
+        });
+        localStorage.setItem('sloi_contracts', JSON.stringify(cnts));
+        document.getElementById('ct-file-input').value = '';
+        renderContractsView();
+      }
+
+      function markContractSigned(id) {
+        var cnts = JSON.parse(localStorage.getItem('sloi_contracts')||'[]');
+        cnts = cnts.map(function(c){ if(c.id===id) c.status='signed'; return c; });
+        localStorage.setItem('sloi_contracts', JSON.stringify(cnts));
+        renderContractsView();
+      }
+
+      function deleteContract(id) {
+        var cnts = JSON.parse(localStorage.getItem('sloi_contracts')||'[]');
+        localStorage.setItem('sloi_contracts', JSON.stringify(cnts.filter(function(c){ return c.id!==id; })));
+        renderContractsView();
+      }
+
       var TITLES = {
         agents: ["&#129504; AI Tools", "6 tools running autonomously on your behalf"],
         opennetwork: [
@@ -3348,6 +3642,7 @@
           "Configure mandate · AI negotiates for you",
         ],
         lois: ["📋 RFQs & LOIs", "Quote requests · Signed Letters of Intent"],
+        contracts: ["📄 Contracts", "Purchase Orders · Signed contracts · Deal documents"],
         notifications: ["Notifications", "Alerts and updates"],
         credits: ["Credits", "Buy credits · history"],
         profile: ["Profile", "Account settings"],
@@ -3401,6 +3696,7 @@
         document.getElementById("tb-title").textContent = t[0];
         document.getElementById("tb-sub").textContent = t[1];
         if (v === 'products') setTimeout(renderCatalog, 0);
+        if (v === 'contracts') renderContractsView();
       }
 
       function renderProducts(filter, sector) {
