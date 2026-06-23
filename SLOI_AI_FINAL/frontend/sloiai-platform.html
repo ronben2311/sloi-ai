@@ -1010,7 +1010,7 @@
                 <div class="ac-desc">Automated multi-round negotiation with pre-qualified suppliers.</div>
                 <div class="ac-cost bv" style="border:1px solid rgba(91,95,239,.25);margin-top:8px">● 2 active rounds</div>
               </div>
-              <div class="action-card" onclick="alert('Running compliance check…')" style="border-color:rgba(239,68,68,.2)">
+              <div class="action-card" onclick="window.open('compliance.html','_blank')" style="border-color:rgba(239,68,68,.2)">
                 <div class="ac-icon">🛡️</div>
                 <div class="ac-title">ComplianceBot</div>
                 <div class="ac-desc">Screens counterparties, flags sanctions & documentation gaps.</div>
@@ -1028,13 +1028,13 @@
                 <div class="ac-desc">Generates purchase orders directly from signed LOIs.</div>
                 <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.25);margin-top:8px">● Always on · 2 POs sent</div>
               </div>
-              <div class="action-card" onclick="alert('Logistics dashboard coming soon…')" style="border-color:rgba(91,95,239,.2)">
+              <div class="action-card" onclick="window.open('logistics-customs-agent.html','_blank')" style="border-color:rgba(91,95,239,.2)">
                 <div class="ac-icon">🚢</div>
                 <div class="ac-title">LogisticsAI</div>
                 <div class="ac-desc">Tracks shipments, optimises routes, monitors port delays.</div>
                 <div class="ac-cost bt" style="border:1px solid rgba(45,212,191,.25);margin-top:8px">● Running · 6 tracked</div>
               </div>
-              <div class="action-card" onclick="alert('HS lookup coming soon…')" style="border-color:rgba(139,143,248,.2)">
+              <div class="action-card" onclick="window.open('logistics-customs-agent.html','_blank')" style="border-color:rgba(139,143,248,.2)">
                 <div class="ac-icon">🌿</div>
                 <div class="ac-title">CustomsAI</div>
                 <div class="ac-desc">HS code lookup, duty calc, import permits across 6 countries.</div>
@@ -1807,7 +1807,7 @@
                   <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
                   <div class="ar-metric">9 checks today &middot; <span style="color:var(--green)">8 cleared</span> &middot; <span style="color:var(--gold)">1 review pending</span></div>
                   <div class="ar-actions">
-                    <button class="btn btn-xs" onclick="event.stopPropagation();alert('Running manual compliance check…')">Run check</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();window.open('compliance.html','_blank')">Run check</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
@@ -1880,8 +1880,8 @@
                   <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
                   <div class="ar-metric">6 shipments tracked &middot; 3 routes optimised &middot; <span style="color:var(--gold)">&#9888; Port Said +2d</span></div>
                   <div class="ar-actions">
-                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();alert('Track shipment…')">&#9654; Track</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();alert('Freight rate dashboard…')">Rates</button>
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('logistics-customs-agent.html','_blank')">&#9654; Track</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();window.open('logistics-customs-agent.html','_blank')">Rates</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
@@ -1901,8 +1901,8 @@
                   <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
                   <div class="ar-metric">22 HS lookups today &middot; 6 countries &middot; <span style="color:var(--green)">$14.2K duty savings</span></div>
                   <div class="ar-actions">
-                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();alert('HS code lookup…')">&#128269; HS Lookup</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();alert('Duty calculator…')">Duty calc</button>
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('logistics-customs-agent.html','_blank')">&#128269; HS Lookup</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();window.open('logistics-customs-agent.html','_blank')">Duty calc</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
@@ -2870,7 +2870,7 @@
           <div id="view-profile" class="view">
             <div class="g2">
               <div class="card">
-                <div class="card-title">// COMPANY PROFILE</div>
+                <div class="card-title">// COMPANY PROFILE <button class="btn btn-xs" onclick="openLIModal()" style="font-size:11px;padding:2px 9px;margin-left:auto;background:rgba(10,102,194,.12);border-color:rgba(10,102,194,.35);color:#5295d6">🔗 Import from LinkedIn</button></div>
                 <div
                   style="
                     display: flex;
@@ -2922,19 +2922,19 @@
                 <div style="display: flex; flex-direction: column; gap: 10px">
                   <div>
                     <label class="flabel">Contact name</label
-                    ><input class="inp" value="Mohammed Al-Rashidi" />
+                    ><input class="inp" id="prof-name" value="Mohammed Al-Rashidi" />
                   </div>
                   <div>
                     <label class="flabel">Email</label
-                    ><input class="inp" value="mohammed@gulfcement.ae" />
+                    ><input class="inp" id="prof-email" value="mohammed@gulfcement.ae" />
                   </div>
                   <div>
                     <label class="flabel">WhatsApp <span style="color:var(--muted);font-weight:400">(optional)</span></label
-                    ><input class="inp" value="@gulfcement" placeholder="@username" />
+                    ><input class="inp" id="prof-whatsapp" value="@gulfcement" placeholder="@username" />
                   </div>
                   <div>
                     <label class="flabel">Country</label
-                    ><input class="inp" value="United Arab Emirates" />
+                    ><input class="inp" id="prof-country" value="United Arab Emirates" />
                   </div>
                   <button class="btn btn-p btn-sm">Save changes</button>
                 </div>
@@ -4319,7 +4319,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': (window.ANTHROPIC_API_KEY || ''),
+            'x-api-key': (window.ANTHROPIC_API_KEY || localStorage.getItem('sf_claude_key') || ''),
             'anthropic-version': '2023-06-01',
             'anthropic-dangerous-direct-browser-calls': 'true'
           },
@@ -4432,6 +4432,7 @@
                  : p.min_deal >= 1000 ? '$' + Math.round(p.min_deal/1000) + 'K'
                  : p.min_deal ? '$' + p.min_deal : '—';
           var sc = sColors[p.sector] || 'rgba(82,82,110,.08)';
+          var n = JSON.stringify(p.name), r = JSON.stringify(p.ref);
           return '<tr><td style="min-width:200px"><div style="font-size:13px;font-weight:600;color:var(--white)">' + p.emoji + ' ' + p.name + '</div><div style="font-size:11px;color:var(--indigo);margin-top:2px">' + p.ref + ' · ' + p.sku + '</div></td>' +
             '<td><span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:2px;background:' + sc + ';border:1px solid rgba(91,95,239,.15);color:var(--text);white-space:nowrap">' + p.sector + '</span></td>' +
             '<td style="font-weight:600;color:var(--white);white-space:nowrap">' + pr + '<span style="color:var(--muted);font-size:11px">/' + p.unit + '</span></td>' +
@@ -4442,9 +4443,9 @@
             '<td style="color:var(--muted);font-size:13px">' + (p.lead || '—') + 'd</td>' +
             '<td style="color:var(--muted);font-size:11px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (p.payment || '—') + '</td>' +
             '<td style="min-width:90px"><div style="display:flex;flex-direction:column;gap:3px">' +
-            '<button class="btn btn-xs btn-p" onclick="catalogRFQ(' + JSON.stringify(p.name) + ',' + JSON.stringify(p.ref) + ')">🤖 RFQ →</button>' +
-            '<button class="btn btn-xs btn-g" onclick="catalogLOI(' + JSON.stringify(p.name) + ',' + JSON.stringify(p.ref) + ')">📄 LOI</button>' +
-            '<button class="btn btn-xs" style="background:var(--gold-dim);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="catalogPO(' + JSON.stringify(p.name) + ',' + JSON.stringify(p.ref) + ')">🧾 PO</button>' +
+            '<button class="btn btn-xs btn-p" onclick=\'catalogRFQ(' + n + ',' + r + ')\'>🤖 RFQ →</button>' +
+            '<button class="btn btn-xs btn-g" onclick=\'catalogLOI(' + n + ',' + r + ')\'>📄 LOI</button>' +
+            '<button class="btn btn-xs" style="background:var(--gold-dim);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick=\'catalogPO(' + n + ',' + r + ')\'>🧾 PO</button>' +
             '</div></td></tr>';
         }).join('');
       }
@@ -4469,6 +4470,75 @@
 
       function catalogPO(name, ref) {
         openPOModal(name, ref);
+      }
+
+      // ── LINKEDIN IMPORT ──────────────────────────────────────────────────────────
+      function openLIModal() {
+        document.getElementById('li-url').value = '';
+        document.getElementById('li-text').value = '';
+        var st = document.getElementById('li-status');
+        st.style.display = 'none';
+        document.getElementById('li-btn').disabled = false;
+        document.getElementById('li-modal').classList.add('open');
+      }
+
+      function closeLIModal() {
+        document.getElementById('li-modal').classList.remove('open');
+      }
+
+      function importLinkedIn() {
+        var url = document.getElementById('li-url').value.trim();
+        var text = document.getElementById('li-text').value.trim();
+        var status = document.getElementById('li-status');
+        var btn = document.getElementById('li-btn');
+        if (!url && !text) { alert('Please enter a LinkedIn URL or paste your profile text.'); return; }
+        status.style.display = 'block';
+        status.style.cssText = 'display:block;font-size:13px;padding:8px 10px;border-radius:4px;background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);color:var(--teal)';
+        status.textContent = '🤖 Analysing profile…';
+        btn.disabled = true;
+        var key = localStorage.getItem('sf_claude_key') || '';
+        if (!key) { liParseURL(url, status, btn); return; }
+        var prompt = 'Extract contact and company information from this LinkedIn profile. ' +
+          'Return ONLY a JSON object (no other text):\n' +
+          '{"name":"full contact name or null","company":"company name or null","title":"job title or null","country":"country or null","email":"email if visible or null"}\n\n';
+        if (url) prompt += 'URL: ' + url + '\n';
+        if (text) prompt += 'Profile text:\n' + text.slice(0, 3000);
+        fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
+          body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 300, messages: [{ role: 'user', content: prompt }] })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          var t = (res.content && res.content[0] && res.content[0].text) || '';
+          var m = t.match(/\{[\s\S]*?\}/);
+          if (!m) throw new Error('no json');
+          liApply(JSON.parse(m[0]), status, btn, false);
+        })
+        .catch(function() { liParseURL(url, status, btn); });
+      }
+
+      function liParseURL(url, status, btn) {
+        var m = url.match(/linkedin\.com\/(in|company)\/([^/?#]+)/i);
+        if (m) {
+          var slug = m[2].replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+          liApply(m[1] === 'company' ? { company: slug } : { name: slug }, status, btn, true);
+        } else {
+          btn.disabled = false;
+          status.style.cssText = 'display:block;font-size:13px;padding:8px 10px;border-radius:4px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);color:var(--red)';
+          status.textContent = 'Could not parse. Paste your profile text above for AI autofill.';
+        }
+      }
+
+      function liApply(data, status, btn, urlOnly) {
+        if (data.name) document.getElementById('prof-name').value = data.name;
+        if (data.email) document.getElementById('prof-email').value = data.email;
+        if (data.country) document.getElementById('prof-country').value = data.country;
+        btn.disabled = false;
+        var filled = ['name','email','country','company'].filter(function(k){ return data[k]; });
+        status.style.cssText = 'display:block;font-size:13px;padding:8px 10px;border-radius:4px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);color:var(--green)';
+        status.textContent = '✓ Filled: ' + (filled.length ? filled.join(', ') : 'basic info') + (urlOnly ? ' — paste profile text for full autofill' : '');
+        setTimeout(closeLIModal, 2000);
       }
 
     </script>
@@ -4532,6 +4602,35 @@
     <div class="modal-ft" id="po-modal-ft">
       <button class="btn" onclick="closePOModal()">Cancel</button>
       <button class="btn btn-p" id="po-action-btn" onclick="poProceed()" style="display:none">Send PO to supplier &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- LINKEDIN IMPORT MODAL -->
+<div class="modal-bg" id="li-modal" onclick="if(event.target===this)closeLIModal()">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">🔗 Import from LinkedIn</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Paste your LinkedIn profile text to autofill your profile</div>
+      </div>
+      <button class="modal-close" onclick="closeLIModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="margin-bottom:12px">
+        <label class="flabel">LinkedIn profile URL <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+        <input class="inp" id="li-url" placeholder="https://linkedin.com/in/yourname or linkedin.com/company/yourcompany" />
+      </div>
+      <div style="margin-bottom:10px">
+        <label class="flabel">Paste your LinkedIn profile text</label>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px;line-height:1.6">Open your LinkedIn profile → select all text (Ctrl+A) → copy → paste below. Your data stays in your browser only.</div>
+        <textarea class="inp" id="li-text" style="height:120px;resize:vertical;font-size:13px" placeholder="Paste LinkedIn profile text here for AI-powered autofill…"></textarea>
+      </div>
+      <div id="li-status" style="display:none;font-size:13px;padding:8px 10px;border-radius:4px"></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeLIModal()">Cancel</button>
+      <button class="btn btn-p" id="li-btn" onclick="importLinkedIn()">🔗 Autofill profile →</button>
     </div>
   </div>
 </div>
