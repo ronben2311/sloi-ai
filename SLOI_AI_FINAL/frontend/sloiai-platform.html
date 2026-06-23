@@ -1995,6 +1995,20 @@
                   </div>
                 </div>
                 <div id="loi-list"></div>
+
+                <!-- MY POs -->
+                <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:24px;margin-bottom:10px">// PURCHASE ORDERS</div>
+                <div class="g4" style="margin-bottom:14px">
+                  <div class="stat"><div class="stat-top">Total POs</div><div class="stat-val" id="po-stat-total">—</div></div>
+                  <div class="stat"><div class="stat-top">This month</div><div class="stat-val" style="color:var(--green)" id="po-stat-month">—</div></div>
+                  <div class="stat"><div class="stat-top">PO value</div><div class="stat-val" id="po-stat-value">—</div></div>
+                  <div class="stat"><div class="stat-top">Pending</div><div class="stat-val" style="color:var(--gold)" id="po-stat-pending">—</div></div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                  <div style="font-size:13px;color:var(--muted)">Generated from signed LOIs</div>
+                  <button class="btn btn-xs" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="openPOModal()">🧾 New PO</button>
+                </div>
+                <div id="po-list"></div>
               </div>
 
               <!-- RIGHT: AI Tools column -->
@@ -3783,9 +3797,51 @@
             '</div><div style="margin-top:4px"><span class="badge bg">Signed</span></div><button class="btn btn-xs btn-g" style="margin-top:6px" onclick="openLOI(this)" data-ref="' + (l._raw.ref||'') + '" data-product="' + (l._raw.product||'') + '" data-qty="' + (l._raw.qty||'') + '" data-unit="' + (l._raw.unit||'') + '" data-price="' + (l._raw.price||'') + '" data-buyer="' + (l._raw.buyer||'') + '">📄 Download</button>' +
             '<button class="btn btn-xs" style="margin-top:4px;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="openLogisticsModal(this)" ' +
             'data-ref="' + (l._raw.ref||'') + '" data-product="' + (l._raw.product||'') + '" data-qty="' + (l._raw.qty||'') + '" data-unit="' + (l._raw.unit||'') + '" data-price="' + (l._raw.price||'') + '" data-buyer="' + (l._raw.buyer||'') + '" data-country="' + (l._raw.country||'UAE') + '">🚢 Logistics</button>' +
+            '<button class="btn btn-xs" style="margin-top:4px;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="window.open(\'po-generator.html?product=' + encodeURIComponent(l._raw.product||'') + '&ref=' + encodeURIComponent(l._raw.ref||'') + '\',\'_blank\')">🧾 Create PO</button>' +
             '</div></div>';
         });
         document.getElementById("loi-list").innerHTML = html;
+      }
+
+      var PO_DATA = [
+        { num: 'PO-SLOI-20260603-0001', product: 'Hard Wheat · 50 MT', supplier: 'Atlas Grain Trading', total: '$56,000', _val: 56000, date: 'Jun 3, 2026', _iso: '2026-06-03', status: 'sent', loi_ref: 'SL-LOI-20260501-003' },
+        { num: 'PO-SLOI-20260602-0002', product: 'Aluminum 6061-T6 · 5 MT', supplier: 'Gulf Steel Industries', total: '$46,000', _val: 46000, date: 'Jun 2, 2026', _iso: '2026-06-02', status: 'sent', loi_ref: 'SL-LOI-20260430-002' },
+        { num: 'PO-SLOI-20260604-0003', product: 'Steel Rebar G60 · 100 MT', supplier: 'Pending LOI signature', total: '—', _val: 0, date: 'Jun 4, 2026', _iso: '2026-06-04', status: 'pending', loi_ref: 'SL-LOI-20260604-001' },
+      ];
+
+      function renderPOs() {
+        var thisMonth = new Date().toISOString().slice(0, 7);
+        var monthCount = PO_DATA.filter(function(p){ return p._iso.slice(0,7) === thisMonth; }).length;
+        var totalVal = PO_DATA.reduce(function(s,p){ return s + p._val; }, 0);
+        var pendingCount = PO_DATA.filter(function(p){ return p.status !== 'sent'; }).length;
+        var fmt = totalVal >= 1e6 ? '$' + (totalVal/1e6).toFixed(1) + 'M' : '$' + Math.round(totalVal/1000) + 'K';
+        var el;
+        el = document.getElementById('po-stat-total');   if(el) el.textContent = PO_DATA.length;
+        el = document.getElementById('po-stat-month');   if(el) el.textContent = monthCount;
+        el = document.getElementById('po-stat-value');   if(el) el.textContent = fmt;
+        el = document.getElementById('po-stat-pending'); if(el) el.textContent = pendingCount;
+        var html = '';
+        PO_DATA.forEach(function(p) {
+          var isSent = p.status === 'sent';
+          var badge = isSent ? '<span class="badge bg">Sent</span>' : '<span class="badge ba">Pending LOI</span>';
+          var url = 'po-generator.html?ref=' + encodeURIComponent(p.loi_ref) + '&product=' + encodeURIComponent(p.product.split(' ·')[0]);
+          html += '<div class="loi-card" style="margin-bottom:8px">' +
+            '<div class="lc-icon">🧾</div>' +
+            '<div class="lc-body">' +
+              '<div class="lc-ref">' + p.num + '</div>' +
+              '<div class="lc-product">' + p.product + '</div>' +
+              '<div class="lc-meta">' + p.supplier + ' · ' + p.date + '</div>' +
+              '<div style="font-size:13px;color:var(--indigo);margin-top:2px">LOI: ' + p.loi_ref + '</div>' +
+            '</div>' +
+            '<div style="text-align:right;flex-shrink:0">' +
+              '<div class="lc-val">' + p.total + '</div>' +
+              '<div style="margin-top:4px">' + badge + '</div>' +
+              (isSent ? '<button class="btn btn-xs" style="margin-top:6px;background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="window.open(\'' + url + '\',\'_blank\')">📄 Download PDF</button>' : '') +
+            '</div>' +
+          '</div>';
+        });
+        var el2 = document.getElementById('po-list');
+        if(el2) el2.innerHTML = html || '<div style="color:var(--muted);font-size:14px;padding:20px;text-align:center">No purchase orders yet.</div>';
       }
 
       function buyCredits(amount, credits) {
@@ -3807,6 +3863,7 @@
       loadProducts();
       loadNegotiations();
       loadLOIs();
+      renderPOs();
       updateCreditDisplay();
 
       // ── EXCHANGE ──────────────────────────────────────────────────────────────────

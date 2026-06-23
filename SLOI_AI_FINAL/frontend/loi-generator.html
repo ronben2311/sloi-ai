@@ -209,8 +209,8 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
       <div style="display:flex;align-items:center;gap:10px">
         <span style="font-size:20px">✨</span>
         <div>
-          <div style="font-size:14px;font-weight:600;color:var(--white)">Smart Fill from offer text</div>
-          <div style="font-size:12px;color:var(--muted)">Paste a commodity offer — product, price, incoterm &amp; date auto-detected</div>
+          <div style="font-size:14px;font-weight:600;color:var(--white)">✨ Auto-fill from offer text</div>
+          <div style="font-size:12px;color:var(--muted)">Paste any offer email or message — we'll read the product, price, terms &amp; date for you</div>
         </div>
       </div>
       <span id="sf-caret" style="color:var(--teal);font-size:16px">▾</span>
@@ -219,15 +219,15 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
       <textarea id="offer-text" rows="4"
         style="width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:10px 12px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;resize:vertical;margin-top:12px;line-height:1.65;transition:border-color .15s"
         onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--border2)'"
-        placeholder="● Prilled Urea: USD 530 / MT in bulk FOB.&#10;● Granular Urea: USD 550 / MT in bulk FOB.&#10;● Validity: 18/06/2026 at 13:00 CLT."></textarea>
+        placeholder="Paste an offer, email, or price sheet here — for example:&#10;&#10;Prilled Urea: USD 530/MT FOB&#10;Granular Urea: USD 550/MT FOB&#10;Validity: 18/06/2026&#10;&#10;We'll extract the product, price, incoterm and date automatically."></textarea>
 
       <!-- AI settings -->
       <div style="margin-top:8px">
         <div onclick="toggleAiSettings()" style="font-size:12px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 0;user-select:none;transition:color .15s" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='var(--muted)'">
-          <span id="sf-ai-caret" style="font-size:10px">▸</span> ⚙ AI-powered parsing (optional — uses Claude API)
+          <span id="sf-ai-caret" style="font-size:10px">▸</span> ⚙ Use AI for better results (optional — add your Claude key)
         </div>
         <div id="sf-ai-body" style="display:none;margin-top:8px;background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:12px">
-          <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Your Claude API key — stored only in your browser, never sent to our servers</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Add your Claude API key to handle any offer format — messy emails, PDFs, mixed languages. Stored only in your browser, never shared.</div>
           <div style="display:flex;gap:8px;align-items:center">
             <input id="sf-api-key" type="password" placeholder="sk-ant-api03-…"
               style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:8px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;transition:border-color .15s"
@@ -249,7 +249,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
       <button id="sf-btn" onclick="parseOffer()"
         style="margin-top:10px;width:100%;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.35);color:var(--teal);padding:10px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:background .15s"
         onmouseover="this.style.background='rgba(45,212,191,.22)'" onmouseout="this.style.background='rgba(45,212,191,.12)'">
-        ✨ Parse &amp; Fill Form
+        ✨ Read offer &amp; fill form
       </button>
     </div>
   </div>
@@ -400,53 +400,6 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
     </button>
   </div>
 
-  <!-- TRADEFINEX FINANCING -->
-  <div style="margin-top:18px;background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.25);border-radius:8px;padding:16px">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
-      <div style="width:36px;height:36px;border-radius:6px;background:rgba(45,212,191,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⛓</div>
-      <div>
-        <div style="font-size:14px;font-weight:600;color:var(--white)">Need financing for this deal?</div>
-        <div style="font-size:12px;color:var(--muted);margin-top:2px">Apply on TradeFinex — powered by XDC blockchain · ICC recognized</div>
-      </div>
-    </div>
-    <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">
-      Take your signed LOI to <strong style="color:var(--teal)">TradeFinex.org</strong> and apply for trade financing. The LOI is tokenized on the XDC Network and listed for institutional investors. Funding in days, not weeks.
-    </div>
-    <div class="tf-grid3" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center">
-        <div style="font-size:15px;margin-bottom:3px">🔒</div>
-        <div style="font-size:12px;color:var(--white);font-weight:600">LOI tokenized</div>
-        <div style="font-size:11px;color:var(--muted)">On XDC blockchain</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center">
-        <div style="font-size:15px;margin-bottom:3px">💰</div>
-        <div style="font-size:12px;color:var(--white);font-weight:600">Funding in days</div>
-        <div style="font-size:11px;color:var(--muted)">Not weeks</div>
-      </div>
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center">
-        <div style="font-size:15px;margin-bottom:3px">🌐</div>
-        <div style="font-size:12px;color:var(--white);font-weight:600">Global investors</div>
-        <div style="font-size:11px;color:var(--muted)">ICC recognized</div>
-      </div>
-    </div>
-    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;font-size:13px">
-      <div style="display:flex;align-items:center;gap:8px;color:var(--muted)">
-        <span style="color:var(--teal)">→</span> Download your signed LOI PDF from above
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;color:var(--muted)">
-        <span style="color:var(--teal)">→</span> Go to TradeFinex.org and upload the LOI
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;color:var(--muted)">
-        <span style="color:var(--teal)">→</span> SLOI AI earns 0.5% finder's fee on funded deals
-      </div>
-    </div>
-    <a href="https://www.tradefinex.org" target="_blank" style="display:block;text-align:center;width:100%;box-sizing:border-box;background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.4);color:var(--teal);padding:11px;border-radius:5px;font-size:14px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:background .15s" onmouseover="this.style.background='rgba(45,212,191,.25)'" onmouseout="this.style.background='rgba(45,212,191,.15)'">
-      ⛓ Go to TradeFinex.org →
-    </a>
-    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">
-      External platform · SLOI AI earns 0.5% finder's fee on funded deals · Powered by XDC Network
-    </div>
-  </div>
 </div>
 
 <!-- PREVIEW SIDE -->
@@ -983,10 +936,10 @@ function toggleSmartFill() {
 
 async function parseOffer() {
   var text = document.getElementById('offer-text').value.trim();
-  if (!text) { sfMsg('error','Paste an offer first.'); return; }
+  if (!text) { sfMsg('error','Please paste an offer or price list above first — even a few lines works.'); return; }
 
   var btn = document.getElementById('sf-btn');
-  btn.disabled = true; btn.textContent = '⏳ Parsing…';
+  btn.disabled = true; btn.textContent = '⏳ Reading your offer…';
   document.getElementById('sf-picker').style.display = 'none';
   sfMsg('','');
 
@@ -994,22 +947,22 @@ async function parseOffer() {
   var result = null;
 
   if (apiKey) {
-    sfMsg('info','⏳ Parsing with AI…');
+    sfMsg('info','Sending to AI — this takes a second or two…');
     try {
       result = await parseWithClaude(text, apiKey);
     } catch(e) {
-      sfMsg('info','⚠️ AI error: '+e.message+'. Using smart regex fallback…');
+      sfMsg('info','AI hit a snag — switching to smart pattern matching instead…');
       result = parseWithRegex(text);
     }
   } else {
     result = parseWithRegex(text);
   }
 
-  btn.disabled = false; btn.textContent = '✨ Parse & Fill Form';
+  btn.disabled = false; btn.textContent = '✨ Read offer & fill form';
 
   var sfProds = (result.products || []).filter(function(p){ return p.name && p.price > 0; });
   if (!sfProds.length) {
-    sfMsg('error','Could not extract a product and price. Try a different format, or add an AI key (⚙ above) for free-form text.');
+    sfMsg('error', "Hmm, couldn't find a product and price in that text. Try including a line like \"Steel Rebar: USD 2,840/MT\" — or add a Claude API key above (⚙) so the AI can understand any format.");
     return;
   }
 
@@ -1185,7 +1138,7 @@ function applyParsed(product, meta) {
   if(meta.delivDate) filled.push('delivery date');
   if(meta.portLoad) filled.push('port of loading');
   calcTotal();
-  sfMsg('success','✅ Filled: '+filled.join(', '));
+  sfMsg('success', '✅ Done! Filled in: ' + filled.join(', ') + '. Review the form below and adjust anything before generating.');
 }
 
 function applyAllParsed(sfProds, meta) {
@@ -1193,12 +1146,12 @@ function applyAllParsed(sfProds, meta) {
   products = sfProds.map(function(p){ return { product:p.name, sku:'', quantity:1, unit:meta.unit||'Metric Tons (MT)', unit_price:p.price }; });
   _applyMeta(meta);
   renderProducts();
-  var filled = [sfProds.length+' products'];
+  var filled = [sfProds.length + ' products'];
   if(meta.incoterm) filled.push('incoterm');
   if(meta.delivDate) filled.push('delivery date');
   if(meta.portLoad) filled.push('port of loading');
   calcTotal();
-  sfMsg('success','✅ Filled: '+filled.join(', '));
+  sfMsg('success', '✅ Done! Filled in: ' + filled.join(', ') + '. Review the form below and adjust anything before generating.');
 }
 
 function _applyMeta(meta) {

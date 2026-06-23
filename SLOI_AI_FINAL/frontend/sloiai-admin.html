@@ -1618,7 +1618,10 @@ function renderNegHistory(negs) {
     return '<tr>' +
       '<td style="color:var(--indigo);font-size:14px">' + n.id + '</td>' +
       '<td><b style="color:var(--white)">' + (n.buyer_name||'—') + '</b></td>' +
-      '<td>' + n.product + ' · ' + n.qty + ' ' + n.unit + '</td>' +
+      '<td>' + n.product + ' · ' + n.qty + ' ' + n.unit +
+      '<br><button class="btn btn-xs" style="margin-top:5px;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal);font-size:12px" ' +
+      'data-id="' + n.id + '" data-product="' + (n.product||'').replace(/"/g,'&quot;') + '" data-qty="' + (n.qty||0) + '" data-unit="' + (n.unit||'MT') + '" data-buyer="' + (n.buyer_name||'').replace(/"/g,'&quot;') + '" data-price="' + (n.deal_price||0) + '" ' +
+      'onclick="openInvoiceFromNeg(this)">🧾 Invoice</button></td>' +
       '<td>' + (n.current_round||0) + '/' + (n.max_rounds||5) + '</td>' +
       '<td style="color:var(--green)">' + price + '</td>' +
       '<td>' + (STATUS_BADGE[n.status]||n.status) + '</td>' +
@@ -2620,6 +2623,22 @@ function openInvoiceModal() {
 
 function closeInvoiceModal() {
   document.getElementById('inv-modal-bg').classList.remove('open');
+}
+
+function openInvoiceFromNeg(btn) {
+  var id      = btn.dataset.id;
+  var product = btn.dataset.product;
+  var qty     = btn.dataset.qty;
+  var unit    = btn.dataset.unit;
+  var buyer   = btn.dataset.buyer;
+  var price   = btn.dataset.price;
+  openInvoiceModal();
+  var productStr = product + ' · ' + qty + ' ' + unit;
+  var priceStr   = price ? '$' + parseFloat(price).toLocaleString() + '/' + unit : '—';
+  var total      = parseFloat(price) * parseFloat(qty);
+  var totalStr   = isNaN(total) ? '—' : '$' + Math.round(total).toLocaleString();
+  document.getElementById('inv-step-1').style.display = 'none';
+  selectInvPO('NEG-' + id, productStr, buyer, priceStr, 'FOB', totalStr, id, document.createElement('div'));
 }
 
 function selectInvPO(po, product, buyer, price, incoterm, total, loi, el) {
