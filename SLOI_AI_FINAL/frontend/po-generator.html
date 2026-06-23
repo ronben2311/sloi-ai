@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="Generate professional Purchase Orders for commodity deals with SLOI AI. AI-powered PO drafting for UAE, Egypt, KSA, and MENA trade transactions."/>
+<title>SLOI AI — PO Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;
+  --border:#1c1c2e;--border2:#252538;
+  --indigo:#5b5fef;--violet:#8b8ff8;
+  --muted:#8888a8;--text:#d4d2f0;--white:#eeedf8;
+  --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg)}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;text-decoration:none}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace}
+.nav-links{display:flex;gap:16px;font-size:13px}
+.nav-links a{color:var(--muted);text-decoration:none;font-family:'IBM Plex Mono',monospace}
+.nav-links a:hover{color:var(--violet)}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 440px;min-height:calc(100vh - 52px)}
+
+/* FORM SIDE */
+.form-side{padding:32px 36px;overflow-y:auto;border-right:1px solid var(--border)}
+.page-title{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:4px}
+.page-sub{font-size:14px;color:var(--muted);margin-bottom:28px}
+
+.step{margin-bottom:28px}
+.step-header{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.step-num{width:28px;height:28px;border-radius:50%;background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:var(--violet);flex-shrink:0}
+.step-title{font-size:15px;font-weight:600;color:var(--white)}
+
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.field-grid.full{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.field input,.field select,.field textarea{
+  background:var(--surface);border:1px solid var(--border2);border-radius:5px;
+  padding:10px 12px;color:var(--white);font-family:'IBM Plex Mono',monospace;
+  font-size:13px;outline:none;width:100%;transition:border-color .15s;
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--indigo)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.field select option{background:var(--surface2);color:var(--white)}
+.field textarea{resize:vertical;min-height:60px}
+
+/* LINE ITEMS */
+.li-label{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.li-table{width:100%;border-collapse:collapse}
+.li-table th{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;padding:6px 5px 8px;text-align:left;border-bottom:1px solid var(--border)}
+.li-row td{padding:4px 3px;vertical-align:middle;border-bottom:1px solid var(--border)}
+.li-row:last-child td{border-bottom:none}
+.li-inp{background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:6px 7px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;width:100%;transition:border-color .15s}
+.li-inp:focus{border-color:var(--indigo)}
+.li-sel{background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:6px 5px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;width:100%}
+.li-total{font-size:12px;color:var(--teal);font-family:'IBM Plex Mono',monospace;white-space:nowrap;padding:0 4px;text-align:right}
+.li-rm{background:none;border:1px solid rgba(239,68,68,.3);color:var(--red);border-radius:3px;width:22px;height:22px;font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+.li-rm:hover{background:rgba(239,68,68,.1)}
+.btn-add-item{background:none;border:1px dashed var(--border2);color:var(--muted);border-radius:4px;padding:8px 14px;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;margin-top:8px;width:100%;transition:all .15s}
+.btn-add-item:hover{border-color:var(--indigo);color:var(--violet)}
+
+/* CALC */
+.calc-row{background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:14px 16px;margin-bottom:16px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.calc-label{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+.calc-val{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--white)}
+.calc-val.total{color:var(--indigo);font-size:18px}
+.tax-inp{background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:5px 7px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;width:64px;transition:border-color .15s}
+.tax-inp:focus{border-color:var(--indigo)}
+
+/* BUTTONS */
+.ai-btn{width:100%;background:rgba(91,95,239,.12);color:var(--violet);border:1px solid rgba(91,95,239,.3);padding:11px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .15s;margin-top:8px}
+.ai-btn:hover{background:rgba(91,95,239,.2)}
+.ai-btn:disabled{opacity:.4;cursor:not-allowed}
+.generate-btn{width:100%;background:var(--indigo);color:#fff;border:none;padding:14px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;justify-content:center;gap:10px;transition:opacity .15s;margin-top:8px}
+.generate-btn:hover{opacity:.85}
+.spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.status-msg{font-size:12px;font-family:'IBM Plex Mono',monospace;padding:6px 0;min-height:22px}
+
+/* PREVIEW SIDE */
+.preview-side{background:var(--surface2);overflow-y:auto}
+.preview-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface2);z-index:10}
+.preview-title{font-size:13px;font-weight:600;color:var(--white);font-family:'IBM Plex Mono',monospace}
+.preview-actions{display:flex;gap:6px}
+.btn-sm{background:none;border:1px solid var(--border2);color:var(--muted);padding:6px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .15s}
+.btn-sm:hover{border-color:var(--indigo);color:var(--violet)}
+.btn-print{background:rgba(91,95,239,.1);border-color:rgba(91,95,239,.3);color:var(--violet)}
+.btn-pdf{background:var(--green);color:#fff;border-color:var(--green);font-weight:600}
+.btn-pdf:hover{opacity:.85;color:#fff}
+
+/* PO DOCUMENT */
+.po-wrap{padding:20px}
+.doc{background:var(--bg);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.doc-top{padding:18px 22px 14px;border-bottom:2px solid var(--indigo)}
+.doc-top-row{display:flex;align-items:flex-start;justify-content:space-between}
+.doc-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:var(--white)}
+.doc-logo em{font-style:italic;color:var(--indigo)}
+.doc-logo-sub{font-size:9px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:3px}
+.doc-type-label{font-size:14px;font-weight:700;color:var(--white);letter-spacing:.06em;text-align:right}
+.doc-ref{font-size:11px;color:var(--indigo);margin-top:3px;font-weight:700;text-align:right;font-family:'IBM Plex Mono',monospace}
+.doc-date{font-size:11px;color:var(--muted);text-align:right;font-family:'IBM Plex Mono',monospace}
+
+.doc-body{padding:16px 22px}
+.doc-section{font-size:9px;color:var(--indigo);letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px;margin-top:14px}
+.doc-section:first-child{margin-top:0}
+
+/* PARTIES */
+.parties-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.party-block{padding:9px 11px;background:var(--surface)}
+.party-block+.party-block{border-left:1px solid var(--border)}
+.party-role{font-size:8px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.party-name{font-size:12px;font-weight:700;color:var(--white);line-height:1.3;margin-bottom:2px}
+.party-detail{font-size:11px;color:var(--muted);line-height:1.5;word-break:break-word}
+
+/* LINE ITEMS (preview) */
+.po-table{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.po-table th{background:var(--surface2);color:var(--muted);padding:6px 8px;text-align:left;font-size:9px;letter-spacing:.1em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.po-table th.r{text-align:right}
+.po-table td{padding:7px 8px;color:var(--white);border-bottom:1px solid var(--border);font-size:11px}
+.po-table tr:last-child td{border-bottom:none}
+.po-table td.muted{color:var(--muted)}
+.po-table td.r{text-align:right;color:var(--teal);font-weight:600}
+
+/* TOTALS */
+.totals-block{border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.tot-row{display:flex;justify-content:space-between;padding:6px 12px;border-bottom:1px solid var(--border);font-size:11px}
+.tot-row:last-child{border-bottom:none;background:rgba(91,95,239,.08)}
+.tot-label{color:var(--muted)}
+.tot-val{color:var(--white);font-weight:600;font-family:'IBM Plex Mono',monospace}
+.tot-val.grand{color:var(--indigo);font-size:13px;font-weight:700}
+
+/* TERMS */
+.terms-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.term-block{padding:8px 11px;background:var(--surface)}
+.term-block+.term-block{border-left:1px solid var(--border)}
+.term-label{font-size:8px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.term-val{font-size:12px;color:var(--white);font-weight:600}
+
+/* NOTES */
+.notes-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:9px 11px;font-size:11px;color:var(--muted);line-height:1.6;white-space:pre-wrap;word-break:break-word}
+
+/* SIGNATURES */
+.sig-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.sig-block{padding:12px;background:var(--surface)}
+.sig-block+.sig-block{border-left:1px solid var(--border)}
+.sig-role{font-size:8px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
+.sig-line{height:1px;background:var(--border2);margin-bottom:5px}
+.sig-name{font-size:11px;font-weight:700;color:var(--white)}
+.sig-date{font-size:10px;color:var(--muted);margin-top:4px}
+
+.doc-footer{padding:9px 22px;background:var(--surface2);border-top:1px solid var(--border);font-size:9px;color:var(--muted);text-align:center;line-height:1.5;letter-spacing:.03em}
+
+/* EMPTY STATE */
+.preview-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:480px;color:var(--muted);text-align:center;padding:40px}
+.preview-empty-icon{font-size:48px;margin-bottom:16px;opacity:.4}
+.preview-empty-text{font-size:14px;line-height:1.7;font-family:'IBM Plex Mono',monospace}
+
+/* MOBILE */
+@media(max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .form-side{border-right:none;padding:20px 16px}
+  .preview-side{display:none}
+  .nav-tagline{display:none}
+  .field-grid{grid-template-columns:1fr!important}
+  .calc-row{grid-template-columns:1fr 1fr}
+  .parties-grid,.sig-grid,.terms-grid{grid-template-columns:1fr}
+  .party-block+.party-block,.sig-block+.sig-block,.term-block+.term-block{border-left:none;border-top:1px solid var(--border)}
+}
+
+/* PRINT */
+@media print{
+  .nav,.form-side,.preview-header{display:none!important}
+  .layout,.preview-side{display:block}
+  .preview-side{overflow:visible;background:#fff}
+  .po-wrap{padding:0}
+  body,html{background:#fff;color:#000}
+  .doc{border:none;border-radius:0;background:#fff}
+  .doc-top{background:#f7f7ff;border-bottom:2px solid #5b5fef}
+  .doc-logo,.doc-type-label,.party-name,.sig-name,.term-val,.tot-val{color:#111!important}
+  .doc-logo-sub,.party-role,.party-detail,.term-label,.sig-role,.sig-date,.tot-label,.doc-footer{color:#666!important}
+  .doc-ref,.doc-section{color:#5b5fef!important}
+  .party-block,.term-block,.sig-block{background:#f9f9ff!important}
+  .po-table th{background:#eeeeff!important;color:#444!important}
+  .po-table td{color:#111!important}
+  .po-table td.r,.tot-val.grand{color:#5b5fef!important}
+  .po-table td.muted{color:#666!important}
+  .totals-block,.tot-row:last-child{background:#f0f0ff!important}
+  .notes-block{background:#f9f9ff!important;color:#444!important}
+  .doc-footer{background:#f0f0ff!important}
+  .sig-line{background:#ccc!important}
+}
+</style>
+<link rel="stylesheet" href="/main.css"/>
+<script src="/api-client.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="sloiai-home.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Purchase Order Generator</span></a>
+  <div class="nav-links">
+    <a href="CommodEx_Platform.html">← Platform</a>
+    <a href="loi-generator.html">LOI Generator</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+<!-- ══ FORM SIDE ═══════════════════════════════════════════════════════════════ -->
+<div class="form-side">
+  <div class="page-title">PO Generator</div>
+  <div class="page-sub">Describe your order · AI fills the details · Preview &amp; download PDF</div>
+
+  <!-- STEP 1 — API KEY -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div class="step-title">AI Setup <span style="font-size:12px;color:var(--muted);font-weight:400">(optional)</span></div>
+    </div>
+    <div onclick="toggleAiSettings()" style="font-size:12px;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;padding:4px 0;user-select:none" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='var(--muted)'">
+      <span id="sf-ai-caret" style="font-size:10px">▸</span> ⚙ AI-powered parsing — uses Claude API
+    </div>
+    <div id="sf-ai-body" style="display:none;margin-top:8px;background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:12px">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Claude API key — stored in your browser only, never sent to our servers</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input id="sf-api-key" type="password" placeholder="sk-ant-api03-…"
+          style="flex:1;background:var(--bg);border:1px solid var(--border2);border-radius:4px;padding:8px 10px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;transition:border-color .15s"
+          oninput="saveSfApiKey(this.value)"/>
+        <button onclick="clearSfApiKey()" style="background:transparent;border:1px solid var(--border2);border-radius:4px;color:var(--muted);padding:7px 12px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:'IBM Plex Mono',monospace">Clear</button>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:8px">Uses <em>claude-haiku-4-5-20251001</em> · fast &amp; cheap. <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--teal);text-decoration:none">Get key →</a></div>
+    </div>
+  </div>
+
+  <!-- STEP 2 — DESCRIPTION + AI DRAFT -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div class="step-title">Describe Your Order</div>
+    </div>
+    <textarea id="po-desc" style="width:100%;min-height:88px;background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:10px 12px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;resize:vertical;transition:border-color .15s" placeholder="e.g. 500 MT of Steel Rebar from Atlas Steel UAE at $2,840/MT, CIF Dubai, TT 30 days payment, deliver within 45 days" onfocus="this.style.borderColor='var(--indigo)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
+    <button class="ai-btn" id="ai-btn" onclick="aiDraft()">
+      <span id="ai-spin" class="spin"></span>
+      <span id="ai-btn-text">✦ AI Draft PO</span>
+    </button>
+    <div class="status-msg" id="ai-status"></div>
+  </div>
+
+  <!-- STEP 3 — PO DETAILS -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div class="step-title">PO Details</div>
+    </div>
+
+    <div class="field-grid">
+      <div class="field">
+        <label>PO Number</label>
+        <input type="text" id="po-num" oninput="liveUpdate()" placeholder="PO-SLOI-20260623-0001"/>
+      </div>
+      <div class="field">
+        <label>Date</label>
+        <input type="date" id="po-date" oninput="liveUpdate()"/>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin:12px 0 6px;font-family:'IBM Plex Mono',monospace">Supplier</div>
+    <div class="field-grid full">
+      <div class="field">
+        <label>Supplier Name</label>
+        <input type="text" id="po-supplier" oninput="liveUpdate()" placeholder="Atlas Steel Trading LLC"/>
+      </div>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Supplier Address</label>
+        <input type="text" id="po-supplier-addr" oninput="liveUpdate()" placeholder="Dubai, UAE"/>
+      </div>
+      <div class="field">
+        <label>Supplier Contact</label>
+        <input type="text" id="po-supplier-contact" oninput="liveUpdate()" placeholder="sales@supplier.com"/>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin:12px 0 6px;font-family:'IBM Plex Mono',monospace">Buyer / Delivery</div>
+    <div class="field-grid full">
+      <div class="field">
+        <label>Bill To (Buyer Company)</label>
+        <input type="text" id="po-bill-to" oninput="liveUpdate()" placeholder="Your Company Name"/>
+      </div>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Ship To (Recipient)</label>
+        <input type="text" id="po-ship-name" oninput="liveUpdate()" placeholder="Warehouse / Port / Recipient"/>
+      </div>
+      <div class="field">
+        <label>Delivery Address</label>
+        <input type="text" id="po-ship-addr" oninput="liveUpdate()" placeholder="City, Country"/>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin:12px 0 6px;font-family:'IBM Plex Mono',monospace">Line Items</div>
+    <table class="li-table">
+      <thead>
+        <tr>
+          <th style="width:30%">Description</th>
+          <th style="width:13%">SKU</th>
+          <th style="width:10%">Qty</th>
+          <th style="width:11%">Unit</th>
+          <th style="width:14%">Unit Price</th>
+          <th style="width:14%;text-align:right">Total</th>
+          <th style="width:8%"></th>
+        </tr>
+      </thead>
+      <tbody id="li-body"></tbody>
+    </table>
+    <button class="btn-add-item" onclick="addLineItem()">+ Add Item</button>
+
+    <div class="calc-row" style="margin-top:12px">
+      <div>
+        <div class="calc-label">Subtotal</div>
+        <div class="calc-val" id="c-sub">$0.00</div>
+      </div>
+      <div>
+        <div class="calc-label">Tax %</div>
+        <input class="tax-inp" type="number" id="po-tax" value="0" min="0" max="100" step="0.5" oninput="updateCalc();liveUpdate()"/>
+      </div>
+      <div>
+        <div class="calc-label">Tax Amount</div>
+        <div class="calc-val" id="c-tax">$0.00</div>
+      </div>
+      <div>
+        <div class="calc-label">Grand Total</div>
+        <div class="calc-val total" id="c-total">$0.00</div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin:12px 0 6px;font-family:'IBM Plex Mono',monospace">Terms</div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Payment Terms</label>
+        <input type="text" id="po-pay-terms" oninput="liveUpdate()" placeholder="TT 30 days after BL"/>
+      </div>
+      <div class="field">
+        <label>Shipping Terms</label>
+        <select id="po-ship-terms" onchange="liveUpdate()">
+          <option value="CIF">CIF — Cost Insurance Freight</option>
+          <option value="FOB">FOB — Free On Board</option>
+          <option value="EXW">EXW — Ex Works</option>
+          <option value="CFR">CFR — Cost and Freight</option>
+          <option value="DAP">DAP — Delivered At Place</option>
+          <option value="DDP">DDP — Delivered Duty Paid</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Delivery (days from PO)</label>
+        <input type="number" id="po-delivery" value="30" min="1" oninput="liveUpdate()"/>
+      </div>
+      <div class="field">
+        <label>Currency</label>
+        <select id="po-currency" onchange="updateCalc();renderLineItems();liveUpdate()">
+          <option value="USD">USD — US Dollar</option>
+          <option value="EUR">EUR — Euro</option>
+          <option value="AED">AED — UAE Dirham</option>
+          <option value="SAR">SAR — Saudi Riyal</option>
+          <option value="GBP">GBP — British Pound</option>
+        </select>
+      </div>
+    </div>
+    <div class="field-grid full">
+      <div class="field">
+        <label>Notes / Special Instructions</label>
+        <textarea id="po-notes" oninput="liveUpdate()" placeholder="Quality specifications, inspection requirements, packaging, Incoterms details…"></textarea>
+      </div>
+    </div>
+
+    <button class="generate-btn" onclick="renderPreview()">Generate Preview →</button>
+  </div>
+
+</div><!-- /form-side -->
+
+<!-- ══ PREVIEW SIDE ═════════════════════════════════════════════════════════════ -->
+<div class="preview-side">
+  <div class="preview-header">
+    <div class="preview-title">📋 Purchase Order Preview</div>
+    <div class="preview-actions">
+      <button class="btn-sm btn-print" onclick="printPO()">🖨 Print</button>
+      <button class="btn-sm btn-pdf" onclick="downloadPDF()">↓ PDF</button>
+    </div>
+  </div>
+  <div id="po-preview-wrap">
+    <div class="preview-empty">
+      <div class="preview-empty-icon">📋</div>
+      <div class="preview-empty-text">Fill in the details or use<br/>AI Draft to generate your PO</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /layout -->
+
+<script>
+// ── GLOBALS ───────────────────────────────────────────────────────────────────
+var lineItems = [{desc:'', sku:'', qty:1, unit:'MT', unit_price:0}];
+var _liveTimer = null;
+var UNITS = ['MT','kg','L','Barrel','Unit','m','m²','m³','Ton','lb','ft','Box','Pallet','Set'];
+var SYM = {USD:'$', EUR:'€', AED:'AED ', SAR:'SAR ', GBP:'£'};
+var SHIP_LABELS = {
+  CIF:'CIF — Cost Insurance Freight', FOB:'FOB — Free On Board',
+  EXW:'EXW — Ex Works', CFR:'CFR — Cost and Freight',
+  DAP:'DAP — Delivered At Place', DDP:'DDP — Delivered Duty Paid'
+};
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(function init() {
+  // PO number + date
+  document.getElementById('po-num').value = genPONum();
+  document.getElementById('po-date').value = new Date().toISOString().slice(0,10);
+
+  // Restore saved API key
+  var saved = localStorage.getItem('sf_claude_key');
+  if (saved) {
+    document.getElementById('sf-api-key').value = saved;
+    document.getElementById('sf-ai-body').style.display = 'block';
+    document.getElementById('sf-ai-caret').textContent = '▾';
+  }
+
+  // Pre-fill from URL params (from catalog buttons)
+  var p = new URLSearchParams(location.search);
+  var product = p.get('product') || '';
+  var ref     = p.get('ref') || '';
+  var qty     = p.get('qty') || '';
+  if (product) {
+    lineItems[0].desc = product;
+    if (ref) lineItems[0].sku = ref;
+    if (qty) lineItems[0].qty = parseFloat(qty) || 1;
+    var hint = product + (ref ? ' (SKU: ' + ref + ')' : '') + (qty ? ', qty: ' + qty : '');
+    document.getElementById('po-desc').value = hint;
+  }
+
+  // Pre-fill buyer info from session
+  try {
+    var u = JSON.parse(localStorage.getItem('sloi_user') || '{}');
+    if (u.org_name) document.getElementById('po-bill-to').value = u.org_name;
+    if (u.country)  document.getElementById('po-ship-addr').value = u.country;
+  } catch(e) {}
+
+  renderLineItems();
+})();
+
+// ── PO NUMBER ─────────────────────────────────────────────────────────────────
+function genPONum() {
+  var d = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  return 'PO-SLOI-' + d + '-' + Math.floor(1000 + Math.random() * 9000);
+}
+
+// ── AI SETTINGS ───────────────────────────────────────────────────────────────
+function toggleAiSettings() {
+  var b = document.getElementById('sf-ai-body');
+  var c = document.getElementById('sf-ai-caret');
+  var open = b.style.display !== 'none';
+  b.style.display = open ? 'none' : 'block';
+  c.textContent = open ? '▸' : '▾';
+}
+
+function saveSfApiKey(val) {
+  val = (val || '').trim();
+  if (val) localStorage.setItem('sf_claude_key', val);
+  else localStorage.removeItem('sf_claude_key');
+}
+
+function clearSfApiKey() {
+  localStorage.removeItem('sf_claude_key');
+  document.getElementById('sf-api-key').value = '';
+}
+
+// ── LINE ITEMS ────────────────────────────────────────────────────────────────
+function sym() {
+  return SYM[document.getElementById('po-currency').value] || '$';
+}
+
+function renderLineItems() {
+  var s = sym();
+  var html = '';
+  lineItems.forEach(function(item, i) {
+    var rowTotal = (parseFloat(item.qty) || 0) * (parseFloat(item.unit_price) || 0);
+    var unitOpts = UNITS.map(function(u) {
+      return '<option value="' + u + '"' + (item.unit === u ? ' selected' : '') + '>' + u + '</option>';
+    }).join('');
+    html += '<tr class="li-row">'
+      + '<td><input class="li-inp" type="text" value="' + esc(item.desc) + '" placeholder="Product / description" oninput="lineItems[' + i + '].desc=this.value;liveUpdate()"/></td>'
+      + '<td><input class="li-inp" type="text" value="' + esc(item.sku) + '" placeholder="SKU" oninput="lineItems[' + i + '].sku=this.value;liveUpdate()"/></td>'
+      + '<td><input class="li-inp" type="number" value="' + (item.qty || 0) + '" min="0" step="any" oninput="lineItems[' + i + '].qty=parseFloat(this.value)||0;updateCalc();liveUpdate()"/></td>'
+      + '<td><select class="li-sel" onchange="lineItems[' + i + '].unit=this.value;liveUpdate()">' + unitOpts + '</select></td>'
+      + '<td><input class="li-inp" type="number" value="' + (item.unit_price || 0) + '" min="0" step="any" oninput="lineItems[' + i + '].unit_price=parseFloat(this.value)||0;updateCalc();liveUpdate()"/></td>'
+      + '<td class="li-total">' + s + fmt(rowTotal) + '</td>'
+      + '<td style="text-align:center">' + (lineItems.length > 1 ? '<button class="li-rm" onclick="removeLineItem(' + i + ')">×</button>' : '') + '</td>'
+      + '</tr>';
+  });
+  document.getElementById('li-body').innerHTML = html;
+  updateCalc();
+}
+
+function addLineItem() {
+  lineItems.push({desc:'', sku:'', qty:1, unit:'MT', unit_price:0});
+  renderLineItems();
+}
+
+function removeLineItem(i) {
+  lineItems.splice(i, 1);
+  renderLineItems();
+  liveUpdate();
+}
+
+// ── CALC ──────────────────────────────────────────────────────────────────────
+function updateCalc() {
+  var s = sym();
+  var sub = lineItems.reduce(function(acc, r) {
+    return acc + (parseFloat(r.qty) || 0) * (parseFloat(r.unit_price) || 0);
+  }, 0);
+  var taxRate = parseFloat(document.getElementById('po-tax').value) || 0;
+  var tax = sub * taxRate / 100;
+  document.getElementById('c-sub').textContent  = s + fmt(sub);
+  document.getElementById('c-tax').textContent  = s + fmt(tax);
+  document.getElementById('c-total').textContent = s + fmt(sub + tax);
+  // Refresh row totals
+  var tds = document.querySelectorAll('#li-body .li-total');
+  lineItems.forEach(function(item, i) {
+    if (tds[i]) tds[i].textContent = s + fmt((parseFloat(item.qty)||0) * (parseFloat(item.unit_price)||0));
+  });
+}
+
+function fmt(n) {
+  return parseFloat(n || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+function esc(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── LIVE UPDATE ───────────────────────────────────────────────────────────────
+function liveUpdate() {
+  clearTimeout(_liveTimer);
+  _liveTimer = setTimeout(function() {
+    if (document.querySelector('#po-preview-wrap .doc')) renderPreview();
+  }, 350);
+}
+
+// ── AI DRAFT ──────────────────────────────────────────────────────────────────
+async function aiDraft() {
+  var apiKey = (localStorage.getItem('sf_claude_key') || '').trim();
+  var desc   = (document.getElementById('po-desc').value || '').trim();
+
+  if (!desc)   { setStatus('Enter an order description above first.', 'red'); return; }
+  if (!apiKey) { setStatus('Add your Claude API key in Step 1 to use AI drafting.', 'gold'); return; }
+
+  setStatus('', '');
+  setBusy(true);
+
+  var prompt = [
+    'Extract purchase order details from the text below and return ONLY a valid JSON object with these exact fields:',
+    '{',
+    '  "supplier_name": "",',
+    '  "supplier_address": "",',
+    '  "supplier_contact": "",',
+    '  "ship_to_name": "",',
+    '  "ship_to_address": "",',
+    '  "items": [{"desc":"","sku":"","qty":1,"unit":"MT","unit_price":0}],',
+    '  "payment_terms": "",',
+    '  "shipping_terms": "CIF",',
+    '  "delivery_days": 30,',
+    '  "currency": "USD",',
+    '  "tax_rate": 0,',
+    '  "notes": ""',
+    '}',
+    '',
+    'Text: ' + desc,
+    '',
+    'Rules:',
+    '- items must have at least one entry with desc filled in',
+    '- qty and unit_price must be plain numbers (no commas, no currency symbols)',
+    '- shipping_terms: one of FOB, CIF, EXW, CFR, DAP, DDP',
+    '- currency: one of USD, EUR, AED, SAR, GBP',
+    '- Return ONLY the JSON object — no markdown fences, no explanation'
+  ].join('\n');
+
+  try {
+    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 800,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    if (!resp.ok) {
+      var err = await resp.json().catch(function() { return {}; });
+      throw new Error((err.error && err.error.message) || 'API error ' + resp.status);
+    }
+
+    var data = await resp.json();
+    var raw = (data.content && data.content[0] && data.content[0].text) || '';
+    var match = raw.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error('Could not parse AI response — try a more detailed description');
+    var parsed = JSON.parse(match[0]);
+
+    // Apply fields
+    if (parsed.supplier_name)    document.getElementById('po-supplier').value         = parsed.supplier_name;
+    if (parsed.supplier_address) document.getElementById('po-supplier-addr').value    = parsed.supplier_address;
+    if (parsed.supplier_contact) document.getElementById('po-supplier-contact').value = parsed.supplier_contact;
+    if (parsed.ship_to_name)     document.getElementById('po-ship-name').value        = parsed.ship_to_name;
+    if (parsed.ship_to_address)  document.getElementById('po-ship-addr').value        = parsed.ship_to_address;
+    if (parsed.payment_terms)    document.getElementById('po-pay-terms').value        = parsed.payment_terms;
+    if (parsed.delivery_days)    document.getElementById('po-delivery').value         = parsed.delivery_days;
+    if (parsed.tax_rate != null) document.getElementById('po-tax').value              = parsed.tax_rate;
+    if (parsed.notes)            document.getElementById('po-notes').value            = parsed.notes;
+
+    setSelect('po-ship-terms', (parsed.shipping_terms || '').split(' ')[0].toUpperCase());
+    setSelect('po-currency', parsed.currency || 'USD');
+
+    if (parsed.items && parsed.items.length > 0) {
+      lineItems = parsed.items.map(function(it) {
+        return {
+          desc:       it.desc || '',
+          sku:        it.sku  || '',
+          qty:        parseFloat(it.qty)        || 1,
+          unit:       it.unit || 'MT',
+          unit_price: parseFloat(it.unit_price) || 0
+        };
+      });
+      renderLineItems();
+    }
+
+    setStatus('✦ AI draft complete — review and adjust below, then Generate Preview.', 'teal');
+    renderPreview();
+
+  } catch(e) {
+    setStatus('Error: ' + e.message, 'red');
+  } finally {
+    setBusy(false);
+  }
+}
+
+function setSelect(id, val) {
+  var el = document.getElementById(id);
+  for (var i = 0; i < el.options.length; i++) {
+    if (el.options[i].value === val) { el.selectedIndex = i; return; }
+  }
+}
+
+function setBusy(busy) {
+  document.getElementById('ai-btn').disabled = busy;
+  document.getElementById('ai-spin').style.display = busy ? 'block' : 'none';
+  document.getElementById('ai-btn-text').textContent = busy ? 'Drafting…' : '✦ AI Draft PO';
+}
+
+function setStatus(msg, color) {
+  var el = document.getElementById('ai-status');
+  var colors = {red:'var(--red)', teal:'var(--teal)', gold:'var(--gold)', green:'var(--green)'};
+  el.textContent = msg;
+  el.style.color = colors[color] || 'var(--muted)';
+}
+
+// ── RENDER PREVIEW ────────────────────────────────────────────────────────────
+function renderPreview() {
+  var poNum     = document.getElementById('po-num').value         || genPONum();
+  var dateVal   = document.getElementById('po-date').value;
+  var supplier  = document.getElementById('po-supplier').value    || '—';
+  var supAddr   = document.getElementById('po-supplier-addr').value;
+  var supCon    = document.getElementById('po-supplier-contact').value;
+  var billTo    = document.getElementById('po-bill-to').value     || '—';
+  var shipName  = document.getElementById('po-ship-name').value;
+  var shipAddr  = document.getElementById('po-ship-addr').value;
+  var payTerms  = document.getElementById('po-pay-terms').value   || '—';
+  var shipTerms = document.getElementById('po-ship-terms').value;
+  var delivery  = document.getElementById('po-delivery').value    || '30';
+  var cur       = document.getElementById('po-currency').value    || 'USD';
+  var taxRate   = parseFloat(document.getElementById('po-tax').value) || 0;
+  var notes     = document.getElementById('po-notes').value;
+
+  var s    = SYM[cur] || '$';
+  var sub  = lineItems.reduce(function(a, r) { return a + (parseFloat(r.qty)||0)*(parseFloat(r.unit_price)||0); }, 0);
+  var tax  = sub * taxRate / 100;
+  var tot  = sub + tax;
+
+  var dateDisp = dateVal
+    ? new Date(dateVal + 'T00:00:00').toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})
+    : '';
+
+  var liRows = lineItems.map(function(item, i) {
+    var rt = (parseFloat(item.qty)||0) * (parseFloat(item.unit_price)||0);
+    return '<tr>'
+      + '<td class="muted" style="font-size:10px">' + (i+1) + '</td>'
+      + '<td style="font-weight:600">' + esc(item.desc || '—') + '</td>'
+      + '<td class="muted">' + esc(item.sku || '—') + '</td>'
+      + '<td>' + (parseFloat(item.qty)||0).toLocaleString() + ' ' + esc(item.unit||'') + '</td>'
+      + '<td>' + s + fmt(parseFloat(item.unit_price)||0) + '</td>'
+      + '<td class="r">' + s + fmt(rt) + '</td>'
+      + '</tr>';
+  }).join('');
+
+  var html = '<div class="po-wrap"><div class="doc" id="po-doc">'
+    // Header
+    + '<div class="doc-top">'
+    + '  <div class="doc-top-row">'
+    + '    <div>'
+    + '      <div class="doc-logo">SLOI <em>AI</em></div>'
+    + '      <div class="doc-logo-sub">Commodity Trading Platform</div>'
+    + '    </div>'
+    + '    <div>'
+    + '      <div class="doc-type-label">PURCHASE ORDER</div>'
+    + '      <div class="doc-ref">' + esc(poNum) + '</div>'
+    + '      <div class="doc-date">' + esc(dateDisp) + '</div>'
+    + '    </div>'
+    + '  </div>'
+    + '</div>'
+    // Body
+    + '<div class="doc-body">'
+    // Parties
+    + '  <div class="doc-section">Parties</div>'
+    + '  <div class="parties-grid">'
+    + '    <div class="party-block"><div class="party-role">Bill To</div><div class="party-name">' + esc(billTo) + '</div></div>'
+    + '    <div class="party-block"><div class="party-role">Ship To</div><div class="party-name">' + esc(shipName || billTo) + '</div>' + (shipAddr ? '<div class="party-detail">' + esc(shipAddr) + '</div>' : '') + '</div>'
+    + '    <div class="party-block"><div class="party-role">Supplier</div><div class="party-name">' + esc(supplier) + '</div>' + (supAddr ? '<div class="party-detail">' + esc(supAddr) + '</div>' : '') + (supCon ? '<div class="party-detail">' + esc(supCon) + '</div>' : '') + '</div>'
+    + '  </div>'
+    // Line items
+    + '  <div class="doc-section">Line Items</div>'
+    + '  <table class="po-table">'
+    + '    <thead><tr>'
+    + '      <th style="width:4%">#</th>'
+    + '      <th style="width:36%">Description</th>'
+    + '      <th style="width:12%">SKU</th>'
+    + '      <th style="width:16%">Quantity</th>'
+    + '      <th style="width:13%">Unit Price</th>'
+    + '      <th class="r" style="width:19%">Line Total</th>'
+    + '    </tr></thead>'
+    + '    <tbody>' + liRows + '</tbody>'
+    + '  </table>'
+    // Totals
+    + '  <div class="doc-section">Totals</div>'
+    + '  <div class="totals-block">'
+    + '    <div class="tot-row"><span class="tot-label">Subtotal</span><span class="tot-val">' + s + fmt(sub) + ' ' + cur + '</span></div>'
+    + '    <div class="tot-row"><span class="tot-label">Tax (' + taxRate + '%)</span><span class="tot-val">' + s + fmt(tax) + '</span></div>'
+    + '    <div class="tot-row"><span class="tot-label" style="font-weight:700;color:var(--white)">Grand Total</span><span class="tot-val grand">' + s + fmt(tot) + ' ' + cur + '</span></div>'
+    + '  </div>'
+    // Terms
+    + '  <div class="doc-section">Terms</div>'
+    + '  <div class="terms-grid">'
+    + '    <div class="term-block"><div class="term-label">Payment Terms</div><div class="term-val">' + esc(payTerms) + '</div></div>'
+    + '    <div class="term-block"><div class="term-label">Shipping Terms</div><div class="term-val">' + esc(SHIP_LABELS[shipTerms] || shipTerms) + '</div></div>'
+    + '  </div>'
+    + '  <div class="terms-grid" style="margin-top:4px;border:1px solid var(--border);border-radius:4px;overflow:hidden">'
+    + '    <div class="term-block"><div class="term-label">Delivery</div><div class="term-val">' + esc(delivery) + ' days from PO date</div></div>'
+    + '    <div class="term-block"><div class="term-label">Currency</div><div class="term-val">' + esc(cur) + '</div></div>'
+    + '  </div>'
+    // Notes
+    + (notes
+      ? '  <div class="doc-section">Notes &amp; Special Instructions</div>'
+        + '  <div class="notes-block">' + esc(notes) + '</div>'
+      : '')
+    // Signatures
+    + '  <div class="doc-section">Authorization</div>'
+    + '  <div class="sig-grid">'
+    + '    <div class="sig-block"><div class="sig-role">Authorized by — Buyer</div><div class="sig-line"></div><div class="sig-name">' + esc(billTo) + '</div><div class="sig-date">Date: ___________________</div></div>'
+    + '    <div class="sig-block"><div class="sig-role">Accepted by — Supplier</div><div class="sig-line"></div><div class="sig-name">' + esc(supplier) + '</div><div class="sig-date">Date: ___________________</div></div>'
+    + '  </div>'
+    + '</div>'
+    // Footer
+    + '<div class="doc-footer">Generated by SLOI AI · sloiai.com · This document requires authorized signatures to be legally binding · ' + esc(poNum) + '</div>'
+    + '</div></div>';
+
+  document.getElementById('po-preview-wrap').innerHTML = html;
+}
+
+// ── PRINT & PDF ───────────────────────────────────────────────────────────────
+function printPO() {
+  if (!document.getElementById('po-doc')) {
+    setStatus('Generate a preview first.', 'gold'); return;
+  }
+  window.print();
+}
+
+function downloadPDF() {
+  var el = document.getElementById('po-doc');
+  if (!el) { setStatus('Generate a preview first.', 'gold'); return; }
+  var poNum = document.getElementById('po-num').value || 'purchase-order';
+  html2pdf().set({
+    margin:     [8, 10, 8, 10],
+    filename:   poNum + '.pdf',
+    image:      { type: 'jpeg', quality: 0.97 },
+    html2canvas:{ scale: 2, useCORS: true, backgroundColor: '#07070f' },
+    jsPDF:      { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  }).from(el).save();
+}
+</script>
+</body>
+</html>
