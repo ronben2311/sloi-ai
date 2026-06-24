@@ -159,11 +159,34 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 .footer-links{display:flex;gap:20px}
 .footer-links a{color:var(--muted);text-decoration:none}.footer-links a:hover{color:var(--white)}
 
-@media(max-width:640px){
-  .stat-bar,.origin-strip,.product-grid,.why-grid{grid-template-columns:1fr 1fr}
+/* PRICE TABLE SCROLL WRAP */
+.price-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:6px}
+.price-table{min-width:680px}
+
+@media(max-width:768px){
+  nav{padding:0 16px}
+  .nav-links{display:none}
+  .wrap{padding:48px 16px 60px}
+  h1{font-size:clamp(32px,9vw,52px)}
+  h2{font-size:clamp(24px,6vw,34px)}
+  .stat-bar{grid-template-columns:1fr 1fr}
   .origin-strip{grid-template-columns:repeat(3,1fr)}
-  nav{padding:0 16px}.wrap{padding:48px 16px 60px}
-  h1{font-size:clamp(34px,10vw,52px)}
+  .product-grid{grid-template-columns:1fr 1fr}
+  .why-grid{grid-template-columns:1fr}
+  .buyer-card{flex-wrap:wrap}
+  .bj-val{width:100%;display:flex;align-items:center;gap:14px;text-align:left;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+  .bj-num{font-size:17px}
+  .cta-box{padding:28px 20px}
+  footer{flex-direction:column;align-items:flex-start;padding:20px 16px;gap:12px}
+  .footer-links{flex-wrap:wrap;gap:14px}
+  .route-row{font-size:12px}
+  .route-time{width:100%;margin-left:0;margin-top:4px}
+}
+@media(max-width:480px){
+  .origin-strip{grid-template-columns:1fr 1fr}
+  .product-grid{grid-template-columns:1fr}
+  .hero-actions{flex-direction:column}
+  .hero-actions .btn{width:100%;justify-content:center}
 }
 </style>
 <link rel="stylesheet" href="/main.css"/>
@@ -591,7 +614,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   <div class="section">
     <h2>Price <em>reference table.</em></h2>
     <p class="section-sub">Indicative FOB prices from Arab Belt and Turkey/UAE origins, May 2026. SLOI AI negotiates within these ranges with verified, KYC-cleared suppliers.</p>
-    <table class="price-table">
+    <div class="price-table-wrap"><table class="price-table">
       <thead>
         <tr>
           <th>Product</th>
@@ -618,7 +641,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
         <tr><td><strong style="color:var(--white)">HDPE Pipe PE100</strong></td><td>ISO 4427 SDR11 · 110mm</td><td>🇸🇦 Saudi · 🇹🇷 Turkey</td><td class="price-hl">$1.20–3.50/m</td><td>2,000–20,000 m</td><td><span class="inco">FOB</span></td><td><span class="tag tag-g">Available</span></td></tr>
         <tr><td><strong style="color:var(--white)">Aggregates Limestone</strong></td><td>3/4" crushed · Bulk</td><td>🇩🇿 Algeria · 🇪🇬 Egypt</td><td class="price-hl">$6–14/MT</td><td>5,000–50,000 MT</td><td><span class="inco">FOB</span></td><td><span class="tag tag-g">Available</span></td></tr>
       </tbody>
-    </table>
+    </table></div>
     <div style="font-size:12px;color:var(--muted);margin-top:10px">All prices indicative · May 2026 · SLOI AI negotiates final terms with KYC-cleared suppliers · Boss approval required before LOI issuance</div>
   </div>
 

@@ -138,7 +138,7 @@ h1 em{font-style:italic;
 .rb-done{background:var(--green)}.rb-active{background:var(--indigo)}.rb-empty{background:var(--border2)}
 
 /* ── PERSONAS ── */
-.personas{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.personas{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .persona-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;transition:all .22s;cursor:pointer;position:relative;overflow:hidden}
 .persona-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(91,95,239,.06) 0%,transparent 70%);opacity:0;transition:opacity .3s}
 .persona-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
@@ -254,7 +254,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   .loi-preview-wrap{padding:0 16px 48px}
   .sec-divider{margin:0 16px}
   .steps-grid{grid-template-columns:1fr 1fr;gap:24px}.steps-connector{display:none}
-  .personas{grid-template-columns:1fr}
+  .personas{grid-template-columns:1fr 1fr}
   .pricing-grid{grid-template-columns:1fr 1fr}
   .features-grid{grid-template-columns:1fr}
   .sectors-grid{grid-template-columns:1fr 1fr!important;}
@@ -336,6 +336,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     <span>ICC-compliant LOI</span><span style="color:var(--border2)">·</span>
     <span>Boss approval on every deal</span>
   </div>
+  <div class="hero-stats fade-in" style="margin-top:48px">
+    <div class="hs"><div class="hs-val" style="color:var(--green)">72</div><div class="hs-label">Products live</div></div>
+    <div class="hs"><div class="hs-val" style="color:var(--violet)">24</div><div class="hs-label">Deals / month</div></div>
+    <div class="hs"><div class="hs-val" style="color:var(--teal)">&lt;12m</div><div class="hs-label">Avg. LOI time</div></div>
+    <div class="hs"><div class="hs-val" style="color:var(--gold)">$500</div><div class="hs-label">LOI fee / deal</div></div>
+  </div>
 </div>
 
 <div class="sec-divider"></div>
@@ -388,12 +394,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <div class="section" id="who">
   <div class="section-eyebrow fade-in">Who it's for</div>
   <div class="section-title fade-in">Built for the <em style="font-style:italic;color:var(--indigo)">whole chain.</em></div>
-  <div class="section-sub fade-in">Buyers, traders, and AI agents — all closing compliant LOIs in one place.</div>
+  <div class="section-sub fade-in">Four procurement profiles. One platform. Every deal ends with a signed LOI.</div>
   <div class="personas fade-in">
     <div class="persona-card" onclick="window.location.href='sloiai-platform.html'">
-      <span class="pc-icon">🏢</span>
-      <div class="pc-role">Buyers</div>
-      <div class="pc-desc">Set your mandate. The engine negotiates with verified suppliers — up to 7 rounds. You approve the price and receive the LOI.</div>
+      <span class="pc-icon">🏗️</span>
+      <div class="pc-role">Construction Procurement</div>
+      <div class="pc-desc">Source cement, rebar, and bulk materials for construction projects. The engine negotiates with verified suppliers — you approve and receive the LOI.</div>
       <div style="font-size:12px;color:var(--teal);font-weight:600;margin-top:14px">Credits never expire · pay by card or USDC</div>
       <a href="sloiai-platform.html" class="pc-cta">Buyer platform →</a>
     </div>
@@ -411,6 +417,54 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
       <div style="font-size:12px;color:var(--teal);font-weight:600;margin-top:14px">Read tier free · MCP-compatible · earns 1% per LOI</div>
       <a href="open-network.html" class="pc-cta">Open Network →</a>
     </div>
+    <div class="persona-card" onclick="window.location.href='sloiai-platform.html'">
+      <span class="pc-icon">🏭</span>
+      <div class="pc-role">Manufacturing Procurement</div>
+      <div class="pc-desc">Automate raw material sourcing for production lines. Negotiate bulk orders across metals, chemicals, and petrochemicals with verified global suppliers.</div>
+      <div style="font-size:12px;color:var(--teal);font-weight:600;margin-top:14px">Volume pricing · multi-supplier comparison · instant LOI</div>
+      <a href="sloiai-platform.html" class="pc-cta">Manufacturing platform →</a>
+    </div>
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- FEATURES -->
+<div class="section">
+  <div class="section-eyebrow fade-in">Platform capabilities</div>
+  <div class="section-title fade-in">Everything the deal<br/><em style="font-style:italic;color:var(--indigo)">needs to close.</em></div>
+  <div class="section-sub fade-in">From sourcing to signed LOI — one platform, zero manual back-and-forth.</div>
+  <div class="features-grid fade-in">
+    <div class="feat">
+      <div class="feat-icon-wrap">🤖</div>
+      <div class="feat-title">Automated negotiation</div>
+      <div class="feat-desc">Up to 7 rounds with pre-qualified suppliers. The agent bids, counters, and closes within your mandate — you only review the final price.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">📄</div>
+      <div class="feat-title">Instant LOI generation</div>
+      <div class="feat-desc">ICC-compliant Letter of Intent generated in seconds on deal approval. Emailed to all parties instantly with blockchain timestamp.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">🛡️</div>
+      <div class="feat-title">Compliance screening</div>
+      <div class="feat-desc">Every counterparty is screened against OFAC, UN, and EU sanctions lists before negotiation starts. Full audit trail included.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">🚢</div>
+      <div class="feat-title">Logistics & customs</div>
+      <div class="feat-desc">HS code lookup, duty calculation, and shipment tracking across 6 countries. Port delay alerts and route optimisation built in.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">💳</div>
+      <div class="feat-title">Payment tracking</div>
+      <div class="feat-desc">LC issuance monitoring, T/T confirmation, and payment milestone alerts. MT103 SWIFT drafts generated automatically.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">🌐</div>
+      <div class="feat-title">Open Network API</div>
+      <div class="feat-desc">MCP-compatible API for AI agents. Read tier is free — your agent can source and compare prices autonomously, 24/7.</div>
+    </div>
   </div>
 </div>
 
@@ -419,7 +473,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <!-- SECTORS WE SERVE -->
 <div class="section" id="sectors">
   <div class="section-eyebrow fade-in">Sectors we serve</div>
-  <div class="section-title fade-in">Deep coverage across<br/><em style="font-style:italic;color:var(--indigo)">four commodity sectors.</em></div>
+  <div class="section-title fade-in">Deep coverage across<br/><em style="font-style:italic;color:var(--indigo)">key commodity sectors.</em></div>
   <div class="section-sub fade-in">Verified suppliers and sector-specific negotiation — ready to use.</div>
   <div class="sectors-grid fade-in">
 
@@ -460,13 +514,13 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     </a>
 
     <a href="imec.html" class="sector-card">
-      <div class="sc-icon">🏗️</div>
-      <div class="sc-name">Reconstruction</div>
+      <div class="sc-icon">🔩</div>
+      <div class="sc-name">Metal &amp; Steel</div>
       <div class="sc-tags">
-        <span class="sc-tag">IMEC Corridor</span>
-        <span class="sc-tag">Infrastructure</span>
-        <span class="sc-tag">Bulk Cement</span>
-        <span class="sc-tag">Steel</span>
+        <span class="sc-tag">Steel Rebar</span>
+        <span class="sc-tag">Aluminum</span>
+        <span class="sc-tag">Iron Ore</span>
+        <span class="sc-tag">Scrap Metal</span>
       </div>
       <div class="sc-cta">Explore sector →</div>
     </a>

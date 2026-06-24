@@ -499,12 +499,12 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="pc-sub">Lithium · Cobalt · Copper · Rare Earth · Graphite</div>
           <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $8,200/MT · 8 products</div>
         </div>
-        <div class="pc" onclick="selectProduct(this,'Cement &amp; Clinker','cement, clinker, OPC, white cement, slag')">
+        <div class="pc" onclick="selectProduct(this,'Petrochemicals','petrochemicals, sulfuric acid, caustic soda, HDPE, polypropylene, methanol')">
           <div class="pc-check">✓ selected</div>
-          <span class="pc-icon">🏔️</span>
-          <div class="pc-name">Cement &amp; Clinker</div>
-          <div class="pc-sub">OPC · Clinker · White Cement · Slag · Pozzolanic</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $58/MT · 10 products</div>
+          <span class="pc-icon">🧪</span>
+          <div class="pc-name">Petrochemicals</div>
+          <div class="pc-sub">Sulfuric Acid · Caustic Soda · HDPE · Polypropylene · Methanol</div>
+          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $380/MT · 18 products</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Engineering equipment','generators, pumps, compressors, cranes')">
           <div class="pc-check">✓ selected</div>
@@ -646,6 +646,72 @@ select.inp option{background:var(--surface2);color:var(--white)}
         </select>
       </div>
 
+      <div class="field">
+        <div class="field-lbl">Preferred origin <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+        <select class="inp" id="origin">
+          <option value="">— No preference —</option>
+          <optgroup label="── Gulf &amp; MENA ──">
+            <option>UAE</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option>
+            <option>Bahrain</option><option>Oman</option><option>Egypt</option><option>Jordan</option>
+            <option>Iraq</option><option>Yemen</option><option>Lebanon</option>
+            <option>Palestine</option><option>Libya</option><option>Tunisia</option><option>Algeria</option>
+            <option>Morocco</option><option>Sudan</option><option>Iran</option><option>Turkey</option>
+          </optgroup>
+          <optgroup label="── Europe ──">
+            <option>Germany</option><option>France</option><option>Italy</option><option>Spain</option>
+            <option>Netherlands</option><option>Belgium</option><option>Switzerland</option>
+            <option>Austria</option><option>Poland</option><option>Czech Republic</option>
+            <option>Romania</option><option>Hungary</option><option>Bulgaria</option>
+            <option>Greece</option><option>Portugal</option><option>Sweden</option>
+            <option>Norway</option><option>Denmark</option><option>Finland</option>
+            <option>United Kingdom</option><option>Ireland</option><option>Slovakia</option>
+            <option>Croatia</option><option>Serbia</option><option>Ukraine</option>
+            <option>Russia</option><option>Belarus</option><option>Estonia</option>
+            <option>Latvia</option><option>Lithuania</option><option>Slovenia</option>
+            <option>Luxembourg</option><option>Malta</option><option>Cyprus</option>
+            <option>Albania</option><option>North Macedonia</option><option>Bosnia</option>
+            <option>Montenegro</option><option>Moldova</option><option>Kosovo</option>
+          </optgroup>
+          <optgroup label="── Asia ──">
+            <option>China</option><option>India</option><option>Japan</option>
+            <option>South Korea</option><option>Singapore</option><option>Malaysia</option>
+            <option>Thailand</option><option>Indonesia</option><option>Vietnam</option>
+            <option>Philippines</option><option>Taiwan</option><option>Hong Kong</option>
+            <option>Pakistan</option><option>Bangladesh</option><option>Sri Lanka</option>
+            <option>Nepal</option><option>Myanmar</option><option>Cambodia</option>
+            <option>Kazakhstan</option><option>Uzbekistan</option><option>Azerbaijan</option>
+            <option>Georgia</option><option>Armenia</option><option>Turkmenistan</option>
+            <option>Afghanistan</option><option>Mongolia</option><option>Kyrgyzstan</option>
+            <option>Tajikistan</option>
+          </optgroup>
+          <optgroup label="── Africa ──">
+            <option>Nigeria</option><option>South Africa</option><option>Kenya</option>
+            <option>Ethiopia</option><option>Ghana</option><option>Tanzania</option>
+            <option>Uganda</option><option>Mozambique</option><option>Zambia</option>
+            <option>Zimbabwe</option><option>Angola</option><option>Cameroon</option>
+            <option>Senegal</option><option>Ivory Coast</option><option>DR Congo</option>
+            <option>Congo</option><option>Rwanda</option><option>Botswana</option>
+            <option>Namibia</option><option>Malawi</option><option>Mauritius</option>
+            <option>Madagascar</option><option>Somalia</option><option>Djibouti</option>
+          </optgroup>
+          <optgroup label="── Americas ──">
+            <option>United States</option><option>Canada</option><option>Mexico</option>
+            <option>Brazil</option><option>Argentina</option><option>Chile</option>
+            <option>Colombia</option><option>Peru</option><option>Venezuela</option>
+            <option>Ecuador</option><option>Bolivia</option><option>Uruguay</option>
+            <option>Paraguay</option><option>Panama</option><option>Costa Rica</option>
+            <option>Guatemala</option><option>Honduras</option><option>El Salvador</option>
+            <option>Dominican Republic</option><option>Cuba</option><option>Jamaica</option>
+          </optgroup>
+          <optgroup label="── Oceania ──">
+            <option>Australia</option><option>New Zealand</option><option>Papua New Guinea</option>
+            <option>Fiji</option>
+          </optgroup>
+          <option>Other</option>
+        </select>
+        <div class="field-hint">The engine will prioritise suppliers from this country. Leave blank to source from all verified origins.</div>
+      </div>
+
       <button class="btn-p" onclick="goStep(3)">Continue →</button>
       <button class="btn-s" onclick="goStep(1)">← Back</button>
     </div>
@@ -772,6 +838,10 @@ select.inp option{background:var(--surface2);color:var(--white)}
         <div class="sum-cell">
           <div class="sum-lbl">Delivery country</div>
           <div class="sum-val" id="sum-country">—</div>
+        </div>
+        <div class="sum-cell" id="sum-origin-cell" style="display:none">
+          <div class="sum-lbl">Preferred origin</div>
+          <div class="sum-val" id="sum-origin" style="color:var(--teal)">—</div>
         </div>
         <div class="sum-cell">
           <div class="sum-lbl">Timeline</div>
@@ -902,7 +972,7 @@ var CATALOG = [
 
 var SECTOR_MAP = {
   'Building materials':    ['Metals','Cement','Building'],
-  'Cement & Clinker':      'Cement',
+  'Petrochemicals':        'Petrochemicals',
   'Energy':                'Energy',
   'Critical Minerals':     'Chemicals',
   'Engineering equipment': 'Engineering',
@@ -1021,6 +1091,7 @@ function goStep(n) {
       state.unit       = document.getElementById('unit').value;
       state.budget     = document.getElementById('budget').value || 'Not specified';
       state.country    = document.getElementById('country').value;
+      state.origin     = document.getElementById('origin').value || '';
       state.projectRef   = document.getElementById('project-ref').value || '';
       state.incoterms    = document.getElementById('incoterms').value || '';
     }
@@ -1255,6 +1326,10 @@ function populateSummary() {
   document.getElementById('sum-budget').textContent  = state.budget;
   document.getElementById('sum-ptype').textContent   = state.purchaseType;
   document.getElementById('sum-country').textContent = state.country;
+  if (state.origin) {
+    document.getElementById('sum-origin').textContent = state.origin;
+    document.getElementById('sum-origin-cell').style.display = '';
+  }
   document.getElementById('sum-urgency').textContent = state.urgency;
   document.getElementById('sum-email').textContent   = state.email || '—';
   document.getElementById('sum-wa').textContent      = state.wa || '—';
@@ -1322,7 +1397,7 @@ function submitOrder() {
     buyer_company:  state.company,
     buyer_telegram: state.wa,
     country:        state.country,
-    notes:          'Urgency: ' + state.urgency + ' | Agent: ' + state.purchaseType + (state.annualVolume ? ' | Annual volume: ' + state.annualVolume : ''),
+    notes:          'Urgency: ' + state.urgency + ' | Agent: ' + state.purchaseType + (state.annualVolume ? ' | Annual volume: ' + state.annualVolume : '') + (state.origin ? ' | Preferred origin: ' + state.origin : ''),
   };
 
   var API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://sloi-ai-production.up.railway.app';
