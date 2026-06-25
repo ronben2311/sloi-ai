@@ -859,6 +859,17 @@
       .mandate-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none}
       .mandate-chev{color:var(--muted);font-size:11px;transition:transform .2s}
       .mandate-chev.open{transform:rotate(180deg)}
+      /* ── AI INLINE PANELS ── */
+      .ai-panel{background:var(--bg);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:12px 14px;margin-top:12px}
+      .ai-panel-title{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+      .ai-panel-title::after{content:'';flex:1;height:1px;background:var(--border)}
+      .ai-tabs{display:flex;gap:3px;margin-bottom:10px;flex-wrap:wrap}
+      .ai-tab{padding:3px 9px;border-radius:3px;border:1px solid var(--border2);background:none;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;transition:all .12s}
+      .ai-tab:hover{color:var(--text)}
+      .ai-tab.active{background:var(--indigo-dim);border-color:var(--indigo);color:var(--violet)}
+      .ai-response{font-size:12px;line-height:1.8;color:var(--text);white-space:pre-wrap;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:10px 12px;min-height:60px;max-height:260px;overflow-y:auto;display:none;margin-top:8px}
+      .ai-response.visible{display:block}
+      .ai-running{color:var(--muted);font-style:italic}
     </style>
 <link rel="stylesheet" href="/main.css"/>
 
@@ -1642,7 +1653,7 @@
                       text-align: center;
                     "
                   >
-                    Boss approval before LOI · Balance:
+                    <a href="mcp-install.html" style="color:var(--teal);text-decoration:none">Local agent</a> auto-approves · Balance:
                     <span style="color: var(--teal)" id="ex-balance"
                       >320 credits</span
                     >
@@ -1662,7 +1673,7 @@
               <div style="display:flex;gap:8px;align-items:flex-start">
                 <input class="inp" id="prod-search" placeholder="Search name, origin, cert..." oninput="renderCatalog()" style="width:240px;font-size:13px;padding:6px 10px"/>
                 <div style="display:flex;flex-direction:column;gap:4px">
-                  <button class="btn btn-sm btn-p" onclick="window.open('smb-order.html','_blank')">🤖 New RFQ →</button>
+                  <button class="btn btn-sm btn-p" onclick="window.open('negotiation-agent.html','_blank')">🤖 Negotiate →</button>
                   <button class="btn btn-sm btn-g" onclick="window.open('loi-generator.html','_blank')">📄 LOI Generator</button>
                   <button class="btn btn-sm" style="background:var(--gold-dim);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="openPOModal()">🧾 PO Generator</button>
                 </div>
@@ -1819,6 +1830,41 @@
                     <div class="ad-log-row"><span style="color:var(--muted)">Gulf Steel Industries</span><span class="badge bg">Cleared</span></div>
                     <div class="ad-log-row"><span style="color:var(--muted)">Atlas Grain Trading</span><span class="badge bg">Cleared</span></div>
                     <div class="ad-log-row"><span style="color:var(--muted)">EuroSteel GmbH</span><span class="badge ba">Review</span></div>
+                  </div>
+                  <div class="ai-panel">
+                    <div class="ai-panel-title">🤖 AI Compliance Tools</div>
+                    <div class="ai-tabs">
+                      <button class="ai-tab active" onclick="compSwitch('entity',this)">Entity Screening</button>
+                      <button class="ai-tab" onclick="compSwitch('country',this)">Country Risk</button>
+                    </div>
+                    <div id="comp-entity-panel">
+                      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px">
+                        <div>
+                          <label class="flabel" style="font-size:10px">Company / Person Name</label>
+                          <input class="inp" id="comp-entity-name" placeholder="e.g. Atlas Grain Trading LLC" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                        <div>
+                          <label class="flabel" style="font-size:10px">Country (optional)</label>
+                          <input class="inp" id="comp-entity-country" placeholder="e.g. Syria, Iran, Russia" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                      </div>
+                      <button class="btn btn-xs btn-p" onclick="runEntityScreen()" style="font-size:11px">🤖 Screen Entity</button>
+                      <div id="comp-entity-resp" class="ai-response"></div>
+                    </div>
+                    <div id="comp-country-panel" style="display:none">
+                      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px">
+                        <div>
+                          <label class="flabel" style="font-size:10px">Country</label>
+                          <input class="inp" id="comp-country-name" placeholder="e.g. Iran, Russia, Myanmar" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                        <div>
+                          <label class="flabel" style="font-size:10px">Commodity (optional)</label>
+                          <input class="inp" id="comp-country-product" placeholder="e.g. Steel, Wheat, Chemicals" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                      </div>
+                      <button class="btn btn-xs btn-p" onclick="runCountryRisk()" style="font-size:11px">🤖 Assess Risk</button>
+                      <div id="comp-country-resp" class="ai-response"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2593,7 +2639,7 @@
                     text-align: center;
                   "
                 >
-                  <div style="font-size: 20px; margin-bottom: 6px">🤝</div>
+                  <div style="font-size: 20px; margin-bottom: 6px">🤖</div>
                   <div
                     style="
                       font-size:15px;
@@ -2602,20 +2648,20 @@
                       margin-bottom: 3px;
                     "
                   >
-                    Boss approval
+                    <a href="mcp-install.html" style="color:var(--white);text-decoration:none" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--white)'">Local Agent</a>
                   </div>
                   <div
                     style="
                       font-size:14px;
-                      color: var(--gold);
+                      color: var(--teal);
                       font-weight: 600;
                       margin-bottom: 4px;
                     "
                   >
-                    Always · No exceptions
+                    MCP · Claude · Cursor · 2 min
                   </div>
                   <div style="font-size:14px; color: var(--muted)">
-                    Every LOI reviewed before generation · Your protection
+                    Install the SLOI AI skill locally — auto-approve deals within your mandate
                   </div>
                 </div>
               </div>
@@ -2633,10 +2679,10 @@
                   Read the API docs
                 </button>
                 <button
-                  class="btn"
-                  onclick="window.open('sloiai-home.html#skill', '_blank')"
+                  class="btn btn-p"
+                  onclick="window.open('mcp-install.html', '_blank')"
                 >
-                  skill.md
+                  Install local agent →
                 </button>
               </div>
             </div>
@@ -2859,7 +2905,7 @@
                         margin-bottom: 3px;
                       "
                     >
-                      Boss approves → LOI generated
+                      <a href="mcp-install.html" style="color:var(--white);text-decoration:none" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--white)'">Local Agent</a> approves → LOI generated
                     </div>
                     <div
                       style="
@@ -2868,8 +2914,8 @@
                         line-height: 1.6;
                       "
                     >
-                      When agreement is reached, Boss reviews and approves. LOI
-                      auto-generated and delivered to all parties.
+                      When agreement is reached, your local MCP agent auto-approves within mandate. LOI
+                      generated and delivered to all parties instantly.
                     </div>
                   </div>
                 </div>
@@ -4819,7 +4865,7 @@
             '<td style="color:var(--muted);font-size:13px">' + (p.lead || '—') + 'd</td>' +
             '<td style="color:var(--muted);font-size:11px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (p.payment || '—') + '</td>' +
             '<td style="min-width:90px"><div style="display:flex;flex-direction:column;gap:3px">' +
-            '<button class="btn btn-xs btn-p" onclick=\'catalogRFQ(' + n + ',' + r + ')\'>🤖 RFQ →</button>' +
+            '<button class="btn btn-xs btn-p" onclick=\'catalogRFQ(' + n + ',' + r + ')\'>🤖 Negotiate</button>' +
             '<button class="btn btn-xs btn-g" onclick=\'catalogLOI(' + n + ',' + r + ')\'>📄 LOI</button>' +
             '<button class="btn btn-xs" style="background:var(--gold-dim);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick=\'catalogPO(' + n + ',' + r + ')\'>🧾 PO</button>' +
             '</div></td></tr>';
@@ -4835,8 +4881,12 @@
       }
 
       function catalogRFQ(name, ref) {
-        var url = 'smb-order.html' + (name ? '?product=' + encodeURIComponent(name) + '&ref=' + encodeURIComponent(ref || '') : '');
-        window.open(url, '_blank');
+        if (name) {
+          try {
+            localStorage.setItem('sloiMandate', JSON.stringify({ product: name, sku: ref || '', productLabel: name }));
+          } catch(e) {}
+        }
+        window.open('negotiation-agent.html', '_blank');
       }
 
       function catalogLOI(name, ref) {

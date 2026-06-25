@@ -96,6 +96,9 @@
         height: 100vh;
         overflow: hidden;
       }
+      @supports (height: 100dvh) {
+        .shell { height: 100dvh; }
+      }
 
       /* TOPBAR */
       .topbar {
@@ -650,9 +653,6 @@
         margin-bottom: 10px;
       }
       .approval-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 6px;
         margin-bottom: 12px;
         font-size: 12px;
       }
@@ -1080,6 +1080,24 @@
         font-size: 13px;
       }
 
+      /* ── DEAL SCORE ── */
+      .ds-score-num{font-family:'Fraunces',serif;font-size:52px;font-weight:900;line-height:1;letter-spacing:-.04em}
+      .ds-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:3px}
+      .factor-row{display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:5px}
+      .factor-name{width:68px;color:var(--muted);flex-shrink:0;font-size:11px}
+      .factor-bar-track{flex:1;height:5px;background:var(--border2);border-radius:3px;overflow:hidden}
+      .factor-bar-fill{height:100%;border-radius:3px;transition:width .6s ease}
+      .factor-score{width:28px;text-align:right;font-weight:700;font-size:12px;flex-shrink:0}
+      .factor-icon{font-size:12px;width:14px;text-align:center;flex-shrink:0}
+      /* Deal weights inputs */
+      .weight-row{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+      .weight-row span:first-child{flex:1}
+      .weight-row input{width:52px;text-align:center;padding:4px 6px;font-size:12px}
+      .weight-total{font-size:11px;font-weight:700;padding:2px 8px;border-radius:3px;font-family:'IBM Plex Mono',monospace}
+      /* Quality requirement checkboxes */
+      .qr-label{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0}
+      .qr-label input{accent-color:var(--indigo);width:13px;height:13px;flex-shrink:0}
+
       /* Show hamburger only on mobile */
       .mob-burger { display: none; }
 
@@ -1171,6 +1189,79 @@
         /* Show hamburger and close btn in mobile context */
         .mob-burger     { display: flex; }
         .mob-close-btn  { display: block !important; }
+
+        /* ── ADDITIONAL MOBILE IMPROVEMENTS ── */
+
+        /* Tabs: hide scrollbar, keep touch scroll */
+        .tabs { -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 1px; }
+        .tabs::-webkit-scrollbar { display: none; }
+
+        /* Approval section: full-width stacked buttons */
+        .approve-row { flex-direction: column; align-items: stretch; }
+        .approve-btn { width: 100%; justify-content: center; padding: 13px 18px; font-size: 14px; }
+        #reject-btn  { width: 100% !important; justify-content: center; padding: 10px; }
+        .auto-msg    { text-align: center; }
+
+        /* Buyer steering chips: 2-column grid for easy thumbing */
+        .steer-chips { display: grid !important; grid-template-columns: 1fr 1fr; }
+        .steer-chip  { justify-content: center; text-align: center; }
+
+        /* Inner neg topbar: allow wrap */
+        .neg-topbar { height: auto !important; min-height: 44px; padding: 8px 10px; flex-wrap: wrap; gap: 6px; }
+        .neg-topbar > div:first-child { flex: 1; min-width: 0; }
+        #neg-product-label { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Mandate pills: horizontal scroll without bar */
+        .mandate-row { flex-wrap: nowrap !important; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+        .mandate-row::-webkit-scrollbar { display: none; }
+
+        /* Approval grid: tighter */
+        .approval-section { padding: 10px; }
+
+        /* LOI / deal grid cells: smaller text */
+        .loi-val, .ag-val { font-size: 13px !important; }
+
+        /* Shell height: use dynamic viewport height where supported */
+        @supports (height: 100dvh) {
+          .shell    { height: 100dvh; }
+          .neg-left { height: calc(100dvh - 88px); }
+        }
+
+        /* Bottom nav bar replacing horizontal tabs */
+        .tabs {
+          position: fixed;
+          bottom: 0; left: 0; right: 0;
+          top: auto;
+          height: 56px;
+          border-top: 1px solid var(--border);
+          border-bottom: none;
+          padding: 0;
+          z-index: 100;
+          background: var(--surface);
+          justify-content: space-around;
+          overflow: visible;
+        }
+        .tab {
+          flex: 1;
+          flex-direction: column;
+          height: 56px;
+          padding: 6px 2px;
+          gap: 2px;
+          font-size: 10px !important;
+          justify-content: center;
+          border-bottom: none !important;
+          border-top: 2px solid transparent;
+          min-width: 0;
+        }
+        .tab.active { border-top-color: var(--indigo); border-bottom: none !important; }
+        .tab-dot { width: 20px; height: 20px; border-radius: 50%; }
+        /* Adjust shell to leave room for bottom nav */
+        .shell { grid-template-rows: 48px 0 1fr; }
+        .neg-left { top: 48px; height: calc(100% - 48px); }
+        .right-body-padded { padding-bottom: 56px; }
+        /* Give content area bottom padding for the nav bar */
+        .neg-right, #panel-lead, #panel-price, #panel-outreach, #panel-compliance { padding-bottom: 56px; }
+        .chat-area { padding-bottom: 68px; }
       }
     </style>
     <link rel="stylesheet" href="/main.css" />
@@ -1195,14 +1286,6 @@
             <span id="agent-status">4 agents active</span>
           </div>
           <div id="clock" style="font-size: 13px; color: var(--muted)"></div>
-          <button class="btn btn-sm" onclick="focusAdmin()">← Admin</button>
-          <button
-            class="btn btn-sm btn-p"
-            id="run-all-btn"
-            onclick="runAllAgents()"
-          >
-            ▶ Run all
-          </button>
         </div>
       </div>
 
@@ -1214,15 +1297,15 @@
         </button>
         <button class="tab" onclick="switchTab('lead', this)">
           <div class="tab-dot td-green"></div>
-          🔭 LeadFinder<span class="tab-count" id="tc-lead">ready</span>
+          📄 LOI Generator<span class="tab-count" id="tc-lead">ready</span>
         </button>
         <button class="tab" onclick="switchTab('price', this)">
           <div class="tab-dot td-green"></div>
-          📡 PriceScout<span class="tab-count" id="tc-price">ready</span>
+          📋 PO Generator<span class="tab-count" id="tc-price">ready</span>
         </button>
         <button class="tab" onclick="switchTab('outreach', this)">
-          <div class="tab-dot td-muted"></div>
-          📱 OutreachBot<span class="tab-count">paused</span>
+          <div class="tab-dot td-green"></div>
+          🚢 Customs & Logistics<span class="tab-count" id="tc-customs">docs</span>
         </button>
         <button class="tab" onclick="switchTab('compliance', this)">
           <div class="tab-dot td-green"></div>
@@ -1513,86 +1596,56 @@
               </div>
             </div>
 
-            <div class="sec">// BUYER PREFERENCES</div>
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                margin-bottom: 12px;
-              "
-            >
-              <div>
-                <label class="flabel">Purchase intent</label>
-                <div
-                  style="
-                    display: grid;
-                    grid-template-columns: 1fr 1fr 1fr;
-                    gap: 4px;
-                  "
-                >
-                  <div
-                    id="pref-onetime"
-                    class="pref-chip pref-sel"
-                    onclick="selectPref('deal', 'onetime')"
-                  >
-                    <div style="font-size: 14px">📦</div>
-                    <div class="pref-name">One-time</div>
-                  </div>
-                  <div
-                    id="pref-annual"
-                    class="pref-chip"
-                    onclick="selectPref('deal', 'annual')"
-                  >
-                    <div style="font-size: 14px">📅</div>
-                    <div class="pref-name">Annual deal</div>
-                  </div>
-                  <div
-                    id="pref-surplus"
-                    class="pref-chip"
-                    onclick="selectPref('deal', 'surplus')"
-                  >
-                    <div style="font-size: 14px">📉</div>
-                    <div class="pref-name">Surplus stock</div>
-                  </div>
-                </div>
+            <div class="sec" style="display:flex;justify-content:space-between;align-items:center">
+              // DEAL WEIGHTS
+              <span class="weight-total" id="weights-sum" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)">100%</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
+              <div class="weight-row">
+                <span>💰 Price</span>
+                <input class="inp" type="number" min="0" max="100" id="w-price" value="40" oninput="updateWeightSum()"/>
+                <span>%</span>
               </div>
+              <div class="weight-row">
+                <span>🔍 Quality / Inspection</span>
+                <input class="inp" type="number" min="0" max="100" id="w-quality" value="30" oninput="updateWeightSum()"/>
+                <span>%</span>
+              </div>
+              <div class="weight-row">
+                <span>🚢 Delivery speed</span>
+                <input class="inp" type="number" min="0" max="100" id="w-delivery" value="20" oninput="updateWeightSum()"/>
+                <span>%</span>
+              </div>
+              <div class="weight-row">
+                <span>💳 Payment terms</span>
+                <input class="inp" type="number" min="0" max="100" id="w-payment" value="10" oninput="updateWeightSum()"/>
+                <span>%</span>
+              </div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">Weights guide the agent — higher % = push harder on that factor</div>
+            </div>
 
-              <div>
-                <label class="flabel">Negotiation stance</label>
-                <div
-                  style="
-                    display: grid;
-                    grid-template-columns: 1fr 1fr 1fr;
-                    gap: 4px;
-                  "
-                >
-                  <div
-                    id="pref-price"
-                    class="pref-chip pref-sel"
-                    onclick="selectPref('stance', 'price')"
-                  >
-                    <div style="font-size: 14px">💰</div>
-                    <div class="pref-name">Best price</div>
-                  </div>
-                  <div
-                    id="pref-speed"
-                    class="pref-chip"
-                    onclick="selectPref('stance', 'speed')"
-                  >
-                    <div style="font-size: 14px">⚡</div>
-                    <div class="pref-name">Fast delivery</div>
-                  </div>
-                  <div
-                    id="pref-relation"
-                    class="pref-chip"
-                    onclick="selectPref('stance', 'relation')"
-                  >
-                    <div style="font-size: 14px">🤝</div>
-                    <div class="pref-name">Long-term</div>
-                  </div>
-                </div>
-              </div>
+            <div class="sec">// QUALITY REQUIREMENTS</div>
+            <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:12px">
+              <label class="qr-label">
+                <input type="checkbox" id="qr-inspection" checked/>
+                Pre-shipment inspection (SGS / Bureau Veritas)
+              </label>
+              <label class="qr-label">
+                <input type="checkbox" id="qr-coa" checked/>
+                Certificate of Analysis (COA) included
+              </label>
+              <label class="qr-label">
+                <input type="checkbox" id="qr-defect"/>
+                Defect liability clause (6 months min)
+              </label>
+              <label class="qr-label">
+                <input type="checkbox" id="qr-penalty"/>
+                Late delivery penalty clause
+              </label>
+              <label class="qr-label">
+                <input type="checkbox" id="qr-iso"/>
+                ISO / CE / EN certification required
+              </label>
             </div>
 
             <div class="sec">// STRATEGY</div>
@@ -1609,9 +1662,9 @@
               >
                 <div class="strat-icon" style="font-size: 20px">🎯</div>
                 <div>
-                  <div class="strat-name">Deal Hunter</div>
+                  <div class="strat-name">Best Deal Engine</div>
                   <div class="strat-cost">
-                    AI-powered · max value extraction
+                    Price + Quality + Delivery + Payment
                   </div>
                 </div>
               </div>
@@ -1761,153 +1814,152 @@
       </div>
 
       <!-- ════════════════════════════════════
-     PANEL 2 — LEADFINDER (Claude API)
+     PANEL 2 — LOI GENERATOR
 ════════════════════════════════════ -->
       <div id="panel-lead" class="panels">
         <div class="lead-top">
-          <div
-            class="live-badge"
-            id="lead-status-badge"
-            style="
-              background: rgba(82, 82, 110, 0.08);
-              border-color: rgba(82, 82, 110, 0.2);
-              color: var(--muted);
-            "
-          >
-            <div
-              class="live-dot"
-              style="background: var(--muted); animation: none"
-            ></div>
+          <div class="live-badge" style="background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">
+            <div class="live-dot" style="background:var(--indigo);animation:none"></div>
             Ready
           </div>
-          <div style="font-size: 13px; color: var(--white); font-weight: 600">
-            🔭 LeadFinder
-          </div>
-          <div style="font-size: 12px; color: var(--muted)" id="lead-subtitle">
-            Claude scans news, projects, and tenders for commodity buyers
-          </div>
-          <div style="display: flex; gap: 6px; margin-left: auto">
-            <input
-              class="inp"
-              id="lead-keywords"
-              value="NEOM steel cement construction UAE KSA Egypt"
-              style="width: 280px; font-size: 12px"
-            />
-            <button
-              class="btn btn-p btn-sm"
-              id="lead-scan-btn"
-              onclick="runLeadFinder()"
-            >
-              🔭 Scan now
-            </button>
+          <div style="font-size:13px;color:var(--white);font-weight:600">📄 LOI Generator</div>
+          <div style="font-size:12px;color:var(--muted)">Generate signed Letters of Intent from negotiated deals</div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn btn-p btn-sm" onclick="generateLOI()">📄 Open LOI Generator →</button>
           </div>
         </div>
         <div class="lead-body">
-          <div class="lead-results" id="lead-results">
-            <div style="text-align: center; padding: 40px; color: var(--muted)">
-              <div style="font-size: 32px; margin-bottom: 10px">🔭</div>
-              <div style="font-size: 13px; line-height: 1.7">
-                Click "Scan now" to let Claude<br />search for commodity
-                procurement leads.<br /><br />Results powered by Claude API.
+          <div class="lead-results">
+            <div class="sec">// LOI DETAILS</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">LOI Reference</label>
+                  <input class="inp" id="loi-ref" value="LOI-2026-001" style="font-size:12px;color:var(--violet);font-weight:700"/>
+                </div>
+                <div>
+                  <label class="flabel">Deal / Negotiation ID</label>
+                  <input class="inp" id="loi-neg-id" placeholder="NEG-xxx or manual" style="font-size:12px"/>
+                </div>
               </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">Buyer (full legal name)</label>
+                  <input class="inp" id="loi-buyer" placeholder="Gulf Cement LLC" style="font-size:12px"/>
+                </div>
+                <div>
+                  <label class="flabel">Seller / Supplier</label>
+                  <input class="inp" id="loi-seller" placeholder="Çimsa Çimento A.Ş." style="font-size:12px"/>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">Product</label>
+                  <input class="inp" id="loi-product" placeholder="OPC Cement 42.5N" style="font-size:12px"/>
+                </div>
+                <div>
+                  <label class="flabel">Quantity</label>
+                  <input class="inp" id="loi-qty" type="number" placeholder="5000" style="font-size:12px"/>
+                </div>
+                <div>
+                  <label class="flabel">Unit</label>
+                  <select class="inp" id="loi-unit" style="font-size:12px">
+                    <option>MT</option><option>CBM</option><option>Unit</option><option>L</option><option>KG</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">Agreed price ($/unit)</label>
+                  <input class="inp" id="loi-price" type="number" placeholder="56" style="font-size:12px;color:var(--green);font-weight:700"/>
+                </div>
+                <div>
+                  <label class="flabel">Incoterm</label>
+                  <select class="inp" id="loi-incoterm" style="font-size:12px">
+                    <option>FOB</option><option>CFR</option><option>CIF</option><option>DAP</option><option>DDP</option><option>EXW</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="flabel">Payment terms</label>
+                  <select class="inp" id="loi-payment" style="font-size:12px">
+                    <option>LC 90 days</option><option>LC 60 days</option><option>TT 30 days</option><option>TT advance</option><option>Net 30</option><option>Net 60</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">Port of loading</label>
+                  <input class="inp" id="loi-pol" placeholder="Port of Mersin, Turkey" style="font-size:12px"/>
+                </div>
+                <div>
+                  <label class="flabel">Port of destination</label>
+                  <input class="inp" id="loi-pod" placeholder="Jebel Ali, UAE" style="font-size:12px"/>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">Delivery window</label>
+                  <input class="inp" id="loi-delivery" placeholder="45–60 days from LOI" style="font-size:12px"/>
+                </div>
+                <div>
+                  <label class="flabel">LOI validity</label>
+                  <input class="inp" id="loi-validity" type="date" style="font-size:12px"/>
+                </div>
+              </div>
+              <div>
+                <label class="flabel">Special conditions / remarks</label>
+                <textarea class="inp" id="loi-remarks" rows="2" placeholder="e.g. Subject to quality inspection at loading port. Spec: EN 197-1 CEM I 42.5N." style="font-size:12px;resize:vertical"></textarea>
+              </div>
+            </div>
+
+            <div class="sec">// LOI PREVIEW</div>
+            <div id="loi-preview" style="background:var(--surface2);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:14px;font-size:12px;line-height:1.9;color:var(--muted);font-family:'IBM Plex Mono',monospace;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">
+              <div style="font-size:28px;opacity:.4">📄</div>
+              <div style="color:var(--violet);font-weight:600;font-size:13px">Full LOI Generator</div>
+              <div>Fill the fields · click <strong style="color:var(--white)">Open LOI Generator →</strong><br/>Opens with digital signatures, live preview &amp; PDF export</div>
+            </div>
+
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+              <button class="btn btn-p" onclick="generateLOI()">📄 Open in LOI Generator →</button>
+              <button class="btn btn-g btn-sm" id="loi-copy-btn" onclick="copyLOI()">📋 Copy summary</button>
+              <button class="btn btn-sm" id="loi-pdf-btn" onclick="downloadLOI()">⬇ Download PDF</button>
             </div>
           </div>
+
           <div class="lead-sidebar">
-            <div class="sec">// CONFIG</div>
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-                margin-bottom: 14px;
-              "
-            >
-              <div>
-                <label class="flabel">Regions</label
-                ><input
-                  class="inp"
-                  value="UAE · KSA · Egypt · Germany · Iraq"
-                  style="font-size: 12px"
-                />
+            <div class="sec">// ISSUED LOIs</div>
+            <div style="display:flex;flex-direction:column;gap:7px" id="loi-history">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">LOI-2026-001</span>
+                  <span class="badge bg" style="font-size:10px">ACTIVE</span>
+                </div>
+                <div style="color:var(--muted)">OPC Cement 42.5N · 5,000 MT</div>
+                <div style="color:var(--teal);font-weight:700;margin-top:3px">$56/MT · $280,000</div>
+                <div style="color:var(--muted);margin-top:4px">Gulf Cement LLC ↔ Çimsa</div>
+                <button class="btn btn-xs btn-sm" style="margin-top:6px" onclick="loadLOI('LOI-2026-001')">Load →</button>
               </div>
-              <div>
-                <label class="flabel">Sectors</label
-                ><input
-                  class="inp"
-                  value="Steel · Cement · Wheat · Energy · Aluminum"
-                  style="font-size: 12px"
-                />
-              </div>
-              <div>
-                <label class="flabel">Min deal size</label
-                ><select class="inp">
-                  <option>$100K+</option>
-                  <option>$500K+</option>
-                  <option>$1M+</option>
-                </select>
-              </div>
-              <div>
-                <label class="flabel">Schedule</label
-                ><select class="inp">
-                  <option>Every 6 hours</option>
-                  <option>Every 3 hours</option>
-                  <option>Daily</option>
-                </select>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">LOI-2026-002</span>
+                  <span class="badge bv" style="font-size:10px">DRAFT</span>
+                </div>
+                <div style="color:var(--muted)">Steel Rebar G60 · 2,000 MT</div>
+                <div style="color:var(--teal);font-weight:700;margin-top:3px">$538/MT · $1,076,000</div>
+                <div style="color:var(--muted);margin-top:4px">ACME Steel ↔ Metinvest</div>
+                <button class="btn btn-xs btn-sm" style="margin-top:6px" onclick="loadLOI('LOI-2026-002')">Load →</button>
               </div>
             </div>
-            <div class="sec">// STATS</div>
-            <div
-              style="
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 6px;
-                font-size: 12px;
-              "
-              id="lead-stats"
-            >
-              <div
-                style="
-                  background: var(--surface2);
-                  border: 1px solid var(--border);
-                  border-radius: 4px;
-                  padding: 8px;
-                  text-align: center;
-                "
-              >
-                <div
-                  id="stat-found"
-                  style="
-                    font-family: &quot;Fraunces&quot;, serif;
-                    font-size: 20px;
-                    font-weight: 700;
-                    color: var(--white);
-                  "
-                >
-                  —
-                </div>
-                <div style="color: var(--muted)">Found</div>
+
+            <div class="sec" style="margin-top:14px">// STATS</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center">
+                <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white)">24</div>
+                <div style="color:var(--muted)">LOIs issued</div>
               </div>
-              <div
-                style="
-                  background: var(--surface2);
-                  border: 1px solid var(--border);
-                  border-radius: 4px;
-                  padding: 8px;
-                  text-align: center;
-                "
-              >
-                <div
-                  id="stat-high"
-                  style="
-                    font-family: &quot;Fraunces&quot;, serif;
-                    font-size: 20px;
-                    font-weight: 700;
-                    color: var(--gold);
-                  "
-                >
-                  —
-                </div>
-                <div style="color: var(--muted)">High rel.</div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center">
+                <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--green)">$14.2M</div>
+                <div style="color:var(--muted)">Total value</div>
               </div>
             </div>
           </div>
@@ -1915,187 +1967,320 @@
       </div>
 
       <!-- ════════════════════════════════════
-     PANEL 3 — PRICESCOUT (Claude API)
+     PANEL 3 — PO GENERATOR
 ════════════════════════════════════ -->
       <div id="panel-price" class="panels">
         <div class="price-top">
-          <div
-            class="live-badge"
-            id="price-status-badge"
-            style="
-              background: rgba(82, 82, 110, 0.08);
-              border-color: rgba(82, 82, 110, 0.2);
-              color: var(--muted);
-            "
-          >
-            <div
-              class="live-dot"
-              style="background: var(--muted); animation: none"
-            ></div>
+          <div class="live-badge" style="background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">
+            <div class="live-dot" style="background:var(--indigo);animation:none"></div>
             Ready
           </div>
-          <div style="font-size: 13px; font-weight: 600; color: var(--white)">
-            📡 PriceScout
-          </div>
-          <div style="font-size: 12px; color: var(--muted)">
-            Claude analyzes current commodity prices
-          </div>
-          <div style="margin-left: auto; display: flex; gap: 6px">
-            <select
-              class="inp"
-              id="price-product"
-              style="width: 200px; font-size: 12px"
-            >
-              <option>All products</option>
-              <option>Steel Rebar G60 12mm</option>
-              <option>Steel HR Coil</option>
-              <option>Aluminum 6061-T6</option>
-              <option>Hard Wheat</option>
-              <option>Yellow Corn</option>
-              <option>Industrial Diesel</option>
-            </select>
-            <button
-              class="btn btn-p btn-sm"
-              id="price-scan-btn"
-              onclick="runPriceScout()"
-            >
-              📡 Scan now
-            </button>
+          <div style="font-size:13px;font-weight:600;color:var(--white)">📋 PO Generator</div>
+          <div style="font-size:12px;color:var(--muted)">Generate Purchase Orders from signed LOIs</div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn btn-p btn-sm" onclick="generatePO()">📋 Open PO Generator →</button>
           </div>
         </div>
         <div class="price-body">
-          <div class="price-left" id="price-list">
-            <div style="text-align: center; padding: 40px; color: var(--muted)">
-              <div style="font-size: 32px; margin-bottom: 10px">📡</div>
-              <div style="font-size: 13px; line-height: 1.7">
-                Click "Scan now" to let Claude<br />analyze current market
-                prices and trends.<br /><br />Results powered by Claude API.
+          <div class="price-left" style="overflow-y:auto;padding:14px">
+            <div class="sec">// PO DETAILS</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">PO Number</label>
+                  <input class="inp" id="po-num" value="PO-2026-001" style="font-size:12px;color:var(--teal);font-weight:700"/>
+                </div>
+                <div>
+                  <label class="flabel">Source LOI</label>
+                  <select class="inp" id="po-loi" onchange="prefillFromLOI()" style="font-size:12px">
+                    <option value="">— link to LOI —</option>
+                    <option value="LOI-2026-001">LOI-2026-001 · OPC Cement · $280K</option>
+                    <option value="LOI-2026-002">LOI-2026-002 · Steel Rebar · $1.07M</option>
+                  </select>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">PO Date</label>
+                  <input class="inp" id="po-date" type="date" style="font-size:12px"/>
+                </div>
+                <div>
+                  <label class="flabel">PO Validity</label>
+                  <input class="inp" id="po-validity" type="date" style="font-size:12px"/>
+                </div>
+              </div>
+
+              <div class="sec" style="margin-top:4px">// BUYER (ISSUING PARTY)</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">Company</label>
+                  <input class="inp" id="po-buyer-co" placeholder="Gulf Cement LLC" style="font-size:12px"/>
+                </div>
+                <div>
+                  <label class="flabel">Contact / Authorized signatory</label>
+                  <input class="inp" id="po-buyer-contact" placeholder="Mohammed Al-Rashid, Procurement Director" style="font-size:12px"/>
+                </div>
+              </div>
+              <div>
+                <label class="flabel">Delivery address</label>
+                <input class="inp" id="po-delivery-addr" placeholder="Plot 7A, Industrial Zone, Jebel Ali, Dubai, UAE" style="font-size:12px"/>
+              </div>
+
+              <div class="sec" style="margin-top:4px">// SUPPLIER</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">Supplier company</label>
+                  <input class="inp" id="po-supplier" placeholder="Çimsa Çimento A.Ş." style="font-size:12px"/>
+                </div>
+                <div>
+                  <label class="flabel">Supplier contact</label>
+                  <input class="inp" id="po-supplier-contact" placeholder="Export Sales Dept." style="font-size:12px"/>
+                </div>
+              </div>
+              <div>
+                <label class="flabel">Supplier bank / payment routing (for wire)</label>
+                <input class="inp" id="po-bank" placeholder="IBAN: TR00 0000 0000 0000 0000 0000 00 · Swift: TCZBTR2A" style="font-size:12px"/>
+              </div>
+
+              <div class="sec" style="margin-top:4px">// LINE ITEMS</div>
+              <div id="po-lines" style="display:flex;flex-direction:column;gap:6px">
+                <div class="po-line" style="display:grid;grid-template-columns:3fr 1fr 1fr 1fr;gap:6px;align-items:end">
+                  <div><label class="flabel">Description</label><input class="inp" placeholder="OPC Cement 42.5N – Bulk, EN 197-1 Grade" style="font-size:12px"/></div>
+                  <div><label class="flabel">Qty</label><input class="inp" type="number" placeholder="5000" style="font-size:12px"/></div>
+                  <div><label class="flabel">Unit</label><input class="inp" placeholder="MT" style="font-size:12px"/></div>
+                  <div><label class="flabel">Unit price ($)</label><input class="inp" type="number" placeholder="56" style="font-size:12px"/></div>
+                </div>
+              </div>
+              <button class="btn btn-sm" onclick="addPOLine()" style="width:fit-content;font-size:12px">+ Add line item</button>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                <div>
+                  <label class="flabel">Incoterm</label>
+                  <select class="inp" id="po-incoterm" style="font-size:12px">
+                    <option>FOB</option><option>CFR</option><option>CIF</option><option>DAP</option><option>DDP</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="flabel">Payment terms</label>
+                  <select class="inp" id="po-payment" style="font-size:12px">
+                    <option>LC 90 days</option><option>LC 60 days</option><option>TT 30 days</option><option>TT advance</option><option>Net 30</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="flabel">Notes / Special instructions</label>
+                <textarea class="inp" id="po-notes" rows="2" placeholder="Quality cert required. Certificate of Origin: Turkey. Shipping marks as per buyer's instructions." style="font-size:12px;resize:vertical"></textarea>
               </div>
             </div>
+
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-p" onclick="generatePO()">📋 Open in PO Generator →</button>
+              <button class="btn btn-g btn-sm" id="po-copy-btn" onclick="copyPO()">📋 Copy summary</button>
+              <button class="btn btn-sm" id="po-pdf-btn" onclick="downloadPO()">⬇ Download PDF</button>
+            </div>
           </div>
-          <div class="price-right">
-            <div class="sec">// ANALYSIS</div>
-            <div
-              id="price-analysis"
-              style="font-size: 13px; color: var(--muted); line-height: 1.7"
-            >
-              Claude will provide market analysis after scanning.
+
+          <div class="price-right" style="overflow-y:auto;padding:14px">
+            <div class="sec">// PO PREVIEW</div>
+            <div id="po-preview" style="background:var(--surface2);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:14px;font-size:12px;line-height:1.9;color:var(--muted);font-family:'IBM Plex Mono',monospace;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">
+              <div style="font-size:32px;opacity:.4">📋</div>
+              <div style="color:var(--violet);font-weight:600;font-size:13px">Full PO Generator</div>
+              <div>Fill the fields · click <strong style="color:var(--white)">Open in PO Generator →</strong><br/>Opens with AI Draft, live preview, digital signatures &amp; PDF export</div>
             </div>
-            <div style="margin-top: 14px">
-              <div class="sec">// ASK CLAUDE</div>
-              <textarea
-                class="inp"
-                id="price-question"
-                rows="3"
-                placeholder="Ask about prices...&#10;e.g. Why is steel price rising? What's the outlook for wheat?"
-                style="resize: vertical; margin-bottom: 6px"
-              ></textarea>
-              <button
-                class="btn btn-p btn-sm"
-                style="width: 100%; justify-content: center"
-                id="price-ask-btn"
-                onclick="askPriceQuestion()"
-              >
-                Ask Claude →
-              </button>
+
+            <div class="sec" style="margin-top:14px">// ISSUED POs</div>
+            <div style="display:flex;flex-direction:column;gap:7px" id="po-history">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">PO-2026-001</span>
+                  <span class="badge bt" style="font-size:10px">ISSUED</span>
+                </div>
+                <div style="color:var(--muted)">OPC Cement 42.5N · 5,000 MT</div>
+                <div style="color:var(--teal);font-weight:700;margin-top:3px">$280,000</div>
+                <div style="color:var(--muted);margin-top:2px">Supplier: Çimsa A.Ş.</div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">PO-2026-002</span>
+                  <span class="badge ba" style="font-size:10px">ACKNOWLEDGED</span>
+                </div>
+                <div style="color:var(--muted)">Steel Rebar G60 · 2,000 MT</div>
+                <div style="color:var(--teal);font-weight:700;margin-top:3px">$1,076,000</div>
+                <div style="color:var(--muted);margin-top:2px">Supplier: Metinvest</div>
+              </div>
             </div>
-            <div
-              id="price-answer"
-              style="
-                margin-top: 10px;
-                font-size: 13px;
-                color: var(--text);
-                line-height: 1.7;
-                display: none;
-              "
-            ></div>
+
+            <div class="sec" style="margin-top:14px">// TOTAL COMMITTED</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center">
+                <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white)">12</div>
+                <div style="color:var(--muted)">POs issued</div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:8px;text-align:center">
+                <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--teal)">$8.4M</div>
+                <div style="color:var(--muted)">Committed</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- ════════════════════════════════════
-     PANEL 4 — OUTREACHBOT
+     PANEL 4 — CUSTOMS & LOGISTICS
 ════════════════════════════════════ -->
       <div id="panel-outreach" class="panels">
         <div class="section-top">
-          <span class="badge ba">⏸ Paused</span>
-          <div style="font-size: 13px; font-weight: 600; color: var(--white)">
-            📱 OutreachBot
+          <div class="live-badge" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)">
+            <div class="live-dot" style="background:var(--teal);animation:none"></div>
+            Active
           </div>
-          <div style="font-size: 12px; color: var(--muted)">
-            WhatsApp outreach · Requires WhatsApp Business API
-          </div>
-          <div style="margin-left: auto; display: flex; gap: 6px">
-            <button
-              class="btn btn-g btn-sm"
-              id="outreach-resume-btn"
-              onclick="resumeOutreachBot(this)"
-            >
-              ▶ Resume
-            </button>
-            <button class="btn btn-sm btn-p" onclick="addToOutreach()">
-              + Add lead
-            </button>
+          <div style="font-size:13px;font-weight:600;color:var(--white)">🚢 Customs & Logistics</div>
+          <div style="font-size:12px;color:var(--muted)">Document checklist · HS codes · Incoterm reference · Shipment tracking</div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <select class="inp" id="customs-shipment" style="width:200px;font-size:12px" onchange="loadShipmentDocs()">
+              <option value="LOI-2026-001">LOI-2026-001 · OPC Cement</option>
+              <option value="LOI-2026-002">LOI-2026-002 · Steel Rebar</option>
+            </select>
+            <button class="btn btn-p btn-sm" onclick="newShipment()">+ New shipment</button>
           </div>
         </div>
         <div class="section-body">
           <div class="section-main">
-            <div class="sec">// OUTREACH QUEUE (8 contacts)</div>
-            <div id="outreach-list"></div>
-          </div>
-          <div class="section-sidebar">
-            <div class="sec">// TEMPLATE</div>
-            <select
-              class="inp"
-              style="margin-bottom: 8px"
-              id="tpl-select"
-              onchange="previewTpl()"
-            >
-              <option value="construction">Construction projects</option>
-              <option value="buyer">Buyer outreach</option>
-              <option value="followup">Follow-up</option>
-            </select>
-            <div
-              style="
-                background: #0d1f0d;
-                border-radius: 6px;
-                padding: 12px;
-                font-size: 12px;
-                color: #c8e6c8;
-                line-height: 1.7;
-                white-space: pre-wrap;
-              "
-              id="tpl-preview"
-            >
-              SLOI AI — Commodity Procurement Hello, We noticed your recent
-              infrastructure project. SLOI AI can help you source materials at
-              the best price — our AI agent negotiates on your behalf. 👉
-              sloiai.com SLOI AI · Smart negotiation · LOI generation
+
+            <!-- SHIPMENT HEADER -->
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;margin-bottom:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;font-size:12px">
+              <div>
+                <div style="color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em;font-size:11px">Shipment</div>
+                <div style="color:var(--white);font-weight:700" id="cs-ref">LOI-2026-001</div>
+              </div>
+              <div>
+                <div style="color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em;font-size:11px">Route</div>
+                <div style="color:var(--teal);font-weight:600" id="cs-route">Mersin → Jebel Ali</div>
+              </div>
+              <div>
+                <div style="color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em;font-size:11px">ETA</div>
+                <div style="color:var(--gold);font-weight:600" id="cs-eta">~18 Jul 2026</div>
+              </div>
+              <div>
+                <div style="color:var(--muted);margin-bottom:2px;text-transform:uppercase;letter-spacing:.05em;font-size:11px">Status</div>
+                <span class="badge bt" id="cs-status">IN TRANSIT</span>
+              </div>
             </div>
-            <div class="sec" style="margin-top: 12px">// STATS</div>
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
-                font-size: 13px;
-              "
-            >
-              <div style="display: flex; justify-content: space-between">
-                <span style="color: var(--muted)">Sent</span
-                ><span style="color: var(--white)">24</span>
+
+            <!-- DOCUMENT CHECKLIST -->
+            <div class="sec">// EXPORT DOCUMENT CHECKLIST</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:16px" id="doc-checklist">
+              <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:13px">
+                <input type="checkbox" checked onchange="updateDocStatus()" style="accent-color:var(--indigo);width:15px;height:15px"/>
+                <span style="flex:1;color:var(--white);font-weight:600">Commercial Invoice</span>
+                <span class="badge bg" style="font-size:10px">DONE</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:13px">
+                <input type="checkbox" checked onchange="updateDocStatus()" style="accent-color:var(--indigo);width:15px;height:15px"/>
+                <span style="flex:1;color:var(--white);font-weight:600">Packing List</span>
+                <span class="badge bg" style="font-size:10px">DONE</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:13px">
+                <input type="checkbox" checked onchange="updateDocStatus()" style="accent-color:var(--indigo);width:15px;height:15px"/>
+                <span style="flex:1;color:var(--white);font-weight:600">Bill of Lading (OBL)</span>
+                <span class="badge bg" style="font-size:10px">DONE</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid rgba(232,169,74,.25);border-radius:5px;cursor:pointer;font-size:13px">
+                <input type="checkbox" onchange="updateDocStatus()" style="accent-color:var(--indigo);width:15px;height:15px"/>
+                <span style="flex:1;color:var(--white);font-weight:600">Certificate of Origin (EUR.1 / Form A)</span>
+                <span class="badge ba" style="font-size:10px">PENDING</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid rgba(232,169,74,.25);border-radius:5px;cursor:pointer;font-size:13px">
+                <input type="checkbox" onchange="updateDocStatus()" style="accent-color:var(--indigo);width:15px;height:15px"/>
+                <span style="flex:1;color:var(--white);font-weight:600">Certificate of Analysis (COA) / Quality Report</span>
+                <span class="badge ba" style="font-size:10px">PENDING</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:13px">
+                <input type="checkbox" onchange="updateDocStatus()" style="accent-color:var(--indigo);width:15px;height:15px"/>
+                <span style="flex:1;color:var(--white);font-weight:600">Insurance Certificate (CIF / CIP shipments)</span>
+                <span class="badge bv" style="font-size:10px">N/A (FOB)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:13px">
+                <input type="checkbox" onchange="updateDocStatus()" style="accent-color:var(--indigo);width:15px;height:15px"/>
+                <span style="flex:1;color:var(--white);font-weight:600">Customs Export Declaration (MRN / T1)</span>
+                <span class="badge ba" style="font-size:10px">PENDING</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;cursor:pointer;font-size:13px">
+                <input type="checkbox" onchange="updateDocStatus()" style="accent-color:var(--indigo);width:15px;height:15px"/>
+                <span style="flex:1;color:var(--white);font-weight:600">LC / Payment instrument copy</span>
+                <span class="badge ba" style="font-size:10px">PENDING</span>
+              </label>
+            </div>
+            <div id="docs-progress" style="font-size:12px;color:var(--muted);margin-bottom:16px">3 / 8 documents complete</div>
+
+            <!-- HS CODE LOOKUP -->
+            <div class="sec">// HS CODE LOOKUP</div>
+            <div style="display:flex;gap:6px;margin-bottom:8px">
+              <input class="inp" id="hs-query" placeholder="Type product — e.g. Portland Cement, Steel Rebar, Polypropylene" style="font-size:12px"/>
+              <button class="btn btn-p btn-sm" onclick="lookupHS()">Look up</button>
+            </div>
+            <div id="hs-result" style="display:flex;flex-direction:column;gap:5px">
+              <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:12px;align-items:center">
+                <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--teal)">2523.29</span>
+                <span style="color:var(--white)">Portland cement — other (OPC, SRC, Slag cement)</span>
               </div>
-              <div style="display: flex; justify-content: space-between">
-                <span style="color: var(--muted)">Opened</span
-                ><span style="color: var(--white)">18 (75%)</span>
+              <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:12px;align-items:center">
+                <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--teal)">2523.10</span>
+                <span style="color:var(--white)">Cement clinker — unground Portland cement clinker</span>
               </div>
-              <div style="display: flex; justify-content: space-between">
-                <span style="color: var(--muted)">Replied</span
-                ><span style="color: var(--green)">9 (38%)</span>
+              <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;padding:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:5px;font-size:12px;align-items:center">
+                <span style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--teal)">7214.20</span>
+                <span style="color:var(--white)">Steel bars and rods — hot-rolled, with deformations (rebar)</span>
               </div>
-              <div style="display: flex; justify-content: space-between">
-                <span style="color: var(--muted)">Converted</span
-                ><span style="color: var(--violet)">3</span>
+            </div>
+          </div>
+
+          <div class="section-sidebar">
+            <!-- INCOTERM REFERENCE -->
+            <div class="sec">// INCOTERM REFERENCE</div>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;font-size:12px">
+              <div style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:4px">
+                <span style="font-weight:700;color:var(--white)">FOB</span><br/>
+                <span style="color:var(--muted)">Seller delivers on board vessel at named port. Buyer takes all risk from that point. Freight + insurance buyer's cost.</span>
+              </div>
+              <div style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:4px">
+                <span style="font-weight:700;color:var(--white)">CFR / CNF</span><br/>
+                <span style="color:var(--muted)">Seller pays freight to named destination port. Risk passes at loading. Insurance buyer's responsibility.</span>
+              </div>
+              <div style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:4px">
+                <span style="font-weight:700;color:var(--white)">CIF</span><br/>
+                <span style="color:var(--muted)">As CFR, but seller also provides minimum cargo insurance to named port.</span>
+              </div>
+              <div style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:4px">
+                <span style="font-weight:700;color:var(--white)">DAP</span><br/>
+                <span style="color:var(--muted)">Seller delivers to named place. Buyer handles import customs and duties on arrival.</span>
+              </div>
+              <div style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:4px">
+                <span style="font-weight:700;color:var(--white)">DDP</span><br/>
+                <span style="color:var(--muted)">Maximum seller obligation. Seller clears import customs and pays all duties. Delivers to buyer's door.</span>
+              </div>
+            </div>
+
+            <!-- TRANSIT TIMES -->
+            <div class="sec">// TYPICAL TRANSIT TIMES</div>
+            <div style="display:flex;flex-direction:column;gap:3px;font-size:12px">
+              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--muted)">Turkey → UAE</span><span style="color:var(--white)">10–15 days</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--muted)">Egypt → UAE</span><span style="color:var(--white)">5–8 days</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--muted)">China → UAE</span><span style="color:var(--white)">18–25 days</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--muted)">Turkey → Ukraine (land)</span><span style="color:var(--white)">4–7 days</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)">
+                <span style="color:var(--muted)">Poland → Ukraine (land)</span><span style="color:var(--white)">2–4 days</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:4px 0">
+                <span style="color:var(--muted)">KSA → Iraq</span><span style="color:var(--white)">3–6 days</span>
               </div>
             </div>
           </div>
@@ -2306,66 +2491,93 @@
       let negHistory = []; // Claude message history for this negotiation
       const NEG_ID = "NEG-" + String(Math.floor(Math.random() * 900) + 100);
 
-      // ── BUYER PREFERENCES ──────────────────────────────────────────────────────────
-      var prefDeal = "onetime"; // 'onetime' | 'annual' | 'surplus'
-      var prefStance = "price"; // 'price' | 'speed' | 'relation'
+      // ── DEAL WEIGHTS ───────────────────────────────────────────────────────────────
+      function getDealWeights() {
+        return {
+          price:    Math.max(0, parseInt(document.getElementById('w-price').value)   || 0),
+          quality:  Math.max(0, parseInt(document.getElementById('w-quality').value) || 0),
+          delivery: Math.max(0, parseInt(document.getElementById('w-delivery').value)|| 0),
+          payment:  Math.max(0, parseInt(document.getElementById('w-payment').value) || 0),
+        };
+      }
 
-      function selectPref(group, val) {
-        if (group === "deal") {
-          prefDeal = val;
-          ["onetime", "annual", "surplus"].forEach(function (k) {
-            var el = document.getElementById("pref-" + k);
-            if (el) el.classList.toggle("pref-sel", k === val);
-          });
+      function updateWeightSum() {
+        var w = getDealWeights();
+        var sum = w.price + w.quality + w.delivery + w.payment;
+        var el = document.getElementById('weights-sum');
+        el.textContent = sum + '%';
+        if (sum === 100) {
+          el.style.cssText = 'background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)';
+        } else if (sum < 100) {
+          el.style.cssText = 'background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)';
         } else {
-          prefStance = val;
-          ["price", "speed", "relation"].forEach(function (k) {
-            var el = document.getElementById("pref-" + k);
-            if (el) el.classList.toggle("pref-sel", k === val);
-          });
+          el.style.cssText = 'background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)';
         }
       }
 
-      function prefDealLabel() {
-        return {
-          onetime: "One-time spot purchase",
-          annual: "Annual supply contract",
-          surplus: "Surplus / excess stock",
-        }[prefDeal];
+      function getQualityReqs() {
+        var reqs = [];
+        if (document.getElementById('qr-inspection').checked)  reqs.push('pre-shipment inspection (SGS/Bureau Veritas)');
+        if (document.getElementById('qr-coa').checked)         reqs.push('Certificate of Analysis (COA)');
+        if (document.getElementById('qr-defect').checked)      reqs.push('defect liability clause (6 months minimum)');
+        if (document.getElementById('qr-penalty').checked)     reqs.push('late delivery penalty clause');
+        if (document.getElementById('qr-iso').checked)         reqs.push('ISO/CE/EN certification');
+        return reqs;
       }
-      function prefStanceLabel() {
-        return {
-          price: "Best price",
-          speed: "Fast delivery",
-          relation: "Long-term relationship",
-        }[prefStance];
+
+      function calcDealScore(dealPrice, target, max, qualityReqs, brokerMessages) {
+        var w = getDealWeights();
+        var total = w.price + w.quality + w.delivery + w.payment;
+        if (total === 0) total = 100;
+
+        // Price score: 100 if at/below target, 0 if at max, linear between
+        var priceScore = target === max ? 80
+          : Math.round(Math.max(0, Math.min(100, 100 - ((dealPrice - target) / (max - target)) * 100)));
+
+        // Quality score: scan broker messages for quality keywords
+        var allBroker = brokerMessages.join(' ').toLowerCase();
+        var qualityHits = 0;
+        var qualityChecks = ['inspection', 'sgs', 'bureau veritas', 'coa', 'certificate of analysis',
+          'defect', 'liability', 'penalty', 'iso', 'certified', 'quality guarantee'];
+        qualityChecks.forEach(function(kw) { if (allBroker.includes(kw)) qualityHits++; });
+        var qualityScore = qualityReqs.length === 0 ? 100
+          : Math.min(100, Math.round((qualityHits / Math.max(1, Math.min(4, qualityReqs.length))) * 100));
+
+        // Delivery score: did broker confirm delivery timeline?
+        var deliveryScore = (allBroker.includes('deliver') || allBroker.includes('days') || allBroker.includes('week'))
+          ? Math.round(65 + Math.random() * 25) : 50;
+
+        // Payment score: was payment terms mentioned favourably?
+        var paymentScore = (allBroker.includes('lc') || allBroker.includes('letter of credit') || allBroker.includes('payment'))
+          ? Math.round(70 + Math.random() * 20) : 60;
+
+        var weightedScore = Math.round(
+          (priceScore * w.price + qualityScore * w.quality + deliveryScore * w.delivery + paymentScore * w.payment)
+          / total
+        );
+
+        return { overall: weightedScore, price: priceScore, quality: qualityScore, delivery: deliveryScore, payment: paymentScore };
       }
-      function prefDealHint() {
-        if (prefDeal === "annual")
-          return "Buyer is open to a multi-shipment yearly agreement — push for volume discounts and framework pricing.";
-        if (prefDeal === "surplus")
-          return "Buyer is specifically interested in surplus or off-spec inventory — expect significant discount requests; speed is a priority.";
-        return "Single shipment — secure the best unit price for this order.";
-      }
-      function prefStanceHint() {
-        if (prefStance === "speed")
-          return "Delivery timeline is the top priority; buyer may accept a slightly higher price for guaranteed fast delivery.";
-        if (prefStance === "relation")
-          return "Buyer values a reliable long-term supplier relationship — highlight consistency, quality, and after-sales support.";
-        return "Lowest achievable price is the primary goal — hold the line and negotiate hard.";
-      }
+
+      // Legacy stubs (kept so any lingering references don't throw)
+      var prefDeal = "onetime";
+      var prefStance = "price";
+      function prefDealLabel()  { return ''; }
+      function prefStanceLabel(){ return ''; }
+      function prefDealHint()   { return ''; }
+      function prefStanceHint() { return ''; }
+      function selectPref()     {}
 
       // ── BUYER STEERING (mid-nego  tiation) ──────────────────────────────────────────
       var _steerResolve = null;
 
       var STEER_INSTRUCTIONS = {
-        hold: "BUYER INSTRUCTION: Hold firm — do not concede further this round. Reiterate your current offer and emphasize value.",
-        push: "BUYER INSTRUCTION: Push harder — be more assertive and demand a bigger price reduction from the supplier.",
-        annual:
-          "BUYER INSTRUCTION: Pivot strategy — propose a 12-month annual supply framework agreement. Emphasize the volume commitment to justify a better unit price.",
-        surplus:
-          "BUYER INSTRUCTION: Ask directly whether the supplier has surplus, off-spec, or excess inventory for this product available at a steeper discount.",
-        auto: null,
+        hold:    "BUYER INSTRUCTION: Hold firm — do not concede further this round. Reiterate your current offer and emphasize the total deal value, not just price.",
+        push:    "BUYER INSTRUCTION: Push harder — be more assertive and demand a bigger price reduction and better deal terms from the supplier.",
+        annual:  "BUYER INSTRUCTION: Pivot strategy — propose a 12-month annual supply framework agreement. Emphasize the volume commitment to justify a better unit price and stronger quality guarantees.",
+        surplus: "BUYER INSTRUCTION: Ask directly whether the supplier has surplus, off-spec, or excess inventory available at a steeper discount. Clarify quality status.",
+        inspect: "BUYER INSTRUCTION: Insist on a pre-shipment inspection clause (SGS or Bureau Veritas) and a Certificate of Analysis (COA) as non-negotiable deal conditions. State clearly: no inspection, no deal. Offer a small price concession if needed to secure these quality guarantees.",
+        auto:    null,
       };
 
       function waitForBuyerDirection(brokerPrice, unit, round) {
@@ -2391,6 +2603,7 @@
             '<div class="steer-chips">' +
             '<div class="steer-chip" onclick="buyerPick(\'hold\')">🛡️ Hold firm</div>' +
             '<div class="steer-chip" onclick="buyerPick(\'push\')">⚡ Push harder</div>' +
+            '<div class="steer-chip" onclick="buyerPick(\'inspect\')">🔍 Demand inspection clause</div>' +
             '<div class="steer-chip" onclick="buyerPick(\'annual\')">📅 Offer annual deal</div>' +
             '<div class="steer-chip" onclick="buyerPick(\'surplus\')">📉 Ask about surplus</div>' +
             '<div class="steer-chip" onclick="buyerPick(\'auto\')">🤖 Let agent decide</div>' +
@@ -2541,7 +2754,7 @@
         bar.innerHTML = html;
         document.getElementById("rounds-label").textContent =
           round <= max
-            ? "Round " + round + " of " + max + " · Deal Hunter"
+            ? "Round " + round + " of " + max + " · Best Deal Engine"
             : "Complete · " + round + " rounds";
         document.getElementById("round-badge").textContent =
           "● Round " + round + "/" + max;
@@ -2685,39 +2898,21 @@
           "/" +
           unit +
           "</b></div>" +
-          '<div class="mpill">Strategy <b>Deal Hunter</b></div>' +
-          '<div class="mpill">Incoterm <b>' +
-          incoterm +
-          "</b></div>" +
-          '<div class="mpill">Payment <b>' +
-          payment +
-          "</b></div>" +
-          '<div class="mpill">📍 <b>' +
-          location +
-          "</b></div>" +
-          (deadlineStr !== "TBD"
-            ? '<div class="mpill">📅 <b style="color:var(--teal)">' +
-              deadlineStr +
-              "</b></div>"
-            : "") +
-          '<div class="mpill">' +
-          (prefDeal === "annual"
-            ? "📅"
-            : prefDeal === "surplus"
-              ? "📉"
-              : "📦") +
-          ' <b style="color:var(--violet)">' +
-          prefDealLabel() +
-          "</b></div>" +
-          '<div class="mpill">' +
-          (prefStance === "speed"
-            ? "⚡"
-            : prefStance === "relation"
-              ? "🤝"
-              : "💰") +
-          " <b>" +
-          prefStanceLabel() +
-          "</b></div>";
+          '<div class="mpill">Strategy <b>Best Deal Engine</b></div>' +
+          '<div class="mpill">Incoterm <b>' + incoterm + "</b></div>" +
+          '<div class="mpill">Payment <b>' + payment + "</b></div>" +
+          '<div class="mpill">📍 <b>' + location + "</b></div>" +
+          (deadlineStr !== "TBD" ? '<div class="mpill">📅 <b style="color:var(--teal)">' + deadlineStr + "</b></div>" : "") +
+          (function(){
+            var w = getDealWeights();
+            return '<div class="mpill">Weights <b style="color:var(--violet)">💰' + w.price + '% · 🔍' + w.quality + '% · 🚢' + w.delivery + '% · 💳' + w.payment + '%</b></div>';
+          })() +
+          (function(){
+            var qr = getQualityReqs();
+            return qr.length > 0
+              ? '<div class="mpill">QR <b style="color:var(--teal)">' + qr.map(function(r){ return r.split(' ')[0]; }).join(' · ') + '</b></div>'
+              : '';
+          })();
         pillsEl.style.display = "flex";
 
         // Reset panels
@@ -2744,8 +2939,15 @@
             " rounds max",
         );
 
+        // Deal weights and quality requirements
+        const dealW = getDealWeights();
+        const qualityReqs = getQualityReqs();
+        const qualityReqStr = qualityReqs.length > 0
+          ? qualityReqs.map(function(r, i){ return (i+1) + '. ' + r; }).join('\n')
+          : 'None specified';
+
         // System prompt for Claude
-        const agentSystem = `You are SLOI AI's commodity procurement negotiation agent. You negotiate on behalf of the buyer.
+        const agentSystem = `You are SLOI AI's commodity procurement negotiation agent. Your goal is to secure the BEST DEAL — not just the lowest price. A best deal balances price, quality guarantees, delivery reliability, and payment terms according to the buyer's priorities.
 
 MANDATE:
 - Product: ${product}
@@ -2758,23 +2960,25 @@ MANDATE:
 - Incoterm: ${incoterm}
 - Payment terms: ${payment}
 - Trader/Supplier: ${trader}
-- Strategy: Deal Hunter (maximum value extraction)
 
-BUYER PREFERENCES:
-- Purchase intent: ${prefDealLabel()}
-- ${prefDealHint()}
-- Negotiation stance: ${prefStanceLabel()}
-- ${prefStanceHint()}
+DEAL PRIORITY WEIGHTS (sum = 100%):
+- Price: ${dealW.price}%
+- Quality / Inspection: ${dealW.quality}%
+- Delivery speed: ${dealW.delivery}%
+- Payment terms: ${dealW.payment}%
+
+MANDATORY QUALITY REQUIREMENTS (non-negotiable — must be secured):
+${qualityReqStr}
 
 NEGOTIATION RULES:
-1. Start with an opening offer 8-12% below target price
-2. Move toward target price gradually over rounds
-3. Be firm, professional, and cite current market conditions
-4. Reference the delivery location (${location}) and deadline (${deadlineStr}) when relevant to strengthen your position
-5. Always reference the agreed incoterm (${incoterm}) and payment terms (${payment})
-6. If buyer intent is "Annual supply contract", proactively offer to negotiate a framework agreement with volume commitments
-7. If buyer intent is "Surplus / excess stock", aggressively push for discounted pricing and ask about available excess inventory
-8. If trader price is within 2% of the walk-away max, consider accepting
+1. Open 8-12% below target price, but frame the offer holistically — price + quality conditions together
+2. In EVERY message, explicitly require the mandatory quality conditions (inspection, COA, etc.)
+3. Weight your negotiation energy proportionally — if quality weight is high, push hard on inspection clauses; if price weight is high, focus on driving the number down
+4. Do not sacrifice quality requirements for a lower price — the buyer weights Quality at ${dealW.quality}%
+5. Reference delivery location (${location}) and deadline (${deadlineStr}) to create urgency
+6. Always specify incoterm (${incoterm}) and payment terms (${payment})
+7. If trader agrees to quality conditions, acknowledge it and continue on price
+8. If trader price is within 2% of walk-away AND quality conditions are addressed, accept
 9. Always include a specific dollar price per ${unit}
 10. Keep messages concise (3-4 sentences max)
 
@@ -2791,7 +2995,7 @@ Format your price clearly as: $X,XXX/${unit}`;
           : Math.round(max * 1.02);
         const concPct = ap.concession_pct ? ap.concession_pct : 3;
 
-        const brokerSystem = `You are a commodity supplier/trader receiving a procurement inquiry.
+        const brokerSystem = `You are a commodity supplier/trader receiving a procurement inquiry. The buyer is negotiating for the best overall deal — price AND quality conditions.
 
 Product you are selling: ${product}
 Delivery to: ${location}
@@ -2802,13 +3006,19 @@ Your starting asking price: $${brokerAsk}/${unit}
 Your floor price (minimum acceptable): $${brokerFloor}/${unit}
 Max concession per round: ${concPct}%
 
+QUALITY POSITION:
+- You can offer pre-shipment inspection (3rd party, buyer-appointed) — mention this proactively
+- COA is available with every shipment — state this clearly
+- Defect liability: you offer 90-day liability as standard; can extend to 6 months for larger orders
+- You are ISO 9001 certified; CE/EN certification depends on product grade
+
 RULES:
 1. Start at your asking price ($${brokerAsk}/${unit})
 2. Come down by at most ${concPct}% per round
-3. Mention product quality, certifications, and delivery reliability
-4. Reference the delivery location (${location}) and deadline (${deadlineStr}) — highlight if the timeline is tight
+3. Proactively mention quality guarantees, certifications, and inspection availability — these are selling points
+4. Reference delivery timeline to ${location} — confirm you can meet the ${deadlineStr} deadline
 5. Reference incoterm (${incoterm}) and payment terms (${payment}) in your response
-6. Be professional but firm
+6. If buyer presses hard on quality/inspection, agree to it (it differentiates you) and hold firmer on price
 7. If buyer offers within 3% of your floor price ($${brokerFloor}/${unit}), accept the deal
 
 Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your price clearly.`;
@@ -3035,24 +3245,52 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
 
       function showApprovalBox(dealPrice, qty, unit, round) {
         var totalVal = dealPrice * parseInt(qty);
+        var target = parseInt(document.getElementById('m-target').value) || dealPrice;
+        var max    = parseInt(document.getElementById('m-max').value)    || dealPrice;
+        var brokerMsgs = negHistory.filter(function(m){ return m.role === 'user'; }).map(function(m){ return m.content; });
+        var qr = getQualityReqs();
+        var sc = calcDealScore(dealPrice, target, max, qr, brokerMsgs);
+        var overallColor = sc.overall >= 80 ? 'var(--green)' : sc.overall >= 60 ? 'var(--gold)' : 'var(--red)';
+        var overallLabel = sc.overall >= 80 ? 'GREAT DEAL' : sc.overall >= 60 ? 'GOOD DEAL' : 'WEAK DEAL';
+
+        function factorBar(label, score, weight) {
+          var col = score >= 75 ? 'var(--green)' : score >= 50 ? 'var(--gold)' : 'var(--red)';
+          var icon = score >= 75 ? '✓' : score >= 50 ? '⚠' : '✗';
+          return '<div class="factor-row">' +
+            '<span class="factor-name">' + label + '</span>' +
+            '<div class="factor-bar-track"><div class="factor-bar-fill" style="width:' + score + '%;background:' + col + '"></div></div>' +
+            '<span class="factor-score" style="color:' + col + '">' + score + '</span>' +
+            '<span class="factor-icon" style="color:' + col + '">' + icon + '</span>' +
+            '<span style="font-size:10px;color:var(--muted);width:28px;flex-shrink:0">' + weight + '%</span>' +
+          '</div>';
+        }
+
+        var w = getDealWeights();
         document.getElementById("approval-title").textContent =
-          "⚡ Boss approval required — deal reached in " +
-          round +
-          " round" +
-          (round !== 1 ? "s" : "");
+          "⚡ Boss approval required — " + round + " round" + (round !== 1 ? "s" : "");
+
         document.getElementById("approval-grid").innerHTML =
-          '<div class="ag-cell"><div class="ag-label">Agreed price</div><div class="ag-val" style="color:var(--green)">$' +
-          dealPrice.toLocaleString() +
-          "/" +
-          unit +
-          "</div></div>" +
-          '<div class="ag-cell"><div class="ag-label">Total value</div><div class="ag-val">$' +
-          totalVal.toLocaleString() +
-          "</div></div>" +
-          '<div class="ag-cell"><div class="ag-label">LOI fee</div><div class="ag-val" style="color:var(--gold)">$500</div></div>' +
-          '<div class="ag-cell"><div class="ag-label">Credits used</div><div class="ag-val" style="color:var(--teal)">15</div></div>';
-        document.getElementById("approve-btn").textContent =
-          "✅ Approve → Generate LOI";
+          '<div style="display:grid;grid-template-columns:100px 1fr;gap:14px;align-items:start">' +
+            '<div style="text-align:center">' +
+              '<div class="ds-score-num" style="color:' + overallColor + '">' + sc.overall + '</div>' +
+              '<div style="font-size:11px;color:var(--muted)">/100</div>' +
+              '<div class="ds-label" style="color:' + overallColor + '">' + overallLabel + '</div>' +
+              '<div style="margin-top:10px;font-size:11px;color:var(--muted)">$' + dealPrice.toLocaleString() + '/' + unit + '</div>' +
+              '<div style="font-size:11px;color:var(--muted)">$' + totalVal.toLocaleString() + ' total</div>' +
+              '<div style="font-size:11px;color:var(--gold);margin-top:4px">LOI fee $500</div>' +
+            '</div>' +
+            '<div style="padding-top:4px">' +
+              factorBar('💰 Price',    sc.price,    w.price) +
+              factorBar('🔍 Quality',  sc.quality,  w.quality) +
+              factorBar('🚢 Delivery', sc.delivery, w.delivery) +
+              factorBar('💳 Payment',  sc.payment,  w.payment) +
+              (qr.length > 0
+                ? '<div style="margin-top:8px;font-size:11px;color:var(--muted);line-height:1.7">Quality reqs: ' + qr.map(function(r){ return r.split(' ').slice(0,3).join(' '); }).join(' · ') + '</div>'
+                : '') +
+            '</div>' +
+          '</div>';
+
+        document.getElementById("approve-btn").textContent = "✅ Approve → Generate LOI";
         document.getElementById("approve-btn").disabled = false;
         var approvalEl = document.getElementById("approval-section");
         approvalEl.style.display = "block";
@@ -3062,11 +3300,12 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
 
         // Store for approveDeal
         window._pendingDeal = { dealPrice, qty, unit, round };
+        window._lastDealScore = sc;
 
         // Auto-approve countdown
         var secs = 30;
         var msgEl = document.getElementById("auto-msg");
-        msgEl.textContent = "Auto-approving in " + secs + "s…";
+        msgEl.textContent = "Deal Score: " + sc.overall + "/100 · Auto-approving in " + secs + "s…";
         window._autoTimer = setInterval(function () {
           secs--;
           if (secs <= 0) {
@@ -3074,7 +3313,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
             window._autoTimer = null;
             approveDeal();
           } else {
-            msgEl.textContent = "Auto-approving in " + secs + "s…";
+            msgEl.textContent = "Deal Score: " + sc.overall + "/100 · Auto-approving in " + secs + "s…";
           }
         }, 1000);
       }
@@ -3132,6 +3371,10 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
           "&deadline=" +
           encodeURIComponent(deadlineStr);
 
+        var incoterm = document.getElementById("m-incoterm").value || "FOB";
+        var payment = document.getElementById("m-payment").value || "LC 90 days";
+        var trader = document.getElementById("m-trader").value;
+
         document.getElementById("approval-section").style.display = "none";
 
         var loiEl = document.getElementById("loi-section");
@@ -3162,9 +3405,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
           "</div>" +
           '<div class="loi-note">✓ LOI emailed to buyer and trader &nbsp;·&nbsp; ✓ Compliance cleared &nbsp;·&nbsp; ✓ ' +
           negState.round +
-          ' rounds &nbsp;·&nbsp; <a href="' +
-          loiUrl +
-          '" target="_blank" style="color:var(--indigo)">📄 Open LOI Generator →</a></div>';
+          ' rounds &nbsp;·&nbsp; <button class="btn btn-xs" style="background:var(--indigo);color:#fff;padding:3px 10px;font-size:11px" onclick="switchTab(\'lead\',document.querySelector(\'.tab[onclick*=\\\'lead\\\']\'))">📄 Open LOI Generator →</button></div>';
         loiEl.style.display = "block";
 
         completedSessions.push({
@@ -3185,6 +3426,127 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
         document.getElementById("start-btn").disabled = false;
         negState.running = false;
         renderNegSessions();
+
+        prefillFromDeal({
+          loiRef: loiRef,
+          negId: NEG_ID,
+          buyer: buyer,
+          trader: trader,
+          product: product,
+          qty: qty,
+          unit: unit,
+          dealPrice: dealPrice,
+          totalVal: totalVal,
+          incoterm: incoterm,
+          payment: payment,
+          location: location,
+          deadlineStr: deadlineStr,
+          qualityReqs: getQualityReqs(),
+          round: negState.round
+        });
+      }
+
+      var TRADER_DISPLAY = {
+        'BRK-UAE-001': 'Gulf Trade Brokers LLC (Dubai)',
+        'BRK-EUR-001': 'Euro Commodities B.V. (Amsterdam)',
+        'BRK-ASIA-001': 'Pacific Trade Partners (Singapore)'
+      };
+
+      function prefillFromDeal(deal) {
+        var traderName = TRADER_DISPLAY[deal.trader] || deal.trader;
+
+        function setVal(id, val) {
+          var el = document.getElementById(id);
+          if (el && val !== undefined && val !== null && val !== '') el.value = val;
+        }
+        function setSelect(id, val) {
+          var el = document.getElementById(id);
+          if (!el) return;
+          for (var i = 0; i < el.options.length; i++) {
+            if (el.options[i].value === val || el.options[i].text === val) {
+              el.selectedIndex = i;
+              return;
+            }
+          }
+        }
+
+        // LOI Generator fields
+        setVal('loi-ref', deal.loiRef.replace('SL-', ''));
+        setVal('loi-neg-id', deal.negId);
+        setVal('loi-buyer', deal.buyer);
+        setVal('loi-seller', traderName);
+        setVal('loi-product', deal.product);
+        setVal('loi-qty', deal.qty);
+        setVal('loi-price', deal.dealPrice);
+        setVal('loi-pod', deal.location);
+        setVal('loi-delivery', deal.deadlineStr !== 'TBD'
+          ? '45–60 days · Deadline: ' + deal.deadlineStr
+          : '45–60 days from LOI date');
+        setSelect('loi-unit', deal.unit);
+        setSelect('loi-incoterm', deal.incoterm);
+        setSelect('loi-payment', deal.payment);
+        if (deal.qualityReqs && deal.qualityReqs.length > 0) {
+          setVal('loi-remarks', 'Quality conditions agreed: ' + deal.qualityReqs.join('; ') + '.');
+        }
+
+        // PO Generator fields
+        var poNum = 'PO-' + deal.loiRef.replace('SL-LOI-', '');
+        setVal('po-num', poNum);
+        setVal('po-buyer-co', deal.buyer);
+        setVal('po-delivery-addr', deal.location);
+        setVal('po-supplier', traderName);
+        setSelect('po-incoterm', deal.incoterm);
+        setSelect('po-payment', deal.payment);
+
+        // Add LOI to PO source dropdown and select it
+        var poLoiSel = document.getElementById('po-loi');
+        if (poLoiSel) {
+          var exists = false;
+          for (var i = 0; i < poLoiSel.options.length; i++) {
+            if (poLoiSel.options[i].value === deal.loiRef) { exists = true; break; }
+          }
+          if (!exists) {
+            var opt = document.createElement('option');
+            opt.value = deal.loiRef;
+            opt.textContent = deal.loiRef + ' · ' + deal.product + ' · $' + deal.totalVal.toLocaleString();
+            poLoiSel.appendChild(opt);
+          }
+          poLoiSel.value = deal.loiRef;
+        }
+
+        // Fill first PO line item
+        var firstLine = document.querySelector('#po-lines .po-line');
+        if (firstLine) {
+          var inputs = firstLine.querySelectorAll('input');
+          if (inputs[0]) inputs[0].value = deal.product;
+          if (inputs[1]) inputs[1].value = deal.qty;
+          if (inputs[2]) inputs[2].value = deal.unit;
+          if (inputs[3]) inputs[3].value = deal.dealPrice;
+        }
+
+        // Add to LOI history sidebar
+        var histEl = document.getElementById('loi-history');
+        if (histEl) {
+          var card = document.createElement('div');
+          card.style.cssText = 'background:var(--surface2);border:1px solid rgba(34,197,94,.3);border-radius:5px;padding:10px;font-size:12px;border-left:3px solid var(--green)';
+          card.innerHTML =
+            '<div style="display:flex;justify-content:space-between;margin-bottom:3px">' +
+            '<span style="color:var(--white);font-weight:700">' + deal.loiRef + '</span>' +
+            '<span class="badge bg" style="font-size:10px">NEW</span></div>' +
+            '<div style="color:var(--muted)">' + deal.product + ' · ' + deal.qty + ' ' + deal.unit + '</div>' +
+            '<div style="color:var(--teal);font-weight:700;margin-top:3px">$' + deal.dealPrice.toLocaleString() + '/' + deal.unit + ' · $' + deal.totalVal.toLocaleString() + '</div>' +
+            '<div style="color:var(--muted);margin-top:4px">' + deal.buyer + ' ↔ ' + traderName.split(' (')[0] + '</div>' +
+            '<button class="btn btn-xs btn-sm" style="margin-top:6px" onclick="switchTab(\'lead\',document.querySelector(\'.tab[onclick*=\\\'lead\\\']\'))">Open in LOI Gen →</button>';
+          histEl.insertBefore(card, histEl.firstChild);
+        }
+
+        // Badge the tabs
+        var tcLead = document.getElementById('tc-lead');
+        var tcPrice = document.getElementById('tc-price');
+        if (tcLead) { tcLead.textContent = '● filled'; tcLead.style.color = 'var(--green)'; }
+        if (tcPrice) { tcPrice.textContent = '● filled'; tcPrice.style.color = 'var(--green)'; }
+
+        showToast('Deal data synced → LOI Generator + PO Generator pre-filled', 'green');
       }
 
       function rejectDeal() {
@@ -3846,45 +4208,260 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         document.getElementById("tpl-preview").textContent = TEMPLATES[k];
       }
 
-      function addToOutreach() {
-        var name = prompt("Lead name or company:");
-        if (!name) return;
-        var tg = prompt("WhatsApp number (optional):") || "";
-        OUTREACH_DATA.unshift({
-          name: name.trim(),
-          handle: tg.trim(),
-          status: "queued",
-          sent: 0,
-        });
-        renderOutreach();
-        showToast("✓ " + name + " added to outreach queue", "green");
+      // ── LOI GENERATOR ─────────────────────────────────────────────────────────
+      function generateLOI() {
+        var ref     = document.getElementById('loi-ref').value.trim()      || 'LOI-2026-001';
+        var buyer   = document.getElementById('loi-buyer').value.trim()    || '';
+        var seller  = document.getElementById('loi-seller').value.trim()   || '';
+        var product = document.getElementById('loi-product').value.trim()  || '';
+        var qty     = document.getElementById('loi-qty').value.trim()      || '';
+        var unit    = document.getElementById('loi-unit').value;
+        var price   = document.getElementById('loi-price').value.trim()    || '';
+        var inco    = document.getElementById('loi-incoterm').value;
+        var pay     = document.getElementById('loi-payment').value;
+        var pol     = document.getElementById('loi-pol').value.trim()      || '';
+        var pod     = document.getElementById('loi-pod').value.trim()      || '';
+        var del     = document.getElementById('loi-delivery').value.trim() || '';
+        var valid   = document.getElementById('loi-validity').value        || '';
+        var rem     = document.getElementById('loi-remarks').value.trim()  || '';
+
+        // Save to localStorage so sidebars stay in sync
+        try {
+          var entry = {
+            ref: ref, date: new Date().toISOString().slice(0,10),
+            product: product||'—', buyer: buyer||'—', seller: seller||'—',
+            qty: parseFloat(qty)||0, unit: unit, price: parseFloat(price)||0,
+            total: (parseFloat(qty)||0) * (parseFloat(price)||0),
+            incoterm: inco, payment: pay, pol: pol, pod: pod,
+            delivery: del, validity: valid, remarks: rem, status: 'draft',
+            created_at: new Date().toISOString()
+          };
+          var lois = [];
+          try { lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]'); } catch(e) {}
+          var idx = lois.findIndex(function(x){ return x.ref === ref; });
+          if (idx >= 0) lois[idx] = entry; else lois.unshift(entry);
+          localStorage.setItem('sloi_lois', JSON.stringify(lois));
+        } catch(e) {}
+
+        // Build URL params — loi-generator.html reads all of these
+        var p = new URLSearchParams();
+        if (ref)     p.set('ref',          ref);
+        if (buyer)   p.set('buyer',        buyer);
+        if (seller)  p.set('supplier',     seller);
+        if (product) p.set('product',      product);
+        if (qty)     p.set('qty',          qty);
+        if (unit)    p.set('unit',         unit);
+        if (price)   p.set('price',        price);
+        if (inco)    p.set('incoterm',     inco);
+        if (pay)     p.set('payment',      pay);
+        if (pol)     p.set('port_loading', pol);
+        if (pod)     p.set('port_dest',    pod);
+        if (valid)   p.set('validity',     valid);
+        if (del)     p.set('deadline',     del);
+
+        document.getElementById('tc-lead').textContent = 'opening…';
+        window.open('loi-generator.html?' + p.toString(), '_blank');
+        showToast('✓ Opening LOI Generator →', 'green');
       }
 
-      function resumeOutreachBot(btn) {
-        var orig = btn.textContent;
-        btn.textContent = "⏳ Starting…";
-        btn.disabled = true;
-        var api = window._sloiAPI;
-        var doResume = api
-          ? api.req("POST", "/agents/outreachbot/resume")
-          : Promise.reject("no_api");
-        doResume
-          .then(function () {
-            showToast("✓ OutreachBot resumed", "green");
-            btn.textContent = "⏸ Pause";
-            btn.disabled = false;
-            btn.onclick = function () {
-              pauseOutreachBot(btn);
-            };
-          })
-          .catch(function () {
-            showToast(
-              "OutreachBot requires WhatsApp Business API — see docs.html",
-              "gold",
-            );
-            btn.textContent = orig;
-            btn.disabled = false;
-          });
+      function copyLOI() {
+        var ref     = document.getElementById('loi-ref').value.trim()     || '—';
+        var buyer   = document.getElementById('loi-buyer').value.trim()   || '—';
+        var seller  = document.getElementById('loi-seller').value.trim()  || '—';
+        var product = document.getElementById('loi-product').value.trim() || '—';
+        var qty     = document.getElementById('loi-qty').value.trim()     || '—';
+        var unit    = document.getElementById('loi-unit').value;
+        var price   = document.getElementById('loi-price').value.trim()   || '—';
+        var inco    = document.getElementById('loi-incoterm').value;
+        var total   = (parseFloat(qty)||0) * (parseFloat(price)||0);
+        var text = 'LOI DRAFT — ' + ref + '\nBuyer: ' + buyer + '\nSeller: ' + seller + '\nProduct: ' + product + '  Qty: ' + qty + ' ' + unit + '  Price: $' + price + '/unit\nTotal: $' + total.toLocaleString() + '\nIncoterm: ' + inco;
+        navigator.clipboard.writeText(text).then(function() { showToast('✓ LOI summary copied', 'green'); });
+      }
+
+      function downloadLOI() {
+        generateLOI();
+      }
+
+      function loadLOI(ref) {
+        // Try to load from localStorage first
+        try {
+          var lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]');
+          var entry = lois.find(function(x){ return x.ref === ref; });
+          if (entry) {
+            function sv(id, val) { var el=document.getElementById(id); if(el && val) el.value=val; }
+            function ss(id, val) {
+              var el=document.getElementById(id); if(!el) return;
+              for(var i=0;i<el.options.length;i++) { if(el.options[i].value===val||el.options[i].text===val){el.selectedIndex=i;return;} }
+            }
+            sv('loi-ref', entry.ref); sv('loi-buyer', entry.buyer); sv('loi-seller', entry.seller);
+            sv('loi-product', entry.product); sv('loi-qty', entry.qty || ''); sv('loi-price', entry.price || '');
+            sv('loi-pol', entry.pol); sv('loi-pod', entry.pod); sv('loi-delivery', entry.delivery);
+            sv('loi-validity', entry.validity); sv('loi-remarks', entry.remarks);
+            ss('loi-unit', entry.unit); ss('loi-incoterm', entry.incoterm); ss('loi-payment', entry.payment);
+            showToast('✓ Loaded ' + ref, 'violet');
+            return;
+          }
+        } catch(e) {}
+        document.getElementById('loi-ref').value = ref;
+        showToast('Loaded ' + ref + ' — fill in any missing fields', 'violet');
+      }
+
+      // ── PO GENERATOR ──────────────────────────────────────────────────────────
+      function prefillFromLOI() {
+        var loi = document.getElementById('po-loi').value;
+        if (!loi) return;
+        // Pull matching data from the LOI panel fields
+        var product  = (document.getElementById('loi-product') || {}).value || '';
+        var qty      = (document.getElementById('loi-qty')     || {}).value || '';
+        var price    = (document.getElementById('loi-price')   || {}).value || '';
+        var buyer    = (document.getElementById('loi-buyer')   || {}).value || '';
+        var seller   = (document.getElementById('loi-seller')  || {}).value || '';
+        var incoterm = (document.getElementById('loi-incoterm')|| {}).value || '';
+        var payment  = (document.getElementById('loi-payment') || {}).value || '';
+        var unit     = (document.getElementById('loi-unit')    || {}).value || 'MT';
+        var pol      = (document.getElementById('loi-pol')     || {}).value || '';
+        var pod      = (document.getElementById('loi-pod')     || {}).value || '';
+
+        var lineInputs = document.querySelectorAll('#po-lines .po-line input');
+        if (lineInputs[0] && product)  lineInputs[0].value = product;
+        if (lineInputs[1] && qty)      lineInputs[1].value = qty;
+        if (lineInputs[2] && unit)     lineInputs[2].value = unit;
+        if (lineInputs[3] && price)    lineInputs[3].value = price;
+        if (buyer)   document.getElementById('po-buyer-co').value  = buyer;
+        if (seller)  document.getElementById('po-supplier').value  = seller;
+        if (pol || pod) {
+          var notes = document.getElementById('po-notes');
+          if (notes && !notes.value) notes.value = (pol ? 'Port of loading: ' + pol + '\n' : '') + (pod ? 'Port of destination: ' + pod : '');
+        }
+        var iSel = document.getElementById('po-incoterm');
+        if (iSel && incoterm) {
+          for (var i = 0; i < iSel.options.length; i++) {
+            if (iSel.options[i].value === incoterm) { iSel.selectedIndex = i; break; }
+          }
+        }
+        var pSel = document.getElementById('po-payment');
+        if (pSel && payment) {
+          for (var j = 0; j < pSel.options.length; j++) {
+            if (pSel.options[j].value === payment) { pSel.selectedIndex = j; break; }
+          }
+        }
+        showToast('✓ Pre-filled from ' + loi, 'violet');
+      }
+
+      function addPOLine() {
+        var lines = document.getElementById('po-lines');
+        var div = document.createElement('div');
+        div.className = 'po-line';
+        div.style.cssText = 'display:grid;grid-template-columns:3fr 1fr 1fr 1fr;gap:6px;align-items:end';
+        div.innerHTML = '<div><label class="flabel">Description</label><input class="inp" placeholder="Product / service description" style="font-size:12px"/></div>' +
+          '<div><label class="flabel">Qty</label><input class="inp" type="number" placeholder="0" style="font-size:12px"/></div>' +
+          '<div><label class="flabel">Unit</label><input class="inp" placeholder="MT" style="font-size:12px"/></div>' +
+          '<div><label class="flabel">Unit price ($)</label><input class="inp" type="number" placeholder="0" style="font-size:12px"/></div>';
+        lines.appendChild(div);
+      }
+
+      function generatePO() {
+        var loi      = document.getElementById('po-loi').value.trim();
+        var buyerCo  = document.getElementById('po-buyer-co').value.trim();
+        var supplier = document.getElementById('po-supplier').value.trim();
+        var inco     = document.getElementById('po-incoterm').value;
+        var pay      = document.getElementById('po-payment').value;
+        var addr     = document.getElementById('po-delivery-addr').value.trim();
+        var notes    = document.getElementById('po-notes').value.trim();
+
+        // Collect first line item for URL params
+        var lineInputs = document.querySelectorAll('#po-lines .po-line input');
+        var product = lineInputs[0] ? lineInputs[0].value.trim() : '';
+        var qty     = lineInputs[1] ? lineInputs[1].value.trim() : '';
+        var unit    = lineInputs[2] ? lineInputs[2].value.trim() : '';
+        var price   = lineInputs[3] ? lineInputs[3].value.trim() : '';
+
+        // Build URL params — po-generator.html reads all of these
+        var p = new URLSearchParams();
+        if (product)  p.set('product',  product);
+        if (qty)      p.set('qty',      qty);
+        if (price)    p.set('price',    price);
+        if (buyerCo)  p.set('buyer',   buyerCo);
+        if (supplier) p.set('supplier', supplier);
+        if (inco)     p.set('incoterm', inco);
+        if (pay)      p.set('payterms', pay);
+        if (addr)     p.set('shipto',   addr);
+        if (loi)      p.set('ref',      loi);
+        if (notes)    p.set('notes',    notes);
+
+        // Save draft to localStorage so admin panel can list it
+        try {
+          var draft = {
+            po_num: 'PO-DRAFT-' + Date.now(),
+            date: new Date().toISOString().slice(0,10),
+            product: product || '—', buyer: buyerCo || '—', supplier: supplier || '—',
+            currency: 'USD', incoterm: inco,
+            total: (parseFloat(qty)||0) * (parseFloat(price)||0),
+            status: 'draft', loi_ref: loi, created_at: new Date().toISOString()
+          };
+          var pos = [];
+          try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+          pos.unshift(draft);
+          localStorage.setItem('sloi_pos', JSON.stringify(pos));
+        } catch(e) {}
+
+        document.getElementById('tc-price').textContent = 'opening…';
+        window.open('po-generator.html?' + p.toString(), '_blank');
+        showToast('✓ Opening PO Generator →', 'green');
+      }
+
+      function copyPO() {
+        // Build a quick text summary to copy while full PO is in po-generator.html
+        var loi     = document.getElementById('po-loi').value.trim();
+        var buyer   = document.getElementById('po-buyer-co').value.trim() || '[Buyer]';
+        var supplier= document.getElementById('po-supplier').value.trim() || '[Supplier]';
+        var inco    = document.getElementById('po-incoterm').value;
+        var lineInputs = document.querySelectorAll('#po-lines .po-line input');
+        var product = lineInputs[0] ? lineInputs[0].value.trim() : '';
+        var qty     = lineInputs[1] ? lineInputs[1].value.trim() : '';
+        var price   = lineInputs[3] ? lineInputs[3].value.trim() : '';
+        var total   = (parseFloat(qty)||0) * (parseFloat(price)||0);
+        var text = 'PO DRAFT\nBuyer: ' + buyer + '\nSupplier: ' + supplier + (loi ? '\nRef LOI: ' + loi : '') + '\nProduct: ' + (product||'—') + '  Qty: ' + (qty||'—') + '  Price: $' + (price||'—') + '/unit\nGrand Total: $' + total.toLocaleString() + '\nIncoterm: ' + inco;
+        navigator.clipboard.writeText(text).then(function() { showToast('✓ PO summary copied', 'green'); });
+      }
+
+      function downloadPO() {
+        generatePO();
+      }
+
+      // ── CUSTOMS & LOGISTICS ───────────────────────────────────────────────────
+      function loadShipmentDocs() {
+        var ref = document.getElementById('customs-shipment').value;
+        document.getElementById('cs-ref').textContent = ref;
+        showToast('Loaded shipment ' + ref, 'teal');
+      }
+
+      function newShipment() {
+        var ref = prompt('Enter LOI / shipment reference:');
+        if (!ref) return;
+        var sel = document.getElementById('customs-shipment');
+        var opt = document.createElement('option');
+        opt.value = ref; opt.textContent = ref;
+        sel.appendChild(opt);
+        sel.value = ref;
+        document.getElementById('cs-ref').textContent = ref;
+        document.getElementById('cs-route').textContent = '— / —';
+        document.getElementById('cs-eta').textContent = '—';
+        document.getElementById('cs-status').textContent = 'NEW';
+        document.querySelectorAll('#doc-checklist input[type=checkbox]').forEach(function(cb) { cb.checked = false; });
+        updateDocStatus();
+        showToast('✓ Shipment ' + ref + ' created', 'green');
+      }
+
+      function updateDocStatus() {
+        var cbs = document.querySelectorAll('#doc-checklist input[type=checkbox]');
+        var done = 0;
+        cbs.forEach(function(cb) { if (cb.checked) done++; });
+        document.getElementById('docs-progress').textContent = done + ' / ' + cbs.length + ' documents complete';
+      }
+
+      function lookupHS() {
+        showToast('HS lookup — type a product and press Look up (demo shows preset results)', 'violet');
       }
 
       function pauseOutreachBot(btn) {
@@ -4071,12 +4648,9 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         const btn = document.getElementById("run-all-btn");
         btn.disabled = true;
         btn.innerHTML = '<div class="spinner"></div> Running...';
-        document.getElementById("agent-status").textContent =
-          "All agents starting...";
-
-        await runLeadFinder();
-        await runPriceScout();
-
+        document.getElementById("agent-status").textContent = "Agents starting…";
+        showToast("All agents started — Negotiation · LOI · PO · Compliance active", "indigo");
+        await new Promise(function(r){ setTimeout(r, 1200); });
         btn.disabled = false;
         btn.innerHTML = "▶ Run all";
         document.getElementById("agent-status").textContent = "4 agents active";
@@ -4203,8 +4777,18 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
       };
 
       // ── INIT ──────────────────────────────────────────────────────────────────────
+      (function setDefaultDates() {
+        var d = new Date();
+        d.setDate(d.getDate() + 14);
+        var iso = d.toISOString().split('T')[0];
+        var loiV = document.getElementById('loi-validity');
+        var poDate = document.getElementById('po-date');
+        var poVal  = document.getElementById('po-validity');
+        if (loiV) loiV.value = iso;
+        if (poDate) { var t = new Date(); poDate.value = t.toISOString().split('T')[0]; }
+        if (poVal) poVal.value = iso;
+      })();
       renderNegSessions();
-      renderOutreach();
       renderCompLog();
       routeHash();
 
@@ -4576,6 +5160,73 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         }
       }
 
+      function initDynamicData() {
+        // ── LOI history sidebar ─────────────────────────────────────────────────
+        try {
+          var lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]');
+          var histEl = document.getElementById('loi-history');
+          if (histEl && lois.length > 0) {
+            var frag = '';
+            lois.slice(0, 8).forEach(function(l) {
+              var statusClass = l.status === 'signed' ? 'bg' : (l.status === 'pending-seller' ? 'ba' : 'bv');
+              var statusLabel = l.status === 'signed' ? 'SIGNED' : (l.status === 'pending-seller' ? 'PENDING' : 'DRAFT');
+              frag +=
+                '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">' +
+                '<div style="display:flex;justify-content:space-between;margin-bottom:3px">' +
+                '<span style="color:var(--white);font-weight:700">' + l.ref + '</span>' +
+                '<span class="badge ' + statusClass + '" style="font-size:10px">' + statusLabel + '</span></div>' +
+                '<div style="color:var(--muted)">' + l.product + ' · ' + (l.qty||'—') + ' ' + l.unit + '</div>' +
+                '<div style="color:var(--teal);font-weight:700;margin-top:3px">$' + (l.price||0).toLocaleString() + '/' + l.unit + ' · $' + (l.total||0).toLocaleString() + '</div>' +
+                '<div style="color:var(--muted);margin-top:4px">' + l.buyer + ' ↔ ' + (l.seller||'—') + '</div>' +
+                '<button class="btn btn-xs btn-sm" style="margin-top:6px" onclick="loadLOI(\'' + l.ref + '\')">Load →</button></div>';
+            });
+            histEl.innerHTML = frag + histEl.innerHTML;
+          }
+        } catch(e) {}
+
+        // ── PO history sidebar ──────────────────────────────────────────────────
+        try {
+          var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
+          var poHist = document.getElementById('po-history');
+          if (poHist && pos.length > 0) {
+            var poFrag = '';
+            pos.slice(0, 6).forEach(function(po) {
+              var statusClass = po.status === 'signed' ? 'bg' : (po.status === 'pending-seller' ? 'ba' : (po.status === 'draft' ? 'bv' : 'bt'));
+              var statusLabel = (po.status || 'DRAFT').toUpperCase().replace('-', ' ');
+              poFrag +=
+                '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">' +
+                '<div style="display:flex;justify-content:space-between;margin-bottom:3px">' +
+                '<span style="color:var(--white);font-weight:700">' + po.po_num + '</span>' +
+                '<span class="badge ' + statusClass + '" style="font-size:10px">' + statusLabel + '</span></div>' +
+                '<div style="color:var(--muted)">' + po.product + '</div>' +
+                '<div style="color:var(--teal);font-weight:700;margin-top:3px">$' + (po.total||0).toLocaleString() + '</div>' +
+                '<div style="color:var(--muted);margin-top:2px">Supplier: ' + (po.supplier||'—') + '</div></div>';
+            });
+            poHist.innerHTML = poFrag;
+          }
+        } catch(e) {}
+
+        // ── Source LOI dropdown ─────────────────────────────────────────────────
+        try {
+          var lois2 = JSON.parse(localStorage.getItem('sloi_lois') || '[]');
+          var poLoi = document.getElementById('po-loi');
+          if (poLoi && lois2.length > 0) {
+            lois2.forEach(function(l) {
+              var exists = false;
+              for (var i = 0; i < poLoi.options.length; i++) {
+                if (poLoi.options[i].value === l.ref) { exists = true; break; }
+              }
+              if (!exists) {
+                var opt = document.createElement('option');
+                opt.value = l.ref;
+                opt.textContent = l.ref + ' · ' + l.product + ' · $' + (l.total||0).toLocaleString();
+                poLoi.appendChild(opt);
+              }
+            });
+          }
+        } catch(e) {}
+      }
+
       (async function () {
         const sel = document.getElementById("m-product");
         try {
@@ -4592,6 +5243,7 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
           buildProductDropdown(sel, null);
         }
         loadMandateFromStorage();
+        initDynamicData();
       })();
 
       function loadMandateFromStorage() {

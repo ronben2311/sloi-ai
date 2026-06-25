@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
-<title>SLOI AI — Procurement automation · LOI generation</title>
-<meta name="description" content="AI-powered commodity procurement automation. Your sourcing engine negotiates with pre-qualified suppliers within your mandate. You approve. LOI generated instantly."/>
+<title>SLOI AI — The Sourcing LOI Engine</title>
+<meta name="description" content="The Sourcing LOI Engine. Set your mandate. Our AI negotiates with pre-qualified, OFAC-screened suppliers across MENA and Ukraine. You approve. Signed LOI in 72 hours — $500 flat."/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{
@@ -84,29 +84,6 @@ h1 em{font-style:italic;
 /* ── DIVIDER ── */
 .sec-divider{position:relative;z-index:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 40px}
 
-/* ── LOI PREVIEW ── */
-.loi-preview-wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 32px 88px}
-.loi-preview-label{text-align:center;font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:14px;justify-content:center}
-.loi-preview-label::before,.loi-preview-label::after{content:'';flex:1;height:1px;background:var(--border)}
-.loi-doc{border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px rgba(91,95,239,.15),0 40px 100px rgba(0,0,0,.8),0 0 80px rgba(91,95,239,.07);font-family:'IBM Plex Mono',monospace}
-.ld-header{background:linear-gradient(135deg,#14142a 0%,#1a1a35 100%);padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(91,95,239,.2)}
-.ld-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:#fff;letter-spacing:-.02em}
-.ld-logo em{font-style:italic;color:#7b7ff8}
-.ld-ref{font-size:12px;color:#7b7ff8;font-family:'IBM Plex Mono',monospace}
-.ld-title{background:#f9f8ff;border-bottom:2px solid #e8e6f8;padding:13px 32px;text-align:center}
-.ld-title-text{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:#1a1a35}
-.ld-body{padding:26px 32px;background:#fff;display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.ld-field{font-size:13px}
-.ld-flabel{font-size:11px;color:#6b6b8a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
-.ld-fval{font-size:15px;font-weight:700;color:#1a1a35}
-.ld-total{grid-column:1/-1;background:linear-gradient(135deg,#1a1a35,#252550);border-radius:6px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
-.ld-total-label{font-size:13px;color:rgba(255,255,255,.55)}
-.ld-total-val{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:#fff}
-.ld-footer{background:#f3f1ff;padding:11px 32px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e2e0f4}
-.ldf-logo{font-family:'Fraunces',serif;font-size:13px;color:#6b6b8a;font-weight:700}
-.ldf-logo em{font-style:italic;color:#5b5fef}
-.ldf-note{font-size:11px;color:#8b8ff8}
-
 /* ── HOW IT WORKS - STEPS ── */
 .steps-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;margin-bottom:56px}
 .steps-connector{position:absolute;top:27px;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,var(--border2) 20%,var(--border2) 80%,transparent);z-index:0}
@@ -117,25 +94,6 @@ h1 em{font-style:italic;
 .step-label{font-size:14px;font-weight:600;color:var(--white);margin-bottom:6px}
 .step-desc{font-size:12px;color:var(--muted);line-height:1.65}
 .step-tag{font-size:11px;color:var(--teal);margin-top:6px;font-weight:600;letter-spacing:.04em}
-
-/* ── NEGOTIATION DEMO ── */
-.neg-demo{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;max-width:740px;margin:0 auto;box-shadow:0 24px 64px rgba(0,0,0,.5)}
-.nd-header{background:var(--surface2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
-.nd-title{font-size:13px;font-weight:600;color:var(--white)}
-.nd-status{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--green)}
-.nd-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
-.nd-chat{padding:20px;display:flex;flex-direction:column;gap:11px}
-.msg{max-width:76%;padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.7}
-.msg-agent{background:var(--indigo-dim);border:1px solid rgba(91,95,239,.22);align-self:flex-start}
-.msg-trader{background:rgba(232,169,74,.07);border:1px solid rgba(232,169,74,.2);align-self:flex-end}
-.msg-system{background:var(--surface2);border:1px solid var(--border);align-self:center;font-size:12px;color:var(--muted);text-align:center;max-width:95%;border-radius:5px;padding:6px 14px}
-.msg-loi{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.22);align-self:center;font-size:12px;text-align:center;max-width:95%;border-radius:6px;padding:12px 20px}
-.msg-label{font-size:11px;font-weight:700;margin-bottom:4px;letter-spacing:.05em}
-.msg-price{font-family:'Fraunces',serif;font-size:17px;font-weight:700;margin-top:4px}
-.nd-footer{background:var(--surface2);border-top:1px solid var(--border);padding:13px 20px;display:flex;align-items:center;justify-content:space-between}
-.nd-rounds{display:flex;gap:5px}
-.nd-rb{height:5px;width:38px;border-radius:3px}
-.rb-done{background:var(--green)}.rb-active{background:var(--indigo)}.rb-empty{background:var(--border2)}
 
 /* ── PERSONAS ── */
 .personas{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
@@ -176,16 +134,14 @@ h1 em{font-style:italic;
 .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
 .price-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;transition:all .2s;cursor:pointer;position:relative}
 .price-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
-.price-card.pop{background:linear-gradient(160deg,rgba(91,95,239,.08),rgba(139,143,248,.04));border:none;padding:2px}
-.pop-inner{background:var(--surface);border-radius:7px;padding:20px;height:100%}
 .pop-wrap{position:relative}
 .pop-wrap::before{content:'';position:absolute;inset:0;border-radius:8px;padding:1px;background:linear-gradient(135deg,var(--indigo),var(--violet),#a78bfa);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.pop-inner{background:var(--surface);border-radius:7px;padding:20px;height:100%}
 .price-pop-label{font-size:11px;color:var(--violet);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:5px}
 .price-pop-label::before{content:'★';font-size:10px}
 .price-amount{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white);letter-spacing:-.02em;line-height:1}
 .price-credits{font-size:13px;color:var(--teal);font-weight:600;margin:7px 0 4px}
 .price-rate{font-size:12px;color:var(--muted)}
-.price-usdc{font-size:12px;color:#4c82fb;margin-top:7px;font-weight:600}
 
 /* ── CTA ── */
 .cta-section{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:80px 32px}
@@ -199,15 +155,6 @@ h1 em{font-style:italic;
 .email-inp:focus{border-color:rgba(91,95,239,.5)}
 .email-inp::placeholder{color:var(--muted)}
 .email-sub-note{font-size:12px;color:var(--muted)}
-
-/* ── TERMINAL ── */
-.terminal{background:var(--surface);border:1px solid rgba(91,95,239,.2);border-radius:12px;overflow:hidden;box-shadow:0 0 60px rgba(91,95,239,.07)}
-.term-bar{padding:10px 16px;background:var(--surface2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.term-dots{display:flex;gap:5px}
-.term-dot{width:10px;height:10px;border-radius:50%}
-.term-body{padding:22px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:2.1;color:var(--text)}
-.term-comment{color:var(--muted);font-size:12.5px}
-.term-foot{padding:10px 20px;background:var(--surface2);border-top:1px solid var(--border);font-size:12px;color:var(--muted);display:flex;justify-content:space-between}
 
 /* ── FOOTER ── */
 footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
@@ -223,7 +170,6 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 .social-icon svg{width:15px;height:15px;fill:currentColor;flex-shrink:0}
 .social-icon:hover{transform:translateY(-1px)}
 .si-li:hover{border-color:rgba(10,102,194,.5);color:#0a66c2}
-.si-tg:hover{border-color:rgba(38,161,215,.5);color:#26a1d7}
 .si-wa:hover{border-color:rgba(37,211,102,.5);color:#25d366}
 
 /* ── BADGES ── */
@@ -241,17 +187,14 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   nav{
     padding-left:16px;
     padding-right:16px;
-    /* push nav content below the device status bar */
     padding-top:env(safe-area-inset-top,0px);
     height:calc(72px + env(safe-area-inset-top,0px));
-    /* remove backdrop-filter on mobile — known to cause sticky issues on Android */
     -webkit-backdrop-filter:none;
     backdrop-filter:none;
     background:rgba(6,6,14,.97);
   }
   .hero{padding:52px 16px 44px}
   .section{padding:48px 16px}
-  .loi-preview-wrap{padding:0 16px 48px}
   .sec-divider{margin:0 16px}
   .steps-grid{grid-template-columns:1fr 1fr;gap:24px}.steps-connector{display:none}
   .personas{grid-template-columns:1fr 1fr}
@@ -260,17 +203,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   .sectors-grid{grid-template-columns:1fr 1fr!important;}
   .nav-links{display:none}
   .btn-cta-nav{padding:6px 12px;font-size:12px}
-  .ld-body{grid-template-columns:1fr}
-  .ld-header{padding:16px 18px}
-  .ld-body{padding:18px}
-  .ld-footer{padding:10px 18px;flex-direction:column;gap:4px}
   .hero-stats{grid-template-columns:1fr 1fr}
   .hero-badge{font-size:11px;padding:5px 12px}
-  .agent-economy-grid{grid-template-columns:1fr!important;gap:32px!important}
   .email-row{flex-direction:column}
   footer{padding:20px 16px}
   .footer-links{gap:12px}
-  /* safe area bottom padding for footer */
   footer{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 }
 </style>
@@ -302,182 +239,62 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <!-- TICKER -->
 <div class="ticker-wrap">
   <div class="ticker-track">
-    <div class="ticker-item">🔩 <b>Steel Rebar G60</b> $2,840/MT <span class="ticker-up price-up">↑ 2.3%</span></div>
-    <div class="ticker-item">🌾 <b>Hard Wheat</b> $1,120/MT <span class="ticker-down price-down">↓ 0.8%</span></div>
-    <div class="ticker-item">🔩 <b>Aluminum 6061</b> $9,200/MT <span class="ticker-down price-down">↓ 1.9%</span></div>
-    <div class="ticker-item">🏗️ <b>Cement OPC</b> $63/MT <span class="ticker-up price-up">↑ 0.2%</span></div>
-    <div class="ticker-item">⚡ <b>Diesel B2</b> $4.92/L <span class="ticker-up price-up">↑ 0.4%</span></div>
-    <div class="ticker-item">🌾 <b>Yellow Corn</b> $980/MT <span class="ticker-down price-down">↓ 1.2%</span></div>
-    <div class="ticker-item">🧪 <b>Sulfuric Acid</b> $580/MT <span class="price-stable">→</span></div>
-    <div class="ticker-item">🏗️ <b>PVC Pipe 110mm</b> $28/m <span class="price-stable">→</span></div>
-    <div class="ticker-item">🔩 <b>Steel Rebar G60</b> $2,840/MT <span class="ticker-up price-up">↑ 2.3%</span></div>
-    <div class="ticker-item">🌾 <b>Hard Wheat</b> $1,120/MT <span class="ticker-down price-down">↓ 0.8%</span></div>
-    <div class="ticker-item">🔩 <b>Aluminum 6061</b> $9,200/MT <span class="ticker-down price-down">↓ 1.9%</span></div>
-    <div class="ticker-item">🏗️ <b>Cement OPC</b> $63/MT <span class="ticker-up price-up">↑ 0.2%</span></div>
-    <div class="ticker-item">⚡ <b>Diesel B2</b> $4.92/L <span class="ticker-up price-up">↑ 0.4%</span></div>
-    <div class="ticker-item">🌾 <b>Yellow Corn</b> $980/MT <span class="ticker-down price-down">↓ 1.2%</span></div>
-    <div class="ticker-item">🧪 <b>Sulfuric Acid</b> $580/MT <span class="price-stable">→</span></div>
-    <div class="ticker-item">🏗️ <b>PVC Pipe 110mm</b> $28/m <span class="price-stable">→</span></div>
+    <div class="ticker-item">🏭 <b>OPC Cement 42.5N</b> $58/MT <span class="ticker-up">↑ 0.4%</span></div>
+    <div class="ticker-item">⚙️ <b>Grey Clinker</b> $44/MT <span class="ticker-down">↓ 0.6%</span></div>
+    <div class="ticker-item">🔩 <b>Steel Rebar G60</b> $528/MT <span class="ticker-up">↑ 1.2%</span></div>
+    <div class="ticker-item">🧪 <b>Polypropylene</b> $1,220/MT <span class="ticker-down">↓ 0.9%</span></div>
+    <div class="ticker-item">⛏️ <b>Lithium Carbonate</b> $13,400/MT <span class="ticker-down">↓ 2.1%</span></div>
+    <div class="ticker-item">🔷 <b>Aluminum 6063</b> $2,480/MT <span class="ticker-up">↑ 0.7%</span></div>
+    <div class="ticker-item">🏗️ <b>Excavator 20T (Sany)</b> $112K/unit <span class="price-stable">→</span></div>
+    <div class="ticker-item">🌾 <b>Hard Wheat</b> $1,120/MT <span class="ticker-down">↓ 0.8%</span></div>
+    <div class="ticker-item">🏭 <b>OPC Cement 42.5N</b> $58/MT <span class="ticker-up">↑ 0.4%</span></div>
+    <div class="ticker-item">⚙️ <b>Grey Clinker</b> $44/MT <span class="ticker-down">↓ 0.6%</span></div>
+    <div class="ticker-item">🔩 <b>Steel Rebar G60</b> $528/MT <span class="ticker-up">↑ 1.2%</span></div>
+    <div class="ticker-item">🧪 <b>Polypropylene</b> $1,220/MT <span class="ticker-down">↓ 0.9%</span></div>
+    <div class="ticker-item">⛏️ <b>Lithium Carbonate</b> $13,400/MT <span class="ticker-down">↓ 2.1%</span></div>
+    <div class="ticker-item">🔷 <b>Aluminum 6063</b> $2,480/MT <span class="ticker-up">↑ 0.7%</span></div>
+    <div class="ticker-item">🏗️ <b>Excavator 20T (Sany)</b> $112K/unit <span class="price-stable">→</span></div>
+    <div class="ticker-item">🌾 <b>Hard Wheat</b> $1,120/MT <span class="ticker-down">↓ 0.8%</span></div>
   </div>
 </div>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-badge"><div class="hero-badge-dot"></div>Procurement automation platform · 24 deals closed this month</div>
-  <h1>Automated<br/>procurement.<br/><em>You approve.</em></h1>
-  <p style="font-size:16px;color:var(--muted);font-weight:400;margin-bottom:10px;line-height:1.6">AI procurement for construction &amp; reconstruction — MENA, Ukraine, global.</p>
-  <p class="hero-sub">Set your mandate. We negotiate with verified suppliers and deliver a signed LOI — in minutes.</p>
+  <div class="hero-badge"><div class="hero-badge-dot"></div>The Sourcing LOI Engine · 24 deals closed this month</div>
+  <h1>The Sourcing<br/><em>LOI Engine.</em></h1>
+  <p style="font-size:16px;color:var(--muted);font-weight:400;margin-bottom:10px;line-height:1.6">Commodity procurement for construction &amp; reconstruction — MENA, Ukraine, global.</p>
+  <p class="hero-sub">Set your mandate. Our AI negotiates with pre-qualified, OFAC-screened suppliers. You approve the price. Signed LOI delivered in 72 hours — $500 flat.</p>
   <div class="hero-actions">
     <a href="smb-order.html" class="btn-primary">🎯 Submit sourcing request →</a>
-    <a href="demo.html" class="btn-outline">🤖 Watch live demo</a>
+    <a href="demo.html" class="btn-outline">Watch live demo</a>
   </div>
-  <div class="fade-in" style="margin-top:20px;font-size:13px;color:var(--muted);letter-spacing:.04em;display:flex;gap:6px;flex-wrap:wrap;justify-content:center;align-items:center">
-    <span>Pre-qualified suppliers</span><span style="color:var(--border2)">·</span>
-    <span>OFAC screened</span><span style="color:var(--border2)">·</span>
-    <span>ICC-compliant LOI</span><span style="color:var(--border2)">·</span>
-    <span>Boss approval on every deal</span>
-  </div>
-</div>
-
-<div class="sec-divider"></div>
-
-<!-- HOW IT WORKS -->
-<div class="section" id="how">
-  <div class="section-eyebrow fade-in">How it works</div>
-  <div class="section-title fade-in">From mandate to<br/><em style="font-style:italic;color:var(--indigo)">signed LOI in minutes.</em></div>
-  <div class="section-sub fade-in">Five steps. Two are yours. Three are fully automated.</div>
-
-  <div class="steps-grid fade-in">
-    <div class="steps-connector"></div>
-    <div class="step-item">
-      <div class="step-num">1</div>
-      <div class="step-label">Define mandate</div>
-      <div class="step-desc">Commodity · volume · target price · max price</div>
-      <div class="step-tag">You</div>
-    </div>
-    <div class="step-item">
-      <div class="step-num active">2</div>
-      <div class="step-label">Engine negotiates</div>
-      <div class="step-desc">Up to 7 rounds with pre-qualified supplier</div>
-      <div class="step-tag">10–20 credits</div>
-    </div>
-    <div class="step-item">
-      <div class="step-num active">3</div>
-      <div class="step-label">Manager approves</div>
-      <div class="step-desc">Review agreed price — one click</div>
-      <div class="step-tag">You · always</div>
-    </div>
-    <div class="step-item">
-      <div class="step-num active">4</div>
-      <div class="step-label">LOI generated</div>
-      <div class="step-desc">Auto-generated PDF · emailed instantly</div>
-      <div class="step-tag">5 credits</div>
-    </div>
-    <div class="step-item">
-      <div class="step-num">5</div>
-      <div class="step-label">Deal closes</div>
-      <div class="step-desc">Payment direct buyer ↔ supplier</div>
-      <div class="step-tag">Off-platform</div>
-    </div>
-  </div>
-
-</div>
-
-<div class="sec-divider"></div>
-
-<!-- WHO IT'S FOR -->
-<div class="section" id="who">
-  <div class="section-eyebrow fade-in">Who it's for</div>
-  <div class="section-title fade-in">Built for the <em style="font-style:italic;color:var(--indigo)">whole chain.</em></div>
-  <div class="section-sub fade-in">Four procurement profiles. One platform. Every deal ends with a signed LOI.</div>
-  <div class="personas fade-in">
-    <div class="persona-card" onclick="window.location.href='imec.html'">
-      <span class="pc-icon">🏗️</span>
-      <div class="pc-role">Construction</div>
-      <div class="pc-desc">Source cement, rebar, and bulk materials. Engine negotiates — you approve the LOI.</div>
-      <a href="imec.html" class="pc-cta">More info →</a>
-    </div>
-    <div class="persona-card" onclick="window.location.href='critical-minerals.html'">
-      <span class="pc-icon">🏭</span>
-      <div class="pc-role">Manufacturing</div>
-      <div class="pc-desc">Automate raw material sourcing across metals, chemicals, and petrochemicals.</div>
-      <a href="critical-minerals.html" class="pc-cta">More info →</a>
-    </div>
-    <div class="persona-card" onclick="window.location.href='broker-onboarding.html'">
-      <span class="pc-icon">🌍</span>
-      <div class="pc-role">Traders</div>
-      <div class="pc-desc">List inventory, receive verified RFQs. Your identity stays protected throughout.</div>
-      <a href="broker-onboarding.html" class="pc-cta">More info →</a>
-    </div>
-    <div class="persona-card" onclick="window.location.href='open-network.html'">
-      <span class="pc-icon">🤖</span>
-      <div class="pc-role">AI Agents</div>
-      <div class="pc-desc">MCP-compatible API. Search suppliers and close deals autonomously, 24/7.</div>
-      <a href="open-network.html" class="pc-cta">More info →</a>
-    </div>
+  <div class="hero-stats fade-in">
+    <div class="hs"><div class="hs-val" style="color:var(--teal)">72h</div><div class="hs-label">RFQ to signed LOI</div></div>
+    <div class="hs"><div class="hs-val" style="color:var(--violet)">$500</div><div class="hs-label">Flat fee per LOI</div></div>
+    <div class="hs"><div class="hs-val" style="color:var(--gold)">12+</div><div class="hs-label">Supply origins</div></div>
+    <div class="hs"><div class="hs-val" style="color:var(--green)">100%</div><div class="hs-label">OFAC screened</div></div>
   </div>
 </div>
 
 <div class="sec-divider"></div>
 
-<!-- FEATURES -->
-<div class="section">
-  <div class="section-eyebrow fade-in">Platform capabilities</div>
-  <div class="section-title fade-in">Everything the deal<br/><em style="font-style:italic;color:var(--indigo)">needs to close.</em></div>
-  <div class="section-sub fade-in">From sourcing to signed LOI — one platform, zero manual back-and-forth.</div>
-  <div class="features-grid fade-in">
-    <div class="feat">
-      <div class="feat-icon-wrap">🤖</div>
-      <div class="feat-title">Automated negotiation</div>
-      <div class="feat-desc">Up to 7 rounds with pre-qualified suppliers. The agent bids, counters, and closes within your mandate — you only review the final price.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon-wrap">📄</div>
-      <div class="feat-title">Instant LOI generation</div>
-      <div class="feat-desc">ICC-compliant Letter of Intent generated in seconds on deal approval. Emailed to all parties instantly with blockchain timestamp.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon-wrap">🛡️</div>
-      <div class="feat-title">Compliance screening</div>
-      <div class="feat-desc">Every counterparty is screened against OFAC, UN, and EU sanctions lists before negotiation starts. Full audit trail included.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon-wrap">🚢</div>
-      <div class="feat-title">Logistics & customs</div>
-      <div class="feat-desc">HS code lookup, duty calculation, and shipment tracking across 6 countries. Port delay alerts and route optimisation built in.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon-wrap">💳</div>
-      <div class="feat-title">Payment tracking</div>
-      <div class="feat-desc">LC issuance monitoring, T/T confirmation, and payment milestone alerts. MT103 SWIFT drafts generated automatically.</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon-wrap">🌐</div>
-      <div class="feat-title">Open Network API</div>
-      <div class="feat-desc">MCP-compatible API for AI agents. Read tier is free — your agent can source and compare prices autonomously, 24/7.</div>
-    </div>
-  </div>
-</div>
-
-<div class="sec-divider"></div>
-
-<!-- SECTORS WE SERVE -->
+<!-- WHAT WE SOURCE -->
 <div class="section" id="sectors">
   <div class="section-eyebrow fade-in">What we source</div>
   <div class="section-title fade-in">Mill-direct. Refinery-direct.<br/><em style="font-style:italic;color:var(--indigo)">No middlemen.</em></div>
-  <div class="section-sub fade-in">Four sourcing verticals. Compliance-screened supply from MENA, Ukraine, and North Africa — with an LOI in 72 hours.</div>
+  <div class="section-sub fade-in">Four sourcing verticals. Compliance-screened supply from MENA, Ukraine, and North Africa — with a signed LOI in 72 hours.</div>
   <div class="sectors-grid fade-in">
 
     <a href="petrochemicals.html" class="sector-card">
       <div class="sc-icon">🧪</div>
       <div class="sc-name">Petrochemicals</div>
       <div class="sc-tags">
-        <span class="sc-tag">Sulfuric Acid</span>
-        <span class="sc-tag">Caustic Soda</span>
-        <span class="sc-tag">HDPE</span>
         <span class="sc-tag">Polypropylene</span>
+        <span class="sc-tag">HDPE</span>
+        <span class="sc-tag">Caustic Soda</span>
+        <span class="sc-tag">Methanol</span>
       </div>
-      <div class="sc-cta">Explore sector →</div>
+      <div class="sc-cta">Explore vertical →</div>
     </a>
 
     <a href="critical-minerals.html" class="sector-card">
@@ -489,31 +306,31 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
         <span class="sc-tag">Graphite</span>
         <span class="sc-tag">Rare Earths</span>
       </div>
-      <div class="sc-cta">Explore sector →</div>
+      <div class="sc-cta">Explore vertical →</div>
     </a>
 
     <a href="building-materials.html" class="sector-card">
-      <div class="sc-icon">🧱</div>
-      <div class="sc-name">Building Materials</div>
+      <div class="sc-icon">🏭</div>
+      <div class="sc-name">Reconstruction Supply</div>
       <div class="sc-tags">
-        <span class="sc-tag">Steel Rebar</span>
-        <span class="sc-tag">OPC Cement</span>
+        <span class="sc-tag">Cement</span>
         <span class="sc-tag">Clinker</span>
-        <span class="sc-tag">PVC Pipe</span>
+        <span class="sc-tag">Equipment</span>
+        <span class="sc-tag">Prefab Panels</span>
       </div>
-      <div class="sc-cta">Explore sector →</div>
+      <div class="sc-cta">Explore vertical →</div>
     </a>
 
     <a href="steel-metals.html" class="sector-card">
       <div class="sc-icon">🔩</div>
-      <div class="sc-name">Metal &amp; Steel</div>
+      <div class="sc-name">Steel &amp; Metals</div>
       <div class="sc-tags">
-        <span class="sc-tag">Steel Rebar</span>
+        <span class="sc-tag">Rebar G60/G40</span>
         <span class="sc-tag">Aluminum</span>
-        <span class="sc-tag">Iron Ore</span>
-        <span class="sc-tag">Scrap Metal</span>
+        <span class="sc-tag">HRC Steel</span>
+        <span class="sc-tag">Scrap HMS</span>
       </div>
-      <div class="sc-cta">Explore sector →</div>
+      <div class="sc-cta">Explore vertical →</div>
     </a>
 
   </div>
@@ -524,15 +341,135 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     <div style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center;align-items:center">
       <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇸🇦</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Saudi Arabia</span></div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇪🇬</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Egypt</span></div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇯🇴</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Jordan</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇹🇷</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Turkey</span></div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇶🇦</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Qatar</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇦🇪</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">UAE</span></div>
       <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇩🇿</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Algeria</span></div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇲🇦</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Morocco</span></div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇮🇱</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Israel</span></div>
-      <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇵🇸</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Palestine</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇺🇦</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">Ukraine</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:24px">🇨🇳</span><span style="font-size:10px;color:var(--muted);letter-spacing:.04em">China</span></div>
     </div>
   </div>
 
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- HOW THE ENGINE WORKS -->
+<div class="section" id="how">
+  <div class="section-eyebrow fade-in">How the engine works</div>
+  <div class="section-title fade-in">Five steps.<br/><em style="font-style:italic;color:var(--indigo)">Two are yours.</em></div>
+  <div class="section-sub fade-in">Define your mandate. The engine handles negotiation, compliance, and LOI generation. You approve once — and only once.</div>
+
+  <div class="steps-grid fade-in">
+    <div class="steps-connector"></div>
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-label">Define mandate</div>
+      <div class="step-desc">Product · volume · target price · max price · destination port</div>
+      <div class="step-tag">You</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num active">2</div>
+      <div class="step-label">Engine negotiates</div>
+      <div class="step-desc">Up to 7 rounds with a pre-qualified, OFAC-screened supplier</div>
+      <div class="step-tag">10–20 credits</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num active">3</div>
+      <div class="step-label">You approve</div>
+      <div class="step-desc">Review agreed price — one click. No deal closes without you.</div>
+      <div class="step-tag">You · always</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num active">4</div>
+      <div class="step-label">LOI generated</div>
+      <div class="step-desc">Spec-referenced, ICC-compliant PDF · emailed instantly · $500 flat</div>
+      <div class="step-tag">5 credits</div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">5</div>
+      <div class="step-label">Deal closes</div>
+      <div class="step-desc">Payment flows direct buyer ↔ supplier. Off-platform.</div>
+      <div class="step-tag">Off-platform</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- WHO IT'S FOR -->
+<div class="section" id="who">
+  <div class="section-eyebrow fade-in">Who it's for</div>
+  <div class="section-title fade-in">Built for every<br/><em style="font-style:italic;color:var(--indigo)">link in the chain.</em></div>
+  <div class="section-sub fade-in">Four procurement profiles. One engine. Every deal ends with a signed, spec-referenced LOI.</div>
+  <div class="personas fade-in">
+    <div class="persona-card" onclick="window.location.href='building-materials.html'">
+      <span class="pc-icon">🏗️</span>
+      <div class="pc-role">Reconstruction</div>
+      <div class="pc-desc">Source cement, clinker, rebar, and engineering equipment for Middle East and Ukraine reconstruction. Engine negotiates — you approve.</div>
+      <a href="building-materials.html" class="pc-cta">More info →</a>
+    </div>
+    <div class="persona-card" onclick="window.location.href='critical-minerals.html'">
+      <span class="pc-icon">🏭</span>
+      <div class="pc-role">Manufacturing</div>
+      <div class="pc-desc">Automate raw material sourcing across critical minerals, metals, chemicals, and petrochemicals — mill-direct and refinery-direct.</div>
+      <a href="critical-minerals.html" class="pc-cta">More info →</a>
+    </div>
+    <div class="persona-card" onclick="window.location.href='broker-onboarding.html'">
+      <span class="pc-icon">🌍</span>
+      <div class="pc-role">Traders</div>
+      <div class="pc-desc">List inventory, receive verified RFQs from qualified buyers. Your identity and margins stay protected throughout every deal.</div>
+      <a href="broker-onboarding.html" class="pc-cta">More info →</a>
+    </div>
+    <div class="persona-card" onclick="window.location.href='open-network.html'">
+      <span class="pc-icon">🤖</span>
+      <div class="pc-role">AI Agents</div>
+      <div class="pc-desc">MCP-compatible API. Your agent searches suppliers and closes deals autonomously — Read tier is free, 24/7.</div>
+      <a href="open-network.html" class="pc-cta">More info →</a>
+    </div>
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- ENGINE CAPABILITIES -->
+<div class="section">
+  <div class="section-eyebrow fade-in">Engine capabilities</div>
+  <div class="section-title fade-in">Everything a deal<br/><em style="font-style:italic;color:var(--indigo)">needs to close.</em></div>
+  <div class="section-sub fade-in">From sourcing mandate to signed LOI — one platform, zero manual back-and-forth.</div>
+  <div class="features-grid fade-in">
+    <div class="feat">
+      <div class="feat-icon-wrap">🤖</div>
+      <div class="feat-title">Automated negotiation</div>
+      <div class="feat-desc">Up to 7 rounds with pre-qualified suppliers. The engine bids, counters, and closes within your mandate. You review the final price — nothing else.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">📄</div>
+      <div class="feat-title">Spec-referenced LOI</div>
+      <div class="feat-desc">ICC-compliant Letter of Intent with the correct product standards — ASTM, EN, ISO — pre-loaded for every vertical. Emailed to all parties instantly on approval.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">🛡️</div>
+      <div class="feat-title">OFAC & sanctions screening</div>
+      <div class="feat-desc">Every counterparty screened against OFAC SDN, UN, and EU sanctions lists before negotiation starts. Enhanced KYC for reconstruction-zone deals. Full audit trail.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">🚢</div>
+      <div class="feat-title">Route-optimised sourcing</div>
+      <div class="feat-desc">The engine selects the lowest landed-cost origin for your destination port — FOB price plus freight, not just FOB. HS code lookup and duty calculation built in.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">💳</div>
+      <div class="feat-title">Trade finance support</div>
+      <div class="feat-desc">LC issuance monitoring, T/T confirmation, and payment milestone alerts. MT103 SWIFT drafts auto-generated. US bank LC compatibility verified on every deal.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon-wrap">🌐</div>
+      <div class="feat-title">Open Network API</div>
+      <div class="feat-desc">MCP-compatible API for AI agents. Read tier is free — your agent can search suppliers and compare prices autonomously, 24/7, no credits required.</div>
+    </div>
+  </div>
 </div>
 
 <div class="sec-divider"></div>
@@ -541,7 +478,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <div class="section">
   <div class="section-eyebrow fade-in">Pricing</div>
   <div class="section-title fade-in">Buy credits. <em style="font-style:italic;color:var(--indigo)">Never expire.</em></div>
-  <div class="section-sub fade-in" style="margin-bottom:32px">No monthly fee. No commitment. Pay only when you negotiate.</div>
+  <div class="section-sub fade-in" style="margin-bottom:32px">No monthly fee. No commitment. No percentage of deal size. Pay only when the engine negotiates.</div>
   <div class="pricing-grid fade-in">
     <div class="price-card">
       <div class="price-amount">$99</div>
@@ -576,15 +513,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     </div>
     <a href="pricing.html" style="color:var(--violet);text-decoration:none;font-size:13px">Full pricing →</a>
   </div>
-  <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)" class="fade-in">Powered by <span style="color:var(--text)">Stripe</span> · Pay by card · Credits never expire</div>
+  <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)" class="fade-in">Powered by <span style="color:var(--text)">Stripe</span> · Pay by card · Credits never expire · LOI fee $500 flat regardless of deal size</div>
 </div>
 
 <!-- CTA -->
 <div class="cta-section">
   <div class="cta-box fade-in">
     <div class="cta-inner">
-      <div class="cta-title">Automate your<br/>first <em>sourcing cycle.</em></div>
-      <p class="cta-sub">3 questions. No commitment. Sourcing engine activates in minutes.</p>
+      <div class="cta-title">Run your first<br/><em>sourcing cycle.</em></div>
+      <p class="cta-sub">3 questions. No commitment. The engine activates in minutes — and your mandate is never shared with suppliers without your approval.</p>
       <div class="email-row">
         <input type="email" class="email-inp" id="cta-email" placeholder="your@company.com"/>
         <a href="smb-order.html" class="btn-primary" style="padding:12px 18px;font-size:14px" onclick="saveLead()">Get started →</a>
@@ -612,14 +549,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
       <a href="https://www.linkedin.com/company/sloiai/" target="_blank" rel="noopener" class="social-icon si-li" title="LinkedIn">
         <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
       </a>
-      <a href="https://wa.me/97250XXXXXX" target="_blank" rel="noopener" class="social-icon si-wa" title="WhatsApp">
+      <a href="https://wa.me/972544664428" target="_blank" rel="noopener" class="social-icon si-wa" title="WhatsApp">
         <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
       </a>
-      <a href="https://sloi-ai.netlify.app/contact" target="_blank" rel="noopener" class="social-icon si-wa" title="Contact">
-        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-      </a>
     </div>
-    <div class="footer-note">© 2026 SLOI AI Ltd. · Procurement automation · LOI generation</div>
+    <div class="footer-note">© 2026 SLOI AI Ltd. · The Sourcing LOI Engine · Procurement automation</div>
   </div>
 </footer>
 
@@ -629,7 +563,6 @@ function saveLead(){
   if(email) localStorage.setItem('sloi_lead_email', email);
 }
 
-// Scroll fade-in
 var io = new IntersectionObserver(function(entries){
   entries.forEach(function(e){
     if(e.isIntersecting){ e.target.classList.add('visible'); io.unobserve(e.target); }
@@ -637,7 +570,6 @@ var io = new IntersectionObserver(function(entries){
 },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.fade-in').forEach(function(el){ io.observe(el); });
 
-// Step hover animation
 var stepsEl = document.querySelector('.steps-grid');
 if(stepsEl){
   new IntersectionObserver(function(entries){

@@ -267,6 +267,15 @@ select.inp option{background:var(--surface2);color:var(--white)}
 .dz-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:5px}
 .dz-sub{font-size:12px;color:var(--muted)}
 .dz-file-hidden{display:none}
+/* ── AI KEY WRAP ── */
+.ai-key-wrap{display:flex;gap:8px;margin-bottom:5px}
+.ai-key-wrap .inp{flex:1;margin-bottom:0}
+.key-toggle{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:0 14px;color:var(--muted);cursor:pointer;font-size:14px;flex-shrink:0;transition:all .2s}
+.key-toggle:hover{border-color:var(--indigo);color:var(--white)}
+.ai-result-item{display:flex;gap:10px;padding:4px 0;font-size:13px}
+.ai-result-item span:first-child{color:var(--muted);min-width:90px;flex-shrink:0}
+.ai-result-item span:last-child{color:var(--white);font-weight:600}
+
 /* ── CATALOG DROPDOWN ── */
 .cat-wrap{margin-bottom:16px;display:none}
 .cat-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
@@ -405,10 +414,10 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="ec-name" style="font-size:13px">Paste from ERP</div>
           <div class="ec-desc">SAP · Oracle · any text</div>
         </div>
-        <div class="ec" id="ec-api" onclick="selectEntry('api')" style="position:relative">
-          <div class="ec-icon" style="font-size:22px">⚡</div>
-          <div class="ec-name" style="font-size:13px">API / Direct</div>
-          <div class="ec-desc">For developers</div>
+        <div class="ec" id="ec-ai" onclick="selectEntry('ai')" style="position:relative">
+          <div class="ec-icon" style="font-size:22px">🤖</div>
+          <div class="ec-name" style="font-size:13px">AI Parse</div>
+          <div class="ec-desc">Claude · Natural language</div>
         </div>
       </div>
 
@@ -461,6 +470,30 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <a href="docs.html" class="btn-p" style="text-decoration:none;flex:1;display:flex;align-items:center;justify-content:center">API docs →</a>
           <button class="btn-s" onclick="goStep(1)" style="flex:1">Continue manually →</button>
         </div>
+      </div>
+
+      <!-- AI PARSE PANEL -->
+      <div class="entry-panel" id="panel-ai">
+        <div style="background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.22);border-radius:10px;padding:16px 18px;margin-bottom:14px">
+          <div style="font-size:12px;color:var(--indigo);font-weight:700;letter-spacing:.08em;margin-bottom:10px">CLAUDE API KEY <span style="color:var(--muted);font-weight:400;letter-spacing:0">— stored in your browser only</span></div>
+          <div class="ai-key-wrap">
+            <input class="inp" id="ai-key-inp" type="password" placeholder="sk-ant-api03-…" oninput="localStorage.setItem('sloi_claude_key',this.value.trim())"/>
+            <button class="key-toggle" onclick="toggleAIKey()" title="Show/hide key">👁</button>
+          </div>
+          <div class="field-hint" style="margin-top:4px">Your key calls Claude directly from your browser — never logged by SLOI AI. <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--violet);text-decoration:none">Get a key →</a></div>
+        </div>
+
+        <div class="field">
+          <div class="field-lbl">Describe your procurement need</div>
+          <textarea class="inp" id="ai-describe" rows="5"
+            placeholder="e.g. I need 500 MT of steel rebar G60 12mm for delivery in Dubai by end of Q3, max budget $1.4M CIF. Prefer Turkish or Chinese origin." style="resize:vertical;line-height:1.7;font-size:14px"></textarea>
+          <div class="field-hint">Plain language · paste ERP text · any format — Claude extracts commodity, quantity, budget, country, timeline automatically.</div>
+        </div>
+
+        <div id="ai-result-wrap"></div>
+
+        <button class="btn-p" id="btn-ai-parse" onclick="parseWithAI()">🤖 Parse with AI →</button>
+        <button class="btn-s" onclick="goStep(1)" style="margin-top:6px">Enter manually →</button>
       </div>
     </div>
 
@@ -800,7 +833,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
           <div class="pt-check">✓ selected</div>
           <div class="pt-icon">📄</div>
           <div class="pt-name">LOI Generator</div>
-          <div class="pt-desc">Instant LOI draft — use if you already have a supplier and agreed price</div>
+          <div class="pt-desc">Jump straight to the LOI Generator tab — use if you already have a supplier and agreed price</div>
         </div>
       </div>
 
@@ -864,7 +897,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
         <div class="g-row"><span class="g-chk">✓</span>No credit card required · full audit trail provided</div>
       </div>
 
-      <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Submit RFQ →</button>
+      <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Launch sourcing agent →</button>
       <button class="btn-s" onclick="goStep(4)">← Back</button>
       <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--muted)">Already have an account? <a href="login.html" style="color:var(--violet);text-decoration:none;font-weight:600">Sign in →</a></div>
     </div>
@@ -1350,82 +1383,180 @@ function selectProceed(el, choice) {
   state.purchaseType = (choice === 'loi') ? 'One-time purchase' : 'Recurring contract';
 }
 
+/* ── AI PARSE ── */
+document.addEventListener('DOMContentLoaded', function() {
+  var saved = localStorage.getItem('sloi_claude_key') || '';
+  if (saved) {
+    var inp = document.getElementById('ai-key-inp');
+    if (inp) inp.value = saved;
+  }
+});
+
+function toggleAIKey() {
+  var inp = document.getElementById('ai-key-inp');
+  if (!inp) return;
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function parseWithAI() {
+  var key = (localStorage.getItem('sloi_claude_key') || '').trim();
+  if (!key) {
+    var inp = document.getElementById('ai-key-inp');
+    if (inp) { inp.focus(); inp.classList.add('shake'); setTimeout(function(){ inp.classList.remove('shake'); }, 400); }
+    if (window.showToast) showToast('Enter your Claude API key first', '#ef4444');
+    else alert('Enter your Claude API key first.');
+    return;
+  }
+  var txt = ((document.getElementById('ai-describe') || {}).value || '').trim();
+  if (!txt) {
+    var ta = document.getElementById('ai-describe');
+    if (ta) { ta.focus(); ta.classList.add('shake'); setTimeout(function(){ ta.classList.remove('shake'); }, 400); }
+    return;
+  }
+
+  var btn = document.getElementById('btn-ai-parse');
+  var orig = btn ? btn.textContent : '';
+  if (btn) { btn.textContent = '⏳ Parsing…'; btn.disabled = true; }
+
+  var SYS = 'You are a commodity procurement assistant. Extract order details from the user\'s description and return ONLY a valid JSON object — no markdown, no explanation — with exactly these fields:\n'
+    + '{"product":"string","qty":number_or_null,"unit":"MT|Tons|kg|m²|m³|Liters|Units|m","budget":"$X/unit or $X total or Not specified",'
+    + '"country":"delivery country","origin":"preferred origin country or null","incoterms":"FOB|CIF|DAP|DDP|EXW or null",'
+    + '"urgency":"ASAP — within 2 weeks|1–2 months|3+ months — flexible","detail":"additional specs or empty string","projectRef":"PO/ref number or null"}';
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 512,
+      system: SYS,
+      messages: [{ role: 'user', content: txt }]
+    })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data) {
+    if (btn) { btn.textContent = orig; btn.disabled = false; }
+    if (data.error) {
+      var msg = data.error.message || 'API error';
+      if (window.showToast) showToast(msg, '#ef4444'); else alert(msg);
+      return;
+    }
+    var raw = (data.content && data.content[0] && data.content[0].text) || '';
+    raw = raw.replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'').trim();
+    var parsed;
+    try { parsed = JSON.parse(raw); }
+    catch(e) {
+      if (window.showToast) showToast('Could not parse AI response — try again.', '#ef4444');
+      else alert('Could not parse AI response.');
+      return;
+    }
+    applyAIParsed(parsed);
+  })
+  .catch(function(e) {
+    if (btn) { btn.textContent = orig; btn.disabled = false; }
+    var msg = 'Network error: ' + (e.message || 'check your key and try again');
+    if (window.showToast) showToast(msg, '#ef4444'); else alert(msg);
+  });
+}
+
+function applyAIParsed(d) {
+  if (d.product) state.product = d.product;
+  if (d.qty)     state.qty     = String(d.qty);
+  if (d.unit)    state.unit    = d.unit;
+  if (d.budget)  state.budget  = d.budget;
+  if (d.country) state.country = d.country;
+  state.origin     = d.origin || '';
+  state.incoterms  = d.incoterms || '';
+  if (d.urgency)   state.urgency   = d.urgency;
+  if (d.detail)    state.detail    = d.detail;
+  state.projectRef = d.projectRef || '';
+
+  var qtyF = document.getElementById('qty');
+  if (qtyF && d.qty != null) qtyF.value = d.qty;
+
+  var budgetF = document.getElementById('budget');
+  if (budgetF && d.budget && d.budget !== 'Not specified') budgetF.value = d.budget;
+
+  var detailF = document.getElementById('product-detail');
+  if (detailF && d.detail) detailF.value = d.detail;
+
+  var refF = document.getElementById('project-ref');
+  if (refF && d.projectRef) refF.value = d.projectRef;
+
+  function setSelect(id, val) {
+    if (!val) return;
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    var v = val.toLowerCase();
+    for (var i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].text.toLowerCase() === v || sel.options[i].value.toLowerCase() === v) {
+        sel.selectedIndex = i; return;
+      }
+    }
+  }
+  setSelect('country', d.country);
+  setSelect('origin', d.origin);
+  setSelect('unit', d.unit);
+  setSelect('incoterms', d.incoterms);
+
+  if (d.urgency) {
+    document.querySelectorAll('.tc').forEach(function(c){ c.classList.remove('sel'); });
+    document.querySelectorAll('.tc').forEach(function(c){
+      var nm = c.querySelector('.tc-name');
+      var desc = c.querySelector('.tc-desc');
+      if ((nm && (d.urgency.toLowerCase().indexOf(nm.textContent.toLowerCase()) !== -1)) ||
+          (desc && (d.urgency.toLowerCase().indexOf(desc.textContent.toLowerCase().substring(0,6)) !== -1))) {
+        c.classList.add('sel');
+      }
+    });
+  }
+
+  showAIResult(d);
+}
+
+function showAIResult(d) {
+  var wrap = document.getElementById('ai-result-wrap');
+  if (!wrap) { populateSummary(); goStep(5); return; }
+
+  var rows = [
+    ['Commodity', d.product],
+    ['Quantity', d.qty != null ? d.qty + ' ' + (d.unit || 'MT') : null],
+    ['Budget', d.budget && d.budget !== 'Not specified' ? d.budget : null],
+    ['Delivery', d.country],
+    ['Origin', d.origin || null],
+    ['Incoterms', d.incoterms || null],
+    ['Timeline', d.urgency],
+    ['Project ref', d.projectRef || null],
+  ].filter(function(r){ return r[1]; });
+
+  wrap.innerHTML = '<div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.18);border-radius:8px;padding:14px 16px;margin-bottom:14px">'
+    + '<div style="font-size:11px;color:var(--green);font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px">AI extracted · review below</div>'
+    + rows.map(function(r){
+        return '<div class="ai-result-item"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
+      }).join('')
+    + '</div>'
+    + '<button class="btn-p" onclick="populateSummary();goStep(5)" style="margin-bottom:8px">Review &amp; submit →</button>'
+    + '<button class="btn-s" onclick="document.getElementById(\'ai-result-wrap\').innerHTML=\'\'" style="font-size:13px">Re-describe →</button>';
+}
+
 
 function submitOrder() {
   var btn = document.getElementById('submit-btn');
-  btn.textContent = '⏳ Submitting…';
+  btn.textContent = '⏳ Launching agent…';
   btn.disabled = true;
 
   var productLabel = (state.sku
     ? (CATALOG.find(function(p){ return p.sku===state.sku; })||{name:state.product}).name + ' [' + state.sku + ']'
     : state.product) + (document.getElementById('product-detail').value ? ' — ' + document.getElementById('product-detail').value : '');
 
-  // LOI Generator Agent: go straight to LOI generator
-  if (state.purchaseType === 'One-time purchase') {
-    var today = new Date();
-    var loiRef = 'LOI-' + today.getFullYear()
-      + String(today.getMonth()+1).padStart(2,'0')
-      + String(today.getDate()).padStart(2,'0') + '-001';
+  state.productLabel = productLabel;
 
-    var loiParams = new URLSearchParams({
-      ref:      loiRef,
-      buyer:    state.name    || '',
-      product:  productLabel,
-      qty:      state.qty     || '',
-      unit:     state.unit    || 'MT',
-      location: state.country || '',
-    });
-
-    var maxPrice = state.budget && state.budget !== 'Not specified'
-      ? parseFloat(state.budget.replace(/[^0-9.]/g,'')) || ''
-      : '';
-    if (maxPrice) loiParams.set('price', maxPrice);
-
-    window.location.href = 'loi-generator.html?' + loiParams.toString();
-    return;
-  }
-
-  // Negotiation Agent: existing negotiation flow
-  var payload = {
-    product:        productLabel,
-    qty:            parseFloat(state.qty) || 0,
-    unit:           state.unit || 'MT',
-    target_price:   null,
-    max_price:      state.budget && state.budget !== 'Not specified' ? parseFloat(state.budget.replace(/[^0-9.]/g,'')) || null : null,
-    buyer_name:     state.name,
-    buyer_email:    state.email,
-    buyer_company:  state.company,
-    buyer_telegram: state.wa,
-    country:        state.country,
-    notes:          'Urgency: ' + state.urgency + ' | Agent: ' + state.purchaseType + (state.annualVolume ? ' | Annual volume: ' + state.annualVolume : '') + (state.origin ? ' | Preferred origin: ' + state.origin : ''),
-  };
-
-  var API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://sloi-ai-production.up.railway.app';
-
-  fetch(API_BASE + '/v1/orders', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .catch(function(){ return null; })
-  .then(function(){
-    btn.textContent = '✓ Find me the best price →';
-    btn.disabled = false;
-    document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
-    document.getElementById('step-success').classList.add('active');
-    for (var i = 1; i <= 5; i++) {
-      var dot   = document.getElementById('dot-' + i);
-      var lname = document.getElementById('lname-' + i);
-      var line  = document.getElementById('line-' + i);
-      if (dot)   { dot.className = 'sn-dot done'; dot.textContent = '✓'; }
-      if (lname) lname.className = 'sn-name done';
-      if (line)  line.className  = 'sn-line done';
-    }
-    document.getElementById('progress').style.width = '100%';
-    document.getElementById('prog-lbl').textContent = 'Done!';
-    var rb = document.querySelector('.right-body');
-    if (rb) rb.scrollTop = 0;
-  });
+  saveMandateAndGo('negotiation-agent.html');
 }
 </script>
 </body>

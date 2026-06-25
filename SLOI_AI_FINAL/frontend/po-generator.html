@@ -26,6 +26,9 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
 .nav-links a{color:var(--muted);text-decoration:none;font-family:'IBM Plex Mono',monospace}
 .nav-links a:hover{color:var(--violet)}
 
+/* SELLER BANNER */
+.seller-banner{background:rgba(91,95,239,.1);border-bottom:1px solid rgba(91,95,239,.3);padding:10px 24px;text-align:center;font-size:13px;color:var(--violet);font-family:'IBM Plex Mono',monospace;display:none}
+
 /* LAYOUT */
 .layout{display:grid;grid-template-columns:1fr 440px;min-height:calc(100vh - 52px)}
 
@@ -52,6 +55,13 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
 .field input::placeholder,.field textarea::placeholder{color:var(--muted)}
 .field select option{background:var(--surface2);color:var(--white)}
 .field textarea{resize:vertical;min-height:60px}
+
+/* LOGO ZONE */
+.logo-zone{border:1px dashed var(--border2);border-radius:5px;padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:border-color .15s;min-height:54px;background:var(--surface)}
+.logo-zone:hover{border-color:var(--indigo)}
+.logo-ph{font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.logo-rm{background:none;border:1px solid rgba(239,68,68,.3);color:var(--red);font-size:12px;border-radius:3px;cursor:pointer;padding:3px 8px;font-family:'IBM Plex Mono',monospace;flex-shrink:0}
+.logo-rm:hover{background:rgba(239,68,68,.1)}
 
 /* LINE ITEMS */
 .li-label{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
@@ -85,6 +95,25 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
 .spin{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 .status-msg{font-size:12px;font-family:'IBM Plex Mono',monospace;padding:6px 0;min-height:22px}
+
+/* SIGNATURE */
+.sig-canvas{width:100%;height:120px;background:rgba(255,255,255,.02);border:1px solid var(--border2);border-radius:5px;cursor:crosshair;touch-action:none;display:block}
+.sig-canvas.locked{opacity:.5;cursor:default;pointer-events:none}
+.sig-row{display:flex;gap:8px;margin-top:8px;align-items:center}
+.sig-name-inp{flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:9px 12px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;transition:border-color .15s}
+.sig-name-inp:focus{border-color:var(--indigo)}
+.sig-name-inp::placeholder{color:var(--muted)}
+.sig-status{font-size:12px;font-family:'IBM Plex Mono',monospace;min-height:18px;margin-top:6px;color:var(--muted)}
+.sig-label{font-size:11px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:6px}
+
+/* SHARE LINK */
+.share-box{margin-top:12px;padding:12px 14px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:5px}
+.share-inp{width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:8px 10px;color:var(--teal);font-family:'IBM Plex Mono',monospace;font-size:12px;outline:none;margin-top:6px}
+.share-row{display:flex;gap:8px;margin-top:6px;align-items:center}
+
+/* BUYER REPLAY */
+.buyer-replay-box{background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:10px;margin-bottom:14px}
+.replay-canvas{width:100%;height:72px;display:block;border-radius:3px}
 
 /* PREVIEW SIDE */
 .preview-side{background:var(--surface2);overflow-y:auto}
@@ -148,11 +177,12 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
 /* NOTES */
 .notes-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:9px 11px;font-size:11px;color:var(--muted);line-height:1.6;white-space:pre-wrap;word-break:break-word}
 
-/* SIGNATURES */
+/* SIGNATURES (preview) */
 .sig-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--border);border-radius:4px;overflow:hidden}
 .sig-block{padding:12px;background:var(--surface)}
 .sig-block+.sig-block{border-left:1px solid var(--border)}
-.sig-role{font-size:8px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
+.sig-role{font-size:8px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
+.sig-img{height:36px;width:auto;display:block;margin-bottom:4px;opacity:.9}
 .sig-line{height:1px;background:var(--border2);margin-bottom:5px}
 .sig-name{font-size:11px;font-weight:700;color:var(--white)}
 .sig-date{font-size:10px;color:var(--muted);margin-top:4px}
@@ -178,7 +208,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
 
 /* PRINT */
 @media print{
-  .nav,.form-side,.preview-header{display:none!important}
+  .nav,.form-side,.preview-header,.seller-banner{display:none!important}
   .layout,.preview-side{display:block}
   .preview-side{overflow:visible;background:#fff}
   .po-wrap{padding:0}
@@ -197,6 +227,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
   .notes-block{background:#f9f9ff!important;color:#444!important}
   .doc-footer{background:#f0f0ff!important}
   .sig-line{background:#ccc!important}
+  .sig-block{background:#f9f9ff!important}
 }
 </style>
 <link rel="stylesheet" href="/main.css"/>
@@ -204,6 +235,11 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
+
+<!-- SELLER MODE BANNER -->
+<div id="seller-banner" class="seller-banner">
+  📋 <strong>Seller Review Mode</strong> — Review the PO details, then scroll to Step 4 to countersign
+</div>
 
 <nav class="nav">
   <a href="sloiai-home.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Purchase Order Generator</span></a>
@@ -220,7 +256,7 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
   <div class="page-title">PO Generator</div>
   <div class="page-sub">Describe your order · AI fills the details · Preview &amp; download PDF</div>
 
-  <!-- STEP 1 — API KEY -->
+  <!-- STEP 1 — AI KEY -->
   <div class="step">
     <div class="step-header">
       <div class="step-num">1</div>
@@ -241,10 +277,28 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
     </div>
   </div>
 
-  <!-- STEP 2 — DESCRIPTION + AI DRAFT -->
+  <!-- STEP 2 — LOGO -->
   <div class="step">
     <div class="step-header">
       <div class="step-num">2</div>
+      <div class="step-title">Company Logo <span style="font-size:12px;color:var(--muted);font-weight:400">(optional)</span></div>
+    </div>
+    <div class="logo-zone" id="logo-zone"
+      onclick="document.getElementById('logo-input').click()"
+      ondragover="event.preventDefault();this.style.borderColor='var(--indigo)'"
+      ondragleave="this.style.borderColor=''"
+      ondrop="handleLogoDrop(event)">
+      <img id="logo-img" style="display:none;max-height:44px;max-width:160px;object-fit:contain;border-radius:2px"/>
+      <div id="logo-ph" class="logo-ph">Click or drag to upload logo · PNG · SVG · JPG · max 2 MB</div>
+      <button id="logo-rm" class="logo-rm" onclick="event.stopPropagation();removeLogo()" style="display:none;margin-left:auto">× Remove</button>
+    </div>
+    <input type="file" id="logo-input" accept="image/*,image/svg+xml" style="display:none" onchange="handleLogoUpload(this)"/>
+  </div>
+
+  <!-- STEP 3 — DESCRIPTION + AI DRAFT -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">3</div>
       <div class="step-title">Describe Your Order</div>
     </div>
     <textarea id="po-desc" style="width:100%;min-height:88px;background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:10px 12px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;resize:vertical;transition:border-color .15s" placeholder="e.g. 500 MT of Steel Rebar from Atlas Steel UAE at $2,840/MT, CIF Dubai, TT 30 days payment, deliver within 45 days" onfocus="this.style.borderColor='var(--indigo)'" onblur="this.style.borderColor='var(--border2)'"></textarea>
@@ -255,10 +309,10 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
     <div class="status-msg" id="ai-status"></div>
   </div>
 
-  <!-- STEP 3 — PO DETAILS -->
+  <!-- STEP 4 — PO DETAILS -->
   <div class="step">
     <div class="step-header">
-      <div class="step-num">3</div>
+      <div class="step-num">4</div>
       <div class="step-title">PO Details</div>
     </div>
 
@@ -389,6 +443,61 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
     <button class="generate-btn" onclick="renderPreview()">Generate Preview →</button>
   </div>
 
+  <!-- STEP 5 — SIGNATURES -->
+  <div class="step">
+    <div class="step-header">
+      <div class="step-num">5</div>
+      <div class="step-title">Digital Signatures</div>
+    </div>
+
+    <!-- BUYER SECTION (default mode) -->
+    <div id="buyer-sig-section">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">
+        Sign below, then lock to generate a share link for the seller to countersign.
+      </div>
+      <div class="sig-label">Buyer Signature</div>
+      <canvas id="buyer-sig-canvas" class="sig-canvas" width="640" height="140"></canvas>
+      <div class="sig-row">
+        <input id="buyer-sig-name" class="sig-name-inp" placeholder="Full name (Buyer)"/>
+        <button class="btn-sm" onclick="clearSig('buyer')">Clear</button>
+        <button class="generate-btn" style="width:auto;padding:10px 18px;margin-top:0" onclick="lockBuyerSig()">Lock &amp; Share →</button>
+      </div>
+      <div id="buyer-sig-status" class="sig-status"></div>
+    </div>
+
+    <!-- SHARE LINK (appears after buyer locks) -->
+    <div id="share-link-section" style="display:none">
+      <div class="share-box">
+        <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:4px">✓ Buyer signed — send this link to the seller:</div>
+        <div class="share-row">
+          <input id="share-link-input" class="share-inp" readonly/>
+          <button class="btn-sm" onclick="copyShareLink()" style="white-space:nowrap;flex-shrink:0">Copy</button>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:7px;line-height:1.5">
+          The seller opens this link, reviews the PO, adds their countersignature, and downloads the fully signed PDF — no account required.
+        </div>
+      </div>
+    </div>
+
+    <!-- SELLER SECTION (seller mode: ?sign=...) -->
+    <div id="seller-sig-section" style="display:none">
+      <div class="buyer-replay-box">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;font-family:'IBM Plex Mono',monospace">Buyer signature received</div>
+        <canvas id="buyer-sig-replay" class="replay-canvas" width="560" height="90"></canvas>
+        <div id="buyer-sig-info" style="font-size:11px;color:var(--muted);margin-top:5px;font-family:'IBM Plex Mono',monospace"></div>
+      </div>
+
+      <div class="sig-label" style="margin-top:4px">Your Signature (Seller / Supplier)</div>
+      <canvas id="seller-sig-canvas" class="sig-canvas" width="640" height="140"></canvas>
+      <div class="sig-row">
+        <input id="seller-sig-name" class="sig-name-inp" placeholder="Full name (Seller)"/>
+        <button class="btn-sm" onclick="clearSig('seller')">Clear</button>
+        <button class="generate-btn" style="width:auto;padding:10px 18px;margin-top:0;background:var(--green);border-color:var(--green)" onclick="lockSellerSig()">✓ Sign &amp; Download PDF</button>
+      </div>
+      <div id="seller-sig-status" class="sig-status"></div>
+    </div>
+  </div>
+
 </div><!-- /form-side -->
 
 <!-- ══ PREVIEW SIDE ═════════════════════════════════════════════════════════════ -->
@@ -414,6 +523,12 @@ html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15p
 // ── GLOBALS ───────────────────────────────────────────────────────────────────
 var lineItems = [{desc:'', sku:'', qty:1, unit:'MT', unit_price:0}];
 var _liveTimer = null;
+var _logoBase64 = null;
+var _sellerMode = false;
+var _sigs = {
+  buyer:  { strokes: [], curStroke: [], drawing: false, signed: false, name: '', date: '' },
+  seller: { strokes: [], curStroke: [], drawing: false, signed: false, name: '', date: '' }
+};
 var UNITS = ['MT','kg','L','Barrel','Unit','m','m²','m³','Ton','lb','ft','Box','Pallet','Set'];
 var SYM = {USD:'$', EUR:'€', AED:'AED ', SAR:'SAR ', GBP:'£'};
 var SHIP_LABELS = {
@@ -424,11 +539,9 @@ var SHIP_LABELS = {
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 (function init() {
-  // PO number + date
   document.getElementById('po-num').value = genPONum();
   document.getElementById('po-date').value = new Date().toISOString().slice(0,10);
 
-  // Restore saved API key
   var saved = localStorage.getItem('sf_claude_key');
   if (saved) {
     document.getElementById('sf-api-key').value = saved;
@@ -436,8 +549,24 @@ var SHIP_LABELS = {
     document.getElementById('sf-ai-caret').textContent = '▾';
   }
 
-  // Pre-fill from URL params (from LOI cards, negotiation rows, or catalog buttons)
+  // Restore saved logo
+  var savedLogo = localStorage.getItem('sloi_po_logo');
+  if (savedLogo) { _logoBase64 = savedLogo; applyLogoPreview(savedLogo); }
+
+  // Check for share link (?sign=) — seller mode
   var p = new URLSearchParams(location.search);
+  var signParam = p.get('sign');
+  if (signParam) {
+    try {
+      var decoded = JSON.parse(decodeURIComponent(escape(atob(signParam))));
+      applySignData(decoded);
+    } catch(e) {
+      console.warn('Failed to decode sign param:', e);
+    }
+    return; // skip URL param pre-fill below (sign data has everything)
+  }
+
+  // Pre-fill from URL params (from LOI cards, negotiation rows, or catalog buttons)
   var product  = p.get('product')  || '';
   var ref      = p.get('ref')      || '';
   var qty      = p.get('qty')      || '';
@@ -473,7 +602,6 @@ var SHIP_LABELS = {
   }
   if (ref && !product) document.getElementById('po-notes').value = 'Linked LOI / Ref: ' + ref;
 
-  // Pre-fill buyer info from session (only if not already set by URL params)
   try {
     var u = JSON.parse(localStorage.getItem('sloi_user') || '{}');
     if (!buyer && u.org_name) document.getElementById('po-bill-to').value = u.org_name;
@@ -483,6 +611,9 @@ var SHIP_LABELS = {
   renderLineItems();
   updateCalc();
   if (hasData) setTimeout(renderPreview, 80);
+
+  // Init buyer signature canvas
+  initSigCanvas('buyer');
 })();
 
 // ── PO NUMBER ─────────────────────────────────────────────────────────────────
@@ -499,22 +630,58 @@ function toggleAiSettings() {
   b.style.display = open ? 'none' : 'block';
   c.textContent = open ? '▸' : '▾';
 }
-
 function saveSfApiKey(val) {
   val = (val || '').trim();
   if (val) localStorage.setItem('sf_claude_key', val);
   else localStorage.removeItem('sf_claude_key');
 }
-
 function clearSfApiKey() {
   localStorage.removeItem('sf_claude_key');
   document.getElementById('sf-api-key').value = '';
 }
 
-// ── LINE ITEMS ────────────────────────────────────────────────────────────────
-function sym() {
-  return SYM[document.getElementById('po-currency').value] || '$';
+// ── LOGO ──────────────────────────────────────────────────────────────────────
+function handleLogoDrop(e) {
+  e.preventDefault();
+  document.getElementById('logo-zone').style.borderColor = '';
+  var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if (file) processLogoFile(file);
 }
+function handleLogoUpload(input) {
+  var file = input.files && input.files[0];
+  if (file) processLogoFile(file);
+}
+function processLogoFile(file) {
+  if (!file.type.startsWith('image/')) { showToast('Please upload an image file', 'red'); return; }
+  if (file.size > 2 * 1024 * 1024) { showToast('Logo too large — max 2 MB', 'red'); return; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    _logoBase64 = e.target.result;
+    localStorage.setItem('sloi_po_logo', _logoBase64);
+    applyLogoPreview(_logoBase64);
+    if (document.querySelector('#po-preview-wrap .doc')) renderPreview();
+  };
+  reader.readAsDataURL(file);
+}
+function applyLogoPreview(src) {
+  var img = document.getElementById('logo-img');
+  img.src = src; img.style.display = 'block';
+  document.getElementById('logo-ph').style.display = 'none';
+  document.getElementById('logo-rm').style.display = 'inline-flex';
+}
+function removeLogo() {
+  _logoBase64 = null;
+  localStorage.removeItem('sloi_po_logo');
+  var img = document.getElementById('logo-img');
+  img.src = ''; img.style.display = 'none';
+  document.getElementById('logo-ph').style.display = 'block';
+  document.getElementById('logo-rm').style.display = 'none';
+  document.getElementById('logo-input').value = '';
+  if (document.querySelector('#po-preview-wrap .doc')) renderPreview();
+}
+
+// ── LINE ITEMS ────────────────────────────────────────────────────────────────
+function sym() { return SYM[document.getElementById('po-currency').value] || '$'; }
 
 function renderLineItems() {
   var s = sym();
@@ -537,12 +704,10 @@ function renderLineItems() {
   document.getElementById('li-body').innerHTML = html;
   updateCalc();
 }
-
 function addLineItem() {
   lineItems.push({desc:'', sku:'', qty:1, unit:'MT', unit_price:0});
   renderLineItems();
 }
-
 function removeLineItem(i) {
   lineItems.splice(i, 1);
   renderLineItems();
@@ -560,22 +725,17 @@ function updateCalc() {
   document.getElementById('c-sub').textContent  = s + fmt(sub);
   document.getElementById('c-tax').textContent  = s + fmt(tax);
   document.getElementById('c-total').textContent = s + fmt(sub + tax);
-  // Refresh row totals
   var tds = document.querySelectorAll('#li-body .li-total');
   lineItems.forEach(function(item, i) {
     if (tds[i]) tds[i].textContent = s + fmt((parseFloat(item.qty)||0) * (parseFloat(item.unit_price)||0));
   });
 }
-
 function fmt(n) {
   return parseFloat(n || 0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
-
 function esc(str) {
   return (str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
-
-// ── LIVE UPDATE ───────────────────────────────────────────────────────────────
 function liveUpdate() {
   clearTimeout(_liveTimer);
   _liveTimer = setTimeout(function() {
@@ -583,17 +743,230 @@ function liveUpdate() {
   }, 350);
 }
 
+// ── SIGNATURE CANVAS ─────────────────────────────────────────────────────────
+function initSigCanvas(party) {
+  var canvas = document.getElementById(party + '-sig-canvas');
+  if (!canvas) return;
+  var sig = _sigs[party];
+
+  function getPos(e) {
+    var rect = canvas.getBoundingClientRect();
+    var src = e.touches ? e.touches[0] : e;
+    return {
+      x: Math.round((src.clientX - rect.left) / rect.width  * 1000) / 1000,
+      y: Math.round((src.clientY - rect.top)  / rect.height * 1000) / 1000
+    };
+  }
+  function redraw() {
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.strokeStyle = '#eeedf8'; ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    var all = sig.strokes.concat(sig.curStroke.length > 1 ? [sig.curStroke] : []);
+    all.forEach(function(stroke) {
+      if (!stroke || stroke.length < 2) return;
+      ctx.beginPath();
+      ctx.moveTo(stroke[0].x * canvas.width, stroke[0].y * canvas.height);
+      for (var i = 1; i < stroke.length; i++)
+        ctx.lineTo(stroke[i].x * canvas.width, stroke[i].y * canvas.height);
+      ctx.stroke();
+    });
+  }
+  function start(e) {
+    if (sig.signed) return;
+    e.preventDefault();
+    sig.drawing = true;
+    sig.curStroke = [getPos(e)];
+  }
+  function move(e) {
+    if (!sig.drawing || sig.signed) return;
+    e.preventDefault();
+    sig.curStroke.push(getPos(e));
+    redraw();
+  }
+  function end(e) {
+    if (!sig.drawing) return;
+    e.preventDefault();
+    sig.drawing = false;
+    if (sig.curStroke.length > 1) sig.strokes.push(sig.curStroke.slice());
+    sig.curStroke = [];
+  }
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  canvas.addEventListener('mouseup', end);
+  canvas.addEventListener('mouseleave', end);
+  canvas.addEventListener('touchstart', start, {passive:false});
+  canvas.addEventListener('touchmove',  move,  {passive:false});
+  canvas.addEventListener('touchend',   end,   {passive:false});
+}
+
+function clearSig(party) {
+  if (_sigs[party].signed) return;
+  _sigs[party].strokes = []; _sigs[party].curStroke = [];
+  var canvas = document.getElementById(party + '-sig-canvas');
+  if (canvas) canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function replayStrokes(canvas, strokes, color) {
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!strokes || !strokes.length) return;
+  ctx.strokeStyle = color || '#eeedf8'; ctx.lineWidth = 2;
+  ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+  strokes.forEach(function(stroke) {
+    if (!stroke || stroke.length < 2) return;
+    ctx.beginPath();
+    ctx.moveTo(stroke[0].x * canvas.width, stroke[0].y * canvas.height);
+    for (var i = 1; i < stroke.length; i++)
+      ctx.lineTo(stroke[i].x * canvas.width, stroke[i].y * canvas.height);
+    ctx.stroke();
+  });
+}
+
+function sigToDataURL(strokes, w, h, color) {
+  var c = document.createElement('canvas');
+  c.width = w || 400; c.height = h || 80;
+  replayStrokes(c, strokes, color || '#5b5fef');
+  return c.toDataURL('image/png');
+}
+
+// ── BUYER LOCK & SHARE ────────────────────────────────────────────────────────
+function lockBuyerSig() {
+  if (_sigs.buyer.signed) return;
+  if (!_sigs.buyer.strokes.length) { showToast('Please sign before locking', 'red'); return; }
+  var name = (document.getElementById('buyer-sig-name').value || '').trim()
+             || document.getElementById('po-bill-to').value || 'Buyer';
+  _sigs.buyer.signed = true;
+  _sigs.buyer.name   = name;
+  _sigs.buyer.date   = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+
+  var canvas = document.getElementById('buyer-sig-canvas');
+  canvas.classList.add('locked');
+  document.getElementById('buyer-sig-status').innerHTML =
+    '<span style="color:var(--green)">✓ Signed · ' + _sigs.buyer.date + '</span>';
+
+  document.getElementById('share-link-section').style.display = 'block';
+  generateShareLink();
+  renderPreview();
+  showToast('Buyer signed — copy the link and send to seller', 'green');
+}
+
+// ── SELLER LOCK & DOWNLOAD ────────────────────────────────────────────────────
+function lockSellerSig() {
+  if (_sigs.seller.signed) return;
+  if (!_sigs.seller.strokes.length) { showToast('Please sign before downloading', 'red'); return; }
+  var name = (document.getElementById('seller-sig-name').value || '').trim()
+             || document.getElementById('po-supplier').value || 'Seller';
+  _sigs.seller.signed = true;
+  _sigs.seller.name   = name;
+  _sigs.seller.date   = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+
+  var canvas = document.getElementById('seller-sig-canvas');
+  canvas.classList.add('locked');
+  document.getElementById('seller-sig-status').innerHTML =
+    '<span style="color:var(--green)">✓ Both parties signed — generating PDF…</span>';
+
+  renderPreview();
+  showToast('Both parties signed — downloading PDF', 'green');
+  setTimeout(downloadPDF, 700);
+}
+
+// ── SHARE LINK ────────────────────────────────────────────────────────────────
+function collectFormData() {
+  return {
+    v: 1,
+    fields: {
+      poNum:    document.getElementById('po-num').value,
+      poDate:   document.getElementById('po-date').value,
+      supplier: document.getElementById('po-supplier').value,
+      supAddr:  document.getElementById('po-supplier-addr').value,
+      supCon:   document.getElementById('po-supplier-contact').value,
+      shipName: document.getElementById('po-ship-name').value,
+      shipAddr: document.getElementById('po-ship-addr').value,
+      billTo:   document.getElementById('po-bill-to').value,
+      payTerms: document.getElementById('po-pay-terms').value,
+      shipTerms:document.getElementById('po-ship-terms').value,
+      delivery: document.getElementById('po-delivery').value,
+      currency: document.getElementById('po-currency').value,
+      taxRate:  document.getElementById('po-tax').value,
+      notes:    document.getElementById('po-notes').value
+    },
+    items: lineItems,
+    buyerSig: { strokes: _sigs.buyer.strokes, name: _sigs.buyer.name, date: _sigs.buyer.date }
+  };
+}
+
+function generateShareLink() {
+  try {
+    var json    = JSON.stringify(collectFormData());
+    var encoded = btoa(unescape(encodeURIComponent(json)));
+    var url     = location.origin + location.pathname + '?sign=' + encoded;
+    document.getElementById('share-link-input').value = url;
+  } catch(e) {
+    document.getElementById('share-link-input').value = '(Error — PO data too large; shorten notes)';
+  }
+}
+
+function copyShareLink() {
+  var inp = document.getElementById('share-link-input');
+  if (!inp.value) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(inp.value)
+      .then(function() { showToast('Share link copied', 'green'); })
+      .catch(function() { inp.select(); document.execCommand('copy'); showToast('Copied', 'green'); });
+  } else {
+    inp.select(); document.execCommand('copy'); showToast('Copied', 'green');
+  }
+}
+
+// ── SELLER MODE ───────────────────────────────────────────────────────────────
+function applySignData(data) {
+  _sellerMode = true;
+  var f = data.fields || {};
+  var map = {
+    poNum:'po-num', poDate:'po-date', supplier:'po-supplier',
+    supAddr:'po-supplier-addr', supCon:'po-supplier-contact',
+    shipName:'po-ship-name', shipAddr:'po-ship-addr', billTo:'po-bill-to',
+    payTerms:'po-pay-terms', delivery:'po-delivery', taxRate:'po-tax', notes:'po-notes'
+  };
+  Object.keys(map).forEach(function(k) {
+    if (f[k] !== undefined) { var el = document.getElementById(map[k]); if (el) el.value = f[k]; }
+  });
+  if (f.shipTerms) setSelect('po-ship-terms', f.shipTerms);
+  if (f.currency)  setSelect('po-currency', f.currency);
+  if (data.items)  { lineItems = data.items; renderLineItems(); updateCalc(); }
+
+  if (data.buyerSig) {
+    _sigs.buyer.strokes = data.buyerSig.strokes || [];
+    _sigs.buyer.signed  = true;
+    _sigs.buyer.name    = data.buyerSig.name  || '';
+    _sigs.buyer.date    = data.buyerSig.date  || '';
+  }
+
+  document.getElementById('seller-banner').style.display = 'block';
+  document.getElementById('buyer-sig-section').style.display   = 'none';
+  document.getElementById('share-link-section').style.display  = 'none';
+  document.getElementById('seller-sig-section').style.display  = 'block';
+
+  var info = document.getElementById('buyer-sig-info');
+  if (info) info.textContent = _sigs.buyer.name + (_sigs.buyer.date ? ' · ' + _sigs.buyer.date : '');
+
+  setTimeout(function() {
+    var rc = document.getElementById('buyer-sig-replay');
+    if (rc) replayStrokes(rc, _sigs.buyer.strokes, '#8b8ff8');
+    initSigCanvas('seller');
+  }, 60);
+
+  setTimeout(renderPreview, 80);
+}
+
 // ── AI DRAFT ──────────────────────────────────────────────────────────────────
 async function aiDraft() {
   var apiKey = (localStorage.getItem('sf_claude_key') || '').trim();
   var desc   = (document.getElementById('po-desc').value || '').trim();
-
   if (!desc)   { setStatus('Enter an order description above first.', 'red'); return; }
   if (!apiKey) { setStatus('Add your Claude API key in Step 1 to use AI drafting.', 'gold'); return; }
-
-  setStatus('', '');
-  setBusy(true);
-
+  setStatus('', ''); setBusy(true);
   var prompt = [
     'Extract purchase order details from the text below and return ONLY a valid JSON object with these exact fields:',
     '{',
@@ -636,19 +1009,16 @@ async function aiDraft() {
         messages: [{ role: 'user', content: prompt }]
       })
     });
-
     if (!resp.ok) {
       var err = await resp.json().catch(function() { return {}; });
       throw new Error((err.error && err.error.message) || 'API error ' + resp.status);
     }
-
-    var data = await resp.json();
-    var raw = (data.content && data.content[0] && data.content[0].text) || '';
-    var match = raw.match(/\{[\s\S]*\}/);
+    var data   = await resp.json();
+    var raw    = (data.content && data.content[0] && data.content[0].text) || '';
+    var match  = raw.match(/\{[\s\S]*\}/);
     if (!match) throw new Error('Could not parse AI response — try a more detailed description');
     var parsed = JSON.parse(match[0]);
 
-    // Apply fields
     if (parsed.supplier_name)    document.getElementById('po-supplier').value         = parsed.supplier_name;
     if (parsed.supplier_address) document.getElementById('po-supplier-addr').value    = parsed.supplier_address;
     if (parsed.supplier_contact) document.getElementById('po-supplier-contact').value = parsed.supplier_contact;
@@ -658,26 +1028,16 @@ async function aiDraft() {
     if (parsed.delivery_days)    document.getElementById('po-delivery').value         = parsed.delivery_days;
     if (parsed.tax_rate != null) document.getElementById('po-tax').value              = parsed.tax_rate;
     if (parsed.notes)            document.getElementById('po-notes').value            = parsed.notes;
-
     setSelect('po-ship-terms', (parsed.shipping_terms || '').split(' ')[0].toUpperCase());
     setSelect('po-currency', parsed.currency || 'USD');
-
     if (parsed.items && parsed.items.length > 0) {
       lineItems = parsed.items.map(function(it) {
-        return {
-          desc:       it.desc || '',
-          sku:        it.sku  || '',
-          qty:        parseFloat(it.qty)        || 1,
-          unit:       it.unit || 'MT',
-          unit_price: parseFloat(it.unit_price) || 0
-        };
+        return { desc: it.desc||'', sku: it.sku||'', qty: parseFloat(it.qty)||1, unit: it.unit||'MT', unit_price: parseFloat(it.unit_price)||0 };
       });
       renderLineItems();
     }
-
-    setStatus('✦ AI draft complete — review and adjust below, then Generate Preview.', 'teal');
+    setStatus('✦ AI draft complete — review and adjust, then Generate Preview.', 'teal');
     renderPreview();
-
   } catch(e) {
     setStatus('Error: ' + e.message, 'red');
   } finally {
@@ -687,17 +1047,16 @@ async function aiDraft() {
 
 function setSelect(id, val) {
   var el = document.getElementById(id);
+  if (!el) return;
   for (var i = 0; i < el.options.length; i++) {
     if (el.options[i].value === val) { el.selectedIndex = i; return; }
   }
 }
-
 function setBusy(busy) {
   document.getElementById('ai-btn').disabled = busy;
   document.getElementById('ai-spin').style.display = busy ? 'block' : 'none';
   document.getElementById('ai-btn-text').textContent = busy ? 'Drafting…' : '✦ AI Draft PO';
 }
-
 function setStatus(msg, color) {
   var el = document.getElementById('ai-status');
   var colors = {red:'var(--red)', teal:'var(--teal)', gold:'var(--gold)', green:'var(--green)'};
@@ -705,7 +1064,7 @@ function setStatus(msg, color) {
   el.style.color = colors[color] || 'var(--muted)';
 }
 
-// ── SAVE PO TO localStorage (readable by admin panel) ─────────────────────────
+// ── SAVE PO TO localStorage ───────────────────────────────────────────────────
 function savePOToStorage() {
   var poNum   = document.getElementById('po-num').value;
   var dateVal = document.getElementById('po-date').value;
@@ -713,17 +1072,16 @@ function savePOToStorage() {
   var taxRate = parseFloat(document.getElementById('po-tax').value) || 0;
   var params  = new URLSearchParams(location.search);
   var item = {
-    po_num:   poNum,
-    date:     dateVal,
-    product:  lineItems[0] ? (lineItems[0].desc || '—') : '—',
-    buyer:    document.getElementById('po-bill-to').value || '—',
-    supplier: document.getElementById('po-supplier').value || '—',
-    currency: document.getElementById('po-currency').value || 'USD',
-    incoterm: document.getElementById('po-ship-terms').value || '',
-    total:    sub + sub * taxRate / 100,
-    status:   'draft',
-    loi_ref:  params.get('ref') || params.get('loi_ref') || '',
-    created_at: new Date().toISOString()
+    po_num:    poNum, date: dateVal,
+    product:   lineItems[0] ? (lineItems[0].desc || '—') : '—',
+    buyer:     document.getElementById('po-bill-to').value    || '—',
+    supplier:  document.getElementById('po-supplier').value   || '—',
+    currency:  document.getElementById('po-currency').value   || 'USD',
+    incoterm:  document.getElementById('po-ship-terms').value || '',
+    total:     sub + sub * taxRate / 100,
+    status:    _sigs.seller.signed ? 'signed' : (_sigs.buyer.signed ? 'pending-seller' : 'draft'),
+    loi_ref:   params.get('ref') || params.get('loi_ref') || '',
+    created_at:new Date().toISOString()
   };
   var pos = [];
   try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
@@ -758,6 +1116,12 @@ function renderPreview() {
     ? new Date(dateVal + 'T00:00:00').toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'})
     : '';
 
+  // Logo
+  var logoHtml = _logoBase64
+    ? '<img src="' + _logoBase64 + '" style="max-height:48px;max-width:180px;object-fit:contain;display:block"/>'
+    : '<div class="doc-logo">SLOI <em>AI</em></div><div class="doc-logo-sub">Commodity Trading Platform</div>';
+
+  // Line items
   var liRows = lineItems.map(function(item, i) {
     var rt = (parseFloat(item.qty)||0) * (parseFloat(item.unit_price)||0);
     return '<tr>'
@@ -770,31 +1134,45 @@ function renderPreview() {
       + '</tr>';
   }).join('');
 
+  // Signatures for preview
+  var buyerSigHtml = '';
+  var sellerSigHtml = '';
+  var buyerSigDateHtml  = 'Date: ___________________';
+  var sellerSigDateHtml = 'Date: ___________________';
+
+  if (_sigs.buyer.signed && _sigs.buyer.strokes.length) {
+    var bSrc = sigToDataURL(_sigs.buyer.strokes, 400, 80, '#5b5fef');
+    buyerSigHtml = '<img src="' + bSrc + '" class="sig-img"/>';
+    buyerSigDateHtml = 'Signed: ' + _sigs.buyer.date;
+  }
+  if (_sigs.seller.signed && _sigs.seller.strokes.length) {
+    var sSrc = sigToDataURL(_sigs.seller.strokes, 400, 80, '#5b5fef');
+    sellerSigHtml = '<img src="' + sSrc + '" class="sig-img"/>';
+    sellerSigDateHtml = 'Signed: ' + _sigs.seller.date;
+  }
+
+  var signedBadge = (_sigs.buyer.signed && _sigs.seller.signed)
+    ? ' <span style="background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);color:#22c55e;border-radius:3px;font-size:9px;padding:2px 6px;letter-spacing:.06em;text-transform:uppercase;font-family:IBM Plex Mono,monospace;margin-left:8px">FULLY SIGNED</span>'
+    : (_sigs.buyer.signed ? ' <span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.3);color:#e8a94a;border-radius:3px;font-size:9px;padding:2px 6px;letter-spacing:.06em;font-family:IBM Plex Mono,monospace;margin-left:8px">PENDING SELLER</span>' : '');
+
   var html = '<div class="po-wrap"><div class="doc" id="po-doc">'
-    // Header
     + '<div class="doc-top">'
     + '  <div class="doc-top-row">'
+    + '    <div>' + logoHtml + '</div>'
     + '    <div>'
-    + '      <div class="doc-logo">SLOI <em>AI</em></div>'
-    + '      <div class="doc-logo-sub">Commodity Trading Platform</div>'
-    + '    </div>'
-    + '    <div>'
-    + '      <div class="doc-type-label">PURCHASE ORDER</div>'
+    + '      <div class="doc-type-label">PURCHASE ORDER' + signedBadge + '</div>'
     + '      <div class="doc-ref">' + esc(poNum) + '</div>'
     + '      <div class="doc-date">' + esc(dateDisp) + '</div>'
     + '    </div>'
     + '  </div>'
     + '</div>'
-    // Body
     + '<div class="doc-body">'
-    // Parties
     + '  <div class="doc-section">Parties</div>'
     + '  <div class="parties-grid">'
     + '    <div class="party-block"><div class="party-role">Bill To</div><div class="party-name">' + esc(billTo) + '</div></div>'
     + '    <div class="party-block"><div class="party-role">Ship To</div><div class="party-name">' + esc(shipName || billTo) + '</div>' + (shipAddr ? '<div class="party-detail">' + esc(shipAddr) + '</div>' : '') + '</div>'
     + '    <div class="party-block"><div class="party-role">Supplier</div><div class="party-name">' + esc(supplier) + '</div>' + (supAddr ? '<div class="party-detail">' + esc(supAddr) + '</div>' : '') + (supCon ? '<div class="party-detail">' + esc(supCon) + '</div>' : '') + '</div>'
     + '  </div>'
-    // Line items
     + '  <div class="doc-section">Line Items</div>'
     + '  <table class="po-table">'
     + '    <thead><tr>'
@@ -807,14 +1185,12 @@ function renderPreview() {
     + '    </tr></thead>'
     + '    <tbody>' + liRows + '</tbody>'
     + '  </table>'
-    // Totals
     + '  <div class="doc-section">Totals</div>'
     + '  <div class="totals-block">'
     + '    <div class="tot-row"><span class="tot-label">Subtotal</span><span class="tot-val">' + s + fmt(sub) + ' ' + cur + '</span></div>'
     + '    <div class="tot-row"><span class="tot-label">Tax (' + taxRate + '%)</span><span class="tot-val">' + s + fmt(tax) + '</span></div>'
     + '    <div class="tot-row"><span class="tot-label" style="font-weight:700;color:var(--white)">Grand Total</span><span class="tot-val grand">' + s + fmt(tot) + ' ' + cur + '</span></div>'
     + '  </div>'
-    // Terms
     + '  <div class="doc-section">Terms</div>'
     + '  <div class="terms-grid">'
     + '    <div class="term-block"><div class="term-label">Payment Terms</div><div class="term-val">' + esc(payTerms) + '</div></div>'
@@ -824,19 +1200,13 @@ function renderPreview() {
     + '    <div class="term-block"><div class="term-label">Delivery</div><div class="term-val">' + esc(delivery) + ' days from PO date</div></div>'
     + '    <div class="term-block"><div class="term-label">Currency</div><div class="term-val">' + esc(cur) + '</div></div>'
     + '  </div>'
-    // Notes
-    + (notes
-      ? '  <div class="doc-section">Notes &amp; Special Instructions</div>'
-        + '  <div class="notes-block">' + esc(notes) + '</div>'
-      : '')
-    // Signatures
+    + (notes ? '  <div class="doc-section">Notes &amp; Special Instructions</div><div class="notes-block">' + esc(notes) + '</div>' : '')
     + '  <div class="doc-section">Authorization</div>'
     + '  <div class="sig-grid">'
-    + '    <div class="sig-block"><div class="sig-role">Authorized by — Buyer</div><div class="sig-line"></div><div class="sig-name">' + esc(billTo) + '</div><div class="sig-date">Date: ___________________</div></div>'
-    + '    <div class="sig-block"><div class="sig-role">Accepted by — Supplier</div><div class="sig-line"></div><div class="sig-name">' + esc(supplier) + '</div><div class="sig-date">Date: ___________________</div></div>'
+    + '    <div class="sig-block"><div class="sig-role">Authorized by — Buyer</div>' + buyerSigHtml + '<div class="sig-line"></div><div class="sig-name">' + esc(_sigs.buyer.signed ? _sigs.buyer.name : billTo) + '</div><div class="sig-date">' + buyerSigDateHtml + '</div></div>'
+    + '    <div class="sig-block"><div class="sig-role">Accepted by — Supplier</div>' + sellerSigHtml + '<div class="sig-line"></div><div class="sig-name">' + esc(_sigs.seller.signed ? _sigs.seller.name : supplier) + '</div><div class="sig-date">' + sellerSigDateHtml + '</div></div>'
     + '  </div>'
     + '</div>'
-    // Footer
     + '<div class="doc-footer">Generated by SLOI AI · sloiai.com · This document requires authorized signatures to be legally binding · ' + esc(poNum) + '</div>'
     + '</div></div>';
 
@@ -846,22 +1216,19 @@ function renderPreview() {
 
 // ── PRINT & PDF ───────────────────────────────────────────────────────────────
 function printPO() {
-  if (!document.getElementById('po-doc')) {
-    setStatus('Generate a preview first.', 'gold'); return;
-  }
+  if (!document.getElementById('po-doc')) { setStatus('Generate a preview first.', 'gold'); return; }
   window.print();
 }
-
 function downloadPDF() {
   var el = document.getElementById('po-doc');
   if (!el) { setStatus('Generate a preview first.', 'gold'); return; }
   var poNum = document.getElementById('po-num').value || 'purchase-order';
   html2pdf().set({
-    margin:     [8, 10, 8, 10],
-    filename:   poNum + '.pdf',
-    image:      { type: 'jpeg', quality: 0.97 },
-    html2canvas:{ scale: 2, useCORS: true, backgroundColor: '#07070f' },
-    jsPDF:      { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    margin:      [8, 10, 8, 10],
+    filename:    poNum + '.pdf',
+    image:       { type: 'jpeg', quality: 0.97 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#07070f' },
+    jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' }
   }).from(el).save();
 }
 </script>
