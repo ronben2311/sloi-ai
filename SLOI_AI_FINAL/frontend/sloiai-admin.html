@@ -231,7 +231,6 @@ select.inp option{background:var(--surface)}
   <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">10</span></button>
   <div class="sb-section">Revenue</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
-  <button class="nav" onclick="show('credits',this)"><span class="nav-icon">⚡</span><span class="nav-label">Credits</span></button>
   <button class="nav" onclick="show('contracts',this)"><span class="nav-icon">📄</span><span class="nav-label">Contracts</span></button>
   <button class="nav" onclick="show('traders',this)"><span class="nav-icon">👥</span><span class="nav-label">Traders</span></button>
   <div class="sb-section">Network</div>
@@ -341,9 +340,9 @@ select.inp option{background:var(--surface)}
 
   <!-- NEGOTIATIONS -->
   <div id="view-negotiations" class="view">
-    <div style="display:grid;grid-template-columns:1fr 230px;gap:20px;align-items:start">
+    <div>
 
-      <!-- LEFT: main negotiation content -->
+      <!-- main negotiation content -->
       <div>
         <div class="g4" style="margin-bottom:10px">
           <div class="stat"><div class="stat-top">Active Now</div><div class="stat-val" id="neg-stat-active" style="color:var(--green)">—</div></div>
@@ -427,128 +426,6 @@ select.inp option{background:var(--surface)}
         </div>
       </div>
 
-      <!-- RIGHT: sticky AI agents column -->
-      <div style="position:sticky;top:0">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-          <span style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">AI Tools</span>
-          <span style="flex:1;height:1px;background:var(--border);display:block"></span>
-        </div>
-
-        <!-- PriceScout -->
-        <div style="background:var(--surface);border:1px solid rgba(45,212,191,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
-          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-            <div style="width:26px;height:26px;border-radius:5px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">💰</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">PriceScout</div>
-              <div style="font-size:11px;color:var(--muted)">Market price · counter-offer</div>
-            </div>
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
-          </div>
-          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">Avg spread today: <span style="color:var(--teal)">+4.2%</span></div>
-          <div style="padding:0 8px 8px">
-            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="alert('PriceScout — pull live market price for active deal')">💰 Price check</button>
-          </div>
-        </div>
-
-        <!-- ComplianceBot -->
-        <div style="background:var(--surface);border:1px solid rgba(34,197,94,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
-          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-            <div style="width:26px;height:26px;border-radius:5px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🛡️</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">ComplianceBot</div>
-              <div style="font-size:11px;color:var(--muted)">OFAC · sanctions · dual-use</div>
-            </div>
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
-          </div>
-          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">Last scan: <span style="color:var(--green)">All clear</span></div>
-          <div style="padding:0 8px 8px">
-            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:var(--green)" onclick="show('compliance',null)">🛡️ Run check</button>
-          </div>
-        </div>
-
-        <!-- OutreachBot -->
-        <div style="background:var(--surface);border:1px solid rgba(99,102,241,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
-          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-            <div style="width:26px;height:26px;border-radius:5px;background:rgba(99,102,241,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📨</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">OutreachBot</div>
-              <div style="font-size:11px;color:var(--muted)">Follow-up · re-engage buyer</div>
-            </div>
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></span>
-          </div>
-          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">2 buyers idle <span style="color:var(--gold)">&gt;24h</span></div>
-          <div style="padding:0 8px 8px">
-            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(99,102,241,.08);border-color:rgba(99,102,241,.25);color:var(--indigo)" onclick="alert('OutreachBot — send follow-up to idle buyers')">📨 Follow up</button>
-          </div>
-        </div>
-
-        <!-- PO Generator -->
-        <div style="background:var(--surface);border:1px solid rgba(232,169,74,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
-          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-            <div style="width:26px;height:26px;border-radius:5px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🧾</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">PO Generator</div>
-              <div style="font-size:11px;color:var(--muted)">Issue PO from signed LOI</div>
-            </div>
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
-          </div>
-          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">2 POs pending · <span style="color:var(--gold)">$102K</span></div>
-          <div style="padding:0 8px 8px">
-            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="openPOModal()">🧾 Generate PO</button>
-          </div>
-        </div>
-
-        <!-- Invoice Generator -->
-        <div style="background:var(--surface);border:1px solid rgba(45,212,191,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
-          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-            <div style="width:26px;height:26px;border-radius:5px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🧾</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">Invoice Generator</div>
-              <div style="font-size:11px;color:var(--muted)">Invoice from signed PO</div>
-            </div>
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
-          </div>
-          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">3 invoices · <span style="color:var(--teal)">$384K total</span></div>
-          <div style="padding:0 8px 8px">
-            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="openInvoiceModal()">🧾 New invoice</button>
-          </div>
-        </div>
-
-        <!-- LegalContract AI -->
-        <div style="background:var(--surface);border:1px solid rgba(168,85,247,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
-          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-            <div style="width:26px;height:26px;border-radius:5px;background:rgba(168,85,247,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">⚖️</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">LegalContract AI</div>
-              <div style="font-size:11px;color:var(--muted)">ICC contract · send to lawyer</div>
-            </div>
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0"></span>
-          </div>
-          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">On-demand · <span style="color:#c084fc">0 pending</span></div>
-          <div style="padding:0 8px 8px">
-            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.25);color:#c084fc" onclick="alert('LegalContract AI — select a completed deal to generate contract')">⚖️ Draft contract</button>
-          </div>
-        </div>
-
-        <!-- TradeFinanceAI -->
-        <div style="background:var(--surface);border:1px solid rgba(232,169,74,.15);border-radius:7px;overflow:hidden;margin-bottom:8px">
-          <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-            <div style="width:26px;height:26px;border-radius:5px;background:rgba(232,169,74,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">💳</div>
-            <div style="flex:1;min-width:0">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">TradeFinanceAI</div>
-              <div style="font-size:11px;color:var(--muted)">LC · SBLC · factoring</div>
-            </div>
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0"></span>
-          </div>
-          <div style="padding:8px 12px;font-size:12px;color:var(--muted)">3 LCs active · <span style="color:var(--gold)">$2.1M</span></div>
-          <div style="padding:0 8px 8px">
-            <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.2);color:var(--gold)" onclick="alert('TradeFinanceAI — draft LC for active deal')">💳 Draft LC</button>
-          </div>
-        </div>
-
-        <button class="btn btn-xs" style="width:100%;justify-content:center;color:var(--muted);border-color:var(--border)" onclick="show('agents',null)">View all AI Tools →</button>
-      </div>
-
     </div>
   </div>
 
@@ -568,34 +445,6 @@ select.inp option{background:var(--surface)}
           <tr><td colspan="8" style="padding:16px;text-align:center;color:var(--muted)">Loading...</td></tr>
         </tbody>
       </table>
-    </div>
-  </div>
-
-  <!-- CREDITS -->
-  <div id="view-credits" class="view">
-    <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Credits Sold MTD</div><div class="stat-val" style="color:var(--teal)">1,240</div></div>
-      <div class="stat"><div class="stat-top">Credit Revenue</div><div class="stat-val" style="color:var(--green)">$970</div></div>
-      <div class="stat"><div class="stat-top">Active Buyers</div><div class="stat-val">7</div></div>
-      <div class="stat"><div class="stat-top">Avg Pack Size</div><div class="stat-val">$139</div></div>
-    </div>
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title">// CREDIT PACK PERFORMANCE</div>
-      <div class="g4">
-        <div class="credit-pack"><div class="cp-price">$99</div><div class="cp-credits">100 credits</div><div class="cp-rate">$0.99/credit</div><div style="font-size:14px;color:var(--muted);margin-top:8px">3 sold</div></div>
-        <div class="credit-pack pop"><div class="cp-price">$299</div><div class="cp-credits">350 credits</div><div class="cp-rate">$0.85/credit</div><div style="font-size:14px;color:var(--teal);margin-top:8px">5 sold · popular</div></div>
-        <div class="credit-pack"><div class="cp-price">$599</div><div class="cp-credits">800 credits</div><div class="cp-rate">$0.75/credit</div><div style="font-size:14px;color:var(--muted);margin-top:8px">1 sold</div></div>
-        <div class="credit-pack"><div class="cp-price">$999</div><div class="cp-credits">1,500 credits</div><div class="cp-rate">$0.67/credit</div><div style="font-size:14px;color:var(--muted);margin-top:8px">0 sold</div></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">// CREDIT TRANSACTIONS</div>
-      <div style="max-height:280px;overflow-y:auto">
-        <div class="ctx-row"><span class="badge bg">PURCHASE</span><span style="flex:1;margin-left:10px;color:var(--muted)">Gulf Cement LLC · $299 pack</span><span style="color:var(--green);font-weight:700">+350</span><span style="color:var(--muted);font-size:14px;margin-left:12px">bal: 320</span></div>
-        <div class="ctx-row"><span class="badge br">LOI</span><span style="flex:1;margin-left:10px;color:var(--muted)">LOI generation · SL-LOI-20260501-003</span><span style="color:var(--red);font-weight:700">-5</span><span style="color:var(--muted);font-size:14px;margin-left:12px">bal: 315</span></div>
-        <div class="ctx-row"><span class="badge ba">NEGOT.</span><span style="flex:1;margin-left:10px;color:var(--muted)">Deal Hunter session · Steel Rebar</span><span style="color:var(--red);font-weight:700">-10</span><span style="color:var(--muted);font-size:14px;margin-left:12px">bal: 320</span></div>
-        <div class="ctx-row"><span class="badge bg">PURCHASE</span><span style="flex:1;margin-left:10px;color:var(--muted)">Atlas Trading · $99 pack</span><span style="color:var(--green);font-weight:700">+100</span><span style="color:var(--muted);font-size:14px;margin-left:12px">bal: 85</span></div>
-      </div>
     </div>
   </div>
 
@@ -642,7 +491,53 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
     <div id="broker-list"></div>
-    <button class="btn btn-p btn-sm" onclick="window.open('broker-onboarding.html','_blank')">+ Onboard new trader</button>
+    <button class="btn btn-p btn-sm" onclick="window.open('broker-onboarding.html','_blank')" style="margin-bottom:20px">+ Onboard new trader</button>
+
+    <!-- LOIs -->
+    <div class="card" style="margin-top:4px">
+      <div class="card-title">
+        // LOIs
+        <input class="inp" id="tl-search" placeholder="Search ref, product, buyer…" oninput="renderTraderLOIs()" style="width:200px;font-size:13px;padding:5px 9px">
+      </div>
+      <div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">
+        <button class="btn btn-xs" id="tlf-all"   onclick="tlFilter('all',this)"   style="border-color:var(--indigo);color:var(--violet)">All traders</button>
+        <button class="btn btn-xs" id="tlf-AA"    onclick="tlFilter('AA',this)">Ali Al-Omari</button>
+        <button class="btn btn-xs" id="tlf-KW"    onclick="tlFilter('KW',this)">Klaus Weber</button>
+        <button class="btn btn-xs" id="tlf-MH"    onclick="tlFilter('MH',this)">Mohammed Hassan</button>
+        <span style="width:1px;background:var(--border);margin:0 4px;align-self:stretch;display:inline-block"></span>
+        <button class="btn btn-xs" id="tlfs-all"    onclick="tlsFilter('all',this)"  style="border-color:var(--indigo);color:var(--violet)">All</button>
+        <button class="btn btn-xs" id="tlfs-signed"   onclick="tlsFilter('signed',this)">✓ Signed</button>
+        <button class="btn btn-xs" id="tlfs-pending"  onclick="tlsFilter('pending',this)">⏳ Pending</button>
+        <button class="btn btn-xs" id="tlfs-completed" onclick="tlsFilter('completed',this)">★ Completed</button>
+      </div>
+      <table>
+        <thead><tr><th>LOI Ref</th><th>Product</th><th>Buyer</th><th>Trader</th><th style="text-align:right">Value</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="trader-loi-body"><tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- POs -->
+    <div class="card" style="margin-top:16px">
+      <div class="card-title">
+        // PURCHASE ORDERS
+        <button class="btn btn-xs btn-g" onclick="window.open('po-generator.html','_blank')" style="font-size:12px">+ New PO</button>
+      </div>
+      <div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">
+        <button class="btn btn-xs" id="tpf-all"  onclick="tpFilter('all',this)"  style="border-color:var(--indigo);color:var(--violet)">All traders</button>
+        <button class="btn btn-xs" id="tpf-AA"   onclick="tpFilter('AA',this)">Ali Al-Omari</button>
+        <button class="btn btn-xs" id="tpf-KW"   onclick="tpFilter('KW',this)">Klaus Weber</button>
+        <button class="btn btn-xs" id="tpf-MH"   onclick="tpFilter('MH',this)">Mohammed Hassan</button>
+        <span style="width:1px;background:var(--border);margin:0 4px;align-self:stretch;display:inline-block"></span>
+        <button class="btn btn-xs" id="tpfs-all"       onclick="tpfsFilter('all',this)"       style="border-color:var(--indigo);color:var(--violet)">All</button>
+        <button class="btn btn-xs" id="tpfs-sent"      onclick="tpfsFilter('sent',this)">Sent</button>
+        <button class="btn btn-xs" id="tpfs-confirmed" onclick="tpfsFilter('confirmed',this)">Confirmed</button>
+        <button class="btn btn-xs" id="tpfs-draft"     onclick="tpfsFilter('draft',this)">Draft</button>
+      </div>
+      <table>
+        <thead><tr><th>PO #</th><th>Product</th><th>Buyer</th><th>Trader</th><th>Incoterm</th><th>Payment</th><th style="text-align:right">Value</th><th>Status</th><th>LOI Ref</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="trader-po-body"><tr><td colspan="11" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr></tbody>
+      </table>
+    </div>
   </div>
 
   <!-- SUPPLIERS -->
@@ -1946,6 +1841,129 @@ function renderBrokers(){var html='';BROKERS.forEach(function(b){html+='<div cla
 
 function approveBroker(){alert('KYC approved. Gulf Metals Trading is now active.\nRef: BRK-UAE-002');document.getElementById('broker-pending').style.display='none';}
 
+// ── TRADER LOIs & POs ─────────────────────────────────────────────────────────
+
+var TRADER_LOIS = [
+  {ref:'SL-LOI-20260501-003', product:'Hard Wheat · 50 MT',     buyer:'Gulf Cement LLC',    trader:'AA', traderName:'Ali Al-Omari',      value:56000,  status:'signed',    date:'2026-05-01'},
+  {ref:'SL-LOI-20260430-002', product:'Aluminum 6061-T6 · 5 MT',buyer:'NEOM Procurement',   trader:'AA', traderName:'Ali Al-Omari',      value:46000,  status:'signed',    date:'2026-04-30'},
+  {ref:'SL-LOI-20260522-004', product:'Steel Rebar G60 · 100 MT',buyer:'Al-Rashid Group',   trader:'AA', traderName:'Ali Al-Omari',      value:56000,  status:'pending',   date:'2026-05-22'},
+  {ref:'SL-LOI-20260415-001', product:'Steel Rebar G60 · 180 MT',buyer:'Atlas Trading',     trader:'KW', traderName:'Klaus Weber',       value:84000,  status:'signed',    date:'2026-04-15'},
+  {ref:'SL-LOI-20260310-007', product:'Cement OPC 52.5R · 200 MT',buyer:'Bauer GmbH',      trader:'KW', traderName:'Klaus Weber',       value:43200,  status:'completed', date:'2026-03-10'},
+  {ref:'SL-LOI-20260228-005', product:'Yellow Corn · 50 MT',    buyer:'Cairo Constructions',trader:'MH', traderName:'Mohammed Hassan',   value:49000,  status:'completed', date:'2026-02-28'},
+];
+
+var TRADER_POS = [
+  {po:'PO-2026-001', product:'Hard Wheat',         buyer:'Gulf Cement LLC',    trader:'AA', traderName:'Ali Al-Omari',    incoterm:'CIF', payment:'T/T advance', value:56000,  status:'sent',      loi:'SL-LOI-20260501-003', date:'2026-05-03'},
+  {po:'PO-2026-002', product:'Aluminum 6061-T6',   buyer:'NEOM Procurement',   trader:'AA', traderName:'Ali Al-Omari',    incoterm:'FOB', payment:'LC at sight', value:46000,  status:'confirmed', loi:'SL-LOI-20260430-002', date:'2026-05-02'},
+  {po:'PO-2026-003', product:'Steel Rebar G60',    buyer:'Atlas Trading',      trader:'KW', traderName:'Klaus Weber',     incoterm:'CFR', payment:'T/T 30d',    value:84000,  status:'sent',      loi:'SL-LOI-20260415-001', date:'2026-04-18'},
+  {po:'PO-2026-004', product:'Cement OPC 52.5R',   buyer:'Bauer GmbH',         trader:'KW', traderName:'Klaus Weber',     incoterm:'EXW', payment:'DP 60d',     value:43200,  status:'confirmed', loi:'SL-LOI-20260310-007', date:'2026-03-14'},
+  {po:'PO-2026-005', product:'Steel Rebar G60',    buyer:'Al-Rashid Group',    trader:'AA', traderName:'Ali Al-Omari',    incoterm:'CFR', payment:'LC at sight', value:56000,  status:'draft',     loi:'SL-LOI-20260522-004', date:'2026-05-24'},
+  {po:'PO-2026-006', product:'Yellow Corn',        buyer:'Cairo Constructions',trader:'MH', traderName:'Mohammed Hassan', incoterm:'CIF', payment:'T/T 30d',    value:49000,  status:'confirmed', loi:'SL-LOI-20260228-005', date:'2026-03-02'},
+];
+
+var _TL_TRADER = 'all', _TL_STATUS = 'all';
+var _TP_TRADER = 'all', _TP_STATUS = 'all';
+
+function tlFilter(v, btn) {
+  _TL_TRADER = v;
+  document.querySelectorAll('[id^="tlf-"]').forEach(function(b){ b.style.borderColor=''; b.style.color=''; });
+  if (btn) { btn.style.borderColor='var(--indigo)'; btn.style.color='var(--violet)'; }
+  renderTraderLOIs();
+}
+function tlsFilter(v, btn) {
+  _TL_STATUS = v;
+  document.querySelectorAll('[id^="tlfs-"]').forEach(function(b){ b.style.borderColor=''; b.style.color=''; });
+  if (btn) { btn.style.borderColor='var(--indigo)'; btn.style.color='var(--violet)'; }
+  renderTraderLOIs();
+}
+function tpFilter(v, btn) {
+  _TP_TRADER = v;
+  document.querySelectorAll('[id^="tpf-"]').forEach(function(b){ b.style.borderColor=''; b.style.color=''; });
+  if (btn) { btn.style.borderColor='var(--indigo)'; btn.style.color='var(--violet)'; }
+  renderTraderPOs();
+}
+function tpfsFilter(v, btn) {
+  _TP_STATUS = v;
+  document.querySelectorAll('[id^="tpfs-"]').forEach(function(b){ b.style.borderColor=''; b.style.color=''; });
+  if (btn) { btn.style.borderColor='var(--indigo)'; btn.style.color='var(--violet)'; }
+  renderTraderPOs();
+}
+
+var LOI_STATUS_BADGE = {
+  signed:    '<span class="badge bg">✓ Signed</span>',
+  pending:   '<span class="badge ba">⏳ Pending</span>',
+  completed: '<span class="badge bv">★ Completed</span>',
+};
+var PO_STATUS_BADGE = {
+  sent:      '<span class="badge bg">Sent</span>',
+  confirmed: '<span class="badge bv">Confirmed</span>',
+  draft:     '<span class="badge bm">Draft</span>',
+};
+
+function renderTraderLOIs() {
+  var q = (document.getElementById('tl-search')||{}).value || '';
+  var list = TRADER_LOIS.filter(function(l) {
+    var matchT = _TL_TRADER === 'all' || l.trader === _TL_TRADER;
+    var matchS = _TL_STATUS === 'all' || l.status === _TL_STATUS;
+    var matchQ = !q || l.ref.toLowerCase().includes(q.toLowerCase()) || l.product.toLowerCase().includes(q.toLowerCase()) || l.buyer.toLowerCase().includes(q.toLowerCase());
+    return matchT && matchS && matchQ;
+  });
+  var tbody = document.getElementById('trader-loi-body');
+  if (!tbody) return;
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:20px">No LOIs match</td></tr>'; return; }
+  tbody.innerHTML = list.map(function(l) {
+    var d = new Date(l.date);
+    var ds = d.toLocaleDateString([],{month:'short',day:'numeric'});
+    return '<tr>'
+      + '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--indigo)">' + l.ref + '</td>'
+      + '<td style="font-size:14px;color:var(--white)">' + l.product + '</td>'
+      + '<td style="font-size:13px;color:var(--muted)">' + l.buyer + '</td>'
+      + '<td><div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:4px;background:' + brokerColor(l.trader) + ';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">' + l.trader + '</div><span style="font-size:13px;color:var(--muted)">' + l.traderName + '</span></div></td>'
+      + '<td style="text-align:right;font-family:\'Fraunces\',serif;font-weight:700;color:var(--violet)">$' + l.value.toLocaleString() + '</td>'
+      + '<td>' + (LOI_STATUS_BADGE[l.status] || l.status) + '</td>'
+      + '<td style="font-size:12px;color:var(--muted)">' + ds + '</td>'
+      + '<td><div style="display:flex;gap:4px">'
+        + '<button class="btn btn-xs" style="font-size:11px" onclick="window.open(\'loi-generator.html\',\'_blank\')">📄 View</button>'
+        + '<button class="btn btn-xs" style="font-size:11px;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="window.open(\'po-generator.html?ref=' + encodeURIComponent(l.ref) + '\',\'_blank\')">🧾 PO</button>'
+      + '</div></td>'
+      + '</tr>';
+  }).join('');
+}
+
+function renderTraderPOs() {
+  var list = TRADER_POS.filter(function(p) {
+    var matchT = _TP_TRADER === 'all' || p.trader === _TP_TRADER;
+    var matchS = _TP_STATUS === 'all' || p.status === _TP_STATUS;
+    return matchT && matchS;
+  });
+  var tbody = document.getElementById('trader-po-body');
+  if (!tbody) return;
+  if (!list.length) { tbody.innerHTML = '<tr><td colspan="11" style="text-align:center;color:var(--muted);padding:20px">No POs match</td></tr>'; return; }
+  tbody.innerHTML = list.map(function(p) {
+    var d = new Date(p.date);
+    var ds = d.toLocaleDateString([],{month:'short',day:'numeric'});
+    return '<tr>'
+      + '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px;color:var(--indigo)">' + p.po + '</td>'
+      + '<td style="font-size:13px;color:var(--white)">' + p.product + '</td>'
+      + '<td style="font-size:13px;color:var(--muted)">' + p.buyer + '</td>'
+      + '<td><div style="display:flex;align-items:center;gap:6px"><div style="width:22px;height:22px;border-radius:4px;background:' + brokerColor(p.trader) + ';display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">' + p.trader + '</div><span style="font-size:13px;color:var(--muted)">' + p.traderName + '</span></div></td>'
+      + '<td style="font-size:12px;color:var(--teal)">' + p.incoterm + '</td>'
+      + '<td style="font-size:12px;color:var(--muted)">' + p.payment + '</td>'
+      + '<td style="text-align:right;font-family:\'Fraunces\',serif;font-weight:700;color:var(--violet)">$' + p.value.toLocaleString() + '</td>'
+      + '<td>' + (PO_STATUS_BADGE[p.status] || p.status) + '</td>'
+      + '<td style="font-size:12px;font-family:\'IBM Plex Mono\',monospace;color:var(--teal)">' + p.loi + '</td>'
+      + '<td style="font-size:12px;color:var(--muted)">' + ds + '</td>'
+      + '<td><div style="display:flex;gap:4px">'
+        + '<button class="btn btn-xs" style="font-size:11px" onclick="window.open(\'po-generator.html?ref=' + encodeURIComponent(p.loi) + '\',\'_blank\')">📄 Open</button>'
+      + '</div></td>'
+      + '</tr>';
+  }).join('');
+}
+
+function brokerColor(init) {
+  var map = { AA:'rgba(91,95,239,.25)', KW:'rgba(45,212,191,.25)', MH:'rgba(232,169,74,.25)' };
+  return map[init] || 'rgba(255,255,255,.1)';
+}
 
 // ── PRODUCTS & PRICING ────────────────────────────────────────────────────────
 
@@ -2432,7 +2450,7 @@ if (api && api.agui) {
     });
 }
 
-renderKanban();renderBrokers();renderProducts();renderUsers();
+renderKanban();renderBrokers();renderTraderLOIs();renderTraderPOs();renderProducts();renderUsers();
 renderLeadFinder();renderPriceScoutFeed();renderAgentLog();
 loadCatalogStatus();
 loadNegotiations();

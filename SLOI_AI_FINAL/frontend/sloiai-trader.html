@@ -99,12 +99,39 @@ select.inp option{background:var(--surface)}
 .sw-label{font-size:14px;color:var(--text)}
 .sw-desc{font-size:12px;color:var(--muted);margin-top:1px}
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.ham-btn{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px 8px;line-height:1;flex-shrink:0}
+.mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:99;cursor:pointer}
+@media(max-width:768px){
+  .ham-btn{display:block}
+  .sidebar{position:fixed;top:0;left:0;bottom:0;width:220px;z-index:100;transform:translateX(-100%);transition:transform .25s ease}
+  body.sidebar-open .sidebar{transform:translateX(0)}
+  body.sidebar-open .mob-overlay{display:block}
+  .topbar{padding:0 10px;gap:6px}
+  .topbar-badge{display:none}
+  .topbar-wa{display:none}
+  .g4{grid-template-columns:1fr 1fr}
+  .g2,.g3{grid-template-columns:1fr}
+  .view{padding:12px 12px 40px}
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .loi-card{flex-wrap:wrap;gap:8px}
+  #pipeline-cols{grid-template-columns:1fr 1fr!important}
+  #lead-form-grid{grid-template-columns:1fr!important}
+  .neg-card{padding:11px}
+  .buyer-profile-grid{grid-template-columns:1fr!important}
+  .profile-inner-g2{grid-template-columns:1fr!important}
+}
+@media(max-width:480px){
+  .g4{grid-template-columns:1fr}
+  #pipeline-cols{grid-template-columns:1fr!important}
+  .topbar-newlead{display:none}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 
 <script src="/api-client.js"></script>
 </head>
 <body>
+<div class="mob-overlay" onclick="closeSidebar()"></div>
 <div class="shell">
 
 <aside class="sidebar">
@@ -137,14 +164,15 @@ select.inp option{background:var(--surface)}
 
 <div class="main">
   <div class="topbar">
-    <div style="display:flex;flex-direction:column;gap:1px">
-      <div style="font-size:15px;font-weight:600;color:var(--white)" id="tb-title">Dashboard</div>
-      <div style="font-size:12px;color:var(--muted)" id="tb-sub">BRK-UAE-001 · UAE / KSA / Iraq</div>
+    <button class="ham-btn" onclick="openSidebar()">☰</button>
+    <div style="display:flex;flex-direction:column;gap:1px;flex:1;min-width:0">
+      <div style="font-size:15px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="tb-title">Dashboard</div>
+      <div style="font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="tb-sub">BRK-UAE-001 · UAE / KSA / Iraq</div>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
-      <span class="badge bg">✓ Active trader</span>
-      <button class="btn btn-sm btn-a" onclick="openTG()">📲 WhatsApp boss</button>
-      <button class="btn btn-sm btn-p" onclick="show('pipeline',document.querySelectorAll('.nav')[3])">+ New lead</button>
+    <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <span class="badge bg topbar-badge">✓ Active trader</span>
+      <button class="btn btn-sm btn-a topbar-wa" onclick="openTG()">📲 WhatsApp boss</button>
+      <button class="btn btn-sm btn-p topbar-newlead" onclick="show('pipeline',document.querySelectorAll('.nav')[3])">+ New lead</button>
     </div>
   </div>
 
@@ -238,7 +266,7 @@ select.inp option{background:var(--surface)}
 
     <div class="card" style="margin-bottom:14px">
       <div class="card-title">// ADD LEAD</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:end">
+      <div id="lead-form-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:end">
         <div><label class="flabel">Buyer name</label><input class="inp" id="pl-name" placeholder="Gulf Cement LLC"/></div>
         <div><label class="flabel">Product</label><input class="inp" id="pl-prod" placeholder="Steel Rebar G60"/></div>
         <div><label class="flabel">Est. value (USD)</label><input class="inp" id="pl-val" type="number" placeholder="250000"/></div>
@@ -247,7 +275,7 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+    <div id="pipeline-cols" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
       <div>
         <div style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.1em;padding:6px 0;margin-bottom:6px;border-bottom:1px solid var(--border)">NEW LEAD</div>
         <div id="col-new"></div>
@@ -361,11 +389,11 @@ select.inp option{background:var(--surface)}
 
   <!-- PROFILE -->
   <div id="view-profile" class="view">
-    <div class="g2">
+    <div class="g2 buyer-profile-grid">
       <div class="card">
         <div class="card-title">// BROKER PROFILE</div>
         <div style="display:flex;flex-direction:column;gap:10px">
-          <div class="g2">
+          <div class="g2 profile-inner-g2">
             <div><label class="flabel">Company name</label><input class="inp" value="Gulf Trade Partners"/></div>
             <div><label class="flabel">Trader ref</label><input class="inp" value="BRK-UAE-001" readonly style="opacity:.6"/></div>
           </div>
@@ -404,6 +432,8 @@ select.inp option{background:var(--surface)}
 <script>
 
 const api = initPortal('trader');
+function openSidebar(){document.body.classList.add('sidebar-open')}
+function closeSidebar(){document.body.classList.remove('sidebar-open')}
 
 // Real user info
 (function() {
@@ -651,6 +681,7 @@ function show(v,btn){
   var t=TITLES[v]||[v,''];
   document.getElementById('tb-title').textContent=t[0];
   document.getElementById('tb-sub').textContent=t[1];
+  closeSidebar();
 }
 
 function renderPipeline(){

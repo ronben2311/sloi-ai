@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="description" content="Source steel rebar, aluminum billets, HRC, DRI, and scrap metal from verified MENA and Ukraine suppliers through SLOI AI. Signed LOI in 72 hours."/>
+<title>Steel & Metals — MENA Supply | SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06060e;--surface:#0d0d1a;--surface2:#11111e;--border:#1a1a2e;--border2:#22223a;
+  --indigo:#5b5fef;--violet:#8b8ff8;--indigo-dim:rgba(91,95,239,.12);
+  --muted:#8888a8;--text:#cac8e4;--white:#eeedfa;
+  --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg);overflow-x:clip}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(91,95,239,.022) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.022) 1px,transparent 1px);
+  background-size:72px 72px}
+.hero-glow{position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:900px;height:600px;
+  background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(91,95,239,.15) 0%,transparent 70%);
+  pointer-events:none;z-index:0}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;
+  background:rgba(6,6,14,.9);border-bottom:1px solid rgba(255,255,255,.05);backdrop-filter:blur(20px);font-family:'IBM Plex Mono',monospace}
+.nav-logo{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.03em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-links{display:flex;gap:24px;font-size:13px}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--white)}
+.btn-cta-nav{background:var(--indigo);color:#fff;border:none;padding:8px 18px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:opacity .15s}
+.btn-cta-nav:hover{opacity:.85}
+
+.hero{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:100px 32px 80px}
+.eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.16em;text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.eyebrow::before,.eyebrow::after{content:'';width:24px;height:1px;background:var(--indigo);opacity:.5}
+h1{font-family:'Fraunces',serif;font-size:clamp(48px,8vw,86px);font-weight:900;line-height:.92;letter-spacing:-.04em;color:var(--white);margin-bottom:24px}
+h1 em{font-style:italic;background:linear-gradient(135deg,var(--indigo),var(--violet),#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:16px;color:var(--muted);line-height:1.85;max-width:580px;margin-bottom:36px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn-primary{padding:14px 28px;border-radius:6px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;gap:8px;background:var(--indigo);color:#fff;border:none}
+.btn-primary:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 8px 28px rgba(91,95,239,.35)}
+.btn-outline{padding:14px 28px;border-radius:6px;font-size:15px;font-weight:500;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:8px;background:none;border:1px solid var(--border2);color:var(--text)}
+.btn-outline:hover{border-color:rgba(91,95,239,.5);color:var(--violet)}
+
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);max-width:none;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:var(--surface);position:relative;z-index:1;margin:0 32px 80px}
+.sb-item{padding:22px 24px;text-align:center;border-right:1px solid var(--border)}
+.sb-item:last-child{border-right:none}
+.sb-val{font-family:'Fraunces',serif;font-size:32px;font-weight:900;letter-spacing:-.03em;line-height:1;margin-bottom:6px}
+.sb-label{font-size:12px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;line-height:1.5}
+
+.sec-divider{position:relative;z-index:1;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 40px}
+
+.section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:80px 32px}
+.section-eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.16em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:10px}
+.section-eyebrow::before,.section-eyebrow::after{content:'';width:24px;height:1px;background:var(--indigo);opacity:.5}
+.section-title{font-family:'Fraunces',serif;font-size:clamp(32px,4.5vw,50px);font-weight:900;color:var(--white);letter-spacing:-.03em;text-align:center;margin-bottom:12px;line-height:1.05}
+.section-title em{font-style:italic;color:var(--indigo)}
+.section-sub{font-size:15px;color:var(--muted);text-align:center;line-height:1.85;max-width:520px;margin:0 auto 48px}
+
+.mineral-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mineral-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;transition:border-color .2s}
+.mineral-card:hover{border-color:rgba(91,95,239,.35)}
+.mc-icon{font-size:26px;margin-bottom:10px}
+.mc-name{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px}
+.mc-price{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:6px}
+.mc-desc{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:10px}
+.mc-origins{display:flex;gap:5px;flex-wrap:wrap}
+.mc-origin{font-size:11px;padding:2px 7px;border-radius:2px;background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+
+.source-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.source-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s}
+.source-card:hover{border-color:rgba(91,95,239,.3)}
+.sc-flag{font-size:30px;flex-shrink:0}
+.sc-body{flex:1}
+.sc-name{font-size:15px;font-weight:600;color:var(--white);margin-bottom:3px}
+.sc-sub{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.sc-tags{display:flex;gap:4px;flex-wrap:wrap}
+.sc-tag{font-size:11px;padding:2px 7px;border-radius:2px;background:var(--surface2);border:1px solid var(--border2);color:var(--text)}
+
+.ptable-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;border:1px solid var(--border)}
+.ptable{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+.ptable th{text-align:left;padding:10px 14px;background:var(--surface2);color:var(--muted);font-weight:600;font-size:11px;letter-spacing:.07em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.ptable td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.ptable tr:last-child td{border-bottom:none}
+.ptable tr:hover td{background:rgba(255,255,255,.012)}
+.price-hl{color:var(--teal);font-weight:700;font-family:'Fraunces',serif;font-size:14px}
+.inco{font-family:'IBM Plex Mono',monospace;font-size:11px;background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:2px 6px;color:var(--muted)}
+
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.why-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;position:relative;overflow:hidden;transition:border-color .2s}
+.why-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--indigo),var(--violet));opacity:0;transition:opacity .2s}
+.why-card:hover{border-color:rgba(91,95,239,.3)}
+.why-card:hover::after{opacity:1}
+.why-icon{font-size:22px;margin-bottom:10px}
+.why-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:6px}
+.why-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+.badge{display:inline-flex;font-size:11px;font-weight:700;padding:2px 8px;border-radius:2px;letter-spacing:.04em}
+.bg{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.ba{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)}
+.bv{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
+.bt{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)}
+
+.cta-section{position:relative;z-index:1;max-width:740px;margin:0 auto;padding:60px 32px 80px}
+.cta-box{position:relative;border-radius:14px;overflow:hidden;padding:2px;background:linear-gradient(135deg,rgba(91,95,239,.6),rgba(139,143,248,.3),rgba(91,95,239,.4))}
+.cta-inner{background:linear-gradient(160deg,rgba(13,13,26,.98),rgba(17,17,30,.98));border-radius:13px;padding:52px 44px;text-align:center}
+.cta-title{font-family:'Fraunces',serif;font-size:clamp(32px,5vw,52px);font-weight:900;color:var(--white);letter-spacing:-.03em;margin-bottom:14px;line-height:.95}
+.cta-title em{font-style:italic;background:linear-gradient(135deg,var(--indigo),var(--violet));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.cta-sub{font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:28px;max-width:460px;margin-left:auto;margin-right:auto}
+
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{font-family:'Fraunces',serif;font-size:14px;font-weight:900;color:var(--white)}
+.footer-logo em{font-style:italic;color:var(--indigo)}
+.footer-links{display:flex;gap:20px;font-size:13px;flex-wrap:wrap;align-items:center}
+.footer-links a{color:var(--muted);text-decoration:none;transition:color .15s}
+.footer-links a:hover{color:var(--white)}
+.footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.footer-note{font-size:12px;color:var(--muted)}
+.social-icons{display:flex;gap:7px}
+.social-icon{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:6px;border:1px solid var(--border2);color:var(--muted);text-decoration:none;transition:all .15s}
+.social-icon svg{width:15px;height:15px;fill:currentColor;flex-shrink:0}
+.social-icon:hover{transform:translateY(-1px)}
+.si-li:hover{border-color:rgba(10,102,194,.5);color:#0a66c2}
+.si-wa:hover{border-color:rgba(37,211,102,.5);color:#25d366}
+
+@media(max-width:768px){
+  nav{padding:0 16px}.nav-links{display:none}
+  .hero{padding:60px 16px 48px}
+  .section{padding:48px 16px}
+  .cta-section{padding:40px 16px 60px}
+  .cta-inner{padding:36px 24px}
+  .stats-bar{grid-template-columns:1fr 1fr;margin:0 16px 48px}
+  .mineral-grid{grid-template-columns:1fr 1fr}
+  .source-grid,.why-grid{grid-template-columns:1fr}
+  .sec-divider{margin:0 16px}
+  footer{padding:20px 16px;flex-direction:column;align-items:flex-start}
+  .footer-right{align-items:flex-start}
+}
+@media(max-width:480px){
+  .mineral-grid{grid-template-columns:1fr}
+  .stats-bar{grid-template-columns:1fr 1fr}
+}
+</style>
+<link rel="stylesheet" href="/main.css"/>
+<script src="/seo-geo.js"></script>
+</head>
+<body>
+<div class="hero-glow"></div>
+
+<nav>
+  <a href="sloiai-home.html" class="nav-logo">Sloi<em>AI</em></a>
+  <div class="nav-links">
+    <a href="about.html">About</a>
+    <a href="faq.html">FAQ</a>
+    <a href="docs.html">Docs</a>
+    <a href="broker-onboarding.html">Become a Trader</a>
+  </div>
+  <a href="smb-order.html" class="btn-cta-nav">Request LOI →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="eyebrow">Steel & Metals · MENA & Ukraine · Mill-Direct Supply</div>
+  <h1>The metals that<br/>build everything.<br/><em>We source them.</em></h1>
+  <p class="hero-sub">Steel rebar, aluminum billets, HRC, DRI, billets, and scrap — the backbone of every construction project, manufacturing line, and infrastructure programme in the world. MENA mills carry the lowest-cost, shortest-lead-time supply in the Eastern Hemisphere. We connect you to verified, KYC-cleared producers and deliver a signed LOI in 72 hours.</p>
+  <div class="hero-actions">
+    <a href="smb-order.html" class="btn-primary">Request a steel & metals LOI →</a>
+    <a href="contact.html" class="btn-outline">Talk to our team</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="sb-item">
+    <div class="sb-val" style="color:var(--teal)">$950B+</div>
+    <div class="sb-label">Global steel market annually — construction is 50% of end-use</div>
+  </div>
+  <div class="sb-item">
+    <div class="sb-val" style="color:var(--violet)">65M MT</div>
+    <div class="sb-label">MENA annual steel production capacity — growing with reconstruction demand</div>
+  </div>
+  <div class="sb-item">
+    <div class="sb-val" style="color:var(--green)">#1</div>
+    <div class="sb-label">Ezz Steel Egypt — largest single steel producer in the MENA region</div>
+  </div>
+  <div class="sb-item">
+    <div class="sb-val" style="color:var(--gold)">72h</div>
+    <div class="sb-label">RFQ to signed offtake LOI with a verified, mill-direct MENA supplier</div>
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- WHAT WE SOURCE -->
+<div class="section">
+  <div class="section-eyebrow">What we source</div>
+  <div class="section-title">Six products.<br/><em>All in demand.</em></div>
+  <div class="section-sub">From long products to flat steel, primary aluminum to DRI — the metals every major buyer needs, sourced directly from MENA mills with full quality documentation.</div>
+  <div class="mineral-grid">
+
+    <div class="mineral-card">
+      <div class="mc-icon">🔩</div>
+      <div class="mc-name">Steel Rebar G60 / G40</div>
+      <div class="mc-price" style="color:var(--teal)">$540–640 / MT FOB</div>
+      <div class="mc-desc">ASTM A615 Grade 60 and Grade 40 deformed rebar — the primary structural reinforcement for construction across MENA, Africa, and Ukraine reconstruction. Ezz Steel (Egypt) and Saudi Hadeed can supply from 500 MT. Mill test certificates and third-party SGS/BV inspection included.</div>
+      <div class="mc-origins">
+        <span class="mc-origin">🇪🇬 Ezz Steel</span>
+        <span class="mc-origin">🇸🇦 Hadeed (SABIC)</span>
+        <span class="mc-origin">🇦🇪 Emirates Steel</span>
+      </div>
+    </div>
+
+    <div class="mineral-card">
+      <div class="mc-icon">🥈</div>
+      <div class="mc-name">Aluminum Billets & Ingots</div>
+      <div class="mc-price" style="color:var(--violet)">$2,200–2,600 / MT FOB</div>
+      <div class="mc-desc">Extrusion-grade 6063 billets and P1020 primary ingots from MENA's two mega-smelters — EGA (UAE, 2.6M MT/yr capacity) and ALBA (Bahrain, 1.5M MT/yr). MENA aluminum costs 30–40% less than European spot due to cheap gas-fired power. Lots from 200 MT.</div>
+      <div class="mc-origins">
+        <span class="mc-origin">🇦🇪 EGA (Emirates Global)</span>
+        <span class="mc-origin">🇧🇭 ALBA Bahrain</span>
+        <span class="mc-origin">🇸🇦 Ma'aden Aluminum</span>
+      </div>
+    </div>
+
+    <div class="mineral-card">
+      <div class="mc-icon">🏗️</div>
+      <div class="mc-name">Steel Billets</div>
+      <div class="mc-price" style="color:var(--gold)">$490–570 / MT FOB</div>
+      <div class="mc-desc">Continuous cast square billets (100×100 to 160×160mm) — feedstock for rolling mills producing rebar, wire rod, and sections. Egypt is one of the world's largest billet exporters, with Ezz and Alexandria Steel shipping millions of tonnes annually to global rolling mills.</div>
+      <div class="mc-origins">
+        <span class="mc-origin">🇪🇬 Ezz · Alexandria Steel</span>
+        <span class="mc-origin">🇸🇦 Saudi mills</span>
+        <span class="mc-origin">🇺🇦 Metinvest</span>
+      </div>
+    </div>
+
+    <div class="mineral-card">
+      <div class="mc-icon">🔄</div>
+      <div class="mc-name">Hot Rolled Coil (HRC)</div>
+      <div class="mc-price" style="color:var(--teal)">$540–620 / MT FOB</div>
+      <div class="mc-desc">HRC 2–12mm thickness, widths 900–1850mm. S235JR and S355JR grades for manufacturing, pipe making, and automotive stampings. Emirates Steel (Abu Dhabi) and Ezz Flat Steel are MENA's primary flat product mills. Coil weight 20–25MT. Lots from 500 MT.</div>
+      <div class="mc-origins">
+        <span class="mc-origin">🇦🇪 Emirates Steel TAQA</span>
+        <span class="mc-origin">🇪🇬 Ezz Flat Steel</span>
+        <span class="mc-origin">🇺🇦 Metinvest Mariupol</span>
+      </div>
+    </div>
+
+    <div class="mineral-card">
+      <div class="mc-icon">⚙️</div>
+      <div class="mc-name">DRI / HBI (Sponge Iron)</div>
+      <div class="mc-price" style="color:var(--violet)">$250–320 / MT FOB</div>
+      <div class="mc-desc">Direct Reduced Iron and Hot Briquetted Iron — the green steel input replacing scrap in electric arc furnaces. Saudi Hadeed operates the world's first industrial-scale DRI plant. Emirates Steel is 100% DRI-based, producing the lowest-carbon steel in the region. Hot commodity for EAF steelmakers globally.</div>
+      <div class="mc-origins">
+        <span class="mc-origin">🇸🇦 Hadeed (SABIC) DRI</span>
+        <span class="mc-origin">🇦🇪 Emirates Steel HBI</span>
+        <span class="mc-origin">🇶🇦 Qatar Steel DRI</span>
+      </div>
+    </div>
+
+    <div class="mineral-card">
+      <div class="mc-icon">♻️</div>
+      <div class="mc-name">Scrap Metal HMS 1 & 2</div>
+      <div class="mc-price" style="color:var(--green)">$330–410 / MT FOB</div>
+      <div class="mc-desc">Heavy Melting Scrap HMS 1 (80% heavy, 20% light, max 1.5m) and HMS 2 (75/25 mix) — primary EAF feedstock for MENA steelmakers. Turkey and Egypt are the world's largest scrap importers and re-exporters, generating arbitrage opportunities. Containerised or bulk. Lots from 500 MT.</div>
+      <div class="mc-origins">
+        <span class="mc-origin">🇪🇬 Egypt aggregators</span>
+        <span class="mc-origin">🇸🇦 Saudi scrap yards</span>
+        <span class="mc-origin">🇺🇦 Ukraine ferrous</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- WHERE WE SOURCE -->
+<div class="section">
+  <div class="section-eyebrow">Where we source</div>
+  <div class="section-title">Four origins.<br/><em>One supply chain.</em></div>
+  <div class="section-sub">Verified, KYC-cleared mill suppliers across MENA and Ukraine — the closest high-volume, low-cost, OFAC-compliant steel and metals supply outside of China.</div>
+  <div class="source-grid">
+
+    <div class="source-card">
+      <div class="sc-flag">🇪🇬</div>
+      <div class="sc-body">
+        <div class="sc-name">Egypt</div>
+        <div class="sc-sub">Ezz Steel (MENA's largest producer, 12M MT capacity) · Alexandria National Iron & Steel · Suez Steel · Delta Steel. Egypt is one of the world's top rebar and billet exporters — supplying East Africa, the Gulf, and Southern Europe. Alexandria and Sokhna ports ship year-round.</div>
+        <div class="sc-tags">
+          <span class="sc-tag">Rebar G60/G40</span><span class="sc-tag">Steel billets</span><span class="sc-tag">Wire rod</span><span class="sc-tag">HRC flat steel</span><span class="sc-tag">Angles & sections</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="sc-flag">🇸🇦</div>
+      <div class="sc-body">
+        <div class="sc-name">Saudi Arabia</div>
+        <div class="sc-sub">Saudi Steel Pipe · Hadeed (SABIC affiliate, world's first DRI plant) · National Metal Manufacturing · Ma'aden Aluminum. Saudi Arabia's Vision 2030 industrial buildout is generating both domestic consumption and export surplus. Jubail export terminal direct access.</div>
+        <div class="sc-tags">
+          <span class="sc-tag">Rebar</span><span class="sc-tag">DRI / HBI</span><span class="sc-tag">Steel pipes</span><span class="sc-tag">Aluminum billets</span><span class="sc-tag">Wire rod</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="sc-flag">🇦🇪</div>
+      <div class="sc-body">
+        <div class="sc-name">UAE</div>
+        <div class="sc-sub">Emirates Steel (TAQA, 3.5M MT/yr capacity, 100% DRI-EAF, lowest carbon intensity in region) · EGA Emirates Global Aluminium (world's 5th largest primary aluminum producer, 2.6M MT/yr) · Jebel Ali free zone re-export hub for the entire region.</div>
+        <div class="sc-tags">
+          <span class="sc-tag">HRC flat steel</span><span class="sc-tag">Rebar</span><span class="sc-tag">Aluminum P1020</span><span class="sc-tag">6063 billets</span><span class="sc-tag">DRI-grade HBI</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="source-card">
+      <div class="sc-flag">🇺🇦</div>
+      <div class="sc-body">
+        <div class="sc-name">Ukraine</div>
+        <div class="sc-sub">Metinvest (Mariupol, Kryvyi Rih, Zaporizhstal) · Ferrexpo iron ore pellets · ArcelorMittal Kryvyi Rih. Ukraine's steelmakers are exporting from western Ukraine ports and road routes despite the conflict. Post-war reconstruction demand will make Ukraine the world's largest rebar consumer by volume.</div>
+        <div class="sc-tags">
+          <span class="sc-tag">Steel billets</span><span class="sc-tag">Rebar</span><span class="sc-tag">Iron ore pellets</span><span class="sc-tag">HRC</span><span class="sc-tag">Pig iron</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- PRICE TABLE -->
+<div class="section">
+  <div class="section-eyebrow">Indicative pricing</div>
+  <div class="section-title">Reference prices.<br/><em>Live negotiations.</em></div>
+  <div class="section-sub">Indicative FOB prices from MENA and Ukraine mills, June 2026. SLOI AI negotiates final terms directly with KYC-cleared mill suppliers — no trader markup.</div>
+  <div class="ptable-wrap">
+    <table class="ptable">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Grade / Spec</th>
+          <th>Origin</th>
+          <th>FOB Price</th>
+          <th>Min Lot</th>
+          <th>Lead Time</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--white)">Rebar G60</strong></td>
+          <td>ASTM A615 · 10–32mm</td>
+          <td>🇪🇬 Ezz Steel / 🇸🇦 Hadeed</td>
+          <td class="price-hl">$540–610/MT</td>
+          <td>500 MT</td>
+          <td>2–4 weeks</td>
+          <td><span class="badge bg">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Rebar G40</strong></td>
+          <td>ASTM A615 · 10–25mm</td>
+          <td>🇪🇬 Ezz / 🇦🇪 Emirates Steel</td>
+          <td class="price-hl">$510–580/MT</td>
+          <td>500 MT</td>
+          <td>2–4 weeks</td>
+          <td><span class="badge bg">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Steel Billets</strong></td>
+          <td>130×130mm · 3SP/5SP</td>
+          <td>🇪🇬 Alexandria · 🇺🇦 Metinvest</td>
+          <td class="price-hl">$490–560/MT</td>
+          <td>5,000 MT</td>
+          <td>3–5 weeks</td>
+          <td><span class="badge bg">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Wire Rod</strong></td>
+          <td>5.5–16mm coil · SAE 1006/1008</td>
+          <td>🇪🇬 Ezz / 🇸🇦 Hadeed</td>
+          <td class="price-hl">$560–640/MT</td>
+          <td>500 MT</td>
+          <td>2–4 weeks</td>
+          <td><span class="badge bg">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">HRC Flat Steel</strong></td>
+          <td>S235JR · 2–12mm · 900–1850mm</td>
+          <td>🇦🇪 Emirates Steel / 🇪🇬 Ezz Flat</td>
+          <td class="price-hl">$545–620/MT</td>
+          <td>500 MT</td>
+          <td>3–5 weeks</td>
+          <td><span class="badge bg">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Aluminum Billets 6063</strong></td>
+          <td>Extrusion grade · 178–254mm dia</td>
+          <td>🇦🇪 EGA / 🇧🇭 ALBA</td>
+          <td class="price-hl">$2,200–2,500/MT</td>
+          <td>200 MT</td>
+          <td>2–3 weeks</td>
+          <td><span class="badge bg">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Aluminum Ingots P1020</strong></td>
+          <td>Al ≥ 99.7% · sow or T-bar</td>
+          <td>🇦🇪 EGA / 🇧🇭 ALBA</td>
+          <td class="price-hl">$2,350–2,600/MT</td>
+          <td>200 MT</td>
+          <td>2–3 weeks</td>
+          <td><span class="badge bg">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">DRI / HBI</strong></td>
+          <td>Fe metallized ≥ 90% · C 1.5–4%</td>
+          <td>🇸🇦 Hadeed / 🇦🇪 Emirates</td>
+          <td class="price-hl">$250–320/MT</td>
+          <td>10,000 MT</td>
+          <td>4–6 weeks</td>
+          <td><span class="badge bg">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Scrap HMS 1&2</strong></td>
+          <td>ISRI 200/201 · 80/20 mix</td>
+          <td>🇪🇬 Egypt / 🇺🇦 Ukraine</td>
+          <td class="price-hl">$330–410/MT</td>
+          <td>500 MT</td>
+          <td>2–4 weeks</td>
+          <td><span class="badge bg">Available</span></td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--white)">Iron Ore Pellets</strong></td>
+          <td>Fe 65%+ · DRI-grade</td>
+          <td>🇺🇦 Ferrexpo / 🇩🇿 Gara Djeb.</td>
+          <td class="price-hl">$115–130/MT</td>
+          <td>25,000 MT</td>
+          <td>6–8 weeks</td>
+          <td><span class="badge ba">On request</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="font-size:12px;color:var(--muted);margin-top:12px;text-align:center">Prices indicative · June 2026 · All deals subject to Boss approval before LOI issuance · OFAC screened · MTC + 3rd party inspection standard</div>
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- WHY SLOI AI -->
+<div class="section">
+  <div class="section-eyebrow">Why SLOI AI</div>
+  <div class="section-title">Built for serious<br/><em>steel buyers.</em></div>
+  <div class="section-sub">Everything your procurement team needs to source MENA and Ukraine steel and metals — faster, cheaper, and more compliant than going through traders.</div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🏭</div>
+      <div class="why-title">Mill-direct, no trader markup</div>
+      <div class="why-desc">SLOI AI connects you directly to Ezz Steel, Emirates Steel, EGA, and Hadeed — not to middlemen who add $30–80/MT to the price. Our trader network are mill agents and offtake holders, not spot traders. You pay the mill price, not the market.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📋</div>
+      <div class="why-title">Mill test certificates standard</div>
+      <div class="why-desc">Every steel shipment comes with a complete Mill Test Certificate (MTC) — heat number, chemical composition, mechanical properties (yield, tensile, elongation). Third-party inspection by SGS, Bureau Veritas, or Intertek arranged on request. No document surprises at destination port.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🛡️</div>
+      <div class="why-title">OFAC & sanctions built in</div>
+      <div class="why-desc">Every mill and every counterparty is screened against OFAC, EU, and UN sanctions lists before LOI issuance. No Russian-origin steel. Ukraine shipments get enhanced KYC. Steel trade faces growing compliance scrutiny — we handle it before the deal starts.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📄</div>
+      <div class="why-title">Signed offtake LOI in 72 hours</div>
+      <div class="why-desc">Steel sourcing typically involves weeks of back-and-forth mill enquiries, quote comparison, and negotiation. SLOI AI runs up to 7 automated negotiation rounds, checks compliance, and generates an ICC-standard signed LOI — ready for your finance desk, bank, or project owner.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🚢</div>
+      <div class="why-title">Incoterm flexibility — FOB to DDP</div>
+      <div class="why-desc">We arrange FOB, CFR, CIF, or DAP to any major port — Rotterdam, Houston, Mombasa, Karachi. MENA to Mediterranean is 5–8 days transit. MENA to US East Coast is 18–22 days. Full freight, insurance, and customs documentation package included on CIF deals.</div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💰</div>
+      <div class="why-title">$500 flat. No % of deal.</div>
+      <div class="why-desc">A 500 MT rebar order or a 50,000 MT billet contract — same flat LOI fee. No success fee on deal value, no monthly retainer. Your procurement savings stay yours. Predictable cost your project budget can absorb without rounding errors.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-box">
+    <div class="cta-inner">
+      <div class="cta-title">MENA mill prices.<br/>No trader margin.<br/><em>Your LOI in 72h.</em></div>
+      <p class="cta-sub">Tell us what product you need, what quantity, and your target delivery port. Our agent contacts verified, KYC-cleared MENA mill suppliers, negotiates the best terms, and generates a signed, bank-ready LOI — $500 flat.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a href="smb-order.html" class="btn-primary" style="padding:13px 28px;font-size:15px">Request a steel & metals LOI →</a>
+        <a href="contact.html" class="btn-outline" style="padding:13px 28px;font-size:15px">Talk to our team</a>
+      </div>
+      <div style="margin-top:16px;font-size:12px;color:var(--muted)">OFAC-compliant · Mill test certificates · ICC-standard LOI · Boss approval on every deal · $500 flat</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">SLOI <em>AI</em></div>
+  <div class="footer-links">
+    <a href="sloiai-home.html">Home</a>
+    <a href="imec.html">Construction</a>
+    <a href="steel-metals.html">Steel & Metals</a>
+    <a href="critical-minerals.html">Critical Minerals</a>
+    <a href="building-materials.html">Building Materials</a>
+    <a href="petrochemicals.html">Petrochemicals</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="open-network.html">MCP</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="legal.html">Legal</a>
+  </div>
+  <div class="footer-right">
+    <div class="social-icons">
+      <a href="https://www.linkedin.com/company/sloiai/" target="_blank" rel="noopener" class="social-icon si-li" title="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://wa.me/972544664428" target="_blank" rel="noopener" class="social-icon si-wa" title="WhatsApp">
+        <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.277-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+    </div>
+    <div class="footer-note">© 2026 SLOI AI Ltd. · Prices indicative · Subject to market conditions</div>
+  </div>
+</footer>
+
+</body>
+</html>

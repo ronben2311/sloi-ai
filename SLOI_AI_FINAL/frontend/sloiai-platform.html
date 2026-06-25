@@ -913,13 +913,13 @@
         <button class="nav" id="nav-contracts" onclick="show('contracts', this)">
           <span class="nav-icon">📄</span><span class="nav-label">Contracts</span>
         </button>
-        <button class="nav" onclick="show('notifications', this)">
+        <button class="nav" id="nav-notifications" onclick="show('notifications', this)">
           <span class="nav-icon">🔔</span
           ><span class="nav-label">Notifications</span
-          ><span class="nav-badge nb-red">3</span>
+          ><span class="nav-badge nb-red" id="notif-badge">3</span>
         </button>
         <div class="sb-section">Account</div>
-        <button class="nav" onclick="show('credits', this)">
+        <button class="nav" id="nav-credits" onclick="show('credits', this)">
           <span class="nav-icon">⚡</span><span class="nav-label">Credits</span>
         </button>
         <button class="nav" onclick="show('opennetwork', this)">
@@ -949,12 +949,12 @@
         <div class="sb-footer">
           <div class="sf-label">CREDIT BALANCE</div>
           <div class="sf-credits" id="sf-credits">—</div>
-          <div style="font-size:14px; color: var(--muted); margin-top: 2px">
+          <div style="font-size:14px; color: var(--muted); margin-top: 2px" id="sf-credits-sub">
             ~32 sessions remaining
           </div>
           <button
             class="sf-buy"
-            onclick="show('credits', document.querySelectorAll('.nav')[5])"
+            onclick="show('credits', document.getElementById('nav-credits'))"
           >
             ⚡ Buy more credits
           </button>
@@ -978,7 +978,7 @@
             <button
               class="btn btn-sm btn-p"
               id="topbar-credits-btn"
-              onclick="show('credits', document.querySelectorAll('.nav')[5])"
+              onclick="show('credits', document.getElementById('nav-credits'))"
             >
               ⚡ — credits
             </button>
@@ -1040,8 +1040,8 @@
               <div class="action-card" onclick="show('agents',document.querySelectorAll('.nav')[3]);setTimeout(function(){var r=document.getElementById('row-payment');if(r&&!r.classList.contains('open'))r.click();r&&r.scrollIntoView({behavior:'smooth',block:'center'});},80)" style="border-color:rgba(232,169,74,.3)">
                 <div class="ac-icon">💳</div>
                 <div class="ac-title">PaymentAI</div>
-                <div class="ac-desc">LC tracking, T/T confirmations, payment milestones &amp; overdue alerts.</div>
-                <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.3);margin-top:8px">● Running · 3 LCs open · 1 overdue</div>
+                <div class="ac-desc">Tracks LCs, T/T transfers &amp; SWIFT confirmations across all active LOIs. Flags overdue milestones.</div>
+                <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.3);margin-top:8px">● Running · 3 LCs open · $145.2K pending · ⚠ 1 overdue</div>
               </div>
             </div>
             <!-- CONNECT AGENT BANNER -->
@@ -2275,19 +2275,8 @@
                 margin-bottom: 14px;
               "
             >
-              <div style="font-size:15px; color: var(--muted)">3 unread</div>
-              <button
-                class="btn btn-xs"
-                onclick="
-                  document
-                    .querySelectorAll('.notif-item')
-                    .forEach(function (n) {
-                      n.className = 'notif-item read';
-                    })
-                "
-              >
-                Mark all read
-              </button>
+              <div style="font-size:15px; color: var(--muted)" id="notif-unread-count">3 unread</div>
+              <button class="btn btn-xs" onclick="markAllRead()">Mark all read</button>
             </div>
             <div class="notif-item success">
               <div class="ni-top">
@@ -2304,7 +2293,7 @@
                   onclick="window.open('loi-generator.html', '_blank')"
                 >
                   📄 Download LOI</button
-                ><button class="btn btn-xs">Dismiss</button>
+                ><button class="btn btn-xs" onclick="dismissNotif(this)">Dismiss</button>
               </div>
             </div>
             <div class="notif-item unread">
@@ -2339,9 +2328,7 @@
               <div class="ni-actions">
                 <button
                   class="btn btn-xs btn-t"
-                  onclick="
-                    show('credits', document.querySelectorAll('.nav')[5])
-                  "
+                  onclick="show('credits', document.getElementById('nav-credits'))"
                 >
                   Buy credits →
                 </button>
@@ -3310,6 +3297,7 @@
           .then(function (d) {
             var bal = d.balance;
             document.getElementById("sf-credits").textContent = bal;
+            document.getElementById("sf-credits-sub").textContent = "~" + Math.floor(bal / 10) + " sessions remaining";
             document.getElementById("stat-credits").textContent = bal;
             document.getElementById("stat-credits-sub").textContent =
               "~" + Math.floor(bal / 10) + " sessions";
@@ -3713,6 +3701,50 @@
         document.getElementById("tb-sub").textContent = t[1];
         if (v === 'products') setTimeout(renderCatalog, 0);
         if (v === 'contracts') renderContractsView();
+        if (v === 'notifications') clearNotifBadge();
+      }
+
+      function countUnread() {
+        return document.querySelectorAll('.notif-item.unread, .notif-item.success, .notif-item.warning').length;
+      }
+
+      function clearNotifBadge() {
+        var badge = document.getElementById('notif-badge');
+        if (badge) badge.style.display = 'none';
+        var cnt = document.getElementById('notif-unread-count');
+        if (cnt) cnt.textContent = countUnread() + ' unread';
+      }
+
+      function updateNotifBadge() {
+        var n = countUnread();
+        var badge = document.getElementById('notif-badge');
+        if (badge) {
+          badge.textContent = n;
+          badge.style.display = n > 0 ? '' : 'none';
+        }
+        var cnt = document.getElementById('notif-unread-count');
+        if (cnt) cnt.textContent = n + ' unread';
+      }
+
+      function markAllRead() {
+        document.querySelectorAll('.notif-item').forEach(function(n) {
+          n.className = 'notif-item read';
+        });
+        updateNotifBadge();
+      }
+
+      function dismissNotif(btn) {
+        var item = btn.closest ? btn.closest('.notif-item') : (function(el) {
+          while (el && !el.classList.contains('notif-item')) el = el.parentElement;
+          return el;
+        })(btn);
+        if (!item) return;
+        item.style.transition = 'opacity 0.2s, max-height 0.3s';
+        item.style.opacity = '0';
+        item.style.overflow = 'hidden';
+        item.style.maxHeight = item.offsetHeight + 'px';
+        setTimeout(function() { item.style.maxHeight = '0'; item.style.marginBottom = '0'; }, 200);
+        setTimeout(function() { item.remove(); updateNotifBadge(); }, 450);
       }
 
       function renderProducts(filter, sector) {
@@ -4029,10 +4061,20 @@
         api
           .getBalance()
           .then(function (b) {
+            var bal = b.balance;
+            var sessions = "~" + Math.floor(bal / 10) + " sessions";
             var btn = document.getElementById("topbar-credits-btn");
-            if (btn) btn.innerHTML = "⚡ " + b.balance + " credits";
+            if (btn) btn.innerHTML = "⚡ " + bal + " credits";
             var el = document.getElementById("stat-credits");
-            if (el) el.textContent = b.balance;
+            if (el) el.textContent = bal;
+            el = document.getElementById("stat-credits-sub");
+            if (el) el.textContent = sessions;
+            el = document.getElementById("sf-credits");
+            if (el) el.textContent = bal;
+            el = document.getElementById("sf-credits-sub");
+            if (el) el.textContent = sessions + " remaining";
+            el = document.getElementById("greeting-sub");
+            if (el) el.textContent = bal + " credits available";
           })
           .catch(function () {});
         updateCreditDisplay();
