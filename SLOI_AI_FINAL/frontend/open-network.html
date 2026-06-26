@@ -99,6 +99,8 @@ h1 em{font-style:italic;color:var(--indigo)}
   h1{font-size:clamp(34px,10vw,52px)}
   .hero-sub{font-size:14px;margin-bottom:36px}
   .tiers{grid-template-columns:1fr!important}
+  [style*="repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
+  [style*="align-items:center"][style*="gap:16px"]{flex-wrap:wrap!important}
   .feat-list{grid-template-columns:1fr!important}
   .flow{grid-template-columns:1fr!important;border-radius:6px}
   .flow-step{border-right:none!important;border-bottom:1px solid var(--border)}
@@ -142,7 +144,7 @@ h1 em{font-style:italic;color:var(--indigo)}
     </span>
   </div>
 
-  <div class="tiers" style="grid-template-columns:1fr">
+  <div class="tiers" style="grid-template-columns:1fr 1fr">
     <div class="tier featured">
       <div class="tier-top">
         <div class="tier-badge badge-free">INSTANT ACCESS</div>
@@ -164,6 +166,54 @@ h1 em{font-style:italic;color:var(--indigo)}
         </div>
         <button class="tier-btn btn-fill" style="margin-top:20px" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Register free — get API key instantly →</button>
       </div>
+    </div>
+
+    <div class="tier featured" style="cursor:pointer;border-color:rgba(91,95,239,.5)" onclick="window.location.href='mcp-install.html'">
+      <div class="tier-top">
+        <div class="tier-badge badge-pro">2-MIN INSTALL</div>
+        <div class="tier-name">Local Agent</div>
+        <div class="tier-tagline">Install the SLOI AI skill in Claude Desktop, Cursor, or any MCP-compatible agent. Negotiate and auto-approve deals autonomously.</div>
+        <div class="tier-price" style="font-size:36px;letter-spacing:-.03em">MCP</div>
+        <div class="tier-price-note">Claude · Cursor · Windsurf · Any agent framework</div>
+      </div>
+      <div class="tier-body">
+        <div class="feat-list">
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Claude Desktop — add 4 lines of JSON</span></div>
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Cursor / Windsurf — same config</span></div>
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">All 10 MCP tools available instantly</span></div>
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text" style="color:var(--teal)">Auto-approve deals within mandate</span></div>
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">AG-UI SSE real-time negotiation stream</span></div>
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text" style="color:var(--green)">Read tier free · no auth required</span></div>
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">USDC on Base — agent pays itself</span></div>
+          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text" style="color:var(--violet)">Earn 1% commission on every LOI</span></div>
+        </div>
+        <button class="tier-btn btn-fill" style="margin-top:20px" onclick="event.stopPropagation();window.location.href='mcp-install.html'">Install local agent →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EARNINGS EXAMPLE -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:48px">
+    <div style="font-size:12px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px">// EXAMPLE — TRANSACT TIER EARNINGS</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:center">
+      <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--white)">$500K</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Deal value</div></div>
+      <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--green)">$5,000</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Your commission (1%)</div></div>
+      <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--muted)">$0</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Monthly fee</div></div>
+      <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--indigo)">One LOI</div><div style="font-size:12px;color:var(--muted);margin-top:3px">One transaction</div></div>
+    </div>
+  </div>
+
+  <!-- AGENTKIT PAYMENT -->
+  <div style="background:rgba(0,82,255,.06);border:1px solid rgba(0,82,255,.25);border-radius:8px;padding:18px 22px;margin-bottom:48px;display:flex;align-items:center;gap:16px">
+    <div style="font-size:32px;flex-shrink:0">⬡</div>
+    <div style="flex:1">
+      <div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px">AI agents pay with USDC on Base — Coinbase AgentKit</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7">Your agent manages its own on-chain wallet. When credits run low, the agent sends USDC to SLOI AI on Base L2. Credits confirmed in ~2 seconds. After the first LOI, the agent earns 1% commission in USDC — enough to fund itself indefinitely.</div>
+    </div>
+    <div style="flex-shrink:0;display:flex;flex-direction:column;gap:6px;align-items:flex-end">
+      <span style="font-size:13px;color:var(--teal);font-weight:600">USDC on Base</span>
+      <span style="font-size:12px;color:var(--muted)">&lt;$0.01 gas · ~2s confirm</span>
+      <a href="agentkit.html" style="font-size:12px;color:rgba(0,82,255,.9);text-decoration:none;font-weight:600">AgentKit docs →</a>
     </div>
   </div>
 

@@ -924,13 +924,8 @@
         <button class="nav" id="nav-contracts" onclick="show('contracts', this)">
           <span class="nav-icon">📄</span><span class="nav-label">Contracts</span>
         </button>
-        <button class="nav" id="nav-notifications" onclick="show('notifications', this)">
-          <span class="nav-icon">🔔</span
-          ><span class="nav-label">Notifications</span
-          ><span class="nav-badge nb-red" id="notif-badge">3</span>
-        </button>
         <div class="sb-section">Account</div>
-        <button class="nav" id="nav-credits" onclick="show('credits', this)">
+        <button class="nav" id="nav-credits" onclick="show('profile', this)">
           <span class="nav-icon">⚡</span><span class="nav-label">Credits</span>
         </button>
         <button class="nav" onclick="show('opennetwork', this)">
@@ -965,7 +960,7 @@
           </div>
           <button
             class="sf-buy"
-            onclick="show('credits', document.getElementById('nav-credits'))"
+            onclick="show('profile', document.getElementById('nav-credits'))"
           >
             ⚡ Buy more credits
           </button>
@@ -987,9 +982,17 @@
               🤖 Start new LOI  · 10 credits
             </button>
             <button
+              class="btn btn-sm"
+              id="topbar-notif-btn"
+              onclick="show('notifications', this)"
+              style="position:relative;padding:0 10px;background:rgba(255,255,255,.04);border-color:var(--border2)"
+            >
+              🔔<span id="notif-badge" style="position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:9px;font-family:'IBM Plex Mono',monospace;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1">3</span>
+            </button>
+            <button
               class="btn btn-sm btn-p"
               id="topbar-credits-btn"
-              onclick="show('credits', document.getElementById('nav-credits'))"
+              onclick="show('profile', document.getElementById('nav-credits'))"
             >
               ⚡ — credits
             </button>
@@ -1048,11 +1051,11 @@
                 <div class="ac-desc">Shipment tracking, route optimisation, HS codes, duty calc &amp; import permits.</div>
                 <div class="ac-cost bt" style="border:1px solid rgba(45,212,191,.25);margin-top:8px">● Running · 6 tracked · $14.2K saved</div>
               </div>
-              <div class="action-card" onclick="show('agents',document.querySelectorAll('.nav')[3]);setTimeout(function(){var r=document.getElementById('row-payment');if(r&&!r.classList.contains('open'))r.click();r&&r.scrollIntoView({behavior:'smooth',block:'center'});},80)" style="border-color:rgba(232,169,74,.3)">
-                <div class="ac-icon">💳</div>
-                <div class="ac-title">PaymentAI</div>
-                <div class="ac-desc">Tracks LCs, T/T transfers &amp; SWIFT confirmations across all active LOIs. Flags overdue milestones.</div>
-                <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.3);margin-top:8px">● Running · 3 LCs open · $145.2K pending · ⚠ 1 overdue</div>
+              <div class="action-card" onclick="show('agents',document.querySelectorAll('.nav')[3]);setTimeout(function(){var r=document.getElementById('row-contract-advisor');if(r&&!r.classList.contains('open'))r.click();r&&r.scrollIntoView({behavior:'smooth',block:'center'});},80)" style="border-color:rgba(91,95,239,.3)">
+                <div class="ac-icon">📋</div>
+                <div class="ac-title">Contract Advisor</div>
+                <div class="ac-desc">Analyzes LOIs &amp; POs — risk checks, clause drafting, LOI comparison &amp; document completeness.</div>
+                <div class="ac-cost bv" style="border:1px solid rgba(91,95,239,.25);margin-top:8px">● Always on · AI-powered · loads from your LOIs &amp; POs</div>
               </div>
             </div>
             <!-- CONNECT AGENT BANNER -->
@@ -1327,6 +1330,7 @@
                     oninput="exFilter()"
                     style="font-size:14px; padding: 5px 8px"
                   />
+                  <button id="ex-refresh-btn" class="btn btn-xs" onclick="refreshExchange()" style="width:100%;justify-content:center;font-size:11px;background:rgba(91,95,239,.06);border-color:rgba(91,95,239,.2);color:var(--violet)">⟳ Refresh market data</button>
                   <div
                     style="display: flex; gap: 3px; flex-wrap: wrap"
                     id="ex-sector-btns"
@@ -1614,7 +1618,7 @@
                   "
                 >
                   <button
-                    onclick="window.location.href='smb-order.html'"
+                    onclick="show('negotiate')"
                     style="
                       width: 100%;
                       background: var(--indigo);
@@ -1659,6 +1663,23 @@
                     >
                   </div>
                 </div>
+
+                <!-- MARKET INTELLIGENCE AI -->
+                <div style="border-top:1px solid rgba(91,95,239,.2);padding:10px 12px;flex-shrink:0;background:rgba(91,95,239,.03)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+                    <div style="font-size:11px;font-weight:700;color:var(--white);letter-spacing:.08em;text-transform:uppercase">📡 Market Intelligence</div>
+                    <span style="font-size:10px;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.25);color:var(--violet);padding:1px 6px;border-radius:3px;font-family:'IBM Plex Mono',monospace">AI</span>
+                  </div>
+                  <div id="ex-mi-label" style="font-size:11px;color:var(--muted);margin-bottom:7px;font-family:'IBM Plex Mono',monospace">← Select a product to analyze</div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:6px">
+                    <button class="btn btn-xs" onclick="runMIAI('brief')" style="font-size:10px;justify-content:center;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">📊 Market Brief</button>
+                    <button class="btn btn-xs" onclick="runMIAI('price')" style="font-size:10px;justify-content:center;background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.2);color:var(--green)">💰 Price Analysis</button>
+                    <button class="btn btn-xs" onclick="runMIAI('supply')" style="font-size:10px;justify-content:center;background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--teal)">🌍 Supply & Demand</button>
+                    <button class="btn btn-xs" onclick="runMIAI('signal')" style="font-size:10px;justify-content:center;background:rgba(232,169,74,.06);border-color:rgba(232,169,74,.2);color:var(--gold)">📡 Trade Signal</button>
+                  </div>
+                  <div id="ex-mi-resp" class="ai-response" style="max-height:160px;font-size:11px;line-height:1.7"></div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -1777,7 +1798,7 @@
 
             <!-- HEADER -->
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-              <div style="font-size:14px;color:var(--muted)">6 agents &nbsp;&middot;&nbsp; <span style="color:var(--green)">5 running</span> &nbsp;&middot;&nbsp; <span style="color:var(--gold)">1 paused</span></div>
+              <div style="font-size:14px;color:var(--muted)">7 agents &nbsp;&middot;&nbsp; <span style="color:var(--green)">5 running</span> &nbsp;&middot;&nbsp; <span style="color:var(--gold)">1 paused</span></div>
               <button class="btn btn-xs btn-p" onclick="alert('Running all agents…')">&#9654; Run all now</button>
             </div>
 
@@ -1916,6 +1937,58 @@
                 </div>
               </div>
 
+              <!-- CONTRACT ADVISOR AGENT -->
+              <div>
+                <div class="agent-row" id="row-contract-advisor" onclick="toggleAgent('contract-advisor');agCAPopulate()">
+                  <div class="ar-icon" style="background:rgba(91,95,239,.12)">📋</div>
+                  <div class="ar-name">Contract Advisor</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">Analyzes LOIs &amp; POs &nbsp;&middot;&nbsp; risk checks &nbsp;&middot;&nbsp; clause drafting &nbsp;&middot;&nbsp; LOI comparison</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();show('contracts',document.getElementById('nav-contracts'))">📄 Contracts</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('lois')">View LOIs</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-contract-advisor">
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>PO-2026-001 &middot; Risk Check &middot; Low risk &middot; LC terms aligned with LOI</span></div>
+                    <div class="ad-log-row"><span style="color:var(--gold)">&#9888;</span><span>SL-LOI-20260604 &middot; Inspection clause missing &mdash; flagged for review</span></div>
+                    <div class="ad-log-row"><span style="color:var(--teal)">&#9998;</span><span>Force Majeure clause drafted for Cement OPC deal</span></div>
+                  </div>
+                  <div class="ai-panel">
+                    <div class="ai-panel-title">🤖 AI Contract Tools</div>
+                    <div style="display:flex;gap:4px;margin-bottom:8px">
+                      <select class="inp" id="ag-ca-load" style="font-size:11px;padding:4px 6px;flex:1">
+                        <option value="">— load from saved LOI / PO —</option>
+                      </select>
+                      <button class="btn btn-xs" onclick="agCALoad()" style="flex-shrink:0;font-size:11px">Load</button>
+                    </div>
+                    <div style="margin-bottom:8px">
+                      <label class="flabel" style="font-size:10px">Document context</label>
+                      <textarea class="inp" id="ag-ca-context" style="height:72px;resize:vertical;font-size:11px;font-family:'IBM Plex Mono',monospace" placeholder="Paste LOI / PO / contract details here, or load from saved above…"></textarea>
+                    </div>
+                    <div class="ai-tabs">
+                      <button class="ai-tab active" id="ag-ca-tab-summarize" onclick="agCASwitch('summarize',this)">Summarize</button>
+                      <button class="ai-tab" id="ag-ca-tab-risk" onclick="agCASwitch('risk',this)">Risk Check</button>
+                      <button class="ai-tab" id="ag-ca-tab-clause" onclick="agCASwitch('clause',this)">Draft Clause</button>
+                      <button class="ai-tab" id="ag-ca-tab-compare" onclick="agCASwitch('compare',this)">vs LOI</button>
+                    </div>
+                    <div id="ag-ca-clause-row" style="display:none;margin-top:6px;margin-bottom:4px">
+                      <select class="inp" id="ag-ca-clause-type" style="font-size:11px;padding:4px 6px">
+                        <option value="Force Majeure">Force Majeure</option>
+                        <option value="Penalty &amp; Liquidated Damages">Penalty &amp; Liquidated Damages</option>
+                        <option value="Inspection &amp; Quality">Inspection &amp; Quality</option>
+                        <option value="Payment">Payment</option>
+                        <option value="Dispute Resolution">Dispute Resolution</option>
+                      </select>
+                    </div>
+                    <button class="btn btn-xs btn-p" onclick="runAgentCA()" style="font-size:11px;margin-bottom:6px">🤖 Analyze</button>
+                    <div id="ag-ca-resp" class="ai-response"></div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             <!-- ── LOGISTICS & TRADE FINANCE ── -->
@@ -1956,9 +2029,81 @@
                   </div>
                   <div class="ad-btns" style="margin-top:10px">
                     <button class="btn btn-xs btn-p" onclick="window.open('logistics-customs-agent.html','_blank')">Open board &rarr;</button>
-                    <button class="btn btn-xs" onclick="window.open('logistics-customs-agent.html','_blank')">&#128269; HS Lookup</button>
-                    <button class="btn btn-xs" onclick="window.open('logistics-customs-agent.html','_blank')">Duty calc</button>
+                    <button class="btn btn-xs" onclick="window.open('logistics-customs-agent.html','_blank')">&#128269; Full agent</button>
                     <button class="btn btn-xs" onclick="alert('Exporting shipment &amp; customs log…')">&#8595; Export</button>
+                  </div>
+                  <div class="ai-panel">
+                    <div class="ai-panel-title">🤖 AI Logistics Tools</div>
+                    <div class="ai-tabs">
+                      <button class="ai-tab active" onclick="logSwitch('hs',this)">HS Lookup</button>
+                      <button class="ai-tab" onclick="logSwitch('docs',this)">Doc Checklist</button>
+                      <button class="ai-tab" onclick="logSwitch('duty',this)">Duty Estimator</button>
+                      <button class="ai-tab" onclick="logSwitch('customs',this)">Customs Notes</button>
+                    </div>
+                    <div id="log-hs-panel">
+                      <div style="margin-bottom:8px">
+                        <label class="flabel" style="font-size:10px">Product Description</label>
+                        <input class="inp" id="log-hs-product" placeholder="e.g. Steel rebar 16mm grade 60" style="font-size:12px;padding:5px 8px"/>
+                      </div>
+                      <button class="btn btn-xs btn-p" onclick="runHSLookup()" style="font-size:11px">🤖 Get HS Code</button>
+                      <div id="log-hs-resp" class="ai-response"></div>
+                    </div>
+                    <div id="log-docs-panel" style="display:none">
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+                        <div>
+                          <label class="flabel" style="font-size:10px">Origin Country</label>
+                          <input class="inp" id="log-docs-origin" placeholder="e.g. UAE, Turkey" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                        <div>
+                          <label class="flabel" style="font-size:10px">Destination Country</label>
+                          <input class="inp" id="log-docs-dest" placeholder="e.g. Egypt, KSA" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                      </div>
+                      <div style="margin-bottom:8px">
+                        <label class="flabel" style="font-size:10px">Incoterm</label>
+                        <select class="inp" id="log-docs-inco" style="font-size:12px;padding:5px 8px"><option>FOB</option><option>CIF</option><option>CFR</option><option>EXW</option><option>DDP</option><option>FCA</option></select>
+                      </div>
+                      <button class="btn btn-xs btn-p" onclick="runDocChecklist()" style="font-size:11px">🤖 Generate Checklist</button>
+                      <div id="log-docs-resp" class="ai-response"></div>
+                    </div>
+                    <div id="log-duty-panel" style="display:none">
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+                        <div>
+                          <label class="flabel" style="font-size:10px">HS Code</label>
+                          <input class="inp" id="log-duty-hs" placeholder="e.g. 7214.20" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                        <div>
+                          <label class="flabel" style="font-size:10px">Shipment Value (USD)</label>
+                          <input class="inp" id="log-duty-value" placeholder="e.g. 50000" type="number" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                      </div>
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+                        <div>
+                          <label class="flabel" style="font-size:10px">Origin Country</label>
+                          <input class="inp" id="log-duty-origin" placeholder="e.g. China, Turkey" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                        <div>
+                          <label class="flabel" style="font-size:10px">Destination Country</label>
+                          <input class="inp" id="log-duty-dest" placeholder="e.g. UAE, KSA" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                      </div>
+                      <button class="btn btn-xs btn-p" onclick="runDutyEstimate()" style="font-size:11px">🤖 Estimate Duties</button>
+                      <div id="log-duty-resp" class="ai-response"></div>
+                    </div>
+                    <div id="log-customs-panel" style="display:none">
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+                        <div>
+                          <label class="flabel" style="font-size:10px">Destination Country</label>
+                          <input class="inp" id="log-customs-country" placeholder="e.g. Saudi Arabia, Egypt" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                        <div>
+                          <label class="flabel" style="font-size:10px">Product / Commodity</label>
+                          <input class="inp" id="log-customs-product" placeholder="e.g. Polypropylene, Wheat" style="font-size:12px;padding:5px 8px"/>
+                        </div>
+                      </div>
+                      <button class="btn btn-xs btn-p" onclick="runCustomsNotes()" style="font-size:11px">🤖 Get Customs Notes</button>
+                      <div id="log-customs-resp" class="ai-response"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -2039,7 +2184,7 @@
 
                     <!-- NEGOTIATE -->
           <div id="view-negotiate" class="view" style="padding:0;overflow:hidden">
-            <iframe src="smb-order.html"
+            <iframe src="negotiation-agent.html"
               style="width:100%;height:calc(100vh - 48px);border:none;display:block"
               title="Start negotiation">
             </iframe>
@@ -2206,6 +2351,27 @@
                   <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="alert('HS code lookup…')">&#128269; HS Lookup</button>
                 </div>
 
+                <!-- AI Contract Advisor -->
+                <div id="loi-ai-panel" style="background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:7px;overflow:hidden;margin-bottom:6px">
+                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🤖</div>
+                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">AI Contract Advisor</div><div style="font-size:11px;color:var(--muted)">Click 🤖 on any RFQ or LOI</div></div>
+                  </div>
+                  <div style="padding:8px 10px">
+                    <div id="loi-ai-label" style="font-size:11px;color:var(--violet);min-height:15px;margin-bottom:6px">No item selected</div>
+                    <textarea class="inp" id="loi-ai-context" style="height:52px;resize:none;font-size:11px;margin-bottom:8px;font-family:'IBM Plex Mono',monospace" placeholder="Select an RFQ or LOI row to load context…" readonly></textarea>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px">
+                      <button class="btn btn-xs" onclick="runLOIAI('summarize')" style="font-size:11px;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">📋 Summarize</button>
+                      <button class="btn btn-xs" onclick="runLOIAI('risk')" style="font-size:11px;background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2);color:var(--red)">⚠ Risk Check</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px">
+                      <button class="btn btn-xs" onclick="runLOIAI('reply')" style="font-size:11px;background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--teal)">✉ Draft Reply</button>
+                      <button class="btn btn-xs" onclick="runLOIAI('completeness')" style="font-size:11px;background:rgba(232,169,74,.06);border-color:rgba(232,169,74,.2);color:var(--gold)">✓ Completeness</button>
+                    </div>
+                    <div id="loi-ai-resp" class="ai-response" style="max-height:200px;font-size:11px;line-height:1.7"></div>
+                  </div>
+                </div>
+
                 <button class="btn btn-xs" style="width:100%;justify-content:center;margin-top:4px" onclick="show('agents')">View all AI Tools →</button>
               </div>
 
@@ -2304,7 +2470,37 @@
                 <div style="background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:10px 12px;margin-bottom:8px">
                   <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Linked Documents</div>
                   <button class="btn btn-xs" style="width:100%;justify-content:center;margin-bottom:4px" onclick="show('lois',document.querySelectorAll('.nav')[3])">📋 View RFQs &amp; LOIs</button>
-                  <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="show('notifications',document.querySelectorAll('.nav')[4])">🔔 Notifications</button>
+                  <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="show('notifications',document.getElementById('topbar-notif-btn'))">🔔 Notifications</button>
+                </div>
+
+                <!-- AI Contract Advisor -->
+                <div id="ct-ai-panel" style="background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:7px;overflow:hidden;margin-bottom:8px">
+                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🤖</div>
+                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">AI Contract Advisor</div><div style="font-size:11px;color:var(--muted)">Click 🤖 on any row</div></div>
+                  </div>
+                  <div style="padding:8px 10px">
+                    <div id="ct-ai-label" style="font-size:11px;color:var(--violet);min-height:15px;margin-bottom:6px">No item selected</div>
+                    <textarea class="inp" id="ct-ai-context" style="height:52px;resize:none;font-size:11px;margin-bottom:8px;font-family:'IBM Plex Mono',monospace" placeholder="Select a PO or contract row to load context…" readonly></textarea>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px">
+                      <button class="btn btn-xs" onclick="runContractAI('summarize')" style="font-size:11px;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">📋 Summarize</button>
+                      <button class="btn btn-xs" onclick="runContractAI('risk')" style="font-size:11px;background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2);color:var(--red)">⚠ Risk Check</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px">
+                      <button class="btn btn-xs" onclick="runContractAI('compare')" style="font-size:11px;background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--teal)">⇄ vs LOI</button>
+                      <div style="display:flex;gap:2px">
+                        <select id="ct-ai-clause-type" class="inp" style="font-size:11px;padding:3px 5px;flex:1">
+                          <option value="Force Majeure">Force Majeure</option>
+                          <option value="Penalty &amp; Liquidated Damages">Penalty</option>
+                          <option value="Inspection &amp; Quality">Inspection</option>
+                          <option value="Payment">Payment</option>
+                          <option value="Dispute Resolution">Dispute</option>
+                        </select>
+                        <button class="btn btn-xs" onclick="runContractAI('clause')" style="font-size:11px;padding:3px 7px;flex-shrink:0" title="Draft clause">✍</button>
+                      </div>
+                    </div>
+                    <div id="ct-ai-resp" class="ai-response" style="max-height:200px;font-size:11px;line-height:1.7"></div>
+                  </div>
                 </div>
               </div>
 
@@ -2374,7 +2570,7 @@
               <div class="ni-actions">
                 <button
                   class="btn btn-xs btn-t"
-                  onclick="show('credits', document.getElementById('nav-credits'))"
+                  onclick="show('profile', document.getElementById('nav-credits'))"
                 >
                   Buy credits →
                 </button>
@@ -2388,176 +2584,6 @@
               <div class="ni-body">
                 SL-LOI-20260430-002 signed and delivered.
               </div>
-            </div>
-          </div>
-
-          <!-- CREDITS -->
-          <div id="view-credits" class="view">
-            <div class="credit-balance-card">
-              <div
-                style="
-                  font-size:13px;
-                  color: var(--muted);
-                  letter-spacing: 0.1em;
-                  text-transform: uppercase;
-                  margin-bottom: 8px;
-                "
-              >
-                Current credit balance
-              </div>
-              <div class="cbc-val">320</div>
-              <div style="font-size:15px; color: var(--muted)">
-                ~32 Deal Hunter sessions · Never expires · Refundable if unused
-              </div>
-            </div>
-            <div
-              style="
-                font-size:14px;
-                font-weight: 600;
-                color: var(--white);
-                letter-spacing: 0.06em;
-                margin-bottom: 10px;
-              "
-            >
-              // BUY CREDITS — PAY BY CARD
-            </div>
-            <div class="pack-grid">
-              <div class="pack-card" onclick="buyCredits(99, 100)">
-                <div class="pack-price">$99</div>
-                <div class="pack-credits">100 credits</div>
-                <div class="pack-rate">$0.99/credit</div>
-              </div>
-              <div class="pack-card pop" onclick="buyCredits(299, 350)">
-                <div
-                  style="
-                    font-size:13px;
-                    color: var(--violet);
-                    margin-bottom: 4px;
-                    font-weight: 700;
-                  "
-                >
-                  MOST POPULAR
-                </div>
-                <div class="pack-price">$299</div>
-                <div class="pack-credits">350 credits</div>
-                <div class="pack-rate">$0.85/credit · save 14%</div>
-              </div>
-              <div class="pack-card" onclick="buyCredits(599, 800)">
-                <div class="pack-price">$599</div>
-                <div class="pack-credits">800 credits</div>
-                <div class="pack-rate">$0.75/credit · save 24%</div>
-              </div>
-              <div class="pack-card" onclick="buyCredits(999, 1500)">
-                <div class="pack-price">$999</div>
-                <div class="pack-credits">1,500 credits</div>
-                <div class="pack-rate">$0.67/credit · save 32%</div>
-              </div>
-            </div>
-            <div
-              style="
-                font-size:14px;
-                font-weight: 600;
-                color: var(--white);
-                letter-spacing: 0.06em;
-                margin-bottom: 10px;
-              "
-            >
-              // CREDIT COSTS
-            </div>
-            <div class="card" style="margin-bottom: 14px">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Action</th>
-                    <th>Credits</th>
-                    <th>Notes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Price Watcher</td>
-                    <td style="color: var(--teal)">1 / day</td>
-                    <td style="color: var(--muted)">
-                      Monitor · alert on target
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Deal Hunter session</td>
-                    <td style="color: var(--teal)">10</td>
-                    <td style="color: var(--muted)">
-                      RFQ + negotiation · up to 5 rounds
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Autopilot session</td>
-                    <td style="color: var(--teal)">20</td>
-                    <td style="color: var(--muted)">
-                      Aggressive · up to 7 rounds
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>LOI generation</td>
-                    <td style="color: var(--teal)">5</td>
-                    <td style="color: var(--muted)">
-                      Auto-generated PDF · emailed instantly
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div
-              style="
-                font-size:14px;
-                font-weight: 600;
-                color: var(--white);
-                letter-spacing: 0.06em;
-                margin-bottom: 10px;
-              "
-            >
-              // TRANSACTION HISTORY
-            </div>
-            <div class="card">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>Credits</th>
-                    <th>Balance</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="color: var(--muted)">Today</td>
-                    <td><span class="badge bt">LOI</span></td>
-                    <td>LOI · SL-LOI-20260501-003</td>
-                    <td style="color: var(--red)">-5</td>
-                    <td>320</td>
-                  </tr>
-                  <tr>
-                    <td style="color: var(--muted)">Today</td>
-                    <td><span class="badge bv">NEGOT.</span></td>
-                    <td>Deal Hunter · Hard Wheat</td>
-                    <td style="color: var(--red)">-10</td>
-                    <td>325</td>
-                  </tr>
-                  <tr>
-                    <td style="color: var(--muted)">Yesterday</td>
-                    <td><span class="badge bg">PURCHASE</span></td>
-                    <td>$299 pack · 350 credits via Stripe</td>
-                    <td style="color: var(--green)">+350</td>
-                    <td>335</td>
-                  </tr>
-                  <tr>
-                    <td style="color: var(--muted)">28 Apr</td>
-                    <td><span class="badge bt">LOI</span></td>
-                    <td>LOI · SL-LOI-20260430-002</td>
-                    <td style="color: var(--red)">-5</td>
-                    <td>-15</td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
           </div>
 
@@ -3317,6 +3343,70 @@
                 </div>
               </div>
             </div>
+
+            <!-- ⚡ CREDITS (merged into profile) -->
+            <div style="margin-top:20px">
+              <div class="credit-balance-card">
+                <div style="font-size:13px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">Current credit balance</div>
+                <div class="cbc-val">320</div>
+                <div style="font-size:15px;color:var(--muted)">~32 Deal Hunter sessions · Never expires · Refundable if unused</div>
+              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:10px">// BUY CREDITS — PAY BY CARD</div>
+              <div class="pack-grid">
+                <div class="pack-card" onclick="buyCredits(99,100)">
+                  <div class="pack-price">$99</div>
+                  <div class="pack-credits">100 credits</div>
+                  <div class="pack-rate">$0.99/credit</div>
+                </div>
+                <div class="pack-card pop" onclick="buyCredits(299,350)">
+                  <div style="font-size:13px;color:var(--violet);margin-bottom:4px;font-weight:700">MOST POPULAR</div>
+                  <div class="pack-price">$299</div>
+                  <div class="pack-credits">350 credits</div>
+                  <div class="pack-rate">$0.85/credit · save 14%</div>
+                </div>
+                <div class="pack-card" onclick="buyCredits(599,800)">
+                  <div class="pack-price">$599</div>
+                  <div class="pack-credits">800 credits</div>
+                  <div class="pack-rate">$0.75/credit · save 24%</div>
+                </div>
+                <div class="pack-card" onclick="buyCredits(999,1500)">
+                  <div class="pack-price">$999</div>
+                  <div class="pack-credits">1,500 credits</div>
+                  <div class="pack-rate">$0.67/credit · save 32%</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:10px">// CREDIT COSTS</div>
+                  <div class="card" style="margin-bottom:14px">
+                    <table>
+                      <thead><tr><th>Action</th><th>Credits</th><th>Notes</th></tr></thead>
+                      <tbody>
+                        <tr><td>Price Watcher</td><td style="color:var(--teal)">1 / day</td><td style="color:var(--muted)">Monitor · alert on target</td></tr>
+                        <tr><td>Deal Hunter session</td><td style="color:var(--teal)">10</td><td style="color:var(--muted)">RFQ + negotiation · up to 5 rounds</td></tr>
+                        <tr><td>Autopilot session</td><td style="color:var(--teal)">20</td><td style="color:var(--muted)">Aggressive · up to 7 rounds</td></tr>
+                        <tr><td>LOI generation</td><td style="color:var(--teal)">5</td><td style="color:var(--muted)">Auto-generated PDF · emailed instantly</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div>
+                  <div style="font-size:14px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:10px">// TRANSACTION HISTORY</div>
+                  <div class="card">
+                    <table>
+                      <thead><tr><th>Date</th><th>Type</th><th>Description</th><th>Credits</th><th>Balance</th></tr></thead>
+                      <tbody>
+                        <tr><td style="color:var(--muted)">Today</td><td><span class="badge bt">LOI</span></td><td>LOI · SL-LOI-20260501-003</td><td style="color:var(--red)">-5</td><td>320</td></tr>
+                        <tr><td style="color:var(--muted)">Today</td><td><span class="badge bv">NEGOT.</span></td><td>Deal Hunter · Hard Wheat</td><td style="color:var(--red)">-10</td><td>325</td></tr>
+                        <tr><td style="color:var(--muted)">Yesterday</td><td><span class="badge bg">PURCHASE</span></td><td>$299 pack · 350 credits via Stripe</td><td style="color:var(--green)">+350</td><td>335</td></tr>
+                        <tr><td style="color:var(--muted)">28 Apr</td><td><span class="badge bt">LOI</span></td><td>LOI · SL-LOI-20260430-002</td><td style="color:var(--red)">-5</td><td>-15</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -3593,6 +3683,7 @@
           return;
         }
         container.innerHTML = pos.map(function(p) {
+          _ctAIStore[p.po_num] = { type: 'po', ref: p.po_num, product: p.product, buyer: p.buyer, supplier: p.supplier, incoterm: p.incoterm, total: p.total, loi_ref: p.loi_ref };
           var badge = p.status === 'confirmed'
             ? '<span class="badge bv" style="font-size:11px">Confirmed</span>'
             : p.status === 'sent'
@@ -3618,6 +3709,7 @@
             + '<div style="display:flex;gap:6px;flex-wrap:wrap">'
             + '<button class="btn btn-xs" onclick="window.open(\'po-generator.html?' + params + '\',\'_blank\')" style="font-size:12px">📄 Open PO</button>'
             + '<button class="btn btn-xs" onclick="window.open(\'po-generator.html?' + params + '\',\'_blank\')" style="font-size:12px;background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:var(--green)">↓ Download PDF</button>'
+            + '<button class="btn btn-xs" onclick="ctFillAI(\'' + p.po_num.replace(/'/g,"\\'") + '\')" style="font-size:12px;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">🤖 AI</button>'
             + (p.loi_ref?'<span style="margin-left:auto;font-size:11px;color:var(--muted);align-self:center">Ref: '+p.loi_ref+'</span>':'')
             + '</div></div>';
         }).join('');
@@ -3628,6 +3720,7 @@
         if (!container) return;
         if (!cnts.length) { container.innerHTML = ''; return; }
         container.innerHTML = cnts.map(function(c) {
+          _ctAIStore[c.id] = { type: 'contract', ref: c.id, name: c.name, date: c.date, status: c.status };
           var badge = c.status === 'signed'
             ? '<span class="badge bg" style="font-size:11px">✓ Signed</span>'
             : '<span class="badge ba" style="font-size:11px">⏳ Pending</span>';
@@ -3641,6 +3734,7 @@
             + '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + (c.date||'') + '</div></div>'
             + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">'
             + badge + signBtn
+            + '<button class="btn btn-xs" style="font-size:11px;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="ctFillAI(\'' + c.id.replace(/'/g,"\\'") + '\')">🤖 AI</button>'
             + '<button class="btn btn-xs btn-r" style="font-size:11px" onclick="deleteContract(\'' + c.id + '\')">✕ Remove</button>'
             + '</div></div>';
         }).join('');
@@ -3694,8 +3788,7 @@
         lois: ["📋 RFQs & LOIs", "Quote requests · Signed Letters of Intent"],
         contracts: ["📄 Contracts", "Purchase Orders · Signed contracts · Deal documents"],
         notifications: ["Notifications", "Alerts and updates"],
-        credits: ["Credits", "Buy credits · history"],
-        profile: ["Profile", "Account settings"],
+        profile: ["Profile & Credits", "Account settings · buy credits · history"],
         support: ["🎧 Support", "AI chat · submit a ticket · FAQ"],
         terms: ["📋 Terms & Privacy", "Terms of service · Privacy policy · Legal"],
       };
@@ -4156,6 +4249,7 @@
             r.status === "awaiting"
               ? '<span class="badge ba">⏳ Awaiting</span>'
               : '<span class="badge bg">✓ Quoted</span>';
+          _loiAIStore['rfq-' + r.ref] = { type:'rfq', ref:r.ref, product:r.product, qty:r.qty, supplier:r.supplier, status:r.status, sent:r.sent };
           html += '</div><div style="display:flex;gap:4px;flex-shrink:0">';
           if (r.status === "quoted")
             html +=
@@ -4165,6 +4259,7 @@
           else
             html +=
               '<button class="btn btn-xs btn-t" onclick="alert(\'Follow-up WhatsApp sent.\')">Follow up</button>';
+          html += '<button class="btn btn-xs" style="font-size:11px;padding:3px 7px;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" title="AI Advisor" onclick="loiFillAI(\'rfq-' + r.ref + '\')">🤖</button>';
           html += "</div></div>";
         });
         document.getElementById("rfq-list").innerHTML = html;
@@ -4198,7 +4293,9 @@
             '<button class="btn btn-xs" style="margin-top:4px;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="openLogisticsModal(this)" ' +
             'data-ref="' + (l._raw.ref||'') + '" data-product="' + (l._raw.product||'') + '" data-qty="' + (l._raw.qty||'') + '" data-unit="' + (l._raw.unit||'') + '" data-price="' + (l._raw.price||'') + '" data-buyer="' + (l._raw.buyer||'') + '" data-country="' + (l._raw.country||'UAE') + '">🚢 Logistics</button>' +
             '<button class="btn btn-xs" style="margin-top:4px;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="window.open(\'po-generator.html?product=' + encodeURIComponent(l._raw.product||'') + '&ref=' + encodeURIComponent(l._raw.ref||'') + '\',\'_blank\')">🧾 Create PO</button>' +
+            '<button class="btn btn-xs" style="margin-top:4px;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="loiFillAI(\'loi-' + (l._raw.ref||l.ref) + '\')">🤖 AI</button>' +
             '</div></div>';
+          _loiAIStore['loi-' + (l._raw.ref||l.ref)] = { type:'loi', ref:l._raw.ref||l.ref, product:l._raw.product||'', qty:l._raw.qty||'', unit:l._raw.unit||'MT', price:l._raw.price||'', buyer:l._raw.buyer||'', incoterm:'FOB', status:'Signed', total:l.total };
         });
         document.getElementById("loi-list").innerHTML = html;
       }
@@ -4371,6 +4468,7 @@
                   " LOIs</div>"
                 : "") +
               "</div>";
+            html += '<button onclick="event.stopPropagation();exSelect(' + p.id + ');runMIAI(\'brief\')" title="AI Market Brief" style="align-self:center;font-size:9px;padding:2px 4px;background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.3);color:var(--violet);border-radius:3px;cursor:pointer;flex-shrink:0;font-family:\'IBM Plex Mono\',monospace;line-height:1.3">🤖</button>';
             html += "</div>";
           });
         });
@@ -4540,6 +4638,7 @@
 
         // Mandate
         exRenderMandate(p);
+        exMIUpdate(p);
       }
 
       function exRenderMandate(p) {
@@ -4639,6 +4738,54 @@
         }
         show("negotiate", document.querySelectorAll(".nav")[2]);
         updateCreditDisplay();
+      }
+
+      // ── EXCHANGE: MARKET INTELLIGENCE AI ────────────────────────────────────
+      var _miProduct = null;
+
+      function exMIUpdate(p) {
+        _miProduct = { name: p.name, price: p.price, unit: p.unit, sector: p.sector || '', emoji: p.emoji || '' };
+        var label = document.getElementById('ex-mi-label');
+        if (label) label.textContent = p.emoji + ' ' + p.name + '  ·  $' + p.price.toLocaleString() + '/' + p.unit;
+        var resp = document.getElementById('ex-mi-resp');
+        if (resp) { resp.textContent = ''; resp.classList.remove('visible'); }
+      }
+
+      function runMIAI(action) {
+        var resp = document.getElementById('ex-mi-resp');
+        if (!resp) return;
+        var ctx = _miProduct
+          ? 'Product: ' + _miProduct.name + '\nMarket price: $' + _miProduct.price.toLocaleString() + '/' + _miProduct.unit + '\nSector: ' + (_miProduct.sector || 'Commodities') + '\nRegion: MENA'
+          : 'General commodity market — no specific product selected (MENA region)';
+        var prompt = '';
+        if (action === 'brief') {
+          prompt = 'You are a commodity market analyst for MENA trade. Give a concise 4-point market intelligence brief for:\n' + ctx + '\nCover: (1) current price drivers, (2) supply outlook, (3) key buyer risks, (4) buyer recommendation. Be specific and practical. Use bullet points.';
+        } else if (action === 'price') {
+          prompt = 'You are a commodity pricing expert. Analyze current price dynamics for:\n' + ctx + '\nCover: price trend direction, key cost drivers (raw materials, freight, energy), comparable regional prices, and a fair value range for a MENA importer. Use bullet points.';
+        } else if (action === 'supply') {
+          prompt = 'You are a global commodity supply chain analyst. Assess supply and demand for:\n' + ctx + '\nCover: main producing regions and capacity, current availability, MENA demand hotspots, and any near-term supply disruptions or logistics constraints. Use bullet points.';
+        } else if (action === 'signal') {
+          prompt = 'You are a commodity trade signal analyst. For:\n' + ctx + '\nProvide a structured trade signal:\nSIGNAL: BUY / HOLD / WAIT\nCONFIDENCE: High / Medium / Low\nREASON: (one sentence)\nENTRY TIMING: (when to act)\nRISK TO WATCH: (one item)\nKeep it tight — 5 lines max.';
+        }
+        callAI(prompt, resp, 500);
+      }
+
+      function refreshExchange() {
+        var btn = document.getElementById('ex-refresh-btn');
+        if (btn) { btn.textContent = '⟳ Refreshing…'; btn.disabled = true; }
+        // Jitter prices slightly to simulate live data
+        EX_PRODUCTS.forEach(function(p) {
+          var jitter = (Math.random() - 0.5) * 0.008;
+          p.prev = p.price;
+          p.price = Math.round(p.price * (1 + jitter) * 100) / 100;
+          p.history.push(p.price);
+          if (p.history.length > 14) p.history.shift();
+        });
+        exRenderList();
+        if (exSelectedId) exSelect(exSelectedId);
+        setTimeout(function() {
+          if (btn) { btn.textContent = '⟳ Refresh market data'; btn.disabled = false; }
+        }, 800);
       }
 
       function exWatch() {
@@ -4966,6 +5113,345 @@
         status.style.cssText = 'display:block;font-size:13px;padding:8px 10px;border-radius:4px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);color:var(--green)';
         status.textContent = '✓ Filled: ' + (filled.length ? filled.join(', ') : 'basic info') + (urlOnly ? ' — paste profile text for full autofill' : '');
         setTimeout(closeLIModal, 2000);
+      }
+
+      // ── SHARED AI HELPER ─────────────────────────────────────────────────────
+      function callAI(prompt, respEl, maxTokens) {
+        var key = window.ANTHROPIC_API_KEY || localStorage.getItem('sf_claude_key') || '';
+        if (!key) {
+          respEl.textContent = 'No Claude API key set. Add it in Profile → API key (sf_claude_key).';
+          respEl.classList.add('visible');
+          return;
+        }
+        respEl.textContent = '⏳ Thinking…';
+        respEl.classList.add('visible', 'ai-running');
+        fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': key,
+            'anthropic-version': '2023-06-01',
+            'anthropic-dangerous-direct-browser-calls': 'true'
+          },
+          body: JSON.stringify({
+            model: 'claude-haiku-4-5-20251001',
+            max_tokens: maxTokens || 600,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          respEl.classList.remove('ai-running');
+          respEl.textContent = (res.content && res.content[0] && res.content[0].text) || JSON.stringify(res);
+        })
+        .catch(function(e) {
+          respEl.classList.remove('ai-running');
+          respEl.textContent = 'Error: ' + e.message;
+        });
+      }
+
+      // ── COMPLIANCE AI ─────────────────────────────────────────────────────────
+      function compSwitch(tab, btn) {
+        document.querySelectorAll('#detail-compliance .ai-tab').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById('comp-entity-panel').style.display = tab === 'entity' ? '' : 'none';
+        document.getElementById('comp-country-panel').style.display = tab === 'country' ? '' : 'none';
+      }
+
+      function runEntityScreen() {
+        var name = document.getElementById('comp-entity-name').value.trim();
+        var country = document.getElementById('comp-entity-country').value.trim();
+        if (!name) { alert('Enter an entity name to screen.'); return; }
+        var prompt = 'You are a trade compliance specialist. Screen the following entity for sanctions risk.\n\n'
+          + 'Entity: ' + name + (country ? '\nCountry: ' + country : '') + '\n\n'
+          + 'Check against: OFAC SDN list, EU Consolidated Sanctions List, UN Security Council Sanctions, UK OFSI.\n\n'
+          + 'Output exactly:\nRISK LEVEL: [Clear / Review Required / High Risk]\n'
+          + 'FLAGS: [any matches or name similarities on sanctions lists, or "None found"]\n'
+          + 'RECOMMENDED ACTION: [what the buyer should do]\n'
+          + 'NOTES: [any relevant compliance considerations]\n\n'
+          + 'Be specific. If you cannot confirm the entity is sanctions-free, say so clearly.';
+        callAI(prompt, document.getElementById('comp-entity-resp'), 450);
+      }
+
+      function runCountryRisk() {
+        var country = document.getElementById('comp-country-name').value.trim();
+        var product = document.getElementById('comp-country-product').value.trim();
+        if (!country) { alert('Enter a country to assess.'); return; }
+        var prompt = 'You are a trade compliance specialist. Provide a trade risk assessment for:\n\n'
+          + 'Country: ' + country + (product ? '\nProduct: ' + product : '') + '\n\n'
+          + 'Output exactly:\nSANCTIONS STATUS: [current OFAC/EU/UN status]\n'
+          + 'TRADE RESTRICTIONS: [export controls, embargoes, import bans]\n'
+          + 'REQUIRED PERMITS: [licences needed to trade]\n'
+          + 'RISK RATING: [Low / Medium / High]\n'
+          + 'KEY RISKS:\n• [risk 1]\n• [risk 2]\n• [risk 3]\n\nBe concise and actionable.';
+        callAI(prompt, document.getElementById('comp-country-resp'), 450);
+      }
+
+      // ── LOGISTICS AI ──────────────────────────────────────────────────────────
+      function logSwitch(tab, btn) {
+        document.querySelectorAll('#detail-logistics .ai-tab').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        ['hs','docs','duty','customs'].forEach(function(t) {
+          document.getElementById('log-' + t + '-panel').style.display = t === tab ? '' : 'none';
+        });
+      }
+
+      function runHSLookup() {
+        var product = document.getElementById('log-hs-product').value.trim();
+        if (!product) { alert('Enter a product description.'); return; }
+        var prompt = 'You are a customs classification expert. Identify the HS code for:\n\nProduct: ' + product + '\n\n'
+          + 'Output exactly:\nHS CODE: [6-digit code]\n'
+          + 'DESCRIPTION: [official WCO description]\n'
+          + 'COMMON DUTY RANGE: [typical import duty % in major markets]\n'
+          + 'ALTERNATIVE CODES: [any other possible codes to consider]\n'
+          + 'NOTES: [classification caveats if any]\n\nBe specific.';
+        callAI(prompt, document.getElementById('log-hs-resp'), 400);
+      }
+
+      function runDocChecklist() {
+        var origin = document.getElementById('log-docs-origin').value.trim();
+        var dest = document.getElementById('log-docs-dest').value.trim();
+        var inco = document.getElementById('log-docs-inco').value;
+        if (!origin || !dest) { alert('Enter origin and destination countries.'); return; }
+        var prompt = 'You are a trade documentation expert.\n\nShipment: ' + origin + ' → ' + dest + ' · Incoterm: ' + inco + '\n\n'
+          + 'List all required documents as a checklist. Group by:\n'
+          + 'SELLER DOCUMENTS:\n✓ ...\n\nTRANSPORT DOCUMENTS:\n✓ ...\n\n'
+          + 'CUSTOMS / IMPORT DOCUMENTS:\n✓ ...\n\nFor each document add a brief note on who issues it.';
+        callAI(prompt, document.getElementById('log-docs-resp'), 550);
+      }
+
+      function runDutyEstimate() {
+        var hs = document.getElementById('log-duty-hs').value.trim();
+        var value = document.getElementById('log-duty-value').value.trim();
+        var origin = document.getElementById('log-duty-origin').value.trim();
+        var dest = document.getElementById('log-duty-dest').value.trim();
+        if (!hs || !dest) { alert('Enter HS code and destination country.'); return; }
+        var prompt = 'You are a customs duty specialist.\n\nShipment:\n- HS Code: ' + hs
+          + '\n- Value: $' + (value || 'unknown') + ' USD'
+          + '\n- Origin: ' + (origin || 'unknown')
+          + '\n- Destination: ' + dest + '\n\n'
+          + 'Output exactly:\nIMPORT DUTY RATE: [%]\n'
+          + 'VAT/GST: [if applicable]\n'
+          + 'DUTY AMOUNT: [$, calculated on value]\n'
+          + 'TOTAL LANDED COST ADD: [duty + taxes estimate]\n'
+          + 'FREE TRADE AGREEMENTS: [any FTAs that may reduce duty]\n'
+          + 'NOTES: [anti-dumping duties, special levies, permits]\n\nFlag if you are uncertain about a rate.';
+        callAI(prompt, document.getElementById('log-duty-resp'), 450);
+      }
+
+      function runCustomsNotes() {
+        var country = document.getElementById('log-customs-country').value.trim();
+        var product = document.getElementById('log-customs-product').value.trim();
+        if (!country || !product) { alert('Enter country and product.'); return; }
+        var prompt = 'You are a customs compliance advisor.\n\nImport requirements for:\n- Destination: ' + country + '\n- Product: ' + product + '\n\n'
+          + 'Output exactly:\nIMPORT LICENCE: [required yes/no, from which authority]\n'
+          + 'STANDARDS & CERTIFICATIONS: [required certifications]\n'
+          + 'LABELLING: [language/label requirements]\n'
+          + 'RESTRICTIONS: [bans, quantity limits, special controls]\n'
+          + 'PRACTICAL TIPS:\n• [tip 1]\n• [tip 2]\n• [tip 3]';
+        callAI(prompt, document.getElementById('log-customs-resp'), 450);
+      }
+
+      // ── AGENT CONTRACT ADVISOR ───────────────────────────────────────────────
+      var _agCAAction = 'summarize';
+
+      function agCASwitch(action, btn) {
+        _agCAAction = action;
+        var detail = document.getElementById('detail-contract-advisor');
+        if (detail) detail.querySelectorAll('.ai-tab').forEach(function(t){ t.classList.remove('active'); });
+        if (btn) btn.classList.add('active');
+        var cr = document.getElementById('ag-ca-clause-row');
+        if (cr) cr.style.display = action === 'clause' ? 'block' : 'none';
+      }
+
+      function agCAPopulate() {
+        var sel = document.getElementById('ag-ca-load');
+        if (!sel || sel.options.length > 1) return;
+        try {
+          var lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]');
+          lois.forEach(function(l) {
+            var o = document.createElement('option');
+            o.value = 'loi:' + l.ref;
+            o.textContent = 'LOI: ' + l.ref + ' · ' + (l.product || '');
+            sel.appendChild(o);
+          });
+        } catch(e) {}
+        try {
+          var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
+          pos.forEach(function(p) {
+            var o = document.createElement('option');
+            o.value = 'po:' + p.po_num;
+            o.textContent = 'PO: ' + p.po_num + ' · ' + (p.product || '');
+            sel.appendChild(o);
+          });
+        } catch(e) {}
+      }
+
+      function agCALoad() {
+        var sel = document.getElementById('ag-ca-load');
+        var ctx = document.getElementById('ag-ca-context');
+        if (!sel || !ctx || !sel.value) return;
+        var parts = sel.value.split(':');
+        var type = parts[0], ref = parts.slice(1).join(':');
+        if (type === 'loi') {
+          try {
+            var lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]');
+            var l = lois.find(function(x){ return x.ref === ref; });
+            if (l) ctx.value = 'LOI: ' + l.ref + '\nProduct: ' + (l.product||'—') + '\nBuyer: ' + (l.buyer||'—') + '\nSeller: ' + (l.seller||'—') + '\nPrice: $' + (l.price||'—') + '/' + (l.unit||'MT') + '\nQty: ' + (l.qty||'—') + ' ' + (l.unit||'MT') + '\nIncoterm: ' + (l.incoterm||'—') + '\nPayment: ' + (l.payment||'—') + '\nTotal: $' + (l.total_value||'—');
+          } catch(e) {}
+        } else if (type === 'po') {
+          try {
+            var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
+            var p = pos.find(function(x){ return x.po_num === ref; });
+            if (p) ctx.value = 'PO: ' + p.po_num + '\nProduct: ' + (p.product||'—') + '\nBuyer: ' + (p.buyer||'—') + '\nSupplier: ' + (p.supplier||'—') + '\nIncoterm: ' + (p.incoterm||'—') + '\nTotal: $' + (p.total ? Math.round(p.total).toLocaleString() : '—') + '\nPayment Terms: ' + (p.payment_terms||p.payment||'—') + (p.loi_ref ? '\nLOI Reference: ' + p.loi_ref : '');
+          } catch(e) {}
+        }
+      }
+
+      function runAgentCA() {
+        var resp = document.getElementById('ag-ca-resp');
+        var ctx = document.getElementById('ag-ca-context');
+        var context = ctx ? ctx.value.trim() : '';
+        if (!context) {
+          resp.textContent = 'Paste document context or load from saved LOI / PO first.';
+          resp.classList.add('visible');
+          return;
+        }
+        var prompt = '';
+        if (_agCAAction === 'summarize') {
+          prompt = 'You are a commodity trade expert. Summarize the following trade document in 5 concise bullet points covering: parties, commodity, value, key terms, and main obligations.\n\n' + context;
+        } else if (_agCAAction === 'risk') {
+          prompt = 'You are a trade risk analyst. Review the following trade document and flag risks, missing clauses, or unusual terms. For each flag state: RISK LEVEL (Low/Medium/High) and explanation.\n\n' + context;
+        } else if (_agCAAction === 'clause') {
+          var ct = (document.getElementById('ag-ca-clause-type') || {}).value || 'Force Majeure';
+          prompt = 'You are a commodity trade contracts lawyer. Draft a professional ' + ct + ' clause for the following deal. Output only the clause text, ready to insert. Max 5 sentences.\n\nContext:\n' + context;
+        } else if (_agCAAction === 'compare') {
+          var loiData = '\n\n(No matching LOI found in local storage.)';
+          try {
+            var lois2 = JSON.parse(localStorage.getItem('sloi_lois') || '[]');
+            var m = context.match(/LOI[: ]+([A-Z0-9\-]+)/i);
+            if (m) { var found = lois2.find(function(l){ return l.ref === m[1].trim(); }); if (found) loiData = '\n\nLOI Data:\nRef: ' + found.ref + '\nProduct: ' + (found.product||'—') + '\nBuyer: ' + (found.buyer||'—') + '\nSeller: ' + (found.seller||'—') + '\nPrice: ' + (found.price||'—') + '\nQty: ' + (found.qty||'—') + '\nIncoterm: ' + (found.incoterm||'—') + '\nPayment: ' + (found.payment||'—'); }
+          } catch(e) {}
+          prompt = 'You are a commodity trade compliance specialist. Compare this document to its referenced LOI and list any discrepancies, term changes, or missing items as bullet points.\n\nDocument:\n' + context + loiData;
+        }
+        callAI(prompt, resp, 600);
+      }
+
+      // ── LOI / RFQ AI ADVISOR ─────────────────────────────────────────────────
+      var _loiAIStore = {};
+
+      function loiFillAI(key) {
+        var d = _loiAIStore[key];
+        if (!d) return;
+        var label = document.getElementById('loi-ai-label');
+        var ctx = document.getElementById('loi-ai-context');
+        if (!label || !ctx) return;
+        label.textContent = d.ref + ' · ' + d.product;
+        if (d.type === 'rfq') {
+          ctx.value = 'RFQ: ' + d.ref
+            + '\nProduct: ' + (d.product || '—')
+            + '\nQuantity: ' + (d.qty || '—')
+            + '\nTrader/Supplier: ' + (d.supplier || '—')
+            + '\nStatus: ' + (d.status === 'awaiting' ? 'Awaiting reply' : 'Quoted')
+            + '\nSent: ' + (d.sent || '—');
+        } else {
+          ctx.value = 'LOI: ' + d.ref
+            + '\nProduct: ' + (d.product || '—')
+            + '\nQuantity: ' + (d.qty || '—') + ' ' + (d.unit || 'MT')
+            + '\nUnit Price: $' + (d.price || '—') + '/' + (d.unit || 'MT')
+            + '\nTotal Value: ' + (d.total || '—')
+            + '\nBuyer: ' + (d.buyer || '—')
+            + '\nIncoterm: ' + (d.incoterm || 'FOB')
+            + '\nStatus: ' + (d.status || 'Signed');
+        }
+        var resp = document.getElementById('loi-ai-resp');
+        if (resp) { resp.textContent = ''; resp.classList.remove('visible'); }
+        var panel = document.getElementById('loi-ai-panel');
+        if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      function runLOIAI(action) {
+        var resp = document.getElementById('loi-ai-resp');
+        var ctx = document.getElementById('loi-ai-context');
+        var context = ctx ? ctx.value.trim() : '';
+        if (!context) {
+          resp.textContent = 'Click 🤖 on an RFQ or LOI row first to load context.';
+          resp.classList.add('visible');
+          return;
+        }
+        var prompt = '';
+        if (action === 'summarize') {
+          prompt = 'You are a commodity trade expert. Summarize the following trade document in 5 concise bullet points covering: parties, commodity, quantity, price, and current status.\n\n' + context;
+        } else if (action === 'risk') {
+          prompt = 'You are a trade risk analyst. Review this RFQ or LOI and flag potential risks: payment exposure, counterparty risk, missing terms, delivery conditions. Rate each risk LOW / MEDIUM / HIGH.\n\n' + context;
+        } else if (action === 'reply') {
+          prompt = 'You are a professional commodity trader. Draft a concise, professional follow-up email regarding this RFQ or LOI — confirm the key terms and specify the next steps required. Sign off as "SLOI AI Trade Desk". Keep it under 120 words.\n\n' + context;
+        } else if (action === 'completeness') {
+          prompt = 'You are a trade document specialist. Review this RFQ or LOI and report which key fields are present and which are MISSING for a complete, legally sound commodity trade document. Use two clearly labelled sections: ✓ Present and ✗ Missing.\n\n' + context;
+        }
+        callAI(prompt, resp, 600);
+      }
+
+      // ── CONTRACT AI ADVISOR ───────────────────────────────────────────────────
+      var _ctAIStore = {};
+
+      function ctFillAI(key) {
+        var d = _ctAIStore[key];
+        if (!d) return;
+        var label = document.getElementById('ct-ai-label');
+        var ctx = document.getElementById('ct-ai-context');
+        if (!label || !ctx) return;
+        if (d.type === 'po') {
+          label.textContent = d.ref + ' · ' + (d.product || '') + (d.total ? ' · $' + Math.round(d.total).toLocaleString() : '');
+          ctx.value = 'Purchase Order: ' + d.ref
+            + '\nProduct: ' + (d.product || '—')
+            + '\nBuyer: ' + (d.buyer || '—')
+            + '\nSupplier: ' + (d.supplier || '—')
+            + '\nIncoterm: ' + (d.incoterm || '—')
+            + '\nTotal Value: $' + Math.round(d.total || 0).toLocaleString()
+            + (d.loi_ref ? '\nLOI Reference: ' + d.loi_ref : '');
+        } else {
+          label.textContent = 'Contract: ' + (d.name || d.ref);
+          ctx.value = 'Contract: ' + (d.name || d.ref)
+            + '\nDate: ' + (d.date || '—')
+            + '\nStatus: ' + (d.status || '—');
+        }
+        var resp = document.getElementById('ct-ai-resp');
+        if (resp) { resp.textContent = ''; resp.classList.remove('visible'); }
+        var panel = document.getElementById('ct-ai-panel');
+        if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      function runContractAI(action) {
+        var resp = document.getElementById('ct-ai-resp');
+        var ctx = document.getElementById('ct-ai-context');
+        var context = ctx ? ctx.value.trim() : '';
+        if (!context) {
+          resp.textContent = 'Click 🤖 AI on a PO or contract row first to load context.';
+          resp.classList.add('visible');
+          return;
+        }
+        var prompt = '';
+        if (action === 'summarize') {
+          prompt = 'You are a commodity trade expert. Summarize the following trade document in 5 concise bullet points covering: parties, commodity, value, key terms, and main obligations.\n\n' + context;
+        } else if (action === 'risk') {
+          prompt = 'You are a trade risk analyst. Review the following trade document and flag risks, missing clauses, or unusual terms. For each flag state: RISK LEVEL (Low/Medium/High) and explanation.\n\n' + context;
+        } else if (action === 'clause') {
+          var clauseType = (document.getElementById('ct-ai-clause-type') || {}).value || 'Force Majeure';
+          prompt = 'You are a commodity trade contracts lawyer. Draft a professional ' + clauseType + ' clause for the following deal. Output only the clause text, ready to insert. Max 5 sentences.\n\nContext:\n' + context;
+        } else if (action === 'compare') {
+          var loiData = '\n\n(No matching LOI found in local storage.)';
+          try {
+            var lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]');
+            var loiRef = ctx.value.match(/LOI Reference: (.+)/);
+            if (loiRef) {
+              var loi = lois.find(function(l) { return l.ref === loiRef[1].trim(); });
+              if (loi) loiData = '\n\nLOI Data:\nRef: ' + loi.ref + '\nProduct: ' + (loi.product||'—') + '\nBuyer: ' + (loi.buyer||'—') + '\nSeller: ' + (loi.seller||'—') + '\nPrice: ' + (loi.price||'—') + '\nQty: ' + (loi.qty||'—') + '\nIncoterm: ' + (loi.incoterm||'—') + '\nPayment: ' + (loi.payment||'—');
+            }
+          } catch(e) {}
+          prompt = 'You are a commodity trade compliance specialist. Compare this Purchase Order to its referenced LOI and list any discrepancies, term changes, or missing items as bullet points.\n\nPO:\n' + context + loiData;
+        }
+        callAI(prompt, resp, 600);
       }
 
     </script>

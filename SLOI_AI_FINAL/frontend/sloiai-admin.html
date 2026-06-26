@@ -187,6 +187,15 @@ select.inp option{background:var(--surface)}
 /* ── MOBILE ─────────────────── */
 .ham-btn{display:none}
 #mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:250}
+/* ── AI RESPONSE ── */
+.ai-running{color:var(--muted);font-style:italic}
+/* ── AI AGENT QUICK-LAUNCH CARDS ── */
+.ai-agent-card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:6px}
+.ai-agent-card:hover{border-color:rgba(91,95,239,.4);background:rgba(91,95,239,.04)}
+.aac-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:2px;flex-shrink:0}
+.aac-name{font-size:14px;font-weight:700;color:var(--white);line-height:1.2}
+.aac-desc{font-size:12px;color:var(--muted);line-height:1.6;flex:1}
+.aac-foot{margin-top:2px}
 @media(max-width:768px){
   html,body{overflow-x:clip}
   .ham-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:20px;cursor:pointer;flex-shrink:0;margin-right:6px}
@@ -199,6 +208,8 @@ select.inp option{background:var(--surface)}
   .view{padding:12px 12px 40px}
   .g2,.g3{grid-template-columns:1fr}
   .g4,.g5{grid-template-columns:1fr 1fr}
+  #view-negotiations [style*="grid-template-columns:300px"]{grid-template-columns:1fr!important}
+  #view-negotiations [style*="position:sticky"]{position:static!important}
   .kanban{overflow-x:auto;grid-template-columns:repeat(5,160px)}
   .kc{min-width:160px}
   .ab-grid{grid-template-columns:1fr 1fr}
@@ -315,6 +326,59 @@ select.inp option{background:var(--surface)}
         <div class="bar-row"><div class="bar-label">Credits</div><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--teal)"></div></div><div class="bar-val">5.3%</div></div>
       </div>
     </div>
+
+    <!-- AI AGENTS QUICK LAUNCH -->
+    <div class="card" style="margin-top:12px;margin-bottom:0">
+      <div class="card-title">
+        // AI AGENTS
+        <span style="font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.02em">Quick launch</span>
+      </div>
+      <div class="g3">
+
+        <div class="ai-agent-card" onclick="window.open('negotiation-agent.html','_blank')">
+          <div class="aac-icon" style="background:rgba(91,95,239,.12)">🤖</div>
+          <div class="aac-name">Negotiation Agent</div>
+          <div class="aac-desc">Multi-round AI negotiation · auto-approves best deal · handles price, quality &amp; delivery</div>
+          <div class="aac-foot"><span class="badge bv" style="font-size:11px">● Live</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('loi-generator.html','_blank')">
+          <div class="aac-icon" style="background:rgba(45,212,191,.1)">📄</div>
+          <div class="aac-name">LOI Generator</div>
+          <div class="aac-desc">Generate signed Letters of Intent from negotiated deals · PDF export &amp; digital signatures</div>
+          <div class="aac-foot"><span class="badge bt" style="font-size:11px">Ready</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('po-generator.html','_blank')">
+          <div class="aac-icon" style="background:rgba(34,197,94,.1)">📋</div>
+          <div class="aac-name">PO Generator</div>
+          <div class="aac-desc">Create Purchase Orders from signed LOIs · multi-line items · supplier bank routing</div>
+          <div class="aac-foot"><span class="badge bg" style="font-size:11px">Ready</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
+          <div class="aac-icon" style="background:rgba(91,95,239,.12)">📝</div>
+          <div class="aac-name">Contract Advisor</div>
+          <div class="aac-desc">AI contract analysis · risk checks · clause drafting · LOI vs PO comparison &amp; completeness</div>
+          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Always on</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
+          <div class="aac-icon" style="background:rgba(239,68,68,.1)">🛡️</div>
+          <div class="aac-name">Compliance Bot</div>
+          <div class="aac-desc">Entity screening · sanctions &amp; country risk · KYC checks · regulatory flags for MENA trade</div>
+          <div class="aac-foot"><span class="badge br" style="font-size:11px">Active</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
+          <div class="aac-icon" style="background:rgba(232,169,74,.1)">📡</div>
+          <div class="aac-name">Market Intelligence</div>
+          <div class="aac-desc">Live commodity prices · supply &amp; demand analysis · trade signals · MENA market briefs</div>
+          <div class="aac-foot"><span class="badge ba" style="font-size:11px">Live data</span></div>
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <!-- PIPELINE -->
@@ -340,24 +404,22 @@ select.inp option{background:var(--surface)}
 
   <!-- NEGOTIATIONS -->
   <div id="view-negotiations" class="view">
-    <div>
 
-      <!-- main negotiation content -->
-      <div>
-        <div class="g4" style="margin-bottom:10px">
-          <div class="stat"><div class="stat-top">Active Now</div><div class="stat-val" id="neg-stat-active" style="color:var(--green)">—</div></div>
-          <div class="stat"><div class="stat-top">Pending Boss</div><div class="stat-val" id="neg-stat-pending" style="color:var(--gold)">—</div></div>
-          <div class="stat"><div class="stat-top">Completed Today</div><div class="stat-val" id="neg-stat-completed">—</div></div>
-          <div class="stat"><div class="stat-top">Win Rate</div><div class="stat-val" id="neg-stat-winrate" style="color:var(--violet)">—</div></div>
-        </div>
-        <div style="display:flex;gap:14px;padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:14px;font-size:13px;align-items:center">
-          <div style="color:var(--muted)">All-time: <b style="color:var(--white)" id="neg-stat-total">—</b></div>
-          <div style="width:1px;height:14px;background:var(--border);flex-shrink:0"></div>
-          <div style="color:var(--muted)">Revenue today: <b style="color:var(--green)" id="neg-stat-revenue">$0</b></div>
-          <div style="margin-left:auto;font-size:12px;color:var(--muted)">⟳ Auto-refresh every 15s</div>
-        </div>
+    <!-- ── TOP STATS ROW ── -->
+    <div class="g4" style="margin-bottom:10px">
+      <div class="stat"><div class="stat-top">Active Now</div><div class="stat-val" id="neg-stat-active" style="color:var(--green)">—</div></div>
+      <div class="stat"><div class="stat-top">Pending Boss</div><div class="stat-val" id="neg-stat-pending" style="color:var(--gold)">—</div></div>
+      <div class="stat"><div class="stat-top">Completed Today</div><div class="stat-val" id="neg-stat-completed">—</div></div>
+      <div class="stat"><div class="stat-top">Win Rate</div><div class="stat-val" id="neg-stat-winrate" style="color:var(--violet)">—</div></div>
+    </div>
 
-        <!-- Approval box — shown only when there's a pending deal -->
+    <!-- ── TWO-COLUMN SPLIT ── -->
+    <div style="display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start">
+
+      <!-- LEFT: Live feed + Boss approval (sticky) -->
+      <div style="position:sticky;top:0;display:flex;flex-direction:column;gap:10px">
+
+        <!-- Boss approval box — shown only when there's a pending deal -->
         <div class="approval-box" id="approval-box" style="display:none">
           <div class="ab-title">⚡ Boss approval required · <span id="ab-neg-id" style="font-weight:400;opacity:.7"></span></div>
           <div class="ab-grid">
@@ -369,28 +431,42 @@ select.inp option{background:var(--surface)}
             <div><div class="abg-label">LOI fee</div><div class="abg-val" style="color:var(--indigo)">$500</div></div>
           </div>
           <div style="margin-bottom:8px">
-            <label style="font-size:14px;color:var(--muted);display:block;margin-bottom:4px">Override price (optional — leave blank to use agent deal price)</label>
-            <input class="inp" id="ab-override" type="number" placeholder="e.g. 2800" style="max-width:180px;padding:6px 10px;font-size:15px">
+            <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:4px">Override price (optional)</label>
+            <input class="inp" id="ab-override" type="number" placeholder="e.g. 2800" style="max-width:160px;padding:5px 9px;font-size:13px">
           </div>
           <div style="display:flex;gap:8px">
-            <button class="btn btn-g" onclick="approveDeal()">✅ Approve — Generate LOI</button>
-            <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗ Reject</button>
+            <button class="btn btn-g" onclick="approveDeal()" style="flex:1;justify-content:center">✅ Approve — Generate LOI</button>
+            <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗</button>
           </div>
         </div>
 
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-          <span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;animation:blink 2s infinite" id="live-pulse"></span>
-          <span style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Live Negotiations</span>
-          <span style="flex:1;height:1px;background:var(--border);display:block"></span>
-          <span class="badge bg" id="live-neg-count" style="font-size:11px;padding:1px 8px">—</span>
+        <!-- Live feed card -->
+        <div class="card" style="margin-bottom:0">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
+            <span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;animation:blink 2s infinite" id="live-pulse"></span>
+            <span style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;flex:1">Live Negotiations</span>
+            <span class="badge bg" id="live-neg-count" style="font-size:11px;padding:1px 8px">—</span>
+          </div>
+          <div id="neg-list" style="max-height:400px;overflow-y:auto"></div>
+          <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)">
+            <span>All-time: <b style="color:var(--white)" id="neg-stat-total">—</b></span>
+            <span style="width:1px;height:12px;background:var(--border);display:inline-block"></span>
+            <span>Today: <b style="color:var(--green)" id="neg-stat-revenue">$0</b></span>
+            <span style="margin-left:auto">⟳ 15s</span>
+          </div>
         </div>
-        <div id="neg-list"></div>
 
-        <div class="card">
+      </div>
+
+      <!-- RIGHT: History table + OC -->
+      <div>
+
+        <!-- All negotiations card -->
+        <div class="card" style="margin-bottom:0">
           <div class="card-title">
             // ALL NEGOTIATIONS
             <div style="display:flex;gap:6px;align-items:center">
-              <input class="inp" id="neg-search" placeholder="Search ID, buyer, product…" oninput="negApplyFilter()" style="width:220px;font-size:13px;padding:5px 9px">
+              <input class="inp" id="neg-search" placeholder="Search ID, buyer, product…" oninput="negApplyFilter()" style="width:200px;font-size:13px;padding:5px 9px">
             </div>
           </div>
           <div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">
@@ -408,25 +484,31 @@ select.inp option{background:var(--surface)}
           </table>
         </div>
 
-        <!-- PURCHASE ORDERS (saved from PO Generator) -->
-        <div class="card" style="margin-top:16px">
+        <!-- Order Confirmations card -->
+        <div class="card" style="margin-top:14px;margin-bottom:0">
           <div class="card-title">
-            // PURCHASE ORDERS
-            <button class="btn btn-xs btn-g" onclick="window.open('po-generator.html','_blank')" style="font-size:12px">+ New PO</button>
-          </div>
-          <div class="g4" style="margin-bottom:12px">
-            <div class="stat"><div class="stat-top">Total POs</div><div class="stat-val" id="admin-po-stat-total">—</div></div>
-            <div class="stat"><div class="stat-top">This Month</div><div class="stat-val" style="color:var(--green)" id="admin-po-stat-month">—</div></div>
-            <div class="stat"><div class="stat-top">PO Value</div><div class="stat-val" id="admin-po-stat-value">—</div></div>
-            <div class="stat"><div class="stat-top">Draft</div><div class="stat-val" style="color:var(--gold)" id="admin-po-stat-draft">—</div></div>
+            // ORDER CONFIRMATIONS
+            <div style="display:flex;gap:6px;align-items:center">
+              <div style="display:flex;gap:10px;font-size:12px;color:var(--muted)">
+                <span>Total: <b style="color:var(--white)" id="admin-po-stat-total">—</b></span>
+                <span>·</span>
+                <span>This month: <b style="color:var(--green)" id="admin-po-stat-month">—</b></span>
+                <span>·</span>
+                <span>Value: <b style="color:var(--violet)" id="admin-po-stat-value">—</b></span>
+                <span>·</span>
+                <span>Draft: <b style="color:var(--gold)" id="admin-po-stat-draft">—</b></span>
+              </div>
+              <button class="btn btn-xs btn-g" onclick="window.open('po-generator.html','_blank')">+ New OC</button>
+            </div>
           </div>
           <div id="admin-po-list">
-            <div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">No purchase orders yet — click + New PO or use the 🧾 PO button on a negotiation row above</div>
+            <div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">No order confirmations yet — click + New OC or use the 🧾 OC button on a negotiation row above</div>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
+
   </div>
 
   <!-- REVENUE -->
@@ -619,6 +701,18 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
 
+    <!-- SUPPLIER CONTACTS -->
+    <div class="card" style="margin-top:12px;margin-bottom:0">
+      <div class="card-title">
+        // SUPPLIER CONTACTS
+        <span style="font-size:12px;font-weight:400;color:var(--muted)">Matched to products — share via WhatsApp or Email</span>
+        <button class="btn btn-xs btn-p" onclick="openAddSupplierModal()" style="margin-left:auto">+ Add contact</button>
+      </div>
+      <div id="supplier-contacts-list">
+        <div style="padding:16px;text-align:center;color:var(--muted);font-size:14px">No supplier contacts yet — click + Add to create one</div>
+      </div>
+    </div>
+
   </div>
 
   <!-- COMPLIANCE -->
@@ -709,12 +803,11 @@ select.inp option{background:var(--surface)}
       <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px">🔭 Sourcing & Intel <span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span></div>
       <div style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">📱 OutreachBot ⏸</div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🛡️ ComplianceBot <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🚢 LogisticsAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🛃 CustomsAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px">🚢🛃 Logistics & Customs <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">💳 TradeFinanceAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.25);color:var(--indigo);padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="window.open('loi-generator.html','_blank')">📄 LOI Generator <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">🧾 PO Generator <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="openInvoiceModal()">🧾 InvoiceGen <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="openInvoiceModal()">📄 Proforma Invoice <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px">⚖️ LegalContract</div>
     </div>
 
@@ -896,53 +989,54 @@ select.inp option{background:var(--surface)}
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
 
-      <!-- LOGISTICSAI -->
-      <div style="background:var(--surface);border:1px solid rgba(91,95,239,.25);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
-        <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-            <div style="width:30px;height:30px;border-radius:6px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🚢</div>
+      <!-- LOGISTICS & CUSTOMS AI (merged) -->
+      <div style="grid-column:1/-1;background:var(--surface);border:1px solid rgba(45,212,191,.3);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+        <!-- Header -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:34px;height:34px;border-radius:8px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🚢</div>
             <div>
-              <div style="font-size:14px;font-weight:600;color:var(--white)">LogisticsAI</div>
-              <div style="font-size:13px;color:var(--muted)">Tracking · freight · port alerts · Incoterms</div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">Logistics & Customs AI</div>
+              <div style="font-size:13px;color:var(--muted)">Shipping · freight · port alerts · HS codes · duty calc · permits</div>
             </div>
           </div>
-          <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:13px;width:fit-content"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Running</span>
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
+            <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:10px;font-size:13px">Always on</span>
+          </div>
         </div>
-        <div style="padding:10px 14px;flex:1;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px">
-          <div>6 shipments tracked · 3 routes optimised</div>
-          <div style="color:var(--gold)">⚠ Port Said congestion +2 days</div>
-          <div style="color:var(--green)">↓ Freight rates -4% this week</div>
-          <div><span style="color:var(--teal)">🚢</span> SL-2406-001 Rebar · AUH→HH · Jun 18</div>
-          <div><span style="color:var(--green)">✓</span> Cement OPC · LCL booked · $1,240/CBM</div>
+        <!-- Tabs -->
+        <div style="display:flex;border-bottom:1px solid var(--border);background:var(--surface2)">
+          <button id="lc-tab-logistics" onclick="lcTab('logistics')" style="flex:1;padding:8px 14px;background:rgba(45,212,191,.08);border:none;border-bottom:2px solid var(--teal);color:var(--teal);font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;transition:all .12s">🚢 Logistics</button>
+          <button id="lc-tab-customs" onclick="lcTab('customs')" style="flex:1;padding:8px 14px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;transition:all .12s">🛃 Customs</button>
         </div>
-        <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
+        <!-- Tab body -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;flex:1">
+          <!-- Logistics panel -->
+          <div id="lc-panel-logistics" style="padding:10px 14px;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--border)">
+            <div style="font-size:12px;font-weight:600;color:var(--white);letter-spacing:.05em;margin-bottom:4px">// SHIPMENT TRACKING</div>
+            <div>6 shipments tracked · 3 routes optimised</div>
+            <div style="color:var(--gold)">⚠ Port Said congestion +2 days</div>
+            <div style="color:var(--green)">↓ Freight rates -4% this week</div>
+            <div><span style="color:var(--teal)">🚢</span> SL-2406-001 Rebar · AUH→HH · Jun 18</div>
+            <div><span style="color:var(--green)">✓</span> Cement OPC · LCL booked · $1,240/CBM</div>
+          </div>
+          <!-- Customs panel -->
+          <div id="lc-panel-customs" style="padding:10px 14px;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px">
+            <div style="font-size:12px;font-weight:600;color:var(--white);letter-spacing:.05em;margin-bottom:4px">// HS CODES & DUTIES</div>
+            <div>22 HS lookups · 6 countries · <span style="color:var(--green)">$14,200 duty savings</span></div>
+            <div style="color:var(--gold)">⚠ 2 import permits flagged (KSA)</div>
+            <div style="display:flex;justify-content:space-between"><span>Steel Rebar → UAE</span><span style="color:var(--teal)">7214.20 · 5%</span></div>
+            <div style="display:flex;justify-content:space-between"><span>Wheat → Egypt</span><span style="color:var(--green)">1001.99 · 0%</span></div>
+            <div style="display:flex;justify-content:space-between"><span>OPC Cement → Germany</span><span style="color:var(--teal)">2523.29 · 3.7%</span></div>
+          </div>
+        </div>
+        <!-- Footer -->
+        <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px;flex-wrap:wrap">
           <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('LogisticsAI — track shipment')">▶ Track shipment</button>
-          <button class="btn btn-xs" onclick="alert('Freight rate dashboard')">Rates</button>
-        </div>
-      </div>
-
-      <!-- CUSTOMSAI -->
-      <div style="background:var(--surface);border:1px solid rgba(139,143,248,.25);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
-        <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-            <div style="width:30px;height:30px;border-radius:6px;background:rgba(139,143,248,.12);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">🛃</div>
-            <div>
-              <div style="font-size:14px;font-weight:600;color:var(--white)">CustomsAI</div>
-              <div style="font-size:13px;color:var(--muted)">HS codes · duty calc · permits per destination</div>
-            </div>
-          </div>
-          <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:13px;width:fit-content"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span>Always on</span>
-        </div>
-        <div style="padding:10px 14px;flex:1;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px">
-          <div>22 HS lookups · 6 countries · <span style="color:var(--green)">$14,200 duty savings</span></div>
-          <div style="color:var(--gold)">⚠ 2 import permits flagged (KSA)</div>
-          <div style="display:flex;justify-content:space-between"><span>Steel Rebar → UAE</span><span style="color:var(--teal)">7214.20 · 5%</span></div>
-          <div style="display:flex;justify-content:space-between"><span>Wheat → Egypt</span><span style="color:var(--green)">1001.99 · 0%</span></div>
-          <div style="display:flex;justify-content:space-between"><span>OPC Cement → Germany</span><span style="color:var(--teal)">2523.29 · 3.7%</span></div>
-        </div>
-        <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-          <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('CustomsAI — HS lookup')">🔍 HS Lookup</button>
-          <button class="btn btn-xs" onclick="alert('Duty calculator')">Duty calc</button>
+          <button class="btn btn-xs" onclick="alert('Freight rate dashboard')" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.3);color:var(--teal)">📈 Rates</button>
+          <button class="btn btn-xs btn-p" onclick="alert('CustomsAI — HS lookup')" style="background:rgba(139,143,248,.12);border-color:rgba(139,143,248,.3);color:var(--violet)">🔍 HS Lookup</button>
+          <button class="btn btn-xs" onclick="alert('Duty calculator')" style="background:rgba(139,143,248,.08);border-color:rgba(139,143,248,.25);color:var(--violet)">🧮 Duty calc</button>
         </div>
       </div>
 
@@ -1046,7 +1140,7 @@ select.inp option{background:var(--surface)}
         <div style="display:flex;align-items:center;gap:10px">
           <div style="width:34px;height:34px;border-radius:8px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🧾</div>
           <div>
-            <div style="font-size:14px;font-weight:600;color:var(--white)">Invoice Generator</div>
+            <div style="font-size:14px;font-weight:600;color:var(--white)">Proforma Invoice Generator</div>
             <div style="font-size:13px;color:var(--muted)">Generates commercial invoices from signed POs · download PDF · send to buyer</div>
           </div>
         </div>
@@ -1137,17 +1231,9 @@ select.inp option{background:var(--surface)}
               <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="00:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="23:59" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
               <td style="padding:10px;font-size:13px;color:var(--teal)">Always on</td>
             </tr>
-            <!-- LogisticsAI -->
+            <!-- Logistics & Customs AI (merged) -->
             <tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🚢</span><span style="font-size:13px;font-weight:600;color:var(--white)">LogisticsAI</span></div></td>
-              <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
-              <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option>Every 6 hours</option><option selected>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
-              <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="07:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="21:00" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
-              <td style="padding:10px;font-size:13px;color:var(--teal)">in 3h 08m</td>
-            </tr>
-            <!-- CustomsAI -->
-            <tr style="border-bottom:1px solid var(--border)">
-              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🛃</span><span style="font-size:13px;font-weight:600;color:var(--white)">CustomsAI</span></div></td>
+              <td style="padding:10px"><div style="display:flex;align-items:center;gap:8px"><span style="font-size:15px">🚢🛃</span><span style="font-size:13px;font-weight:600;color:var(--white)">Logistics & Customs</span></div></td>
               <td style="padding:10px"><div class="sw on" onclick="this.classList.toggle('on');this.closest('tr').style.opacity=this.classList.contains('on')?'1':'.45'"><div class="sw-thumb"></div></div></td>
               <td style="padding:10px"><select class="inp" style="padding:4px 8px;font-size:13px;width:130px"><option>Every 6 hours</option><option selected>Every 12 hours</option><option>Every 24 hours</option><option>Manual only</option></select></td>
               <td style="padding:10px"><div style="display:flex;align-items:center;gap:4px"><input class="inp" type="time" value="07:00" style="padding:4px 6px;font-size:13px;width:80px"><span style="color:var(--muted);font-size:12px">to</span><input class="inp" type="time" value="21:00" style="padding:4px 6px;font-size:13px;width:80px"></div></td>
@@ -1273,8 +1359,8 @@ select.inp option{background:var(--surface)}
         <div style="display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:7px">
           <div class="sw" style="flex-shrink:0;margin-top:2px" onclick="this.classList.toggle('on')"><div class="sw-thumb"></div></div>
           <div style="flex:1">
-            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">Shipment confirmed → LogisticsAI + CustomsAI</div>
-            <div style="font-size:12px;color:var(--muted)">PO acknowledged by supplier <span style="color:var(--indigo)">→</span> LogisticsAI books freight <span style="color:var(--indigo)">→</span> CustomsAI prepares HS codes &amp; export docs</div>
+            <div style="font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px">Shipment confirmed → Logistics & Customs AI</div>
+            <div style="font-size:12px;color:var(--muted)">PO acknowledged by supplier <span style="color:var(--indigo)">→</span> Logistics AI books freight <span style="color:var(--indigo)">→</span> Customs AI prepares HS codes &amp; export docs</div>
           </div>
           <span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.2);color:var(--gold);padding:2px 8px;border-radius:8px;font-size:11px;flex-shrink:0">Paused</span>
         </div>
@@ -1595,7 +1681,7 @@ function renderAdminPOs() {
   if (drfEl) drfEl.textContent = drafts.length || '0';
 
   if (!pos.length) {
-    container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">No purchase orders yet — click + New PO or use the 🧾 PO button on a negotiation row above</div>';
+    container.innerHTML = '<div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">No order confirmations yet — click + New OC or use the 🧾 OC button on a negotiation row above</div>';
     return;
   }
 
@@ -1628,13 +1714,14 @@ function renderAdminPOs() {
       + '<td style="font-size:12px;color:var(--muted)">' + dateStr + '</td>'
       + '<td><div style="display:flex;gap:4px">'
         + '<button class="btn btn-xs" style="font-size:11px" onclick="window.open(\'po-generator.html?' + params + '\',\'_blank\')">📄 Open</button>'
+        + '<button class="btn btn-xs btn-p" style="font-size:11px" onclick="openSendOC(\'' + p.po_num + '\')">✉ Send OC</button>'
         + '<button class="btn btn-xs btn-r" style="font-size:11px" onclick="deletePO(\'' + p.po_num + '\')">✕</button>'
       + '</div></td>'
       + '</tr>';
   }).join('');
 
   container.innerHTML = '<table>'
-    + '<thead><tr><th>PO #</th><th>Product</th><th>Buyer</th><th>Supplier</th>'
+    + '<thead><tr><th>OC #</th><th>Product</th><th>Buyer</th><th>Supplier</th>'
     + '<th>Incoterm</th><th style="text-align:right">Total</th><th>Status</th>'
     + '<th>LOI Ref</th><th>Date</th><th>Actions</th></tr></thead>'
     + '<tbody>' + rows + '</tbody></table>';
@@ -1644,6 +1731,82 @@ function deletePO(poNum) {
   var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
   localStorage.setItem('sloi_pos', JSON.stringify(pos.filter(function(p){ return p.po_num !== poNum; })));
   renderAdminPOs();
+}
+
+var _ocSendRef = '';
+
+function openSendOC(poNum) {
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  var p = pos.find(function(x){ return x.po_num === poNum; });
+  if (!p) return;
+  _ocSendRef = poNum;
+
+  document.getElementById('oc-send-ref').textContent = poNum;
+  document.getElementById('oc-send-subtitle').textContent = (p.buyer || 'Buyer') + ' · ' + (p.product || '');
+  document.getElementById('oc-send-to').value = '';
+
+  var status = p.status || 'draft';
+  var badgeMap = { sent:'<span class="badge bg">Sent</span>', confirmed:'<span class="badge bv">Confirmed</span>', draft:'<span class="badge bm">Draft</span>' };
+  document.getElementById('oc-send-status-badge').innerHTML = badgeMap[status] || '';
+
+  var sentBtn = document.getElementById('oc-mark-sent-btn');
+  sentBtn.textContent = status === 'sent' ? '✓ Already Sent' : '✓ Mark as Sent';
+  sentBtn.disabled = status === 'sent';
+
+  var subject = 'Order Confirmation – ' + poNum + ' | ' + (p.product || '');
+  document.getElementById('oc-send-subject').value = subject;
+
+  var total = p.total ? '$' + Math.round(p.total).toLocaleString() : '—';
+  var body = 'Dear ' + (p.buyer || 'Sir/Madam') + ',\n\n'
+    + 'Please find below the Order Confirmation for your recent purchase order.\n\n'
+    + 'Order Confirmation #: ' + poNum + '\n'
+    + 'Product:              ' + (p.product || '—') + '\n'
+    + 'Supplier:             ' + (p.supplier || '—') + '\n'
+    + 'Incoterm:             ' + (p.incoterm || '—') + '\n'
+    + 'Payment Terms:        ' + (p.payment_terms || p.payment || '—') + '\n'
+    + 'Total Value:          ' + total + '\n'
+    + (p.loi_ref ? 'LOI Reference:        ' + p.loi_ref + '\n' : '')
+    + '\nKindly acknowledge receipt of this Order Confirmation by return email.\n\n'
+    + 'Best regards,\nSLOI AI Trade Desk';
+  document.getElementById('oc-send-body').value = body;
+
+  document.getElementById('oc-send-modal').classList.add('open');
+}
+
+function closeSendOC() {
+  document.getElementById('oc-send-modal').classList.remove('open');
+}
+
+function ocOpenMailto() {
+  var to  = document.getElementById('oc-send-to').value.trim();
+  var sub = encodeURIComponent(document.getElementById('oc-send-subject').value);
+  var bod = encodeURIComponent(document.getElementById('oc-send-body').value);
+  window.location.href = 'mailto:' + to + '?subject=' + sub + '&body=' + bod;
+}
+
+function ocCopyMessage() {
+  var text = 'To: ' + document.getElementById('oc-send-to').value + '\n'
+    + 'Subject: ' + document.getElementById('oc-send-subject').value + '\n\n'
+    + document.getElementById('oc-send-body').value;
+  navigator.clipboard.writeText(text).then(function() {
+    var btn = document.getElementById('oc-copy-btn');
+    btn.textContent = '✓ Copied!';
+    setTimeout(function(){ btn.textContent = '⎘ Copy Message'; }, 1800);
+  });
+}
+
+function ocMarkSent() {
+  if (!_ocSendRef) return;
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  pos = pos.map(function(p) {
+    if (p.po_num === _ocSendRef) p.status = 'sent';
+    return p;
+  });
+  localStorage.setItem('sloi_pos', JSON.stringify(pos));
+  renderAdminPOs();
+  closeSendOC();
 }
 
 // ── CONTRACTS VIEW ────────────────────────────────────────────────────────────
@@ -1967,6 +2130,21 @@ function brokerColor(init) {
 
 // ── PRODUCTS & PRICING ────────────────────────────────────────────────────────
 
+function lcTab(tab) {
+  var tabs = ['logistics','customs'];
+  tabs.forEach(function(t) {
+    var btn = document.getElementById('lc-tab-' + t);
+    var panel = document.getElementById('lc-panel-' + t);
+    var active = t === tab;
+    if (btn) {
+      btn.style.background = active ? 'rgba(45,212,191,.08)' : 'none';
+      btn.style.color = active ? 'var(--teal)' : 'var(--muted)';
+      btn.style.borderBottom = active ? '2px solid var(--teal)' : '2px solid transparent';
+    }
+    if (panel) panel.style.opacity = active ? '1' : '.35';
+  });
+}
+
 function prodSource(name) {
   show('agents', null);
   setTimeout(function(){ siTab('leads'); }, 220);
@@ -1982,11 +2160,12 @@ function renderProducts() {
   var EMOJI = {Metals:'🔩',Building:'🏗️',Energy:'⚡',Agriculture:'🌾',Chemicals:'🧪'};
   var sector = (document.getElementById('prod-sector-filter')||{}).value || '';
   api.getProducts(sector).then(function(data) {
+    _PROD_DATA = data || [];
     if (!data || !data.length) {
       tbody.innerHTML = '<tr><td colspan="6" style="padding:20px;text-align:center;color:var(--muted)">No products — upload catalog to populate</td></tr>';
       return;
     }
-    tbody.innerHTML = data.map(function(p) {
+    tbody.innerHTML = data.map(function(p, i) {
       var emoji = EMOJI[p.sector] || '📦';
       var certs = (p.certs||[]).join(' · ') || '—';
       var pname = encodeURIComponent(p.name||'');
@@ -2000,9 +2179,11 @@ function renderProducts() {
         + '<button class="btn btn-xs" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal);font-size:12px" onclick="prodSource(\'' + pname + '\')">🔭 Source</button>'
         + '<button class="btn btn-xs" style="background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.25);color:#25d366;font-size:12px" onclick="prodOutreach(\'' + pname + '\')">📱 Outreach</button>'
         + '<button class="btn btn-xs btn-p" style="font-size:12px" onclick="window.open(\'negotiation-agent.html\',\'_blank\')">🤖 Negotiate</button>'
+        + '<button class="btn btn-xs" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.3);color:var(--gold);font-size:12px" onclick="openContactModal(' + i + ')">📞 Contact</button>'
         + '</div></td>'
         + '</tr>';
     }).join('');
+    renderSupplierContacts();
   }).catch(function() {
     if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="padding:16px;text-align:center;color:var(--muted)">Failed to load products</td></tr>';
   });
@@ -2829,151 +3010,243 @@ function poProceed() {
 </div>
 
 <!-- INVOICE GENERATOR MODAL -->
-<div class="modal-bg" id="inv-modal-bg" onclick="if(event.target===this)closeInvoiceModal()">
-  <div class="modal" style="max-width:680px;width:calc(100vw - 32px)">
+<!-- SEND OC MODAL -->
+<div class="modal-bg" id="oc-send-modal" onclick="if(event.target===this)closeSendOC()">
+  <div class="modal" style="max-width:560px;width:calc(100vw - 32px)">
     <div class="modal-hd">
       <div>
-        <div class="modal-title">🧾 Invoice Generator</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:2px">Generate a commercial invoice from a signed PO</div>
+        <div class="modal-title">✉ Send Order Confirmation</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px" id="oc-send-subtitle">Draft message to buyer</div>
+      </div>
+      <button class="modal-close" onclick="closeSendOC()">×</button>
+    </div>
+    <div class="modal-body" style="display:flex;flex-direction:column;gap:12px">
+      <div style="background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);border-radius:5px;padding:10px 13px;display:flex;align-items:center;gap:10px">
+        <span style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase">OC Reference</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:700;color:var(--violet)" id="oc-send-ref">—</span>
+        <span style="flex:1"></span>
+        <span id="oc-send-status-badge"></span>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px">Recipient (Buyer)</label>
+        <input class="inp" id="oc-send-to" placeholder="buyer@company.com" style="width:100%"/>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px">Subject</label>
+        <input class="inp" id="oc-send-subject" style="width:100%"/>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px">Message</label>
+        <textarea id="oc-send-body" style="width:100%;min-height:160px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;line-height:1.7;padding:9px 11px;resize:vertical"></textarea>
+      </div>
+    </div>
+    <div class="modal-ft" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-p" style="gap:6px" onclick="ocOpenMailto()">📧 Open in Email Client</button>
+      <button class="btn" onclick="ocCopyMessage()" id="oc-copy-btn">⎘ Copy Message</button>
+      <button class="btn btn-g" onclick="ocMarkSent()" id="oc-mark-sent-btn">✓ Mark as Sent</button>
+      <button class="btn btn-r btn-sm" style="margin-left:auto" onclick="closeSendOC()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFORMA INVOICE GENERATOR MODAL -->
+<div class="modal-bg" id="inv-modal-bg" onclick="if(event.target===this)closeInvoiceModal()">
+  <div class="modal" style="max-width:900px;width:calc(100vw - 24px);max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">📄 Proforma Invoice Generator</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Issue a proforma invoice from a negotiated OC or deal · live preview</div>
       </div>
       <button class="modal-close" onclick="closeInvoiceModal()">×</button>
     </div>
-    <div class="modal-body">
 
-      <!-- Step 1: Select PO -->
-      <div id="inv-step-1">
-        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">// Select source PO</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div class="inv-po-row" onclick="selectInvPO('PO-2026-001','Hard Wheat · 50 MT','Atlas Grain Trading','$1,120/MT','FOB','$56,000','SL-LOI-20260501-003',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid rgba(34,197,94,.35);border-radius:5px;cursor:pointer;transition:border-color .15s">
-            <div style="font-size:18px">📦</div>
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">PO-2026-001 · Hard Wheat · 50 MT</div>
-              <div style="font-size:12px;color:var(--muted)">Atlas Grain Trading · $56,000 · Signed</div>
-            </div>
-            <span class="badge bg" style="font-size:12px">✓ Signed</span>
-          </div>
-          <div class="inv-po-row" onclick="selectInvPO('PO-2026-002','Aluminum 6061-T6 · 5 MT','Gulf Steel Industries','$9,200/MT','FOB','$46,000','SL-LOI-20260430-002',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;cursor:pointer;transition:border-color .15s">
-            <div style="font-size:18px">📦</div>
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">PO-2026-002 · Aluminum 6061-T6 · 5 MT</div>
-              <div style="font-size:12px;color:var(--muted)">Gulf Steel Industries · $46,000 · Signed</div>
-            </div>
-            <span class="badge bg" style="font-size:12px">✓ Signed</span>
-          </div>
-          <div class="inv-po-row" onclick="selectInvPO('PO-2026-003','Steel Rebar G60 · 100 MT','EuroSteel GmbH','$2,820/MT','CIF','$282,000','SL-LOI-20260604-004',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;cursor:pointer;transition:border-color .15s">
-            <div style="font-size:18px">📦</div>
-            <div style="flex:1">
-              <div style="font-size:13px;font-weight:600;color:var(--white)">PO-2026-003 · Steel Rebar G60 · 100 MT</div>
-              <div style="font-size:12px;color:var(--muted)">EuroSteel GmbH · $282,000 · Pending</div>
-            </div>
-            <span class="badge ba" style="font-size:12px">⏳ Pending</span>
-          </div>
+    <!-- 2-COLUMN BODY -->
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;min-height:0">
+
+      <!-- LEFT: Form -->
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+
+        <!-- Source OC selector -->
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source OC / Deal</div>
+          <div id="pi-oc-list" style="display:flex;flex-direction:column;gap:5px;max-height:150px;overflow-y:auto"></div>
         </div>
-      </div>
 
-      <!-- Step 2: Invoice fields -->
-      <div id="inv-step-2" style="display:none">
-        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">// Invoice details</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-          <div><label class="flabel">Invoice Ref</label><input class="inp" id="inv-ref" readonly style="color:var(--teal)"/></div>
-          <div><label class="flabel">Invoice Date</label><input class="inp" id="inv-date" type="date"/></div>
-          <div><label class="flabel">Due Date</label><input class="inp" id="inv-due" type="date"/></div>
-          <div><label class="flabel">Payment Terms</label>
-            <select class="inp" id="inv-terms">
-              <option>Net 30</option><option>Net 15</option><option>Net 60</option>
-              <option>50% upfront · 50% on delivery</option><option>LC at sight</option>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+
+        <!-- Fields grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <label class="flabel">PI Reference</label>
+            <input class="inp" id="pi-ref" readonly style="color:var(--teal);font-size:12px"/>
+          </div>
+          <div>
+            <label class="flabel">Issue Date</label>
+            <input class="inp" id="pi-date" type="date" oninput="piRefresh()" style="font-size:12px"/>
+          </div>
+          <div>
+            <label class="flabel">Valid Until</label>
+            <input class="inp" id="pi-validity" type="date" oninput="piRefresh()" style="font-size:12px"/>
+          </div>
+          <div>
+            <label class="flabel">Payment Terms</label>
+            <select class="inp" id="pi-terms" onchange="piRefresh()" style="font-size:12px">
+              <option>LC at sight</option>
+              <option>LC 30 days</option>
+              <option>LC 60 days</option>
+              <option>LC 90 days</option>
+              <option>TT advance</option>
+              <option>TT 30 days</option>
+              <option>Net 30</option>
+              <option>50% upfront · 50% on delivery</option>
             </select>
           </div>
-          <div><label class="flabel">Seller (Issuer)</label><input class="inp" id="inv-seller" value="SLOI AI Trading LLC"/></div>
-          <div><label class="flabel">Buyer (Bill To)</label><input class="inp" id="inv-buyer"/></div>
+          <div>
+            <label class="flabel">Port of Loading</label>
+            <input class="inp" id="pi-pol" placeholder="e.g. Mersin, Turkey" oninput="piRefresh()" style="font-size:12px"/>
+          </div>
+          <div>
+            <label class="flabel">Port of Destination</label>
+            <input class="inp" id="pi-pod" placeholder="e.g. Jebel Ali, UAE" oninput="piRefresh()" style="font-size:12px"/>
+          </div>
+          <div style="grid-column:span 2">
+            <label class="flabel">Delivery Timeline</label>
+            <input class="inp" id="pi-delivery" placeholder="e.g. 45–60 days from PI acceptance" oninput="piRefresh()" style="font-size:12px"/>
+          </div>
+          <div>
+            <label class="flabel">Seller (Issuer)</label>
+            <input class="inp" id="pi-seller" value="SLOI AI Trading LLC" oninput="piRefresh()" style="font-size:12px"/>
+          </div>
+          <div>
+            <label class="flabel">Buyer (Bill To)</label>
+            <input class="inp" id="pi-buyer" oninput="piRefresh()" style="font-size:12px"/>
+          </div>
         </div>
-        <div style="margin-bottom:10px">
-          <label class="flabel">Bank / Payment details</label>
-          <textarea class="inp" id="inv-bank" rows="3" style="resize:vertical;line-height:1.6">IBAN: AE07 0331 2345 6789 0123 456
+
+        <div>
+          <label class="flabel">Bank / Payment Details</label>
+          <textarea class="inp" id="pi-bank" rows="3" style="resize:vertical;line-height:1.6;font-size:12px" oninput="piRefresh()">IBAN: AE07 0331 2345 6789 0123 456
 Bank: Emirates NBD · Dubai, UAE
 SWIFT: EBILAEAD</textarea>
         </div>
+
         <div>
           <label class="flabel">Notes (optional)</label>
-          <textarea class="inp" id="inv-notes" rows="2" style="resize:vertical;line-height:1.6" placeholder="e.g. please reference invoice number on transfer…"></textarea>
+          <textarea class="inp" id="pi-notes" rows="2" style="resize:vertical;line-height:1.6;font-size:12px" placeholder="e.g. goods subject to quality inspection at origin…" oninput="piRefresh()"></textarea>
         </div>
       </div>
 
-      <!-- Step 3: Preview -->
-      <div id="inv-step-3" style="display:none">
-        <div style="font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px">Invoice preview <span style="flex:1;height:1px;background:var(--border)"></span><span class="badge bg" style="font-size:12px">Generated</span></div>
-        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px">
-          <div style="background:linear-gradient(135deg,#14142a,#1a1a35);padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
-            <div style="font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
-            <div style="text-align:right"><div style="color:#7b7ff8;font-size:12px" id="inv-doc-ref">—</div><div style="color:#52526e;font-size:11px" id="inv-doc-date">—</div></div>
+      <!-- RIGHT: Live preview -->
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px">
+          Live preview
+          <span style="flex:1;height:1px;background:var(--border);display:block"></span>
+          <span class="badge bt" id="pi-ready-badge" style="display:none;font-size:10px">● Live</span>
+        </div>
+
+        <!-- Proforma document -->
+        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #d0cee8">
+          <!-- Header -->
+          <div style="background:linear-gradient(135deg,#14142a,#0c2340);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right">
+              <div style="color:#7b7ff8;font-size:12px;font-weight:700" id="pi-doc-ref">PI-—</div>
+              <div style="color:#52526e;font-size:11px" id="pi-doc-date">—</div>
+            </div>
           </div>
-          <div style="background:#f0eff8;border-bottom:2px solid #e0deef;padding:8px 20px;text-align:center;font-size:13px;font-weight:700;color:#14142a;letter-spacing:.12em;text-transform:uppercase">COMMERCIAL INVOICE</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #e0deef">
-            <div style="padding:12px 16px;border-right:1px solid #e0deef">
-              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">FROM</div>
-              <div style="font-size:12px;font-weight:600;color:#14142a" id="inv-doc-seller">—</div>
+          <!-- Banner -->
+          <div style="background:#ddeef8;border-bottom:2px solid #9bc4e0;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#0c2340;letter-spacing:.14em;text-transform:uppercase">PROFORMA INVOICE</div>
+          <!-- From / To -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #d0cee8">
+            <div style="padding:10px 14px;border-right:1px solid #d0cee8">
+              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">FROM</div>
+              <div style="font-size:12px;font-weight:600;color:#14142a" id="pi-doc-seller">SLOI AI Trading LLC</div>
               <div style="font-size:11px;color:#52526e">Dubai, UAE · TRN: 100-123-456</div>
             </div>
-            <div style="padding:12px 16px">
-              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">BILL TO</div>
-              <div style="font-size:12px;font-weight:600;color:#14142a" id="inv-doc-buyer">—</div>
+            <div style="padding:10px 14px">
+              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">TO</div>
+              <div style="font-size:12px;font-weight:600;color:#14142a" id="pi-doc-buyer" style="min-height:16px">—</div>
             </div>
           </div>
-          <table style="font-size:11px">
-            <thead><tr style="background:#e8e6f8">
-              <th style="padding:7px 14px;background:#e8e6f8;border:none;color:#52526e">Description</th>
-              <th style="padding:7px 10px;background:#e8e6f8;border:none;color:#52526e">Unit Price</th>
-              <th style="padding:7px 10px;background:#e8e6f8;border:none;color:#52526e">Incoterm</th>
-              <th style="padding:7px 14px;background:#e8e6f8;border:none;color:#52526e;text-align:right">Total</th>
+          <!-- Line items -->
+          <table style="font-size:11px;width:100%;border-collapse:collapse">
+            <thead><tr style="background:#c8e0f0">
+              <th style="padding:6px 12px;border:none;color:#0c2340;text-align:left;font-weight:600">Description</th>
+              <th style="padding:6px 8px;border:none;color:#0c2340;font-weight:600">Unit Price</th>
+              <th style="padding:6px 8px;border:none;color:#0c2340;font-weight:600">Incoterm</th>
+              <th style="padding:6px 12px;border:none;color:#0c2340;text-align:right;font-weight:600">Est. Total</th>
             </tr></thead>
             <tbody><tr>
-              <td style="padding:9px 14px;color:#14142a;border-bottom:1px solid #e0deef" id="inv-doc-product">—</td>
-              <td style="padding:9px 10px;color:#14142a;border-bottom:1px solid #e0deef" id="inv-doc-price">—</td>
-              <td style="padding:9px 10px;color:#14142a;border-bottom:1px solid #e0deef" id="inv-doc-incoterm">—</td>
-              <td style="padding:9px 14px;color:#14142a;border-bottom:1px solid #e0deef;text-align:right;font-weight:700" id="inv-doc-total">—</td>
+              <td style="padding:8px 12px;color:#14142a;border-bottom:1px solid #d0cee8" id="pi-doc-product">—</td>
+              <td style="padding:8px 8px;color:#14142a;border-bottom:1px solid #d0cee8" id="pi-doc-price">—</td>
+              <td style="padding:8px 8px;color:#14142a;border-bottom:1px solid #d0cee8" id="pi-doc-incoterm">FOB</td>
+              <td style="padding:8px 12px;color:#14142a;border-bottom:1px solid #d0cee8;text-align:right;font-weight:700" id="pi-doc-total">—</td>
             </tr></tbody>
           </table>
-          <div style="display:flex;justify-content:flex-end;padding:10px 16px;border-bottom:1px solid #e0deef">
+          <!-- Totals -->
+          <div style="display:flex;justify-content:flex-end;padding:8px 14px;border-bottom:1px solid #d0cee8">
             <div style="min-width:200px">
-              <div style="display:flex;justify-content:space-between;padding:3px 0;color:#52526e"><span>Subtotal</span><span id="inv-doc-sub">—</span></div>
-              <div style="display:flex;justify-content:space-between;padding:3px 0;color:#52526e"><span>VAT (0% — export)</span><span>$0.00</span></div>
-              <div style="display:flex;justify-content:space-between;padding:6px 0 0;border-top:1px solid #e0deef;margin-top:3px;font-weight:700;color:#14142a"><span>Total Due</span><span id="inv-doc-due">—</span></div>
+              <div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;color:#52526e"><span>Subtotal</span><span id="pi-doc-sub">—</span></div>
+              <div style="display:flex;justify-content:space-between;padding:2px 0;font-size:11px;color:#52526e"><span>VAT (0% — export)</span><span>$0.00</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0 0;border-top:1px solid #d0cee8;margin-top:3px;font-weight:700;color:#14142a;font-size:12px"><span>Estimated Total</span><span id="pi-doc-due">—</span></div>
             </div>
           </div>
-          <div style="padding:10px 16px;border-bottom:1px solid #e0deef">
-            <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">PAYMENT</div>
-            <div style="color:#14142a;white-space:pre-line;line-height:1.6" id="inv-doc-bank">—</div>
+          <!-- Shipping + Payment -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #d0cee8">
+            <div style="padding:8px 14px;border-right:1px solid #d0cee8">
+              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">SHIPPING</div>
+              <div style="font-size:11px;color:#14142a;line-height:1.6">
+                <span id="pi-doc-pol">—</span> → <span id="pi-doc-pod">—</span><br/>
+                <span style="color:#52526e" id="pi-doc-delivery">—</span>
+              </div>
+            </div>
+            <div style="padding:8px 14px">
+              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">PAYMENT</div>
+              <div style="font-size:11px;color:#14142a;white-space:pre-line;line-height:1.5" id="pi-doc-bank">—</div>
+            </div>
           </div>
-          <div style="padding:8px 16px;display:flex;justify-content:space-between;font-size:11px;color:#6b6b8e">
-            <span>LOI: <span id="inv-doc-loi" style="color:#5b5fef">—</span></span>
-            <span>PO: <span id="inv-doc-po" style="color:#5b5fef">—</span></span>
-            <span>Terms: <span id="inv-doc-terms" style="color:#14142a;font-weight:600">—</span></span>
+          <!-- Meta footer -->
+          <div style="padding:6px 14px;display:flex;justify-content:space-between;font-size:11px;color:#6b6b8e;border-bottom:1px solid #d0cee8;flex-wrap:wrap;gap:6px">
+            <span>Terms: <b style="color:#14142a" id="pi-doc-terms">—</b></span>
+            <span>Valid until: <b style="color:#0c5080" id="pi-doc-validity">—</b></span>
+            <span>OC: <span style="color:#5b5fef" id="pi-doc-oc">—</span></span>
           </div>
-          <div style="padding:8px 16px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e;border-top:1px solid #e0deef">Generated by SLOI AI · sloiai.com</div>
+          <!-- Notes -->
+          <div id="pi-doc-notes-row" style="display:none;padding:6px 14px;border-bottom:1px solid #d0cee8;font-size:11px;color:#52526e" id="pi-doc-notes-wrap">
+            <span style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#6b6b8e">Notes: </span><span id="pi-doc-notes"></span>
+          </div>
+          <!-- Proforma disclaimer -->
+          <div style="padding:7px 14px;background:#ddeef8;text-align:center;font-size:10px;color:#0c5080;font-style:italic">
+            This is a proforma invoice only and not a demand for payment. Subject to final contract terms.
+          </div>
+          <div style="padding:5px 14px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com</div>
         </div>
       </div>
-
     </div>
-    <div class="modal-ft" id="inv-modal-ft">
+
+    <div class="modal-ft" style="flex-shrink:0">
       <button class="btn" onclick="closeInvoiceModal()">Cancel</button>
-      <button class="btn btn-g" id="inv-action-btn" onclick="invProceed()" style="display:none">Generate invoice →</button>
+      <button class="btn btn-sm" onclick="invoiceReset()">↺ Reset</button>
+      <button class="btn btn-g" onclick="alert('Downloading proforma PDF…')">↓ Download PDF</button>
+      <button class="btn btn-p" onclick="piSendToBuyer()">✉ Send to Buyer</button>
     </div>
   </div>
 </div>
 
 <script>
-var _invPO = null;
+var _piData = null;
+
+var PI_DEMOS = [
+  {po:'PO-2026-001', product:'Hard Wheat · 50 MT', buyer:'Atlas Grain Trading', price:'$1,120/MT', incoterm:'FOB', total:'$56,000', loi:'SL-LOI-20260501-003'},
+  {po:'PO-2026-002', product:'Aluminum 6061-T6 · 5 MT', buyer:'Gulf Steel Industries', price:'$9,200/MT', incoterm:'FOB', total:'$46,000', loi:'SL-LOI-20260430-002'},
+  {po:'PO-2026-003', product:'Steel Rebar G60 · 100 MT', buyer:'EuroSteel GmbH', price:'$2,820/MT', incoterm:'CIF', total:'$282,000', loi:'SL-LOI-20260604-004'}
+];
 
 function openInvoiceModal() {
-  _invPO = null;
-  document.getElementById('inv-step-1').style.display = 'block';
-  document.getElementById('inv-step-2').style.display = 'none';
-  document.getElementById('inv-step-3').style.display = 'none';
-  document.getElementById('inv-action-btn').style.display = 'none';
-  document.getElementById('inv-modal-ft').style.display = 'flex';
-  document.querySelectorAll('.inv-po-row').forEach(function(r){
-    r.style.borderColor = 'var(--border2)'; r.style.background = 'var(--surface2)';
-  });
+  _piData = null;
+  piPopulateOCList();
+  piRefresh();
+  document.getElementById('pi-ready-badge').style.display = 'none';
   document.getElementById('inv-modal-bg').classList.add('open');
 }
 
@@ -2981,72 +3254,446 @@ function closeInvoiceModal() {
   document.getElementById('inv-modal-bg').classList.remove('open');
 }
 
-function openInvoiceFromNeg(btn) {
-  var id      = btn.dataset.id;
-  var product = btn.dataset.product;
-  var qty     = btn.dataset.qty;
-  var unit    = btn.dataset.unit;
-  var buyer   = btn.dataset.buyer;
-  var price   = btn.dataset.price;
-  openInvoiceModal();
-  var productStr = product + ' · ' + qty + ' ' + unit;
-  var priceStr   = price ? '$' + parseFloat(price).toLocaleString() + '/' + unit : '—';
-  var total      = parseFloat(price) * parseFloat(qty);
-  var totalStr   = isNaN(total) ? '—' : '$' + Math.round(total).toLocaleString();
-  document.getElementById('inv-step-1').style.display = 'none';
-  selectInvPO('NEG-' + id, productStr, buyer, priceStr, 'FOB', totalStr, id, document.createElement('div'));
+function piPopulateOCList() {
+  var list = document.getElementById('pi-oc-list');
+  if (!list) return;
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  var items = pos.length ? pos.map(function(p){
+    return {po: p.po_num, product: p.product + (p.total ? ' · ' + (p.qty || '') : ''), buyer: p.buyer || '—', price: p.unit_price ? '$' + p.unit_price + '/MT' : '—', incoterm: p.incoterm || 'FOB', total: p.total ? '$' + Math.round(p.total).toLocaleString() : '—', loi: p.loi_ref || ''};
+  }) : PI_DEMOS;
+  list.innerHTML = items.map(function(it, i){
+    var badge = i === 0 && !pos.length ? '<span class="badge bg" style="font-size:11px">✓ Signed</span>' : '<span class="badge bm" style="font-size:11px">Draft</span>';
+    return '<div class="pi-oc-row" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;cursor:pointer;transition:border-color .12s" onclick="piSelect(' + i + ',this)">'
+      + '<div style="font-size:16px">📦</div>'
+      + '<div style="flex:1;min-width:0">'
+        + '<div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + it.po + ' · ' + it.product + '</div>'
+        + '<div style="font-size:11px;color:var(--muted)">' + it.buyer + ' · ' + it.total + '</div>'
+      + '</div>'
+      + badge
+      + '</div>';
+  }).join('');
+  list._items = items;
 }
 
-function selectInvPO(po, product, buyer, price, incoterm, total, loi, el) {
-  _invPO = {po:po, product:product, buyer:buyer, price:price, incoterm:incoterm, total:total, loi:loi};
-  document.querySelectorAll('.inv-po-row').forEach(function(r){
-    r.style.borderColor = 'var(--border2)'; r.style.background = 'var(--surface2)';
-  });
+function piSelect(idx, el) {
+  var items = document.getElementById('pi-oc-list')._items || PI_DEMOS;
+  _piData = items[idx];
+  document.querySelectorAll('.pi-oc-row').forEach(function(r){ r.style.borderColor = 'var(--border2)'; r.style.background = 'var(--surface2)'; });
   el.style.borderColor = 'rgba(91,95,239,.5)';
   el.style.background = 'rgba(91,95,239,.06)';
   var today = new Date();
-  var due = new Date(today); due.setDate(due.getDate() + 30);
+  var validity = new Date(today); validity.setDate(validity.getDate() + 15);
   var fmt = function(d){ return d.toISOString().split('T')[0]; };
-  document.getElementById('inv-ref').value = 'INV-' + today.getFullYear() + '-' + String(Math.floor(Math.random()*900)+100);
-  document.getElementById('inv-date').value = fmt(today);
-  document.getElementById('inv-due').value = fmt(due);
-  document.getElementById('inv-buyer').value = buyer;
-  document.getElementById('inv-step-2').style.display = 'block';
-  document.getElementById('inv-action-btn').style.display = 'inline-flex';
+  document.getElementById('pi-ref').value = 'PI-' + today.getFullYear() + '-' + String(Math.floor(Math.random()*900)+100);
+  document.getElementById('pi-date').value = fmt(today);
+  document.getElementById('pi-validity').value = fmt(validity);
+  document.getElementById('pi-buyer').value = _piData.buyer || '';
+  document.getElementById('pi-ready-badge').style.display = 'inline-flex';
+  piRefresh();
 }
 
-function invProceed() {
-  if (!_invPO) return;
-  var ref = document.getElementById('inv-ref').value;
-  var date = document.getElementById('inv-date').value;
-  document.getElementById('inv-doc-ref').textContent = ref;
-  document.getElementById('inv-doc-date').textContent = 'Date: ' + date;
-  document.getElementById('inv-doc-seller').textContent = document.getElementById('inv-seller').value;
-  document.getElementById('inv-doc-buyer').textContent = document.getElementById('inv-buyer').value;
-  document.getElementById('inv-doc-product').textContent = _invPO.product;
-  document.getElementById('inv-doc-price').textContent = _invPO.price;
-  document.getElementById('inv-doc-incoterm').textContent = _invPO.incoterm;
-  document.getElementById('inv-doc-total').textContent = _invPO.total;
-  document.getElementById('inv-doc-sub').textContent = _invPO.total;
-  document.getElementById('inv-doc-due').textContent = _invPO.total;
-  document.getElementById('inv-doc-bank').textContent = document.getElementById('inv-bank').value;
-  document.getElementById('inv-doc-loi').textContent = _invPO.loi;
-  document.getElementById('inv-doc-po').textContent = _invPO.po;
-  document.getElementById('inv-doc-terms').textContent = document.getElementById('inv-terms').value;
-  document.getElementById('inv-step-1').style.display = 'none';
-  document.getElementById('inv-step-2').style.display = 'none';
-  document.getElementById('inv-step-3').style.display = 'block';
-  document.getElementById('inv-action-btn').textContent = '↓ Download PDF';
-  document.getElementById('inv-action-btn').onclick = function(){ alert('Downloading ' + ref + '.pdf'); };
-  document.getElementById('inv-modal-ft').innerHTML +=
-    '<button class="btn btn-g" onclick="alert(\'Invoice sent to \' + document.getElementById(\'inv-buyer\').value + \' via email.\')">✉ Send to buyer</button>';
+function piRefresh() {
+  var ref      = document.getElementById('pi-ref').value || 'PI-—';
+  var date     = document.getElementById('pi-date').value;
+  var validity = document.getElementById('pi-validity').value;
+  var terms    = document.getElementById('pi-terms').value;
+  var pol      = document.getElementById('pi-pol').value;
+  var pod      = document.getElementById('pi-pod').value;
+  var delivery = document.getElementById('pi-delivery').value;
+  var seller   = document.getElementById('pi-seller').value;
+  var buyer    = document.getElementById('pi-buyer').value;
+  var bank     = document.getElementById('pi-bank').value;
+  var notes    = document.getElementById('pi-notes').value;
+
+  function set(id, val) { var e = document.getElementById(id); if (e) e.textContent = val || '—'; }
+
+  set('pi-doc-ref', ref);
+  set('pi-doc-date', date ? 'Date: ' + date : '—');
+  set('pi-doc-seller', seller || 'SLOI AI Trading LLC');
+  set('pi-doc-buyer', buyer || '—');
+  set('pi-doc-terms', terms);
+  set('pi-doc-validity', validity || '—');
+  set('pi-doc-pol', pol || '—');
+  set('pi-doc-pod', pod || '—');
+  set('pi-doc-delivery', delivery || '—');
+  set('pi-doc-bank', bank);
+
+  if (_piData) {
+    set('pi-doc-product', _piData.product);
+    set('pi-doc-price', _piData.price);
+    set('pi-doc-incoterm', _piData.incoterm || 'FOB');
+    set('pi-doc-total', _piData.total);
+    set('pi-doc-sub', _piData.total);
+    set('pi-doc-due', _piData.total);
+    set('pi-doc-oc', _piData.po || '—');
+  }
+
+  var notesRow = document.getElementById('pi-doc-notes-row');
+  if (notesRow) notesRow.style.display = notes ? 'block' : 'none';
+  var notesEl = document.getElementById('pi-doc-notes');
+  if (notesEl) notesEl.textContent = notes;
 }
 
-function invoiceDownload() { alert('Generate an invoice first.'); }
-function invoiceSend() { alert('Generate an invoice first.'); }
-function invoiceReset() { openInvoiceModal(); }
-function invoiceGenerate() { invProceed(); }
+function piSendToBuyer() {
+  var buyer = document.getElementById('pi-buyer').value || 'buyer';
+  var ref   = document.getElementById('pi-ref').value || 'Proforma Invoice';
+  var prod  = _piData ? _piData.product : '—';
+  var total = _piData ? _piData.total : '—';
+  var validity = document.getElementById('pi-validity').value;
+  var body = encodeURIComponent('Dear ' + buyer + ',\n\nPlease find attached the Proforma Invoice ' + ref + '.\n\nProduct: ' + prod + '\nEstimated Total: ' + total + (validity ? '\nValid Until: ' + validity : '') + '\n\nKindly confirm acceptance at your earliest convenience.\n\nBest regards,\nSLOI AI Trade Desk');
+  var subj = encodeURIComponent('Proforma Invoice – ' + ref + ' | ' + prod);
+  window.location.href = 'mailto:?subject=' + subj + '&body=' + body;
+}
+
+function openInvoiceFromNeg(btn) {
+  var id = btn.dataset.id, product = btn.dataset.product, qty = btn.dataset.qty,
+      unit = btn.dataset.unit, buyer = btn.dataset.buyer, price = btn.dataset.price;
+  openInvoiceModal();
+  var total = parseFloat(price) * parseFloat(qty);
+  _piData = {po: 'NEG-' + id, product: product + ' · ' + qty + ' ' + unit, buyer: buyer,
+    price: price ? '$' + parseFloat(price).toLocaleString() + '/' + unit : '—',
+    incoterm: 'FOB', total: isNaN(total) ? '—' : '$' + Math.round(total).toLocaleString(), loi: id};
+  var today = new Date();
+  var validity = new Date(today); validity.setDate(validity.getDate() + 15);
+  var fmt = function(d){ return d.toISOString().split('T')[0]; };
+  document.getElementById('pi-ref').value = 'PI-' + today.getFullYear() + '-' + String(Math.floor(Math.random()*900)+100);
+  document.getElementById('pi-date').value = fmt(today);
+  document.getElementById('pi-validity').value = fmt(validity);
+  document.getElementById('pi-buyer').value = buyer || '';
+  document.getElementById('pi-ready-badge').style.display = 'inline-flex';
+  piRefresh();
+}
+
+/* legacy aliases kept for any remaining callers */
+function selectInvPO(po, product, buyer, price, incoterm, total, loi) {
+  _piData = {po:po, product:product, buyer:buyer, price:price, incoterm:incoterm, total:total, loi:loi};
+  document.getElementById('pi-buyer').value = buyer || '';
+  piRefresh();
+}
+function invoiceDownload() { alert('Click ↓ Download PDF in the Proforma Invoice Generator.'); }
+function invoiceSend()     { piSendToBuyer(); }
+function invoiceReset()    { openInvoiceModal(); }
+function invoiceGenerate() { piRefresh(); }
+
+// ── ADMIN AI HELPER ───────────────────────────────────────────────────────────
+function callAdminAI(prompt, onSuccess, onError) {
+  var key = localStorage.getItem('sf_claude_key') || '';
+  if (!key) { if (onError) onError('No Claude API key — set sf_claude_key in localStorage.'); return; }
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-calls': 'true'
+    },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 400, messages: [{ role: 'user', content: prompt }] })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){ var txt = (res.content && res.content[0]) ? res.content[0].text : ''; if (onSuccess) onSuccess(txt); })
+  .catch(function(e){ if (onError) onError('Error: ' + e.message); });
+}
+
+// ── SUPPLIER CONTACTS ─────────────────────────────────────────────────────────
+var _SUPPLIERS = JSON.parse(localStorage.getItem('admin_suppliers') || '[]');
+var _PROD_DATA  = [];
+var _cmProduct  = null;
+var _editingSupIdx = null;
+
+function saveAdminSuppliers() { localStorage.setItem('admin_suppliers', JSON.stringify(_SUPPLIERS)); }
+
+function renderSupplierContacts() {
+  var el = document.getElementById('supplier-contacts-list');
+  if (!el) return;
+  if (!_SUPPLIERS.length) {
+    el.innerHTML = '<div style="padding:16px;text-align:center;color:var(--muted);font-size:14px">No supplier contacts yet — click + Add to create one</div>';
+    return;
+  }
+  el.innerHTML = '<table style="width:100%;border-collapse:collapse">'
+    + '<thead><tr style="background:var(--surface2)">'
+    + '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.06em">SUPPLIER</th>'
+    + '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.06em">EMAIL</th>'
+    + '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.06em">WHATSAPP</th>'
+    + '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.06em">BANK</th>'
+    + '<th style="padding:8px 12px;text-align:left;font-size:12px;color:var(--muted);font-weight:700;letter-spacing:.06em">PRODUCTS</th>'
+    + '<th style="padding:8px 12px"></th></tr></thead><tbody>'
+    + _SUPPLIERS.map(function(s, i) {
+      return '<tr style="border-bottom:1px solid var(--border)">'
+        + '<td style="padding:9px 12px;font-size:14px;font-weight:600;color:var(--white)">' + (s.name||'—') + '</td>'
+        + '<td style="padding:9px 12px;font-size:13px;color:var(--muted)">' + (s.email ? '<a href="mailto:' + s.email + '" style="color:var(--violet);text-decoration:none">' + s.email + '</a>' : '—') + '</td>'
+        + '<td style="padding:9px 12px;font-size:13px;color:var(--muted)">' + (s.whatsapp ? '<a href="https://wa.me/' + s.whatsapp.replace(/[^0-9]/g,'') + '" target="_blank" style="color:#25d366;text-decoration:none">' + s.whatsapp + '</a>' : '—') + '</td>'
+        + '<td style="padding:9px 12px;font-size:12px;color:var(--muted);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="' + (s.bank||'') + '">' + (s.bank||'—') + '</td>'
+        + '<td style="padding:9px 12px;font-size:12px;color:var(--muted)">' + (s.products||'All') + '</td>'
+        + '<td style="padding:9px 12px"><div style="display:flex;gap:4px">'
+        + '<button class="btn btn-xs" onclick="editSupplier(' + i + ')">✎ Edit</button>'
+        + '<button class="btn btn-xs btn-r" onclick="deleteSupplier(' + i + ')">✕</button>'
+        + '</div></td></tr>';
+    }).join('') + '</tbody></table>';
+}
+
+// ── CONTACT MODAL ─────────────────────────────────────────────────────────────
+function openContactModal(prodIdx) {
+  var p = _PROD_DATA[prodIdx];
+  if (!p) return;
+  _cmProduct = p;
+  var EMOJI = {Metals:'🔩',Building:'🏗️',Energy:'⚡',Agriculture:'🌾',Chemicals:'🧪'};
+  var lbl = document.getElementById('cm-product-label');
+  if (lbl) lbl.textContent = (EMOJI[p.sector]||'📦') + ' ' + p.name
+    + (p.current_price ? '  ·  $' + Number(p.current_price).toLocaleString() + '/' + (p.unit||'unit') : '')
+    + (p.moq ? '  ·  MOQ ' + Number(p.moq).toLocaleString() + ' ' + (p.unit||'units') : '');
+
+  var sel = document.getElementById('cm-supplier-select');
+  if (sel) {
+    sel.innerHTML = _SUPPLIERS.length
+      ? '<option value="">— select supplier —</option>' + _SUPPLIERS.map(function(s,i){ return '<option value="'+i+'">'+s.name+(s.products?' · '+s.products:'')+'</option>'; }).join('')
+      : '<option value="">No contacts — click + Add first</option>';
+  }
+  var noSup = document.getElementById('cm-no-suppliers');
+  var card  = document.getElementById('cm-contact-card');
+  var msgS  = document.getElementById('cm-msg-section');
+  if (noSup) noSup.style.display = _SUPPLIERS.length ? 'none' : 'block';
+  if (card)  card.style.display  = 'none';
+  if (msgS)  msgS.style.display  = 'none';
+  document.getElementById('contact-modal-overlay').style.display = 'flex';
+}
+
+function closeContactModal() {
+  document.getElementById('contact-modal-overlay').style.display = 'none';
+  _cmProduct = null;
+}
+
+function cmSelectSupplier() {
+  var sel = document.getElementById('cm-supplier-select');
+  var idx = sel ? parseInt(sel.value) : NaN;
+  var s = (!isNaN(idx) && _SUPPLIERS[idx]) ? _SUPPLIERS[idx] : null;
+  var card = document.getElementById('cm-contact-card');
+  var msgS = document.getElementById('cm-msg-section');
+  if (!s) { if(card)card.style.display='none'; if(msgS)msgS.style.display='none'; return; }
+
+  var nm = document.getElementById('cm-supplier-name'); if(nm) nm.textContent = s.name;
+  var em = document.getElementById('cm-email');         if(em) em.textContent = s.email||'—';
+  var wa = document.getElementById('cm-whatsapp');      if(wa) wa.textContent = s.whatsapp||'—';
+  var bk = document.getElementById('cm-bank');          if(bk) bk.textContent = s.bank||'—';
+
+  var p = _cmProduct || {};
+  var emBtn = document.getElementById('cm-email-btn');
+  if (emBtn && s.email) emBtn.href = 'mailto:' + s.email + '?subject=' + encodeURIComponent('Sourcing Inquiry – ' + (p.name||''));
+  var waBtn = document.getElementById('cm-wa-btn');
+  if (waBtn && s.whatsapp) { waBtn.href = 'https://wa.me/' + s.whatsapp.replace(/[^0-9]/g,''); waBtn.target='_blank'; }
+
+  if (card) card.style.display = 'flex';
+  var msg = cmBuildMsg(s);
+  cmUpdateShareLinks(s, msg);
+  if (msgS) msgS.style.display = 'block';
+}
+
+function cmBuildMsg(s) {
+  var p = _cmProduct || {};
+  var msg = 'Hi ' + (s.name||'') + ',\n\n'
+    + 'We are interested in sourcing the following:\n\n'
+    + '📦 Product: ' + (p.name||'—') + '\n'
+    + (p.current_price ? '💰 Price: $' + Number(p.current_price).toLocaleString() + '/' + (p.unit||'unit') + '\n' : '')
+    + (p.moq ? '📏 MOQ: ' + Number(p.moq).toLocaleString() + ' ' + (p.unit||'units') + '\n' : '')
+    + '\nPlease confirm availability and your best offer.\n\nBest regards,\nSLOI AI — sloiai.com';
+  var el = document.getElementById('cm-message'); if(el) el.value = msg;
+  return msg;
+}
+
+function cmUpdateShareLinks(s, msg) {
+  if (!msg) msg = (document.getElementById('cm-message')||{}).value||'';
+  var p = _cmProduct || {};
+  var wa = document.getElementById('cm-share-wa');
+  var em = document.getElementById('cm-share-email');
+  if (wa) wa.href = (s && s.whatsapp) ? 'https://wa.me/' + s.whatsapp.replace(/[^0-9]/g,'') + '?text=' + encodeURIComponent(msg) : '#';
+  if (em) em.href = (s && s.email) ? 'mailto:' + s.email + '?subject=' + encodeURIComponent('Sourcing Inquiry – ' + (p.name||'')) + '&body=' + encodeURIComponent(msg) : '#';
+}
+
+function cmDraftAI() {
+  var sel = document.getElementById('cm-supplier-select');
+  var idx = sel ? parseInt(sel.value) : NaN;
+  var s = (!isNaN(idx) && _SUPPLIERS[idx]) ? _SUPPLIERS[idx] : null;
+  var p = _cmProduct || {};
+  var status = document.getElementById('cm-ai-status');
+  var msgEl  = document.getElementById('cm-message');
+  if (status) { status.textContent = '⏳ Drafting message…'; status.style.display = 'block'; }
+  callAdminAI(
+    'Write a concise professional commodity sourcing outreach (4-5 sentences).\n'
+    + 'Product: ' + (p.name||'commodity') + '\n'
+    + (p.current_price ? 'Target price: $' + Number(p.current_price).toLocaleString() + '/' + (p.unit||'unit') + '\n' : '')
+    + (p.moq ? 'Quantity: ' + Number(p.moq).toLocaleString() + ' ' + (p.unit||'units') + '\n' : '')
+    + (s ? 'Supplier: ' + s.name + '\n' : '')
+    + 'Context: MENA commodity trade platform. Be direct. End with: SLOI AI — sloiai.com',
+    function(txt) {
+      if (status) status.style.display = 'none';
+      if (msgEl) { msgEl.value = txt; cmUpdateShareLinks(s, txt); }
+    },
+    function(err) { if (status) { status.textContent = err; } }
+  );
+}
+
+function copyContact(id) {
+  var el = document.getElementById(id);
+  if (el && navigator.clipboard) navigator.clipboard.writeText(el.textContent).catch(function(){});
+}
+
+// ── ADD / EDIT SUPPLIER MODAL ─────────────────────────────────────────────────
+function openAddSupplierModal(idx) {
+  _editingSupIdx = (idx !== undefined && idx !== null) ? idx : null;
+  var s = (_editingSupIdx !== null) ? (_SUPPLIERS[_editingSupIdx]||{}) : {};
+  var title = document.getElementById('as-modal-title');
+  if (title) title.textContent = _editingSupIdx !== null ? '✎ Edit Supplier Contact' : '+ Add Supplier Contact';
+  document.getElementById('as-name').value     = s.name||'';
+  document.getElementById('as-email').value    = s.email||'';
+  document.getElementById('as-wa').value       = s.whatsapp||'';
+  document.getElementById('as-bank').value     = s.bank||'';
+  document.getElementById('as-products').value = s.products||'';
+  document.getElementById('add-supplier-overlay').style.display = 'flex';
+}
+
+function closeAddSupplierModal() {
+  document.getElementById('add-supplier-overlay').style.display = 'none';
+  _editingSupIdx = null;
+}
+
+function saveSupplier() {
+  var name = (document.getElementById('as-name').value||'').trim();
+  if (!name) { alert('Supplier name is required'); return; }
+  var s = {
+    name: name,
+    email:    (document.getElementById('as-email').value||'').trim(),
+    whatsapp: (document.getElementById('as-wa').value||'').trim(),
+    bank:     (document.getElementById('as-bank').value||'').trim(),
+    products: (document.getElementById('as-products').value||'').trim()
+  };
+  if (_editingSupIdx !== null) _SUPPLIERS[_editingSupIdx] = s; else _SUPPLIERS.push(s);
+  saveAdminSuppliers();
+  renderSupplierContacts();
+  closeAddSupplierModal();
+  // refresh contact modal dropdown if it's open
+  var overlay = document.getElementById('contact-modal-overlay');
+  if (overlay && overlay.style.display === 'flex' && _cmProduct) {
+    var idx = _PROD_DATA.indexOf(_cmProduct);
+    if (idx >= 0) openContactModal(idx);
+  }
+}
+
+function editSupplier(idx)   { openAddSupplierModal(idx); }
+function deleteSupplier(idx) {
+  if (!confirm('Delete supplier contact "' + (_SUPPLIERS[idx]||{}).name + '"?')) return;
+  _SUPPLIERS.splice(idx, 1);
+  saveAdminSuppliers();
+  renderSupplierContacts();
+}
 </script>
+
+<!-- ── AI CONTACT MODAL ─────────────────────────────────────────────────── -->
+<div id="contact-modal-overlay" onclick="if(event.target===this)closeContactModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border:1px solid rgba(91,95,239,.35);border-radius:10px;width:520px;max-width:calc(100vw - 24px);max-height:88vh;overflow:hidden;display:flex;flex-direction:column">
+    <!-- header -->
+    <div style="padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--white)">📞 Contact Supplier</div>
+        <div id="cm-product-label" style="font-size:12px;color:var(--muted);margin-top:2px">—</div>
+      </div>
+      <button onclick="closeContactModal()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:2px 6px;line-height:1">✕</button>
+    </div>
+    <!-- body -->
+    <div style="overflow-y:auto;flex:1;padding:14px 16px;display:flex;flex-direction:column;gap:12px">
+
+      <!-- supplier selector -->
+      <div>
+        <label class="flabel">Supplier contact</label>
+        <div style="display:flex;gap:6px">
+          <select class="inp" id="cm-supplier-select" onchange="cmSelectSupplier()" style="font-size:13px;flex:1"></select>
+          <button class="btn btn-xs btn-p" onclick="openAddSupplierModal()">+ Add</button>
+        </div>
+      </div>
+
+      <!-- no suppliers state -->
+      <div id="cm-no-suppliers" style="display:none;text-align:center;padding:18px;background:var(--surface2);border:1px solid var(--border);border-radius:6px">
+        <div style="font-size:24px;margin-bottom:6px">👤</div>
+        <div style="font-size:13px;color:var(--muted)">No supplier contacts yet</div>
+        <button class="btn btn-sm btn-p" style="margin-top:8px" onclick="openAddSupplierModal()">+ Add first contact</button>
+      </div>
+
+      <!-- contact details card -->
+      <div id="cm-contact-card" style="display:none;background:var(--surface2);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:12px;flex-direction:column;gap:10px">
+        <div style="font-size:14px;font-weight:700;color:var(--white)" id="cm-supplier-name">—</div>
+        <!-- email -->
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:22px;text-align:center;font-size:15px;flex-shrink:0">📧</span>
+          <span id="cm-email" style="flex:1;font-size:13px;color:var(--text);word-break:break-all">—</span>
+          <button class="btn btn-xs" onclick="copyContact('cm-email')" title="Copy">📋</button>
+          <a id="cm-email-btn" href="#" class="btn btn-xs" style="text-decoration:none;background:rgba(91,95,239,.1);border-color:rgba(91,95,239,.3);color:var(--violet)">✉ Email</a>
+        </div>
+        <!-- whatsapp -->
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="width:22px;text-align:center;font-size:15px;flex-shrink:0">📱</span>
+          <span id="cm-whatsapp" style="flex:1;font-size:13px;color:var(--text)">—</span>
+          <button class="btn btn-xs" onclick="copyContact('cm-whatsapp')" title="Copy">📋</button>
+          <a id="cm-wa-btn" href="#" class="btn btn-xs" style="text-decoration:none;background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.3);color:#25d366">💬 WA</a>
+        </div>
+        <!-- bank -->
+        <div style="display:flex;align-items:flex-start;gap:8px">
+          <span style="width:22px;text-align:center;font-size:15px;flex-shrink:0;margin-top:1px">🏦</span>
+          <span id="cm-bank" style="flex:1;font-size:12px;color:var(--text);line-height:1.6;word-break:break-all">—</span>
+          <button class="btn btn-xs" onclick="copyContact('cm-bank')" title="Copy" style="align-self:flex-start">📋</button>
+        </div>
+      </div>
+
+      <!-- message + share -->
+      <div id="cm-msg-section" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <label class="flabel" style="margin:0">Outreach message</label>
+          <button class="btn btn-xs" onclick="cmDraftAI()" style="font-size:11px;background:rgba(91,95,239,.1);border-color:rgba(91,95,239,.3);color:var(--violet)">🤖 Draft with AI</button>
+        </div>
+        <textarea id="cm-message" class="inp" rows="6" style="font-size:12px;resize:vertical;line-height:1.7" oninput="(function(){var sel=document.getElementById('cm-supplier-select');var idx=sel?parseInt(sel.value):NaN;var s=(!isNaN(idx)&&_SUPPLIERS[idx])?_SUPPLIERS[idx]:null;if(s)cmUpdateShareLinks(s,document.getElementById('cm-message').value);})()"></textarea>
+        <div id="cm-ai-status" style="display:none;font-size:12px;color:var(--muted);font-style:italic;margin-top:4px">⏳ Drafting…</div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <a id="cm-share-wa" href="#" target="_blank" class="btn btn-sm" style="flex:1;justify-content:center;text-decoration:none;background:rgba(37,211,102,.08);border-color:rgba(37,211,102,.3);color:#25d366">💬 Send on WhatsApp</a>
+          <a id="cm-share-email" href="#" class="btn btn-sm" style="flex:1;justify-content:center;text-decoration:none;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.3);color:var(--violet)">✉ Send via Email</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD / EDIT SUPPLIER MODAL ─────────────────────────────────────────── -->
+<div id="add-supplier-overlay" onclick="if(event.target===this)closeAddSupplierModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:510;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:10px;width:440px;max-width:calc(100vw - 24px);padding:20px;display:flex;flex-direction:column;gap:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between">
+      <div style="font-size:15px;font-weight:700;color:var(--white)" id="as-modal-title">+ Add Supplier Contact</div>
+      <button onclick="closeAddSupplierModal()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:2px 6px;line-height:1">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="grid-column:1/-1">
+        <label class="flabel">Supplier name *</label>
+        <input class="inp" id="as-name" placeholder="e.g. Çimsa Çimento A.Ş." style="font-size:13px"/>
+      </div>
+      <div>
+        <label class="flabel">Email</label>
+        <input class="inp" id="as-email" type="email" placeholder="export@supplier.com" style="font-size:13px"/>
+      </div>
+      <div>
+        <label class="flabel">WhatsApp (+ country code)</label>
+        <input class="inp" id="as-wa" placeholder="+905321234567" style="font-size:13px"/>
+      </div>
+      <div style="grid-column:1/-1">
+        <label class="flabel">Bank details (IBAN / SWIFT / account)</label>
+        <input class="inp" id="as-bank" placeholder="IBAN: TR00 0000… · SWIFT: XXXXX" style="font-size:13px"/>
+      </div>
+      <div style="grid-column:1/-1">
+        <label class="flabel">Products / Sectors they supply (optional)</label>
+        <input class="inp" id="as-products" placeholder="e.g. Cement, Steel, Building Materials" style="font-size:13px"/>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-p" onclick="saveSupplier()" style="flex:1;justify-content:center">💾 Save contact</button>
+      <button class="btn" onclick="closeAddSupplierModal()">Cancel</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

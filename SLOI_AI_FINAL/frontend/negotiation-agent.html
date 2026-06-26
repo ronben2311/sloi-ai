@@ -1097,6 +1097,18 @@
       /* Quality requirement checkboxes */
       .qr-label{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0}
       .qr-label input{accent-color:var(--indigo);width:13px;height:13px;flex-shrink:0}
+      /* Mandate accordion sections */
+      .mnd-section{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden}
+      .mnd-section-hdr{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--surface2);cursor:pointer;user-select:none;transition:background .12s}
+      .mnd-section-hdr:hover{background:rgba(91,95,239,.07)}
+      .mnd-section-hdr.open{border-bottom:1px solid var(--border);background:rgba(91,95,239,.06)}
+      .mnd-section-icon{font-size:13px;flex-shrink:0}
+      .mnd-section-title{font-size:11px;font-weight:700;color:var(--white);letter-spacing:.08em;text-transform:uppercase;flex:1}
+      .mnd-section-sum{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;max-width:160px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+      .mnd-section-chev{font-size:9px;color:var(--muted);transition:transform .18s;flex-shrink:0}
+      .mnd-section-hdr.open .mnd-section-chev{transform:rotate(180deg)}
+      .mnd-section-body{display:none;padding:10px 11px;gap:7px;flex-direction:column}
+      .mnd-section-hdr.open + .mnd-section-body{display:flex}
 
       /* Show hamburger only on mobile */
       .mob-burger { display: none; }
@@ -1340,338 +1352,199 @@
             <button class="mob-close-btn" onclick="closeSidebar()" style="display:none;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px" title="Close">✕</button>
           </div>
           <div class="neg-left-body">
-            <div class="sec">// MANDATE</div>
-            <div
-              style="
-                display: flex;
-                flex-direction: column;
-                gap: 7px;
-                margin-bottom: 12px;
-              "
-            >
-              <div>
-                <label class="flabel">Buyer / Company</label>
-                <input
-                  class="inp"
-                  id="m-buyer"
-                  placeholder="e.g. Gulf Cement LLC"
-                  value="Gulf Cement LLC"
-                />
-              </div>
 
-              <div>
-                <label class="flabel"
-                  >Product
-                  <span
-                    id="params-loading"
-                    style="display: none; color: var(--muted); font-size: 11px"
-                    >loading params…</span
-                  ></label
-                >
-                <select
-                  class="inp"
-                  id="m-product"
-                  onchange="loadProductParams(this.value)"
-                >
-                  <option value="">— select product —</option>
-                </select>
+            <!-- ① MANDATE -->
+            <div class="mnd-section">
+              <div class="mnd-section-hdr open" id="mnd-hdr-mandate" onclick="mndToggle('mandate')">
+                <span class="mnd-section-icon">📋</span>
+                <span class="mnd-section-title">Mandate</span>
+                <span class="mnd-section-chev">▼</span>
               </div>
-
-              <!-- params hint strip -->
-              <div
-                id="params-hint"
-                style="
-                  display: none;
-                  background: var(--indigo-dim);
-                  border: 1px solid rgba(91, 95, 239, 0.2);
-                  border-radius: 3px;
-                  padding: 6px 9px;
-                  font-size: 12px;
-                  color: var(--violet);
-                  line-height: 1.7;
-                "
-              >
-                <strong style="color: var(--white)" id="ph-name"></strong><br />
-                Market:
-                <span id="ph-market" style="color: var(--teal)"></span>
-                &nbsp;·&nbsp; Opening:
-                <span id="ph-opening" style="color: var(--green)"></span>
-                &nbsp;·&nbsp; Walk-away:
-                <span id="ph-walkaway" style="color: var(--gold)"></span><br />
-                Trader floor:
-                <span id="ph-floor" style="color: var(--red)"></span>
-                &nbsp;·&nbsp; Concession: <span id="ph-conc"></span>/round
-                &nbsp;·&nbsp; Rounds: <span id="ph-rounds"></span>
-              </div>
-
-              <div
-                style="display: grid; grid-template-columns: 2fr 1fr; gap: 6px"
-              >
+              <div class="mnd-section-body">
                 <div>
-                  <label class="flabel">Quantity</label
-                  ><input
-                    class="inp"
-                    id="m-qty"
-                    type="number"
-                    min="1"
-                    value="100"
-                    placeholder="100"
-                  />
+                  <label class="flabel">Buyer / Company</label>
+                  <input class="inp" id="m-buyer" placeholder="e.g. Gulf Cement LLC" value="Gulf Cement LLC"/>
                 </div>
-                <div>
-                  <label class="flabel">Unit</label>
-                  <input
-                    class="inp"
-                    id="m-unit"
-                    value="MT"
-                    placeholder="MT"
-                    style="background: var(--surface); color: var(--muted)"
-                    readonly
-                  />
-                </div>
-              </div>
 
-              <div
-                style="
-                  background: rgba(91, 95, 239, 0.06);
-                  border: 1px solid rgba(91, 95, 239, 0.18);
-                  border-radius: 4px;
-                  padding: 8px 10px;
-                "
-              >
-                <div
-                  style="
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin-bottom: 6px;
-                  "
-                >
-                  <span
-                    style="
-                      font-size: 12px;
-                      color: var(--violet);
-                      font-weight: 600;
-                      letter-spacing: 0.04em;
-                    "
-                    >📊 SLOI AI Excel params</span
-                  >
-                  <span
-                    id="params-src-label"
-                    style="font-size: 12px; color: var(--muted)"
-                    >select a product →</span
-                  >
+                <div>
+                  <label class="flabel">Product <span id="params-loading" style="display:none;color:var(--muted);font-size:11px">loading params…</span></label>
+                  <select class="inp" id="m-product" onchange="loadProductParams(this.value)">
+                    <option value="">— select product —</option>
+                  </select>
                 </div>
-                <div
-                  style="
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 6px;
-                  "
-                >
+
+                <div id="params-hint" style="display:none;background:var(--indigo-dim);border:1px solid rgba(91,95,239,.2);border-radius:3px;padding:6px 9px;font-size:12px;color:var(--violet);line-height:1.7">
+                  <strong style="color:var(--white)" id="ph-name"></strong><br/>
+                  Market: <span id="ph-market" style="color:var(--teal)"></span>
+                  &nbsp;·&nbsp; Opening: <span id="ph-opening" style="color:var(--green)"></span>
+                  &nbsp;·&nbsp; Walk-away: <span id="ph-walkaway" style="color:var(--gold)"></span><br/>
+                  Trader floor: <span id="ph-floor" style="color:var(--red)"></span>
+                  &nbsp;·&nbsp; Concession: <span id="ph-conc"></span>/round
+                  &nbsp;·&nbsp; Rounds: <span id="ph-rounds"></span>
+                </div>
+
+                <div style="display:grid;grid-template-columns:2fr 1fr;gap:6px">
                   <div>
-                    <label class="flabel">Opening offer ($/unit)</label>
-                    <input
-                      class="inp"
-                      id="m-target"
-                      type="number"
-                      min="0"
-                      placeholder="—"
-                      readonly
-                      style="
-                        background: var(--surface);
-                        color: var(--teal);
-                        font-weight: 700;
-                        cursor: default;
-                      "
-                    />
+                    <label class="flabel">Quantity</label>
+                    <input class="inp" id="m-qty" type="number" min="1" value="100" placeholder="100"/>
                   </div>
                   <div>
-                    <label class="flabel">Walk-away max ($/unit)</label>
-                    <input
-                      class="inp"
-                      id="m-max"
-                      type="number"
-                      min="0"
-                      placeholder="—"
-                      readonly
-                      style="
-                        background: var(--surface);
-                        color: var(--gold);
-                        font-weight: 700;
-                        cursor: default;
-                      "
-                    />
+                    <label class="flabel">Unit</label>
+                    <input class="inp" id="m-unit" value="MT" placeholder="MT" style="background:var(--surface);color:var(--muted)" readonly/>
                   </div>
                 </div>
-                <div
-                  id="price-warning"
-                  style="
-                    display: none;
-                    margin-top: 6px;
-                    font-size: 12px;
-                    color: var(--red);
-                    background: var(--red-dim);
-                    border: 1px solid rgba(239, 68, 68, 0.25);
-                    border-radius: 3px;
-                    padding: 5px 8px;
-                  "
-                >
-                  ⚠ Walk-away max must be greater than target price — check your
-                  Excel params sheet
-                </div>
-              </div>
 
-              <div
-                style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px"
-              >
-                <div>
-                  <label class="flabel">Incoterm</label>
-                  <div
-                    style="
-                      display: flex;
-                      align-items: center;
-                      height: 30px;
-                      background: var(--surface2);
-                      border: 1px solid var(--border2);
-                      border-radius: 4px;
-                      padding: 0 10px;
-                      font-size: 13px;
-                      color: var(--white);
-                      font-weight: 600;
-                      letter-spacing: 0.06em;
-                    "
-                  >
-                    FOB
+                <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.18);border-radius:4px;padding:8px 10px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                    <span style="font-size:12px;color:var(--violet);font-weight:600;letter-spacing:.04em">📊 SLOI AI Excel params</span>
+                    <span id="params-src-label" style="font-size:12px;color:var(--muted)">select a product →</span>
                   </div>
-                  <input type="hidden" id="m-incoterm" value="FOB" />
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                    <div>
+                      <label class="flabel">Opening offer ($/unit)</label>
+                      <input class="inp" id="m-target" type="number" min="0" placeholder="—" readonly style="background:var(--surface);color:var(--teal);font-weight:700;cursor:default"/>
+                    </div>
+                    <div>
+                      <label class="flabel">Walk-away max ($/unit)</label>
+                      <input class="inp" id="m-max" type="number" min="0" placeholder="—" readonly style="background:var(--surface);color:var(--gold);font-weight:700;cursor:default"/>
+                    </div>
+                  </div>
+                  <div id="price-warning" style="display:none;margin-top:6px;font-size:12px;color:var(--red);background:var(--red-dim);border:1px solid rgba(239,68,68,.25);border-radius:3px;padding:5px 8px">
+                    ⚠ Walk-away max must be greater than target price — check your Excel params sheet
+                  </div>
                 </div>
-                <div>
-                  <label class="flabel">Payment terms</label>
-                  <select class="inp" id="m-payment">
-                    <option>LC 90 days</option>
-                    <option>LC 60 days</option>
-                    <option>TT 30 days</option>
-                    <option>TT advance</option>
-                    <option>Net 30</option>
-                    <option>Net 60</option>
-                  </select>
-                </div>
-              </div>
 
-              <div
-                style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px"
-              >
-                <div>
-                  <label class="flabel">Trader</label>
-                  <select class="inp" id="m-trader">
-                    <option value="BRK-UAE-001">BRK-UAE-001</option>
-                    <option value="BRK-EUR-001">BRK-EUR-001</option>
-                    <option value="BRK-ASIA-001">BRK-ASIA-001</option>
-                  </select>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                  <div>
+                    <label class="flabel">Incoterm</label>
+                    <div style="display:flex;align-items:center;height:30px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;padding:0 10px;font-size:13px;color:var(--white);font-weight:600;letter-spacing:.06em">FOB</div>
+                    <input type="hidden" id="m-incoterm" value="FOB"/>
+                  </div>
+                  <div>
+                    <label class="flabel">Payment terms</label>
+                    <select class="inp" id="m-payment">
+                      <option>LC 90 days</option>
+                      <option>LC 60 days</option>
+                      <option>TT 30 days</option>
+                      <option>TT advance</option>
+                      <option>Net 30</option>
+                      <option>Net 60</option>
+                    </select>
+                  </div>
                 </div>
-                <div>
-                  <label class="flabel">Max rounds</label>
-                  <select class="inp" id="m-rounds">
-                    <option value="3">3 rounds</option>
-                    <option value="5" selected>5 rounds</option>
-                    <option value="7">7 rounds</option>
-                  </select>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+                  <div>
+                    <label class="flabel">Trader</label>
+                    <select class="inp" id="m-trader">
+                      <option value="BRK-UAE-001">BRK-UAE-001</option>
+                      <option value="BRK-EUR-001">BRK-EUR-001</option>
+                      <option value="BRK-ASIA-001">BRK-ASIA-001</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="flabel">Max rounds</label>
+                    <select class="inp" id="m-rounds">
+                      <option value="3">3 rounds</option>
+                      <option value="5" selected>5 rounds</option>
+                      <option value="7">7 rounds</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label class="flabel">Delivery location</label>
-                <input
-                  class="inp"
-                  id="m-location"
-                  placeholder="e.g. Dubai, UAE"
-                  value="Dubai, UAE"
-                />
-              </div>
+                <div>
+                  <label class="flabel">Delivery location</label>
+                  <input class="inp" id="m-location" placeholder="e.g. Dubai, UAE" value="Dubai, UAE"/>
+                </div>
 
-              <div>
-                <label class="flabel">Delivery deadline</label>
-                <input class="inp" id="m-deadline" type="date" />
+                <div>
+                  <label class="flabel">Delivery deadline</label>
+                  <input class="inp" id="m-deadline" type="date"/>
+                </div>
               </div>
             </div>
 
-            <div class="sec" style="display:flex;justify-content:space-between;align-items:center">
-              // DEAL WEIGHTS
-              <span class="weight-total" id="weights-sum" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)">100%</span>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">
-              <div class="weight-row">
-                <span>💰 Price</span>
-                <input class="inp" type="number" min="0" max="100" id="w-price" value="40" oninput="updateWeightSum()"/>
-                <span>%</span>
+            <!-- ② DEAL WEIGHTS -->
+            <div class="mnd-section">
+              <div class="mnd-section-hdr" id="mnd-hdr-weights" onclick="mndToggle('weights')">
+                <span class="mnd-section-icon">⚖️</span>
+                <span class="mnd-section-title">Deal Weights</span>
+                <span class="weight-total mnd-section-sum" id="weights-sum" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:1px 6px;border-radius:3px">100%</span>
+                <span class="mnd-section-chev">▼</span>
               </div>
-              <div class="weight-row">
-                <span>🔍 Quality / Inspection</span>
-                <input class="inp" type="number" min="0" max="100" id="w-quality" value="30" oninput="updateWeightSum()"/>
-                <span>%</span>
+              <div class="mnd-section-body">
+                <div class="weight-row">
+                  <span>💰 Price</span>
+                  <input class="inp" type="number" min="0" max="100" id="w-price" value="40" oninput="updateWeightSum()"/>
+                  <span>%</span>
+                </div>
+                <div class="weight-row">
+                  <span>🔍 Quality / Inspection</span>
+                  <input class="inp" type="number" min="0" max="100" id="w-quality" value="30" oninput="updateWeightSum()"/>
+                  <span>%</span>
+                </div>
+                <div class="weight-row">
+                  <span>🚢 Delivery speed</span>
+                  <input class="inp" type="number" min="0" max="100" id="w-delivery" value="20" oninput="updateWeightSum()"/>
+                  <span>%</span>
+                </div>
+                <div class="weight-row">
+                  <span>💳 Payment terms</span>
+                  <input class="inp" type="number" min="0" max="100" id="w-payment" value="10" oninput="updateWeightSum()"/>
+                  <span>%</span>
+                </div>
+                <div style="font-size:11px;color:var(--muted)">Higher % = agent pushes harder on that factor</div>
               </div>
-              <div class="weight-row">
-                <span>🚢 Delivery speed</span>
-                <input class="inp" type="number" min="0" max="100" id="w-delivery" value="20" oninput="updateWeightSum()"/>
-                <span>%</span>
-              </div>
-              <div class="weight-row">
-                <span>💳 Payment terms</span>
-                <input class="inp" type="number" min="0" max="100" id="w-payment" value="10" oninput="updateWeightSum()"/>
-                <span>%</span>
-              </div>
-              <div style="font-size:11px;color:var(--muted);margin-top:2px">Weights guide the agent — higher % = push harder on that factor</div>
-            </div>
-
-            <div class="sec">// QUALITY REQUIREMENTS</div>
-            <div style="display:flex;flex-direction:column;gap:2px;margin-bottom:12px">
-              <label class="qr-label">
-                <input type="checkbox" id="qr-inspection" checked/>
-                Pre-shipment inspection (SGS / Bureau Veritas)
-              </label>
-              <label class="qr-label">
-                <input type="checkbox" id="qr-coa" checked/>
-                Certificate of Analysis (COA) included
-              </label>
-              <label class="qr-label">
-                <input type="checkbox" id="qr-defect"/>
-                Defect liability clause (6 months min)
-              </label>
-              <label class="qr-label">
-                <input type="checkbox" id="qr-penalty"/>
-                Late delivery penalty clause
-              </label>
-              <label class="qr-label">
-                <input type="checkbox" id="qr-iso"/>
-                ISO / CE / EN certification required
-              </label>
             </div>
 
-            <div class="sec">// STRATEGY</div>
-            <div style="margin-bottom: 14px">
-              <div
-                class="strat sel"
-                id="s-deal-hunter"
-                style="
-                  display: flex;
-                  align-items: center;
-                  gap: 10px;
-                  text-align: left;
-                "
-              >
-                <div class="strat-icon" style="font-size: 20px">🎯</div>
-                <div>
-                  <div class="strat-name">Best Deal Engine</div>
-                  <div class="strat-cost">
-                    Price + Quality + Delivery + Payment
+            <!-- ③ QUALITY REQUIREMENTS -->
+            <div class="mnd-section">
+              <div class="mnd-section-hdr" id="mnd-hdr-quality" onclick="mndToggle('quality')">
+                <span class="mnd-section-icon">🔍</span>
+                <span class="mnd-section-title">Quality Requirements</span>
+                <span class="mnd-section-sum" id="mnd-sum-quality" style="color:var(--teal)">2 / 5</span>
+                <span class="mnd-section-chev">▼</span>
+              </div>
+              <div class="mnd-section-body">
+                <label class="qr-label"><input type="checkbox" id="qr-inspection" checked onchange="mndSumRefresh()"/> Pre-shipment inspection (SGS / Bureau Veritas)</label>
+                <label class="qr-label"><input type="checkbox" id="qr-coa" checked onchange="mndSumRefresh()"/> Certificate of Analysis (COA) included</label>
+                <label class="qr-label"><input type="checkbox" id="qr-defect" onchange="mndSumRefresh()"/> Defect liability clause (6 months min)</label>
+                <label class="qr-label"><input type="checkbox" id="qr-penalty" onchange="mndSumRefresh()"/> Late delivery penalty clause</label>
+                <label class="qr-label"><input type="checkbox" id="qr-iso" onchange="mndSumRefresh()"/> ISO / CE / EN certification required</label>
+              </div>
+            </div>
+
+            <!-- ④ STRATEGY -->
+            <div class="mnd-section">
+              <div class="mnd-section-hdr" id="mnd-hdr-strategy" onclick="mndToggle('strategy')">
+                <span class="mnd-section-icon">🎯</span>
+                <span class="mnd-section-title">Strategy</span>
+                <span class="mnd-section-sum" style="color:var(--violet)">Best Deal Engine</span>
+                <span class="mnd-section-chev">▼</span>
+              </div>
+              <div class="mnd-section-body">
+                <div class="strat sel" id="s-deal-hunter" style="display:flex;align-items:center;gap:10px;text-align:left">
+                  <div class="strat-icon" style="font-size:20px">🎯</div>
+                  <div>
+                    <div class="strat-name">Best Deal Engine</div>
+                    <div class="strat-cost">Price + Quality + Delivery + Payment</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="sec">// ACTIVE SESSIONS</div>
-            <div id="neg-sessions"></div>
+            <!-- ⑤ ACTIVE SESSIONS -->
+            <div class="mnd-section">
+              <div class="mnd-section-hdr open" id="mnd-hdr-sessions" onclick="mndToggle('sessions')">
+                <span class="mnd-section-icon">📡</span>
+                <span class="mnd-section-title">Active Sessions</span>
+                <span class="mnd-section-chev">▼</span>
+              </div>
+              <div class="mnd-section-body">
+                <div id="neg-sessions"></div>
+              </div>
+            </div>
+
           </div>
           <div class="neg-left-foot">
             <div style="display: flex; gap: 6px">
@@ -2501,17 +2374,29 @@
         };
       }
 
+      function mndToggle(id) {
+        var hdr = document.getElementById('mnd-hdr-' + id);
+        if (hdr) hdr.classList.toggle('open');
+      }
+
+      function mndSumRefresh() {
+        var ids = ['qr-inspection','qr-coa','qr-defect','qr-penalty','qr-iso'];
+        var checked = ids.filter(function(id){ var el = document.getElementById(id); return el && el.checked; }).length;
+        var el = document.getElementById('mnd-sum-quality');
+        if (el) el.textContent = checked + ' / 5';
+      }
+
       function updateWeightSum() {
         var w = getDealWeights();
         var sum = w.price + w.quality + w.delivery + w.payment;
         var el = document.getElementById('weights-sum');
         el.textContent = sum + '%';
         if (sum === 100) {
-          el.style.cssText = 'background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)';
+          el.style.cssText = 'background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:1px 6px;border-radius:3px';
         } else if (sum < 100) {
-          el.style.cssText = 'background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)';
+          el.style.cssText = 'background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:1px 6px;border-radius:3px';
         } else {
-          el.style.cssText = 'background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red)';
+          el.style.cssText = 'background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:var(--red);padding:1px 6px;border-radius:3px';
         }
       }
 
