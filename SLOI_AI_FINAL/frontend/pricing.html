@@ -1,186 +1,225 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>Pricing — SLOI AI</title>
-<meta name="description" content="Simple, transparent pricing for SLOI AI. Start free and scale as you grow. AI-powered procurement automation for commodity traders and enterprises."/>
+<meta name="description" content="Simple, transparent pricing for SLOI AI. SaaS credits, local agentic team, or enterprise on-premise. AI-powered procurement automation for commodity traders."/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#8888a8;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);font-family:'IBM Plex Mono',monospace;}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);font-family:'IBM Plex Mono',monospace}
 .nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
 .nav-logo em{font-style:italic;color:var(--indigo)}
 .nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}
 .nav-links a:hover{color:var(--violet)}
-.nav-cta{background:var(--indigo);color:#fff;padding:6px 16px;border-radius:4px;font-size:13px;text-decoration:none}
+
 .wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:60px 28px 80px}
-.hero{text-align:center;margin-bottom:52px}
+.hero{text-align:center;margin-bottom:48px}
 .eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;justify-content:center}
 .eyebrow::before,.eyebrow::after{content:'';width:24px;height:1px;background:var(--indigo)}
 h1{font-family:'Fraunces',serif;font-size:clamp(42px,6vw,66px);font-weight:900;line-height:.95;letter-spacing:-.03em;color:var(--white);margin-bottom:16px}
 h1 em{font-style:italic;color:var(--indigo)}
 .hero-sub{font-size:15px;color:var(--muted);line-height:1.85;max-width:520px;margin:0 auto}
-.option-tabs{display:flex;gap:12px;justify-content:center;margin-bottom:48px}
+
+/* OPTION TABS */
+.option-tabs{display:flex;gap:12px;justify-content:center;margin-bottom:44px}
 .opt-tab{padding:10px 28px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;border:1px solid var(--border2);background:var(--surface);color:var(--muted);transition:all .2s}
 .opt-tab.active{background:rgba(91,95,239,.12);border-color:var(--indigo);color:var(--violet)}
 .option-panel{display:none}
 .option-panel.active{display:block}
-.pay-note{background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:14px 18px;font-size:14px;color:var(--teal);line-height:1.7;margin-bottom:28px;text-align:center}
-.open-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.pay-note{background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:13px 18px;font-size:14px;color:var(--teal);line-height:1.7;margin-bottom:32px;text-align:center}
+
+/* PRICING SECTION SEPARATOR */
+.psec{margin-bottom:32px}
+.psec-head{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.psec-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 12px;border-radius:4px;flex-shrink:0}
+.badge-saas{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.28);color:var(--violet)}
+.badge-local{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.28);color:var(--teal)}
+.badge-ent{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.28);color:var(--gold)}
+.psec-title{font-size:14px;font-weight:600;color:var(--white)}
+.psec-sub{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* TIER CARDS */
 .tier-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s,transform .2s}
 .tier-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
 .tier-card.featured{border-color:rgba(91,95,239,.5)}
-.tier-top{padding:28px 26px 20px;border-bottom:1px solid var(--border)}
-.tier-badge{display:inline-flex;font-size:12px;font-weight:700;padding:3px 10px;border-radius:3px;margin-bottom:14px;letter-spacing:.06em}
+.tier-top{padding:24px 22px 18px;border-bottom:1px solid var(--border)}
+.tier-badge{display:inline-flex;font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;margin-bottom:12px;letter-spacing:.06em}
 .badge-i{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:var(--green)}
 .badge-r{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.3);color:var(--violet)}
-.tier-name{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--white);margin-bottom:6px;letter-spacing:-.02em}
-.tier-tagline{font-size:14px;color:var(--muted);line-height:1.65;margin-bottom:20px;min-height:40px}
-.tier-price{font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:var(--white);letter-spacing:-.04em;line-height:1}
-.tier-price-note{font-size:13px;color:var(--muted);margin-top:6px}
-.tier-body{padding:20px 26px 26px}
-.feat-list{display:flex;flex-direction:column;gap:9px;margin-bottom:22px}
-.feat{display:flex;align-items:flex-start;gap:9px;font-size:13px;line-height:1.5}
+.badge-g{background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.3);color:var(--gold)}
+.badge-t{background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.3);color:var(--teal)}
+.tier-name{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);margin-bottom:5px;letter-spacing:-.02em}
+.tier-tagline{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.tier-price{font-family:'Fraunces',serif;font-size:44px;font-weight:900;color:var(--white);letter-spacing:-.04em;line-height:1}
+.tier-price sup{font-size:18px;vertical-align:top;margin-top:8px;font-family:'IBM Plex Mono',monospace;color:var(--muted)}
+.tier-price-note{font-size:13px;color:var(--muted);margin-top:5px}
+.tier-body{padding:18px 22px 22px}
+.feat-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.feat{display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.5}
 .fy{color:var(--green);flex-shrink:0}
 .fn{color:var(--border2);flex-shrink:0}
 .ft{color:var(--text)}
 .ftd{color:var(--muted)}
-.tier-cta,.plan-btn{display:block;text-align:center;padding:12px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;font-family:'IBM Plex Mono',monospace;cursor:pointer;border:none;width:100%;transition:all .15s}
+.tier-cta,.plan-btn{display:block;text-align:center;padding:11px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;font-family:'IBM Plex Mono',monospace;cursor:pointer;border:none;width:100%;transition:all .15s}
 .cta-ghost{background:none;border:1px solid var(--border2);color:var(--text)}
 .cta-ghost:hover{border-color:var(--indigo);color:var(--violet)}
 .cta-solid{background:var(--indigo);color:#fff;border:none}
 .cta-solid:hover{opacity:.85}
-.managed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px}
-.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s;position:relative}
-.plan-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
-.plan-card.pop{border-color:rgba(91,95,239,.5)}
-.pop-tag{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:4px 16px;border-radius:0 0 8px 8px;letter-spacing:.06em}
-.plan-top{padding:26px 22px 18px;border-bottom:1px solid var(--border)}
-.plan-icon{font-size:28px;margin-bottom:12px}
-.plan-name{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);margin-bottom:4px}
-.plan-tagline{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px;min-height:44px}
-.plan-price{font-family:'Fraunces',serif;font-size:44px;font-weight:900;color:var(--white);letter-spacing:-.04em;line-height:1}
-.plan-price sup{font-size:18px;vertical-align:top;margin-top:8px;font-family:'IBM Plex Mono',monospace;color:var(--muted)}
-.plan-period{font-size:13px;color:var(--muted);margin-top:5px}
-.plan-loi{font-size:13px;color:var(--teal);margin-top:4px;font-weight:600}
-.plan-body{padding:18px 22px 22px;flex:1;display:flex;flex-direction:column}
-.plan-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;flex:1}
-.plan-feat{display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.45}
-.pfy{color:var(--green);flex-shrink:0}
-.pft{color:var(--text)}
-.flow-diagram{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:28px}
-.flow-title{font-size:12px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:18px}
+.cta-teal{background:none;border:1px solid rgba(45,212,191,.35);color:var(--teal)}
+.cta-teal:hover{background:rgba(45,212,191,.08)}
+.cta-gold{background:none;border:1px solid rgba(232,169,74,.35);color:var(--gold)}
+.cta-gold:hover{background:rgba(232,169,74,.08)}
+
+/* CREDIT PACK CARDS */
+.credit-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.credit-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;cursor:pointer;transition:border-color .15s,transform .15s;position:relative}
+.credit-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-1px)}
+.credit-card.pop{border-color:rgba(91,95,239,.5)}
+.cc-popular{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:3px 14px;border-radius:0 0 6px 6px;letter-spacing:.06em}
+.cc-price{font-family:'Fraunces',serif;font-size:34px;font-weight:900;color:var(--white);margin-top:4px}
+.cc-credits{font-size:13px;color:var(--teal);font-weight:600;margin:4px 0}
+.cc-rate{font-size:12px;color:var(--muted)}
+.cc-btn{margin-top:14px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:7px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;transition:all .15s}
+.cc-btn:hover{border-color:var(--indigo);color:var(--violet)}
+.credit-card.pop .cc-btn{background:var(--indigo);border:none;color:#fff;font-weight:600}
+
+/* AGENT CARDS */
+.agent-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.agent-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;cursor:pointer;transition:all .18s;display:flex;flex-direction:column;gap:4px}
+.agent-card:hover{border-color:rgba(91,95,239,.4);transform:translateY(-1px)}
+.agent-card.pop{border-color:rgba(91,95,239,.35)}
+.ac-tag{position:relative;margin-bottom:6px}
+.ac-badge{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:10px;font-weight:700;padding:2px 10px;border-radius:0 0 5px 5px;letter-spacing:.06em;white-space:nowrap}
+.ac-icon{font-size:22px;margin-bottom:6px}
+.ac-name{font-size:13px;font-weight:600;color:var(--white)}
+.ac-desc{font-size:12px;color:var(--muted);line-height:1.55;flex:1}
+.ac-cost{font-size:11px;color:var(--teal);font-weight:600;margin-top:6px}
+
+/* EXAMPLE BOX */
+.ex-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:22px}
+
+/* LOCAL & ENTERPRISE CARDS */
+.deploy-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.deploy-card.teal-border{border-color:rgba(45,212,191,.3)}
+.deploy-card.gold-border{border-color:rgba(232,169,74,.3)}
+.deploy-top{padding:22px 24px 16px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr auto;gap:16px;align-items:start}
+.deploy-name{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);margin-bottom:5px;letter-spacing:-.02em}
+.deploy-desc{font-size:13px;color:var(--muted);line-height:1.6}
+.deploy-price{text-align:right;flex-shrink:0}
+.deploy-amount{font-family:'Fraunces',serif;font-size:36px;font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1}
+.deploy-period{font-size:12px;color:var(--muted);margin-top:3px}
+.deploy-body{padding:16px 24px 20px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.deploy-feats{display:flex;flex-direction:column;gap:7px}
+.deploy-feat{display:flex;align-items:flex-start;gap:7px;font-size:13px}
+.dfcheck{color:var(--green);flex-shrink:0;font-size:12px;margin-top:1px}
+.dftext{color:var(--text);line-height:1.4}
+.deploy-footer{padding:0 24px 18px}
+
+/* FLOW DIAGRAM */
+.flow-diagram{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:28px}
+.flow-title{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.1em;margin-bottom:18px;text-transform:uppercase}
 .flow-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative}
-.flow-steps::before{content:'';position:absolute;top:20px;left:10%;right:10%;height:1px;background:var(--border2);z-index:0}
-.flow-step{text-align:center;position:relative;z-index:1;padding:0 6px}
-.fs-dot{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;margin:0 auto 10px;border:1px solid var(--border2);background:var(--surface)}
-.fs-label{font-size:12px;color:var(--white);font-weight:600;margin-bottom:3px;line-height:1.3}
-.fs-sub{font-size:11px;color:var(--muted);line-height:1.4}
-.fs-done .fs-dot{background:rgba(34,197,94,.1);border-color:var(--green)}
-.fs-active .fs-dot{background:rgba(91,95,239,.15);border-color:var(--indigo)}
-.ctable{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:32px}
-.ctable th{background:var(--surface2);padding:9px 14px;font-size:12px;color:var(--muted);letter-spacing:.06em;text-align:left;border-bottom:1px solid var(--border)}
+.flow-steps::before{content:'';position:absolute;top:18px;left:10%;right:10%;height:1px;background:var(--border2);z-index:0}
+.flow-step{text-align:center;position:relative;z-index:1;padding:0 4px}
+.fs-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;margin:0 auto 8px;border:1px solid var(--border2);background:var(--surface)}
+.fs-label{font-size:11px;color:var(--white);font-weight:600;margin-bottom:2px;line-height:1.3}
+.fs-sub{font-size:10px;color:var(--muted);line-height:1.4}
+.fs-done .fs-dot{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.4)}
+.fs-active .fs-dot{background:rgba(91,95,239,.12);border-color:var(--indigo)}
+
+/* COMPARISON TABLE */
+.ctable{width:100%;border-collapse:collapse;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:28px}
+.ctable th{background:var(--surface2);padding:10px 14px;font-size:11px;color:var(--muted);letter-spacing:.06em;text-align:left;border-bottom:1px solid var(--border)}
 .ctable th:not(:first-child){text-align:center}
-.ctable td{padding:8px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+.ctable td{padding:9px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
 .ctable tr:last-child td{border-bottom:none}
-.ctable td:first-child{color:var(--muted)}
-.ctable td:not(:first-child){text-align:center;color:var(--white);font-weight:500}
+.ctable td:first-child{color:var(--muted);font-size:12px}
+.ctable td:not(:first-child){text-align:center;font-weight:500}
 .ck{color:var(--green)}
 .cn{color:var(--border2)}
-.cat-row td{background:var(--surface2)!important;color:var(--indigo)!important;font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px!important}
-.ex-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:28px}
+.cat-row td{background:var(--surface2)!important;color:var(--indigo)!important;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:6px 14px!important;font-weight:700}
+.th-saas{color:var(--violet)!important}
+.th-local{color:var(--teal)!important}
+.th-ent{color:var(--gold)!important}
+
+/* OPEN NETWORK CARDS */
+.open-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+
+/* FAQ */
 .faq-item{border-bottom:1px solid var(--border)}
-.faq-q{display:flex;align-items:center;justify-content:space-between;padding:15px 0;cursor:pointer;gap:16px}
-.faq-qt{font-size:15px;font-weight:600;color:var(--white);transition:color .15s}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:14px 0;cursor:pointer;gap:16px}
+.faq-qt{font-size:14px;font-weight:600;color:var(--white);transition:color .15s}
 .faq-q:hover .faq-qt{color:var(--violet)}
 .faq-arr{color:var(--muted);font-size:18px;transition:transform .2s;flex-shrink:0}
-.faq-a{font-size:14px;color:var(--muted);line-height:1.85;padding-bottom:16px;display:none}
+.faq-a{font-size:13px;color:var(--muted);line-height:1.85;padding-bottom:14px;display:none}
 .faq-item.open .faq-a{display:block}
 .faq-item.open .faq-arr{transform:rotate(90deg);color:var(--indigo)}
 .faq-item.open .faq-qt{color:var(--violet)}
-.bottom-cta{background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:10px;padding:48px;text-align:center;margin-top:48px}
-.bcta-h{font-family:'Fraunces',serif;font-size:clamp(30px,4vw,46px);font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:12px;line-height:1.05}
-.bcta-h em{font-style:italic;color:var(--indigo)}
-.bcta-sub{font-size:15px;color:var(--muted);margin-bottom:28px;line-height:1.7}
-.bcta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.bb-p{background:var(--indigo);color:#fff;padding:13px 28px;border-radius:5px;font-size:15px;font-weight:600;text-decoration:none}
-.bb-p:hover{opacity:.85}
-.bb-s{background:none;border:1px solid var(--border2);color:var(--text);padding:13px 28px;border-radius:5px;font-size:15px;text-decoration:none}
-.bb-s:hover{border-color:var(--indigo);color:var(--violet)}
-.nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
 
-/* ── MOBILE ── */
+/* BOTTOM CTA */
+.bottom-cta{background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:10px;padding:48px;text-align:center;margin-top:48px}
+.bcta-h{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,44px);font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:10px;line-height:1.05}
+.bcta-h em{font-style:italic;color:var(--indigo)}
+.bcta-sub{font-size:14px;color:var(--muted);margin-bottom:26px;line-height:1.7}
+.bcta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.bb-p{background:var(--indigo);color:#fff;padding:12px 26px;border-radius:5px;font-size:14px;font-weight:600;text-decoration:none}
+.bb-p:hover{opacity:.85}
+.bb-s{background:none;border:1px solid var(--border2);color:var(--text);padding:12px 26px;border-radius:5px;font-size:14px;text-decoration:none}
+.bb-s:hover{border-color:var(--indigo);color:var(--violet)}
+
+/* MOBILE */
 .mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
 @media(max-width:768px){
   nav{padding:0 14px}
-  .nav-tagline,.nav-cta{display:none}
+  .mob-nav-btn{display:flex}
   .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:rgba(7,7,15,.98);border-bottom:1px solid var(--border);padding:14px 20px;flex-direction:column;gap:14px;z-index:200}
   .nav-links.nav-open{display:flex}
-  .mob-nav-btn{display:flex}
-
   .wrap{padding:32px 14px 56px}
   h1{font-size:clamp(34px,10vw,52px)}
   .hero-sub{font-size:14px}
-
-  /* Option tabs: stack vertically */
-  .option-tabs{flex-direction:column;gap:8px;margin-bottom:32px}
-  .opt-tab{text-align:center;padding:10px 16px}
-
-  /* Flow diagram: horizontal scroll instead of 5-col grid */
-  .flow-steps{display:flex!important;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;gap:0}
-  .flow-steps::before{top:18px;left:5%;right:5%}
-  .flow-step{flex-shrink:0;min-width:110px;padding:0 8px}
-  .fs-dot{width:36px;height:36px;font-size:16px}
-  .fs-label{font-size:11px}
-  .fs-sub{font-size:10px}
-
-  /* Open network grid */
+  .option-tabs{flex-direction:column;gap:8px;margin-bottom:28px}
+  .opt-tab{text-align:center}
   .open-grid{grid-template-columns:1fr!important}
-
-  /* Inline repeat() grids */
-  [style*="repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
-  [style*="repeat(2,1fr)"]{grid-template-columns:1fr!important}
-  [style*="repeat(3,1fr)"]{grid-template-columns:1fr!important}
-
-  /* AgentKit payment box: wrap on mobile */
-  [style*="align-items:center"][style*="gap:16px"]{flex-wrap:wrap!important}
-  [style*="flex-direction:column"][style*="align-items:flex-end"]{align-items:flex-start!important}
-
-  /* Comparison table: horizontal scroll */
+  .credit-grid{grid-template-columns:1fr!important}
+  .agent-grid{grid-template-columns:1fr 1fr!important}
+  .deploy-top{grid-template-columns:1fr!important}
+  .deploy-price{text-align:left!important}
+  .deploy-body{grid-template-columns:1fr!important}
+  .flow-steps{display:flex!important;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px}
+  .flow-step{flex-shrink:0;min-width:100px;padding:0 6px}
   .ctable{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;font-size:12px}
   .ctable th,.ctable td{padding:7px 10px;white-space:nowrap}
-
-  /* Pay note */
-  .pay-note{font-size:13px;padding:12px 14px;text-align:left}
-
-  /* Bottom CTA */
   .bottom-cta{padding:28px 18px}
-  .bcta-h{font-size:clamp(24px,6vw,36px)}
   .bcta-btns{flex-direction:column;gap:10px}
-  .bb-p,.bb-s{text-align:center;padding:12px 20px}
+  .bb-p,.bb-s{text-align:center;padding:11px 18px}
 }
 </style>
 <link rel="stylesheet" href="/main.css"/>
-
 <script src="/api-client.js"></script>
 <script src="/seo-geo.js"></script>
 </head>
 <body>
 <nav>
-  <a href="sloiai-home.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <a href="sloiai-home.html" class="nav-logo">Sloi<em>AI</em></a>
   <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
   <div class="nav-links" id="mob-nav">
-    <a href="about.html">About</a>
+    <a href="sloiai-home.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="open-network.html">MCP</a>
     <a href="docs.html">Docs</a>
-    <a href="open-network.html">Open Network</a>
     <a href="contact.html">Contact</a>
   </div>
-  <a href="login.html" class="nav-cta">Get started →</a>
+  <div class="nav-right">
+    <a href="login.html" class="btn-ghost">Sign in</a>
+    <a href="smb-order.html" class="btn-cta-nav">Start sourcing →</a>
+  </div>
 </nav>
 
 <div class="wrap">
@@ -195,18 +234,18 @@ h1 em{font-style:italic;color:var(--indigo)}
     <button class="opt-tab" onclick="switchOpt('a',this)">⚡ Option B — Open Network</button>
   </div>
 
-  <!-- ══ OPTION A ══ -->
+  <!-- ══ OPTION A: OPEN NETWORK ══ -->
   <div class="option-panel" id="panel-a">
-    <div class="pay-note">Connect your own AI agent directly to the SLOI AI API. Read tier is instant and free. Transact tier requires a 5-day review and earns you 1% commission on every signed LOI. AI agents can pay for credits autonomously using <strong style="color:var(--teal)">USDC on Base</strong> via Coinbase AgentKit — no human required.</div>
+    <div class="pay-note">Connect your own AI agent directly to the SLOI AI API. Read tier is instant and free. Transact tier requires a 5-day review and earns you 1% commission on every signed LOI. AI agents can pay autonomously via <strong style="color:var(--teal)">USDC on Base</strong> (Coinbase AgentKit) — no human required.</div>
 
     <div class="flow-diagram">
       <div class="flow-title">// HOW IT WORKS — OPEN NETWORK</div>
       <div class="flow-steps">
         <div class="flow-step fs-done"><div class="fs-dot">📖</div><div class="fs-label">Read skill.md</div><div class="fs-sub">Agent discovers SLOI AI automatically</div></div>
         <div class="flow-step fs-done"><div class="fs-dot">🔑</div><div class="fs-label">Register</div><div class="fs-sub">POST /agents/register → API key instant</div></div>
-        <div class="flow-step fs-active"><div class="fs-dot">🔍</div><div class="fs-label">Query</div><div class="fs-sub">Search products, compare traders, get prices</div></div>
-        <div class="flow-step"><div class="fs-dot">📋</div><div class="fs-label">Negotiate</div><div class="fs-sub">Submit RFQ, run negotiation rounds</div></div>
-        <div class="flow-step"><div class="fs-dot">📄</div><div class="fs-label">LOI signed</div><div class="fs-sub">Boss approves → 1% commission to you</div></div>
+        <div class="flow-step fs-active"><div class="fs-dot">🔍</div><div class="fs-label">Query</div><div class="fs-sub">Search products, compare traders</div></div>
+        <div class="flow-step"><div class="fs-dot">📋</div><div class="fs-label">Negotiate</div><div class="fs-sub">Submit RFQ, run rounds</div></div>
+        <div class="flow-step"><div class="fs-dot">📄</div><div class="fs-label">LOI signed</div><div class="fs-sub">Boss approves → 1% to you</div></div>
       </div>
     </div>
 
@@ -235,32 +274,32 @@ h1 em{font-style:italic;color:var(--indigo)}
         </div>
       </div>
 
-      <div class="tier-card featured" style="cursor:pointer" onclick="window.location.href='mcp-install.html'">
+      <div class="tier-card featured" style="cursor:pointer" onclick="window.location.href='open-network.html'">
         <div class="tier-top">
-          <div class="tier-badge badge-r">2-MIN INSTALL</div>
-          <div class="tier-name">Local Agent</div>
-          <div class="tier-tagline">Install the SLOI AI skill in Claude Desktop, Cursor, or any MCP-compatible agent. Negotiate and auto-approve deals autonomously.</div>
-          <div class="tier-price" style="font-size:36px;letter-spacing:-.03em">MCP</div>
-          <div class="tier-price-note">Claude · Cursor · Windsurf · Any agent framework</div>
+          <div class="tier-badge badge-r">5-DAY REVIEW</div>
+          <div class="tier-name">Transact Tier</div>
+          <div class="tier-tagline">Submit RFQs, run AI negotiation, generate LOIs. Earn 1% commission on every signed deal.</div>
+          <div class="tier-price">1%</div>
+          <div class="tier-price-note">Commission per signed LOI · No monthly fee</div>
         </div>
         <div class="tier-body">
           <div class="feat-list">
-            <div class="feat"><span class="fy">✓</span><span class="ft">Claude Desktop — add 4 lines of JSON</span></div>
-            <div class="feat"><span class="fy">✓</span><span class="ft">Cursor / Windsurf — same config</span></div>
-            <div class="feat"><span class="fy">✓</span><span class="ft">All 10 MCP tools available instantly</span></div>
-            <div class="feat"><span class="fy">✓</span><span class="ft" style="color:var(--teal)">Auto-approve deals within mandate</span></div>
-            <div class="feat"><span class="fy">✓</span><span class="ft">AG-UI SSE real-time negotiation stream</span></div>
-            <div class="feat"><span class="fy">✓</span><span class="ft" style="color:var(--green)">Read tier free · no auth required</span></div>
+            <div class="feat"><span class="fy">✓</span><span class="ft">Everything in Read tier</span></div>
+            <div class="feat"><span class="fy">✓</span><span class="ft">POST /v1/rfq — submit RFQs</span></div>
+            <div class="feat"><span class="fy">✓</span><span class="ft">POST /v1/negotiations/start</span></div>
+            <div class="feat"><span class="fy">✓</span><span class="ft" style="color:var(--teal)">1% commission per signed LOI</span></div>
             <div class="feat"><span class="fy">✓</span><span class="ft">USDC on Base — agent pays itself</span></div>
-            <div class="feat"><span class="fy">✓</span><span class="ft" style="color:var(--violet)">Earn 1% commission on every LOI</span></div>
+            <div class="feat"><span class="fy">✓</span><span class="ft">10,000 API calls / hour</span></div>
+            <div class="feat"><span class="fy">✓</span><span class="ft">Listed on Agent Marketplace</span></div>
+            <div class="feat"><span class="fy">✓</span><span class="ft">OFAC screened automatically</span></div>
           </div>
-          <button class="tier-cta cta-solid" onclick="event.stopPropagation();window.location.href='mcp-install.html'">Install local agent →</button>
+          <button class="tier-cta cta-solid" onclick="event.stopPropagation();window.location.href='open-network.html'">Apply for Transact tier →</button>
         </div>
       </div>
     </div>
 
     <div class="ex-box">
-      <div style="font-size:12px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px">// EXAMPLE — TRANSACT TIER EARNINGS</div>
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px;text-transform:uppercase">// Example — Transact Tier Earnings</div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:center">
         <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--white)">$500K</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Deal value</div></div>
         <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--green)">$5,000</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Your commission (1%)</div></div>
@@ -269,151 +308,255 @@ h1 em{font-style:italic;color:var(--indigo)}
       </div>
     </div>
 
-    <!-- AGENTKIT PAYMENT -->
-    <div style="background:rgba(0,82,255,.06);border:1px solid rgba(0,82,255,.25);border-radius:8px;padding:18px 22px;margin-bottom:28px;display:flex;align-items:center;gap:16px">
+    <div style="background:rgba(0,82,255,.06);border:1px solid rgba(0,82,255,.25);border-radius:8px;padding:18px 22px;display:flex;align-items:center;gap:16px">
       <div style="font-size:32px;flex-shrink:0">⬡</div>
       <div style="flex:1">
         <div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px">AI agents pay with USDC on Base — Coinbase AgentKit</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7">Your agent manages its own on-chain wallet. When credits run low, the agent sends USDC to SLOI AI on Base L2. Credits confirmed in ~2 seconds. After the first LOI, the agent earns 1% commission in USDC — enough to fund itself indefinitely.</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7">Your agent manages its own on-chain wallet. When credits run low, the agent sends USDC to SLOI AI on Base L2 — confirmed in ~2 seconds. After the first LOI, the agent earns 1% commission in USDC — enough to fund itself indefinitely.</div>
       </div>
-      <div style="flex-shrink:0;display:flex;flex-direction:column;gap:6px;align-items:flex-end">
-        <span style="font-size:13px;color:var(--teal);font-weight:600">USDC on Base</span>
-        <span style="font-size:12px;color:var(--muted)">&lt;$0.01 gas · ~2s confirm</span>
-        <a href="agentkit.html" style="font-size:12px;color:rgba(0,82,255,.9);text-decoration:none;font-weight:600">AgentKit docs →</a>
+      <div style="flex-shrink:0;text-align:right">
+        <div style="font-size:13px;color:var(--teal);font-weight:600">USDC on Base</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">&lt;$0.01 gas · ~2s confirm</div>
+        <a href="agentkit.html" style="font-size:12px;color:rgba(0,82,255,.9);text-decoration:none;font-weight:600;margin-top:4px;display:block">AgentKit docs →</a>
       </div>
     </div>
   </div>
 
-  <!-- ══ OPTION B ══ -->
+  <!-- ══ OPTION B: MANAGED AGENT ══ -->
   <div class="option-panel active" id="panel-b">
-    <div class="pay-note">Credit-based model — buy credits by card (Stripe) or with USDC on Base (Coinbase AgentKit). Spend credits per negotiation session and per LOI. Unlimited LOIs as long as you have credits. AI agents can pay autonomously — no human needed.</div>
+    <div class="pay-note">Three deployment models for the SLOI AI managed agent — cloud SaaS (pay per credit), local agentic team (monthly), or enterprise on-premise (one-time). Every path ends with a signed LOI and Boss approval.</div>
 
-    <!-- CREDIT PACKS -->
-    <div style="margin-bottom:24px">
-      <div style="font-size:12px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:14px;text-align:center">// BUY CREDITS — PAY BY CARD · SPEND AS YOU GO</div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(91,95,239,.4)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white)">$99</div>
-          <div style="font-size:12px;color:var(--teal);font-weight:600;margin:4px 0">100 credits</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.5">$0.99 / credit</div>
-          <button onclick="buyCredits(99)" style="margin-top:10px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer">Buy →</button>
-        </div>
-        <div style="background:var(--surface);border:1px solid rgba(91,95,239,.4);border-radius:8px;padding:18px;text-align:center;cursor:pointer;position:relative" onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='rgba(91,95,239,.4)'">
-          <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:2px 12px;border-radius:0 0 6px 6px">POPULAR</div>
-          <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white)">$299</div>
-          <div style="font-size:12px;color:var(--teal);font-weight:600;margin:4px 0">350 credits</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.5">$0.85 / credit · save 14%</div>
-          <button onclick="buyCredits(299)" style="margin-top:10px;width:100%;background:var(--indigo);border:none;color:#fff;padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;font-weight:600">Buy →</button>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer" onmouseover="this.style.borderColor='rgba(91,95,239,.4)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white)">$599</div>
-          <div style="font-size:12px;color:var(--teal);font-weight:600;margin:4px 0">800 credits</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.5">$0.75 / credit · save 24%</div>
-          <button onclick="buyCredits(599)" style="margin-top:10px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer">Buy →</button>
-        </div>
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;text-align:center;cursor:pointer" onmouseover="this.style.borderColor='rgba(91,95,239,.4)'" onmouseout="this.style.borderColor='var(--border)'">
-          <div style="font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white)">$999</div>
-          <div style="font-size:12px;color:var(--teal);font-weight:600;margin:4px 0">1,500 credits</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.5">$0.67 / credit · save 32%</div>
-          <button onclick="buyCredits(999)" style="margin-top:10px;width:100%;background:none;border:1px solid var(--border2);color:var(--muted);padding:6px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer">Buy →</button>
-        </div>
-      </div>
-      <div style="font-size:12px;color:var(--muted);text-align:center">Credits never expire · Secured by Stripe · Refundable if unused</div>
-    </div>
-
-    <!-- AI AGENTS GRID -->
-    <div style="font-size:12px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:14px;text-align:center">// WHAT CREDITS BUY — AI AGENTS</div>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:32px">
-
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s" onclick="window.location.href='smb-order.html'" onmouseover="this.style.borderColor='rgba(91,95,239,.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform=''">
-        <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.18)">📄</div>
-        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">LOI Generator</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Drafts and finalizes Letters of Intent in seconds after Boss approval. ICC-compliant terms, supplier anonymization enforced, auto-emailed to both parties.</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:12px;color:var(--teal);font-weight:600">5 credits per LOI</span>
-          <span style="font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
+    <!-- ── SAAS SECTION ── -->
+    <div class="psec">
+      <div class="psec-head">
+        <span class="psec-badge badge-saas">☁ SaaS · Cloud Hosted</span>
+        <div>
+          <div class="psec-title">Pay-as-you-go credits — hosted and managed by SLOI AI</div>
+          <div class="psec-sub">No setup. Buy credits by card or USDC. Spend on negotiation sessions and LOIs. Start immediately.</div>
         </div>
       </div>
 
-      <div style="background:var(--surface);border:1px solid rgba(91,95,239,.35);border-radius:8px;padding:20px;cursor:pointer;position:relative;overflow:hidden;transition:all .2s" onclick="window.location.href='negotiation-agent.html'" onmouseover="this.style.borderColor='rgba(91,95,239,.6)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(91,95,239,.35)';this.style.transform=''">
-        <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:2px 14px;border-radius:0 0 6px 6px;letter-spacing:.06em">MOST POPULAR</div>
-        <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.18);margin-top:8px">🤖</div>
-        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">NegotiationAgent</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Runs up to 7 negotiation rounds against verified traders. Deal Hunter or Autopilot strategy. Real-time price feed after every round. OFAC screened automatically.</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:12px;color:var(--teal);font-weight:600">10–20 credits per deal</span>
-          <span style="font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
+      <div class="credit-grid">
+        <div class="credit-card" onclick="buyCredits(99)">
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px">Starter</div>
+          <div class="cc-price">$99</div>
+          <div class="cc-credits">100 credits</div>
+          <div class="cc-rate">$0.99 / credit</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5">~10 negotiation sessions or 20 LOIs</div>
+          <button class="cc-btn">Buy →</button>
+        </div>
+        <div class="credit-card pop" onclick="buyCredits(299)">
+          <div class="cc-popular">POPULAR</div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;margin-top:6px">Most Popular</div>
+          <div class="cc-price">$299</div>
+          <div class="cc-credits">350 credits</div>
+          <div class="cc-rate">$0.85 / credit · save 14%</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5">~35 negotiation sessions or 70 LOIs</div>
+          <button class="cc-btn">Buy →</button>
         </div>
       </div>
 
-      <div style="background:var(--surface);border:1px solid rgba(232,169,74,.25);border-radius:8px;padding:20px;cursor:pointer;transition:all .2s" onclick="window.location.href='sloiai-platform.html'" onmouseover="this.style.borderColor='rgba(232,169,74,.5)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(232,169,74,.25)';this.style.transform=''">
-        <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.2)">💳</div>
-        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">TradeFinanceAI</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Structures LC requirements and SWIFT instructions. Connects to TradeFinex for verified trade finance instruments — letter of credit, SBLC, factoring.</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:12px;color:var(--teal);font-weight:600">5 credits per LC</span>
-          <span style="font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
+      <!-- WHAT CREDITS BUY -->
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px">// What credits buy</div>
+      <div class="agent-grid">
+        <div class="agent-card pop" onclick="window.location.href='negotiation-agent.html'">
+          <div class="ac-tag" style="position:relative;height:14px">
+            <div class="ac-badge">MOST POPULAR</div>
+          </div>
+          <div class="ac-icon">🤖</div>
+          <div class="ac-name">NegotiationAgent</div>
+          <div class="ac-desc">Up to 7 rounds against verified traders. Deal Hunter or Autopilot strategy. OFAC screened automatically.</div>
+          <div class="ac-cost">10–20 credits / deal</div>
+        </div>
+        <div class="agent-card" onclick="window.location.href='smb-order.html'">
+          <div class="ac-icon">📄</div>
+          <div class="ac-name">LOI Generator</div>
+          <div class="ac-desc">Drafts and finalizes Letters of Intent after Boss approval. ICC-compliant, auto-emailed to both parties.</div>
+          <div class="ac-cost">5 credits / LOI</div>
+        </div>
+        <div class="agent-card" onclick="window.location.href='sloiai-platform.html'">
+          <div class="ac-icon">💳</div>
+          <div class="ac-name">TradeFinanceAI</div>
+          <div class="ac-desc">Structures LC requirements and SWIFT instructions. Connects to TradeFinex for letter of credit and SBLC.</div>
+          <div class="ac-cost">5 credits / LC</div>
+        </div>
+        <div class="agent-card" onclick="window.location.href='logistics-customs-agent.html'">
+          <div class="ac-icon">🚢</div>
+          <div class="ac-name">Logistics &amp; Customs</div>
+          <div class="ac-desc">Tracks shipments, optimises freight, auto-generates HS codes and customs declarations per country.</div>
+          <div class="ac-cost">5 credits / shipment</div>
+        </div>
+        <div class="agent-card" onclick="window.location.href='sloiai-platform.html'">
+          <div class="ac-icon">🛡️</div>
+          <div class="ac-name">ComplianceBot</div>
+          <div class="ac-desc">Screens counterparties against OFAC, EU, and UN sanctions before every LOI. Flags high-risk jurisdictions.</div>
+          <div class="ac-cost">Always on · 1 credit/day</div>
+        </div>
+        <div class="agent-card" onclick="window.location.href='sloiai-platform.html'">
+          <div class="ac-icon">🧾</div>
+          <div class="ac-name">PO Generator</div>
+          <div class="ac-desc">Auto-generates purchase orders from signed LOIs. Dispatches to supplier — no manual re-entry.</div>
+          <div class="ac-cost">2 credits / PO</div>
         </div>
       </div>
 
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;cursor:pointer;transition:all .2s" onclick="window.location.href='logistics-customs-agent.html'" onmouseover="this.style.borderColor='rgba(91,95,239,.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='var(--border)';this.style.transform=''">
-        <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.18)">🚢</div>
-        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">Logistics &amp; Customs</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Tracks shipments, optimises freight routes, and auto-generates HS codes, duty calculations, and customs declarations per destination country.</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:12px;color:var(--teal);font-weight:600">5 credits per shipment</span>
-          <span style="font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
+      <div class="ex-box">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px;text-transform:uppercase">// What $299 gets you (350 credits)</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px">
+            <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white)">35</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">Deal Hunter sessions<br/>(10 credits each)</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px">
+            <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--green)">70 LOIs</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">Letters of Intent<br/>(5 credits each)</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px">
+            <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--indigo)">$8.54</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:3px">Cost per full negotiation<br/>+ LOI</div>
+          </div>
         </div>
       </div>
 
-      <div style="background:var(--surface);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:20px;cursor:pointer;transition:all .2s" onclick="window.location.href='sloiai-platform.html'" onmouseover="this.style.borderColor='rgba(239,68,68,.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(239,68,68,.2)';this.style.transform=''">
-        <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2)">🛡️</div>
-        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">ComplianceBot</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Screens every counterparty against OFAC, EU, and UN sanctions lists before any LOI is generated. Flags high-risk jurisdictions automatically — always running.</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:12px;color:var(--green);font-weight:600">Always on · 1 credit/day</span>
-          <span style="font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
-        </div>
-      </div>
-
-      <div style="background:var(--surface);border:1px solid rgba(232,169,74,.2);border-radius:8px;padding:20px;cursor:pointer;transition:all .2s" onclick="window.location.href='sloiai-platform.html'" onmouseover="this.style.borderColor='rgba(232,169,74,.4)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(232,169,74,.2)';this.style.transform=''">
-        <div style="width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;background:rgba(232,169,74,.12);border:1px solid rgba(232,169,74,.2)">🧾</div>
-        <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:7px">PO Generator</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px">Auto-generates purchase orders from signed LOIs. Reads agreed price, quantity, and delivery terms and dispatches to the supplier — no manual re-entry.</div>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-          <span style="font-size:12px;color:var(--teal);font-weight:600">2 credits per PO</span>
-          <span style="font-size:12px;color:var(--indigo);font-weight:600;letter-spacing:.05em">Open agent →</span>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- EXAMPLE CALC -->
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:24px">
-      <div style="font-size:12px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px">// EXAMPLE — WHAT $299 GETS YOU (350 credits)</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:center">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px">
-          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--white)">35</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:3px">Deal Hunter sessions<br/>(10 credits each)</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px">
-          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--green)">Unlimited</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:3px">LOIs generated<br/>(5 credits each = 70 LOIs)</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px">
-          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--indigo)">$8.54</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:3px">Cost per negotiation<br/>+ LOI</div>
-        </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:4px">
+        <div style="font-size:22px">💳</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6">Pay by card via <strong style="color:var(--white)">Stripe</strong> · or USDC on Base via <strong style="color:var(--white)">Coinbase AgentKit</strong> · Credits never expire · Unused credits refundable</div>
       </div>
     </div>
 
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 22px;margin-bottom:24px;display:flex;align-items:center;gap:14px">
-      <div style="font-size:26px;flex-shrink:0">💳</div>
-      <div><div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:3px">Pay by card — instantly</div><div style="font-size:13px;color:var(--muted);line-height:1.7">Credits purchased via Stripe on the website. Secured checkout. Credits never expire. Unused credits are refundable. No monthly commitment.</div></div>
+    <!-- ── LOCAL AGENTIC TEAM ── -->
+    <div class="psec" style="margin-top:36px">
+      <div class="psec-head">
+        <span class="psec-badge badge-local">🖥 Local · Your Infrastructure</span>
+        <div>
+          <div class="psec-title">Monthly subscription — agents run on your team's servers</div>
+          <div class="psec-sub">Install via MCP in 2 minutes. Unlimited sessions. No credit deductions per run.</div>
+        </div>
+      </div>
+
+      <div class="deploy-card teal-border">
+        <div class="deploy-top">
+          <div>
+            <div class="tier-badge badge-t">🖥 LOCAL AGENTIC TEAM</div>
+            <div class="deploy-name">Local Agent Plan</div>
+            <div class="deploy-desc">The SLOI AI MCP skill runs inside your local agent framework — Claude Desktop, Cursor, Windsurf, or any MCP-compatible host. Unlimited negotiation sessions for a flat monthly fee. Your data never leaves your infrastructure.</div>
+          </div>
+          <div class="deploy-price">
+            <div class="deploy-amount">$599</div>
+            <div class="deploy-period">per month</div>
+            <div style="font-size:11px;color:var(--teal);margin-top:5px;font-weight:600">Cancel anytime</div>
+          </div>
+        </div>
+        <div class="deploy-body">
+          <div class="deploy-feats">
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Claude Desktop, Cursor, Windsurf — 4-line JSON install</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">All 10 MCP tools available immediately</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Unlimited negotiation sessions — no credit deductions</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Auto-approve deals within pre-set mandate</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">AG-UI SSE real-time negotiation stream</span></div>
+          </div>
+          <div class="deploy-feats">
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Team workspace — up to 5 seats</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">OFAC + EU sanctions screening on every LOI</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Data stays on your servers — never shared</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Custom mandate configuration per seat</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Priority email support (4h SLA)</span></div>
+          </div>
+        </div>
+        <div class="deploy-footer">
+          <button class="tier-cta cta-teal" onclick="window.location.href='mcp-install.html'">Install local agent →</button>
+        </div>
+      </div>
     </div>
 
+    <!-- ── ENTERPRISE DEPLOY ── -->
+    <div class="psec" style="margin-top:36px">
+      <div class="psec-head">
+        <span class="psec-badge badge-ent">🏢 Enterprise · On-Premise</span>
+        <div>
+          <div class="psec-title">One-time payment — full on-premise deployment, yours forever</div>
+          <div class="psec-sub">Custom setup, white-label LOIs, unlimited users, dedicated onboarding. Pay once, no recurring fees.</div>
+        </div>
+      </div>
+
+      <div class="deploy-card gold-border">
+        <div class="deploy-top">
+          <div>
+            <div class="tier-badge badge-g">🏢 ENTERPRISE DEPLOY</div>
+            <div class="deploy-name">Enterprise Plan</div>
+            <div class="deploy-desc">Full on-premise deployment of the SLOI AI agent stack on your own servers. Custom mandate rules, white-label LOI documents with your branding, and a dedicated 48-hour onboarding session. One payment — the platform is yours with 6 months of included support.</div>
+          </div>
+          <div class="deploy-price">
+            <div class="deploy-amount">$999</div>
+            <div class="deploy-period">one-time payment</div>
+            <div style="font-size:11px;color:var(--gold);margin-top:5px;font-weight:600">No recurring fees</div>
+          </div>
+        </div>
+        <div class="deploy-body">
+          <div class="deploy-feats">
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Everything in Local Agent plan</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Full on-premise deployment on your servers</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Unlimited users — no seat limit</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">White-label LOI documents — your branding</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Custom mandate rules + approval workflows</span></div>
+          </div>
+          <div class="deploy-feats">
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Custom OFAC + sanctions list configuration</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">48h dedicated setup + onboarding call</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">6 months dedicated support included</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">Source code for on-premise stack</span></div>
+            <div class="deploy-feat"><span class="dfcheck">✓</span><span class="dftext">One-time payment — yours forever</span></div>
+          </div>
+        </div>
+        <div class="deploy-footer">
+          <button class="tier-cta cta-gold" onclick="window.location.href='contact.html'">Contact for Enterprise →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── COMPARISON TABLE ── -->
+    <div style="margin-top:40px">
+      <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px;text-align:center">// SaaS vs Local vs Enterprise — full comparison</div>
+      <table class="ctable">
+        <thead>
+          <tr>
+            <th style="width:32%">Feature</th>
+            <th class="th-saas">☁ SaaS<br/><span style="color:var(--muted);font-weight:400">$99 / $299 credits</span></th>
+            <th class="th-local">🖥 Local Team<br/><span style="color:var(--muted);font-weight:400">$599 / month</span></th>
+            <th class="th-ent">🏢 Enterprise<br/><span style="color:var(--muted);font-weight:400">$999 one-time</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="cat-row"><td colspan="4">Deployment</td></tr>
+          <tr><td>Where it runs</td><td>SLOI AI cloud</td><td>Your servers</td><td>Your servers</td></tr>
+          <tr><td>Setup time</td><td style="color:var(--green)">Instant</td><td style="color:var(--teal)">2 min MCP install</td><td style="color:var(--gold)">48h custom setup</td></tr>
+          <tr><td>Data stays on-premise</td><td><span class="cn">—</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
+          <tr><td>Payment model</td><td>Credits per use</td><td>Monthly flat</td><td style="color:var(--gold)">One-time</td></tr>
+          <tr class="cat-row"><td colspan="4">Usage &amp; Access</td></tr>
+          <tr><td>Negotiation sessions</td><td>Credit-based</td><td style="color:var(--teal)">Unlimited</td><td style="color:var(--teal)">Unlimited</td></tr>
+          <tr><td>LOI generation</td><td>5 credits / LOI</td><td style="color:var(--teal)">Unlimited</td><td style="color:var(--teal)">Unlimited</td></tr>
+          <tr><td>Users / seats</td><td>1 account</td><td>Up to 5 seats</td><td style="color:var(--gold)">Unlimited</td></tr>
+          <tr><td>MCP compatible</td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
+          <tr><td>Auto-approve within mandate</td><td><span class="cn">—</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
+          <tr class="cat-row"><td colspan="4">Customization</td></tr>
+          <tr><td>Custom mandate rules</td><td><span class="cn">—</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
+          <tr><td>White-label LOI branding</td><td><span class="cn">—</span></td><td><span class="cn">—</span></td><td><span class="ck">✓</span></td></tr>
+          <tr><td>Custom OFAC / sanctions lists</td><td><span class="cn">—</span></td><td><span class="cn">—</span></td><td><span class="ck">✓</span></td></tr>
+          <tr><td>Custom approval workflows</td><td><span class="cn">—</span></td><td><span class="cn">—</span></td><td><span class="ck">✓</span></td></tr>
+          <tr class="cat-row"><td colspan="4">Compliance &amp; Security</td></tr>
+          <tr><td>OFAC + EU sanctions screening</td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
+          <tr><td>Boss approval gate (LOI)</td><td>Always required</td><td>Always required</td><td>Configurable</td></tr>
+          <tr><td>Supplier anonymization</td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
+          <tr class="cat-row"><td colspan="4">Support</td></tr>
+          <tr><td>Support level</td><td>Email</td><td style="color:var(--teal)">Priority (4h SLA)</td><td style="color:var(--gold)">Dedicated</td></tr>
+          <tr><td>Onboarding</td><td>Self-serve</td><td>MCP guide</td><td style="color:var(--gold)">48h dedicated call</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FLOW DIAGRAM -->
     <div class="flow-diagram">
-      <div class="flow-title">// HOW IT WORKS — MANAGED AGENT</div>
+      <div class="flow-title">// How it works — Managed Agent</div>
       <div class="flow-steps">
         <div class="flow-step fs-done"><div class="fs-dot">📋</div><div class="fs-label">Give mandate</div><div class="fs-sub">Product, qty, target price, deadline</div></div>
         <div class="flow-step fs-done"><div class="fs-dot">🤖</div><div class="fs-label">Agent runs</div><div class="fs-sub">SLOI AI negotiates with traders</div></div>
@@ -422,50 +565,60 @@ h1 em{font-style:italic;color:var(--indigo)}
         <div class="flow-step"><div class="fs-dot">📄</div><div class="fs-label">LOI signed</div><div class="fs-sub">PDF sent to you + trader</div></div>
       </div>
     </div>
-
-    <table class="ctable">
-      <thead><tr><th style="width:36%">Feature</th><th>🧾 PO Generator<br/><span style="color:var(--teal)">2 credits/PO</span></th><th>📄 LOI Generator<br/><span style="color:var(--teal)">5 credits/LOI</span></th><th>🤖 Negotiation Engine<br/><span style="color:var(--teal)">10–20 credits/deal</span></th></tr></thead>
-      <tbody>
-        <tr class="cat-row"><td colspan="4">What it does</td></tr>
-        <tr><td>Trigger</td><td>Signed LOI</td><td>Boss approval</td><td>RFQ mandate</td></tr>
-        <tr><td>Output</td><td>Purchase Order PDF</td><td>Letter of Intent PDF</td><td>Best negotiated offer</td></tr>
-        <tr><td>Auto-dispatched to counterparty</td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="cn">—</span></td></tr>
-        <tr><td>Runs autonomously</td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
-        <tr class="cat-row"><td colspan="4">Negotiation</td></tr>
-        <tr><td>Negotiation rounds</td><td><span class="cn">—</span></td><td><span class="cn">—</span></td><td>Up to 7</td></tr>
-        <tr><td>Strategy</td><td><span class="cn">—</span></td><td><span class="cn">—</span></td><td>Deal Hunter / Autopilot</td></tr>
-        <tr><td>Real-time price feed</td><td><span class="cn">—</span></td><td><span class="cn">—</span></td><td><span class="ck">✓</span></td></tr>
-        <tr class="cat-row"><td colspan="4">Compliance &amp; approval</td></tr>
-        <tr><td>OFAC + EU sanctions screened</td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
-        <tr><td>Boss approval gate</td><td><span class="cn">—</span></td><td>Always ✓</td><td>Before LOI</td></tr>
-        <tr><td>Supplier anonymized</td><td><span class="cn">—</span></td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td></tr>
-        <tr><td>ICC-compliant format</td><td><span class="ck">✓</span></td><td><span class="ck">✓</span></td><td><span class="cn">—</span></td></tr>
-        <tr class="cat-row"><td colspan="4">Credits &amp; payment</td></tr>
-        <tr><td>Cost</td><td>2 credits / PO</td><td>5 credits / LOI</td><td>10–20 credits / deal</td></tr>
-        <tr><td>Credits expire</td><td>Never</td><td>Never</td><td>Never</td></tr>
-        <tr><td>Payment method</td><td colspan="3" style="text-align:center;color:var(--muted)">Credit card via Stripe · USDC on Base (AgentKit)</td></tr>
-      </tbody>
-    </table>
   </div>
 
-  <!-- FAQ -->
+  <!-- ══ FAQ ══ -->
   <div style="margin-bottom:48px">
-    <div style="font-size:13px;font-weight:600;color:var(--white);letter-spacing:.06em;margin-bottom:20px;text-align:center">// COMMON QUESTIONS</div>
-    <div class="faq-item" onclick="tf(this)"><div class="faq-q"><span class="faq-qt">What is the difference between Option A and Option B?</span><span class="faq-arr">›</span></div><div class="faq-a">Option A is for buyers who want SLOI AI to run the agent on their behalf — they buy credits, give us the mandate, and we deliver the LOI. Option B is for developers and AI agents that want to connect their own agent to the SLOI AI API — they build the agent, we provide the trader network.</div></div>
-    <div class="faq-item" onclick="tf(this)"><div class="faq-q"><span class="faq-qt">Can the agent close a deal without my approval?</span><span class="faq-arr">›</span></div><div class="faq-a">No. This is a hard rule in SLOI AI. The Boss must approve every deal before a LOI is generated. The agent negotiates and reaches agreement — then stops and waits. The LOI is only generated after explicit Boss approval. This applies to both Option A agents and Option B managed subscriptions.</div></div>
-    <div class="faq-item" onclick="tf(this)"><div class="faq-q"><span class="faq-qt">Does SLOI AI handle payments or direct payment?</span><span class="faq-arr">›</span></div><div class="faq-a">No. SLOI AI is a negotiation and LOI platform only. Once the LOI is signed, payment flows directly between the buyer and the trader outside the SLOI AI system. This keeps the platform simple and avoids financial licensing requirements.</div></div>
-    <div class="faq-item" onclick="tf(this)"><div class="faq-q"><span class="faq-qt">How do I pay for a Managed Agent subscription?</span><span class="faq-arr">›</span></div><div class="faq-a">Two payment options: (1) Card via Stripe — buy on the website instantly. (2) USDC on Base via Coinbase AgentKit — AI agents send USDC directly on-chain, credits confirmed in ~2 seconds. Both options use the same credit packs ($99/$299/$599/$999). Credits never expire.</div></div>
-    <div class="faq-item" onclick="tf(this)"><div class="faq-q"><span class="faq-qt">Is a LOI legally binding?</span><span class="faq-arr">›</span></div><div class="faq-a">The LOI generated by SLOI AI is binding upon countersignature by all parties. It is not a final sales contract — it establishes agreed price, quantity, incoterm, and delivery terms. Final payment and shipping happen directly between the buyer and broker.</div></div>
-    <div class="faq-item" onclick="tf(this)"><div class="faq-q"><span class="faq-qt">Can I cancel anytime?</span><span class="faq-arr">›</span></div><div class="faq-a">Yes. Managed Agent subscriptions cancel with 30 days notice, no penalty. Open Network has no monthly fee — just stop using the API. Any LOIs already signed remain valid regardless of account status.</div></div>
+    <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px;text-align:center">// Common Questions</div>
+
+    <div class="faq-item" onclick="tf(this)">
+      <div class="faq-q"><span class="faq-qt">What is the difference between SaaS, Local Team, and Enterprise?</span><span class="faq-arr">›</span></div>
+      <div class="faq-a"><strong style="color:var(--white)">SaaS ($99/$299)</strong> — the agent runs on SLOI AI's cloud servers. You buy credits and spend them per session. Best for occasional use or getting started.<br/><br/><strong style="color:var(--white)">Local Agentic Team ($599/mo)</strong> — you install the SLOI AI MCP skill on your own machines. Agents run locally in Claude Desktop, Cursor, or any MCP host. Unlimited sessions for a flat monthly fee. Your data never leaves your infrastructure.<br/><br/><strong style="color:var(--white)">Enterprise ($999 one-time)</strong> — full on-premise deployment on your servers. White-label LOIs, unlimited users, custom mandate rules, and dedicated onboarding. One payment — the platform is yours forever with no recurring fees.</div>
+    </div>
+
+    <div class="faq-item" onclick="tf(this)">
+      <div class="faq-q"><span class="faq-qt">Can the agent close a deal without my approval?</span><span class="faq-arr">›</span></div>
+      <div class="faq-a">No — this is a hard rule across all plans. The Boss must approve every deal before a LOI is generated. The agent negotiates and reaches the best available offer, then stops and waits. The LOI is only generated after your explicit one-click approval. On Enterprise you can configure conditional auto-approval within a pre-set price mandate, but the default is always manual approval.</div>
+    </div>
+
+    <div class="faq-item" onclick="tf(this)">
+      <div class="faq-q"><span class="faq-qt">What happens to my data on the SaaS plan?</span><span class="faq-arr">›</span></div>
+      <div class="faq-a">On the SaaS plan, negotiation sessions and mandate data are processed on SLOI AI's cloud infrastructure. Supplier identities are always anonymized — you never see supplier names, only REF codes and origin country. If data residency matters to your team, choose the Local Team or Enterprise plan where all data stays on your own servers.</div>
+    </div>
+
+    <div class="faq-item" onclick="tf(this)">
+      <div class="faq-q"><span class="faq-qt">Do credits expire? Can I get a refund?</span><span class="faq-arr">›</span></div>
+      <div class="faq-a">Credits never expire. If you decide SLOI AI isn't right for you, unused credits are fully refundable — just email billing@sloiai.com within 90 days of purchase. The Local Team monthly plan cancels with 30 days notice, no penalty. The Enterprise one-time payment is non-refundable after the onboarding call begins.</div>
+    </div>
+
+    <div class="faq-item" onclick="tf(this)">
+      <div class="faq-q"><span class="faq-qt">Can I upgrade from SaaS to Local Team later?</span><span class="faq-arr">›</span></div>
+      <div class="faq-a">Yes. SaaS and Local Team are separate products — you can start on SaaS credits to test the platform, then switch to the Local Team monthly plan when your team is ready for on-premise. Any unused SaaS credits remain valid. To switch, contact support@sloiai.com and we'll handle the migration.</div>
+    </div>
+
+    <div class="faq-item" onclick="tf(this)">
+      <div class="faq-q"><span class="faq-qt">Does SLOI AI handle payments or SWIFT transfers?</span><span class="faq-arr">›</span></div>
+      <div class="faq-a">No. SLOI AI is a negotiation and LOI platform only. Once a LOI is signed, payment flows directly between the buyer and the trader — outside SLOI AI entirely. We don't hold escrow, process SWIFT, or touch commodity payments. This keeps the platform simple and avoids financial licensing requirements.</div>
+    </div>
+
+    <div class="faq-item" onclick="tf(this)">
+      <div class="faq-q"><span class="faq-qt">What AI models work with the Local Agent plan?</span><span class="faq-arr">›</span></div>
+      <div class="faq-a">Any MCP-compatible agent host: Claude Desktop (Anthropic), Cursor, Windsurf, Continue, or any custom framework that supports the MCP protocol. The SLOI AI skill works identically across all of them — add 4 lines of JSON to your config. The underlying model (Claude, GPT-4o, Gemini, etc.) is your choice.</div>
+    </div>
+
+    <div class="faq-item" onclick="tf(this)">
+      <div class="faq-q"><span class="faq-qt">Is a LOI legally binding?</span><span class="faq-arr">›</span></div>
+      <div class="faq-a">The LOI generated by SLOI AI is binding upon countersignature by all parties. It follows ICC trade terms and establishes the agreed price, quantity, incoterm, payment terms, and delivery schedule. It is not a final sales contract — the actual purchase contract and payment happen directly between buyer and supplier after the LOI is signed.</div>
+    </div>
   </div>
 
   <div class="bottom-cta">
     <div class="bcta-h">Ready to close<br/><em>your first LOI?</em></div>
-    <p class="bcta-sub">Connect your own agent or let SLOI AI negotiate for you.<br/>Boss approval on every deal. No payments on platform.</p>
+    <p class="bcta-sub">Start with SaaS credits, run agents locally, or deploy on-premise.<br/>Boss approval on every deal. No payments on platform.</p>
     <div class="bcta-btns">
-      <a href="open-network.html" class="bb-p">Connect via Open Network →</a>
-      <a href="contact.html" class="bb-s">Get a Managed Agent</a>
-      <a href="negotiation-agent.html" class="bb-s">Try the agent live</a>
+      <a href="smb-order.html" class="bb-p">Start with SaaS →</a>
+      <a href="mcp-install.html" class="bb-s">Install local agent</a>
+      <a href="contact.html" class="bb-s">Enterprise enquiry</a>
     </div>
   </div>
 </div>
@@ -480,15 +633,21 @@ function switchOpt(opt,btn){
   btn.classList.add('active');
   document.getElementById('panel-'+opt).classList.add('active');
 }
+
 function buyCredits(amount){
-  alert('Redirecting to Stripe checkout for $' + amount + ' credit pack.\n\nIn production this opens a Stripe Payment Link.\nCredits are added to your account instantly after payment.');
+  alert('Redirecting to Stripe checkout for $'+amount+' credit pack.\n\nIn production this opens a Stripe Payment Link.\nCredits are added to your account instantly after payment.');
 }
+
 function tf(el){
   document.querySelectorAll('.faq-item.open').forEach(function(i){if(i!==el)i.classList.remove('open')});
   el.classList.toggle('open');
 }
 </script>
 
-<div style="text-align:center;padding:20px;font-size:12px;color:var(--muted)"><a href="terms.html" style="color:var(--muted);text-decoration:none;margin:0 10px">Terms of Service</a><a href="terms.html#privacy" style="color:var(--muted);text-decoration:none;margin:0 10px">Privacy Policy</a><a href="terms.html#trader" style="color:var(--muted);text-decoration:none;margin:0 10px">Trader Agreement</a></div>
+<div style="text-align:center;padding:20px;font-size:12px;color:var(--muted)">
+  <a href="terms.html" style="color:var(--muted);text-decoration:none;margin:0 10px">Terms of Service</a>
+  <a href="terms.html#privacy" style="color:var(--muted);text-decoration:none;margin:0 10px">Privacy Policy</a>
+  <a href="terms.html#trader" style="color:var(--muted);text-decoration:none;margin:0 10px">Trader Agreement</a>
+</div>
 </body>
 </html>

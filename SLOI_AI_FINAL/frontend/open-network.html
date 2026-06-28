@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="SLOI AI Open Network — connect trading systems and AI agents to the MENA commodity marketplace. Open API for supplier discovery and deal execution."/>
+<meta name="description" content="SLOI AI Open Network — connect your AI agent to the MENA commodity marketplace. Free Read tier, instant API key, or install the Managed Agentic Team via MCP."/>
 <title>Open Agent Network — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
@@ -11,293 +11,347 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.95);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);font-family:'IBM Plex Mono',monospace;}
+
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);font-family:'IBM Plex Mono',monospace}
 .nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
 .nav-logo em{font-style:italic;color:var(--indigo)}
 .nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}
 .nav-links a:hover{color:var(--violet)}
-.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:70px 28px 80px}
+
+.wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:64px 28px 80px}
 .eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.eyebrow::before{content:'';width:24px;height:1px;background:var(--indigo)}
-h1{font-family:'Fraunces',serif;font-size:clamp(42px,6vw,68px);font-weight:900;line-height:.95;letter-spacing:-.03em;color:var(--white);margin-bottom:20px}
+.eyebrow::before,.eyebrow::after{content:'';width:24px;height:1px;background:var(--indigo)}
+h1{font-family:'Fraunces',serif;font-size:clamp(42px,6vw,68px);font-weight:900;line-height:.95;letter-spacing:-.03em;color:var(--white);margin-bottom:18px}
 h1 em{font-style:italic;color:var(--indigo)}
-.hero-sub{font-size:14px;color:var(--muted);line-height:1.85;max-width:580px;margin-bottom:52px}
-.tiers{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:60px}
-.tier{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
-.tier.featured{border-color:rgba(91,95,239,.5)}
-.tier-top{padding:28px 28px 20px;border-bottom:1px solid var(--border)}
-.tier-badge{display:inline-flex;font-size:12px;font-weight:700;padding:3px 10px;border-radius:3px;margin-bottom:14px;letter-spacing:.06em}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.85;max-width:540px;margin-bottom:40px}
+
+/* TIERS */
+.tiers{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:52px}
+.tier{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.tier:hover{border-color:rgba(91,95,239,.35)}
+.tier.featured{border-color:rgba(91,95,239,.45)}
+.tier-top{padding:26px 26px 18px;border-bottom:1px solid var(--border)}
+.tier-badge{display:inline-flex;font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;margin-bottom:12px;letter-spacing:.06em}
 .badge-free{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:var(--green)}
 .badge-pro{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.3);color:var(--violet)}
-.tier-name{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:6px}
-.tier-tagline{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:16px}
-.tier-price{font-family:'Fraunces',serif;font-size:40px;font-weight:900;color:var(--white);letter-spacing:-.03em}
+.badge-teal{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.3);color:var(--teal)}
+.tier-name{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:6px}
+.tier-tagline{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.tier-price{font-family:'Fraunces',serif;font-size:38px;font-weight:900;color:var(--white);letter-spacing:-.03em}
 .tier-price-note{font-size:13px;color:var(--muted);margin-top:4px}
-.tier-body{padding:20px 28px 28px}
-.feat-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
-.feat{display:flex;align-items:flex-start;gap:10px;font-size:14px}
-.feat-icon{color:var(--green);flex-shrink:0}
-.feat-icon.no{color:var(--muted)}
-.feat-text{color:var(--text);line-height:1.5}
-.feat-text.dim{color:var(--muted)}
-.tier-btn{display:block;text-align:center;padding:12px;border-radius:6px;font-size:15px;font-weight:600;text-decoration:none;font-family:'IBM Plex Mono',monospace;transition:opacity .15s;cursor:pointer;border:none;width:100%}
+.tier-body{padding:18px 26px 24px}
+.feat-list{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
+.feat{display:flex;align-items:flex-start;gap:9px;font-size:13px}
+.fy{color:var(--green);flex-shrink:0}
+.fn{color:var(--border2);flex-shrink:0}
+.ft{color:var(--text);line-height:1.5}
+.ftd{color:var(--muted);line-height:1.5}
+.tier-btn{display:block;text-align:center;padding:11px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;font-family:'IBM Plex Mono',monospace;transition:opacity .15s;cursor:pointer;border:none;width:100%}
 .btn-outline{background:none;border:1px solid var(--border2);color:var(--text)}
+.btn-outline:hover{border-color:var(--indigo);color:var(--violet)}
 .btn-fill{background:var(--indigo);color:#fff}
 .btn-fill:hover{opacity:.85}
-.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:48px}
-.flow-step{padding:20px;border-right:1px solid var(--border);background:var(--surface)}
+.btn-teal{background:none;border:1px solid rgba(45,212,191,.35);color:var(--teal)}
+.btn-teal:hover{background:rgba(45,212,191,.08)}
+
+/* WHICH SECTION */
+.which{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:44px;display:grid;grid-template-columns:1fr 1fr;gap:0}
+.which-col{padding:0 18px}
+.which-col:first-child{border-right:1px solid var(--border);padding-left:0}
+.which-col:last-child{padding-right:0}
+.which-head{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.which-head.green{color:var(--green)}
+.which-head.teal{color:var(--teal)}
+.which-item{font-size:13px;color:var(--muted);line-height:1.65;padding:3px 0}
+.which-item::before{content:'→ ';color:var(--muted)}
+
+/* HOW IT WORKS */
+.flow{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:44px}
+.flow-step{padding:18px 20px;border-right:1px solid var(--border);background:var(--surface)}
 .flow-step:last-child{border-right:none}
-.flow-num{font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:rgba(91,95,239,.3);margin-bottom:12px}
-.flow-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:6px}
-.flow-desc{font-size:13px;color:var(--muted);line-height:1.65}
+.flow-num{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:rgba(91,95,239,.3);margin-bottom:10px}
+.flow-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:5px}
+.flow-desc{font-size:13px;color:var(--muted);line-height:1.6}
 .flow-code{font-size:12px;color:var(--teal);margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:3px 8px;display:inline-block}
-.section-h{font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px}
-.section-h em{font-style:italic;color:var(--indigo)}
-.section-sub{font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:28px}
-.ep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:48px}
-.ep-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:14px}
-.ep-method{font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:8px;display:inline-block}
+
+/* ENDPOINTS */
+.ep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:44px}
+.ep-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:13px}
+.ep-method{font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;margin-bottom:7px;display:inline-block}
 .get{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.25);color:var(--green)}
 .post{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.25);color:var(--violet)}
-.ep-path{font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px}
-.ep-desc{font-size:13px;color:var(--muted);line-height:1.5}
-.ep-tier{font-size:11px;color:var(--muted);margin-top:6px;text-transform:uppercase;letter-spacing:.06em}
-.reg-card{background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:10px;overflow:hidden;margin-bottom:48px}
-.reg-header{padding:20px 28px;background:rgba(91,95,239,.06);border-bottom:1px solid var(--border)}
+.ep-path{font-size:13px;font-weight:600;color:var(--white);margin-bottom:4px}
+.ep-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.ep-tier{font-size:11px;color:var(--muted);margin-top:5px;letter-spacing:.04em}
+
+/* REG FORM */
+.reg-card{background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:10px;overflow:hidden;margin-bottom:40px}
+.reg-header{padding:18px 26px;background:rgba(91,95,239,.06);border-bottom:1px solid var(--border)}
 .reg-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:3px}
 .reg-sub{font-size:13px;color:var(--muted)}
-.reg-body{padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.reg-body{padding:24px 26px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:12px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
-.field input,.field select{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:10px 12px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:14px;outline:none;width:100%;transition:border-color .15s}
+.field input,.field select{background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:10px 12px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;width:100%;transition:border-color .15s}
 .field input:focus,.field select:focus{border-color:var(--indigo)}
 .field input::placeholder{color:var(--muted)}
 .field select option{background:var(--surface)}
 .field.full{grid-column:1/-1}
-.reg-footer{padding:16px 28px;border-top:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between}
-.reg-btn{background:var(--indigo);color:#fff;border:none;padding:11px 28px;border-radius:5px;font-size:15px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace}
+.reg-footer{padding:14px 26px;border-top:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between}
+.reg-btn{background:var(--indigo);color:#fff;border:none;padding:10px 26px;border-radius:5px;font-size:14px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace}
 .reg-btn:hover{opacity:.85}
 .reg-note{font-size:13px;color:var(--muted)}
-.marquee-wrap{overflow:hidden;border:1px solid var(--border);border-radius:6px;background:var(--surface);margin-bottom:48px}
-.marquee-label{font-size:11px;color:var(--indigo);letter-spacing:.1em;padding:8px 14px;border-bottom:1px solid var(--border);background:rgba(91,95,239,.06)}
-.marquee-track{display:flex;animation:marquee 22s linear infinite;padding:10px 0}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-.agent-pill{display:flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:5px 14px;margin:0 6px;white-space:nowrap;font-size:13px;color:var(--text);flex-shrink:0}
-.agent-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
-.nav-tagline{font-size:11px;color:var(--muted);font-weight:400;margin-left:6px;letter-spacing:.04em;font-style:normal;font-family:'IBM Plex Mono',monospace;}
 
-/* ── MOBILE ── */
+/* SECTION LABEL */
+.sec-label{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
+
+/* MOBILE */
 .mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
 @media(max-width:768px){
   nav{padding:0 14px}
-  .nav-tagline{display:none}
+  .mob-nav-btn{display:flex}
   .nav-links{display:none;position:absolute;top:52px;left:0;right:0;background:rgba(7,7,15,.98);border-bottom:1px solid var(--border);padding:14px 20px;flex-direction:column;gap:14px;z-index:200}
   .nav-links.nav-open{display:flex}
-  .mob-nav-btn{display:flex}
-  .wrap{padding:40px 16px 60px}
+  .wrap{padding:36px 14px 56px}
   h1{font-size:clamp(34px,10vw,52px)}
-  .hero-sub{font-size:14px;margin-bottom:36px}
-  .tiers{grid-template-columns:1fr!important}
-  [style*="repeat(4,1fr)"]{grid-template-columns:repeat(2,1fr)!important}
-  [style*="align-items:center"][style*="gap:16px"]{flex-wrap:wrap!important}
-  .feat-list{grid-template-columns:1fr!important}
-  .flow{grid-template-columns:1fr!important;border-radius:6px}
-  .flow-step{border-right:none!important;border-bottom:1px solid var(--border)}
+  .hero-sub{font-size:14px;margin-bottom:28px}
+  .tiers{grid-template-columns:1fr}
+  .which{grid-template-columns:1fr}
+  .which-col:first-child{border-right:none;border-bottom:1px solid var(--border);padding-left:0;padding-bottom:14px;margin-bottom:14px}
+  .which-col:last-child{padding-right:0}
+  .flow{grid-template-columns:1fr}
+  .flow-step{border-right:none;border-bottom:1px solid var(--border)}
   .flow-step:last-child{border-bottom:none}
   .ep-grid{grid-template-columns:1fr}
-  .reg-body{grid-template-columns:1fr!important}
+  .reg-body{grid-template-columns:1fr}
   .reg-footer{flex-direction:column;gap:10px;align-items:stretch}
   .reg-btn{width:100%;text-align:center}
-  .tier-top,.tier-body{padding:20px 18px}
-  .marquee-track{animation:marquee 16s linear infinite}
 }
 </style>
 <link rel="stylesheet" href="/main.css"/>
-
 <script src="/api-client.js"></script>
 <script src="/seo-geo.js"></script>
 </head>
 <body>
 <nav>
-  <a href="sloiai-home.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
+  <a href="sloiai-home.html" class="nav-logo">Sloi<em>AI</em></a>
   <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
   <div class="nav-links" id="mob-nav">
+    <a href="sloiai-home.html">Home</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="open-network.html">MCP</a>
     <a href="docs.html">Docs</a>
-    <a href="api-explorer.html">API</a>
-    <a href="a2a.html">A2A</a>
-    <a href="agui.html">AG-UI</a>
-    <a href="agentkit.html">AgentKit</a>
-    <a href="agent-auth.html">Auth</a>
-    <a href="autonomous-mode.html">Autonomous</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-right">
+    <a href="login.html" class="btn-ghost">Sign in</a>
+    <a href="smb-order.html" class="btn-cta-nav">Start sourcing →</a>
   </div>
 </nav>
-<div class="wrap">
-  <div class="eyebrow">Open Agent Network</div>
-  <h1>The network is<br/><em>open.</em></h1>
-  <p class="hero-sub">Any AI agent can read the SLOI AI platform network instantly — no approval needed. Query suppliers, compare live prices, monitor commodity markets. Free forever. No card, no review.</p>
 
-  <div style="text-align:center;margin-bottom:48px">
-    <span style="display:inline-flex;align-items:center;gap:10px;background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.35);border-radius:20px;padding:9px 22px;font-size:13px;color:var(--violet);font-weight:600;letter-spacing:.01em">
-      <span style="width:7px;height:7px;border-radius:50%;background:var(--indigo);flex-shrink:0;display:inline-block"></span>
-      Open Network launching Q3 2026 — register now for early access
+<div class="wrap">
+
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+    <div class="eyebrow" style="margin-bottom:0">Open Agent Network</div>
+  </div>
+  <h1>The network<br/>is <em>open.</em></h1>
+  <p class="hero-sub">Any AI agent can read SLOI AI's commodity marketplace — free, instant, no approval. Run a managed agentic team on your infrastructure for unlimited negotiation sessions.</p>
+
+  <div style="text-align:center;margin-bottom:40px">
+    <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.3);border-radius:20px;padding:7px 18px;font-size:13px;color:var(--violet);font-weight:500">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--indigo);display:inline-block;flex-shrink:0"></span>
+      Launching Q3 2026 — register now for early access
     </span>
   </div>
 
-  <div class="tiers" style="grid-template-columns:1fr 1fr">
-    <div class="tier featured">
+  <!-- TIER CARDS -->
+  <div class="tiers">
+    <div class="tier">
       <div class="tier-top">
-        <div class="tier-badge badge-free">INSTANT ACCESS</div>
+        <div class="tier-badge badge-free">⚡ INSTANT ACCESS</div>
         <div class="tier-name">Read Tier</div>
-        <div class="tier-tagline">Query, compare, monitor. No approval. No review. Start in 60 seconds.</div>
+        <div class="tier-tagline">Query, compare, monitor the market. No approval needed. API key returned immediately — free forever.</div>
         <div class="tier-price">Free</div>
-        <div class="tier-price-note">Forever. No credit card. No approval needed.</div>
-      </div>
-      <div class="tier-body">
-        <div class="feat-list" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">All verified suppliers</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Live price feed</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Price comparison by product</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Real-time stock check</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Supplier certifications</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">1,000 API calls / hour</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">MCP-compatible skill.md</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">API key returned instantly</span></div>
-        </div>
-        <button class="tier-btn btn-fill" style="margin-top:20px" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Register free — get API key instantly →</button>
-      </div>
-    </div>
-
-    <div class="tier featured" style="cursor:pointer;border-color:rgba(91,95,239,.5)" onclick="window.location.href='mcp-install.html'">
-      <div class="tier-top">
-        <div class="tier-badge badge-pro">2-MIN INSTALL</div>
-        <div class="tier-name">Local Agent</div>
-        <div class="tier-tagline">Install the SLOI AI skill in Claude Desktop, Cursor, or any MCP-compatible agent. Negotiate and auto-approve deals autonomously.</div>
-        <div class="tier-price" style="font-size:36px;letter-spacing:-.03em">MCP</div>
-        <div class="tier-price-note">Claude · Cursor · Windsurf · Any agent framework</div>
+        <div class="tier-price-note">No credit card · No review · Always free</div>
       </div>
       <div class="tier-body">
         <div class="feat-list">
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Claude Desktop — add 4 lines of JSON</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">Cursor / Windsurf — same config</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">All 10 MCP tools available instantly</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text" style="color:var(--teal)">Auto-approve deals within mandate</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">AG-UI SSE real-time negotiation stream</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text" style="color:var(--green)">Read tier free · no auth required</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text">USDC on Base — agent pays itself</span></div>
-          <div class="feat"><span class="feat-icon">✓</span><span class="feat-text" style="color:var(--violet)">Earn 1% commission on every LOI</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">All verified suppliers + live prices</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Price comparison by product</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Real-time stock availability</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Supplier certifications</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">1,000 API calls / hour</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">MCP-compatible skill.md</span></div>
+          <div class="feat"><span class="fn">—</span><span class="ftd">Submit RFQs or negotiate</span></div>
+          <div class="feat"><span class="fn">—</span><span class="ftd">LOI generation</span></div>
         </div>
-        <button class="tier-btn btn-fill" style="margin-top:20px" onclick="event.stopPropagation();window.location.href='mcp-install.html'">Install local agent →</button>
+        <button class="tier-btn btn-fill" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Register free — get API key →</button>
+      </div>
+    </div>
+
+    <div class="tier featured" onclick="window.location.href='mcp-install.html'" style="cursor:pointer">
+      <div class="tier-top">
+        <div class="tier-badge badge-teal">🖥 MCP · 2-MIN INSTALL</div>
+        <div class="tier-name">Managed Agentic Team</div>
+        <div class="tier-tagline">Install the SLOI AI skill via MCP and run unlimited negotiation sessions on your own infrastructure. Flat monthly fee — no credit deductions.</div>
+        <div class="tier-price" style="font-size:32px">$599<span style="font-size:16px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-weight:400"> / mo</span></div>
+        <div class="tier-price-note">Or $999 one-time enterprise · <a href="pricing.html" style="color:var(--violet);text-decoration:none" onclick="event.stopPropagation()">See all plans →</a></div>
+      </div>
+      <div class="tier-body">
+        <div class="feat-list">
+          <div class="feat"><span class="fy">✓</span><span class="ft">Claude Desktop, Cursor, Windsurf — 4-line JSON</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">All 10 MCP tools available instantly</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft" style="color:var(--teal)">Unlimited sessions — no credit deductions</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Auto-approve deals within mandate</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Team workspace — up to 5 seats</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">OFAC + EU sanctions screened on every LOI</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Data stays on your servers</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">AG-UI real-time negotiation stream</span></div>
+        </div>
+        <button class="tier-btn btn-teal" onclick="event.stopPropagation();window.location.href='mcp-install.html'">Install Managed Agentic Team →</button>
       </div>
     </div>
   </div>
 
-  <!-- EARNINGS EXAMPLE -->
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:48px">
-    <div style="font-size:12px;color:var(--muted);letter-spacing:.08em;margin-bottom:14px">// EXAMPLE — TRANSACT TIER EARNINGS</div>
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;text-align:center">
-      <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--white)">$500K</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Deal value</div></div>
-      <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--green)">$5,000</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Your commission (1%)</div></div>
-      <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--muted)">$0</div><div style="font-size:12px;color:var(--muted);margin-top:3px">Monthly fee</div></div>
-      <div><div style="font-family:'Fraunces',serif;font-size:26px;font-weight:700;color:var(--indigo)">One LOI</div><div style="font-size:12px;color:var(--muted);margin-top:3px">One transaction</div></div>
+  <!-- WHICH IS RIGHT FOR YOU -->
+  <div class="which">
+    <div class="which-col">
+      <div class="which-head green">Read Tier is for you if…</div>
+      <div class="which-item">You want to monitor prices or discover suppliers</div>
+      <div class="which-item">You're building a custom agent or integration</div>
+      <div class="which-item">You need market data with no commitment</div>
+      <div class="which-item">You want to evaluate SLOI AI before subscribing</div>
+    </div>
+    <div class="which-col">
+      <div class="which-head teal">Managed Agentic Team is for you if…</div>
+      <div class="which-item">You want to run AI negotiations end-to-end</div>
+      <div class="which-item">Your team uses Claude Desktop, Cursor, or Windsurf</div>
+      <div class="which-item">You need unlimited sessions without per-use costs</div>
+      <div class="which-item">Your data must stay on your own infrastructure</div>
     </div>
   </div>
 
-  <!-- AGENTKIT PAYMENT -->
-  <div style="background:rgba(0,82,255,.06);border:1px solid rgba(0,82,255,.25);border-radius:8px;padding:18px 22px;margin-bottom:48px;display:flex;align-items:center;gap:16px">
-    <div style="font-size:32px;flex-shrink:0">⬡</div>
-    <div style="flex:1">
-      <div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px">AI agents pay with USDC on Base — Coinbase AgentKit</div>
-      <div style="font-size:13px;color:var(--muted);line-height:1.7">Your agent manages its own on-chain wallet. When credits run low, the agent sends USDC to SLOI AI on Base L2. Credits confirmed in ~2 seconds. After the first LOI, the agent earns 1% commission in USDC — enough to fund itself indefinitely.</div>
+  <!-- HOW IT WORKS -->
+  <div class="sec-label">// How it works — Read Tier</div>
+  <div class="flow" style="margin-bottom:44px">
+    <div class="flow-step">
+      <div class="flow-num">01</div>
+      <div class="flow-title">Read skill.md</div>
+      <div class="flow-desc">Agent discovers all endpoints, products, and auth schema via MCP skill file. No prior knowledge needed.</div>
+      <div class="flow-code">GET /skill.md</div>
     </div>
-    <div style="flex-shrink:0;display:flex;flex-direction:column;gap:6px;align-items:flex-end">
-      <span style="font-size:13px;color:var(--teal);font-weight:600">USDC on Base</span>
-      <span style="font-size:12px;color:var(--muted)">&lt;$0.01 gas · ~2s confirm</span>
-      <a href="agentkit.html" style="font-size:12px;color:rgba(0,82,255,.9);text-decoration:none;font-weight:600">AgentKit docs →</a>
+    <div class="flow-step">
+      <div class="flow-num">02</div>
+      <div class="flow-title">Register — get key</div>
+      <div class="flow-desc">One API call. Key returned immediately. No review, no wait, no card required.</div>
+      <div class="flow-code">POST /v1/agents/register</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-num">03</div>
+      <div class="flow-title">Query &amp; compare</div>
+      <div class="flow-desc">Search verified suppliers, compare live prices, check stock. 1,000 calls/hour.</div>
+      <div class="flow-code">GET /v1/compare</div>
     </div>
   </div>
 
-  <div class="section-h" style="margin-bottom:8px">How it <em>works</em></div>
-  <p class="section-sub">3 calls from registration to live market data.</p>
-  <div class="flow" style="grid-template-columns:repeat(3,1fr)">
-    <div class="flow-step"><div class="flow-num">01</div><div class="flow-title">Read skill.md</div><div class="flow-desc">Agent discovers all endpoints, products, and auth via MCP-compatible skill file.</div><div class="flow-code">GET /skill.md</div></div>
-    <div class="flow-step"><div class="flow-num">02</div><div class="flow-title">Register — get key</div><div class="flow-desc">Self-register in one call. API key returned immediately. No review, no wait.</div><div class="flow-code">POST /v1/agents/register</div></div>
-    <div class="flow-step"><div class="flow-num">03</div><div class="flow-title">Query &amp; compare</div><div class="flow-desc">Search suppliers, compare prices, check stock — 1,000 calls/hour, real-time data.</div><div class="flow-code">GET /v1/compare</div></div>
-  </div>
-
-  <div class="section-h" style="margin-bottom:8px">Read <em>endpoints</em></div>
-  <p class="section-sub">All available instantly with your API key. No review needed.</p>
+  <!-- ENDPOINTS -->
+  <div class="sec-label">// Read endpoints — available instantly</div>
   <div class="ep-grid">
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/suppliers</div><div class="ep-desc">List all verified suppliers.</div><div class="ep-tier">✓ Instant</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/prices</div><div class="ep-desc">Live spot prices, all commodities.</div><div class="ep-tier">✓ Instant</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/compare</div><div class="ep-desc">Rank suppliers by price for a product.</div><div class="ep-tier">✓ Instant</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/products/search</div><div class="ep-desc">Full-text search all catalogues.</div><div class="ep-tier">✓ Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/suppliers</div><div class="ep-desc">List all verified suppliers with certifications and origin.</div><div class="ep-tier">✓ Read tier · Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/prices</div><div class="ep-desc">Live spot prices across all commodity types.</div><div class="ep-tier">✓ Read tier · Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/compare</div><div class="ep-desc">Rank suppliers by price and availability for a given product.</div><div class="ep-tier">✓ Read tier · Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/products/search</div><div class="ep-desc">Full-text search across all supplier catalogues.</div><div class="ep-tier">✓ Read tier · Instant</div></div>
+    <div class="ep-card" style="opacity:.55"><span class="ep-method post">POST</span><div class="ep-path">/v1/rfq</div><div class="ep-desc">Submit a request for quote to matched suppliers.</div><div class="ep-tier">🔒 Managed Agentic Team</div></div>
+    <div class="ep-card" style="opacity:.55"><span class="ep-method post">POST</span><div class="ep-path">/v1/negotiations/start</div><div class="ep-desc">Launch an AI negotiation session with a trader.</div><div class="ep-tier">🔒 Managed Agentic Team</div></div>
   </div>
 
+  <!-- REGISTRATION FORM -->
   <div class="reg-card" id="reg-form">
-    <div class="reg-header"><div class="reg-title">🤖 Register your agent — free &amp; instant</div><div class="reg-sub">API key returned immediately · No review · No credit card</div></div>
+    <div class="reg-header">
+      <div class="reg-title">🤖 Register your agent — free &amp; instant</div>
+      <div class="reg-sub">API key returned immediately · No review · No credit card</div>
+    </div>
     <div class="reg-body" id="reg-body">
       <div class="field"><label>Agent name</label><input id="ag-name" placeholder="MyProcurementAgent"/></div>
       <div class="field"><label>Developer / company</label><input id="ag-dev" placeholder="Your company"/></div>
       <div class="field"><label>Email</label><input id="ag-email" type="email" placeholder="you@company.com"/></div>
-      <div class="field"><label>Framework</label><select><option>Claude / Anthropic</option><option>OpenAI</option><option>LangChain</option><option>CrewAI</option><option>Custom</option></select></div>
-      <div class="field"><label>Use case</label><select><option>Procurement automation</option><option>Price monitoring</option><option>Deal sourcing</option><option>Research</option><option>Other</option></select></div>
+      <div class="field"><label>Framework</label>
+        <select>
+          <option>Claude / Anthropic</option>
+          <option>OpenAI</option>
+          <option>LangChain</option>
+          <option>CrewAI</option>
+          <option>Custom</option>
+        </select>
+      </div>
+      <div class="field"><label>Use case</label>
+        <select>
+          <option>Procurement automation</option>
+          <option>Price monitoring</option>
+          <option>Deal sourcing</option>
+          <option>Research</option>
+          <option>Other</option>
+        </select>
+      </div>
       <div class="field full"><label>Agent description (optional)</label><input id="ag-desc" placeholder="e.g. Monitors steel rebar prices for UAE construction projects"/></div>
     </div>
     <div class="reg-footer" id="reg-footer">
       <div class="reg-note">API key sent to your email immediately after registration</div>
       <button class="reg-btn" onclick="submitReg()">Register agent →</button>
     </div>
-    <div id="reg-success" style="display:none;text-align:center;padding:48px 28px">
-      <div style="font-size:40px;color:var(--green);margin-bottom:16px">✓</div>
-      <div style="font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:10px">You're registered.</div>
-      <div style="font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:22px">Your API key is on its way.<br/>Check your inbox — usually within 2 minutes.</div>
-      <a href="/docs" style="color:var(--violet);font-size:14px;font-weight:600;text-decoration:none">Read the docs →</a>
+    <div id="reg-success" style="display:none;text-align:center;padding:44px 28px">
+      <div style="font-size:40px;color:var(--green);margin-bottom:14px">✓</div>
+      <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">You're registered.</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:20px">Your API key is on its way — check your inbox within 2 minutes.</div>
+      <a href="docs.html" style="color:var(--violet);font-size:13px;font-weight:600;text-decoration:none">Read the docs →</a>
     </div>
   </div>
 
-  <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center">
-    <a href="docs.html" style="color:var(--violet);text-decoration:none;font-size:14px">Full documentation →</a>
-    <a href="api-explorer.html" style="color:var(--violet);text-decoration:none;font-size:14px">Try the API →</a>
-    <a href="a2a.html" style="color:var(--violet);text-decoration:none;font-size:14px">A2A Protocol →</a>
+  <div style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center">
+    <a href="docs.html" style="color:var(--violet);text-decoration:none;font-size:13px;font-weight:500">Full documentation →</a>
+    <a href="mcp-install.html" style="color:var(--teal);text-decoration:none;font-size:13px;font-weight:500">Install via MCP →</a>
+    <a href="pricing.html" style="color:var(--muted);text-decoration:none;font-size:13px">Compare all plans →</a>
   </div>
+
+</div>
+
+<div style="text-align:center;padding:20px;font-size:12px;color:var(--muted)">
+  <a href="terms.html" style="color:var(--muted);text-decoration:none;margin:0 10px">Terms of Service</a>
+  <a href="terms.html#privacy" style="color:var(--muted);text-decoration:none;margin:0 10px">Privacy Policy</a>
+  <a href="contact.html" style="color:var(--muted);text-decoration:none;margin:0 10px">Contact</a>
 </div>
 
 <script>
 function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open')}
 document.addEventListener('click',function(e){if(!e.target.closest('nav'))document.getElementById('mob-nav').classList.remove('nav-open')});
 
-function showRegSuccess() {
-  document.getElementById('reg-body').style.display = 'none';
-  document.getElementById('reg-footer').style.display = 'none';
-  document.getElementById('reg-success').style.display = 'block';
-  document.getElementById('reg-form').scrollIntoView({ behavior: 'smooth' });
+function showRegSuccess(){
+  document.getElementById('reg-body').style.display='none';
+  document.getElementById('reg-footer').style.display='none';
+  document.getElementById('reg-success').style.display='block';
+  document.getElementById('reg-form').scrollIntoView({behavior:'smooth'});
 }
 
-async function submitReg() {
+async function submitReg(){
   var name  = document.getElementById('ag-name').value.trim();
   var dev   = document.getElementById('ag-dev').value.trim();
   var email = document.getElementById('ag-email').value.trim();
   var desc  = document.getElementById('ag-desc').value.trim();
-  if (!name)  { document.getElementById('ag-name').focus(); return; }
-  if (!email) { document.getElementById('ag-email').focus(); return; }
-
+  if(!name){document.getElementById('ag-name').focus();return}
+  if(!email){document.getElementById('ag-email').focus();return}
   var btn = document.querySelector('.reg-btn');
-  btn.textContent = 'Submitting…';
-  btn.disabled = true;
-
-  try {
-    const token = localStorage.getItem('sloi_jwt') || '';
-    const res = await fetch((window.SLOI_API_BASE || 'https://api.sloiai.com/v1') + '/agents/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
-      body: JSON.stringify({ name, developer: dev, email, tier: 'read', description: desc })
+  btn.textContent='Submitting…';
+  btn.disabled=true;
+  try{
+    const token=localStorage.getItem('sloi_jwt')||'';
+    await fetch((window.SLOI_API_BASE||'https://api.sloiai.com/v1')+'/agents/register',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
+      body:JSON.stringify({name,developer:dev,email,tier:'read',description:desc})
     });
-    const data = res.ok ? await res.json() : null;
-    showRegSuccess();
-  } catch(e) {
-    showRegSuccess();
-  }
+  }catch(e){}
+  showRegSuccess();
 }
 </script>
 </body>
