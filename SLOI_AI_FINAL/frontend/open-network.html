@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="SLOI AI Open Network — connect your AI agent to the MENA commodity marketplace. Free Read tier, instant API key, or install the Managed Agentic Team via MCP."/>
+<meta name="description" content="SLOI AI Open Network — run a Managed Agentic Team on your infrastructure or connect any AI agent via the free Read API. MENA commodity marketplace, instant access."/>
 <title>Open Agent Network — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
@@ -18,23 +18,28 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}
 .nav-links a:hover{color:var(--violet)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.btn-ghost{font-size:13px;color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:5px;border:1px solid var(--border2)}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
+.btn-cta-nav{font-size:13px;background:var(--indigo);color:#fff;text-decoration:none;padding:7px 14px;border-radius:5px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+.btn-cta-nav:hover{opacity:.85}
 
 .wrap{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:64px 28px 80px}
 .eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
 .eyebrow::before,.eyebrow::after{content:'';width:24px;height:1px;background:var(--indigo)}
 h1{font-family:'Fraunces',serif;font-size:clamp(42px,6vw,68px);font-weight:900;line-height:.95;letter-spacing:-.03em;color:var(--white);margin-bottom:18px}
-h1 em{font-style:italic;color:var(--indigo)}
-.hero-sub{font-size:15px;color:var(--muted);line-height:1.85;max-width:540px;margin-bottom:40px}
+h1 em{font-style:italic;color:var(--teal)}
+.hero-sub{font-size:15px;color:var(--muted);line-height:1.85;max-width:560px;margin-bottom:40px}
 
 /* TIERS */
 .tiers{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:52px}
 .tier{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
 .tier:hover{border-color:rgba(91,95,239,.35)}
-.tier.featured{border-color:rgba(91,95,239,.45)}
+.tier.featured{border-color:rgba(45,212,191,.45)}
+.tier.featured:hover{border-color:rgba(45,212,191,.7)}
 .tier-top{padding:26px 26px 18px;border-bottom:1px solid var(--border)}
 .tier-badge{display:inline-flex;font-size:11px;font-weight:700;padding:3px 10px;border-radius:3px;margin-bottom:12px;letter-spacing:.06em}
 .badge-free{background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:var(--green)}
-.badge-pro{background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.3);color:var(--violet)}
 .badge-teal{background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.3);color:var(--teal)}
 .tier-name{font-family:'Fraunces',serif;font-size:26px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:6px}
 .tier-tagline{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px}
@@ -44,16 +49,17 @@ h1 em{font-style:italic;color:var(--indigo)}
 .feat-list{display:flex;flex-direction:column;gap:9px;margin-bottom:20px}
 .feat{display:flex;align-items:flex-start;gap:9px;font-size:13px}
 .fy{color:var(--green);flex-shrink:0}
-.fn{color:var(--border2);flex-shrink:0}
 .ft{color:var(--text);line-height:1.5}
+.ft.teal{color:var(--teal)}
+.fn{color:var(--border2);flex-shrink:0}
 .ftd{color:var(--muted);line-height:1.5}
 .tier-btn{display:block;text-align:center;padding:11px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;font-family:'IBM Plex Mono',monospace;transition:opacity .15s;cursor:pointer;border:none;width:100%}
 .btn-outline{background:none;border:1px solid var(--border2);color:var(--text)}
 .btn-outline:hover{border-color:var(--indigo);color:var(--violet)}
 .btn-fill{background:var(--indigo);color:#fff}
 .btn-fill:hover{opacity:.85}
-.btn-teal{background:none;border:1px solid rgba(45,212,191,.35);color:var(--teal)}
-.btn-teal:hover{background:rgba(45,212,191,.08)}
+.btn-teal{background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.4);color:var(--teal)}
+.btn-teal:hover{background:rgba(45,212,191,.2)}
 
 /* WHICH SECTION */
 .which{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:44px;display:grid;grid-template-columns:1fr 1fr;gap:0}
@@ -61,19 +67,19 @@ h1 em{font-style:italic;color:var(--indigo)}
 .which-col:first-child{border-right:1px solid var(--border);padding-left:0}
 .which-col:last-child{padding-right:0}
 .which-head{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
-.which-head.green{color:var(--green)}
 .which-head.teal{color:var(--teal)}
+.which-head.green{color:var(--green)}
 .which-item{font-size:13px;color:var(--muted);line-height:1.65;padding:3px 0}
 .which-item::before{content:'→ ';color:var(--muted)}
 
-/* HOW IT WORKS */
+/* HOW IT WORKS — MCP */
 .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:44px}
 .flow-step{padding:18px 20px;border-right:1px solid var(--border);background:var(--surface)}
 .flow-step:last-child{border-right:none}
-.flow-num{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:rgba(91,95,239,.3);margin-bottom:10px}
+.flow-num{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:rgba(45,212,191,.3);margin-bottom:10px}
 .flow-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:5px}
 .flow-desc{font-size:13px;color:var(--muted);line-height:1.6}
-.flow-code{font-size:12px;color:var(--teal);margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:3px 8px;display:inline-block}
+.flow-code{font-size:11px;color:var(--teal);margin-top:8px;background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:4px 10px;display:inline-block;font-family:'IBM Plex Mono',monospace;line-height:1.7;white-space:pre}
 
 /* ENDPOINTS */
 .ep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:44px}
@@ -106,6 +112,13 @@ h1 em{font-style:italic;color:var(--indigo)}
 /* SECTION LABEL */
 .sec-label{font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
 
+/* TOOLS GRID */
+.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:44px}
+.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:13px 15px;display:flex;align-items:flex-start;gap:10px}
+.tool-icon{font-size:20px;flex-shrink:0;line-height:1.2}
+.tool-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.tool-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
 /* MOBILE */
 .mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
 @media(max-width:768px){
@@ -124,6 +137,7 @@ h1 em{font-style:italic;color:var(--indigo)}
   .flow-step{border-right:none;border-bottom:1px solid var(--border)}
   .flow-step:last-child{border-bottom:none}
   .ep-grid{grid-template-columns:1fr}
+  .tools-grid{grid-template-columns:1fr}
   .reg-body{grid-template-columns:1fr}
   .reg-footer{flex-direction:column;gap:10px;align-items:stretch}
   .reg-btn{width:100%;text-align:center}
@@ -155,122 +169,178 @@ h1 em{font-style:italic;color:var(--indigo)}
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
     <div class="eyebrow" style="margin-bottom:0">Open Agent Network</div>
   </div>
-  <h1>The network<br/>is <em>open.</em></h1>
-  <p class="hero-sub">Any AI agent can read SLOI AI's commodity marketplace — free, instant, no approval. Run a managed agentic team on your infrastructure for unlimited negotiation sessions.</p>
+  <h1>Your agents.<br/><em>Our network.</em></h1>
+  <p class="hero-sub">Run a fully managed AI negotiation team on your own infrastructure — or connect any agent to SLOI AI's MENA commodity marketplace via a free read-only API. No approval, no credit card, instant access.</p>
 
-  <div style="text-align:center;margin-bottom:40px">
-    <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.3);border-radius:20px;padding:7px 18px;font-size:13px;color:var(--violet);font-weight:500">
-      <span style="width:6px;height:6px;border-radius:50%;background:var(--indigo);display:inline-block;flex-shrink:0"></span>
+  <div style="text-align:center;margin-bottom:44px">
+    <span style="display:inline-flex;align-items:center;gap:8px;background:rgba(45,212,191,.07);border:1px solid rgba(45,212,191,.3);border-radius:20px;padding:7px 18px;font-size:13px;color:var(--teal);font-weight:500">
+      <span style="width:6px;height:6px;border-radius:50%;background:var(--teal);display:inline-block;flex-shrink:0"></span>
       Launching Q3 2026 — register now for early access
     </span>
   </div>
 
-  <!-- TIER CARDS -->
+  <!-- TIER CARDS — Managed first, Read second -->
   <div class="tiers">
-    <div class="tier">
-      <div class="tier-top">
-        <div class="tier-badge badge-free">⚡ INSTANT ACCESS</div>
-        <div class="tier-name">Read Tier</div>
-        <div class="tier-tagline">Query, compare, monitor the market. No approval needed. API key returned immediately — free forever.</div>
-        <div class="tier-price">Free</div>
-        <div class="tier-price-note">No credit card · No review · Always free</div>
-      </div>
-      <div class="tier-body">
-        <div class="feat-list">
-          <div class="feat"><span class="fy">✓</span><span class="ft">All verified suppliers + live prices</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft">Price comparison by product</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft">Real-time stock availability</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft">Supplier certifications</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft">1,000 API calls / hour</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft">MCP-compatible skill.md</span></div>
-          <div class="feat"><span class="fn">—</span><span class="ftd">Submit RFQs or negotiate</span></div>
-          <div class="feat"><span class="fn">—</span><span class="ftd">LOI generation</span></div>
-        </div>
-        <button class="tier-btn btn-fill" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Register free — get API key →</button>
-      </div>
-    </div>
 
-    <div class="tier featured" onclick="window.location.href='mcp-install.html'" style="cursor:pointer">
+    <div class="tier featured" style="cursor:pointer" onclick="window.location.href='mcp-install.html'">
       <div class="tier-top">
         <div class="tier-badge badge-teal">🖥 MCP · 2-MIN INSTALL</div>
         <div class="tier-name">Managed Agentic Team</div>
-        <div class="tier-tagline">Install the SLOI AI skill via MCP and run unlimited negotiation sessions on your own infrastructure. Flat monthly fee — no credit deductions.</div>
+        <div class="tier-tagline">Install SLOI AI via MCP and run unlimited AI negotiations end-to-end on your own servers. Flat monthly fee — zero credit deductions per deal.</div>
         <div class="tier-price" style="font-size:32px">$599<span style="font-size:16px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-weight:400"> / mo</span></div>
         <div class="tier-price-note">Or $999 one-time enterprise · <a href="pricing.html" style="color:var(--violet);text-decoration:none" onclick="event.stopPropagation()">See all plans →</a></div>
       </div>
       <div class="tier-body">
         <div class="feat-list">
-          <div class="feat"><span class="fy">✓</span><span class="ft">Claude Desktop, Cursor, Windsurf — 4-line JSON</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft">All 10 MCP tools available instantly</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft" style="color:var(--teal)">Unlimited sessions — no credit deductions</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft">Auto-approve deals within mandate</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft">Team workspace — up to 5 seats</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft teal">Unlimited negotiation sessions — no credit deductions</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Claude Desktop, Cursor, Windsurf — 4-line JSON config</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">All 10 MCP tools: RFQ, LOI, negotiate, contract, PO</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Auto-approve deals within your mandate thresholds</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Team workspace — up to 5 seats included</span></div>
           <div class="feat"><span class="fy">✓</span><span class="ft">OFAC + EU sanctions screened on every LOI</span></div>
-          <div class="feat"><span class="fy">✓</span><span class="ft">Data stays on your servers</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Data stays on your servers — no cloud storage</span></div>
           <div class="feat"><span class="fy">✓</span><span class="ft">AG-UI real-time negotiation stream</span></div>
         </div>
         <button class="tier-btn btn-teal" onclick="event.stopPropagation();window.location.href='mcp-install.html'">Install Managed Agentic Team →</button>
       </div>
     </div>
+
+    <div class="tier">
+      <div class="tier-top">
+        <div class="tier-badge badge-free">⚡ INSTANT ACCESS</div>
+        <div class="tier-name">Read Tier</div>
+        <div class="tier-tagline">Connect any AI agent to the MENA commodity marketplace. Query suppliers, compare prices, monitor stock. API key returned immediately — free forever.</div>
+        <div class="tier-price">Free</div>
+        <div class="tier-price-note">No credit card · No review · Always free</div>
+      </div>
+      <div class="tier-body">
+        <div class="feat-list">
+          <div class="feat"><span class="fy">✓</span><span class="ft">All verified suppliers + live spot prices</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Price comparison by product &amp; region</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Real-time stock availability</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">Supplier certifications &amp; compliance flags</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">1,000 API calls / hour</span></div>
+          <div class="feat"><span class="fy">✓</span><span class="ft">MCP-compatible skill.md autodiscovery</span></div>
+          <div class="feat"><span class="fn">—</span><span class="ftd">Submit RFQs or start negotiations</span></div>
+          <div class="feat"><span class="fn">—</span><span class="ftd">LOI or contract generation</span></div>
+        </div>
+        <button class="tier-btn btn-fill" onclick="document.getElementById('reg-form').scrollIntoView({behavior:'smooth'})">Register free — get API key →</button>
+      </div>
+    </div>
+
   </div>
 
   <!-- WHICH IS RIGHT FOR YOU -->
   <div class="which">
     <div class="which-col">
-      <div class="which-head green">Read Tier is for you if…</div>
-      <div class="which-item">You want to monitor prices or discover suppliers</div>
-      <div class="which-item">You're building a custom agent or integration</div>
-      <div class="which-item">You need market data with no commitment</div>
-      <div class="which-item">You want to evaluate SLOI AI before subscribing</div>
+      <div class="which-head teal">Managed Agentic Team is for you if…</div>
+      <div class="which-item">You want AI to negotiate, issue LOIs, and generate contracts autonomously</div>
+      <div class="which-item">Your team uses Claude Desktop, Cursor, or Windsurf already</div>
+      <div class="which-item">You need unlimited deal volume without per-session costs</div>
+      <div class="which-item">Your data and conversations must stay on your own infrastructure</div>
     </div>
     <div class="which-col">
-      <div class="which-head teal">Managed Agentic Team is for you if…</div>
-      <div class="which-item">You want to run AI negotiations end-to-end</div>
-      <div class="which-item">Your team uses Claude Desktop, Cursor, or Windsurf</div>
-      <div class="which-item">You need unlimited sessions without per-use costs</div>
-      <div class="which-item">Your data must stay on your own infrastructure</div>
+      <div class="which-head green">Read Tier is for you if…</div>
+      <div class="which-item">You want to monitor commodity prices or discover suppliers</div>
+      <div class="which-item">You're building a custom agent or integration on top of SLOI AI data</div>
+      <div class="which-item">You need market intelligence with zero commitment</div>
+      <div class="which-item">You want to evaluate SLOI AI before subscribing</div>
     </div>
   </div>
 
-  <!-- HOW IT WORKS -->
-  <div class="sec-label">// How it works — Read Tier</div>
+  <!-- HOW MCP INSTALL WORKS -->
+  <div class="sec-label">// How it works — Managed Agentic Team</div>
   <div class="flow" style="margin-bottom:44px">
     <div class="flow-step">
       <div class="flow-num">01</div>
-      <div class="flow-title">Read skill.md</div>
-      <div class="flow-desc">Agent discovers all endpoints, products, and auth schema via MCP skill file. No prior knowledge needed.</div>
-      <div class="flow-code">GET /skill.md</div>
+      <div class="flow-title">Add 4 lines to your config</div>
+      <div class="flow-desc">Paste the SLOI AI MCP block into your Claude Desktop or Cursor config. No build step, no dependencies.</div>
+      <div class="flow-code">"sloiai": &#123;
+  "command": "npx",
+  "args": ["@sloiai/mcp"]
+&#125;</div>
     </div>
     <div class="flow-step">
       <div class="flow-num">02</div>
-      <div class="flow-title">Register — get key</div>
-      <div class="flow-desc">One API call. Key returned immediately. No review, no wait, no card required.</div>
-      <div class="flow-code">POST /v1/agents/register</div>
+      <div class="flow-title">Set your Agent Mandate</div>
+      <div class="flow-desc">Define your product, target price, incoterm, and auto-approve threshold. The agent negotiates within those limits without asking each time.</div>
+      <div class="flow-code">sloi_set_mandate(&#123;
+  product: "Steel Rebar",
+  target: 2700,
+  strategy: "aggressive"
+&#125;)</div>
     </div>
     <div class="flow-step">
       <div class="flow-num">03</div>
-      <div class="flow-title">Query &amp; compare</div>
-      <div class="flow-desc">Search verified suppliers, compare live prices, check stock. 1,000 calls/hour.</div>
-      <div class="flow-code">GET /v1/compare</div>
+      <div class="flow-title">Agent runs end-to-end</div>
+      <div class="flow-desc">SLOI AI contacts suppliers, negotiates rounds, issues a compliant LOI, and streams the live log back to your IDE. You approve or it auto-closes.</div>
+      <div class="flow-code">LOI signed · $2,640/MT
+Saved $6,000 vs target
+→ Sent to Gulf Cement</div>
     </div>
   </div>
 
-  <!-- ENDPOINTS -->
-  <div class="sec-label">// Read endpoints — available instantly</div>
-  <div class="ep-grid">
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/suppliers</div><div class="ep-desc">List all verified suppliers with certifications and origin.</div><div class="ep-tier">✓ Read tier · Instant</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/prices</div><div class="ep-desc">Live spot prices across all commodity types.</div><div class="ep-tier">✓ Read tier · Instant</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/compare</div><div class="ep-desc">Rank suppliers by price and availability for a given product.</div><div class="ep-tier">✓ Read tier · Instant</div></div>
-    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/products/search</div><div class="ep-desc">Full-text search across all supplier catalogues.</div><div class="ep-tier">✓ Read tier · Instant</div></div>
-    <div class="ep-card" style="opacity:.55"><span class="ep-method post">POST</span><div class="ep-path">/v1/rfq</div><div class="ep-desc">Submit a request for quote to matched suppliers.</div><div class="ep-tier">🔒 Managed Agentic Team</div></div>
-    <div class="ep-card" style="opacity:.55"><span class="ep-method post">POST</span><div class="ep-path">/v1/negotiations/start</div><div class="ep-desc">Launch an AI negotiation session with a trader.</div><div class="ep-tier">🔒 Managed Agentic Team</div></div>
+  <!-- 10 MCP TOOLS -->
+  <div class="sec-label">// 10 MCP tools included with Managed Agentic Team</div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-icon">🤖</div>
+      <div><div class="tool-name">Negotiation Engine</div><div class="tool-desc">Multi-round AI negotiation with suppliers. Applies your mandate strategy — aggressive, standard, or deal-hunter.</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📋</div>
+      <div><div class="tool-name">RFQ Generator</div><div class="tool-desc">Auto-builds and sends request-for-quote packages to matched suppliers based on your product spec.</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📄</div>
+      <div><div class="tool-name">LOI Engine</div><div class="tool-desc">Generates compliant Letters of Intent with OFAC + EU sanctions screening on every counterparty.</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🧾</div>
+      <div><div class="tool-name">PO Generator</div><div class="tool-desc">Issues Purchase Orders directly from confirmed LOI data. Incoterm, payment terms, and delivery included.</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📑</div>
+      <div><div class="tool-name">Contract Advisor</div><div class="tool-desc">Reviews supplier contracts against your mandate and flags deviations before you sign.</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🚢</div>
+      <div><div class="tool-name">Logistics &amp; Customs</div><div class="tool-desc">Calculates landed cost, checks HS codes, and flags customs requirements for your origin/destination pair.</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🛡️</div>
+      <div><div class="tool-name">ComplianceBot</div><div class="tool-desc">Screens every supplier and transaction against OFAC, EU, and UN sanctions lists in real time.</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">💳</div>
+      <div><div class="tool-name">Trade Finance AI</div><div class="tool-desc">Recommends LC, CAD, or open account terms based on supplier risk profile and transaction size.</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">📊</div>
+      <div><div class="tool-name">Price Monitor</div><div class="tool-desc">Watches live spot prices for your watchlist products and alerts you when your target price window opens.</div></div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-icon">🔍</div>
+      <div><div class="tool-name">Supplier Finder</div><div class="tool-desc">Searches and ranks verified MENA suppliers by price, lead time, certifications, and past deal history.</div></div>
+    </div>
   </div>
 
-  <!-- REGISTRATION FORM -->
+  <!-- READ TIER ENDPOINTS -->
+  <div class="sec-label">// Read Tier endpoints — free &amp; instant</div>
+  <div class="ep-grid">
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/suppliers</div><div class="ep-desc">List all verified suppliers with certifications, origin, and compliance status.</div><div class="ep-tier">✓ Read Tier · Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/prices</div><div class="ep-desc">Live spot prices across all commodity types and MENA regions.</div><div class="ep-tier">✓ Read Tier · Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/compare</div><div class="ep-desc">Rank suppliers by price and availability for a given product and quantity.</div><div class="ep-tier">✓ Read Tier · Instant</div></div>
+    <div class="ep-card"><span class="ep-method get">GET</span><div class="ep-path">/v1/products/search</div><div class="ep-desc">Full-text search across all supplier catalogues with HS code and spec filters.</div><div class="ep-tier">✓ Read Tier · Instant</div></div>
+    <div class="ep-card" style="opacity:.55"><span class="ep-method post">POST</span><div class="ep-path">/v1/rfq</div><div class="ep-desc">Submit a request for quote to matched suppliers. Responses within 4 hours.</div><div class="ep-tier">🔒 Managed Agentic Team only</div></div>
+    <div class="ep-card" style="opacity:.55"><span class="ep-method post">POST</span><div class="ep-path">/v1/negotiations/start</div><div class="ep-desc">Launch a multi-round AI negotiation session with a verified trader.</div><div class="ep-tier">🔒 Managed Agentic Team only</div></div>
+  </div>
+
+  <!-- READ TIER REGISTRATION FORM -->
   <div class="reg-card" id="reg-form">
     <div class="reg-header">
-      <div class="reg-title">🤖 Register your agent — free &amp; instant</div>
-      <div class="reg-sub">API key returned immediately · No review · No credit card</div>
+      <div class="reg-title">🤖 Register your agent — Read Tier, free &amp; instant</div>
+      <div class="reg-sub">API key returned immediately · No review · No credit card required</div>
     </div>
     <div class="reg-body" id="reg-body">
       <div class="field"><label>Agent name</label><input id="ag-name" placeholder="MyProcurementAgent"/></div>
@@ -290,7 +360,7 @@ h1 em{font-style:italic;color:var(--indigo)}
           <option>Procurement automation</option>
           <option>Price monitoring</option>
           <option>Deal sourcing</option>
-          <option>Research</option>
+          <option>Market research</option>
           <option>Other</option>
         </select>
       </div>
@@ -303,14 +373,17 @@ h1 em{font-style:italic;color:var(--indigo)}
     <div id="reg-success" style="display:none;text-align:center;padding:44px 28px">
       <div style="font-size:40px;color:var(--green);margin-bottom:14px">✓</div>
       <div style="font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px">You're registered.</div>
-      <div style="font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:20px">Your API key is on its way — check your inbox within 2 minutes.</div>
-      <a href="docs.html" style="color:var(--violet);font-size:13px;font-weight:600;text-decoration:none">Read the docs →</a>
+      <div style="font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:20px">Your API key is on its way — check your inbox within 2 minutes.<br/>Ready to go further? Install the Managed Agentic Team for full negotiation access.</div>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+        <a href="mcp-install.html" style="color:var(--teal);font-size:13px;font-weight:600;text-decoration:none">Install Managed Agentic Team →</a>
+        <a href="docs.html" style="color:var(--violet);font-size:13px;font-weight:600;text-decoration:none">Read the docs →</a>
+      </div>
     </div>
   </div>
 
   <div style="display:flex;gap:18px;flex-wrap:wrap;justify-content:center">
+    <a href="mcp-install.html" style="color:var(--teal);text-decoration:none;font-size:13px;font-weight:500">Install Managed Agentic Team →</a>
     <a href="docs.html" style="color:var(--violet);text-decoration:none;font-size:13px;font-weight:500">Full documentation →</a>
-    <a href="mcp-install.html" style="color:var(--teal);text-decoration:none;font-size:13px;font-weight:500">Install via MCP →</a>
     <a href="pricing.html" style="color:var(--muted);text-decoration:none;font-size:13px">Compare all plans →</a>
   </div>
 

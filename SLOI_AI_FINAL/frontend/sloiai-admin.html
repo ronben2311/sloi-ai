@@ -189,6 +189,22 @@ select.inp option{background:var(--surface)}
 #mob-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:250}
 /* ── AI RESPONSE ── */
 .ai-running{color:var(--muted);font-style:italic}
+/* ── SIDEBAR-FREE LAYOUT ── */
+.sidebar{display:none!important}
+.shell{flex-direction:column!important}
+.topbar{display:flex;flex-direction:column;height:auto;padding:0;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.tb-row1{height:48px;display:flex;align-items:center;padding:0 16px;gap:10px;justify-content:space-between}
+.tb-logo-hd{font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:var(--white);letter-spacing:-.02em;flex-shrink:0}
+.tb-logo-hd em{font-style:italic;color:var(--indigo)}
+.tb-logo-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:1px 6px;border-radius:2px;letter-spacing:.04em;margin-left:4px}
+.tb-page-info{flex:1;display:flex;flex-direction:column;gap:0;border-left:1px solid var(--border);padding-left:12px;margin-left:6px;overflow:hidden}
+.tb-row2{height:34px;display:flex;align-items:center;gap:1px;padding:0 10px;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--border)}
+.tb-row2::-webkit-scrollbar{display:none}
+.tb-row2 .nav{padding:3px 10px;font-size:12px;height:26px;border-radius:3px;white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-weight:500;color:var(--muted);border:none;border-left:none!important;background:none;cursor:pointer;display:flex;align-items:center;gap:4px;transition:all .12s}
+.tb-row2 .nav:hover{background:var(--surface2);color:var(--text)}
+.tb-row2 .nav.active{background:rgba(91,95,239,.15);color:var(--violet)}
+.tb-row2 .nav-badge{font-size:10px;font-weight:700;padding:0 4px;border-radius:2px}
+.tb-nav-sep{width:1px;height:14px;background:var(--border);margin:0 6px;flex-shrink:0}
 /* ── AI AGENT QUICK-LAUNCH CARDS ── */
 .ai-agent-card{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:6px}
 .ai-agent-card:hover{border-color:rgba(91,95,239,.4);background:rgba(91,95,239,.04)}
@@ -259,15 +275,37 @@ select.inp option{background:var(--surface)}
 
 <div class="main">
   <div class="topbar">
-    <button class="ham-btn" onclick="openSidebar()">☰</button>
-    <div class="tb-left">
-      <div class="tb-title" id="tb-title">🔴 War Room</div>
-      <div class="tb-sub" id="tb-sub">Platform health · live view</div>
+    <div class="tb-row1">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+        <div class="tb-logo-hd">Sloi<em>AI</em><span class="tb-logo-badge">BOSS</span></div>
+        <div class="tb-page-info">
+          <div class="tb-title" id="tb-title">🔴 War Room</div>
+          <div class="tb-sub" id="tb-sub">Platform health · live view</div>
+        </div>
+      </div>
+      <div class="tb-right">
+        <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+        <div id="tb-clock" style="font-size:13px;color:var(--muted)"></div>
+        <button class="btn btn-sm btn-a" onclick="openTG()">📲 WhatsApp</button>
+      </div>
     </div>
-    <div class="tb-right">
-      <div class="live-badge"><div class="live-dot"></div>LIVE</div>
-      <div id="tb-clock" style="font-size:15px;color:var(--muted)"></div>
-      <button class="btn btn-sm btn-a" onclick="openTG()">📲 WhatsApp</button>
+    <div class="tb-row2">
+      <button class="nav" id="tb-briefing" onclick="show('briefing',this)" style="color:var(--gold)">☀️ Daily Briefing</button>
+      <div class="tb-nav-sep"></div>
+      <button class="nav active" id="tb-warroom" onclick="show('warroom',this)">🔴 War Room <span class="nav-badge nb-red" id="alert-count">3</span></button>
+      <button class="nav" id="tb-pipeline" onclick="show('pipeline',this)">📊 Pipeline</button>
+      <button class="nav" id="tb-negotiations" onclick="show('negotiations',this)">🤖 Negotiations <span class="nav-badge nb-gold" id="neg-count">2</span></button>
+      <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg)">10</span></button>
+      <div class="tb-nav-sep"></div>
+      <button class="nav" id="tb-revenue" onclick="show('revenue',this)">💰 Revenue</button>
+      <button class="nav" id="tb-contracts" onclick="show('contracts',this)">📄 Contracts</button>
+      <button class="nav" id="tb-traders" onclick="show('traders',this)">👥 Traders</button>
+      <div class="tb-nav-sep"></div>
+      <button class="nav" id="tb-products" onclick="show('products',this)">📦 Products &amp; Pricing</button>
+      <button class="nav" id="tb-users" onclick="show('users',this)">👤 Users &amp; CRM</button>
+      <button class="nav" id="tb-settings" onclick="show('settings',this)">⚙️ Settings</button>
+      <div class="tb-nav-sep"></div>
+      <button class="nav" onclick="api.logout();window.location.href='login.html'" style="color:var(--muted)">← Sign out</button>
     </div>
   </div>
 
@@ -2248,7 +2286,7 @@ function renderUserTable(data) {
       ? '<button class="btn btn-xs" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.25);color:var(--red)" title="Incomplete registration">⚠ Fix</button>'
       : '<button class="btn btn-xs" onclick="openTG()" title="WhatsApp">📲</button>'
         + (u.email ? '<a href="mailto:' + u.email + '" class="btn btn-xs" title="Email" style="text-decoration:none">✉️</a>' : '')
-        + '<button class="btn btn-xs btn-p" onclick="show(\'negotiations\',document.querySelectorAll(\'.nav\')[2])" title="Start negotiation" style="font-size:12px">🤖</button>';
+        + '<button class="btn btn-xs btn-p" onclick="show(\'negotiations\',document.getElementById(\'tb-negotiations\'))" title="Start negotiation" style="font-size:12px">🤖</button>';
     return '<tr' + (isIncomplete ? ' style="opacity:.6"' : '') + '>'
       + '<td>' + nameCell + '<div style="font-size:13px;color:var(--muted);margin-top:1px">' + created + '</div></td>'
       + '<td style="font-size:13px;color:var(--muted)">' + (u.email||'—') + '</td>'
@@ -2554,7 +2592,7 @@ function renderAlerts(negs, lois) {
       desc:  n.product + ' · ' + n.qty + ' ' + n.unit + ' · ' + priceStr + ' · ' + (n.buyer_name || '—') + contact,
       actions: '<button class="btn btn-xs btn-g" onclick="approveNegById(\''+id+'\')">✓ Approve → LOI</button>'
              + '<button class="btn btn-xs btn-r" onclick="rejectNegById(\''+id+'\')">✗ Reject</button>'
-             + '<button class="btn btn-xs" onclick="show(\'negotiations\',document.querySelectorAll(\'.nav\')[2])">View</button>',
+             + '<button class="btn btn-xs" onclick="show(\'negotiations\',document.getElementById(\'tb-negotiations\'))">View</button>',
     });
   });
 
