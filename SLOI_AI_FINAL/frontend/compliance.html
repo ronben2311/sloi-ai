@@ -11,12 +11,23 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg)}
 body::before{content:'';position:fixed;inset:0;z-index:0;background-image:linear-gradient(rgba(91,95,239,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.03) 1px,transparent 1px);background-size:64px 64px;pointer-events:none}
-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:52px;background:rgba(7,7,15,.96);border-bottom:1px solid var(--border);backdrop-filter:blur(12px);font-family:'IBM Plex Mono',monospace;}
-.nav-logo{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em}
-.nav-logo em{font-style:italic;color:var(--indigo)}
-.nav-links{display:flex;gap:20px;font-size:13px}
-.nav-links a{color:var(--muted);text-decoration:none}
-.nav-links a:hover{color:var(--violet)}
+/* ── PLATFORM TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(7,7,15,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);font-family:'IBM Plex Mono',monospace}
+.tb-row1{height:52px;display:flex;align-items:center;padding:0 24px;gap:10px;justify-content:space-between}
+.tb-logo-hd{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em;flex-shrink:0}
+.tb-logo-hd em{font-style:italic;color:var(--indigo)}
+.tb-page-info{flex:1;display:flex;flex-direction:column;border-left:1px solid var(--border);padding-left:12px;margin-left:2px;overflow:hidden;min-width:0}
+.tb-title{font-size:14px;font-weight:600;color:var(--white);white-space:nowrap;font-family:'Inter',sans-serif}
+.tb-sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:'Inter',sans-serif}
+.tb-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tb-platform-link{font-size:12px;color:var(--text);text-decoration:none;border:1px solid var(--border2);border-radius:4px;padding:6px 12px;white-space:nowrap;transition:all .12s}
+.tb-platform-link:hover{border-color:var(--indigo);color:var(--violet)}
+.tb-row2{height:34px;display:flex;align-items:center;gap:1px;padding:0 18px;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--border)}
+.tb-row2::-webkit-scrollbar{display:none}
+.tb-row2 a{padding:3px 10px;font-size:12px;height:26px;border-radius:3px;white-space:nowrap;font-weight:500;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:4px;transition:all .12s}
+.tb-row2 a:hover{background:var(--surface2);color:var(--text)}
+.tb-row2 a.active{background:rgba(91,95,239,.15);color:var(--violet)}
+@media(max-width:768px){.tb-sub{display:none}.tb-row2{padding:0 10px}}
 
 .wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:40px 24px 60px}
 
@@ -117,15 +128,28 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 </head>
 <body>
 
-<nav>
-  <a href="sloiai-home.html" class="nav-logo">SLOI <em>AI</em><span class="nav-tagline">Smart negotiation · LOI generation</span><span class="nav-tagline">Smart negotiation · LOI generation</span></a>
-  <div class="nav-links">
-    <a href="sloiai-platform.html">← Platform</a>
-    <a href="sloiai-admin.html">← Admin</a>
-    <a href="loi-generator.html">LOI Generator</a>
-    <a href="payments.html">Payments</a>
+<div class="topbar">
+  <div class="tb-row1">
+    <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+      <a href="sloiai-platform.html" class="tb-logo-hd">Sloi<em>AI</em></a>
+      <div class="tb-page-info">
+        <div class="tb-title">Compliance Engine</div>
+        <div class="tb-sub">Sanctions screening · KYC · dual-use classification</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <a class="tb-platform-link" href="sloiai-admin.html">← Admin</a>
+      <a class="tb-platform-link" href="sloiai-platform.html">← Platform</a>
+    </div>
   </div>
-</nav>
+  <div class="tb-row2">
+    <a href="sloiai-platform.html?view=dashboard">🏠 Dashboard</a>
+    <a href="sloiai-platform.html?view=products">📦 Products &amp; Traders</a>
+    <a class="active" href="sloiai-platform.html?view=agents">🧠 AI Tools</a>
+    <a href="sloiai-platform.html?view=lois">📋 RFQs &amp; LOIs</a>
+    <a href="sloiai-platform.html?view=contracts">📄 Contracts</a>
+  </div>
+</div>
 
 <div class="wrap">
 
