@@ -1097,6 +1097,13 @@
       /* Quality requirement checkboxes */
       .qr-label{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0}
       .qr-label input{accent-color:var(--indigo);width:13px;height:13px;flex-shrink:0}
+      /* Standards toggle (American / European) */
+      .std-toggle-wrap{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+      .std-toggle{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+      .std-btn{flex:1;background:var(--surface2);border:none;border-right:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:600;padding:7px 6px;cursor:pointer;transition:all .15s;font-family:'IBM Plex Mono',monospace}
+      .std-btn:last-child{border-right:none}
+      .std-btn:hover{background:var(--surface);color:var(--text)}
+      .std-btn.active{background:rgba(91,95,239,.12);color:var(--violet)}
       /* Mandate accordion sections */
       .mnd-section{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden}
       .mnd-section-hdr{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--surface2);cursor:pointer;user-select:none;transition:background .12s}
@@ -1352,6 +1359,32 @@
             <button class="mob-close-btn" onclick="closeSidebar()" style="display:none;background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px" title="Close">✕</button>
           </div>
           <div class="neg-left-body">
+
+            <!-- AI PROFILE -->
+            <div class="mnd-section">
+              <div class="mnd-section-hdr open" id="mnd-hdr-profile" onclick="mndToggle('profile')">
+                <span class="mnd-section-icon">🧭</span>
+                <span class="mnd-section-title">AI Profile</span>
+                <span class="mnd-section-chev">▼</span>
+              </div>
+              <div class="mnd-section-body">
+                <div>
+                  <label class="flabel">Choose your procurement profile</label>
+                  <select class="inp" id="m-profile" onchange="setProcProfile(this.value)">
+                    <option value="">— select profile —</option>
+                    <option value="construction">🏗 Construction Procurement</option>
+                    <option value="factory">🏭 Advanced Factory Procurement</option>
+                  </select>
+                </div>
+                <div class="std-toggle-wrap">
+                  <span class="flabel" style="margin-bottom:0">Standards</span>
+                  <div class="std-toggle">
+                    <button type="button" class="std-btn" id="neg-std-btn-us" onclick="setStandard('us')">🇺🇸 American — ASTM · USD</button>
+                    <button type="button" class="std-btn" id="neg-std-btn-eu" onclick="setStandard('eu')">🇪🇺 European — EN/ISO · EUR</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <!-- ① MANDATE -->
             <div class="mnd-section">
@@ -1698,7 +1731,7 @@
           <div style="font-size:13px;color:var(--white);font-weight:600">📄 LOI Generator</div>
           <div style="font-size:12px;color:var(--muted)">Generate signed Letters of Intent from negotiated deals</div>
           <div style="margin-left:auto;display:flex;gap:6px">
-            <button class="btn btn-p btn-sm" onclick="generateLOI()">📄 Open LOI Generator →</button>
+            <button class="btn btn-p btn-sm" onclick="generateLOI()">📄 Load LOI Generator ↓</button>
           </div>
         </div>
         <div class="lead-body">
@@ -1789,11 +1822,11 @@
             <div id="loi-preview" style="background:var(--surface2);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:14px;font-size:12px;line-height:1.9;color:var(--muted);font-family:'IBM Plex Mono',monospace;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">
               <div style="font-size:28px;opacity:.4">📄</div>
               <div style="color:var(--violet);font-weight:600;font-size:13px">Full LOI Generator</div>
-              <div>Fill the fields · click <strong style="color:var(--white)">Open LOI Generator →</strong><br/>Opens with digital signatures, live preview &amp; PDF export</div>
+              <div>Fill the fields · click <strong style="color:var(--white)">Load LOI Generator ↓</strong><br/>Loads inline below with digital signatures, live preview &amp; PDF export</div>
             </div>
 
             <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-              <button class="btn btn-p" onclick="generateLOI()">📄 Open in LOI Generator →</button>
+              <button class="btn btn-p" onclick="generateLOI()">📄 Load LOI Generator ↓</button>
               <button class="btn btn-g btn-sm" id="loi-copy-btn" onclick="copyLOI()">📋 Copy summary</button>
               <button class="btn btn-sm" id="loi-pdf-btn" onclick="downloadLOI()">⬇ Download PDF</button>
             </div>
@@ -1851,7 +1884,7 @@
           <div style="font-size:13px;font-weight:600;color:var(--white)">📋 PO Generator</div>
           <div style="font-size:12px;color:var(--muted)">Generate Purchase Orders from signed LOIs</div>
           <div style="margin-left:auto;display:flex;gap:6px">
-            <button class="btn btn-p btn-sm" onclick="generatePO()">📋 Open PO Generator →</button>
+            <button class="btn btn-p btn-sm" onclick="generatePO()">📋 Load PO Generator ↓</button>
           </div>
         </div>
         <div class="price-body">
@@ -1947,7 +1980,7 @@
             </div>
 
             <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="btn btn-p" onclick="generatePO()">📋 Open in PO Generator →</button>
+              <button class="btn btn-p" onclick="generatePO()">📋 Load PO Generator ↓</button>
               <button class="btn btn-g btn-sm" id="po-copy-btn" onclick="copyPO()">📋 Copy summary</button>
               <button class="btn btn-sm" id="po-pdf-btn" onclick="downloadPO()">⬇ Download PDF</button>
             </div>
@@ -1958,7 +1991,7 @@
             <div id="po-preview" style="background:var(--surface2);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:14px;font-size:12px;line-height:1.9;color:var(--muted);font-family:'IBM Plex Mono',monospace;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px">
               <div style="font-size:32px;opacity:.4">📋</div>
               <div style="color:var(--violet);font-weight:600;font-size:13px">Full PO Generator</div>
-              <div>Fill the fields · click <strong style="color:var(--white)">Open in PO Generator →</strong><br/>Opens with AI Draft, live preview, digital signatures &amp; PDF export</div>
+              <div>Fill the fields · click <strong style="color:var(--white)">Load PO Generator ↓</strong><br/>Loads inline below with AI Draft, live preview, digital signatures &amp; PDF export</div>
             </div>
 
             <div class="sec" style="margin-top:14px">// ISSUED POs</div>
@@ -2378,6 +2411,25 @@
         var hdr = document.getElementById('mnd-hdr-' + id);
         if (hdr) hdr.classList.toggle('open');
       }
+
+      // ── AI PROFILE / STANDARDS (cosmetic — shared with sloiai-platform.html via localStorage) ──
+      function setStandard(s) {
+        if (s !== 'us' && s !== 'eu') return;
+        localStorage.setItem('sloi_standard', s);
+        ['us', 'eu'].forEach(function(k) {
+          var btn = document.getElementById('neg-std-btn-' + k);
+          if (btn) btn.classList.toggle('active', k === s);
+        });
+      }
+      function setProcProfile(val) {
+        localStorage.setItem('sloi_profile', val);
+      }
+      (function() {
+        setStandard(localStorage.getItem('sloi_standard') || 'eu');
+        var savedProfile = localStorage.getItem('sloi_profile');
+        var sel = document.getElementById('m-profile');
+        if (sel && savedProfile) sel.value = savedProfile;
+      })();
 
       function mndSumRefresh() {
         var ids = ['qr-inspection','qr-coa','qr-defect','qr-penalty','qr-iso'];
@@ -4144,9 +4196,12 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         if (valid)   p.set('validity',     valid);
         if (del)     p.set('deadline',     del);
 
-        document.getElementById('tc-lead').textContent = 'opening…';
-        window.open('loi-generator.html?' + p.toString(), '_blank');
-        showToast('✓ Opening LOI Generator →', 'green');
+        p.set('embed', '1');
+        document.getElementById('tc-lead').textContent = 'loaded ↓';
+        var loiWrap = document.getElementById('loi-preview');
+        loiWrap.style.cssText = 'padding:0;display:block;text-align:left;min-height:0';
+        loiWrap.innerHTML = '<iframe src="loi-generator.html?' + p.toString() + '" title="LOI Generator" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:6px;background:#07070f;display:block"></iframe>';
+        showToast('✓ LOI Generator loaded below', 'green');
       }
 
       function copyLOI() {
@@ -4290,9 +4345,12 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
           localStorage.setItem('sloi_pos', JSON.stringify(pos));
         } catch(e) {}
 
-        document.getElementById('tc-price').textContent = 'opening…';
-        window.open('po-generator.html?' + p.toString(), '_blank');
-        showToast('✓ Opening PO Generator →', 'green');
+        p.set('embed', '1');
+        document.getElementById('tc-price').textContent = 'loaded ↓';
+        var poWrap = document.getElementById('po-preview');
+        poWrap.style.cssText = 'padding:0;display:block;text-align:left;min-height:0';
+        poWrap.innerHTML = '<iframe src="po-generator.html?' + p.toString() + '" title="PO Generator" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:6px;background:#07070f;display:block"></iframe>';
+        showToast('✓ PO Generator loaded below', 'green');
       }
 
       function copyPO() {

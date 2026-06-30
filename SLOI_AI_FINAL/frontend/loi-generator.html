@@ -1323,6 +1323,13 @@ calcTotal();
 // ── READ URL PARAMS FROM AGENT CONSOLE ────────────────────────────────────────
 (function(){
   var params = new URLSearchParams(window.location.search);
+  // embed=1 — loaded inline inside negotiation-agent.html's console iframe; hide the standalone nav
+  if (params.get('embed') === '1') {
+    var navEl = document.querySelector('.nav');
+    if (navEl) navEl.style.display = 'none';
+    var layoutEl = document.querySelector('.layout');
+    if (layoutEl) layoutEl.style.minHeight = '100vh';
+  }
   // deadline comes as a formatted string (e.g. "15 Jun 2026") — convert back to YYYY-MM-DD for the date input
   var deadlineParam = params.get('deadline');
   if (deadlineParam && deadlineParam !== 'TBD') {

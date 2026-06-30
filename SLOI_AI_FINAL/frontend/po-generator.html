@@ -542,6 +542,14 @@ var SHIP_LABELS = {
   document.getElementById('po-num').value = genPONum();
   document.getElementById('po-date').value = new Date().toISOString().slice(0,10);
 
+  // embed=1 — loaded inline inside negotiation-agent.html's console iframe; hide the standalone nav
+  if (new URLSearchParams(location.search).get('embed') === '1') {
+    var navEl = document.querySelector('.nav');
+    if (navEl) navEl.style.display = 'none';
+    var layoutEl = document.querySelector('.layout');
+    if (layoutEl) layoutEl.style.minHeight = '100vh';
+  }
+
   var saved = localStorage.getItem('sf_claude_key');
   if (saved) {
     document.getElementById('sf-api-key').value = saved;

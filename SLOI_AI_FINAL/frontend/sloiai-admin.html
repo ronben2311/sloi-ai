@@ -253,19 +253,15 @@ select.inp option{background:var(--surface)}
   <button class="nav" onclick="show('briefing',this)" style="margin:8px 10px 4px;border-radius:5px;border:1px solid rgba(232,169,74,.3);background:rgba(232,169,74,.06);color:var(--gold);width:calc(100% - 20px);padding:9px 12px"><span class="nav-icon">☀️</span><span class="nav-label" style="font-weight:600">Daily Briefing</span></button>
   <div class="sb-section">Command</div>
   <button class="nav active" onclick="show('warroom',this)"><span class="nav-icon">🔴</span><span class="nav-label">War Room</span><span class="nav-badge nb-red" id="alert-count">3</span></button>
-  <button class="nav" onclick="show('pipeline',this)"><span class="nav-icon">📊</span><span class="nav-label">Pipeline</span></button>
   <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold" id="neg-count">2</span></button>
   <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">10</span></button>
   <div class="sb-section">Revenue</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
-  <button class="nav" onclick="show('contracts',this)"><span class="nav-icon">📄</span><span class="nav-label">Contracts</span></button>
-  <button class="nav" onclick="show('traders',this)"><span class="nav-icon">👥</span><span class="nav-label">Traders</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
   <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & CRM</span></button>
   <div class="sb-section">System</div>
   <button class="nav" onclick="show('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
-  <button class="nav" onclick="api.logout(); window.location.href='login.html'"><span class="nav-icon">←</span><span class="nav-label">Sign out</span></button>
   <div class="sb-footer">
     <div class="sf-label">LOI VOLUME MTD</div>
     <div class="sf-val">$1.84M</div>
@@ -287,25 +283,21 @@ select.inp option{background:var(--surface)}
         <div class="live-badge"><div class="live-dot"></div>LIVE</div>
         <div id="tb-clock" style="font-size:13px;color:var(--muted)"></div>
         <button class="btn btn-sm btn-a" onclick="openTG()">📲 WhatsApp</button>
+        <button class="btn btn-sm btn-r" onclick="api.logout();window.location.href='login.html'">← Sign out</button>
       </div>
     </div>
     <div class="tb-row2">
       <button class="nav" id="tb-briefing" onclick="show('briefing',this)" style="color:var(--gold)">☀️ Daily Briefing</button>
       <div class="tb-nav-sep"></div>
       <button class="nav active" id="tb-warroom" onclick="show('warroom',this)">🔴 War Room <span class="nav-badge nb-red" id="alert-count">3</span></button>
-      <button class="nav" id="tb-pipeline" onclick="show('pipeline',this)">📊 Pipeline</button>
       <button class="nav" id="tb-negotiations" onclick="show('negotiations',this)">🤖 Negotiations <span class="nav-badge nb-gold" id="neg-count">2</span></button>
       <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg)">10</span></button>
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-revenue" onclick="show('revenue',this)">💰 Revenue</button>
-      <button class="nav" id="tb-contracts" onclick="show('contracts',this)">📄 Contracts</button>
-      <button class="nav" id="tb-traders" onclick="show('traders',this)">👥 Traders</button>
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-products" onclick="show('products',this)">📦 Products &amp; Pricing</button>
       <button class="nav" id="tb-users" onclick="show('users',this)">👤 Users &amp; CRM</button>
       <button class="nav" id="tb-settings" onclick="show('settings',this)">⚙️ Settings</button>
-      <div class="tb-nav-sep"></div>
-      <button class="nav" onclick="api.logout();window.location.href='login.html'" style="color:var(--muted)">← Sign out</button>
     </div>
   </div>
 
@@ -327,42 +319,9 @@ select.inp option{background:var(--surface)}
       <div class="stat"><div class="stat-top">Active Agents</div><div class="stat-val" style="color:var(--teal)">8</div><div class="stat-sub up">all running</div></div>
       <div class="stat"><div class="stat-top">Open Pipeline</div><div class="stat-val" style="color:var(--gold)">$2.4M</div><div class="stat-sub warn">14 leads</div></div>
     </div>
-    <div class="g2" style="margin-bottom:14px">
-      <div class="card" style="margin-bottom:0">
-        <div class="card-title">// ALERTS <span class="badge br" id="alerts-header-badge">—</span></div>
-        <div id="alerts-list"><div style="padding:12px;text-align:center;color:var(--muted);font-size:14px">Loading…</div></div>
-      </div>
-      <div class="card" style="margin-bottom:0">
-        <div class="card-title">// LIVE FEED</div>
-        <div class="feed-wrap" id="live-feed">
-          <div class="feed-row"><div class="feed-time">14:38</div><div class="feed-icon">🤖</div><div class="feed-text"><b>PriceScout</b> queried REF-MET-001 — $2,840/MT</div></div>
-          <div class="feed-row"><div class="feed-time">14:35</div><div class="feed-icon">📋</div><div class="feed-text"><b>New RFQ</b> — Gulf Cement · Cement OPC · 500 MT</div></div>
-          <div class="feed-row"><div class="feed-time">14:31</div><div class="feed-icon">💬</div><div class="feed-text"><b>NegotiationAgent</b> round 3/5 — $2,840/MT agreed</div></div>
-          <div class="feed-row"><div class="feed-time">14:22</div><div class="feed-icon">📄</div><div class="feed-text"><b>LOI signed</b> — Hard Wheat 50 MT · $56,000</div></div>
-          <div class="feed-row"><div class="feed-time">14:18</div><div class="feed-icon">⚡</div><div class="feed-text"><b>Credit purchase</b> — $299 · 350 credits · Gulf Cement</div></div>
-          <div class="feed-row"><div class="feed-time">14:09</div><div class="feed-icon">🌍</div><div class="feed-text"><b>Trader applied</b> — Gulf Metals Trading · UAE</div></div>
-          <div class="feed-row"><div class="feed-time">13:55</div><div class="feed-icon">🤖</div><div class="feed-text"><b>LeadFinder</b> — 3 new prospects in KSA</div></div>
-        </div>
-      </div>
-    </div>
-    <div class="g2">
-      <div class="card" style="margin-bottom:0">
-        <div class="card-title">// REVENUE BY SECTOR</div>
-        <div class="bar-row"><div class="bar-label">🔩 Metals</div><div class="bar-track"><div class="bar-fill" style="width:78%;background:var(--indigo)"></div></div><div class="bar-val">$7,840</div></div>
-        <div class="bar-row"><div class="bar-label">🏗️ Building</div><div class="bar-track"><div class="bar-fill" style="width:52%;background:var(--teal)"></div></div><div class="bar-val">$4,230</div></div>
-        <div class="bar-row"><div class="bar-label">🧪 Chemicals</div><div class="bar-track"><div class="bar-fill" style="width:38%;background:var(--gold)"></div></div><div class="bar-val">$3,120</div></div>
-        <div class="bar-row"><div class="bar-label">🌾 Agriculture</div><div class="bar-track"><div class="bar-fill" style="width:22%;background:var(--green)"></div></div><div class="bar-val">$1,840</div></div>
-        <div class="bar-row"><div class="bar-label">⚡ Energy</div><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--red)"></div></div><div class="bar-val">$840</div></div>
-      </div>
-      <div class="card" style="margin-bottom:0">
-        <div class="card-title">// REVENUE BREAKDOWN</div>
-        <div class="g2" style="margin-bottom:10px">
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:10px;text-align:center"><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--violet)">$17,450</div><div style="font-size:13px;color:var(--muted);margin-top:2px">LOI fees (35 × $500)</div></div>
-          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:10px;text-align:center"><div style="font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--teal)">$970</div><div style="font-size:13px;color:var(--muted);margin-top:2px">Credits (1,240 sold)</div></div>
-        </div>
-        <div class="bar-row"><div class="bar-label">LOI fees</div><div class="bar-track"><div class="bar-fill" style="width:95%;background:var(--violet)"></div></div><div class="bar-val">94.7%</div></div>
-        <div class="bar-row"><div class="bar-label">Credits</div><div class="bar-track"><div class="bar-fill" style="width:5%;background:var(--teal)"></div></div><div class="bar-val">5.3%</div></div>
-      </div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">// ALERTS <span class="badge br" id="alerts-header-badge">—</span></div>
+      <div id="alerts-list"><div style="padding:12px;text-align:center;color:var(--muted);font-size:14px">Loading…</div></div>
     </div>
 
     <!-- AI AGENTS QUICK LAUNCH -->
@@ -417,10 +376,9 @@ select.inp option{background:var(--surface)}
 
       </div>
     </div>
-  </div>
 
-  <!-- PIPELINE -->
-  <div id="view-pipeline" class="view">
+    <!-- PIPELINE (merged into War Room) -->
+    <div class="card-title" style="margin-top:18px">// PIPELINE</div>
     <div class="g4" style="margin-bottom:14px">
       <div class="stat"><div class="stat-top">Total Leads</div><div class="stat-val">14</div></div>
       <div class="stat"><div class="stat-top">Pipeline Value</div><div class="stat-val" style="color:var(--gold)">$2.4M</div></div>
@@ -566,10 +524,9 @@ select.inp option{background:var(--surface)}
         </tbody>
       </table>
     </div>
-  </div>
 
-  <!-- CONTRACTS -->
-  <div id="view-contracts" class="view">
+    <!-- CONTRACTS (merged into Revenue) -->
+    <div class="card-title" style="margin-top:18px">// CONTRACTS</div>
     <div class="g4" style="margin-bottom:14px">
       <div class="stat"><div class="stat-top">Total POs</div><div class="stat-val" style="color:var(--white)" id="ct-stat-count">—</div><div class="stat-sub">All purchase orders</div></div>
       <div class="stat"><div class="stat-top">Total Value</div><div class="stat-val" style="color:var(--violet)" id="ct-stat-value">—</div><div class="stat-sub">Across all deals</div></div>
@@ -588,10 +545,9 @@ select.inp option{background:var(--surface)}
         <tbody id="ct-po-tbody"><tr><td colspan="8" style="padding:18px;text-align:center;color:var(--muted)">Loading…</td></tr></tbody>
       </table>
     </div>
-  </div>
 
-  <!-- BROKERS -->
-  <div id="view-traders" class="view">
+    <!-- TRADERS (merged into Revenue) -->
+    <div class="card-title" style="margin-top:18px">// TRADERS</div>
     <div class="g4" style="margin-bottom:14px">
       <div class="stat"><div class="stat-top">Active Traders</div><div class="stat-val">3</div></div>
       <div class="stat"><div class="stat-top">Pending KYC</div><div class="stat-val" style="color:var(--gold)">1</div></div>
@@ -1590,7 +1546,7 @@ function resumeOutreach(){
   openConsole('outreach');
 }
 
-function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];if(v==='contracts')loadContracts();}
+function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];if(v==='revenue')loadContracts();}
 
 function renderKanban(){var cols=[{key:'new',label:'New',color:'var(--muted)'},{key:'contacted',label:'Contacted',color:'var(--blue)'},{key:'rfq',label:'RFQ sent',color:'var(--teal)'},{key:'negotiating',label:'Negotiating',color:'var(--gold)'},{key:'closed',label:'Closed ✓',color:'var(--green)'}];var html='';cols.forEach(function(col){var cards=PIPELINE[col.key]||[];html+='<div class="kc"><div class="kc-head" style="color:'+col.color+'">'+col.label+'<span class="kc-count">'+cards.length+'</span></div>';cards.forEach(function(c){html+='<div class="kcard'+(c.hot?' hot':'')+'"><div class="kcard-name">'+(c.hot?'🔥 ':'')+c.name+'</div><div class="kcard-sub">'+c.product+' · '+c.country+'</div><div class="kcard-val">$'+c.value.toLocaleString()+'</div><div class="kcard-actions">';if(col.key==='new')html+='<button class="btn btn-xs btn-g" onclick="openTG()">WA</button><button class="btn btn-xs btn-p" onclick="moveCard(\'new\',\'contacted\',\''+c.name+'\')">Contact</button>';else if(col.key==='contacted')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'contacted\',\'rfq\',\''+c.name+'\')">Send RFQ</button>';else if(col.key==='rfq')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'rfq\',\'negotiating\',\''+c.name+'\')">Negotiate</button>';else if(col.key==='negotiating')html+='<button class="btn btn-xs btn-g" onclick="moveCard(\'negotiating\',\'closed\',\''+c.name+'\')">Close ✓</button>';else html+='<button class="btn btn-xs" onclick="window.open(\'loi-generator.html\',\'_blank\')">LOI</button>';html+='</div></div>';});html+='</div>';});document.getElementById('kanban').innerHTML=html;}
 

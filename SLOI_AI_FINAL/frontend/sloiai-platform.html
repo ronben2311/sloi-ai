@@ -447,6 +447,15 @@
         color: var(--muted);
         line-height: 1.6;
       }
+      .sn-dd{position:relative;flex-shrink:0}
+      .sn-dd-menu{display:none;position:absolute;top:calc(100% + 6px);right:0;width:280px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.5);overflow:hidden;z-index:50}
+      .sn-dd-menu.sn-dd-open{display:block}
+      .sn-dd-item{display:flex;align-items:flex-start;gap:10px;width:100%;padding:11px 14px;background:none;border:none;border-bottom:1px solid var(--border);cursor:pointer;text-align:left;transition:background .12s}
+      .sn-dd-item:last-child{border-bottom:none}
+      .sn-dd-item:hover{background:rgba(91,95,239,.08)}
+      .sn-dd-icon{font-size:17px;flex-shrink:0;margin-top:1px}
+      .sn-dd-title{display:block;font-size:13px;font-weight:600;color:var(--white)}
+      .sn-dd-sub{display:block;font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
       .action-cards {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -859,6 +868,15 @@
       .mandate-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none}
       .mandate-chev{color:var(--muted);font-size:11px;transition:transform .2s}
       .mandate-chev.open{transform:rotate(180deg)}
+      /* ── COMMODITIES ENGINE HERO ── */
+      .hero-engine{background:linear-gradient(135deg,rgba(91,95,239,.1),rgba(91,95,239,.02));border:1px solid rgba(91,95,239,.4);border-radius:10px;padding:18px 20px;margin-bottom:22px}
+      .hero-engine .agent-row{background:none;border:none;padding:0;cursor:pointer}
+      .hero-engine .agent-row:hover{border-color:transparent}
+      .hero-engine .ar-icon{width:44px;height:44px;font-size:22px;border-radius:9px}
+      .hero-engine .ar-name{font-size:17px;font-weight:700;width:auto;margin-right:6px}
+      .hero-engine .agent-detail{background:var(--bg);border-color:rgba(91,95,239,.25);border-radius:6px;margin-top:10px}
+      .hero-engine-tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.35);color:var(--violet);padding:2px 8px;border-radius:3px;flex-shrink:0}
+      .hero-engine-sub{font-size:13px;color:var(--muted);margin:4px 0 12px;padding-left:50px}
       /* ── AI INLINE PANELS ── */
       .ai-panel{background:var(--bg);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:12px 14px;margin-top:12px}
       .ai-panel-title{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
@@ -885,17 +903,15 @@
       .tb-row2 .nav:hover{background:var(--surface2);color:var(--text)}
       .tb-row2 .nav.active{background:rgba(91,95,239,.15);color:var(--violet)}
       .tb-nav-sep{width:1px;height:14px;background:var(--border);margin:0 6px;flex-shrink:0}
-      /* ── AGENT MANDATE WIDGET ── */
-      .dash-mandate{background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:7px;margin-bottom:14px;overflow:hidden}
-      .dm-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;background:rgba(91,95,239,.06);border-bottom:1px solid rgba(91,95,239,.12)}
-      .dm-htitle{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--white)}
-      .dm-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0}
-      .dm-params{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;padding:10px 14px}
-      .dm-param{display:flex;flex-direction:column;gap:2px}
-      .dm-label{font-size:10px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
-      .dm-val{font-size:12px;color:var(--white);font-weight:500}
       /* ── PROCUREMENT MARKETPLACE ── */
       .mp-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+      .std-toggle-wrap{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+      .std-toggle{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden}
+      .std-btn{background:var(--surface);border:none;border-right:1px solid var(--border);color:var(--muted);font-size:12px;font-weight:600;padding:8px 14px;cursor:pointer;transition:all .15s;font-family:'IBM Plex Mono',monospace}
+      .std-btn:last-child{border-right:none}
+      .std-btn:hover{background:var(--surface2);color:var(--text)}
+      .std-btn.active{background:rgba(91,95,239,.12);color:var(--violet)}
+      .prof-standard-line{font-size:11px;color:var(--muted);padding:8px 18px;border-top:1px solid var(--border);background:var(--surface2)}
       .prof-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
       .prof-card{background:var(--surface);border:1px solid var(--border);border-radius:9px;overflow:hidden;transition:border-color .2s,transform .15s;cursor:pointer}
       .prof-card:hover{border-color:var(--border2);transform:translateY(-1px)}
@@ -927,7 +943,7 @@
       .tp-desc{font-size:11px;color:var(--muted);line-height:1.3;margin-top:1px}
       .tp-chk{width:17px;height:17px;border-radius:3px;border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;color:transparent}
       .tp-item.on .tp-chk{background:var(--indigo);border-color:var(--indigo);color:#fff}
-      @media(max-width:768px){.dm-params{grid-template-columns:repeat(2,1fr)}.tp-grid{grid-template-columns:1fr}.tb-row2 .nav-badge{display:none}}
+      @media(max-width:768px){.tp-grid{grid-template-columns:1fr}.tb-row2 .nav-badge{display:none}}
       /* ── CONSTRUCTION ARCHITECTURE ── */
       .arch-section{background:var(--surface);border:1px solid rgba(45,212,191,.22);border-radius:9px;overflow:hidden;margin-bottom:18px}
       .arch-hdr{padding:11px 16px;background:rgba(45,212,191,.05);border-bottom:1px solid rgba(45,212,191,.15);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
@@ -1005,6 +1021,18 @@
       .mcp-file-path span{color:var(--gold)}
       .mcp-highlight{background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);border-radius:5px;padding:10px 14px;font-size:13px;color:var(--text);line-height:1.65;margin-top:8px}
       .mcp-highlight strong{color:var(--teal)}
+      /* services strip — plain-language summary above the technical tool cards */
+      .svc-strip{padding:18px 18px 4px}
+      .svc-strip-hdr{margin-bottom:12px}
+      .svc-strip-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px}
+      .svc-strip-sub{font-size:12px;color:var(--muted)}
+      .svc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+      .svc-card{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:11px 12px;display:flex;flex-direction:column;gap:5px}
+      .svc-icon{font-size:17px}
+      .svc-name{font-size:12px;font-weight:700;color:var(--white)}
+      .svc-desc{font-size:11px;color:var(--muted);line-height:1.5}
+      @media(max-width:980px){.svc-grid{grid-template-columns:repeat(3,1fr)}}
+      @media(max-width:640px){.svc-grid{grid-template-columns:repeat(2,1fr)}}
       /* tool cards */
       .mcp-tools-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
       .mcp-tool-grid{display:flex;flex-direction:column;gap:6px}
@@ -1197,28 +1225,6 @@
           <!-- DASHBOARD -->
           <div id="view-dashboard" class="view active">
 
-            <!-- AGENT MANDATE WIDGET -->
-            <div class="dash-mandate">
-              <div class="dm-hdr">
-                <div class="dm-htitle">
-                  <span class="dm-dot"></span>
-                  🎯 Agent Mandate
-                </div>
-                <div style="display:flex;gap:6px">
-                  <button class="btn btn-xs" onclick="show('negotiate')">Edit</button>
-                  <button class="btn btn-xs btn-p" onclick="show('negotiate')">+ New mandate →</button>
-                </div>
-              </div>
-              <div class="dm-params">
-                <div class="dm-param"><span class="dm-label">Product</span><span class="dm-val">Steel Rebar G60</span></div>
-                <div class="dm-param"><span class="dm-label">Quantity</span><span class="dm-val">100 MT</span></div>
-                <div class="dm-param"><span class="dm-label">Target price</span><span class="dm-val">≤$2,700/MT</span></div>
-                <div class="dm-param"><span class="dm-label">Strategy</span><span class="dm-val">Deal Hunter</span></div>
-                <div class="dm-param"><span class="dm-label">Max rounds</span><span class="dm-val">5</span></div>
-                <div class="dm-param"><span class="dm-label">Status</span><span class="dm-val"><span class="badge bg" style="font-size:11px">● Round 3/5</span></span></div>
-              </div>
-            </div>
-
             <div class="welcome-bar">
               <div>
                 <div class="wb-title">
@@ -1228,19 +1234,26 @@
                   Loading your dashboard…
                 </div>
               </div>
-              <button
-                class="btn btn-p"
-                onclick="
-                  show('negotiate')
-                "
-              >
-                🤖 Start new LOI →
-              </button>
+              <div class="sn-dd">
+                <button class="btn btn-p" onclick="toggleStartNewDD(event)">
+                  🤖 Start New <span style="font-size:10px;margin-left:2px">▼</span>
+                </button>
+                <div class="sn-dd-menu" id="sn-dd-menu">
+                  <button class="sn-dd-item" onclick="window.open('negotiation-agent.html','_blank');closeStartNewDD()">
+                    <span class="sn-dd-icon">🤖</span>
+                    <span><span class="sn-dd-title">Commodities Engine</span><span class="sn-dd-sub">Multi-round AI negotiation with suppliers</span></span>
+                  </button>
+                  <button class="sn-dd-item" onclick="window.open('loi-generator.html','_blank');closeStartNewDD()">
+                    <span class="sn-dd-icon">📄</span>
+                    <span><span class="sn-dd-title">LOI / PO Generator</span><span class="sn-dd-sub">Draft a Letter of Intent or Purchase Order</span></span>
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="action-cards">
               <div class="action-card" onclick="window.open('negotiation-agent.html','_blank')" style="border-color:rgba(91,95,239,.3)">
                 <div class="ac-icon">🤖</div>
-                <div class="ac-title">NegotiationAgent</div>
+                <div class="ac-title">Commodities Engine</div>
                 <div class="ac-desc">Automated multi-round negotiation with pre-qualified suppliers.</div>
                 <div class="ac-cost bv" style="border:1px solid rgba(91,95,239,.25);margin-top:8px">● 2 active rounds</div>
               </div>
@@ -1302,17 +1315,17 @@
                       margin-bottom: 2px;
                     "
                   >
-                    Connect your own AI agent via Open Network
+                    Connect Managed Agent
                   </div>
                   <div style="font-size:14px; color: var(--muted)">
-                    Your agent discovers suppliers and compares prices
-                    autonomously · Read tier free · instant access
+                    Activate a fully managed AI agent that negotiates and
+                    sources on your behalf · set up in AI Tools
                   </div>
                 </div>
               </div>
               <button
                 class="btn btn-p btn-sm"
-                onclick="window.open('open-network.html','_blank')"
+                onclick="show('agents',document.getElementById('tb-agents'))"
               >
                 Connect agent →
               </button>
@@ -1957,6 +1970,105 @@
           <!-- AI TOOLS -->
           <div id="view-agents" class="view">
 
+            <!-- MANDATE — collapsible -->
+            <div style="background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:8px;margin-bottom:18px;overflow:hidden">
+              <div class="mandate-hdr" onclick="toggleMandate()">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:18px">&#9881;&#65039;</span>
+                  <div>
+                    <div style="font-size:14px;font-weight:600;color:var(--white)">Agent Mandate <span id="mandate-profile-label" style="font-size:12px;font-weight:400;color:var(--muted)"></span></div>
+                    <div style="font-size:13px;color:var(--muted)" id="mandate-summary-line">Steel Rebar &middot; Hard Wheat &middot; OPC Cement &nbsp;&middot;&nbsp; Standard strategy &nbsp;&middot;&nbsp; Max $2,900/unit &nbsp;&middot;&nbsp; 3 regions</div>
+                    <div id="mandate-from-wizard-badge" style="display:none;font-size:12px;color:var(--green);margin-top:3px">&#10003; Received from your Agent Mandate request</div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:2px 9px;border-radius:10px;font-size:13px;font-weight:700">&#9679; Active</span>
+                  <span id="mandate-chev" class="mandate-chev">&#9660;</span>
+                </div>
+              </div>
+              <div id="mandate-body" style="display:none;border-top:1px solid var(--border);padding:16px">
+                <!-- Profile row -->
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)">
+                  <span style="font-size:12px;color:var(--muted);flex-shrink:0">Active profile:</span>
+                  <button class="btn btn-xs" id="mp-switch-construction" onclick="activateProfile('construction')" style="font-size:11px">🏗 Construction</button>
+                  <button class="btn btn-xs" id="mp-switch-factory" onclick="activateProfile('factory')" style="font-size:11px">🏭 Advanced Factory</button>
+                  <span style="font-size:11px;color:var(--muted);margin-left:4px" id="mandate-profile-sub">No profile selected — choose above or set manually</span>
+                </div>
+                <div class="std-toggle-wrap">
+                  <span style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase">Standards</span>
+                  <div class="std-toggle">
+                    <button class="std-btn" id="std-btn-us" onclick="setStandard('us')">🇺🇸 American — ASTM · Imperial · USD</button>
+                    <button class="std-btn" id="std-btn-eu" onclick="setStandard('eu')">🇪🇺 European — EN/ISO · Metric · EUR</button>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px">
+                  <div>
+                    <label class="flabel">Target Products</label>
+                    <div id="mandate-products-wrap" style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;min-height:36px;align-items:center">
+                      <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Steel Rebar &times;</span>
+                      <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Hard Wheat &times;</span>
+                      <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">OPC Cement &times;</span>
+                      <span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="flabel">Strategy</label>
+                    <div style="display:flex;gap:5px">
+                      <button class="btn btn-xs" id="ms-watcher" onclick="setMS('watcher')" style="flex:1;justify-content:center">&#128065; Watcher</button>
+                      <button class="btn btn-xs btn-p" id="ms-standard" onclick="setMS('standard')" style="flex:1;justify-content:center">&#127919; Standard</button>
+                      <button class="btn btn-xs" id="ms-aggressive" onclick="setMS('aggressive')" style="flex:1;justify-content:center">&#129302; Aggressive</button>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="flabel">Target Regions</label>
+                    <div id="mandate-regions-wrap" style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;min-height:36px;align-items:center">
+                      <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">UAE &times;</span>
+                      <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">KSA &times;</span>
+                      <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Egypt &times;</span>
+                      <span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
+                  <div><label class="flabel">Max price / unit ($)</label><input class="inp" id="mandate-in-maxprice" value="2,900"></div>
+                  <div><label class="flabel">Target quantity (MT)</label><input class="inp" id="mandate-in-qty" value="100"></div>
+                  <div><label class="flabel">Auto-LOI below ($K)</label><input class="inp" id="mandate-in-autoloi" value="50"></div>
+                  <div><label class="flabel">Max deals / day</label><input class="inp" id="mandate-in-maxdeals" value="3"></div>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <button class="btn btn-sm btn-p" onclick="alert('Mandate saved — all 9 agents updated.')">&#128190; Save mandate</button>
+                  <button class="btn btn-sm" onclick="alert('Reset to defaults.')">Reset</button>
+                  <span style="font-size:13px;color:var(--muted);margin-left:6px">Last saved: Today 09:15 AM &middot; Applied to 6 agents</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── COMMODITIES ENGINE — MAIN AI TOOL ── -->
+            <div class="hero-engine">
+              <div class="agent-row" id="row-neg" onclick="toggleAgent('neg')">
+                <div class="ar-icon" style="background:rgba(91,95,239,.15)">&#129302;</div>
+                <div class="ar-name">Commodities Engine</div>
+                <span class="hero-engine-tag">Main AI Tool</span>
+                <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>2 active rounds</span>
+                <div class="ar-metric">Steel R3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; Hard Wheat R1/5 &middot; opening offer sent</div>
+                <div class="ar-actions">
+                  <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('negotiation-agent.html','_blank')">&#9654; View live</button>
+                  <button class="btn btn-xs" onclick="event.stopPropagation();show('negotiate')">+ New</button>
+                </div>
+                <span class="ar-chev">&#9660;</span>
+              </div>
+              <div class="hero-engine-sub">Sources, negotiates &amp; closes commodity deals — within your Agent Mandate, fully documented, you approve before anything's committed.</div>
+              <div class="agent-detail" id="detail-neg">
+                <div class="ad-log">
+                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Steel Rebar</span><span>Round 3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; counter-offer pending</span></div>
+                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Hard Wheat</span><span>Round 1/5 &middot; opening offer sent &middot; awaiting reply</span></div>
+                </div>
+                <div class="ad-btns">
+                  <button class="btn btn-xs btn-p" onclick="window.open('negotiation-agent.html','_blank')">Open negotiation board &rarr;</button>
+                </div>
+              </div>
+            </div>
+
             <!-- ── PROCUREMENT MARKETPLACE ── -->
             <div style="margin-bottom:22px">
               <div class="mp-section-hdr">
@@ -1990,6 +2102,7 @@
                       <div class="prof-feat"><span class="pfc">✓</span><span class="pft">Multi-site delivery coordination</span></div>
                     </div>
                   </div>
+                  <div class="prof-standard-line">Standards: <span class="prof-standard-val">—</span></div>
                   <div class="prof-footer" style="display:flex;gap:6px">
                     <button class="btn btn-sm" id="prof-btn-construction" style="flex:1;justify-content:center;border-color:rgba(45,212,191,.35);color:var(--teal)" onclick="event.stopPropagation();activateProfile('construction')">Activate →</button>
                     <button class="btn btn-sm" style="flex-shrink:0;border-color:rgba(45,212,191,.18);color:var(--muted)" onclick="event.stopPropagation();openArchDrawer('construction')">🧠 View agents</button>
@@ -2016,6 +2129,7 @@
                       <div class="prof-feat"><span class="pfc">✓</span><span class="pft">Multi-supplier sourcing per production line</span></div>
                     </div>
                   </div>
+                  <div class="prof-standard-line">Standards: <span class="prof-standard-val">—</span></div>
                   <div class="prof-footer" style="display:flex;gap:6px">
                     <button class="btn btn-sm" id="prof-btn-factory" style="flex:1;justify-content:center;border-color:rgba(91,95,239,.35);color:var(--violet)" onclick="event.stopPropagation();activateProfile('factory')">Activate →</button>
                     <button class="btn btn-sm" style="flex-shrink:0;border-color:rgba(91,95,239,.18);color:var(--muted)" onclick="event.stopPropagation();openArchDrawer('factory')">🧠 View agents</button>
@@ -2661,104 +2775,11 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
               </div><!-- /arch-body-factory -->
             </div><!-- /arch-section factory -->
 
-            <!-- MANDATE — collapsible -->
-            <div style="background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:8px;margin-bottom:18px;overflow:hidden">
-              <div class="mandate-hdr" onclick="toggleMandate()">
-                <div style="display:flex;align-items:center;gap:10px">
-                  <span style="font-size:18px">&#9881;&#65039;</span>
-                  <div>
-                    <div style="font-size:14px;font-weight:600;color:var(--white)">Agent Mandate <span id="mandate-profile-label" style="font-size:12px;font-weight:400;color:var(--muted)"></span></div>
-                    <div style="font-size:13px;color:var(--muted)" id="mandate-summary-line">Steel Rebar &middot; Hard Wheat &middot; OPC Cement &nbsp;&middot;&nbsp; Standard strategy &nbsp;&middot;&nbsp; Max $2,900/unit &nbsp;&middot;&nbsp; 3 regions</div>
-                  </div>
-                </div>
-                <div style="display:flex;align-items:center;gap:8px">
-                  <span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:2px 9px;border-radius:10px;font-size:13px;font-weight:700">&#9679; Active</span>
-                  <span id="mandate-chev" class="mandate-chev">&#9660;</span>
-                </div>
-              </div>
-              <div id="mandate-body" style="display:none;border-top:1px solid var(--border);padding:16px">
-                <!-- Profile row -->
-                <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)">
-                  <span style="font-size:12px;color:var(--muted);flex-shrink:0">Active profile:</span>
-                  <button class="btn btn-xs" id="mp-switch-construction" onclick="activateProfile('construction')" style="font-size:11px">🏗 Construction</button>
-                  <button class="btn btn-xs" id="mp-switch-factory" onclick="activateProfile('factory')" style="font-size:11px">🏭 Advanced Factory</button>
-                  <span style="font-size:11px;color:var(--muted);margin-left:4px" id="mandate-profile-sub">No profile selected — choose above or set manually</span>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px">
-                  <div>
-                    <label class="flabel">Target Products</label>
-                    <div style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;min-height:36px;align-items:center">
-                      <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Steel Rebar &times;</span>
-                      <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Hard Wheat &times;</span>
-                      <span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">OPC Cement &times;</span>
-                      <span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>
-                    </div>
-                  </div>
-                  <div>
-                    <label class="flabel">Strategy</label>
-                    <div style="display:flex;gap:5px">
-                      <button class="btn btn-xs" id="ms-watcher" onclick="setMS('watcher')" style="flex:1;justify-content:center">&#128065; Watcher</button>
-                      <button class="btn btn-xs btn-p" id="ms-standard" onclick="setMS('standard')" style="flex:1;justify-content:center">&#127919; Standard</button>
-                      <button class="btn btn-xs" id="ms-aggressive" onclick="setMS('aggressive')" style="flex:1;justify-content:center">&#129302; Aggressive</button>
-                    </div>
-                  </div>
-                  <div>
-                    <label class="flabel">Target Regions</label>
-                    <div style="display:flex;flex-wrap:wrap;gap:4px;padding:6px 8px;background:var(--surface2);border:1px solid var(--border2);border-radius:4px;min-height:36px;align-items:center">
-                      <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">UAE &times;</span>
-                      <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">KSA &times;</span>
-                      <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">Egypt &times;</span>
-                      <span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>
-                    </div>
-                  </div>
-                </div>
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px">
-                  <div><label class="flabel">Max price / unit ($)</label><input class="inp" value="2,900"></div>
-                  <div><label class="flabel">Target quantity (MT)</label><input class="inp" value="100"></div>
-                  <div><label class="flabel">Auto-LOI below ($K)</label><input class="inp" value="50"></div>
-                  <div><label class="flabel">Max deals / day</label><input class="inp" value="3"></div>
-                </div>
-                <div style="display:flex;gap:8px;align-items:center">
-                  <button class="btn btn-sm btn-p" onclick="alert('Mandate saved — all 9 agents updated.')">&#128190; Save mandate</button>
-                  <button class="btn btn-sm" onclick="alert('Reset to defaults.')">Reset</button>
-                  <span style="font-size:13px;color:var(--muted);margin-left:6px">Last saved: Today 09:15 AM &middot; Applied to 6 agents</span>
-                </div>
-              </div>
-            </div>
-
             <!-- HEADER -->
+            <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">// Powered by Commodities Engine</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-              <div style="font-size:14px;color:var(--muted)">7 agents &nbsp;&middot;&nbsp; <span style="color:var(--green)">5 running</span> &nbsp;&middot;&nbsp; <span style="color:var(--gold)">1 paused</span></div>
+              <div style="font-size:14px;color:var(--muted)">7 supporting agents &nbsp;&middot;&nbsp; <span style="color:var(--green)">6 running</span> &nbsp;&middot;&nbsp; <span style="color:var(--gold)">1 paused</span></div>
               <button class="btn btn-xs btn-p" onclick="alert('Running all agents…')">&#9654; Run all now</button>
-            </div>
-
-            <!-- ── OUTREACH & NEGOTIATION ── -->
-            <div class="ag-section">Negotiation</div>
-            <div class="agent-rows">
-
-                            <div>
-                <div class="agent-row" id="row-neg" onclick="toggleAgent('neg')">
-                  <div class="ar-icon" style="background:rgba(91,95,239,.12)">&#129302;</div>
-                  <div class="ar-name">NegotiationAgent</div>
-                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>2 active rounds</span>
-                  <div class="ar-metric">Steel R3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; Hard Wheat R1/5 &middot; opening offer sent</div>
-                  <div class="ar-actions">
-                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('negotiation-agent.html','_blank')">&#9654; View live</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();show('negotiate')">+ New</button>
-                  </div>
-                  <span class="ar-chev">&#9660;</span>
-                </div>
-                <div class="agent-detail" id="detail-neg">
-                  <div class="ad-log">
-                    <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Steel Rebar</span><span>Round 3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; counter-offer pending</span></div>
-                    <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Hard Wheat</span><span>Round 1/5 &middot; opening offer sent &middot; awaiting reply</span></div>
-                  </div>
-                  <div class="ad-btns">
-                    <button class="btn btn-xs btn-p" onclick="window.open('negotiation-agent.html','_blank')">Open negotiation board &rarr;</button>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
             <!-- ── COMPLIANCE & DOCUMENTS ── -->
@@ -3038,6 +3059,52 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                 </div>
               </div>
 
+              <!-- DOCUMENTATION INSTRUCTION AGENT — "THE GUARD" -->
+              <div>
+                <div class="agent-row" id="row-sdi" onclick="toggleAgent('sdi');agSDIPopulate()">
+                  <div class="ar-icon" style="background:rgba(45,212,191,.12)">&#128737;&#65039;</div>
+                  <div class="ar-name">Documentation Instruction Agent</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">"The Guard" &middot; cross-checks HS codes &amp; destination import rules &middot; auto-drafts vendor shipping &amp; documentation instructions</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();toggleAgent('sdi');agSDIPopulate()">&#128737;&#65039; Generate SDI</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-sdi">
+                  <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Analyzes the PO and produces exact, zero-ambiguity Shipping &amp; Documentation Instructions (SDI) for the vendor — before goods leave origin — by cross-checking HS codes against destination import requirements (standards body, health/safety permits, certificates of origin, etc.).</div>
+                  <div class="ai-panel">
+                    <div class="ai-panel-title">🤖 Documentation Instruction Agent — The Guard</div>
+                    <div style="display:flex;gap:4px;margin-bottom:8px">
+                      <select class="inp" id="ag-sdi-load" style="font-size:11px;padding:4px 6px;flex:1">
+                        <option value="">— load PO details —</option>
+                      </select>
+                      <button class="btn btn-xs" onclick="agSDILoad()" style="flex-shrink:0;font-size:11px">Load</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+                      <div>
+                        <label class="flabel" style="font-size:10px">HS Code</label>
+                        <input class="inp" id="ag-sdi-hs" placeholder="e.g. 7214.20" style="font-size:12px;padding:5px 8px"/>
+                      </div>
+                      <div>
+                        <label class="flabel" style="font-size:10px">Country of Origin</label>
+                        <input class="inp" id="ag-sdi-origin" placeholder="e.g. Turkey" style="font-size:12px;padding:5px 8px"/>
+                      </div>
+                    </div>
+                    <div style="margin-bottom:8px">
+                      <label class="flabel" style="font-size:10px">Destination Port / Country</label>
+                      <input class="inp" id="ag-sdi-dest" placeholder="e.g. Haifa, Israel" style="font-size:12px;padding:5px 8px"/>
+                    </div>
+                    <div style="margin-bottom:8px">
+                      <label class="flabel" style="font-size:10px">PO context (optional)</label>
+                      <textarea class="inp" id="ag-sdi-context" style="height:56px;resize:vertical;font-size:11px;font-family:'IBM Plex Mono',monospace" placeholder="Paste PO details, or load from saved above…"></textarea>
+                    </div>
+                    <button class="btn btn-xs btn-p" onclick="runAgentSDI()" style="font-size:11px">🤖 Generate SDI</button>
+                    <div id="ag-sdi-resp" class="ai-response"></div>
+                  </div>
+                </div>
+              </div>
+
             </div>
 
             <!-- ── PAYMENTS & FINANCE ── -->
@@ -3045,7 +3112,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
             <div class="agent-rows">
 
               <div>
-                <div class="agent-row" id="row-payment" onclick="toggleAgent('payment')">
+                <div class="agent-row" id="row-payment" onclick="toggleAgent('payment');agLCPopulate()">
                   <div class="ar-icon" style="background:rgba(232,169,74,.12)">💳</div>
                   <div class="ar-name">PaymentAI</div>
                   <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
@@ -3105,6 +3172,21 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                     <button class="btn btn-xs" onclick="alert('Overdue reminder sent to supplier for SL-LOI-20260428-001 (Cement OPC 52.5R). Due date: 2026-05-28.')">Send reminder</button>
                     <button class="btn btn-xs" onclick="alert('MT103 SWIFT draft generated for SL-LOI-20260430-002 (Aluminum · $46,000). Check your email.')">MT103 draft</button>
                     <button class="btn btn-xs" onclick="alert('Payment ledger exported: 4 transactions, $201,200 total.')">&#8595; Export</button>
+                  </div>
+                  <div class="ai-panel">
+                    <div class="ai-panel-title">🤖 AI LC Tools</div>
+                    <div style="display:flex;gap:4px;margin-bottom:8px">
+                      <select class="inp" id="ag-lc-load" style="font-size:11px;padding:4px 6px;flex:1">
+                        <option value="">— load from saved LOI / PO —</option>
+                      </select>
+                      <button class="btn btn-xs" onclick="agLCLoad()" style="flex-shrink:0;font-size:11px">Load</button>
+                    </div>
+                    <div style="margin-bottom:8px">
+                      <label class="flabel" style="font-size:10px">Deal context</label>
+                      <textarea class="inp" id="ag-lc-context" style="height:72px;resize:vertical;font-size:11px;font-family:'IBM Plex Mono',monospace" placeholder="Paste deal details (commodity, amount, Incoterm, payment terms), or load from saved above…"></textarea>
+                    </div>
+                    <button class="btn btn-xs btn-p" onclick="runAgentLC()" style="font-size:11px">🤖 Draft LC</button>
+                    <div id="ag-lc-resp" class="ai-response"></div>
                   </div>
                 </div>
               </div>
@@ -3303,6 +3385,26 @@ Content-Type: application/json
                 </div>
               </div>
 
+              <!-- ── SERVICES STRIP (plain language) ── -->
+              <div class="svc-strip">
+                <div class="svc-strip-hdr">
+                  <div class="svc-strip-title">What your agent can do for you</div>
+                  <div class="svc-strip-sub">A plain-English summary of the 10 tools below — scroll down for the technical detail on each one</div>
+                </div>
+                <div class="svc-grid">
+                  <div class="svc-card"><div class="svc-icon">🔍</div><div class="svc-name">Supplier Finder</div><div class="svc-desc">Finds verified suppliers and ranks them for you</div></div>
+                  <div class="svc-card"><div class="svc-icon">📋</div><div class="svc-name">RFQ Generator</div><div class="svc-desc">Sends a Request for Quote to matched suppliers</div></div>
+                  <div class="svc-card"><div class="svc-icon">🤖</div><div class="svc-name">Negotiation Engine</div><div class="svc-desc">Negotiates price with a supplier on your behalf</div></div>
+                  <div class="svc-card"><div class="svc-icon">🛡️</div><div class="svc-name">ComplianceBot</div><div class="svc-desc">Screens suppliers against global sanctions lists</div></div>
+                  <div class="svc-card"><div class="svc-icon">📄</div><div class="svc-name">LOI Engine</div><div class="svc-desc">Generates a Letter of Intent from agreed terms</div></div>
+                  <div class="svc-card"><div class="svc-icon">📑</div><div class="svc-name">Contract Advisor</div><div class="svc-desc">Reviews contracts and flags risk before you sign</div></div>
+                  <div class="svc-card"><div class="svc-icon">🧾</div><div class="svc-name">PO Generator</div><div class="svc-desc">Issues a Purchase Order from a confirmed LOI</div></div>
+                  <div class="svc-card"><div class="svc-icon">💳</div><div class="svc-name">Trade Finance AI</div><div class="svc-desc">Recommends the right payment method for the deal</div></div>
+                  <div class="svc-card"><div class="svc-icon">🚢</div><div class="svc-name">Logistics &amp; Customs</div><div class="svc-desc">Calculates landed cost and customs requirements</div></div>
+                  <div class="svc-card"><div class="svc-icon">📊</div><div class="svc-name">Price Monitor</div><div class="svc-desc">Tracks live market price and alerts you to buy</div></div>
+                </div>
+              </div>
+
               <!-- ── 10 TOOL CARDS ── -->
               <div style="padding:0 18px 20px">
                 <div class="mcp-tools-hdr">
@@ -3440,9 +3542,6 @@ Content-Type: application/json
         </div>
       </div>
     </div>
-
-    <script>
-      const api = initPortal("buyer");
 
                     <!-- NEGOTIATE -->
           <div id="view-negotiate" class="view" style="padding:0;overflow:hidden">
@@ -4818,11 +4917,32 @@ Content-Type: application/json
       var RFQS_DATA = [];
       var LOIS_DATA = [];
 
+      // Negotiation Agent (negotiation-agent.html) persists its LOIs only to
+      // localStorage['sloi_lois'] — it never calls the backend. Read that as
+      // the primary source so RFQ/LOI trackers reflect what was actually done.
+      function _localLois() {
+        try { return JSON.parse(localStorage.getItem('sloi_lois') || '[]'); } catch (e) { return []; }
+      }
+
       function loadNegotiations() {
+        function fromLocal() {
+          RFQS_DATA = _localLois().map(function (l) {
+            return {
+              ref: l.ref,
+              product: l.product,
+              supplier: l.seller || l.buyer || "—",
+              qty: l.qty + " " + (l.unit || "MT"),
+              sent: l.date || (l.created_at ? new Date(l.created_at).toLocaleDateString() : ""),
+              status: "quoted",
+              hot: false,
+            };
+          });
+          renderRFQs();
+        }
         api
           .getNegotiations()
           .then(function (data) {
-            RFQS_DATA = data.map(function (n) {
+            var fromApi = (data || []).map(function (n) {
               return {
                 ref: n.id,
                 product: n.product,
@@ -4833,18 +4953,49 @@ Content-Type: application/json
                 hot: n.status === "running",
               };
             });
+            var local = _localLois().map(function (l) {
+              return {
+                ref: l.ref,
+                product: l.product,
+                supplier: l.seller || l.buyer || "—",
+                qty: l.qty + " " + (l.unit || "MT"),
+                sent: l.date || (l.created_at ? new Date(l.created_at).toLocaleDateString() : ""),
+                status: "quoted",
+                hot: false,
+              };
+            }).filter(function (l) { return !fromApi.some(function (a) { return a.ref === l.ref; }); });
+            RFQS_DATA = fromApi.concat(local);
             renderRFQs();
           })
-          .catch(function () {
-            renderRFQs();
-          });
+          .catch(fromLocal);
       }
 
       function loadLOIs() {
+        function mapLocal(entry) {
+          var qty = parseFloat(entry.qty) || 0;
+          var price = parseFloat(entry.price) || 0;
+          var total = entry.total != null ? parseFloat(entry.total) || 0 : qty * price;
+          return {
+            ref: entry.ref,
+            product: entry.product + " · " + qty + " " + (entry.unit || "MT"),
+            price: "$" + price.toLocaleString() + "/" + (entry.unit || "MT"),
+            total: "$" + total.toLocaleString(),
+            date: entry.date || (entry.created_at ? new Date(entry.created_at).toLocaleDateString() : ""),
+            emoji: SECTOR_EMOJI["Metals"],
+            fresh: false,
+            _raw: { ref: entry.ref, product: entry.product, qty: entry.qty, unit: entry.unit || "MT", price: entry.price, buyer: entry.buyer, country: entry.country || 'UAE' },
+            _val: total,
+            _signed_at: entry.created_at || entry.date,
+          };
+        }
+        function fromLocal() {
+          LOIS_DATA = _localLois().map(mapLocal);
+          _afterLOIsLoaded([]);
+        }
         api
           .getLOIs()
           .then(function (data) {
-            LOIS_DATA = data.map(function (l) {
+            var fromApi = (data || []).map(function (l) {
               return {
                 ref: l.ref,
                 product: l.product + " · " + l.qty + " " + (l.unit || "MT"),
@@ -4858,6 +5009,14 @@ Content-Type: application/json
                 _signed_at: l.signed_at,
               };
             });
+            var local = _localLois().map(mapLocal).filter(function (l) { return !fromApi.some(function (a) { return a.ref === l.ref; }); });
+            LOIS_DATA = fromApi.concat(local);
+            _afterLOIsLoaded(data || []);
+          })
+          .catch(fromLocal);
+      }
+
+      function _afterLOIsLoaded(data) {
             // Update stats
             var thisMonth = new Date().toISOString().slice(0, 7);
             var monthCount = LOIS_DATA.filter(function(l){ return (l._signed_at||'').slice(0,7) === thisMonth; }).length;
@@ -4897,10 +5056,6 @@ Content-Type: application/json
               }).length;
             });
             if (exSelectedId) exSelect(exSelectedId);
-          })
-          .catch(function () {
-            renderLOIs();
-          });
       }
       // ── CONTRACTS VIEW ────────────────────────────────────────────────────────
       function renderContractsView() {
@@ -5133,9 +5288,40 @@ Content-Type: application/json
         document.getElementById("tb-title").textContent = t[0];
         document.getElementById("tb-sub").textContent = t[1];
         if (v === 'products') setTimeout(renderCatalog, 0);
+        if (v === 'lois') { loadNegotiations(); loadLOIs(); }
         if (v === 'contracts') renderContractsView();
         if (v === 'notifications') clearNotifBadge();
       }
+
+      // negotiation-agent.html runs in a separate tab/window and writes deals
+      // straight to localStorage — keep the platform's views in sync with it.
+      window.addEventListener('storage', function (e) {
+        if (e.key === 'sloi_lois') { loadNegotiations(); loadLOIs(); }
+        if (e.key === 'sloi_pos' || e.key === 'sloi_contracts') {
+          if (document.getElementById('view-contracts').classList.contains('active')) renderContractsView();
+        }
+      });
+      window.addEventListener('focus', function () {
+        if (document.getElementById('view-lois').classList.contains('active')) { loadNegotiations(); loadLOIs(); }
+        if (document.getElementById('view-contracts').classList.contains('active')) renderContractsView();
+      });
+
+      function toggleStartNewDD(e) {
+        if (e) e.stopPropagation();
+        var m = document.getElementById('sn-dd-menu');
+        if (!m) return;
+        m.classList.toggle('sn-dd-open');
+      }
+      function closeStartNewDD() {
+        var m = document.getElementById('sn-dd-menu');
+        if (m) m.classList.remove('sn-dd-open');
+      }
+      document.addEventListener('click', function(e) {
+        var dd = document.getElementById('sn-dd-menu');
+        if (dd && dd.classList.contains('sn-dd-open') && !e.target.closest('.sn-dd')) {
+          dd.classList.remove('sn-dd-open');
+        }
+      });
 
       function countUnread() {
         return document.querySelectorAll('.notif-item.unread, .notif-item.success, .notif-item.warning').length;
@@ -6262,6 +6448,9 @@ Content-Type: application/json
       // ── PRODUCT CATALOG ──────────────────────────────────────────────────────────
       var CATALOG=[{"ref":"REF-MET-001","sku":"STL-12","name":"Steel Rebar G60 12mm","sector":"Metals","emoji":"🔩","unit":"MT","price":2840,"origin":"UAE/Turkey","incoterm":"FOB","moq":10,"min_deal":50000,"certs":"ISO 3834, CE, ASTM A615","lead":7,"payment":"LC at sight","trader":"Emirates Steel"},{"ref":"REF-MET-001","sku":"STL-HRC","name":"Steel HR Coil SS400","sector":"Metals","emoji":"🔩","unit":"MT","price":3100,"origin":"UAE/Turkey","incoterm":"FOB","moq":20,"min_deal":80000,"certs":"ISO 3834, JIS G3101","lead":10,"payment":"LC at sight","trader":"Duferco Trading"},{"ref":"REF-MET-001","sku":"STL-CRC","name":"Steel CR Coil DC01","sector":"Metals","emoji":"🔩","unit":"MT","price":3400,"origin":"Germany","incoterm":"FOB","moq":20,"min_deal":80000,"certs":"EN 10130, ISO 3834","lead":12,"payment":"LC 30 days","trader":"Salzgitter AG"},{"ref":"REF-MET-002","sku":"ALU-6061","name":"Aluminum 6061-T6","sector":"Metals","emoji":"🔩","unit":"MT","price":9200,"origin":"UAE/China","incoterm":"FOB","moq":5,"min_deal":50000,"certs":"CE, REACH, AMS 2770","lead":8,"payment":"TT in advance","trader":"Emirates Global Aluminium"},{"ref":"REF-MET-002","sku":"ALU-PRF","name":"Aluminum Profiles","sector":"Metals","emoji":"🔩","unit":"m","price":38,"origin":"UAE/China","incoterm":"FOB","moq":500,"min_deal":20000,"certs":"CE, REACH","lead":8,"payment":"TT in advance","trader":"Gulf Extrusions"},{"ref":"REF-MET-003","sku":"CPR-ETP","name":"Copper ETP Rod 8mm","sector":"Metals","emoji":"🔩","unit":"MT","price":9800,"origin":"Chile/UAE","incoterm":"CIF","moq":5,"min_deal":50000,"certs":"ASTM B187, EN 13599","lead":10,"payment":"LC at sight","trader":"Codelco Trading"},{"ref":"REF-BLD-001","sku":"BLK-200","name":"Concrete Block 20cm","sector":"Building","emoji":"🏗️","unit":"Unit","price":4.8,"origin":"UAE","incoterm":"DAP","moq":1000,"min_deal":5000,"certs":"ISO 9001, ASTM C90","lead":3,"payment":"TT in advance","trader":"Gulf Precast"},{"ref":"REF-BLD-001","sku":"CNC-B25","name":"Ready-Mix Concrete B25","sector":"Building","emoji":"🏗️","unit":"m³","price":380,"origin":"UAE","incoterm":"DAP","moq":10,"min_deal":5000,"certs":"ISO 9001, BS 8500","lead":2,"payment":"TT in advance","trader":"CEMEX UAE"},{"ref":"REF-BLD-002","sku":"TLE-6060","name":"Porcelain Tile 60×60cm","sector":"Building","emoji":"🏗️","unit":"m²","price":62,"origin":"Italy/Spain","incoterm":"CIF","moq":100,"min_deal":5000,"certs":"ISO 9001, CE","lead":5,"payment":"LC 60 days","trader":"Marazzi Group"},{"ref":"REF-BLD-003","sku":"PVC-110","name":"PVC Pipe 110mm SDR34","sector":"Building","emoji":"🏗️","unit":"m","price":28,"origin":"UAE/Egypt","incoterm":"DAP","moq":500,"min_deal":5000,"certs":"CE, ISO 4422","lead":4,"payment":"TT in advance","trader":"Georg Fischer Piping"},{"ref":"REF-BLD-004","sku":"STL-STR","name":"Structural Steel H-Beam","sector":"Building","emoji":"🏗️","unit":"MT","price":3200,"origin":"Turkey","incoterm":"FOB","moq":10,"min_deal":50000,"certs":"EN 10034, ISO 9001","lead":8,"payment":"LC at sight","trader":"Asil Celik"},{"ref":"REF-ENE-001","sku":"DSL-B2","name":"Industrial Diesel B2","sector":"Energy","emoji":"⚡","unit":"Liter","price":4.92,"origin":"UAE","incoterm":"DAP","moq":5000,"min_deal":25000,"certs":"ISO 14001, EN 590","lead":2,"payment":"TT in advance","trader":"ENOC Trading"},{"ref":"REF-ENE-001","sku":"DSL-B5","name":"Biodiesel B5","sector":"Energy","emoji":"⚡","unit":"Liter","price":5.15,"origin":"UAE","incoterm":"DAP","moq":5000,"min_deal":25000,"certs":"ISO 14001, EN 14214","lead":3,"payment":"TT in advance","trader":"ENOC Trading"},{"ref":"REF-ENE-002","sku":"LFO-380","name":"Fuel Oil 380 CST","sector":"Energy","emoji":"⚡","unit":"MT","price":510,"origin":"UAE","incoterm":"FOB","moq":100,"min_deal":50000,"certs":"ISO 8217","lead":5,"payment":"CAD","trader":"Vitol Gulf"},{"ref":"REF-AGR-001","sku":"WHT-HRD","name":"Hard Wheat 14% Protein","sector":"Agriculture","emoji":"🌾","unit":"MT","price":1120,"origin":"Ukraine","incoterm":"CIF","moq":50,"min_deal":50000,"certs":"ISO 22000, HACCP","lead":14,"payment":"LC at sight","trader":"Nidera BV"},{"ref":"REF-AGR-001","sku":"WHT-SFT","name":"Soft Wheat 11% Protein","sector":"Agriculture","emoji":"🌾","unit":"MT","price":1050,"origin":"France","incoterm":"CIF","moq":50,"min_deal":50000,"certs":"ISO 22000, HACCP","lead":14,"payment":"LC 30 days","trader":"Louis Dreyfus MENA"},{"ref":"REF-AGR-001","sku":"CRN-YLW","name":"Yellow Corn No.2","sector":"Agriculture","emoji":"🌾","unit":"MT","price":980,"origin":"Brazil","incoterm":"CIF","moq":50,"min_deal":50000,"certs":"ISO 22000, HACCP, Non-GMO","lead":14,"payment":"LC at sight","trader":"Cargill MENA"},{"ref":"REF-AGR-002","sku":"SOY-GMO","name":"Soybean GMO 48% Protein","sector":"Agriculture","emoji":"🌾","unit":"MT","price":1200,"origin":"Brazil","incoterm":"CIF","moq":50,"min_deal":50000,"certs":"ISO 22000","lead":14,"payment":"LC at sight","trader":"Bunge Global"},{"ref":"REF-AGR-003","sku":"SGR-RAW","name":"Raw Cane Sugar VHP","sector":"Agriculture","emoji":"🌾","unit":"MT","price":560,"origin":"Brazil","incoterm":"CIF","moq":50,"min_deal":25000,"certs":"ISO 22000, Bonsucro","lead":21,"payment":"LC 60 days","trader":"Sucden Middle East"},{"ref":"REF-CHM-001","sku":"H2SO4","name":"Sulfuric Acid 98%","sector":"Chemicals","emoji":"🧪","unit":"MT","price":580,"origin":"UAE/Germany","incoterm":"DAP","moq":5,"min_deal":5000,"certs":"REACH, ISO 9001","lead":7,"payment":"LC at sight","trader":"BASF Trading"},{"ref":"REF-CHM-001","sku":"NaOH","name":"Caustic Soda 50% Liquid","sector":"Chemicals","emoji":"🧪","unit":"MT","price":420,"origin":"UAE/Germany","incoterm":"DAP","moq":5,"min_deal":5000,"certs":"REACH, ISO 9001","lead":7,"payment":"LC at sight","trader":"Dow Chemical MENA"},{"ref":"REF-CHM-002","sku":"UREA","name":"Urea 46% Prilled","sector":"Chemicals","emoji":"🧪","unit":"MT","price":450,"origin":"UAE/Egypt","incoterm":"FOB","moq":50,"min_deal":25000,"certs":"ISO 9001","lead":14,"payment":"LC at sight","trader":"Fertiglobe"},{"ref":"REF-CHM-002","sku":"DAP-F","name":"DAP Fertilizer 18-46-0","sector":"Chemicals","emoji":"🧪","unit":"MT","price":620,"origin":"Morocco/UAE","incoterm":"FOB","moq":50,"min_deal":25000,"certs":"ISO 9001","lead":14,"payment":"LC 30 days","trader":"OCP Morocco"},{"ref":"REF-CHM-003","sku":"PP-GRN","name":"PP Granules Homopolymer","sector":"Chemicals","emoji":"🧪","unit":"MT","price":1280,"origin":"UAE/Saudi","incoterm":"CIF","moq":20,"min_deal":20000,"certs":"REACH, RoHS","lead":10,"payment":"TT in advance","trader":"Borouge"},{"ref":"REF-CHM-003","sku":"HDPE-BLW","name":"HDPE Blow Grade","sector":"Chemicals","emoji":"🧪","unit":"MT","price":1220,"origin":"UAE/Saudi","incoterm":"CIF","moq":20,"min_deal":20000,"certs":"REACH, RoHS","lead":10,"payment":"TT in advance","trader":"SABIC Polymers"},{"ref":"REF-CMT-001","sku":"CLK-KSA","name":"Clinker FOB Yanbu","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":62,"origin":"Saudi Arabia","incoterm":"FOB","moq":5000,"min_deal":310000,"certs":"ISO 9001, ASTM C150","lead":6,"payment":"LC at sight","trader":"Saudi Cement Co"},{"ref":"REF-CMT-001","sku":"CLK-EGY","name":"Clinker FOB Alexandria","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":56,"origin":"Egypt","incoterm":"FOB","moq":3000,"min_deal":168000,"certs":"ISO 9001, ASTM C150","lead":3,"payment":"LC at sight","trader":"Sinai Cement Co"},{"ref":"REF-CMT-001","sku":"CLK-ALG","name":"Clinker FOB Oran","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":54,"origin":"Algeria","incoterm":"FOB","moq":5000,"min_deal":270000,"certs":"ISO 9001","lead":12,"payment":"LC at sight","trader":"Ciment de l'Ouest"},{"ref":"REF-CMT-002","sku":"OPC-KSA","name":"OPC Cement 42.5 Saudi","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":77,"origin":"Saudi Arabia","incoterm":"FOB","moq":3000,"min_deal":231000,"certs":"EN 197-1, ASTM C150","lead":5,"payment":"LC at sight","trader":"Yanbu Cement Co"},{"ref":"REF-CMT-002","sku":"OPC-EGY","name":"OPC Cement 42.5 Egypt","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":70,"origin":"Egypt","incoterm":"FOB","moq":3000,"min_deal":210000,"certs":"EN 197-1, ASTM C150","lead":3,"payment":"LC at sight","trader":"Suez Cement"},{"ref":"REF-CMT-003","sku":"WHT-KSA","name":"White Cement 52.5 Saudi","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":155,"origin":"Saudi Arabia","incoterm":"FOB","moq":500,"min_deal":77500,"certs":"EN 197-1, ASTM C150","lead":4,"payment":"TT in advance","trader":"White Cement Co KSA"},{"ref":"REF-CMT-003","sku":"WHT-EGY","name":"White Cement 52.5 Egypt","sector":"Cement & Clinker","emoji":"🏛️","unit":"MT","price":140,"origin":"Egypt","incoterm":"FOB","moq":500,"min_deal":70000,"certs":"EN 197-1","lead":5,"payment":"TT in advance","trader":"Egyptian White Cement"},{"ref":"REF-BLD-010","sku":"RBR-TUR","name":"Steel Rebar G60 Turkey","sector":"Building Materials","emoji":"🧱","unit":"MT","price":558,"origin":"Turkey","incoterm":"FOB","moq":500,"min_deal":279000,"certs":"ASTM A615, EN 10080","lead":5,"payment":"LC at sight","trader":"Habas Sinai"},{"ref":"REF-BLD-011","sku":"WRD-EGY","name":"Wire Rod SAE1008 Egypt","sector":"Building Materials","emoji":"🧱","unit":"MT","price":542,"origin":"Egypt","incoterm":"FOB","moq":500,"min_deal":271000,"certs":"ASTM A510","lead":7,"payment":"LC at sight","trader":"Ezz Steel"},{"ref":"REF-BLD-012","sku":"ALU-BLT","name":"Aluminum Billet 6061 UAE","sector":"Building Materials","emoji":"🧱","unit":"MT","price":2450,"origin":"UAE","incoterm":"FOB","moq":20,"min_deal":49000,"certs":"EN AW-6061, ASTM B221","lead":6,"payment":"TT advance / LC","trader":"Emirates Global Aluminium"},{"ref":"REF-BLD-013","sku":"GYP-EGY","name":"Gypsum Board 12.5mm Egypt","sector":"Building Materials","emoji":"🧱","unit":"m²","price":3.6,"origin":"Egypt","incoterm":"FOB","moq":20000,"min_deal":72000,"certs":"ASTM C36, EN 520","lead":3,"payment":"LC at sight","trader":"Sinai White Gold"},{"ref":"REF-BLD-014","sku":"GYP-KSA","name":"Gypsum Board 12.5mm Saudi","sector":"Building Materials","emoji":"🧱","unit":"m²","price":3.8,"origin":"Saudi Arabia","incoterm":"FOB","moq":20000,"min_deal":76000,"certs":"ASTM C36, SASO","lead":4,"payment":"LC at sight","trader":"Saudi Gypsum Co"},{"ref":"REF-BLD-015","sku":"GLS-KSA","name":"Float Glass 6mm Saudi","sector":"Building Materials","emoji":"🧱","unit":"m²","price":10.5,"origin":"Saudi Arabia","incoterm":"CIF","moq":500,"min_deal":5250,"certs":"EN 572, ASTM C1036","lead":5,"payment":"LC 30 days","trader":"Saudi Flat Glass"},{"ref":"REF-BLD-016","sku":"TLE-TUR","name":"Porcelain Tile 60×60 Turkey","sector":"Building Materials","emoji":"🧱","unit":"m²","price":7.5,"origin":"Turkey","incoterm":"FOB","moq":500,"min_deal":3750,"certs":"ISO 13006, CE","lead":6,"payment":"LC 60 days","trader":"Kale Seramik"},{"ref":"REF-BLD-017","sku":"MRB-EGY","name":"Marble Slab Galala Cream","sector":"Building Materials","emoji":"🧱","unit":"m²","price":26,"origin":"Egypt","incoterm":"FOB","moq":50,"min_deal":1300,"certs":"ISO 1341","lead":7,"payment":"TT advance / LC","trader":"Egyptian Marble Group"},{"ref":"REF-BLD-018","sku":"MRB-TUR","name":"Marble Slab Afyon White","sector":"Building Materials","emoji":"🧱","unit":"m²","price":42,"origin":"Turkey","incoterm":"FOB","moq":50,"min_deal":2100,"certs":"ISO 1341","lead":8,"payment":"TT advance / LC","trader":"Marmara Marble"},{"ref":"REF-BLD-019","sku":"RCW-TUR","name":"Rock Wool Insulation 100kg/m³","sector":"Building Materials","emoji":"🧱","unit":"MT","price":360,"origin":"Turkey","incoterm":"FOB","moq":20,"min_deal":7200,"certs":"EN 13162, A1 non-combustible","lead":7,"payment":"LC at sight","trader":"Rockwool Turkey"},{"ref":"REF-BLD-020","sku":"AGG-ALG","name":"Aggregates Limestone 3/4\" Algeria","sector":"Building Materials","emoji":"🧱","unit":"MT","price":9,"origin":"Algeria","incoterm":"FOB","moq":5000,"min_deal":45000,"certs":"ASTM C33","lead":4,"payment":"TT in advance","trader":"Granit Maghreb"},{"ref":"REF-BLD-021","sku":"HDPE-PP","name":"HDPE Pipe PE100 SDR11 Saudi","sector":"Building Materials","emoji":"🧱","unit":"m","price":2.8,"origin":"Saudi Arabia","incoterm":"FOB","moq":2000,"min_deal":5600,"certs":"ISO 4427, ASTM F714","lead":7,"payment":"LC at sight","trader":"Saudi Pipe Systems"},{"ref":"REF-BLD-022","sku":"CBL-UAE","name":"Copper Electrical Cable 16mm²","sector":"Building Materials","emoji":"🧱","unit":"m","price":5.8,"origin":"UAE","incoterm":"DAP","moq":500,"min_deal":2900,"certs":"IEC 60228, BS 7671","lead":6,"payment":"LC at sight","trader":"Ducab UAE"},{"ref":"REF-MIN-001","sku":"PHO-KSA","name":"Phosphate Rock BPL 68% Saudi","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":95,"origin":"Saudi Arabia","incoterm":"FOB","moq":10000,"min_deal":950000,"certs":"ISO 9001, HACCP","lead":10,"payment":"LC at sight","trader":"Ma'aden Phosphate"},{"ref":"REF-MIN-001","sku":"PHO-EGY","name":"Phosphate Rock BPL 70% Egypt","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":90,"origin":"Egypt","incoterm":"FOB","moq":10000,"min_deal":900000,"certs":"ISO 9001","lead":12,"payment":"LC at sight","trader":"Abu Zaabal Fertilizers"},{"ref":"REF-MIN-002","sku":"IRN-ALG","name":"Iron Ore Fe 58% Algeria","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":98,"origin":"Algeria","incoterm":"FOB","moq":25000,"min_deal":2450000,"certs":"ISO 9001, EN","lead":10,"payment":"LC at sight","trader":"Ferphos Group"},{"ref":"REF-MIN-003","sku":"CPR-KSA","name":"Copper Concentrate 25% Saudi","sector":"Critical Minerals","emoji":"⛏️","unit":"DMT","price":1350,"origin":"Saudi Arabia","incoterm":"CIF","moq":5000,"min_deal":6750000,"certs":"ASTM, LME spec","lead":12,"payment":"LC at sight","trader":"Ma'aden Copper"},{"ref":"REF-MIN-004","sku":"SIL-EGY","name":"Silica Sand SiO₂ 99.5% Egypt","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":58,"origin":"Egypt","incoterm":"FOB","moq":5000,"min_deal":290000,"certs":"REACH, ISO 9001","lead":10,"payment":"LC at sight","trader":"Egyptian Silica"},{"ref":"REF-MIN-005","sku":"KAO-EGY","name":"Kaolin Brightness 85 ISO Egypt","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":72,"origin":"Egypt","incoterm":"FOB","moq":1000,"min_deal":72000,"certs":"REACH, EN","lead":9,"payment":"LC at sight","trader":"El Nasr Mining"},{"ref":"REF-MIN-006","sku":"GLD-KSA","name":"Gold Doré 75% Au Saudi","sector":"Critical Minerals","emoji":"⛏️","unit":"oz","price":3200,"origin":"Saudi Arabia","incoterm":"TT advance","moq":100,"min_deal":320000,"certs":"LBMA, ISO 9001","lead":3,"payment":"TT in advance","trader":"Saudi Arabian Mining"},{"ref":"REF-MIN-007","sku":"ZNC-ALG","name":"Zinc Concentrate 50% Algeria","sector":"Critical Minerals","emoji":"⛏️","unit":"DMT","price":1650,"origin":"Algeria","incoterm":"CIF","moq":5000,"min_deal":8250000,"certs":"LME spec","lead":12,"payment":"LC at sight","trader":"Zinc Maghreb"},{"ref":"REF-MIN-008","sku":"BAR-ALG","name":"Barite API Grade SG 4.2 Algeria","sector":"Critical Minerals","emoji":"⛏️","unit":"MT","price":155,"origin":"Algeria","incoterm":"FOB","moq":2000,"min_deal":310000,"certs":"API 13A","lead":16,"payment":"LC at sight","trader":"Enof Algeria"},{"ref":"REF-PET-001","sku":"PP-HOM","name":"PP Homopolymer Raffia Grade","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":920,"origin":"Saudi Arabia","incoterm":"FOB","moq":500,"min_deal":460000,"certs":"REACH, RoHS","lead":7,"payment":"LC at sight / TT","trader":"SABIC Polymers"},{"ref":"REF-PET-002","sku":"PP-COP","name":"PP Copolymer Impact Grade","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":970,"origin":"UAE","incoterm":"FOB","moq":100,"min_deal":97000,"certs":"REACH","lead":8,"payment":"LC at sight","trader":"Borouge"},{"ref":"REF-PET-003","sku":"HDPE-PG","name":"HDPE Pipe Grade PE100","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":920,"origin":"Saudi Arabia","incoterm":"FOB","moq":500,"min_deal":460000,"certs":"REACH, ISO 4427","lead":8,"payment":"LC at sight","trader":"SABIC Polymers"},{"ref":"REF-PET-004","sku":"HDPE-BL","name":"HDPE Blow Grade","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":900,"origin":"Saudi Arabia","incoterm":"FOB","moq":500,"min_deal":450000,"certs":"REACH, RoHS","lead":7,"payment":"LC at sight","trader":"SABIC Polymers"},{"ref":"REF-PET-005","sku":"LDPE-FG","name":"LDPE Film Grade Qatar","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":900,"origin":"Qatar","incoterm":"FOB","moq":200,"min_deal":180000,"certs":"REACH","lead":9,"payment":"LC at sight","trader":"Qapco"},{"ref":"REF-PET-006","sku":"LLDPE4","name":"LLDPE C4 Butene Borouge","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":920,"origin":"UAE","incoterm":"FOB","moq":200,"min_deal":184000,"certs":"REACH","lead":12,"payment":"LC at sight","trader":"Borouge"},{"ref":"REF-PET-007","sku":"PVCR-K","name":"PVC Resin S-PVC K67","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":820,"origin":"Saudi Arabia","incoterm":"FOB","moq":200,"min_deal":164000,"certs":"REACH, ISO","lead":8,"payment":"LC at sight","trader":"SABIC Polymers"},{"ref":"REF-PET-010","sku":"UREA-F","name":"Urea 46% Granular Fertiglobe","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":408,"origin":"UAE","incoterm":"FOB","moq":5000,"min_deal":2040000,"certs":"ISO 9001","lead":9,"payment":"LC at sight","trader":"Fertiglobe"},{"ref":"REF-PET-011","sku":"AMN-FG","name":"Anhydrous Ammonia Fertiglobe","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":345,"origin":"UAE","incoterm":"FOB","moq":5000,"min_deal":1725000,"certs":"ISO 9001","lead":8,"payment":"LC at sight","trader":"Fertiglobe"},{"ref":"REF-PET-012","sku":"DAP-MA","name":"DAP Fertilizer 18-46-0 Ma'aden","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":610,"origin":"Saudi Arabia","incoterm":"FOB","moq":5000,"min_deal":3050000,"certs":"ISO 9001","lead":9,"payment":"LC at sight / 30d","trader":"Ma'aden Fertilizers"},{"ref":"REF-PET-020","sku":"MET-KS","name":"Methanol IMPCA Grade Saudi","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":310,"origin":"Saudi Arabia","incoterm":"FOB","moq":5000,"min_deal":1550000,"certs":"REACH, IMPCA spec","lead":14,"payment":"LC at sight","trader":"SAFCO"},{"ref":"REF-PET-021","sku":"MEG-SA","name":"MEG Fiber Grade ≥99.9%","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":520,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":520000,"certs":"REACH","lead":10,"payment":"LC at sight","trader":"Ibn Rushd (Sipchem)"},{"ref":"REF-PET-022","sku":"BNZ-SA","name":"Benzene Petrochemical ≥99.9%","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":730,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":730000,"certs":"REACH, ADR","lead":12,"payment":"LC at sight","trader":"Petro Rabigh"},{"ref":"REF-PET-023","sku":"PX-SAU","name":"Paraxylene Fiber Grade ≥99.7%","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":870,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":870000,"certs":"REACH","lead":14,"payment":"LC at sight","trader":"Petro Rabigh"},{"ref":"REF-PET-024","sku":"CBN33","name":"Carbon Black N330 HAF Grade","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":870,"origin":"Saudi Arabia","incoterm":"FOB","moq":100,"min_deal":87000,"certs":"ASTM D1765","lead":8,"payment":"LC at sight","trader":"Saudi Carbon"},{"ref":"REF-PET-030","sku":"BIT-60","name":"Bitumen 60/70 Pen Saudi","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":355,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":355000,"certs":"ASTM D946, EN 12591","lead":6,"payment":"LC at sight","trader":"Aramco Trading"},{"ref":"REF-PET-031","sku":"BIT-UA","name":"Bitumen 80/100 Pen UAE","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":365,"origin":"UAE","incoterm":"FOB","moq":1000,"min_deal":365000,"certs":"EN 12591","lead":14,"payment":"LC at sight","trader":"ENOC"},{"ref":"REF-PET-032","sku":"BOG2","name":"Base Oil Group II SN150","sector":"Petrochemicals","emoji":"🛢️","unit":"MT","price":720,"origin":"Saudi Arabia","incoterm":"FOB","moq":1000,"min_deal":720000,"certs":"API Group II","lead":10,"payment":"LC 30 days","trader":"Neste MENA"}];
 
+      // ── PER-TRADER CONTACT DIRECTORY ───────────────────────────────────────────
+      var TRADER_CONTACTS = {"Emirates Steel":{"email":"trade@emiratessteel.com","whatsapp":"971264673577"},"Duferco Trading":{"email":"trade@dufercotrading.com","whatsapp":"971150327502"},"Salzgitter AG":{"email":"trade@salzgitterag.com","whatsapp":"49216758729"},"Emirates Global Aluminium":{"email":"trade@emiratesglobalaluminium.com","whatsapp":"971383777226"},"Gulf Extrusions":{"email":"trade@gulfextrusions.com","whatsapp":"971964153074"},"Codelco Trading":{"email":"trade@codelcotrading.com","whatsapp":"56151268724"},"Gulf Precast":{"email":"trade@gulfprecast.com","whatsapp":"971264089476"},"CEMEX UAE":{"email":"trade@cemexuae.com","whatsapp":"971830489143"},"Marazzi Group":{"email":"trade@marazzigroup.com","whatsapp":"971262509494"},"Georg Fischer Piping":{"email":"trade@georgfischerpiping.com","whatsapp":"971134444937"},"Asil Celik":{"email":"trade@asilcelik.com","whatsapp":"90336139158"},"ENOC Trading":{"email":"trade@enoctrading.com","whatsapp":"971323606735"},"Vitol Gulf":{"email":"trade@vitolgulf.com","whatsapp":"971263047892"},"Nidera BV":{"email":"trade@niderabv.com","whatsapp":"380619767241"},"Louis Dreyfus MENA":{"email":"trade@louisdreyfusmena.com","whatsapp":"33302098945"},"Cargill MENA":{"email":"trade@cargillmena.com","whatsapp":"55223253800"},"Bunge Global":{"email":"trade@bungeglobal.com","whatsapp":"55321006113"},"Sucden Middle East":{"email":"trade@sucdenmiddleeast.com","whatsapp":"55412767944"},"BASF Trading":{"email":"trade@basftrading.com","whatsapp":"971282090027"},"Dow Chemical MENA":{"email":"trade@dowchemicalmena.com","whatsapp":"971126878016"},"Fertiglobe":{"email":"trade@fertiglobe.com","whatsapp":"971105228742"},"OCP Morocco":{"email":"trade@ocpmorocco.com","whatsapp":"212376597633"},"Borouge":{"email":"trade@borouge.com","whatsapp":"971173224048"},"SABIC Polymers":{"email":"trade@sabicpolymers.com","whatsapp":"971362914811"},"Saudi Cement Co":{"email":"trade@saudicementco.com","whatsapp":"966147342316"},"Sinai Cement Co":{"email":"trade@sinaicementco.com","whatsapp":"20339049434"},"Ciment de l'Ouest":{"email":"trade@cimentdelouest.com","whatsapp":"213363562882"},"Yanbu Cement Co":{"email":"trade@yanbucementco.com","whatsapp":"966363587520"},"Suez Cement":{"email":"trade@suezcement.com","whatsapp":"20149612571"},"White Cement Co KSA":{"email":"trade@whitecementcoksa.com","whatsapp":"966355129694"},"Egyptian White Cement":{"email":"trade@egyptianwhitecement.com","whatsapp":"20141653007"},"Habas Sinai":{"email":"trade@habassinai.com","whatsapp":"90237327740"},"Ezz Steel":{"email":"trade@ezzsteel.com","whatsapp":"20390676481"},"Sinai White Gold":{"email":"trade@sinaiwhitegold.com","whatsapp":"20297572338"},"Saudi Gypsum Co":{"email":"trade@saudigypsumco.com","whatsapp":"966210461620"},"Saudi Flat Glass":{"email":"trade@saudiflatglass.com","whatsapp":"966108605188"},"Kale Seramik":{"email":"trade@kaleseramik.com","whatsapp":"90256323805"},"Egyptian Marble Group":{"email":"trade@egyptianmarblegroup.com","whatsapp":"20420863068"},"Marmara Marble":{"email":"trade@marmaramarble.com","whatsapp":"90976154460"},"Rockwool Turkey":{"email":"trade@rockwoolturkey.com","whatsapp":"90263329944"},"Granit Maghreb":{"email":"trade@granitmaghreb.com","whatsapp":"213297546172"},"Saudi Pipe Systems":{"email":"trade@saudipipesystems.com","whatsapp":"966324876103"},"Ducab UAE":{"email":"trade@ducabuae.com","whatsapp":"971422961537"},"Ma'aden Phosphate":{"email":"trade@maadenphosphate.com","whatsapp":"966422498246"},"Abu Zaabal Fertilizers":{"email":"trade@abuzaabalfertilizers.com","whatsapp":"20379082017"},"Ferphos Group":{"email":"trade@ferphosgroup.com","whatsapp":"213301101127"},"Ma'aden Copper":{"email":"trade@maadencopper.com","whatsapp":"966231428530"},"Egyptian Silica":{"email":"trade@egyptiansilica.com","whatsapp":"20370526658"},"El Nasr Mining":{"email":"trade@elnasrmining.com","whatsapp":"20172705254"},"Saudi Arabian Mining":{"email":"trade@saudiarabianmining.com","whatsapp":"966326812345"},"Zinc Maghreb":{"email":"trade@zincmaghreb.com","whatsapp":"213276922060"},"Enof Algeria":{"email":"trade@enofalgeria.com","whatsapp":"213889440833"},"Qapco":{"email":"trade@qapco.com","whatsapp":"974778057407"},"Ma'aden Fertilizers":{"email":"trade@maadenfertilizers.com","whatsapp":"966166317816"},"SAFCO":{"email":"trade@safco.com","whatsapp":"966786580847"},"Ibn Rushd (Sipchem)":{"email":"trade@ibnrushdsipchem.com","whatsapp":"966180071979"},"Petro Rabigh":{"email":"trade@petrorabigh.com","whatsapp":"966375074651"},"Saudi Carbon":{"email":"trade@saudicarbon.com","whatsapp":"966697311649"},"Aramco Trading":{"email":"trade@aramcotrading.com","whatsapp":"966324083437"},"ENOC":{"email":"trade@enoc.com","whatsapp":"971213305321"},"Neste MENA":{"email":"trade@nestemena.com","whatsapp":"966104193859"}};
+
       var catalogSector = 'all';
 
       function renderCatalog() {
@@ -6295,7 +6484,8 @@ Content-Type: application/json
                  : p.min_deal >= 1000 ? '$' + Math.round(p.min_deal/1000) + 'K'
                  : p.min_deal ? '$' + p.min_deal : '—';
           var sc = sColors[p.sector] || 'rgba(82,82,110,.08)';
-          var n = JSON.stringify(p.name), r = JSON.stringify(p.ref), t = JSON.stringify(p.trader || '');
+          var attrSafe = function(v) { return JSON.stringify(v).replace(/'/g, '&#39;'); };
+          var n = attrSafe(p.name), r = attrSafe(p.ref), t = attrSafe(p.trader || ''), s = attrSafe(p.sector || '');
           return '<tr><td style="min-width:200px"><div style="font-size:13px;font-weight:600;color:var(--white)">' + p.emoji + ' ' + p.name + '</div><div style="font-size:11px;color:var(--indigo);margin-top:2px">' + p.ref + ' · ' + p.sku + '</div></td>' +
             '<td><span style="font-size:11px;font-weight:600;padding:2px 6px;border-radius:2px;background:' + sc + ';border:1px solid rgba(91,95,239,.15);color:var(--text);white-space:nowrap">' + p.sector + '</span></td>' +
             '<td style="font-weight:600;color:var(--white);white-space:nowrap">' + pr + '<span style="color:var(--muted);font-size:11px">/' + p.unit + '</span></td>' +
@@ -6307,9 +6497,7 @@ Content-Type: application/json
             '<td style="color:var(--muted);font-size:11px;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + (p.payment || '—') + '</td>' +
             '<td style="min-width:130px;font-size:12px;color:var(--text);white-space:nowrap">' + (p.trader || '—') + '</td>' +
             '<td style="min-width:90px"><div style="display:flex;flex-direction:column;gap:3px">' +
-            '<button class="btn btn-xs btn-p" onclick=\'catalogRFQ(' + n + ',' + r + ')\'>🤖 Negotiate</button>' +
-            '<button class="btn btn-xs btn-g" onclick=\'catalogLOI(' + n + ',' + r + ')\'>📄 LOI</button>' +
-            '<button class="btn btn-xs" style="background:var(--gold-dim);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick=\'catalogPO(' + n + ',' + r + ')\'>🧾 PO</button>' +
+            '<button class="btn btn-xs btn-p" onclick=\'catalogAITools(' + n + ',' + r + ',' + s + ',' + t + ')\'>⚡ AI Tools</button>' +
             '<button class="btn btn-xs" style="background:rgba(45,212,191,.07);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick=\'catalogContact(' + n + ',' + t + ')\'>📞 Contact</button>' +
             '</div></td></tr>';
         }).join('');
@@ -6342,29 +6530,39 @@ Content-Type: application/json
         window.open(url, '_blank');
       }
 
-      function catalogContact(name, trader) {
-        var existing = document.getElementById('cat-contact-modal');
+      function catalogModalShell(id, title, sub, name) {
+        var existing = document.getElementById(id);
         if (existing) existing.remove();
         var m = document.createElement('div');
-        m.id = 'cat-contact-modal';
+        m.id = id;
         m.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999;display:flex;align-items:center;justify-content:center';
         var inner = document.createElement('div');
-        inner.style.cssText = 'background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:24px 28px;width:400px;max-width:92vw';
+        inner.id = id + '-inner';
+        inner.style.cssText = 'background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:24px 28px;width:420px;max-width:92vw;max-height:84vh;overflow-y:auto';
         inner.innerHTML =
           '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px">' +
-          '<div><div style="font-size:15px;font-weight:700;color:var(--white)">📞 Contact Trader</div>' +
-          '<div style="font-size:13px;color:var(--teal);margin-top:4px">' + (trader || '—') + '</div>' +
-          '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + name + '</div></div>' +
-          '<button id="cat-close-btn" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:0">×</button></div>' +
-          '<div style="display:flex;flex-direction:column;gap:8px">' +
+          '<div><div style="font-size:15px;font-weight:700;color:var(--white)">' + title + '</div>' +
+          (sub ? '<div style="font-size:13px;color:var(--teal);margin-top:4px">' + sub + '</div>' : '') +
+          (name ? '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + name + '</div>' : '') +
+          '</div><button class="cat-modal-close" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:0">×</button></div>' +
+          '<div id="' + id + '-body" style="display:flex;flex-direction:column;gap:8px"></div>';
+        m.appendChild(inner);
+        document.body.appendChild(m);
+        inner.querySelector('.cat-modal-close').onclick = function(){ m.remove(); };
+        m.onclick = function(e){ if (e.target === m) m.remove(); };
+        return { modal: m, body: document.getElementById(id + '-body') };
+      }
+
+      function catalogAITools(name, ref, sector, trader) {
+        var ui = catalogModalShell('cat-tools-modal', '⚡ AI Tools', trader, name);
+        var body = ui.body, m = ui.modal;
+        body.innerHTML =
           '<button class="btn btn-p" style="justify-content:center" id="cat-neg-btn">🤖 Start AI Negotiation</button>' +
           '<button class="btn btn-g" style="justify-content:center" id="cat-loi-btn">📄 Generate LOI</button>' +
           '<button class="btn" style="justify-content:center;border-color:rgba(232,169,74,.3);color:var(--gold)" id="cat-po-btn">🧾 Create PO</button>' +
-          '</div>';
-        m.appendChild(inner);
-        document.body.appendChild(m);
-        document.getElementById('cat-close-btn').onclick = function(){m.remove();};
-        m.onclick = function(e){if(e.target===m)m.remove();};
+          '<button class="btn" style="justify-content:center;border-color:rgba(45,212,191,.3);color:var(--teal)" id="cat-price-btn">📊 Check Market Price</button>' +
+          '<button class="btn" style="justify-content:center;border-color:rgba(91,95,239,.3);color:var(--violet)" id="cat-find-btn">🔍 Find More Suppliers</button>' +
+          '<div id="cat-tools-result" style="margin-top:4px"></div>';
         document.getElementById('cat-neg-btn').onclick = function(){
           try{localStorage.setItem('sloiMandate',JSON.stringify({product:name,sku:'',productLabel:name,trader:trader||''}));}catch(e){}
           window.open('negotiation-agent.html','_blank'); m.remove();
@@ -6375,6 +6573,65 @@ Content-Type: application/json
         document.getElementById('cat-po-btn').onclick = function(){
           window.open('po-generator.html?product='+encodeURIComponent(name),'_blank'); m.remove();
         };
+        document.getElementById('cat-price-btn').onclick = function(){
+          renderPriceCheck(ref, sector);
+        };
+        document.getElementById('cat-find-btn').onclick = function(){
+          renderFindSuppliers(ref, sector, trader);
+        };
+      }
+
+      function renderPriceCheck(ref, sector) {
+        var box = document.getElementById('cat-tools-result');
+        if (!box) return;
+        var peers = CATALOG.filter(function(p){ return p.sector === sector && typeof p.price === 'number'; });
+        var current = CATALOG.find(function(p){ return p.ref === ref; }) || peers[0];
+        var prices = peers.map(function(p){ return p.price; });
+        var min = Math.min.apply(null, prices), max = Math.max.apply(null, prices);
+        var avg = prices.reduce(function(a,b){return a+b;},0) / prices.length;
+        var pr = function(v){ return '$' + v.toLocaleString(undefined,{maximumFractionDigits:2}); };
+        box.innerHTML =
+          '<div class="mcp-highlight" style="margin-top:6px">' +
+          '📊 <strong>' + sector + ' — market snapshot</strong><br/>' +
+          'This listing: ' + pr(current ? current.price : min) + '/' + (current ? current.unit : '') + '<br/>' +
+          'Sector range: ' + pr(min) + ' – ' + pr(max) + ' (' + peers.length + ' suppliers)<br/>' +
+          'Sector average: ' + pr(avg) +
+          '</div>';
+      }
+
+      function renderFindSuppliers(ref, sector, trader) {
+        var box = document.getElementById('cat-tools-result');
+        if (!box) return;
+        var alts = CATALOG.filter(function(p){ return p.sector === sector && p.ref !== ref && p.trader !== trader; })
+          .sort(function(a,b){ return (typeof a.price==='number'?a.price:0) - (typeof b.price==='number'?b.price:0); })
+          .slice(0, 5);
+        if (!alts.length) {
+          box.innerHTML = '<div class="mcp-highlight" style="margin-top:6px">🔍 No other suppliers found in this sector yet.</div>';
+          return;
+        }
+        box.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--violet);margin-top:6px;margin-bottom:2px">Other suppliers in ' + sector + '</div>' +
+          alts.map(function(p){
+            var pr = typeof p.price === 'number' ? '$' + p.price.toLocaleString() : String(p.price);
+            return '<div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:8px 10px;font-size:12px">' +
+              '<div style="color:var(--white);font-weight:600">' + p.emoji + ' ' + p.name + '</div>' +
+              '<div style="color:var(--muted);margin-top:2px">' + (p.trader||'—') + ' · ' + pr + '/' + p.unit + ' · ' + (p.lead||'—') + 'd lead</div></div>';
+          }).join('');
+      }
+
+      function catalogContact(name, trader) {
+        var c = TRADER_CONTACTS[trader] || {};
+        var subject = encodeURIComponent('Inquiry: ' + name);
+        var bodyText = encodeURIComponent('Hi ' + (trader || '') + ',\n\nI\'m interested in ' + name + ' via SLOI AI. Could you share current availability and terms?\n\nThanks');
+        var ui = catalogModalShell('cat-contact-modal', '📞 Contact Trader', trader || '—', name);
+        var body = ui.body, m = ui.modal;
+        if (!c.email && !c.whatsapp) {
+          body.innerHTML = '<div class="mcp-highlight">No direct contact on file for this trader yet — use AI Tools to start a negotiation instead.</div>';
+          return;
+        }
+        body.innerHTML =
+          (c.email ? '<a class="btn btn-g" style="justify-content:center;text-decoration:none" href="mailto:' + c.email + '?subject=' + subject + '&body=' + bodyText + '">📧 Email — ' + c.email + '</a>' : '') +
+          (c.whatsapp ? '<a class="btn" style="justify-content:center;text-decoration:none;border-color:rgba(34,197,94,.35);color:var(--green)" href="https://wa.me/' + c.whatsapp + '?text=' + bodyText + '" target="_blank" rel="noopener">📲 WhatsApp — +' + c.whatsapp + '</a>' : '');
+        body.querySelectorAll('a').forEach(function(a){ a.onclick = function(){ setTimeout(function(){ m.remove(); }, 50); }; });
       }
 
       // ── LINKEDIN IMPORT ──────────────────────────────────────────────────────────
@@ -6668,6 +6925,107 @@ Content-Type: application/json
         callAI(prompt, resp, 600);
       }
 
+      // ── DOCUMENTATION INSTRUCTION AGENT ("THE GUARD") ───────────────────────
+      function agSDIPopulate() {
+        var sel = document.getElementById('ag-sdi-load');
+        if (!sel || sel.options.length > 1) return;
+        try {
+          var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
+          pos.forEach(function(p) {
+            var o = document.createElement('option');
+            o.value = p.po_num;
+            o.textContent = 'PO: ' + p.po_num + ' · ' + (p.product || '');
+            sel.appendChild(o);
+          });
+        } catch(e) {}
+      }
+
+      function agSDILoad() {
+        var sel = document.getElementById('ag-sdi-load');
+        var ctx = document.getElementById('ag-sdi-context');
+        if (!sel || !ctx || !sel.value) return;
+        try {
+          var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
+          var p = pos.find(function(x){ return x.po_num === sel.value; });
+          if (p) ctx.value = 'PO: ' + p.po_num + '\nProduct: ' + (p.product||'—') + '\nBuyer: ' + (p.buyer||'—') + '\nSupplier: ' + (p.supplier||'—') + '\nIncoterm: ' + (p.incoterm||'—') + '\nTotal: $' + (p.total ? Math.round(p.total).toLocaleString() : '—') + '\nPayment Terms: ' + (p.payment_terms||p.payment||'—');
+        } catch(e) {}
+      }
+
+      function runAgentSDI() {
+        var resp = document.getElementById('ag-sdi-resp');
+        var hs = (document.getElementById('ag-sdi-hs')||{}).value || '';
+        var origin = (document.getElementById('ag-sdi-origin')||{}).value || '';
+        var dest = (document.getElementById('ag-sdi-dest')||{}).value || '';
+        var ctx = (document.getElementById('ag-sdi-context')||{}).value || '';
+        if (!hs.trim() && !origin.trim() && !dest.trim() && !ctx.trim()) {
+          resp.textContent = 'Enter at least an HS code, country of origin, or destination — or load a saved PO.';
+          resp.classList.add('visible');
+          return;
+        }
+        var prompt = 'You are "The Guard" — a Documentation Instruction Agent for commodity trade. Your job is to analyze a Purchase Order and produce exact Shipping & Documentation Instructions (SDI) for the vendor, leaving zero room for mistakes before goods leave origin.\n\n'
+          + 'Steps:\n1. Cross-reference the HS code against the destination country\'s customs and import regulations.\n2. Identify specific local import requirements for that destination (e.g. national standards institution approval, ministry of health permits, certificates of conformity, certificate of origin, phytosanitary certificates if applicable).\n3. Produce a clean, numbered Shipping & Documentation Instructions (SDI) document for the vendor, covering: required documents and exact data fields needed on each, labeling/marking requirements, certificates needed before shipment, and any destination-specific compliance steps.\n\n'
+          + 'HS Code: ' + (hs || '—') + '\nCountry of Origin: ' + (origin || '—') + '\nDestination Port / Country: ' + (dest || '—') + '\n' + (ctx ? '\nPO Details:\n' + ctx : '');
+        callAI(prompt, resp, 700);
+      }
+
+      // ── LC (LETTER OF CREDIT) AI DRAFTING ───────────────────────────────────
+      function agLCPopulate() {
+        var sel = document.getElementById('ag-lc-load');
+        if (!sel || sel.options.length > 1) return;
+        try {
+          var lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]');
+          lois.forEach(function(l) {
+            var o = document.createElement('option');
+            o.value = 'loi:' + l.ref;
+            o.textContent = 'LOI: ' + l.ref + ' · ' + (l.product || '');
+            sel.appendChild(o);
+          });
+        } catch(e) {}
+        try {
+          var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
+          pos.forEach(function(p) {
+            var o = document.createElement('option');
+            o.value = 'po:' + p.po_num;
+            o.textContent = 'PO: ' + p.po_num + ' · ' + (p.product || '');
+            sel.appendChild(o);
+          });
+        } catch(e) {}
+      }
+
+      function agLCLoad() {
+        var sel = document.getElementById('ag-lc-load');
+        var ctx = document.getElementById('ag-lc-context');
+        if (!sel || !ctx || !sel.value) return;
+        var parts = sel.value.split(':');
+        var type = parts[0], ref = parts.slice(1).join(':');
+        if (type === 'loi') {
+          try {
+            var lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]');
+            var l = lois.find(function(x){ return x.ref === ref; });
+            if (l) ctx.value = 'LOI: ' + l.ref + '\nProduct: ' + (l.product||'—') + '\nBuyer: ' + (l.buyer||'—') + '\nSeller: ' + (l.seller||'—') + '\nPrice: $' + (l.price||'—') + '/' + (l.unit||'MT') + '\nQty: ' + (l.qty||'—') + ' ' + (l.unit||'MT') + '\nIncoterm: ' + (l.incoterm||'—') + '\nPayment: ' + (l.payment||'—') + '\nTotal: $' + (l.total_value||'—');
+          } catch(e) {}
+        } else if (type === 'po') {
+          try {
+            var pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]');
+            var p = pos.find(function(x){ return x.po_num === ref; });
+            if (p) ctx.value = 'PO: ' + p.po_num + '\nProduct: ' + (p.product||'—') + '\nBuyer: ' + (p.buyer||'—') + '\nSupplier: ' + (p.supplier||'—') + '\nIncoterm: ' + (p.incoterm||'—') + '\nTotal: $' + (p.total ? Math.round(p.total).toLocaleString() : '—') + '\nPayment Terms: ' + (p.payment_terms||p.payment||'—') + (p.loi_ref ? '\nLOI Reference: ' + p.loi_ref : '');
+          } catch(e) {}
+        }
+      }
+
+      function runAgentLC() {
+        var resp = document.getElementById('ag-lc-resp');
+        var ctx = document.getElementById('ag-lc-context');
+        var context = ctx ? ctx.value.trim() : '';
+        if (!context) {
+          resp.textContent = 'Paste deal context or load from saved LOI / PO first.';
+          resp.classList.add('visible');
+          return;
+        }
+        var prompt = 'You are a trade finance specialist drafting a Letter of Credit application under UCP 600. Based on the deal details below, draft the key LC application fields: Applicant, Beneficiary, LC Amount & Currency, Available by (sight/usance), Latest Shipment Date, Partial Shipments (allowed/not allowed), Transhipment (allowed/not allowed), and Required Documents (commercial invoice, packing list, bill of lading, certificate of origin, inspection certificate as relevant). Output as a clean labelled list, ready for a bank LC application form.\n\nDeal:\n' + context;
+        callAI(prompt, resp, 650);
+      }
+
       // ── LOI / RFQ AI ADVISOR ─────────────────────────────────────────────────
       var _loiAIStore = {};
 
@@ -6724,6 +7082,28 @@ Content-Type: application/json
       }
 
       // ── PROCUREMENT PROFILES ─────────────────────────────────────────────────
+      var STANDARDS = {
+        us: { label: '🇺🇸 American', specs: 'ASTM', units: 'Imperial', currency: 'USD' },
+        eu: { label: '🇪🇺 European', specs: 'EN / ISO', units: 'Metric', currency: 'EUR' }
+      };
+
+      function setStandard(s) {
+        if (!STANDARDS[s]) return;
+        localStorage.setItem('sloi_standard', s);
+        ['us', 'eu'].forEach(function(k) {
+          var btn = document.getElementById('std-btn-' + k);
+          if (btn) btn.classList.toggle('active', k === s);
+        });
+        var v = STANDARDS[s];
+        document.querySelectorAll('.prof-standard-val').forEach(function(el) {
+          el.textContent = v.specs + ' · ' + v.units + ' · ' + v.currency;
+        });
+      }
+      (function() {
+        var saved = localStorage.getItem('sloi_standard') || 'eu';
+        setStandard(saved);
+      })();
+
       var PROC_PROFILES = {
         construction: {
           label: '🏗 Construction',
@@ -6789,13 +7169,13 @@ Content-Type: application/json
         if (sf) sf.className = type === 'factory'      ? 'btn btn-xs btn-p' : 'btn btn-xs';
 
         // Pre-fill mandate inputs
-        var ipMax  = document.querySelector('#mandate-body .inp[value="2,900"]');
+        var ipMax  = document.getElementById('mandate-in-maxprice');
         if (ipMax)  ipMax.value  = p.maxPrice;
-        var ipQty  = document.querySelector('#mandate-body .inp[value="100"]');
+        var ipQty  = document.getElementById('mandate-in-qty');
         if (ipQty)  ipQty.value  = p.qty;
-        var ipAuto = document.querySelector('#mandate-body .inp[value="50"]');
+        var ipAuto = document.getElementById('mandate-in-autoloi');
         if (ipAuto) ipAuto.value = p.autoLOI;
-        var ipMax2 = document.querySelector('#mandate-body .inp[value="3"]');
+        var ipMax2 = document.getElementById('mandate-in-maxdeals');
         if (ipMax2) ipMax2.value = p.maxDeals;
 
         // Open the mandate body if it's collapsed
@@ -6811,6 +7191,62 @@ Content-Type: application/json
       (function() {
         var saved = localStorage.getItem('sloi_profile');
         if (saved && PROC_PROFILES[saved]) setTimeout(function(){ activateProfile(saved); }, 200);
+      })();
+
+      // ── AGENT MANDATE — incoming from agent-mandate.html wizard ────────────────
+      function applyMandateFromWizard() {
+        var raw = localStorage.getItem('sloiMandate');
+        if (!raw) return;
+        var data;
+        try { data = JSON.parse(raw); } catch (e) { return; }
+        if (!data) return;
+
+        var product = data.productLabel || data.product || '';
+        var qty = data.qty ? (data.qty + ' ' + (data.unit || 'MT')) : '';
+        var budget = data.budget || '';
+        var country = data.country || '';
+
+        var prodWrap = document.getElementById('mandate-products-wrap');
+        if (prodWrap && product) {
+          prodWrap.innerHTML =
+            '<span style="background:rgba(91,95,239,.15);border:1px solid rgba(91,95,239,.3);color:var(--violet);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">' + product + ' &times;</span>' +
+            '<span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>';
+        }
+        var regWrap = document.getElementById('mandate-regions-wrap');
+        if (regWrap && country) {
+          regWrap.innerHTML =
+            '<span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:3px;font-size:13px;cursor:pointer">' + country + ' &times;</span>' +
+            '<span style="color:var(--muted);font-size:13px;padding:2px 4px;cursor:pointer">+ Add</span>';
+        }
+        var ipMax = document.getElementById('mandate-in-maxprice');
+        if (ipMax && budget) ipMax.value = budget;
+        var ipQty = document.getElementById('mandate-in-qty');
+        if (ipQty && data.qty) ipQty.value = data.qty;
+
+        var sum = document.getElementById('mandate-summary-line');
+        if (sum) {
+          var parts = [];
+          if (product) parts.push(product);
+          if (qty) parts.push(qty);
+          if (budget) parts.push('Target $' + budget + '/unit');
+          if (country) parts.push(country);
+          if (parts.length) sum.textContent = parts.join('  ·  ');
+        }
+        var badge = document.getElementById('mandate-from-wizard-badge');
+        if (badge) badge.style.display = 'block';
+
+        var body = document.getElementById('mandate-body');
+        if (body && (body.style.display === 'none' || body.style.display === '')) toggleMandate();
+        var mhdr = document.querySelector('.mandate-hdr');
+        if (mhdr) setTimeout(function(){ mhdr.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 150);
+      }
+
+      // Land on the requested view + apply an incoming mandate on page load
+      (function() {
+        var params = new URLSearchParams(window.location.search);
+        var view = params.get('view');
+        if (view) setTimeout(function() { show(view, document.getElementById('tb-' + view)); }, 0);
+        if (params.get('from') === 'mandate') setTimeout(applyMandateFromWizard, 220);
       })();
 
       // ── TOOL PICKER ──────────────────────────────────────────────────────────
