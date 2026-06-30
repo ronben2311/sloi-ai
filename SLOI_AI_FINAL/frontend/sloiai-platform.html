@@ -1239,11 +1239,11 @@
                   🤖 Start New <span style="font-size:10px;margin-left:2px">▼</span>
                 </button>
                 <div class="sn-dd-menu" id="sn-dd-menu">
-                  <button class="sn-dd-item" onclick="window.open('negotiation-agent.html','_blank');closeStartNewDD()">
+                  <button class="sn-dd-item" onclick="window.location.href='negotiation-agent.html'">
                     <span class="sn-dd-icon">🤖</span>
                     <span><span class="sn-dd-title">Commodities Engine</span><span class="sn-dd-sub">Multi-round AI negotiation with suppliers</span></span>
                   </button>
-                  <button class="sn-dd-item" onclick="window.open('loi-generator.html','_blank');closeStartNewDD()">
+                  <button class="sn-dd-item" onclick="window.location.href='loi-generator.html'">
                     <span class="sn-dd-icon">📄</span>
                     <span><span class="sn-dd-title">LOI / PO Generator</span><span class="sn-dd-sub">Draft a Letter of Intent or Purchase Order</span></span>
                   </button>
@@ -1251,31 +1251,25 @@
               </div>
             </div>
             <div class="action-cards">
-              <div class="action-card" onclick="window.open('negotiation-agent.html','_blank')" style="border-color:rgba(91,95,239,.3)">
+              <div class="action-card" onclick="window.location.href='negotiation-agent.html'" style="border-color:rgba(91,95,239,.3)">
                 <div class="ac-icon">🤖</div>
                 <div class="ac-title">Commodities Engine</div>
                 <div class="ac-desc">Automated multi-round negotiation with pre-qualified suppliers.</div>
                 <div class="ac-cost bv" style="border:1px solid rgba(91,95,239,.25);margin-top:8px">● 2 active rounds</div>
               </div>
-              <div class="action-card" onclick="window.open('compliance.html','_blank')" style="border-color:rgba(239,68,68,.2)">
+              <div class="action-card" onclick="window.location.href='compliance.html'" style="border-color:rgba(239,68,68,.2)">
                 <div class="ac-icon">🛡️</div>
                 <div class="ac-title">ComplianceBot</div>
                 <div class="ac-desc">Screens counterparties, flags sanctions & documentation gaps.</div>
                 <div class="ac-cost bg" style="border:1px solid rgba(34,197,94,.25);margin-top:8px">● Always on · 1 pending</div>
               </div>
-              <div class="action-card" onclick="window.open('loi-generator.html','_blank')" style="border-color:rgba(34,197,94,.25)">
+              <div class="action-card" onclick="window.location.href='loi-generator.html'" style="border-color:rgba(34,197,94,.25)">
                 <div class="ac-icon">📄</div>
-                <div class="ac-title">LOI Generator</div>
-                <div class="ac-desc">Instant LOI draft from agreed terms — blockchain verified.</div>
-                <div class="ac-cost bg" style="border:1px solid rgba(34,197,94,.25);margin-top:8px">● Always on · 3 this week</div>
+                <div class="ac-title">LOI/PO Generator</div>
+                <div class="ac-desc">Instant LOI draft from agreed terms, then issue the PO straight from the signed LOI.</div>
+                <div class="ac-cost bg" style="border:1px solid rgba(34,197,94,.25);margin-top:8px">● Always on · 3 LOIs · 2 POs this week</div>
               </div>
-              <div class="action-card" onclick="openPOModal()" style="border-color:rgba(232,169,74,.25)">
-                <div class="ac-icon">🧾</div>
-                <div class="ac-title">PO Generator</div>
-                <div class="ac-desc">Generates purchase orders directly from signed LOIs.</div>
-                <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.25);margin-top:8px">● Always on · 2 POs sent</div>
-              </div>
-              <div class="action-card" onclick="window.open('logistics-customs-agent.html','_blank')" style="border-color:rgba(45,212,191,.25)">
+              <div class="action-card" onclick="window.location.href='logistics-customs-agent.html'" style="border-color:rgba(45,212,191,.25)">
                 <div class="ac-icon">🚢</div>
                 <div class="ac-title">Logistics &amp; Customs</div>
                 <div class="ac-desc">Shipment tracking, route optimisation, HS codes, duty calc &amp; import permits.</div>
@@ -1286,6 +1280,12 @@
                 <div class="ac-title">Contract Advisor</div>
                 <div class="ac-desc">Analyzes LOIs &amp; POs — risk checks, clause drafting, LOI comparison &amp; document completeness.</div>
                 <div class="ac-cost bv" style="border:1px solid rgba(91,95,239,.25);margin-top:8px">● Always on · AI-powered · loads from your LOIs &amp; POs</div>
+              </div>
+              <div class="action-card" onclick="show('agents',document.getElementById('tb-agents'));setTimeout(function(){var r=document.getElementById('row-payment');if(r&&!r.classList.contains('open'))r.click();r&&r.scrollIntoView({behavior:'smooth',block:'center'});},80)" style="border-color:rgba(232,169,74,.25)">
+                <div class="ac-icon">💳</div>
+                <div class="ac-title">Payment AI</div>
+                <div class="ac-desc">Tracks LCs &amp; payments, drafts SWIFT/MT103 &amp; LC application terms.</div>
+                <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.25);margin-top:8px">● Running · 3 LCs open · 1 overdue</div>
               </div>
             </div>
             <div style="text-align:right;margin-top:-6px;margin-bottom:10px">
@@ -1419,7 +1419,7 @@
                   </div>
                   <button
                     class="btn btn-sm btn-p"
-                    onclick="window.open('negotiation-agent.html', '_blank')"
+                    onclick="window.location.href='negotiation-agent.html'"
                   >
                     View live →
                   </button>
@@ -1462,7 +1462,7 @@
                   </div>
                   <button
                     class="btn btn-sm"
-                    onclick="window.open('negotiation-agent.html', '_blank')"
+                    onclick="window.location.href='negotiation-agent.html'"
                   >
                     View live →
                   </button>
@@ -1485,7 +1485,7 @@
                     <button
                       class="btn btn-xs btn-g"
                       style="margin-top: 6px"
-                      onclick="window.open('loi-generator.html', '_blank')"
+                      onclick="window.location.href='loi-generator.html'"
                     >
                       📄 Download
                     </button>
@@ -1926,8 +1926,7 @@
                 <input class="inp" id="prod-search" placeholder="Search name, origin, cert..." oninput="renderCatalog()" style="width:240px;font-size:13px;padding:6px 10px"/>
                 <div style="display:flex;flex-direction:column;gap:4px">
                   <button class="btn btn-sm btn-p" onclick="window.open('negotiation-agent.html','_blank')">🤖 Negotiate →</button>
-                  <button class="btn btn-sm btn-g" onclick="window.open('loi-generator.html','_blank')">📄 LOI Generator</button>
-                  <button class="btn btn-sm" style="background:var(--gold-dim);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="openPOModal()">🧾 PO Generator</button>
+                  <button class="btn btn-sm btn-g" onclick="window.open('loi-generator.html','_blank')">📄 LOI/PO Generator</button>
                 </div>
               </div>
             </div>
@@ -2778,7 +2777,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
             <!-- HEADER -->
             <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">// Powered by Commodities Engine</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-              <div style="font-size:14px;color:var(--muted)">7 supporting agents &nbsp;&middot;&nbsp; <span style="color:var(--green)">6 running</span> &nbsp;&middot;&nbsp; <span style="color:var(--gold)">1 paused</span></div>
+              <div style="font-size:14px;color:var(--muted)">6 supporting agents &nbsp;&middot;&nbsp; <span style="color:var(--green)">5 running</span> &nbsp;&middot;&nbsp; <span style="color:var(--gold)">1 paused</span></div>
               <button class="btn btn-xs btn-p" onclick="alert('Running all agents…')">&#9654; Run all now</button>
             </div>
 
@@ -2844,46 +2843,33 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
               <div>
                 <div class="agent-row" id="row-loi" onclick="toggleAgent('loi')">
                   <div class="ar-icon" style="background:rgba(34,197,94,.1)">&#128196;</div>
-                  <div class="ar-name">LOI Generator</div>
+                  <div class="ar-name">LOI/PO Generator</div>
                   <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
-                  <div class="ar-metric">3 LOIs this week &middot; <span style="color:var(--green)">$148K signed</span> &middot; avg ~12 sec</div>
+                  <div class="ar-metric">3 LOIs &middot; <span style="color:var(--green)">$148K signed</span> &middot; 2 POs &middot; <span style="color:var(--green)">$102K covered</span></div>
                   <div class="ar-actions">
-                    <button class="btn btn-xs btn-g" onclick="event.stopPropagation();window.open('loi-generator.html','_blank')">&#128196; Generate</button>
+                    <button class="btn btn-xs btn-g" onclick="event.stopPropagation();window.open('loi-generator.html','_blank')">&#128196; Generate LOI</button>
+                    <button class="btn btn-xs" style="background:var(--gold-dim);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="event.stopPropagation();openPOModal()">&#129534; Generate PO</button>
                     <button class="btn btn-xs" onclick="event.stopPropagation();show('lois',document.getElementById('tb-lois'))">View all</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
                 <div class="agent-detail" id="detail-loi">
+                  <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Letters of Intent</div>
                   <div class="ad-log">
                     <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>SL-LOI-20260603 &middot; Hard Wheat &middot; $56K &middot; Signed</span></div>
                     <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>SL-LOI-20260602 &middot; Aluminum &middot; $46K &middot; Signed</span></div>
                     <div class="ad-log-row"><span style="color:var(--muted)">&#8987;</span><span>SL-LOI-20260604 &middot; Steel Rebar &middot; pending signature</span></div>
                   </div>
-                </div>
-              </div>
-
-              <!-- PO GENERATOR AGENT -->
-              <div>
-                <div class="agent-row" id="row-po" onclick="toggleAgent('po')">
-                  <div class="ar-icon" style="background:rgba(232,169,74,.12)">&#129534;</div>
-                  <div class="ar-name">PO Generator</div>
-                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
-                  <div class="ar-metric">2 POs sent this week &middot; <span style="color:var(--green)">$102K covered</span> &middot; reads from signed LOI</div>
-                  <div class="ar-actions">
-                    <button class="btn btn-xs btn-g" onclick="event.stopPropagation();openPOModal()">&#129534; Generate PO</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();show('lois',document.getElementById('tb-lois'))">View LOIs</button>
-                  </div>
-                  <span class="ar-chev">&#9660;</span>
-                </div>
-                <div class="agent-detail" id="detail-po">
+                  <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin:10px 0 6px">Purchase Orders</div>
                   <div class="ad-log">
                     <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>PO-2026-001 &middot; Hard Wheat &middot; $56K &middot; Sent to Atlas Grain Trading</span></div>
                     <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>PO-2026-002 &middot; Aluminum &middot; $46K &middot; Sent to Gulf Steel Industries</span></div>
                     <div class="ad-log-row"><span style="color:var(--muted)">&#8987;</span><span>PO-2026-003 &middot; Steel Rebar &middot; LOI pending signature — PO on hold</span></div>
                   </div>
                   <div class="ad-btns">
+                    <button class="btn btn-xs btn-g" onclick="window.open('loi-generator.html','_blank')">&#128196; Generate LOI</button>
                     <button class="btn btn-xs btn-p" onclick="openPOModal()">&#129534; Generate PO from LOI &rarr;</button>
-                    <button class="btn btn-xs" onclick="alert('Exporting PO history…')">&#8595; Export</button>
+                    <button class="btn btn-xs" onclick="alert('Exporting LOI &amp; PO history…')">&#8595; Export</button>
                   </div>
                 </div>
               </div>
@@ -3664,28 +3650,19 @@ Content-Type: application/json
                   <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="alert('Running compliance check…')">Run check</button>
                 </div>
 
-                <!-- LOI Generator -->
+                <!-- LOI/PO Generator -->
                 <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
                     <div style="width:26px;height:26px;border-radius:5px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128196;</div>
                     <div style="flex:1;min-width:0">
-                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LOI Generator</div>
-                      <div style="font-size:11px;color:var(--muted);margin-top:2px">3 LOIs this week</div>
+                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LOI/PO Generator</div>
+                      <div style="font-size:11px;color:var(--muted);margin-top:2px">3 LOIs &middot; 2 POs this week</div>
                     </div>
                   </div>
-                  <button class="btn btn-xs btn-g" style="width:100%;justify-content:center" onclick="window.open('loi-generator.html','_blank')">&#128196; Generate LOI</button>
-                </div>
-
-                <!-- PO Generator -->
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#129534;</div>
-                    <div style="flex:1;min-width:0">
-                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">PO Generator</div>
-                      <div style="font-size:11px;color:var(--muted);margin-top:2px">2 POs sent this week</div>
-                    </div>
+                  <div style="display:flex;gap:6px">
+                    <button class="btn btn-xs btn-g" style="flex:1;justify-content:center" onclick="window.open('loi-generator.html','_blank')">&#128196; LOI</button>
+                    <button class="btn btn-xs" style="flex:1;justify-content:center;background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="openPOModal()">&#129534; PO</button>
                   </div>
-                  <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="openPOModal()">&#129534; Generate PO</button>
                 </div>
 
                 <!-- LogisticsAI -->
@@ -3794,25 +3771,15 @@ Content-Type: application/json
                   Quick Actions<span style="flex:1;height:1px;background:var(--border);display:block"></span>
                 </div>
 
-                <!-- PO Generator -->
-                <div style="background:var(--surface);border:1px solid rgba(232,169,74,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
-                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🧾</div>
-                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">PO Generator</div><div style="font-size:11px;color:var(--muted)">Issue from signed LOI</div></div>
-                  </div>
-                  <div style="padding:8px">
-                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="window.open('po-generator.html','_blank')">🧾 New PO</button>
-                  </div>
-                </div>
-
-                <!-- LOI Generator -->
+                <!-- LOI/PO Generator -->
                 <div style="background:var(--surface);border:1px solid rgba(91,95,239,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
                   <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
                     <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📋</div>
-                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">LOI Generator</div><div style="font-size:11px;color:var(--muted)">Draft a Letter of Intent</div></div>
+                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">LOI/PO Generator</div><div style="font-size:11px;color:var(--muted)">Draft an LOI, then issue the PO</div></div>
                   </div>
-                  <div style="padding:8px">
-                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="window.open('loi-generator.html','_blank')">📋 Generate LOI</button>
+                  <div style="padding:8px;display:flex;gap:6px">
+                    <button class="btn btn-xs" style="flex:1;justify-content:center;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="window.open('loi-generator.html','_blank')">📋 LOI</button>
+                    <button class="btn btn-xs" style="flex:1;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="window.open('po-generator.html','_blank')">🧾 PO</button>
                   </div>
                 </div>
 
