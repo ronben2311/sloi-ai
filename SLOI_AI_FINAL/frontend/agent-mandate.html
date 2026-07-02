@@ -336,24 +336,12 @@ select.inp option{background:var(--surface2);color:var(--white)}
     </div>
     <div class="sn-spacer"></div>
 
-    <div class="sn-row" onclick="tryGoStep(4)">
-      <div class="sn-col">
-        <div class="sn-dot" id="dot-4">4</div>
-        <div class="sn-line" id="line-4"></div>
-      </div>
-      <div class="sn-info">
-        <div class="sn-name" id="lname-4">Automation level</div>
-        <div class="sn-desc">Choose your agent's autonomy</div>
-      </div>
-    </div>
-    <div class="sn-spacer"></div>
-
     <div class="sn-row">
       <div class="sn-col">
-        <div class="sn-dot" id="dot-5">✓</div>
+        <div class="sn-dot" id="dot-4">✓</div>
       </div>
       <div class="sn-info">
-        <div class="sn-name" id="lname-5">Review &amp; activate</div>
+        <div class="sn-name" id="lname-4">Review &amp; activate</div>
         <div class="sn-desc">Confirm your mandate · activate the agent</div>
       </div>
     </div>
@@ -815,34 +803,8 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </a>
     </div>
 
-    <!-- ── STEP 4 — HOW TO PROCEED ── -->
+    <!-- ── STEP 4 — REVIEW ── -->
     <div class="step" id="step-4">
-      <div class="q-eyebrow">Step 4</div>
-      <div class="q-title">Set your agent's<br/><em>automation level.</em></div>
-      <div class="q-sub">Choose how much autonomy your agent has.</div>
-
-      <div class="ptype-grid" id="proceed-grid" style="margin-bottom:28px">
-        <div class="pt sel" id="pt-proceed-negotiate" onclick="selectProceed(this,'negotiate')">
-          <div class="pt-check">✓ selected</div>
-          <div class="pt-icon">🤖</div>
-          <div class="pt-name">AI Negotiation Engine</div>
-          <div class="pt-desc">Automated multi-round negotiation — you approve every offer before commitment</div>
-          <div style="margin-top:8px"><span style="background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:3px;letter-spacing:.05em">RECOMMENDED</span></div>
-        </div>
-        <div class="pt" id="pt-proceed-loi" onclick="selectProceed(this,'loi')">
-          <div class="pt-check">✓ selected</div>
-          <div class="pt-icon">📄</div>
-          <div class="pt-name">LOI Generator</div>
-          <div class="pt-desc">Jump straight to the LOI Generator tab — use if you already have a supplier and agreed price</div>
-        </div>
-      </div>
-
-      <button class="btn-p" onclick="goStep(5)">Continue →</button>
-      <button class="btn-s" onclick="goStep(3)">← Back</button>
-    </div>
-
-    <!-- ── STEP 5 — REVIEW ── -->
-    <div class="step" id="step-5">
       <div class="q-eyebrow">Review</div>
       <div class="q-title">Mandate<br/><em>summary.</em></div>
       <div class="q-sub">Review your mandate below. Once activated, your agent engages pre-qualified suppliers and delivers a documented price offer within 24 hours.</div>
@@ -859,14 +821,6 @@ select.inp option{background:var(--surface2);color:var(--white)}
         <div class="sum-cell">
           <div class="sum-lbl">Target budget</div>
           <div class="sum-val" id="sum-budget">—</div>
-        </div>
-        <div class="sum-cell">
-          <div class="sum-lbl">Automation level</div>
-          <div class="sum-val" id="sum-ptype">—</div>
-        </div>
-        <div class="sum-cell" id="sum-annual-cell" style="display:none">
-          <div class="sum-lbl">Annual volume</div>
-          <div class="sum-val" id="sum-annual" style="color:var(--teal)">—</div>
         </div>
         <div class="sum-cell">
           <div class="sum-lbl">Delivery country</div>
@@ -898,7 +852,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </div>
 
       <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Activate my mandate →</button>
-      <button class="btn-s" onclick="goStep(4)">← Back</button>
+      <button class="btn-s" onclick="goStep(3)">← Back</button>
       <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--muted)">Already have an account? <a href="login.html" style="color:var(--violet);text-decoration:none;font-weight:600">Sign in →</a></div>
     </div>
 
@@ -1147,8 +1101,8 @@ function goStep(n) {
   currentStep = n;
   if (n > maxReached) maxReached = n;
 
-  if (n === 5) populateSummary();
-  var el = document.getElementById(n <= 5 ? 'step-' + n : 'step-success');
+  if (n === 4) populateSummary();
+  var el = document.getElementById(n <= 4 ? 'step-' + n : 'step-success');
   if (el) el.classList.add('active');
 
   updateNav(n);
@@ -1157,18 +1111,18 @@ function goStep(n) {
 }
 
 function updateNav(n) {
-  var pcts = {0:0,1:20,2:40,3:60,4:80,5:90};
-  var lbls = {0:'Start mandate',1:'Step 1 of 4',2:'Step 2 of 4',3:'Step 3 of 4',4:'Step 4 of 4',5:'Review mandate'};
+  var pcts = {0:0,1:25,2:50,3:75,4:90};
+  var lbls = {0:'Start mandate',1:'Step 1 of 3',2:'Step 2 of 3',3:'Step 3 of 3',4:'Review mandate'};
   document.getElementById('progress').style.width = (pcts[n] !== undefined ? pcts[n] : 100) + '%';
   document.getElementById('prog-lbl').textContent = lbls[n] || 'Mandate active';
 
-  for (var i = 1; i <= 5; i++) {
+  for (var i = 1; i <= 4; i++) {
     var dot   = document.getElementById('dot-' + i);
     var lname = document.getElementById('lname-' + i);
     var line  = document.getElementById('line-' + i);
     if (!dot) continue;
     if (n === 0) {
-      dot.className = 'sn-dot'; dot.textContent = i < 5 ? i : '✓';
+      dot.className = 'sn-dot'; dot.textContent = i < 4 ? i : '✓';
       if (lname) lname.className = 'sn-name';
       if (line)  line.className  = 'sn-line';
     } else if (i < n) {
@@ -1176,11 +1130,11 @@ function updateNav(n) {
       if (lname) lname.className = 'sn-name done';
       if (line)  line.className  = 'sn-line done';
     } else if (i === n) {
-      dot.className = 'sn-dot active'; dot.textContent = i < 5 ? i : '✓';
+      dot.className = 'sn-dot active'; dot.textContent = i < 4 ? i : '✓';
       if (lname) lname.className = 'sn-name active';
       if (line)  line.className  = 'sn-line';
     } else {
-      dot.className = 'sn-dot'; dot.textContent = i < 5 ? i : '✓';
+      dot.className = 'sn-dot'; dot.textContent = i < 4 ? i : '✓';
       if (lname) lname.className = 'sn-name';
       if (line)  line.className  = 'sn-line';
     }
@@ -1357,7 +1311,6 @@ function populateSummary() {
   document.getElementById('sum-product').textContent = prodLabel + skuLabel + (detail ? ' — ' + detail : '');
   document.getElementById('sum-qty').textContent     = state.qty + ' ' + state.unit;
   document.getElementById('sum-budget').textContent  = state.budget;
-  document.getElementById('sum-ptype').textContent   = state.purchaseType;
   document.getElementById('sum-country').textContent = state.country;
   if (state.origin) {
     document.getElementById('sum-origin').textContent = state.origin;
@@ -1368,13 +1321,6 @@ function populateSummary() {
   document.getElementById('sum-wa').textContent      = state.wa || '—';
   var waCell = document.getElementById('sum-wa-cell');
   if (waCell) waCell.style.display = state.wa ? 'block' : 'none';
-  var annualCell = document.getElementById('sum-annual-cell');
-  if (state.annualVolume) {
-    document.getElementById('sum-annual').textContent = state.annualVolume;
-    annualCell.style.display = 'block';
-  } else {
-    annualCell.style.display = 'none';
-  }
 }
 
 function selectProceed(el, choice) {

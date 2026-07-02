@@ -1007,6 +1007,15 @@
         color: var(--muted);
       }
 
+      /* ── TABS: SPA / TRADE CONTRACT / LC APP ── */
+      #panel-spa, #panel-tc, #panel-lca {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+      }
+      #panel-spa.active, #panel-tc.active, #panel-lca.active { display: flex; }
+
       /* ── TABS 4+5: OUTREACH + COMPLIANCE ── */
       #panel-outreach {
         display: none;
@@ -1279,7 +1288,7 @@
         .neg-left { top: 48px; height: calc(100% - 48px); }
         .right-body-padded { padding-bottom: 56px; }
         /* Give content area bottom padding for the nav bar */
-        .neg-right, #panel-lead, #panel-price, #panel-outreach, #panel-compliance { padding-bottom: 56px; }
+        .neg-right, #panel-lead, #panel-price, #panel-spa, #panel-tc, #panel-lca, #panel-outreach, #panel-compliance { padding-bottom: 56px; }
         .chat-area { padding-bottom: 68px; }
       }
     </style>
@@ -1315,6 +1324,10 @@
           <div class="tab-dot td-gold"></div>
           🤖 Negotiation<span class="tab-count" id="tc-neg">2 live</span>
         </button>
+        <button class="tab" onclick="switchTab('nda', this)">
+          <div class="tab-dot" style="background:var(--blue)"></div>
+          🔏 NDA<span class="tab-count" id="tc-nda">ready</span>
+        </button>
         <button class="tab" onclick="switchTab('lead', this)">
           <div class="tab-dot td-green"></div>
           📄 LOI Generator<span class="tab-count" id="tc-lead">ready</span>
@@ -1322,6 +1335,18 @@
         <button class="tab" onclick="switchTab('price', this)">
           <div class="tab-dot td-green"></div>
           📋 PO Generator<span class="tab-count" id="tc-price">ready</span>
+        </button>
+        <button class="tab" onclick="switchTab('spa', this)">
+          <div class="tab-dot" style="background:var(--gold)"></div>
+          📜 SPA<span class="tab-count">GAFTA/ICC</span>
+        </button>
+        <button class="tab" onclick="switchTab('tc', this)">
+          <div class="tab-dot" style="background:var(--violet)"></div>
+          ⚖️ Trade Contract<span class="tab-count">Incoterms</span>
+        </button>
+        <button class="tab" onclick="switchTab('lca', this)">
+          <div class="tab-dot" style="background:var(--teal)"></div>
+          💳 LC Application<span class="tab-count">UCP 600</span>
         </button>
         <button class="tab" onclick="switchTab('outreach', this)">
           <div class="tab-dot td-green"></div>
@@ -1721,6 +1746,97 @@
       </div>
 
       <!-- ════════════════════════════════════
+     PANEL: NDA GENERATOR
+════════════════════════════════════ -->
+      <div id="panel-nda" class="panels">
+        <div class="lead-top">
+          <div class="live-badge" style="background:rgba(59,130,246,.08);border-color:rgba(59,130,246,.25);color:#60a5fa">
+            <div class="live-dot" style="background:#3b82f6;animation:none"></div>
+            Ready
+          </div>
+          <div style="font-size:13px;color:var(--white);font-weight:600">🔏 NDA Generator</div>
+          <div style="font-size:12px;color:var(--muted)">Draft a Mutual or One-Way NDA before sharing deal terms</div>
+        </div>
+
+        <div style="max-width:760px;margin:0 auto;padding:24px 20px">
+
+          <!-- Deal context banner (auto-filled from mandate) -->
+          <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.2);border-radius:7px;padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;gap:12px">
+            <span style="font-size:20px">🔏</span>
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--white)">Non-Disclosure Agreement</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">Parties and product will be pulled from the active negotiation mandate. Edit any field before generating.</div>
+            </div>
+            <button class="btn btn-xs" style="margin-left:auto;flex-shrink:0;border-color:rgba(59,130,246,.4);color:#60a5fa" onclick="ndaPrefill()">↺ Pull from deal</button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+            <div>
+              <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px">NDA Type</label>
+              <select class="inp" id="nda-neg-type" style="font-size:13px">
+                <option value="mutual">Mutual (both parties)</option>
+                <option value="oneway">One-way (supplier → buyer)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px">Duration</label>
+              <select class="inp" id="nda-neg-duration" style="font-size:13px">
+                <option>1 year</option>
+                <option>2 years</option>
+                <option selected>3 years</option>
+                <option>5 years</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px">Disclosing Party</label>
+              <input class="inp" id="nda-neg-disclosing" placeholder="Supplier name" style="font-size:13px"/>
+            </div>
+            <div>
+              <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px">Receiving Party</label>
+              <input class="inp" id="nda-neg-receiving" placeholder="Buyer name" style="font-size:13px"/>
+            </div>
+            <div>
+              <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px">Governing Law</label>
+              <select class="inp" id="nda-neg-law" style="font-size:13px">
+                <option>UAE (DIFC)</option>
+                <option>England &amp; Wales</option>
+                <option>Germany</option>
+                <option>Singapore</option>
+                <option>Saudi Arabia</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px">Subject / Product</label>
+              <input class="inp" id="nda-neg-subject" placeholder="e.g. Portland Cement 42.5N" style="font-size:13px"/>
+            </div>
+          </div>
+
+          <div style="margin-bottom:14px">
+            <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px">Confidentiality scope</label>
+            <div style="display:flex;gap:12px;flex-wrap:wrap">
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="nda-neg-price" checked style="accent-color:#3b82f6"> Pricing &amp; offers</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="nda-neg-supplier" checked style="accent-color:#3b82f6"> Supplier identities</label>
+              <label style="display:flex;align-items:center;gap=5px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="nda-neg-route" checked style="accent-color:#3b82f6"> Trade routes &amp; logistics</label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;color:var(--text);cursor:pointer"><input type="checkbox" id="nda-neg-financial" style="accent-color:#3b82f6"> Financial terms</label>
+            </div>
+          </div>
+
+          <div style="margin-bottom:16px">
+            <label style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:5px">Purpose &amp; additional instructions</label>
+            <textarea class="inp" id="nda-neg-context" rows="2" placeholder="e.g. Pre-deal evaluation of long-term supply. Arbitration at ICC Dubai." style="resize:vertical;font-size:13px"></textarea>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-bottom:16px">
+            <button class="btn btn-p btn-sm" style="background:rgba(59,130,246,.85);border-color:rgba(59,130,246,.9)" onclick="runNegNDA()">🔏 Draft NDA</button>
+            <button class="btn btn-sm" onclick="document.getElementById('nda-neg-resp').style.display='none';document.getElementById('nda-neg-resp').textContent=''">✕ Clear</button>
+            <button class="btn btn-sm" style="margin-left:auto;border-color:rgba(91,95,239,.3);color:var(--violet)" onclick="switchTab('lead',document.querySelector('.tab[onclick*=\'lead\']'))">Next: LOI Generator →</button>
+          </div>
+
+          <div id="nda-neg-resp" style="display:none;white-space:pre-wrap;font-size:13px;color:var(--text);line-height:1.7;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:16px;max-height:480px;overflow-y:auto"></div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
      PANEL 2 — LOI GENERATOR
 ════════════════════════════════════ -->
       <div id="panel-lead" class="panels">
@@ -2027,6 +2143,409 @@
                 <div style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--teal)">$8.4M</div>
                 <div style="color:var(--muted)">Committed</div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+     PANEL: SPA GENERATOR
+════════════════════════════════════ -->
+      <div id="panel-spa" class="panels">
+        <div class="section-top">
+          <div class="live-badge" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)">
+            <div class="live-dot" style="background:var(--gold);animation:none"></div>
+            Ready
+          </div>
+          <div style="font-size:13px;font-weight:600;color:var(--white)">📜 SPA Generator · GAFTA / ICC</div>
+          <div style="font-size:12px;color:var(--muted)">Sales &amp; Purchase Agreement from the agreed negotiation terms</div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn btn-xs" style="border-color:rgba(232,169,74,.35);color:var(--gold)" onclick="spaPrefill()">↺ Pull from deal</button>
+            <button class="btn btn-p btn-sm" onclick="runSPAPanel()">📜 Generate SPA</button>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="section-main">
+            <div style="background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.2);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--gold);font-family:'IBM Plex Mono',monospace">
+              ⚡ Click "Pull from deal" to auto-fill from the active negotiation mandate.
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Buyer (Purchaser)</label>
+                <input class="inp" id="spa-p-buyer" placeholder="e.g. Gulf Cement LLC" style="font-size:12px"/>
+              </div>
+              <div>
+                <label class="flabel">Seller (Supplier)</label>
+                <input class="inp" id="spa-p-seller" placeholder="e.g. Metinvest Trading" style="font-size:12px"/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Contract Framework</label>
+                <select class="inp" id="spa-p-framework" style="font-size:12px">
+                  <option value="GAFTA 49">GAFTA 49 — Grain (CIF/CFR)</option>
+                  <option value="GAFTA 78">GAFTA 78 — Grain (FOB)</option>
+                  <option value="GAFTA 100">GAFTA 100 — Feed Commodities</option>
+                  <option value="ICC">ICC Model International Sale Contract</option>
+                  <option value="FOSFA">FOSFA — Oils &amp; Fats</option>
+                </select>
+              </div>
+              <div>
+                <label class="flabel">Product &amp; Specification</label>
+                <input class="inp" id="spa-p-product" placeholder="e.g. Hard Wheat 12.5% protein" style="font-size:12px"/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Quantity (MT)</label>
+                <input class="inp" id="spa-p-qty" type="number" placeholder="5000" style="font-size:12px"/>
+              </div>
+              <div>
+                <label class="flabel">Agreed Price ($/MT)</label>
+                <input class="inp" id="spa-p-price" type="number" placeholder="—" style="font-size:12px;color:var(--green);font-weight:700"/>
+              </div>
+              <div>
+                <label class="flabel">Payment Terms</label>
+                <select class="inp" id="spa-p-payment" style="font-size:12px">
+                  <option>LC at sight (UCP 600)</option>
+                  <option>LC 30 days (UCP 600)</option>
+                  <option>LC 60 days (UCP 600)</option>
+                  <option>TT 30% advance + 70% on BL</option>
+                  <option>Net 30 days</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Port of Loading</label>
+                <input class="inp" id="spa-p-pol" placeholder="e.g. Odesa, Constanta" style="font-size:12px"/>
+              </div>
+              <div>
+                <label class="flabel">Port of Destination</label>
+                <input class="inp" id="spa-p-pod" placeholder="e.g. Jeddah, Jebel Ali" style="font-size:12px"/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+              <div>
+                <label class="flabel">Arbitration</label>
+                <select class="inp" id="spa-p-arb" style="font-size:12px">
+                  <option>GAFTA Arbitration (London)</option>
+                  <option>ICC Court of Arbitration (Paris)</option>
+                  <option>DIFC-LCIA (Dubai)</option>
+                  <option>LCIA (London)</option>
+                </select>
+              </div>
+              <div>
+                <label class="flabel">Shipment deadline</label>
+                <input class="inp" id="spa-p-shipdate" type="date" style="font-size:12px"/>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:14px">
+              <button class="btn btn-p" onclick="runSPAPanel()">📜 Generate SPA</button>
+              <button class="btn btn-sm" onclick="document.getElementById('spa-p-result').style.display='none'">✕ Clear</button>
+              <button class="btn btn-sm" style="margin-left:auto;border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="switchTab('tc',document.querySelector('.tab[onclick*=\'tc\']'))">Next: Trade Contract →</button>
+            </div>
+            <div id="spa-p-loading" style="display:none;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:10px">
+              <div class="spinner" style="border-top-color:var(--gold)"></div>
+              Drafting SPA — applying GAFTA / ICC clause set…
+            </div>
+            <div id="spa-p-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;font-size:12px;color:var(--text);font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;line-height:1.7;max-height:320px;overflow-y:auto"></div>
+          </div>
+          <div class="section-sidebar">
+            <div class="sec">// ISSUED SPAs</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">SPA-2026-001</span>
+                  <span class="badge bg" style="font-size:10px">SIGNED</span>
+                </div>
+                <div style="color:var(--muted)">Hard Wheat 5,000 MT · GAFTA 49</div>
+                <div style="color:var(--gold);font-weight:700;margin-top:3px">$280K</div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">SPA-2026-002</span>
+                  <span class="badge ba" style="font-size:10px">DRAFT</span>
+                </div>
+                <div style="color:var(--muted)">Steel Rebar · ICC Model</div>
+                <div style="color:var(--gold);font-weight:700;margin-top:3px">$102K</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+     PANEL: TRADE CONTRACT
+════════════════════════════════════ -->
+      <div id="panel-tc" class="panels">
+        <div class="section-top">
+          <div class="live-badge" style="background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">
+            <div class="live-dot" style="background:var(--indigo);animation:none"></div>
+            Ready
+          </div>
+          <div style="font-size:13px;font-weight:600;color:var(--white)">⚖️ Trade Contract · Incoterms 2020</div>
+          <div style="font-size:12px;color:var(--muted)">Full trade contract with risk allocation, insurance &amp; clause set</div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn btn-xs" style="border-color:rgba(91,95,239,.35);color:var(--violet)" onclick="tcPrefill()">↺ Pull from deal</button>
+            <button class="btn btn-p btn-sm" onclick="runTCPanel()">⚖️ Generate Contract</button>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="section-main">
+            <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--violet);font-family:'IBM Plex Mono',monospace">
+              ⚡ Click "Pull from deal" to auto-fill from the active negotiation mandate &amp; LOI.
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Buyer</label>
+                <input class="inp" id="tc-p-buyer" placeholder="e.g. Gulf Cement LLC" style="font-size:12px"/>
+              </div>
+              <div>
+                <label class="flabel">Seller</label>
+                <input class="inp" id="tc-p-seller" placeholder="e.g. Metinvest Trading" style="font-size:12px"/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Product</label>
+                <input class="inp" id="tc-p-product" placeholder="e.g. Steel Rebar" style="font-size:12px"/>
+              </div>
+              <div>
+                <label class="flabel">Quantity (MT)</label>
+                <input class="inp" id="tc-p-qty" type="number" placeholder="5000" style="font-size:12px"/>
+              </div>
+              <div>
+                <label class="flabel">Unit Price ($)</label>
+                <input class="inp" id="tc-p-price" type="number" placeholder="—" style="font-size:12px;color:var(--green);font-weight:700"/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Incoterm (2020)</label>
+                <select class="inp" id="tc-p-incoterm" style="font-size:12px">
+                  <option>CIF — Cost, Insurance &amp; Freight</option>
+                  <option>CFR — Cost &amp; Freight</option>
+                  <option>FOB — Free on Board</option>
+                  <option>FCA — Free Carrier</option>
+                  <option>DAP — Delivered at Place</option>
+                  <option>DDP — Delivered Duty Paid</option>
+                  <option>EXW — Ex Works</option>
+                </select>
+              </div>
+              <div>
+                <label class="flabel">Named Place / Port</label>
+                <input class="inp" id="tc-p-place" placeholder="e.g. Port of Dubai" style="font-size:12px"/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Governing Law</label>
+                <select class="inp" id="tc-p-law" style="font-size:12px">
+                  <option>UAE (DIFC)</option>
+                  <option>England &amp; Wales</option>
+                  <option>Saudi Arabia</option>
+                  <option>Egypt</option>
+                  <option>Switzerland</option>
+                </select>
+              </div>
+              <div>
+                <label class="flabel">Arbitration</label>
+                <select class="inp" id="tc-p-arb" style="font-size:12px">
+                  <option>DIFC-LCIA (Dubai)</option>
+                  <option>ICC Court of Arbitration (Paris)</option>
+                  <option>LCIA (London)</option>
+                  <option>DIAC (Dubai)</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+              <div>
+                <label class="flabel">Payment Terms</label>
+                <select class="inp" id="tc-p-payment" style="font-size:12px">
+                  <option>LC at sight (UCP 600)</option>
+                  <option>LC 30 days (UCP 600)</option>
+                  <option>LC 60 days (UCP 600)</option>
+                  <option>TT 30% advance + 70% on BL</option>
+                </select>
+              </div>
+              <div>
+                <label class="flabel">Insurance (CIF only)</label>
+                <select class="inp" id="tc-p-insurance" style="font-size:12px">
+                  <option>Institute Cargo Clauses (A) — All Risks</option>
+                  <option>Institute Cargo Clauses (B)</option>
+                  <option>N/A — not CIF</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:14px">
+              <button class="btn btn-p" onclick="runTCPanel()">⚖️ Generate Contract</button>
+              <button class="btn btn-sm" onclick="document.getElementById('tc-p-result').style.display='none'">✕ Clear</button>
+              <button class="btn btn-sm" style="margin-left:auto;border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="switchTab('lca',document.querySelector('.tab[onclick*=\'lca\']'))">Next: LC Application →</button>
+            </div>
+            <div id="tc-p-loading" style="display:none;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:10px">
+              <div class="spinner" style="border-top-color:var(--violet)"></div>
+              Drafting Trade Contract — applying Incoterms 2020 risk &amp; cost allocation…
+            </div>
+            <div id="tc-p-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;font-size:12px;color:var(--text);font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;line-height:1.7;max-height:320px;overflow-y:auto"></div>
+          </div>
+          <div class="section-sidebar">
+            <div class="sec">// ISSUED CONTRACTS</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">TC-2026-001</span>
+                  <span class="badge bg" style="font-size:10px">SIGNED</span>
+                </div>
+                <div style="color:var(--muted)">Steel Rebar · Incoterms 2020 CIF</div>
+                <div style="color:var(--violet);font-weight:700;margin-top:3px">$102K · Dubai</div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">TC-2026-002</span>
+                  <span class="badge ba" style="font-size:10px">DRAFT</span>
+                </div>
+                <div style="color:var(--muted)">Bitumen · FOB Ras Tanura</div>
+                <div style="color:var(--violet);font-weight:700;margin-top:3px">$78K</div>
+              </div>
+            </div>
+            <div class="sec" style="margin-top:14px">// INCOTERM QUICK REFERENCE</div>
+            <div style="font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:4px;font-family:'IBM Plex Mono',monospace">
+              <div><span style="color:var(--teal)">CIF</span> — Seller pays freight + insurance to dest. port</div>
+              <div><span style="color:var(--teal)">CFR</span> — Seller pays freight. Buyer insures.</div>
+              <div><span style="color:var(--teal)">FOB</span> — Risk transfers on board vessel at origin.</div>
+              <div><span style="color:var(--teal)">DAP</span> — Seller delivers to named place.</div>
+              <div><span style="color:var(--teal)">DDP</span> — Seller clears import &amp; delivers.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+     PANEL: LC APPLICATION (UCP 600)
+════════════════════════════════════ -->
+      <div id="panel-lca" class="panels">
+        <div class="section-top">
+          <div class="live-badge" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)">
+            <div class="live-dot" style="background:var(--teal);animation:none"></div>
+            Ready
+          </div>
+          <div style="font-size:13px;font-weight:600;color:var(--white)">💳 LC Application · UCP 600</div>
+          <div style="font-size:12px;color:var(--muted)">Bank-ready Letter of Credit application from the agreed deal</div>
+          <div style="margin-left:auto;display:flex;gap:6px">
+            <button class="btn btn-xs" style="border-color:rgba(45,212,191,.35);color:var(--teal)" onclick="lcaPrefill()">↺ Pull from deal</button>
+            <button class="btn btn-p btn-sm" style="background:rgba(45,212,191,.2);border-color:var(--teal);color:var(--teal)" onclick="runLCAPanel()">💳 Generate LC Application</button>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="section-main">
+            <div style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--teal);font-family:'IBM Plex Mono',monospace">
+              ⚡ Applicant, beneficiary, amount and goods pulled from the active deal. Confirm issuing bank &amp; tenor.
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Applicant (Buyer)</label>
+                <input class="inp" id="lca-p-buyer" placeholder="e.g. Gulf Cement LLC" style="font-size:12px"/>
+              </div>
+              <div>
+                <label class="flabel">Beneficiary (Supplier)</label>
+                <input class="inp" id="lca-p-seller" placeholder="e.g. Metinvest Trading" style="font-size:12px"/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">Issuing Bank</label>
+                <input class="inp" id="lca-p-bank" placeholder="e.g. Emirates NBD, Mashreq" style="font-size:12px"/>
+              </div>
+              <div>
+                <label class="flabel">LC Amount (USD)</label>
+                <input class="inp" id="lca-p-amount" type="number" placeholder="—" style="font-size:12px;color:var(--green);font-weight:700"/>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+              <div>
+                <label class="flabel">LC Tenor</label>
+                <select class="inp" id="lca-p-tenor" style="font-size:12px">
+                  <option>At Sight</option>
+                  <option>30 Days after BL date</option>
+                  <option>60 Days after BL date</option>
+                  <option>90 Days after BL date</option>
+                </select>
+              </div>
+              <div>
+                <label class="flabel">LC Type</label>
+                <select class="inp" id="lca-p-type" style="font-size:12px">
+                  <option>Irrevocable (UCP 600 Art. 3)</option>
+                  <option>Irrevocable &amp; Confirmed</option>
+                  <option>Transferable (UCP 600 Art. 38)</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-bottom:10px">
+              <label class="flabel">Goods Description</label>
+              <input class="inp" id="lca-p-goods" placeholder="e.g. Hard Wheat 12.5% protein, 5,000 MT, GAFTA 49" style="font-size:12px"/>
+            </div>
+            <div style="margin-bottom:10px">
+              <label class="flabel">Required Documents</label>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0"><input type="checkbox" id="lca-p-bl" checked style="accent-color:var(--teal)"/> Full set 3/3 original BL</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0"><input type="checkbox" id="lca-p-ci" checked style="accent-color:var(--teal)"/> Commercial invoice</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0"><input type="checkbox" id="lca-p-pl" checked style="accent-color:var(--teal)"/> Packing list</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0"><input type="checkbox" id="lca-p-co" checked style="accent-color:var(--teal)"/> Certificate of origin</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0"><input type="checkbox" id="lca-p-ic" style="accent-color:var(--teal)"/> Inspection cert (SGS/BV)</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0"><input type="checkbox" id="lca-p-ins" style="accent-color:var(--teal)"/> Insurance certificate</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0"><input type="checkbox" id="lca-p-ph" style="accent-color:var(--teal)"/> Phytosanitary cert</label>
+                <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer;padding:3px 0"><input type="checkbox" id="lca-p-an" style="accent-color:var(--teal)"/> Analysis / quality report</label>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+              <div>
+                <label class="flabel">Partial Shipment</label>
+                <select class="inp" id="lca-p-partial" style="font-size:12px"><option>Not allowed</option><option>Allowed</option></select>
+              </div>
+              <div>
+                <label class="flabel">Transhipment</label>
+                <select class="inp" id="lca-p-trans" style="font-size:12px"><option>Not allowed</option><option>Allowed</option></select>
+              </div>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:14px">
+              <button class="btn btn-p" style="background:rgba(45,212,191,.2);border-color:var(--teal);color:var(--teal)" onclick="runLCAPanel()">💳 Generate LC Application</button>
+              <button class="btn btn-sm" onclick="document.getElementById('lca-p-result').style.display='none'">✕ Clear</button>
+              <button class="btn btn-sm" style="margin-left:auto;border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="switchTab('outreach',document.querySelector('.tab[onclick*=\'outreach\']'))">Next: Customs →</button>
+            </div>
+            <div id="lca-p-loading" style="display:none;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-bottom:10px">
+              <div class="spinner" style="border-top-color:var(--teal)"></div>
+              Drafting LC Application — applying UCP 600 field requirements…
+            </div>
+            <div id="lca-p-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;font-size:12px;color:var(--text);font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;line-height:1.7;max-height:320px;overflow-y:auto"></div>
+          </div>
+          <div class="section-sidebar">
+            <div class="sec">// ISSUED LC APPLICATIONS</div>
+            <div style="display:flex;flex-direction:column;gap:7px">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">LC-APP-001</span>
+                  <span class="badge bg" style="font-size:10px">SUBMITTED</span>
+                </div>
+                <div style="color:var(--muted)">Hard Wheat · $56K · At Sight</div>
+                <div style="color:var(--teal);font-weight:700;margin-top:3px">Emirates NBD</div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;font-size:12px">
+                <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+                  <span style="color:var(--white);font-weight:700">LC-APP-002</span>
+                  <span class="badge bg" style="font-size:10px">APPROVED</span>
+                </div>
+                <div style="color:var(--muted)">Aluminum · $46K · LC 30d</div>
+                <div style="color:var(--teal);font-weight:700;margin-top:3px">Mashreq Bank</div>
+              </div>
+            </div>
+            <div class="sec" style="margin-top:14px">// UCP 600 KEY ARTICLES</div>
+            <div style="font-size:11px;color:var(--muted);display:flex;flex-direction:column;gap:4px;font-family:'IBM Plex Mono',monospace">
+              <div><span style="color:var(--teal)">Art. 3</span> — Irrevocability</div>
+              <div><span style="color:var(--teal)">Art. 14</span> — Document examination standard</div>
+              <div><span style="color:var(--teal)">Art. 20</span> — Bills of Lading</div>
+              <div><span style="color:var(--teal)">Art. 28</span> — Insurance document</div>
+              <div><span style="color:var(--teal)">Art. 38</span> — Transferable LC</div>
             </div>
           </div>
         </div>
@@ -2382,6 +2901,171 @@
         document.getElementById("panel-" + id).classList.add("active");
         btn.classList.add("active");
         history.replaceState(null, "", "#" + id);
+      }
+
+      // ── DEAL PREFILL HELPERS ─────────────────────────────────────────────────────
+      function _dealCtx() {
+        return {
+          buyer:   (document.getElementById('m-buyer')   || {}).value || '',
+          product: (document.getElementById('m-product') || {}).options[(document.getElementById('m-product')||{}).selectedIndex||0] && document.getElementById('m-product').options[document.getElementById('m-product').selectedIndex].text || '',
+          qty:     (document.getElementById('m-qty')     || {}).value || '',
+          price:   (document.getElementById('loi-price') || document.getElementById('m-target') || {}).value || '',
+          payment: (document.getElementById('m-payment') || {}).value || '',
+          location:(document.getElementById('m-location')|| {}).value || '',
+        };
+      }
+
+      function spaPrefill() {
+        var d = _dealCtx();
+        if (d.buyer)   document.getElementById('spa-p-buyer').value   = d.buyer;
+        if (d.product) document.getElementById('spa-p-product').value = d.product;
+        if (d.qty)     document.getElementById('spa-p-qty').value     = d.qty;
+        if (d.price)   document.getElementById('spa-p-price').value   = d.price;
+        if (d.location)document.getElementById('spa-p-pod').value     = d.location;
+      }
+      function tcPrefill() {
+        var d = _dealCtx();
+        if (d.buyer)   document.getElementById('tc-p-buyer').value   = d.buyer;
+        if (d.product) document.getElementById('tc-p-product').value = d.product;
+        if (d.qty)     document.getElementById('tc-p-qty').value     = d.qty;
+        if (d.price)   document.getElementById('tc-p-price').value   = d.price;
+        if (d.location)document.getElementById('tc-p-place').value   = d.location;
+      }
+      function lcaPrefill() {
+        var d = _dealCtx();
+        if (d.buyer)   document.getElementById('lca-p-buyer').value  = d.buyer;
+        if (d.product) document.getElementById('lca-p-goods').value  = d.product + (d.qty ? ', ' + d.qty + ' MT' : '');
+        if (d.price && d.qty) {
+          var amt = parseFloat(d.price) * parseFloat(d.qty);
+          if (!isNaN(amt)) document.getElementById('lca-p-amount').value = Math.round(amt);
+        }
+      }
+
+      function _runDocPanel(loadingId, resultId, content, delay) {
+        var loading = document.getElementById(loadingId);
+        var result  = document.getElementById(resultId);
+        if (!loading || !result) return;
+        loading.style.display = 'flex';
+        result.style.display  = 'none';
+        setTimeout(function() {
+          loading.style.display = 'none';
+          result.style.display  = 'block';
+          result.textContent    = content;
+        }, delay || 1800);
+      }
+
+      function runSPAPanel() {
+        var fw  = (document.getElementById('spa-p-framework')||{}).value || 'GAFTA 49';
+        var b   = document.getElementById('spa-p-buyer').value   || '—';
+        var s   = document.getElementById('spa-p-seller').value  || '—';
+        var pr  = document.getElementById('spa-p-product').value || '—';
+        var qty = document.getElementById('spa-p-qty').value     || '—';
+        var px  = document.getElementById('spa-p-price').value   || '—';
+        var pay = (document.getElementById('spa-p-payment')||{}).value || '—';
+        var pol = document.getElementById('spa-p-pol').value || '—';
+        var pod = document.getElementById('spa-p-pod').value || '—';
+        var arb = (document.getElementById('spa-p-arb')||{}).value || '—';
+        var ref = 'SPA-2026-' + String(Math.floor(Math.random()*900)+100);
+        _runDocPanel('spa-p-loading','spa-p-result',
+          ref + ' · ' + fw + '\n' +
+          '──────────────────────────────────────────\n' +
+          'Buyer         : ' + b + '\n' +
+          'Seller        : ' + s + '\n' +
+          'Product       : ' + pr + '\n' +
+          'Quantity      : ' + qty + ' MT\n' +
+          'Agreed Price  : $' + px + '/MT\n' +
+          'Port of Load  : ' + pol + '\n' +
+          'Port of Dest  : ' + pod + '\n' +
+          'Payment       : ' + pay + '\n' +
+          'Arbitration   : ' + arb + '\n' +
+          '──────────────────────────────────────────\n' +
+          'Clauses applied:\n' +
+          '  ✓ Quality & Specification (ASTM / ISO ref)\n' +
+          '  ✓ Inspection at Origin — SGS / Bureau Veritas\n' +
+          '  ✓ Force Majeure (UN Vienna Convention)\n' +
+          '  ✓ Penalty & Liquidated Damages\n' +
+          '  ✓ Title & Risk Transfer (Incoterms 2020)\n' +
+          '  ✓ Governing Law & Arbitration (' + arb + ')\n' +
+          '──────────────────────────────────────────\n' +
+          '✓ SPA ready — PDF dispatch queued for all parties.');
+      }
+
+      function runTCPanel() {
+        var b   = document.getElementById('tc-p-buyer').value   || '—';
+        var s   = document.getElementById('tc-p-seller').value  || '—';
+        var pr  = document.getElementById('tc-p-product').value || '—';
+        var qty = document.getElementById('tc-p-qty').value     || '—';
+        var px  = document.getElementById('tc-p-price').value   || '—';
+        var inc = (document.getElementById('tc-p-incoterm')||{}).value || '—';
+        var pl  = document.getElementById('tc-p-place').value   || '—';
+        var law = (document.getElementById('tc-p-law')||{}).value || '—';
+        var arb = (document.getElementById('tc-p-arb')||{}).value || '—';
+        var ref = 'TC-2026-' + String(Math.floor(Math.random()*900)+100);
+        var isSeller = inc.indexOf('CIF') !== -1 || inc.indexOf('CFR') !== -1 || inc.indexOf('DAP') !== -1 || inc.indexOf('DDP') !== -1;
+        _runDocPanel('tc-p-loading','tc-p-result',
+          ref + ' · Incoterms 2020 ' + inc.split(' ')[0] + '\n' +
+          '──────────────────────────────────────────\n' +
+          'Buyer         : ' + b + '\n' +
+          'Seller        : ' + s + '\n' +
+          'Product       : ' + pr + '\n' +
+          'Quantity      : ' + qty + ' MT\n' +
+          'Unit Price    : $' + px + '/MT\n' +
+          'Incoterm      : ' + inc.split(' ')[0] + ' — ' + pl + '\n' +
+          'Governing Law : ' + law + '\n' +
+          'Arbitration   : ' + arb + '\n' +
+          '──────────────────────────────────────────\n' +
+          'Risk & Cost Allocation:\n' +
+          '  ✓ Risk transfers: ' + (isSeller ? 'at named place (' + pl + ')' : 'on board vessel at origin') + '\n' +
+          '  ✓ Export clearance: Seller\n' +
+          '  ✓ Import clearance: ' + (inc.indexOf('DDP') !== -1 ? 'Seller' : 'Buyer') + '\n' +
+          '  ✓ Freight: ' + (isSeller ? 'Seller' : 'Buyer') + '\n' +
+          '──────────────────────────────────────────\n' +
+          'Clauses applied:\n' +
+          '  ✓ Quality, Inspection & Acceptance\n' +
+          '  ✓ Force Majeure & Hardship\n' +
+          '  ✓ Penalty & Liquidated Damages\n' +
+          '  ✓ Confidentiality & Anti-Bribery\n' +
+          '──────────────────────────────────────────\n' +
+          '✓ Trade Contract ready — dispatch queued to both parties.');
+      }
+
+      function runLCAPanel() {
+        var b   = document.getElementById('lca-p-buyer').value  || '—';
+        var s   = document.getElementById('lca-p-seller').value || '—';
+        var bk  = document.getElementById('lca-p-bank').value   || '—';
+        var amt = document.getElementById('lca-p-amount').value || '—';
+        var tn  = (document.getElementById('lca-p-tenor')||{}).value || '—';
+        var tp  = (document.getElementById('lca-p-type')||{}).value  || '—';
+        var gd  = document.getElementById('lca-p-goods').value  || '—';
+        var docs = [];
+        if (document.getElementById('lca-p-bl').checked)  docs.push('Full set 3/3 original clean on-board Bills of Lading');
+        if (document.getElementById('lca-p-ci').checked)  docs.push('Signed commercial invoice in 3 originals');
+        if (document.getElementById('lca-p-pl').checked)  docs.push('Packing list in 3 originals');
+        if (document.getElementById('lca-p-co').checked)  docs.push('Certificate of Origin (Chamber of Commerce)');
+        if (document.getElementById('lca-p-ic').checked)  docs.push('Inspection certificate (SGS or Bureau Veritas)');
+        if (document.getElementById('lca-p-ins').checked) docs.push('Insurance certificate / policy (min 110% CIF value)');
+        if (document.getElementById('lca-p-ph').checked)  docs.push('Phytosanitary certificate');
+        if (document.getElementById('lca-p-an').checked)  docs.push('Quality / analysis report');
+        var ref = 'LC-APP-2026-' + String(Math.floor(Math.random()*900)+100);
+        _runDocPanel('lca-p-loading','lca-p-result',
+          ref + ' · UCP 600\n' +
+          '──────────────────────────────────────────\n' +
+          'Applicant (Buyer) : ' + b + '\n' +
+          'Beneficiary       : ' + s + '\n' +
+          'Issuing Bank      : ' + bk + '\n' +
+          'LC Amount         : USD ' + Number(amt).toLocaleString() + '\n' +
+          'LC Type           : ' + tp + '\n' +
+          'Tenor             : ' + tn + '\n' +
+          'Goods             : ' + gd + '\n' +
+          'Partial Shipment  : ' + (document.getElementById('lca-p-partial')||{}).value + '\n' +
+          'Transhipment      : ' + (document.getElementById('lca-p-trans')||{}).value + '\n' +
+          '──────────────────────────────────────────\n' +
+          'Required Documents (' + docs.length + '):\n' +
+          docs.map(function(d){ return '  ✓ ' + d; }).join('\n') + '\n' +
+          '──────────────────────────────────────────\n' +
+          'UCP 600: Art. 3 · Art. 14 · Art. 20 · Art. 28\n' +
+          '──────────────────────────────────────────\n' +
+          '✓ LC Application ready — submit to ' + bk + '.');
       }
 
       // ── NEGOTIATION ───────────────────────────────────────────────────────────────
@@ -4144,6 +4828,53 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
       function previewTpl() {
         const k = document.getElementById("tpl-select").value;
         document.getElementById("tpl-preview").textContent = TEMPLATES[k];
+      }
+
+      // ── NDA GENERATOR ─────────────────────────────────────────────────────────
+      function ndaPrefill() {
+        var buyer   = (document.getElementById('m-buyer')   || {}).value || '';
+        var product = (document.getElementById('m-product') || {}).value || '';
+        var recv = document.getElementById('nda-neg-receiving');
+        var subj = document.getElementById('nda-neg-subject');
+        var ctx  = document.getElementById('nda-neg-context');
+        if (recv && buyer)   recv.value = buyer;
+        if (subj && product) subj.value = product;
+        if (ctx && !ctx.value && (buyer || product))
+          ctx.value = 'Pre-deal evaluation of commodity supply agreement' + (product ? ' for ' + product : '') + (buyer ? ' with ' + buyer : '') + '.';
+      }
+
+      async function runNegNDA() {
+        var respEl = document.getElementById('nda-neg-resp');
+        respEl.style.display = '';
+        respEl.textContent = '⏳ Drafting NDA…';
+
+        var type  = (document.getElementById('nda-neg-type')      || {}).value || 'mutual';
+        var disc  = (document.getElementById('nda-neg-disclosing') || {}).value || '[Disclosing Party]';
+        var recv  = (document.getElementById('nda-neg-receiving')  || {}).value || '[Receiving Party]';
+        var dur   = (document.getElementById('nda-neg-duration')   || {}).value || '3 years';
+        var law   = (document.getElementById('nda-neg-law')        || {}).value || 'UAE (DIFC)';
+        var subj  = (document.getElementById('nda-neg-subject')    || {}).value || '';
+        var ctx   = ((document.getElementById('nda-neg-context')   || {}).value || '').trim();
+        var scope = [];
+        if (document.getElementById('nda-neg-price')    && document.getElementById('nda-neg-price').checked)    scope.push('pricing, offers, and commercial terms');
+        if (document.getElementById('nda-neg-supplier') && document.getElementById('nda-neg-supplier').checked) scope.push('supplier identities and contact details');
+        if (document.getElementById('nda-neg-route')    && document.getElementById('nda-neg-route').checked)    scope.push('trade routes, logistics arrangements, and shipping methods');
+        if (document.getElementById('nda-neg-financial')&& document.getElementById('nda-neg-financial').checked) scope.push('financial terms and payment structures');
+
+        var prompt = 'You are a senior international trade lawyer. Draft a complete, formal '
+          + (type === 'mutual' ? 'Mutual' : 'One-Way') + ' Non-Disclosure Agreement (NDA) for a commodity trading transaction.\n\n'
+          + 'PARTIES:\n- Disclosing Party: ' + disc + '\n- Receiving Party: ' + recv + '\n\n'
+          + 'TERMS:\n- NDA Type: ' + (type === 'mutual' ? 'Mutual — both parties exchange confidential information' : 'One-Way — only the Disclosing Party shares confidential information') + '\n'
+          + '- Duration: ' + dur + ' from the date of signing\n'
+          + '- Governing Law: ' + law + '\n'
+          + (subj ? '- Subject / Commodity: ' + subj + '\n' : '')
+          + '- Confidential Information includes: ' + (scope.length ? scope.join('; ') : 'all business information') + '\n'
+          + (ctx ? '- Context: ' + ctx + '\n' : '')
+          + '\nDraft the full NDA with: 1. PARTIES  2. DEFINITIONS  3. OBLIGATIONS OF RECEIVING PARTY  4. SCOPE OF CONFIDENTIAL INFORMATION  5. EXCLUSIONS  6. DURATION & TERMINATION  7. RETURN/DESTRUCTION OF INFORMATION  8. REMEDIES  9. GOVERNING LAW & ARBITRATION  10. MISCELLANEOUS  11. SIGNATURES\n\n'
+          + 'Include a commodity-trading-specific clause protecting supplier identity and pricing from third-party traders. Use [PLACEHOLDER] for missing details. Use formal legal language.';
+
+        const result = await callClaude([{ role: 'user', content: prompt }], null, 1500);
+        respEl.textContent = result || 'No response received.';
       }
 
       // ── LOI GENERATOR ─────────────────────────────────────────────────────────

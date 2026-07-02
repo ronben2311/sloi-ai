@@ -181,9 +181,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 
 <!-- HERO -->
 <div class="hero">
-  <div class="eyebrow">MCP Skill · v2.0 · Claude · GPT · OpenClaw</div>
+  <div class="eyebrow">MCP Skill · v2.1 · Claude · GPT · OpenClaw · 14 tools</div>
   <h1>Install the<br/><em>SLOI AI Skill.</em></h1>
-  <p class="hero-sub">Add commodity sourcing and LOI generation to Claude Desktop, Cursor, or any MCP-compatible agent in under 2 minutes. Your agent negotiates deals with verified suppliers autonomously — you approve, LOI is generated.</p>
+  <p class="hero-sub">Add commodity sourcing, negotiation, LOI generation, and full procurement document automation to Claude Desktop, Cursor, or any MCP-compatible agent in under 2 minutes. Your agent negotiates, generates SPA · Trade Contract · LC Application · HS Code Report — you approve once, every document is dispatched automatically.</p>
 </div>
 
 <!-- SKILL URL CARD -->
@@ -199,7 +199,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     </div>
     <div class="skill-meta">
       <span class="skill-meta-item"><span class="skill-meta-dot"></span>Live · v2.0</span>
-      <span class="skill-meta-item">10 MCP tools</span>
+      <span class="skill-meta-item">14 MCP tools</span>
       <span class="skill-meta-item">AG-UI SSE stream</span>
       <span class="skill-meta-item">USDC payments on Base</span>
       <span class="skill-meta-item">Read tier free · no auth required</span>
@@ -425,8 +425,8 @@ mandate = httpx.post(<span class="fn">f"{BASE}/mandates"</span>, headers=headers
 <!-- TOOLS REFERENCE -->
 <div class="section">
   <div class="section-eyebrow">MCP Tools</div>
-  <div class="section-title">10 tools.<br/><em>Everything procurement needs.</em></div>
-  <div class="section-sub">All tools are available via the MCP protocol and the REST API. Read-tier tools are free. Transact-tier tools deduct credits.</div>
+  <div class="section-title">14 tools.<br/><em>Everything procurement needs.</em></div>
+  <div class="section-sub">All tools available via MCP and REST API. Read-tier tools are free. Transact-tier tools deduct credits. Document generation tools (SPA, Trade Contract, LC Application) produce PDF-ready output automatically from your LOI reference.</div>
   <div class="tools-grid">
 
     <div class="tool-card">
@@ -489,6 +489,30 @@ mandate = httpx.post(<span class="fn">f"{BASE}/mandates"</span>, headers=headers
       <div class="tool-cost"><span class="badge bg">Free</span></div>
     </div>
 
+    <div class="tool-card">
+      <div class="tool-name">sloi_generate_spa</div>
+      <div class="tool-desc">Drafts a Sales &amp; Purchase Agreement under GAFTA 49/78/100 or ICC rules from a confirmed LOI. Returns signed-ready PDF with full clause set and dispatch confirmation.</div>
+      <div class="tool-cost"><span class="badge ba">15 credits</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-name">sloi_trade_contract</div>
+      <div class="tool-desc">Generates an Incoterms 2020-compliant trade contract from a signed LOI or SPA. Includes risk transfer table, insurance obligations, and governing law clause.</div>
+      <div class="tool-cost"><span class="badge ba">15 credits</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-name">sloi_lc_application</div>
+      <div class="tool-desc">Drafts a bank-ready Letter of Credit application (UCP 600) from a confirmed LOI. Outputs PDF / SWIFT MT700 format with document checklist and estimated bank charges.</div>
+      <div class="tool-cost"><span class="badge bt">10 credits</span></div>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-name">sloi_hs_lookup</div>
+      <div class="tool-desc">Classifies a commodity by HS code (6-digit) and returns MFN import duty, FTA preferential rates, VAT, anti-dumping flags, and import permit requirements per destination country.</div>
+      <div class="tool-cost"><span class="badge bt">3 credits</span></div>
+    </div>
+
   </div>
 </div>
 
@@ -507,6 +531,9 @@ mandate = httpx.post(<span class="fn">f"{BASE}/mandates"</span>, headers=headers
 <span class="kw">AWAIT_HUMAN</span>          <span class="cm">→ Boss approval needed · { deal_price, total_value, loi_fee: 500 }</span>
 <span class="kw">AUTO_APPROVED</span>        <span class="cm">→ autonomous deal closed · { deal_price, loi_ref, conditions_met }</span>
 <span class="kw">LOI_GENERATED</span>        <span class="cm">→ LOI ready · { loi_ref, deal_price, pdf_url }</span>
+<span class="kw">SPA_GENERATED</span>        <span class="cm">→ SPA ready · { spa_ref, framework, pdf_url, dispatched_to: [...] }</span>
+<span class="kw">TC_GENERATED</span>         <span class="cm">→ Trade Contract ready · { tc_ref, incoterm, pdf_url }</span>
+<span class="kw">LC_GENERATED</span>         <span class="cm">→ LC Application ready · { lc_ref, bank, amount_usd, swift_mt700_url }</span>
 <span class="kw">NEGOTIATION_FAILED</span>   <span class="cm">→ { reason: "max_rounds" | "boss_rejected" | "compliance_blocked" }</span>
 <span class="kw">PRICE_UPDATE</span>         <span class="cm">→ live price change · { sku, price, change_pct }</span>
 <span class="kw">HEARTBEAT</span>            <span class="cm">→ keep-alive every 15s</span></pre>

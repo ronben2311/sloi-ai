@@ -919,6 +919,8 @@
       .prof-card.violet-brd{border-color:rgba(91,95,239,.3)}
       .prof-card.prof-active.teal-brd{border-color:var(--teal);box-shadow:0 0 0 1px rgba(45,212,191,.18)}
       .prof-card.prof-active.violet-brd{border-color:var(--indigo);box-shadow:0 0 0 1px rgba(91,95,239,.18)}
+      .prof-card.gold-brd{border-color:rgba(232,169,74,.35)}
+      .prof-card.prof-active.gold-brd{border-color:var(--gold);box-shadow:0 0 0 1px rgba(232,169,74,.18)}
       .prof-top{padding:15px 18px 12px;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
       .prof-name{font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);margin-bottom:3px;letter-spacing:-.02em}
       .prof-desc{font-size:12px;color:var(--muted);line-height:1.55}
@@ -1989,6 +1991,7 @@
                 <!-- Profile row -->
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)">
                   <span style="font-size:12px;color:var(--muted);flex-shrink:0">Active profile:</span>
+                  <button class="btn btn-xs" id="mp-switch-saas" onclick="activateProfile('saas')" style="font-size:11px">🚀 SLOI AI SaaS</button>
                   <button class="btn btn-xs" id="mp-switch-construction" onclick="activateProfile('construction')" style="font-size:11px">🏗 Construction</button>
                   <button class="btn btn-xs" id="mp-switch-factory" onclick="activateProfile('factory')" style="font-size:11px">🏭 Advanced Factory</button>
                   <span style="font-size:11px;color:var(--muted);margin-left:4px" id="mandate-profile-sub">No profile selected — choose above or set manually</span>
@@ -2080,6 +2083,35 @@
               </div>
 
               <div class="prof-grid">
+
+                <!-- 🚀 SLOI AI SaaS -->
+                <div class="prof-card gold-brd" id="prof-card-saas" onclick="activateProfile('saas')" style="grid-column:1/-1">
+                  <div class="prof-top">
+                    <div>
+                      <div style="display:inline-flex;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 9px;border-radius:3px;background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.28);color:var(--gold);margin-bottom:9px">🚀 SLOI AI SAAS</div>
+                      <div class="prof-name">SLOI AI SaaS</div>
+                      <div class="prof-desc">Full-platform commodity procurement — all sectors, all document types, all AI agents active. Built for traders, importers, and procurement teams running on SLOI AI.</div>
+                    </div>
+                    <div class="prof-check" id="prof-check-saas" style="display:none;background:rgba(232,169,74,.15);border:1px solid var(--gold);color:var(--gold)">✓</div>
+                  </div>
+                  <div class="prof-body">
+                    <div class="prof-feats" style="display:grid;grid-template-columns:1fr 1fr;gap:2px 24px">
+                      <div class="prof-feat"><span class="pfc">✓</span><span class="pft">Full catalog: metals, energy, agriculture, chemicals, construction</span></div>
+                      <div class="prof-feat"><span class="pfc">✓</span><span class="pft">Auto-generate LOI · SPA · Trade Contract · LC Application</span></div>
+                      <div class="prof-feat"><span class="pfc">✓</span><span class="pft">Default incoterm: <strong style="color:var(--gold)">FOB</strong> (flexible per deal)</span></div>
+                      <div class="prof-feat"><span class="pfc">✓</span><span class="pft">All negotiation strategies: watcher · standard · aggressive</span></div>
+                      <div class="prof-feat"><span class="pfc">✓</span><span class="pft">Compliance screening on every counterparty (OFAC, EU, UN)</span></div>
+                      <div class="prof-feat"><span class="pfc">✓</span><span class="pft">HS Code &amp; Duty Report per shipment destination</span></div>
+                      <div class="prof-feat"><span class="pfc">✓</span><span class="pft">MCP tool integration — Claude, Cursor &amp; custom agents</span></div>
+                      <div class="prof-feat"><span class="pfc">✓</span><span class="pft">1% commission earned on every LOI deal value</span></div>
+                    </div>
+                  </div>
+                  <div class="prof-standard-line">Standards: <span class="prof-standard-val">—</span></div>
+                  <div class="prof-footer" style="display:flex;gap:6px">
+                    <button class="btn btn-sm" id="prof-btn-saas" style="flex:1;justify-content:center;border-color:rgba(232,169,74,.35);color:var(--gold)" onclick="event.stopPropagation();activateProfile('saas')">Activate →</button>
+                    <button class="btn btn-sm" style="flex-shrink:0;border-color:rgba(232,169,74,.18);color:var(--muted)" onclick="event.stopPropagation();openArchDrawer('saas')">🧠 View agents</button>
+                  </div>
+                </div>
 
                 <!-- 🏗 Construction Procurement -->
                 <div class="prof-card teal-brd" id="prof-card-construction" onclick="activateProfile('construction')">
@@ -2874,6 +2906,112 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                 </div>
               </div>
 
+              <!-- SPA GENERATOR AGENT -->
+              <div>
+                <div class="agent-row" id="row-spa" onclick="toggleAgent('spa')">
+                  <div class="ar-icon" style="background:rgba(232,169,74,.1)">📜</div>
+                  <div class="ar-name">SPA Generator</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">Sales &amp; Purchase Agreement &nbsp;&middot;&nbsp; GAFTA / ICC &nbsp;&middot;&nbsp; drafts from signed LOI</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="event.stopPropagation();openSPAModal()">📜 Generate SPA</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('contracts',document.getElementById('nav-contracts'))">View all</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-spa">
+                  <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Sales &amp; Purchase Agreements</div>
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>SPA-2026-001 &middot; Hard Wheat 5,000 MT &middot; GAFTA 49 &middot; $280K &middot; Signed</span></div>
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>SPA-2026-002 &middot; Steel Rebar &middot; ICC Model Contract &middot; $102K &middot; Signed</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">&#8987;</span><span>SPA-2026-003 &middot; Bitumen &middot; awaiting LOI signature</span></div>
+                  </div>
+                  <div class="ad-btns">
+                    <button class="btn btn-xs" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="openSPAModal()">📜 Generate SPA from LOI</button>
+                    <button class="btn btn-xs" onclick="alert('Exporting SPA history…')">&#8595; Export</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TRADE CONTRACT AGENT -->
+              <div>
+                <div class="agent-row" id="row-trade-contract" onclick="toggleAgent('trade-contract')">
+                  <div class="ar-icon" style="background:rgba(91,95,239,.1)">⚖️</div>
+                  <div class="ar-name">Trade Contract</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">Incoterms 2020 &nbsp;&middot;&nbsp; from SPA or LOI &nbsp;&middot;&nbsp; full clause set</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();openTradeContractModal()">⚖️ Generate Contract</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('contracts',document.getElementById('nav-contracts'))">View all</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-trade-contract">
+                  <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Trade Contracts</div>
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>TC-2026-001 &middot; Steel Rebar CIF Dubai &middot; Incoterms 2020 CIF &middot; $102K &middot; Signed</span></div>
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>TC-2026-002 &middot; Bitumen FOB Ras Tanura &middot; $78K &middot; Signed</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">&#8987;</span><span>TC-2026-003 &middot; Hard Wheat &middot; awaiting SPA signature</span></div>
+                  </div>
+                  <div class="ad-btns">
+                    <button class="btn btn-xs btn-p" onclick="openTradeContractModal()">⚖️ Generate Trade Contract</button>
+                    <button class="btn btn-xs" onclick="alert('Exporting contract history…')">&#8595; Export</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- LC APPLICATION AGENT -->
+              <div>
+                <div class="agent-row" id="row-lc-app" onclick="toggleAgent('lc-app')">
+                  <div class="ar-icon" style="background:rgba(45,212,191,.1)">💳</div>
+                  <div class="ar-name">LC Application</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">UCP 600 &nbsp;&middot;&nbsp; from LOI or SPA &nbsp;&middot;&nbsp; bank-ready draft</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="event.stopPropagation();openLCAppModal()">💳 Draft LC Application</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('contracts',document.getElementById('nav-contracts'))">View all</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-lc-app">
+                  <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">LC Applications</div>
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>LC-APP-2026-001 &middot; Hard Wheat &middot; $56K &middot; Emirates NBD &middot; Submitted</span></div>
+                    <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>LC-APP-2026-002 &middot; Aluminum &middot; $46K &middot; Mashreq Bank &middot; Approved</span></div>
+                    <div class="ad-log-row"><span style="color:var(--muted)">&#8987;</span><span>LC-APP-2026-003 &middot; Steel Rebar &middot; draft — pending LOI signature</span></div>
+                  </div>
+                  <div class="ad-btns">
+                    <button class="btn btn-xs" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="openLCAppModal()">💳 Draft LC Application</button>
+                    <button class="btn btn-xs" onclick="alert('Exporting LC history…')">&#8595; Export</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- HS CODE & DUTY AGENT -->
+              <div>
+                <div class="agent-row" id="row-hs-code" onclick="toggleAgent('hs-code')">
+                  <div class="ar-icon" style="background:rgba(45,212,191,.08)">🛃</div>
+                  <div class="ar-name">HS Code &amp; Duty Report</div>
+                  <span style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);color:var(--teal);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
+                  <div class="ar-metric">HS classification &nbsp;&middot;&nbsp; import duty per destination &nbsp;&middot;&nbsp; FTA rates &nbsp;&middot;&nbsp; anti-dumping flags</div>
+                  <div class="ar-actions">
+                    <button class="btn btn-xs" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="event.stopPropagation();openHSModal()">🛃 HS Lookup</button>
+                  </div>
+                  <span class="ar-chev">&#9660;</span>
+                </div>
+                <div class="agent-detail" id="detail-hs-code">
+                  <div style="font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px">Recent lookups</div>
+                  <div class="ad-log">
+                    <div class="ad-log-row"><span style="color:var(--teal)">&#9654;</span><span>Steel Rebar → UAE &middot; HS 7213.10 &middot; 5% MFN &middot; 0% GCC &middot; No anti-dumping</span></div>
+                    <div class="ad-log-row"><span style="color:var(--teal)">&#9654;</span><span>Hard Wheat → Saudi Arabia &middot; HS 1001.99 &middot; 0% MFN &middot; SFDA import permit req.</span></div>
+                    <div class="ad-log-row"><span style="color:var(--teal)">&#9654;</span><span>Bitumen → Egypt &middot; HS 2713.20 &middot; 5% MFN &middot; No FTA &middot; No restrictions</span></div>
+                  </div>
+                  <div class="ad-btns">
+                    <button class="btn btn-xs" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="openHSModal()">🛃 New HS Lookup</button>
+                  </div>
+                </div>
+              </div>
+
               <!-- CONTRACT ADVISOR AGENT -->
               <div>
                 <div class="agent-row" id="row-contract-advisor" onclick="toggleAgent('contract-advisor');agCAPopulate()">
@@ -3448,6 +3586,54 @@ Content-Type: application/json
                   </div>
 
                   <div class="mcp-tool-card" onclick="mcpToggleTool(this)">
+                    <div class="mcp-tool-row"><div class="mcp-tool-icon">📜</div><div><div class="mcp-tool-name">SPA Generator</div><div class="mcp-tool-desc">Drafts a Sales &amp; Purchase Agreement (GAFTA or ICC) from a confirmed LOI</div></div><div class="mcp-tool-chev">▼</div></div>
+                    <div class="mcp-tool-detail">
+                      <div class="mcp-schema-grid">
+                        <div class="mcp-schema-col"><div class="mcp-schema-label req">What it needs from you</div><div class="mcp-schema-item">LOI reference number</div><div class="mcp-schema-item">Framework — GAFTA 49/78/100 or ICC</div><div class="mcp-schema-item">Product, quantity &amp; quality spec</div><div class="mcp-schema-item">Port of loading &amp; destination</div><div class="mcp-schema-item">Payment terms (LC, CAD, TT…)</div></div>
+                        <div class="mcp-schema-col"><div class="mcp-schema-label ret">What you get back</div><div class="mcp-schema-item">Signed-ready SPA document (PDF)</div><div class="mcp-schema-item">GAFTA / ICC clause set applied</div><div class="mcp-schema-item">SPA reference number</div><div class="mcp-schema-item">Plain-language clause summary</div><div class="mcp-schema-item">Dispatch confirmation to all parties</div></div>
+                      </div>
+                      <div class="mcp-example-label">// Example call</div>
+                      <div class="mcp-code-wrap"><code class="mcp-code" style="font-size:11px">sloi_generate_spa({ loi_ref: "SL-LOI-20260630-007", framework: "GAFTA 49", product: "Hard Wheat 12.5%", qty_mt: 5000, payment: "LC 30d", port_load: "Odesa", port_dest: "Jeddah" })</code></div>
+                    </div>
+                  </div>
+
+                  <div class="mcp-tool-card" onclick="mcpToggleTool(this)">
+                    <div class="mcp-tool-row"><div class="mcp-tool-icon">⚖️</div><div><div class="mcp-tool-name">Trade Contract Generator</div><div class="mcp-tool-desc">Generates an Incoterms 2020-compliant trade contract from a signed LOI or SPA</div></div><div class="mcp-tool-chev">▼</div></div>
+                    <div class="mcp-tool-detail">
+                      <div class="mcp-schema-grid">
+                        <div class="mcp-schema-col"><div class="mcp-schema-label req">What it needs from you</div><div class="mcp-schema-item">LOI or SPA reference number</div><div class="mcp-schema-item">Incoterm (CIF, FOB, DAP, DDP…)</div><div class="mcp-schema-item">Place of delivery</div><div class="mcp-schema-item">Governing law &amp; jurisdiction</div><div class="mcp-schema-item">Special clauses (optional)</div></div>
+                        <div class="mcp-schema-col"><div class="mcp-schema-label ret">What you get back</div><div class="mcp-schema-item">Trade Contract PDF (Incoterms 2020)</div><div class="mcp-schema-item">Risk transfer &amp; cost allocation table</div><div class="mcp-schema-item">Insurance obligations summary</div><div class="mcp-schema-item">Contract reference number</div><div class="mcp-schema-item">Dispatch to both parties</div></div>
+                      </div>
+                      <div class="mcp-example-label">// Example call</div>
+                      <div class="mcp-code-wrap"><code class="mcp-code" style="font-size:11px">sloi_trade_contract({ spa_ref: "SPA-2026-001", incoterm: "CIF", place: "Dubai Port", law: "UAE", qty_mt: 5000, product: "Steel Rebar ASTM A615" })</code></div>
+                    </div>
+                  </div>
+
+                  <div class="mcp-tool-card" onclick="mcpToggleTool(this)">
+                    <div class="mcp-tool-row"><div class="mcp-tool-icon">💳</div><div><div class="mcp-tool-name">LC Application (UCP 600)</div><div class="mcp-tool-desc">Drafts a bank-ready Letter of Credit application from a confirmed LOI or SPA</div></div><div class="mcp-tool-chev">▼</div></div>
+                    <div class="mcp-tool-detail">
+                      <div class="mcp-schema-grid">
+                        <div class="mcp-schema-col"><div class="mcp-schema-label req">What it needs from you</div><div class="mcp-schema-item">LOI or SPA reference number</div><div class="mcp-schema-item">Issuing bank name</div><div class="mcp-schema-item">LC tenor (sight / 30 / 60 / 90 days)</div><div class="mcp-schema-item">Documents required list</div><div class="mcp-schema-item">Partial shipment / transhipment flags</div></div>
+                        <div class="mcp-schema-col"><div class="mcp-schema-label ret">What you get back</div><div class="mcp-schema-item">LC Application form (PDF/SWIFT MT700)</div><div class="mcp-schema-item">UCP 600 clause references</div><div class="mcp-schema-item">Required documents checklist</div><div class="mcp-schema-item">Estimated bank charges</div><div class="mcp-schema-item">LC reference number</div></div>
+                      </div>
+                      <div class="mcp-example-label">// Example call</div>
+                      <div class="mcp-code-wrap"><code class="mcp-code" style="font-size:11px">sloi_lc_application({ loi_ref: "SL-LOI-20260603", bank: "Emirates NBD", tenor: "sight", amount_usd: 56000, docs: ["BL", "packing_list", "cert_origin", "inspection_cert"] })</code></div>
+                    </div>
+                  </div>
+
+                  <div class="mcp-tool-card" onclick="mcpToggleTool(this)">
+                    <div class="mcp-tool-row"><div class="mcp-tool-icon">🛃</div><div><div class="mcp-tool-name">HS Code &amp; Duty Report</div><div class="mcp-tool-desc">Classifies a product and returns import duty, FTA rates &amp; restrictions per destination</div></div><div class="mcp-tool-chev">▼</div></div>
+                    <div class="mcp-tool-detail">
+                      <div class="mcp-schema-grid">
+                        <div class="mcp-schema-col"><div class="mcp-schema-label req">What it needs from you</div><div class="mcp-schema-item">Product name or known HS code</div><div class="mcp-schema-item">Origin country</div><div class="mcp-schema-item">Destination country</div><div class="mcp-schema-item">Shipment value (USD)</div></div>
+                        <div class="mcp-schema-col"><div class="mcp-schema-label ret">What you get back</div><div class="mcp-schema-item">Confirmed HS code (6-digit)</div><div class="mcp-schema-item">MFN import duty rate</div><div class="mcp-schema-item">FTA preferential rate (if applicable)</div><div class="mcp-schema-item">VAT / GST at destination</div><div class="mcp-schema-item">Anti-dumping &amp; import permit flags</div></div>
+                      </div>
+                      <div class="mcp-example-label">// Example call</div>
+                      <div class="mcp-code-wrap"><code class="mcp-code" style="font-size:11px">sloi_hs_lookup({ product: "Steel Rebar", origin: "Ukraine", destination: "UAE", value_usd: 102000 })</code></div>
+                    </div>
+                  </div>
+
+                  <div class="mcp-tool-card" onclick="mcpToggleTool(this)">
                     <div class="mcp-tool-row"><div class="mcp-tool-icon">📑</div><div><div class="mcp-tool-name">Contract Advisor</div><div class="mcp-tool-desc">Reviews a supplier contract and flags risks before you sign</div></div><div class="mcp-tool-chev">▼</div></div>
                     <div class="mcp-tool-detail">
                       <div class="mcp-schema-grid">
@@ -3780,6 +3966,56 @@ Content-Type: application/json
                   <div style="padding:8px;display:flex;gap:6px">
                     <button class="btn btn-xs" style="flex:1;justify-content:center;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="window.open('loi-generator.html','_blank')">📋 LOI</button>
                     <button class="btn btn-xs" style="flex:1;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="window.open('po-generator.html','_blank')">🧾 PO</button>
+                  </div>
+                </div>
+
+                <!-- Document Suite label -->
+                <div style="font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:4px 0 6px;display:flex;align-items:center;gap:6px">Document Suite<span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
+
+                <!-- SPA Generator -->
+                <div style="background:var(--surface);border:1px solid rgba(232,169,74,.2);border-radius:7px;overflow:hidden;margin-bottom:6px">
+                  <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <div style="width:22px;height:22px;border-radius:4px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">📜</div>
+                    <div><div style="font-size:12px;font-weight:600;color:var(--white)">SPA Generator</div><div style="font-size:11px;color:var(--muted)">GAFTA / ICC</div></div>
+                  </div>
+                  <div style="padding:6px 8px">
+                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="openSPAModal()">📜 Generate SPA</button>
+                  </div>
+                </div>
+
+                <!-- Trade Contract Generator -->
+                <div style="background:var(--surface);border:1px solid rgba(91,95,239,.2);border-radius:7px;overflow:hidden;margin-bottom:6px">
+                  <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <div style="width:22px;height:22px;border-radius:4px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⚖️</div>
+                    <div><div style="font-size:12px;font-weight:600;color:var(--white)">Trade Contract</div><div style="font-size:11px;color:var(--muted)">Incoterms 2020</div></div>
+                  </div>
+                  <div style="padding:6px 8px">
+                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="openTradeContractModal()">⚖️ Generate Contract</button>
+                  </div>
+                </div>
+
+                <!-- LC Application Generator -->
+                <div style="background:var(--surface);border:1px solid rgba(45,212,191,.2);border-radius:7px;overflow:hidden;margin-bottom:6px">
+                  <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <div style="width:22px;height:22px;border-radius:4px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">💳</div>
+                    <div><div style="font-size:12px;font-weight:600;color:var(--white)">LC Application</div><div style="font-size:11px;color:var(--muted)">UCP 600</div></div>
+                  </div>
+                  <div style="padding:6px 8px">
+                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="openLCAppModal()">💳 Draft LC Application</button>
+                  </div>
+                </div>
+
+                <!-- Trade Intelligence label -->
+                <div style="font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:8px 0 6px;display:flex;align-items:center;gap:6px">Trade Intelligence<span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
+
+                <!-- HS Code & Duty -->
+                <div style="background:var(--surface);border:1px solid rgba(45,212,191,.15);border-radius:7px;overflow:hidden;margin-bottom:8px">
+                  <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <div style="width:22px;height:22px;border-radius:4px;background:rgba(45,212,191,.08);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">🛃</div>
+                    <div><div style="font-size:12px;font-weight:600;color:var(--white)">HS Code &amp; Duty</div><div style="font-size:11px;color:var(--muted)">Per destination · FTA rates</div></div>
+                  </div>
+                  <div style="padding:6px 8px">
+                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--teal)" onclick="openHSModal()">🛃 HS Lookup</button>
                   </div>
                 </div>
 
@@ -5116,7 +5352,16 @@ Content-Type: application/json
       function renderContractsList(cnts) {
         var container = document.getElementById('ct-contracts-list');
         if (!container) return;
-        if (!cnts.length) { container.innerHTML = ''; return; }
+        if (!cnts.length) {
+          container.innerHTML =
+            '<div style="border:1px dashed var(--border2);border-radius:8px;padding:40px 24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.8">'
+            + '<div style="font-size:32px;margin-bottom:8px">📄</div>'
+            + '<div style="color:var(--white);font-weight:600;font-size:14px;margin-bottom:6px">No contracts yet</div>'
+            + '<div style="margin-bottom:16px">Upload a signed PDF contract and it will appear here for tracking and AI review.</div>'
+            + '<button class="btn btn-xs" onclick="document.getElementById(\'ct-file-input\').click()" style="background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">📎 Upload Contract</button>'
+            + '</div>';
+          return;
+        }
         container.innerHTML = cnts.map(function(c) {
           _ctAIStore[c.id] = { type: 'contract', ref: c.id, name: c.name, date: c.date, status: c.status };
           var badge = c.status === 'signed'
@@ -5205,6 +5450,270 @@ Content-Type: application/json
       /* ── PO GENERATOR ── */
       function openPOModal() {
         window.open('po-generator.html', '_blank');
+      }
+
+      /* ── SPA GENERATOR ── */
+      function openSPAModal() {
+        var m = document.getElementById('spa-modal');
+        if (!m) return;
+        m.classList.add('open');
+        document.getElementById('spa-result').style.display = 'none';
+        document.getElementById('spa-dl-btn').style.display = 'none';
+        document.getElementById('spa-gen-btn').disabled = false;
+      }
+      function closeSPAModal() {
+        var m = document.getElementById('spa-modal');
+        if (m) m.classList.remove('open');
+      }
+      function generateSPA() {
+        var fw   = document.getElementById('spa-framework').value;
+        var prod = document.getElementById('spa-product').value || 'Hard Wheat 12.5% protein';
+        var qty  = document.getElementById('spa-qty').value || '5,000';
+        var pl   = document.getElementById('spa-port-load').value || 'Odesa';
+        var pd   = document.getElementById('spa-port-dest').value || 'Jeddah';
+        var pay  = document.getElementById('spa-payment').value;
+        var arb  = document.getElementById('spa-arbitration').value;
+        var loi  = document.getElementById('spa-loi-ref').value || 'SL-LOI-2026-—';
+        document.getElementById('spa-generating').style.display = 'flex';
+        document.getElementById('spa-result').style.display = 'none';
+        document.getElementById('spa-gen-btn').disabled = true;
+        document.getElementById('spa-dl-btn').style.display = 'none';
+        setTimeout(function() {
+          var ref = 'SPA-2026-' + String(Math.floor(Math.random() * 900) + 100);
+          document.getElementById('spa-generating').style.display = 'none';
+          document.getElementById('spa-result').style.display = 'block';
+          document.getElementById('spa-result').textContent =
+            ref + ' · ' + fw + '\n' +
+            '──────────────────────────────────────────\n' +
+            'LOI Reference : ' + loi + '\n' +
+            'Product       : ' + prod + '\n' +
+            'Quantity      : ' + qty + ' MT\n' +
+            'Port of Load  : ' + pl + '\n' +
+            'Port of Dest  : ' + pd + '\n' +
+            'Payment       : ' + pay + '\n' +
+            'Arbitration   : ' + arb + '\n' +
+            '──────────────────────────────────────────\n' +
+            'Clauses applied:\n' +
+            '  ✓ Quality & Specification (ASTM / ISO ref)\n' +
+            '  ✓ Inspection at Origin — SGS / Bureau Veritas\n' +
+            '  ✓ Force Majeure (UN Vienna Convention)\n' +
+            '  ✓ Penalty & Liquidated Damages\n' +
+            '  ✓ Title & Risk Transfer (Incoterms 2020)\n' +
+            '  ✓ Governing Law & Arbitration (' + arb + ')\n' +
+            '──────────────────────────────────────────\n' +
+            '✓ SPA ready — PDF dispatch queued for all parties.';
+          document.getElementById('spa-gen-btn').disabled = false;
+          document.getElementById('spa-dl-btn').style.display = '';
+        }, 1800);
+      }
+
+      /* ── TRADE CONTRACT GENERATOR ── */
+      function openTradeContractModal() {
+        var m = document.getElementById('trade-contract-modal');
+        if (!m) return;
+        m.classList.add('open');
+        document.getElementById('tc-result').style.display = 'none';
+        document.getElementById('tc-dl-btn').style.display = 'none';
+        document.getElementById('tc-gen-btn').disabled = false;
+      }
+      function closeTradeContractModal() {
+        var m = document.getElementById('trade-contract-modal');
+        if (m) m.classList.remove('open');
+      }
+      function generateTradeContract() {
+        var ref      = document.getElementById('tc-ref').value || 'Manual entry';
+        var incoterm = document.getElementById('tc-incoterm').value;
+        var place    = document.getElementById('tc-place').value || 'Port of Dubai';
+        var law      = document.getElementById('tc-law').value;
+        var arb      = document.getElementById('tc-arb').value;
+        var ins      = document.getElementById('tc-insurance').value;
+        document.getElementById('tc-generating').style.display = 'flex';
+        document.getElementById('tc-result').style.display = 'none';
+        document.getElementById('tc-gen-btn').disabled = true;
+        document.getElementById('tc-dl-btn').style.display = 'none';
+        setTimeout(function() {
+          var tcRef = 'TC-2026-' + String(Math.floor(Math.random() * 900) + 100);
+          document.getElementById('tc-generating').style.display = 'none';
+          document.getElementById('tc-result').style.display = 'block';
+          document.getElementById('tc-result').textContent =
+            tcRef + ' · Incoterms 2020 ' + incoterm + '\n' +
+            '──────────────────────────────────────────\n' +
+            'Source Document : ' + ref + '\n' +
+            'Incoterm        : ' + incoterm + ' — ' + place + '\n' +
+            'Governing Law   : ' + law + '\n' +
+            'Arbitration     : ' + arb + '\n' +
+            '──────────────────────────────────────────\n' +
+            'Risk & Cost Allocation (' + incoterm + '):\n' +
+            '  ✓ Risk transfer point applied per Incoterms 2020\n' +
+            '  ✓ Export clearance: Seller\n' +
+            '  ✓ Import clearance: ' + (incoterm === 'DDP' ? 'Seller' : 'Buyer') + '\n' +
+            (incoterm === 'CIF' || incoterm === 'CFR' ? '  ✓ Freight: Seller\n' : '  ✓ Freight: Buyer\n') +
+            (incoterm === 'CIF' ? '  ✓ Insurance: Seller · ' + ins + '\n' : '') +
+            '──────────────────────────────────────────\n' +
+            'Clauses applied:\n' +
+            '  ✓ Quality, Inspection & Acceptance\n' +
+            '  ✓ Force Majeure & Hardship\n' +
+            '  ✓ Penalty & Liquidated Damages\n' +
+            '  ✓ Title Transfer at named place\n' +
+            '  ✓ Confidentiality & Anti-Bribery\n' +
+            '──────────────────────────────────────────\n' +
+            '✓ Trade Contract ready — dispatch queued to both parties.';
+          document.getElementById('tc-gen-btn').disabled = false;
+          document.getElementById('tc-dl-btn').style.display = '';
+        }, 1800);
+      }
+
+      /* ── LC APPLICATION (UCP 600) ── */
+      function openLCAppModal() {
+        var m = document.getElementById('lc-app-modal');
+        if (!m) return;
+        m.classList.add('open');
+        document.getElementById('lca-result').style.display = 'none';
+        document.getElementById('lca-dl-btn').style.display = 'none';
+        document.getElementById('lca-gen-btn').disabled = false;
+      }
+      function closeLCAppModal() {
+        var m = document.getElementById('lc-app-modal');
+        if (m) m.classList.remove('open');
+      }
+      function generateLCApp() {
+        var ref     = document.getElementById('lca-ref').value || 'Manual entry';
+        var bank    = document.getElementById('lca-bank').value || 'Emirates NBD';
+        var tenor   = document.getElementById('lca-tenor').value;
+        var type    = document.getElementById('lca-type').value;
+        var partial = document.getElementById('lca-partial').value;
+        var trans   = document.getElementById('lca-trans').value;
+        var docs = [];
+        if (document.getElementById('lca-doc-bl').checked)  docs.push('Full set 3/3 original clean on-board Bills of Lading');
+        if (document.getElementById('lca-doc-pl').checked)  docs.push('Packing list in 3 originals');
+        if (document.getElementById('lca-doc-ci').checked)  docs.push('Signed commercial invoice in 3 originals');
+        if (document.getElementById('lca-doc-co').checked)  docs.push('Certificate of Origin (Chamber of Commerce)');
+        if (document.getElementById('lca-doc-ic').checked)  docs.push('Inspection certificate (SGS or Bureau Veritas)');
+        if (document.getElementById('lca-doc-ins').checked) docs.push('Insurance certificate / policy (min 110% CIF value)');
+        if (document.getElementById('lca-doc-ph').checked)  docs.push('Phytosanitary certificate (country of origin)');
+        if (document.getElementById('lca-doc-an').checked)  docs.push('Quality / analysis report from accredited lab');
+        document.getElementById('lca-generating').style.display = 'flex';
+        document.getElementById('lca-result').style.display = 'none';
+        document.getElementById('lca-gen-btn').disabled = true;
+        document.getElementById('lca-dl-btn').style.display = 'none';
+        setTimeout(function() {
+          var lcRef = 'LC-APP-2026-' + String(Math.floor(Math.random() * 900) + 100);
+          document.getElementById('lca-generating').style.display = 'none';
+          document.getElementById('lca-result').style.display = 'block';
+          document.getElementById('lca-result').textContent =
+            lcRef + ' · UCP 600\n' +
+            '──────────────────────────────────────────\n' +
+            'Source Document : ' + ref + '\n' +
+            'Issuing Bank    : ' + bank + '\n' +
+            'LC Type         : ' + type + '\n' +
+            'Tenor           : ' + tenor + '\n' +
+            'Partial Shipment: ' + partial + '\n' +
+            'Transhipment    : ' + trans + '\n' +
+            '──────────────────────────────────────────\n' +
+            'Required Documents (' + docs.length + '):\n' +
+            docs.map(function(d){ return '  ✓ ' + d; }).join('\n') + '\n' +
+            '──────────────────────────────────────────\n' +
+            'UCP 600 References applied:\n' +
+            '  Art. 3  — Irrevocability\n' +
+            '  Art. 14 — Standard for Examination of Documents\n' +
+            '  Art. 20 — Bills of Lading\n' +
+            '  Art. 28 — Insurance Document\n' +
+            '──────────────────────────────────────────\n' +
+            '✓ LC Application ready — submit to ' + bank + '.';
+          document.getElementById('lca-gen-btn').disabled = false;
+          document.getElementById('lca-dl-btn').style.display = '';
+        }, 2000);
+      }
+
+      /* ── HS CODE & DUTY REPORT ── */
+      var HS_DB = {
+        'Steel Rebar':    { code:'7213.10', desc:'Bars/rods of iron, hot-rolled, with indentations' },
+        'Bitumen':        { code:'2713.20', desc:'Petroleum bitumen (asphalt)' },
+        'Hard Wheat':     { code:'1001.19', desc:'Durum wheat, other than seed' },
+        'Wheat':          { code:'1001.99', desc:'Wheat other than durum wheat, other than seed' },
+        'Cement':         { code:'2523.29', desc:'Portland cement, other' },
+        'Aluminum':       { code:'7601.10', desc:'Unwrought aluminium, not alloyed' },
+        'Copper':         { code:'7403.11', desc:'Refined copper, cathodes' },
+        'Clinker':        { code:'2523.10', desc:'Cement clinker' },
+        'Urea':           { code:'3102.10', desc:'Urea, whether or not in aqueous solution' },
+      };
+      var DUTY_DB = {
+        'UAE':          { mfn:'5%',  fta:{ 'Saudi Arabia':'0% (GCC)', 'Egypt':'0% (GAFTA)', 'Jordan':'0% (GAFTA)', 'Iraq':'0% (GAFTA)' }, vat:'5% VAT', ad:null },
+        'Saudi Arabia': { mfn:'5%',  fta:{ 'UAE':'0% (GCC)', 'Egypt':'0% (GAFTA)', 'Jordan':'0% (GAFTA)' }, vat:'15% VAT', ad:null },
+        'Egypt':        { mfn:'10%', fta:{ 'UAE':'0% (GAFTA)', 'Saudi Arabia':'0% (GAFTA)', 'Jordan':'0% (GAFTA)', 'Morocco':'0% (GAFTA)' }, vat:'14% VAT', ad:'⚠ Anti-dumping on China/Turkey steel — verify' },
+        'Iraq':         { mfn:'5%',  fta:{ 'Saudi Arabia':'0% (GCC assoc.)', 'UAE':'0% (GCC assoc.)' }, vat:'None', ad:null },
+        'Jordan':       { mfn:'10%', fta:{ 'UAE':'0% (GAFTA)', 'Egypt':'0% (GAFTA)', 'USA':'0% (US-Jordan FTA)' }, vat:'16% GST', ad:null },
+        'USA':          { mfn:'3.5%',fta:{ 'Jordan':'0% (US-Jordan FTA)' }, vat:'None (state sales tax applies)', ad:'⚠ Section 232 tariffs on steel (25%) and aluminum (10%) from most origins' },
+        'UK':           { mfn:'0%',  fta:{}, vat:'20% VAT', ad:'⚠ UK anti-dumping on Chinese steel — check schedule' },
+        'Germany':      { mfn:'0%',  fta:{}, vat:'19% VAT', ad:null },
+      };
+      function openHSModal() {
+        var m = document.getElementById('hs-modal');
+        if (!m) return;
+        m.classList.add('open');
+        document.getElementById('hs-result').style.display = 'none';
+        document.getElementById('hs-copy-btn').style.display = 'none';
+        document.getElementById('hs-lookup-btn').disabled = false;
+      }
+      function closeHSModal() {
+        var m = document.getElementById('hs-modal');
+        if (m) m.classList.remove('open');
+      }
+      function runHSLookup() {
+        var prod  = document.getElementById('hs-product').value.trim();
+        var code  = document.getElementById('hs-code-input').value.trim();
+        var orig  = document.getElementById('hs-origin').value;
+        var dest  = document.getElementById('hs-dest').value;
+        var val   = document.getElementById('hs-value').value || '0';
+        if (!prod && !code) { alert('Enter a product name or HS code.'); return; }
+        document.getElementById('hs-generating').style.display = 'flex';
+        document.getElementById('hs-result').style.display = 'none';
+        document.getElementById('hs-lookup-btn').disabled = true;
+        document.getElementById('hs-copy-btn').style.display = 'none';
+        setTimeout(function() {
+          var hsEntry = null;
+          if (code) {
+            hsEntry = { code: code, desc: 'Custom entry' };
+          } else {
+            for (var k in HS_DB) {
+              if (prod.toLowerCase().indexOf(k.toLowerCase()) !== -1 || k.toLowerCase().indexOf(prod.toLowerCase()) !== -1) {
+                hsEntry = HS_DB[k]; break;
+              }
+            }
+            if (!hsEntry) hsEntry = { code: '—.—', desc: 'Manual classification required — product not in quick lookup' };
+          }
+          var dutyInfo = DUTY_DB[dest] || { mfn:'—', fta:{}, vat:'—', ad:null };
+          var ftaRate  = dutyInfo.fta[orig] || null;
+          var dutyAmt  = ftaRate ? '0' : (parseFloat(dutyInfo.mfn) * parseFloat(val) / 100).toFixed(0);
+          var report =
+            'HS CODE LOOKUP REPORT\n' +
+            '──────────────────────────────────────────\n' +
+            'Product       : ' + (prod || code) + '\n' +
+            'HS Code       : ' + hsEntry.code + '\n' +
+            'Description   : ' + hsEntry.desc + '\n' +
+            '──────────────────────────────────────────\n' +
+            'Origin        : ' + orig + '\n' +
+            'Destination   : ' + dest + '\n' +
+            'Shipment Value: USD ' + Number(val).toLocaleString() + '\n' +
+            '──────────────────────────────────────────\n' +
+            'DUTY RATES\n' +
+            '  MFN Rate      : ' + dutyInfo.mfn + '\n' +
+            (ftaRate ? '  FTA Rate      : ' + ftaRate + ' (' + orig + '→' + dest + ')\n' : '  FTA Rate      : No FTA applicable\n') +
+            '  Tax at dest.  : ' + dutyInfo.vat + '\n' +
+            '  Est. duty cost: USD ' + Number(dutyAmt).toLocaleString() + (ftaRate ? ' (FTA — zero duty)' : '') + '\n' +
+            '──────────────────────────────────────────\n' +
+            (dutyInfo.ad ? 'FLAGS\n  ' + dutyInfo.ad + '\n──────────────────────────────────────────\n' : '') +
+            '✓ Report complete. Verify with destination customs authority before shipment.';
+          document.getElementById('hs-generating').style.display = 'none';
+          document.getElementById('hs-result').style.display = 'block';
+          document.getElementById('hs-result-body').textContent = report;
+          document.getElementById('hs-lookup-btn').disabled = false;
+          document.getElementById('hs-copy-btn').style.display = '';
+        }, 1400);
+      }
+      function hssCopyResult() {
+        var text = document.getElementById('hs-result-body').textContent;
+        navigator.clipboard.writeText(text).then(function(){ alert('Report copied.'); });
       }
 
       function toggleArch() {
@@ -5668,6 +6177,16 @@ Content-Type: application/json
 
       function renderRFQs() {
         var html = "";
+        if (!RFQS_DATA.length) {
+          document.getElementById("rfq-list").innerHTML =
+            '<div style="border:1px dashed var(--border2);border-radius:8px;padding:40px 24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.8">'
+            + '<div style="font-size:32px;margin-bottom:8px">📋</div>'
+            + '<div style="color:var(--white);font-weight:600;font-size:14px;margin-bottom:6px">No RFQs yet</div>'
+            + '<div style="margin-bottom:16px">Start a negotiation — your AI agent will send RFQs and track supplier responses here.</div>'
+            + '<button class="btn btn-xs btn-p" onclick="window.open(\'negotiation-agent.html\',\'_blank\')">Start Negotiation →</button>'
+            + '</div>';
+          return;
+        }
         RFQS_DATA.forEach(function (r) {
           html += '<div class="rfq-row">';
           html +=
@@ -5720,6 +6239,16 @@ Content-Type: application/json
 
       function renderLOIs() {
         var html = "";
+        if (!LOIS_DATA.length) {
+          document.getElementById("loi-list").innerHTML =
+            '<div style="border:1px dashed var(--border2);border-radius:8px;padding:40px 24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.8">'
+            + '<div style="font-size:32px;margin-bottom:8px">📄</div>'
+            + '<div style="color:var(--white);font-weight:600;font-size:14px;margin-bottom:6px">No signed LOIs yet</div>'
+            + '<div style="margin-bottom:16px">Once your negotiation agent reaches agreement, a signed LOI will appear here automatically.</div>'
+            + '<button class="btn btn-xs btn-g" onclick="window.open(\'negotiation-agent.html\',\'_blank\')">Open Negotiation Agent →</button>'
+            + '</div>';
+          return;
+        }
         LOIS_DATA.forEach(function (l) {
           html +=
             '<div class="loi-card' +
@@ -7072,6 +7601,14 @@ Content-Type: application/json
       })();
 
       var PROC_PROFILES = {
+        saas: {
+          label: '🚀 SLOI AI SaaS',
+          summary: 'Full catalog · FOB · LOI + SPA + Trade Contract + LC · All AI agents',
+          products: ['Steel Rebar', 'Hard Wheat', 'Crude Oil'],
+          incoterm: 'FOB',
+          regions: ['UAE', 'Global'],
+          maxPrice: '5,000', qty: '100', autoLOI: '200', maxDeals: '10', strategy: 'standard'
+        },
         construction: {
           label: '🏗 Construction',
           summary: 'Cement · Steel · Aggregates · DDP · Milestone payments',
@@ -7100,21 +7637,26 @@ Content-Type: application/json
         if (badge) { badge.textContent = '● Active: ' + p.label; badge.style.display = 'block'; }
 
         // Card border highlight + check icon + button text
-        ['construction', 'factory'].forEach(function(t) {
+        var profileColors = {
+          saas:         { active: 'var(--gold)',   dim: 'rgba(232,169,74,.3)',  bg: 'rgba(232,169,74,.1)',  label: 'SaaS' },
+          construction: { active: 'var(--teal)',   dim: 'rgba(45,212,191,.3)',  bg: 'rgba(45,212,191,.1)',  label: 'Construction' },
+          factory:      { active: 'var(--indigo)', dim: 'rgba(91,95,239,.3)',   bg: 'rgba(91,95,239,.1)',   label: 'Factory' }
+        };
+        ['saas', 'construction', 'factory'].forEach(function(t) {
           var card = document.getElementById('prof-card-' + t);
           var chk  = document.getElementById('prof-check-' + t);
           var btn  = document.getElementById('prof-btn-' + t);
+          var col  = profileColors[t];
           if (card) {
             card.classList.toggle('prof-active', t === type);
-            if (t === 'construction') card.style.borderColor = t === type ? 'var(--teal)' : 'rgba(45,212,191,.3)';
-            else card.style.borderColor = t === type ? 'var(--indigo)' : 'rgba(91,95,239,.3)';
+            card.style.borderColor = t === type ? col.active : col.dim;
           }
           if (chk) chk.style.display = t === type ? 'flex' : 'none';
           if (btn && t === type) {
             btn.textContent = '✓ Profile active';
-            btn.style.background = t === 'construction' ? 'rgba(45,212,191,.1)' : 'rgba(91,95,239,.1)';
+            btn.style.background = col.bg;
           } else if (btn) {
-            btn.textContent = 'Activate ' + (t === 'construction' ? 'Construction' : 'Factory') + ' profile →';
+            btn.textContent = 'Activate ' + col.label + ' profile →';
             btn.style.background = 'none';
           }
         });
@@ -7130,8 +7672,10 @@ Content-Type: application/json
         if (sub) sub.textContent = p.label + ' profile active — defaults applied below';
 
         // Highlight the active switch button
+        var ss = document.getElementById('mp-switch-saas');
         var sc = document.getElementById('mp-switch-construction');
         var sf = document.getElementById('mp-switch-factory');
+        if (ss) ss.className = type === 'saas'         ? 'btn btn-xs btn-p' : 'btn btn-xs';
         if (sc) sc.className = type === 'construction' ? 'btn btn-xs btn-p' : 'btn btn-xs';
         if (sf) sf.className = type === 'factory'      ? 'btn btn-xs btn-p' : 'btn btn-xs';
 
@@ -7379,6 +7923,353 @@ Content-Type: application/json
   </div>
 </div>
 
+<!-- SPA GENERATOR MODAL -->
+<div class="modal-bg" id="spa-modal" onclick="if(event.target===this)closeSPAModal()">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">📜 SPA Generator &middot; GAFTA / ICC</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Sales &amp; Purchase Agreement — auto-drafted from your signed LOI</div>
+      </div>
+      <button class="modal-close" onclick="closeSPAModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.2);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--gold);font-family:'IBM Plex Mono',monospace">
+        ⚡ The engine pulls deal terms directly from your LOI — only confirm the framework and any overrides.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <label class="flabel" style="font-size:11px">Load from LOI</label>
+          <select class="inp" id="spa-loi-ref" style="font-size:12px;padding:5px 8px">
+            <option value="">— select a signed LOI —</option>
+            <option value="SL-LOI-20260603">SL-LOI-20260603 &middot; Hard Wheat &middot; $56K</option>
+            <option value="SL-LOI-20260602">SL-LOI-20260602 &middot; Aluminum &middot; $46K</option>
+            <option value="SL-LOI-20260604">SL-LOI-20260604 &middot; Steel Rebar &middot; pending</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Contract Framework</label>
+          <select class="inp" id="spa-framework" style="font-size:12px;padding:5px 8px">
+            <option value="GAFTA 49">GAFTA 49 — Grain (CIF / CFR)</option>
+            <option value="GAFTA 78">GAFTA 78 — Grain (FOB)</option>
+            <option value="GAFTA 100">GAFTA 100 — Feed Commodities</option>
+            <option value="ICC">ICC Model International Sale Contract</option>
+            <option value="FOSFA">FOSFA — Oils &amp; Fats</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <label class="flabel" style="font-size:11px">Product &amp; Specification</label>
+          <input class="inp" id="spa-product" placeholder="e.g. Hard Wheat 12.5% protein" style="font-size:12px;padding:5px 8px"/>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Quantity (MT)</label>
+          <input class="inp" id="spa-qty" type="number" placeholder="5000" style="font-size:12px;padding:5px 8px"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <label class="flabel" style="font-size:11px">Port of Loading</label>
+          <input class="inp" id="spa-port-load" placeholder="e.g. Odesa, Constanta" style="font-size:12px;padding:5px 8px"/>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Port of Destination</label>
+          <input class="inp" id="spa-port-dest" placeholder="e.g. Jeddah, Dubai" style="font-size:12px;padding:5px 8px"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div>
+          <label class="flabel" style="font-size:11px">Payment Terms</label>
+          <select class="inp" id="spa-payment" style="font-size:12px;padding:5px 8px">
+            <option>LC at sight (UCP 600)</option>
+            <option>LC 30 days (UCP 600)</option>
+            <option>LC 60 days (UCP 600)</option>
+            <option>CAD (Documents against Payment)</option>
+            <option>TT 30% advance + 70% on BL</option>
+            <option>Open Account 30 days</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Arbitration</label>
+          <select class="inp" id="spa-arbitration" style="font-size:12px;padding:5px 8px">
+            <option>GAFTA Arbitration (London)</option>
+            <option>ICC Court of Arbitration (Paris)</option>
+            <option>DIFC-LCIA (Dubai)</option>
+            <option>LCIA (London)</option>
+          </select>
+        </div>
+      </div>
+      <div id="spa-generating" style="display:none;align-items:center;gap:10px;padding:12px 0;color:var(--muted);font-size:13px">
+        <div style="width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
+        Drafting SPA — applying GAFTA / ICC clause set…
+      </div>
+      <div id="spa-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--text);font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;line-height:1.6"></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeSPAModal()">Close</button>
+      <button class="btn" id="spa-gen-btn" style="background:rgba(232,169,74,.15);border-color:rgba(232,169,74,.4);color:var(--gold)" onclick="generateSPA()">📜 Generate SPA</button>
+      <button class="btn" id="spa-dl-btn" style="display:none;background:var(--indigo);color:#fff;border-color:var(--indigo)" onclick="alert('Downloading SPA PDF…')">&#8595; Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRADE CONTRACT MODAL -->
+<div class="modal-bg" id="trade-contract-modal" onclick="if(event.target===this)closeTradeContractModal()">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">⚖️ Trade Contract · Incoterms 2020</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Full trade contract auto-drafted from your SPA or LOI</div>
+      </div>
+      <button class="modal-close" onclick="closeTradeContractModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--violet);font-family:'IBM Plex Mono',monospace">
+        ⚡ Deal terms are pulled from the linked document — confirm your Incoterm and jurisdiction.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <label class="flabel" style="font-size:11px">Load from LOI or SPA</label>
+          <select class="inp" id="tc-ref" style="font-size:12px;padding:5px 8px">
+            <option value="">— select document —</option>
+            <option value="SPA-2026-001">SPA-2026-001 · Hard Wheat · $280K</option>
+            <option value="SPA-2026-002">SPA-2026-002 · Steel Rebar · $102K</option>
+            <option value="SL-LOI-20260603">SL-LOI-20260603 · Hard Wheat · $56K</option>
+            <option value="SL-LOI-20260602">SL-LOI-20260602 · Aluminum · $46K</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Incoterm (2020)</label>
+          <select class="inp" id="tc-incoterm" style="font-size:12px;padding:5px 8px">
+            <option value="CIF">CIF — Cost, Insurance &amp; Freight</option>
+            <option value="CFR">CFR — Cost &amp; Freight</option>
+            <option value="FOB">FOB — Free on Board</option>
+            <option value="FCA">FCA — Free Carrier</option>
+            <option value="DAP">DAP — Delivered at Place</option>
+            <option value="DDP">DDP — Delivered Duty Paid</option>
+            <option value="EXW">EXW — Ex Works</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <label class="flabel" style="font-size:11px">Named Place / Port</label>
+          <input class="inp" id="tc-place" placeholder="e.g. Port of Dubai" style="font-size:12px;padding:5px 8px"/>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Governing Law</label>
+          <select class="inp" id="tc-law" style="font-size:12px;padding:5px 8px">
+            <option>UAE (DIFC)</option>
+            <option>England &amp; Wales</option>
+            <option>Saudi Arabia</option>
+            <option>Egypt</option>
+            <option>Ukraine</option>
+            <option>Switzerland</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div>
+          <label class="flabel" style="font-size:11px">Arbitration</label>
+          <select class="inp" id="tc-arb" style="font-size:12px;padding:5px 8px">
+            <option>DIFC-LCIA (Dubai)</option>
+            <option>ICC Court of Arbitration (Paris)</option>
+            <option>LCIA (London)</option>
+            <option>DIAC (Dubai)</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Insurance (CIF only)</label>
+          <select class="inp" id="tc-insurance" style="font-size:12px;padding:5px 8px">
+            <option>Institute Cargo Clauses (A) — All Risks</option>
+            <option>Institute Cargo Clauses (B)</option>
+            <option>Institute Cargo Clauses (C)</option>
+            <option>N/A — not CIF</option>
+          </select>
+        </div>
+      </div>
+      <div id="tc-generating" style="display:none;align-items:center;gap:10px;padding:12px 0;color:var(--muted);font-size:13px">
+        <div style="width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--violet);border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
+        Drafting Trade Contract — applying Incoterms 2020 risk &amp; cost allocation…
+      </div>
+      <div id="tc-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--text);font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;line-height:1.6"></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeTradeContractModal()">Close</button>
+      <button class="btn" id="tc-gen-btn" style="background:rgba(91,95,239,.15);border-color:rgba(91,95,239,.4);color:var(--violet)" onclick="generateTradeContract()">⚖️ Generate Contract</button>
+      <button class="btn" id="tc-dl-btn" style="display:none;background:var(--indigo);color:#fff;border-color:var(--indigo)" onclick="alert('Downloading Trade Contract PDF…')">&#8595; Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- LC APPLICATION MODAL -->
+<div class="modal-bg" id="lc-app-modal" onclick="if(event.target===this)closeLCAppModal()">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">💳 LC Application · UCP 600</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Bank-ready Letter of Credit application from your LOI or SPA</div>
+      </div>
+      <button class="modal-close" onclick="closeLCAppModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--teal);font-family:'IBM Plex Mono',monospace">
+        ⚡ Applicant, beneficiary, amount and goods details are auto-filled from the linked document.
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <label class="flabel" style="font-size:11px">Load from LOI or SPA</label>
+          <select class="inp" id="lca-ref" style="font-size:12px;padding:5px 8px">
+            <option value="">— select document —</option>
+            <option value="SPA-2026-001">SPA-2026-001 · Hard Wheat · $280K</option>
+            <option value="SL-LOI-20260603">SL-LOI-20260603 · Hard Wheat · $56K</option>
+            <option value="SL-LOI-20260602">SL-LOI-20260602 · Aluminum · $46K</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Issuing Bank</label>
+          <input class="inp" id="lca-bank" placeholder="e.g. Emirates NBD, Mashreq" style="font-size:12px;padding:5px 8px"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <label class="flabel" style="font-size:11px">LC Tenor</label>
+          <select class="inp" id="lca-tenor" style="font-size:12px;padding:5px 8px">
+            <option>At Sight</option>
+            <option>30 Days after BL date</option>
+            <option>60 Days after BL date</option>
+            <option>90 Days after BL date</option>
+            <option>120 Days after BL date</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">LC Type</label>
+          <select class="inp" id="lca-type" style="font-size:12px;padding:5px 8px">
+            <option>Irrevocable (UCP 600 Art. 3)</option>
+            <option>Irrevocable &amp; Confirmed</option>
+            <option>Transferable (UCP 600 Art. 38)</option>
+            <option>Back-to-Back</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:12px">
+        <label class="flabel" style="font-size:11px">Required Documents</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-bl" checked style="accent-color:var(--teal)"/> Full set of clean on-board BL</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-pl" checked style="accent-color:var(--teal)"/> Packing list</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-ci" checked style="accent-color:var(--teal)"/> Commercial invoice</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-co" checked style="accent-color:var(--teal)"/> Certificate of origin</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-ic" style="accent-color:var(--teal)"/> Inspection certificate (SGS/BV)</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-ins" style="accent-color:var(--teal)"/> Insurance certificate</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-ph" style="accent-color:var(--teal)"/> Phytosanitary certificate</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-an" style="accent-color:var(--teal)"/> Analysis / quality report</label>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+        <div>
+          <label class="flabel" style="font-size:11px">Partial Shipment</label>
+          <select class="inp" id="lca-partial" style="font-size:12px;padding:5px 8px">
+            <option>Not allowed</option>
+            <option>Allowed</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Transhipment</label>
+          <select class="inp" id="lca-trans" style="font-size:12px;padding:5px 8px">
+            <option>Not allowed</option>
+            <option>Allowed</option>
+          </select>
+        </div>
+      </div>
+      <div id="lca-generating" style="display:none;align-items:center;gap:10px;padding:12px 0;color:var(--muted);font-size:13px">
+        <div style="width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--teal);border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
+        Drafting LC Application — applying UCP 600 field requirements…
+      </div>
+      <div id="lca-result" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--text);font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;line-height:1.6"></div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeLCAppModal()">Close</button>
+      <button class="btn" id="lca-gen-btn" style="background:rgba(45,212,191,.12);border-color:rgba(45,212,191,.35);color:var(--teal)" onclick="generateLCApp()">💳 Generate LC Application</button>
+      <button class="btn" id="lca-dl-btn" style="display:none;background:var(--indigo);color:#fff;border-color:var(--indigo)" onclick="alert('Downloading LC Application PDF…')">&#8595; Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- HS CODE & DUTY REPORT MODAL -->
+<div class="modal-bg" id="hs-modal" onclick="if(event.target===this)closeHSModal()">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-hd">
+      <div>
+        <div class="modal-title">🛃 HS Code &amp; Duty Report</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">HS classification · import duty · FTA rates · restrictions — per destination</div>
+      </div>
+      <button class="modal-close" onclick="closeHSModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <label class="flabel" style="font-size:11px">Product Name</label>
+          <input class="inp" id="hs-product" placeholder="e.g. Steel Rebar, Bitumen, Wheat" style="font-size:12px;padding:5px 8px"/>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Known HS Code (optional)</label>
+          <input class="inp" id="hs-code-input" placeholder="e.g. 7213.10" style="font-size:12px;padding:5px 8px"/>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div>
+          <label class="flabel" style="font-size:11px">Origin Country</label>
+          <select class="inp" id="hs-origin" style="font-size:12px;padding:5px 8px">
+            <option>Ukraine</option>
+            <option>Saudi Arabia</option>
+            <option>UAE</option>
+            <option>Egypt</option>
+            <option>Turkey</option>
+            <option>China</option>
+            <option>India</option>
+            <option>Russia</option>
+            <option>USA</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel" style="font-size:11px">Destination Country</label>
+          <select class="inp" id="hs-dest" style="font-size:12px;padding:5px 8px">
+            <option>UAE</option>
+            <option>Saudi Arabia</option>
+            <option>Egypt</option>
+            <option>Iraq</option>
+            <option>Jordan</option>
+            <option>Libya</option>
+            <option>Morocco</option>
+            <option>USA</option>
+            <option>UK</option>
+            <option>Germany</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:16px">
+        <label class="flabel" style="font-size:11px">Shipment Value (USD)</label>
+        <input class="inp" id="hs-value" type="number" placeholder="e.g. 250000" style="font-size:12px;padding:5px 8px;width:50%"/>
+      </div>
+      <div id="hs-generating" style="display:none;align-items:center;gap:10px;padding:12px 0;color:var(--muted);font-size:13px">
+        <div style="width:14px;height:14px;border:2px solid var(--border2);border-top-color:var(--teal);border-radius:50%;animation:spin 1s linear infinite;flex-shrink:0"></div>
+        Looking up HS classification and duty rates…
+      </div>
+      <div id="hs-result" style="display:none">
+        <div id="hs-result-body" style="background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:12px;color:var(--text);font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;line-height:1.8"></div>
+      </div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeHSModal()">Close</button>
+      <button class="btn" id="hs-lookup-btn" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="runHSLookup()">🛃 Run Lookup</button>
+      <button class="btn" id="hs-copy-btn" style="display:none" onclick="hssCopyResult()">📋 Copy report</button>
+    </div>
+  </div>
+</div>
+
 <!-- LOGISTICS & CUSTOMS MODAL -->
 <div class="modal-bg" id="lc-modal" onclick="if(event.target===this)closeLogisticsModal()">
   <div class="modal">
@@ -7435,6 +8326,139 @@ Content-Type: application/json
   </div>
 
   <div class="adr-body">
+
+    <!-- SAAS CONTENT -->
+    <div class="adr-content" id="adr-con-saas">
+
+      <!-- AGENTS TAB -->
+      <div id="adr-agents-saas">
+        <div class="arch-grid">
+
+          <div class="arch-card">
+            <div class="arch-card-hdr"><div class="arch-card-icon">🔍</div><div><div class="arch-card-name">Market Intelligence &amp; Price Discovery Agent</div><span class="arch-persona" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.25);color:var(--gold)">Market Analyst</span></div></div>
+            <div class="arch-card-body">
+              <div class="arch-sec-label">// System Prompt</div>
+              <div class="sys-prompt-box">You are a live commodity market intelligence agent for SLOI AI. Your role is to continuously monitor global price feeds, supplier quote databases, and trade flow data to surface the best sourcing opportunities within a buyer's mandate parameters.
+
+Instructions:
+- Ingest commodity watchlists from active mandates. For each commodity, query SLOI AI's supplier network for live indicative prices, lead times, and minimum order quantities.
+- Cross-reference with global price benchmarks: LME (metals), CBOT (agricultural), Platts (energy), ICIS (chemicals). Flag when the network price diverges from the benchmark by &gt;5%.
+- Rank suppliers by a composite score: Price 45%, Lead Time 25%, Compliance Score 20%, Reputation Tier 10%.
+- Surface top-3 opportunities per commodity as best_offers[ ] with a "buy signal" confidence rating.
+- Alert when a mandate's target price becomes achievable based on current market conditions.
+- Re-run every 30 minutes or on any mandate update event.
+
+Tone: data-driven, opportunity-focused. Always show price delta vs benchmark and confidence score.</div>
+              <div class="arch-sec-label">// Inputs &amp; Outputs · Tools</div>
+              <div class="arch-io-grid">
+                <div class="arch-io-col"><div class="arch-io-label inp">Inputs</div><div class="arch-io-item">Active mandate parameters (product, qty, max price)</div><div class="arch-io-item">SLOI AI supplier network quotes</div><div class="arch-io-item">LME / CBOT / Platts / ICIS price feeds</div><div class="arch-io-item">Vendor reputation &amp; compliance scores</div></div>
+                <div class="arch-io-col"><div class="arch-io-label out">Outputs</div><div class="arch-io-item">best_offers[ ] (supplier, price, delta_vs_benchmark, confidence)</div><div class="arch-io-item">market_report.json (price trend, volume, spread)</div><div class="arch-io-item">buy_signal_alerts[ ] (mandate_id, trigger_price, confidence)</div><div class="arch-io-item">price_movement_log (30-min snapshots)</div></div>
+                <div class="arch-io-col"><div class="arch-io-label tools">Tools &amp; APIs</div><div class="arch-io-item">SLOI AI Supplier Network API</div><div class="arch-io-item">LME / CBOT / Platts price ticker API</div><div class="arch-io-item">ICIS / Argus commodity data</div><div class="arch-io-item">Bloomberg / Refinitiv feed (optional)</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="arch-card">
+            <div class="arch-card-hdr"><div class="arch-card-icon">🤖</div><div><div class="arch-card-name">AI Negotiation &amp; LOI Engine</div><span class="arch-persona" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.25);color:var(--gold)">Deal Closer</span></div></div>
+            <div class="arch-card-body">
+              <div class="arch-sec-label">// System Prompt</div>
+              <div class="sys-prompt-box">You are SLOI AI's core negotiation engine. Your role is to conduct multi-round price negotiations with pre-qualified suppliers on behalf of buyers, strictly within mandate parameters, and generate a binding Letter of Intent upon deal close.
+
+Instructions:
+- Ingest the active mandate (product, qty, target price, max price, incoterm, payment terms, strategy). Never exceed max_price under any circumstance.
+- Open negotiation with the top-ranked supplier from Market Intelligence. State the RFQ clearly: product spec, quantity, incoterm, delivery timeline, and payment terms.
+- Apply strategy: standard (max 5 rounds, open at target_price − 8%), aggressive (max 7 rounds, open at target_price − 15%, apply time pressure tactics in rounds 3+).
+- For each counter-offer: evaluate against mandate, compute gap_pct = (offer − max_price) / max_price, and decide: counter, accept, or escalate to AWAIT_HUMAN if within 2% of max_price.
+- On deal close: generate draft_loi.json including all agreed terms, compliance check result, and dispatch to both parties via email + WhatsApp.
+- Emit AG-UI SSE events per round so the buyer can follow live in the platform.
+
+Tone: commercially assertive, professional. Never reveal max_price. Surface savings vs opening offer.</div>
+              <div class="arch-sec-label">// Inputs &amp; Outputs · Tools</div>
+              <div class="arch-io-grid">
+                <div class="arch-io-col"><div class="arch-io-label inp">Inputs</div><div class="arch-io-item">Mandate parameters (product, qty, target, max, strategy)</div><div class="arch-io-item">best_offers[ ] from Market Intelligence Agent</div><div class="arch-io-item">Supplier compliance score</div><div class="arch-io-item">Buyer contact &amp; company details</div></div>
+                <div class="arch-io-col"><div class="arch-io-label out">Outputs</div><div class="arch-io-item">negotiation_log.json (round, offer, counter, gap_pct, status)</div><div class="arch-io-item">draft_loi.json (all agreed terms, parties, incoterm, payment)</div><div class="arch-io-item">deal_summary (savings %, total value, conditions)</div><div class="arch-io-item">AG-UI SSE stream (live per round)</div></div>
+                <div class="arch-io-col"><div class="arch-io-label tools">Tools &amp; APIs</div><div class="arch-io-item">SLOI AI Negotiation API (sloi_negotiate)</div><div class="arch-io-item">SLOI AI LOI Engine (sloi_generate_loi)</div><div class="arch-io-item">Email / WhatsApp dispatch API</div><div class="arch-io-item">Sanctions pre-check (OFAC / EU / UN)</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="arch-card">
+            <div class="arch-card-hdr"><div class="arch-card-icon">📁</div><div><div class="arch-card-name">Procurement Document Automation Agent</div><span class="arch-persona" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.25);color:var(--gold)">Document Engine</span></div></div>
+            <div class="arch-card-body">
+              <div class="arch-sec-label">// System Prompt</div>
+              <div class="sys-prompt-box">You are SLOI AI's procurement document automation agent. Your role is to generate every legal and trade document required to close a commodity deal — SPA, Trade Contract, LC Application, HS Code &amp; Duty Report — automatically from a signed LOI, with zero manual input.
+
+Instructions:
+- On LOI signature event: read loi_ref, parties, product, qty, price, incoterm, payment terms, and port details.
+- Generate SPA (sloi_generate_spa): apply GAFTA 49/78/100 or ICC framework based on product type (GAFTA for soft commodities, ICC for metals/chemicals). Include arbitration clause and force majeure.
+- Generate Trade Contract (sloi_trade_contract): apply Incoterms 2020. Include risk transfer point, insurance obligations, and governing law clause matching the incoterm and jurisdiction.
+- Generate LC Application (sloi_lc_application): draft bank-ready MT700 form compliant with UCP 600. Auto-select required documents: B/L, packing list, cert of origin, inspection certificate, insurance certificate.
+- Generate HS Code &amp; Duty Report (sloi_hs_lookup): classify the product, return MFN duty rate, FTA preferential rates, VAT, and any anti-dumping or import permit flags for the destination country.
+- Dispatch all documents to buyer and supplier simultaneously via email.
+
+Tone: precise, legally rigorous. Never infer missing data — flag for human review.</div>
+              <div class="arch-sec-label">// Inputs &amp; Outputs · Tools</div>
+              <div class="arch-io-grid">
+                <div class="arch-io-col"><div class="arch-io-label inp">Inputs</div><div class="arch-io-item">Signed LOI (loi_ref, all deal terms)</div><div class="arch-io-item">Buyer &amp; supplier legal entity details</div><div class="arch-io-item">Issuing bank name (for LC)</div><div class="arch-io-item">Destination country (for HS/duty)</div></div>
+                <div class="arch-io-col"><div class="arch-io-label out">Outputs</div><div class="arch-io-item">spa.pdf — GAFTA / ICC Sales &amp; Purchase Agreement</div><div class="arch-io-item">trade_contract.pdf — Incoterms 2020 compliant</div><div class="arch-io-item">lc_application.pdf — UCP 600 / SWIFT MT700</div><div class="arch-io-item">hs_duty_report.pdf — HS code, duties, FTA, VAT, flags</div></div>
+                <div class="arch-io-col"><div class="arch-io-label tools">Tools &amp; APIs</div><div class="arch-io-item">sloi_generate_spa · sloi_trade_contract</div><div class="arch-io-item">sloi_lc_application · sloi_hs_lookup</div><div class="arch-io-item">PDF generation engine</div><div class="arch-io-item">Email / WhatsApp dispatch API</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="arch-card">
+            <div class="arch-card-hdr"><div class="arch-card-icon">🛡️</div><div><div class="arch-card-name">Compliance, Risk &amp; Audit Agent</div><span class="arch-persona" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.25);color:var(--gold)">Risk Guardian</span></div></div>
+            <div class="arch-card-body">
+              <div class="arch-sec-label">// System Prompt</div>
+              <div class="sys-prompt-box">You are SLOI AI's compliance, risk, and deal audit agent. Your role is to screen every counterparty before any LOI is issued, score deal risk, and maintain a tamper-proof audit trail for every transaction on the platform.
+
+Instructions:
+- On every negotiation start event: screen the supplier (and buyer, if required by jurisdiction) against OFAC SDN, EU Consolidated, UN Security Council, and UK HMT lists. Return: cleared / review / blocked. Blocked = hard stop, no LOI issued.
+- Assign a counterparty_risk_score (0–100) based on: sanctions status (40pts), trade license validity (25pts), payment history on SLOI AI (20pts), country risk rating (15pts).
+- For each deal: compute deal_risk_score based on: counterparty risk, commodity sensitivity (dual-use flags), payment terms risk (open account vs LC), and incoterm (EXW scores higher risk than DDP).
+- Maintain a complete audit_trail: every agent action, every human approval, every document generated — timestamped and hash-signed for regulatory export.
+- On deal completion: issue a compliance_certificate.pdf with all checks, scores, and timestamps.
+
+Tone: rigorous, non-negotiable on hard blocks. Every check must be documented with source, timestamp, and confidence score.</div>
+              <div class="arch-sec-label">// Inputs &amp; Outputs · Tools</div>
+              <div class="arch-io-grid">
+                <div class="arch-io-col"><div class="arch-io-label inp">Inputs</div><div class="arch-io-item">Counterparty name &amp; country</div><div class="arch-io-item">Deal terms (product, value, incoterm, payment)</div><div class="arch-io-item">Trade license / registration number</div><div class="arch-io-item">All agent action events (audit stream)</div></div>
+                <div class="arch-io-col"><div class="arch-io-label out">Outputs</div><div class="arch-io-item">compliance_check.json (verdict, lists checked, timestamp)</div><div class="arch-io-item">counterparty_risk_score (0–100)</div><div class="arch-io-item">deal_risk_score + breakdown</div><div class="arch-io-item">audit_trail.json (hash-signed, exportable)</div><div class="arch-io-item">compliance_certificate.pdf</div></div>
+                <div class="arch-io-col"><div class="arch-io-label tools">Tools &amp; APIs</div><div class="arch-io-item">OFAC / EU / UN / HMT sanctions API</div><div class="arch-io-item">Trade license registry (DED / MoE / HMRC)</div><div class="arch-io-item">Country risk index (OECD / Dun &amp; Bradstreet)</div><div class="arch-io-item">XDC blockchain hash (tamper-proof log)</div></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- WORKFLOW TAB -->
+      <div id="adr-workflow-saas" style="display:none">
+        <div class="wf-section" style="background:var(--surface);border:none;padding:0">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">// Mandate → Market → Negotiate → LOI → Full Document Suite → Deal Complete</div>
+          <div class="wf-bar">
+            <div class="wf-col"><div class="wf-node"><div class="wf-num" style="color:rgba(232,169,74,.4)">01</div><div class="wf-icon">📝</div><div class="wf-label">Set Mandate</div><div class="wf-sub">Product · qty · price ceiling · strategy</div></div></div>
+            <div class="wf-connector"><div class="wf-arrow" style="color:rgba(232,169,74,.5)">→</div><div class="wf-data-label" style="color:var(--gold)">mandate.json</div></div>
+            <div class="wf-col"><div class="wf-node"><div class="wf-num" style="color:rgba(232,169,74,.4)">02</div><div class="wf-icon">🔍</div><div class="wf-label">Market Intel</div><div class="wf-sub">Scans supplier network · benchmarks price · buy signal</div></div></div>
+            <div class="wf-connector"><div class="wf-arrow" style="color:rgba(232,169,74,.5)">→</div><div class="wf-data-label" style="color:var(--gold)">best_offers[ ]</div></div>
+            <div class="wf-col"><div class="wf-node"><div class="wf-num" style="color:rgba(232,169,74,.4)">03</div><div class="wf-icon">🤖</div><div class="wf-label">AI Negotiate</div><div class="wf-sub">Multi-round negotiation · SSE stream · you approve</div></div></div>
+            <div class="wf-connector"><div class="wf-arrow" style="color:rgba(232,169,74,.5)">→</div><div class="wf-data-label" style="color:var(--gold)">draft_loi.json</div></div>
+            <div class="wf-col"><div class="wf-node"><div class="wf-num" style="color:rgba(232,169,74,.4)">04</div><div class="wf-icon">📄</div><div class="wf-label">LOI Issued</div><div class="wf-sub">Signed LOI dispatched to both parties</div></div></div>
+            <div class="wf-connector"><div class="wf-arrow" style="color:rgba(232,169,74,.5)">→</div><div class="wf-data-label" style="color:var(--gold)">loi_ref</div></div>
+            <div class="wf-col"><div class="wf-node"><div class="wf-num" style="color:rgba(232,169,74,.4)">05</div><div class="wf-icon">📁</div><div class="wf-label">Doc Suite</div><div class="wf-sub">SPA · Trade Contract · LC Application · HS Report</div></div></div>
+            <div class="wf-connector"><div class="wf-arrow" style="color:rgba(232,169,74,.5)">→</div><div class="wf-data-label" style="color:var(--gold)">4 PDFs dispatched</div></div>
+            <div class="wf-col"><div class="wf-node wf-final"><div class="wf-num" style="color:rgba(34,197,94,.5)">06</div><div class="wf-icon">✅</div><div class="wf-label" style="color:var(--green)">Deal Complete</div><div class="wf-sub">Audit trail signed · compliance certificate issued</div></div></div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;padding-top:12px;border-top:1px solid var(--border)">
+            <div style="font-size:11px;color:var(--muted)"><span style="color:var(--gold);font-weight:700">→</span> best_offers[ ] — supplier, price, delta_vs_benchmark, compliance_score, reputation_tier, confidence</div>
+            <div style="font-size:11px;color:var(--muted)"><span style="color:var(--gold);font-weight:700">→</span> negotiation_log.json — round, agent_price, supplier_counter, gap_pct, strategy_action, savings</div>
+            <div style="font-size:11px;color:var(--muted)"><span style="color:var(--gold);font-weight:700">→</span> document_suite — spa.pdf · trade_contract.pdf · lc_application.pdf · hs_duty_report.pdf</div>
+            <div style="font-size:11px;color:var(--muted)"><span style="color:var(--gold);font-weight:700">→</span> audit_trail.json — hash-signed · every agent action timestamped · exportable for compliance</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /adr-con-saas -->
 
     <!-- CONSTRUCTION CONTENT -->
     <div class="adr-content adr-active" id="adr-con-construction">
@@ -7703,10 +8727,12 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within thresh
     document.getElementById('arch-drawer-overlay').classList.add('adr-open');
     document.getElementById('arch-drawer').classList.add('adr-open');
     // Swap profile content
-    document.getElementById('adr-con-construction').classList.toggle('adr-active', profile === 'construction');
-    document.getElementById('adr-con-factory').classList.toggle('adr-active', profile === 'factory');
+    ['saas','construction','factory'].forEach(function(p) {
+      document.getElementById('adr-con-' + p).classList.toggle('adr-active', p === profile);
+    });
     // Update header
     var cfg = {
+      saas:         { title:'🚀 SLOI AI SaaS — Agent Architecture',             sub:'Market Intel → AI Negotiate → LOI → SPA · Trade Contract · LC · HS Report → Deal Complete' },
       construction: { title:'🏗 Construction Procurement — Agent Architecture', sub:'BOQ → JIT Schedule → RFx Negotiation → Compliance → PO' },
       factory:       { title:'🏭 Factory Procurement — Agent Architecture',      sub:'MRP Forecast → Contract Optimization → Supplier KPIs → MRO Emergency → PO' }
     };
@@ -7730,7 +8756,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within thresh
     document.getElementById('adr-tab-agents').classList.toggle('adr-tab-active', isAgents);
     document.getElementById('adr-tab-workflow').classList.toggle('adr-tab-active', !isAgents);
     // Tab content for each profile
-    ['construction','factory'].forEach(function(p) {
+    ['saas','construction','factory'].forEach(function(p) {
       var ag = document.getElementById('adr-agents-'+p);
       var wf = document.getElementById('adr-workflow-'+p);
       if (ag) ag.style.display = isAgents ? 'block' : 'none';

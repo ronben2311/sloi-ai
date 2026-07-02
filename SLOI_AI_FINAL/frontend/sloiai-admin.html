@@ -254,7 +254,7 @@ select.inp option{background:var(--surface)}
   <div class="sb-section">Command</div>
   <button class="nav active" onclick="show('warroom',this)"><span class="nav-icon">🔴</span><span class="nav-label">War Room</span><span class="nav-badge nb-red" id="alert-count">3</span></button>
   <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold" id="neg-count">2</span></button>
-  <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">10</span></button>
+  <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">11</span></button>
   <div class="sb-section">Revenue</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
   <div class="sb-section">Network</div>
@@ -291,13 +291,12 @@ select.inp option{background:var(--surface)}
       <div class="tb-nav-sep"></div>
       <button class="nav active" id="tb-warroom" onclick="show('warroom',this)">🔴 War Room <span class="nav-badge nb-red" id="alert-count">3</span></button>
       <button class="nav" id="tb-negotiations" onclick="show('negotiations',this)">🤖 Negotiations <span class="nav-badge nb-gold" id="neg-count">2</span></button>
-      <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg)">10</span></button>
+      <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg)">11</span></button>
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-revenue" onclick="show('revenue',this)">💰 Revenue</button>
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-products" onclick="show('products',this)">📦 Products &amp; Pricing</button>
       <button class="nav" id="tb-users" onclick="show('users',this)">👤 Users &amp; CRM</button>
-      <button class="nav" id="tb-settings" onclick="show('settings',this)">⚙️ Settings</button>
     </div>
   </div>
 
@@ -544,6 +543,42 @@ select.inp option{background:var(--surface)}
         <thead><tr><th>PO No.</th><th>Product</th><th>Buyer</th><th>Value</th><th>Payment Terms</th><th>LOI Ref</th><th>Status</th><th></th></tr></thead>
         <tbody id="ct-po-tbody"><tr><td colspan="8" style="padding:18px;text-align:center;color:var(--muted)">Loading…</td></tr></tbody>
       </table>
+    </div>
+
+    <!-- SPA AI — CONTRACTS VIEW -->
+    <div class="card" style="margin-top:14px;border-color:rgba(168,85,247,.25)">
+      <div class="card-title" style="color:#c084fc">📜 SPA AI — Share Purchase Agreement
+        <span style="font-size:12px;font-weight:400;color:var(--muted)">Draft a formal SPA from any PO</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div>
+          <label class="flabel">Load from PO</label>
+          <select class="inp" id="ct-spa-po-select" onchange="ctSpaLoadPO()">
+            <option value="">— select PO —</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Governing Law</label>
+          <select class="inp" id="ct-spa-gov-law">
+            <option>UAE (DIFC)</option>
+            <option>England &amp; Wales</option>
+            <option>Germany</option>
+            <option>Singapore</option>
+            <option>Saudi Arabia</option>
+            <option>France</option>
+          </select>
+        </div>
+      </div>
+      <div id="ct-spa-po-summary" style="display:none;background:rgba(168,85,247,.05);border:1px solid rgba(168,85,247,.2);border-radius:6px;padding:10px 14px;margin-bottom:10px"></div>
+      <div style="margin-bottom:10px">
+        <label class="flabel">Special clauses / context</label>
+        <textarea class="inp" id="ct-spa-context" rows="2" placeholder="Force majeure, arbitration seat, title transfer conditions, penalty clauses…" style="resize:vertical;font-size:13px"></textarea>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <button class="btn btn-sm" style="background:rgba(168,85,247,.85);border-color:rgba(168,85,247,.9);color:#fff" onclick="runCtSPA()">📜 Draft SPA</button>
+        <button class="btn btn-sm" onclick="document.getElementById('ct-spa-resp').style.display='none';document.getElementById('ct-spa-resp').textContent=''">✕ Clear</button>
+      </div>
+      <div id="ct-spa-resp" style="display:none;white-space:pre-wrap;font-size:13px;color:var(--text);line-height:1.7;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;max-height:420px;overflow-y:auto"></div>
     </div>
 
     <!-- TRADERS (merged into Revenue) -->
@@ -803,6 +838,7 @@ select.inp option{background:var(--surface)}
       <div style="display:flex;align-items:center;gap:4px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">🧾 PO Generator <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="openInvoiceModal()">📄 Proforma Invoice <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
       <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px">⚖️ LegalContract</div>
+      <div style="display:flex;align-items:center;gap:4px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="show('agents',document.getElementById('tb-agents'))">📜 SPA AI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
     </div>
 
     <!-- STAGE 01: DISCOVER & QUALIFY -->
@@ -838,7 +874,7 @@ select.inp option{background:var(--surface)}
           <div id="lead-finder-results" style="font-size:13px"></div>
           <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap">
             <button class="btn btn-xs btn-p" onclick="addAllLeads()">+ Add all</button>
-            <button class="btn btn-xs" onclick="openConsole('lead')">▶ Run</button>
+            <button class="btn btn-xs" onclick="runAdminLeadScan()">▶ Run</button>
             <button class="btn btn-xs" onclick="exportLeads()">↓ CSV</button>
             <button class="btn btn-xs" onclick="configLeadFinder()">⚙</button>
           </div>
@@ -863,7 +899,7 @@ select.inp option{background:var(--surface)}
           <div style="font-size:13px;display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)"><span style="color:var(--white)">Al-Ghurair Grain</span><span class="badge bg" style="font-size:11px">Verified</span></div>
           <div style="font-size:13px;display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span style="color:var(--white)">Arabian Cement Co</span><span class="badge ba" style="font-size:11px">KYC pending</span></div>
           <div style="display:flex;gap:5px;margin-top:8px">
-            <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="openConsole('supplier')">▶ Run now</button>
+            <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="runAdminSupplierScan()">▶ Run now</button>
             <button class="btn btn-xs" onclick="alert('Export supplier list as CSV')">↓ Export</button>
           </div>
         </div>
@@ -983,54 +1019,31 @@ select.inp option{background:var(--surface)}
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
 
-      <!-- LOGISTICS & CUSTOMS AI (merged) -->
-      <div style="grid-column:1/-1;background:var(--surface);border:1px solid rgba(45,212,191,.3);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
-        <!-- Header -->
-        <div style="padding:12px 14px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <!-- LOGISTICS & CUSTOMS AI SUITE -->
+      <div style="grid-column:1/-1;background:var(--surface);border:1px solid rgba(45,212,191,.3);border-radius:8px;overflow:hidden;margin-bottom:0">
+        <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
           <div style="display:flex;align-items:center;gap:10px">
             <div style="width:34px;height:34px;border-radius:8px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🚢</div>
             <div>
-              <div style="font-size:14px;font-weight:600;color:var(--white)">Logistics & Customs AI</div>
-              <div style="font-size:13px;color:var(--muted)">Shipping · freight · port alerts · HS codes · duty calc · permits</div>
+              <div style="font-size:14px;font-weight:600;color:var(--white)">Logistics &amp; Customs AI</div>
+              <div style="font-size:12px;color:var(--muted)">Freight Advisor · HS Code &amp; Duty — AI-powered, from PO data</div>
             </div>
           </div>
-          <div style="display:flex;gap:5px;flex-wrap:wrap">
-            <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:13px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
-            <span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:2px 8px;border-radius:10px;font-size:13px">Always on</span>
-          </div>
+          <span style="display:flex;align-items:center;gap:5px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 10px;border-radius:10px;font-size:12px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Ready</span>
         </div>
-        <!-- Tabs -->
-        <div style="display:flex;border-bottom:1px solid var(--border);background:var(--surface2)">
-          <button id="lc-tab-logistics" onclick="lcTab('logistics')" style="flex:1;padding:8px 14px;background:rgba(45,212,191,.08);border:none;border-bottom:2px solid var(--teal);color:var(--teal);font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;transition:all .12s">🚢 Logistics</button>
-          <button id="lc-tab-customs" onclick="lcTab('customs')" style="flex:1;padding:8px 14px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:13px;cursor:pointer;transition:all .12s">🛃 Customs</button>
-        </div>
-        <!-- Tab body -->
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;flex:1">
-          <!-- Logistics panel -->
-          <div id="lc-panel-logistics" style="padding:10px 14px;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--border)">
-            <div style="font-size:12px;font-weight:600;color:var(--white);letter-spacing:.05em;margin-bottom:4px">// SHIPMENT TRACKING</div>
-            <div>6 shipments tracked · 3 routes optimised</div>
-            <div style="color:var(--gold)">⚠ Port Said congestion +2 days</div>
-            <div style="color:var(--green)">↓ Freight rates -4% this week</div>
-            <div><span style="color:var(--teal)">🚢</span> SL-2406-001 Rebar · AUH→HH · Jun 18</div>
-            <div><span style="color:var(--green)">✓</span> Cement OPC · LCL booked · $1,240/CBM</div>
+        <div style="padding:14px 18px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="background:var(--surface2);border:1px solid rgba(45,212,191,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openFreightModal()" onmouseover="this.style.borderColor='rgba(45,212,191,.6)'" onmouseout="this.style.borderColor='rgba(45,212,191,.25)'">
+            <div style="font-size:22px;margin-bottom:6px">🚢</div>
+            <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">Freight Advisor</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">Best route · forwarder type · rate estimate · ETA · port congestion alerts · from PO</div>
+            <div style="margin-top:10px"><span style="background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.3);color:var(--teal);padding:2px 9px;border-radius:8px;font-size:11px;font-weight:600">Open →</span></div>
           </div>
-          <!-- Customs panel -->
-          <div id="lc-panel-customs" style="padding:10px 14px;font-size:13px;color:var(--muted);display:flex;flex-direction:column;gap:4px">
-            <div style="font-size:12px;font-weight:600;color:var(--white);letter-spacing:.05em;margin-bottom:4px">// HS CODES & DUTIES</div>
-            <div>22 HS lookups · 6 countries · <span style="color:var(--green)">$14,200 duty savings</span></div>
-            <div style="color:var(--gold)">⚠ 2 import permits flagged (KSA)</div>
-            <div style="display:flex;justify-content:space-between"><span>Steel Rebar → UAE</span><span style="color:var(--teal)">7214.20 · 5%</span></div>
-            <div style="display:flex;justify-content:space-between"><span>Wheat → Egypt</span><span style="color:var(--green)">1001.99 · 0%</span></div>
-            <div style="display:flex;justify-content:space-between"><span>OPC Cement → Germany</span><span style="color:var(--teal)">2523.29 · 3.7%</span></div>
+          <div style="background:var(--surface2);border:1px solid rgba(139,143,248,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openHSModal()" onmouseover="this.style.borderColor='rgba(139,143,248,.6)'" onmouseout="this.style.borderColor='rgba(139,143,248,.25)'">
+            <div style="font-size:22px;margin-bottom:6px">🛃</div>
+            <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">HS Code &amp; Duty</div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.6">HS code lookup · duty rate · import permits · required certificates · by country</div>
+            <div style="margin-top:10px"><span style="background:rgba(139,143,248,.12);border:1px solid rgba(139,143,248,.3);color:var(--violet);padding:2px 9px;border-radius:8px;font-size:11px;font-weight:600">Open →</span></div>
           </div>
-        </div>
-        <!-- Footer -->
-        <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px;flex-wrap:wrap">
-          <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('LogisticsAI — track shipment')">▶ Track shipment</button>
-          <button class="btn btn-xs" onclick="alert('Freight rate dashboard')" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.3);color:var(--teal)">📈 Rates</button>
-          <button class="btn btn-xs btn-p" onclick="alert('CustomsAI — HS lookup')" style="background:rgba(139,143,248,.12);border-color:rgba(139,143,248,.3);color:var(--violet)">🔍 HS Lookup</button>
-          <button class="btn btn-xs" onclick="alert('Duty calculator')" style="background:rgba(139,143,248,.08);border-color:rgba(139,143,248,.25);color:var(--violet)">🧮 Duty calc</button>
         </div>
       </div>
 
@@ -1057,7 +1070,7 @@ select.inp option{background:var(--surface)}
           <div><span style="color:var(--green)">✓</span> SBLC verified — Atlas Trading · $800K</div>
         </div>
         <div style="padding:8px 14px;border-top:1px solid var(--border);display:flex;gap:5px">
-          <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="alert('TradeFinanceAI — draft LC')">📄 Draft LC</button>
+          <button class="btn btn-xs btn-p" style="flex:1;justify-content:center" onclick="openTFModal()">📄 Draft LC</button>
           <button class="btn btn-xs" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="window.open('https://www.tradefinex.org','_blank')">⛓ TradeFinex</button>
         </div>
       </div>
@@ -1098,32 +1111,37 @@ select.inp option{background:var(--surface)}
       <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">CLOSE — LEGAL, CONTRACT &amp; BILLING</span>
       <span style="flex:1;height:1px;background:var(--border)"></span>
     </div>
+
+    <!-- LEGAL AI SUITE -->
     <div style="background:var(--surface);border:1px solid rgba(168,85,247,.3);border-radius:8px;overflow:hidden;margin-bottom:18px">
       <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
         <div style="display:flex;align-items:center;gap:10px">
           <div style="width:34px;height:34px;border-radius:8px;background:rgba(168,85,247,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚖️</div>
           <div>
-            <div style="font-size:14px;font-weight:600;color:var(--white)">LegalContract AI</div>
-            <div style="font-size:13px;color:var(--muted)">Drafts ICC/UNIDROIT-compliant commodity sale contracts · sends to partner lawyer for review</div>
+            <div style="font-size:14px;font-weight:600;color:var(--white)">Legal AI Suite</div>
+            <div style="font-size:13px;color:var(--muted)">LegalContract · SPA · NDA — AI-drafted from PO data · ICC-aligned · commodity-specific clauses</div>
           </div>
         </div>
-        <span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:4px 10px;border-radius:10px;font-size:13px;flex-shrink:0">On-demand</span>
+        <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 10px;border-radius:10px;font-size:13px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Ready</span>
       </div>
-      <div style="padding:12px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:center">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
-          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--white)" id="legal-count">0</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Contracts generated</div>
+      <div style="padding:14px 18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div style="background:var(--surface2);border:1px solid rgba(168,85,247,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openLCModal()" onmouseover="this.style.borderColor='rgba(168,85,247,.6)'" onmouseout="this.style.borderColor='rgba(168,85,247,.25)'">
+          <div style="font-size:22px;margin-bottom:6px">⚖️</div>
+          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">LegalContract AI</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">ICC/UNIDROIT commodity sale contract · full T&amp;Cs · from LOI or PO · send to lawyer</div>
+          <div style="margin-top:10px"><span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:2px 9px;border-radius:8px;font-size:11px">Open →</span></div>
         </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
-          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:#c084fc" id="legal-sent">0</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Sent for review</div>
+        <div style="background:var(--surface2);border:1px solid rgba(168,85,247,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openSPAModal()" onmouseover="this.style.borderColor='rgba(168,85,247,.6)'" onmouseout="this.style.borderColor='rgba(168,85,247,.25)'">
+          <div style="font-size:22px;margin-bottom:6px">📜</div>
+          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">SPA AI</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Share Purchase Agreement · title transfer · warranties · from PO data</div>
+          <div style="margin-top:10px"><span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:2px 9px;border-radius:8px;font-size:11px">Open →</span></div>
         </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px">
-          <div style="font-size:12px;color:var(--muted);margin-bottom:3px">Lawyer email</div>
-          <div style="font-size:13px;color:var(--teal);word-break:break-all" id="legal-lawyer-display">Not set — <a href="#" onclick="show('settings',null);return false" style="color:var(--indigo)">Settings</a></div>
-        </div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.7">
-          Go to <b style="color:var(--white)">Negotiations</b> → click <b style="color:var(--white)">📜 Contract</b> on any completed deal to generate &amp; send.
+        <div style="background:var(--surface2);border:1px solid rgba(59,130,246,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openNDAModal()" onmouseover="this.style.borderColor='rgba(59,130,246,.6)'" onmouseout="this.style.borderColor='rgba(59,130,246,.25)'">
+          <div style="font-size:22px;margin-bottom:6px">🔏</div>
+          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">NDA AI</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Mutual / one-way NDA · supplier &amp; pricing confidentiality · commodity-specific clauses</div>
+          <div style="margin-top:10px"><span style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--blue);padding:2px 9px;border-radius:8px;font-size:11px">Open →</span></div>
         </div>
       </div>
     </div>
@@ -1156,6 +1174,40 @@ select.inp option{background:var(--surface)}
         <div style="display:flex;flex-direction:column;gap:6px">
           <button class="btn btn-xs btn-g" onclick="openInvoiceModal()" style="width:100%;justify-content:center">🧾 New invoice from PO</button>
           <button class="btn btn-xs" onclick="alert('Invoice history — showing all 3 invoices')" style="width:100%;justify-content:center">↓ Invoice history</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCUMENT GENERATION SUITE -->
+    <div style="background:var(--surface);border:1px solid rgba(45,212,191,.25);border-radius:8px;overflow:hidden;margin-bottom:18px">
+      <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:34px;height:34px;border-radius:8px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📑</div>
+          <div>
+            <div style="font-size:14px;font-weight:600;color:var(--white)">Document Generation Suite</div>
+            <div style="font-size:13px;color:var(--muted)">Commercial Invoice · Packing List · SGS Inspection Report — generated from PO data</div>
+          </div>
+        </div>
+        <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 10px;border-radius:10px;font-size:13px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Ready</span>
+      </div>
+      <div style="padding:14px 18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div style="background:var(--surface2);border:1px solid rgba(59,130,246,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openCIModal()" onmouseover="this.style.borderColor='rgba(59,130,246,.55)'" onmouseout="this.style.borderColor='rgba(59,130,246,.25)'">
+          <div style="font-size:22px;margin-bottom:6px">🧾</div>
+          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">Commercial Invoice</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Formal invoice for customs, bank, and buyer · pulls from PO data</div>
+          <div style="margin-top:10px"><span class="badge bt" style="font-size:11px">Open →</span></div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(232,169,74,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openPLModal()" onmouseover="this.style.borderColor='rgba(232,169,74,.55)'" onmouseout="this.style.borderColor='rgba(232,169,74,.25)'">
+          <div style="font-size:22px;margin-bottom:6px">📦</div>
+          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">Packing List</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Package count, weights, dimensions, container &amp; marks · required by customs</div>
+          <div style="margin-top:10px"><span class="badge ba" style="font-size:11px">Open →</span></div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(34,197,94,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openSGSModal()" onmouseover="this.style.borderColor='rgba(34,197,94,.55)'" onmouseout="this.style.borderColor='rgba(34,197,94,.25)'">
+          <div style="font-size:22px;margin-bottom:6px">🔬</div>
+          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">SGS Inspection Report</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.6">Pre-shipment inspection certificate · quality, quantity &amp; HS code verification</div>
+          <div style="margin-top:10px"><span class="badge bg" style="font-size:11px">Open →</span></div>
         </div>
       </div>
     </div>
@@ -1546,7 +1598,8 @@ function resumeOutreach(){
   openConsole('outreach');
 }
 
-function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];if(v==='revenue')loadContracts();}
+function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];if(v==='revenue'){loadContracts();spaPopulate('ct-spa-po-select');}
+if(v==='agents'){}}
 
 function renderKanban(){var cols=[{key:'new',label:'New',color:'var(--muted)'},{key:'contacted',label:'Contacted',color:'var(--blue)'},{key:'rfq',label:'RFQ sent',color:'var(--teal)'},{key:'negotiating',label:'Negotiating',color:'var(--gold)'},{key:'closed',label:'Closed ✓',color:'var(--green)'}];var html='';cols.forEach(function(col){var cards=PIPELINE[col.key]||[];html+='<div class="kc"><div class="kc-head" style="color:'+col.color+'">'+col.label+'<span class="kc-count">'+cards.length+'</span></div>';cards.forEach(function(c){html+='<div class="kcard'+(c.hot?' hot':'')+'"><div class="kcard-name">'+(c.hot?'🔥 ':'')+c.name+'</div><div class="kcard-sub">'+c.product+' · '+c.country+'</div><div class="kcard-val">$'+c.value.toLocaleString()+'</div><div class="kcard-actions">';if(col.key==='new')html+='<button class="btn btn-xs btn-g" onclick="openTG()">WA</button><button class="btn btn-xs btn-p" onclick="moveCard(\'new\',\'contacted\',\''+c.name+'\')">Contact</button>';else if(col.key==='contacted')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'contacted\',\'rfq\',\''+c.name+'\')">Send RFQ</button>';else if(col.key==='rfq')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'rfq\',\'negotiating\',\''+c.name+'\')">Negotiate</button>';else if(col.key==='negotiating')html+='<button class="btn btn-xs btn-g" onclick="moveCard(\'negotiating\',\'closed\',\''+c.name+'\')">Close ✓</button>';else html+='<button class="btn btn-xs" onclick="window.open(\'loi-generator.html\',\'_blank\')">LOI</button>';html+='</div></div>';});html+='</div>';});document.getElementById('kanban').innerHTML=html;}
 
@@ -3370,6 +3423,191 @@ function invoiceSend()     { piSendToBuyer(); }
 function invoiceReset()    { openInvoiceModal(); }
 function invoiceGenerate() { piRefresh(); }
 
+// ── SPA AI — SHARE PURCHASE AGREEMENT ────────────────────────────────────────
+function spaPopulate(selectId) {
+  var el = document.getElementById(selectId);
+  if (!el) return;
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  el.innerHTML = '<option value="">— select PO —</option>';
+  pos.forEach(function(p, i) {
+    var opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = (p.po_num || 'PO-' + (i+1)) + ' · ' + (p.product || '') + ' · ' + (p.buyer || '');
+    el.appendChild(opt);
+  });
+}
+
+function spaGetPO(selectId) {
+  var el = document.getElementById(selectId);
+  if (!el || el.value === '') return null;
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  return pos[parseInt(el.value, 10)] || null;
+}
+
+function spaSummaryHTML(po) {
+  var row = function(label, val) {
+    return '<div><div style="color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px">' + label + '</div>'
+      + '<div style="color:var(--white);font-size:13px;font-weight:600">' + (val || '—') + '</div></div>';
+  };
+  return '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">'
+    + row('PO No.', po.po_num)
+    + row('Product', po.product)
+    + row('Buyer', po.buyer)
+    + row('Supplier', po.supplier)
+    + '<div>' + row('Value', po.total) + '</div>'.replace('color:var(--white)', 'color:#c084fc')
+    + row('Incoterm', po.incoterm)
+    + row('Payment', po.payment_terms || po.payment)
+    + row('LOI Ref', po.loi_ref)
+    + '</div>';
+}
+
+function spaLoadPO() {
+  var po = spaGetPO('spa-po-select');
+  var sum = document.getElementById('spa-po-summary');
+  if (!sum) return;
+  if (po) { sum.style.display = ''; sum.innerHTML = spaSummaryHTML(po); }
+  else { sum.style.display = 'none'; sum.innerHTML = ''; }
+}
+
+function ctSpaLoadPO() {
+  var po = spaGetPO('ct-spa-po-select');
+  var sum = document.getElementById('ct-spa-po-summary');
+  if (!sum) return;
+  if (po) { sum.style.display = ''; sum.innerHTML = spaSummaryHTML(po); }
+  else { sum.style.display = 'none'; sum.innerHTML = ''; }
+}
+
+function buildSPAPrompt(po, govLaw, extraCtx) {
+  return 'You are a senior international trade lawyer specialising in commodity transactions.\n'
+    + 'Draft a complete, formal Share Purchase Agreement (SPA) for the following deal.\n\n'
+    + 'DEAL DATA (from Purchase Order ' + (po.po_num || '') + '):\n'
+    + '- Product / Commodity: ' + (po.product || 'N/A') + '\n'
+    + '- Buyer: ' + (po.buyer || 'N/A') + '\n'
+    + '- Supplier / Seller: ' + (po.supplier || 'N/A') + '\n'
+    + '- Total Contract Value: ' + (po.total || 'N/A') + '\n'
+    + '- Incoterms: ' + (po.incoterm || 'N/A') + '\n'
+    + '- Payment Terms: ' + (po.payment_terms || po.payment || 'N/A') + '\n'
+    + (po.loi_ref ? '- LOI Reference: ' + po.loi_ref + '\n' : '')
+    + '- Governing Law: ' + govLaw + '\n'
+    + (extraCtx ? '- Additional instructions: ' + extraCtx + '\n' : '')
+    + '\nDraft the complete SPA with the following numbered sections:\n'
+    + '1. PARTIES\n2. DEFINITIONS\n3. SALE & PURCHASE\n4. PURCHASE PRICE & PAYMENT\n'
+    + '5. DELIVERY & TITLE TRANSFER\n6. INSPECTION & QUALITY\n7. REPRESENTATIONS & WARRANTIES\n'
+    + '8. FORCE MAJEURE\n9. DISPUTE RESOLUTION & ARBITRATION\n10. GOVERNING LAW\n'
+    + '11. MISCELLANEOUS\n12. SIGNATURES\n\n'
+    + 'Use [PLACEHOLDER] for missing information. Use clear, formal legal language.';
+}
+
+function execSPADraft(prompt, respEl) {
+  var key = localStorage.getItem('sf_claude_key') || '';
+  if (!key) { respEl.style.display = ''; respEl.textContent = 'No Claude API key — set sf_claude_key in localStorage.'; return; }
+  respEl.style.display = '';
+  respEl.textContent = '⏳ Drafting SPA…';
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1500, messages: [{ role: 'user', content: prompt }] })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) { respEl.textContent = (res.content && res.content[0]) ? res.content[0].text : 'No response received.'; })
+  .catch(function(e) { respEl.textContent = 'Error: ' + e.message; });
+}
+
+function runAgentSPA() {
+  var po = spaGetPO('spa-po-select');
+  if (!po) { alert('Select a PO to draft from.'); return; }
+  var govLaw = (document.getElementById('spa-gov-law') || {}).value || 'UAE (DIFC)';
+  var ctx = ((document.getElementById('spa-context') || {}).value || '').trim();
+  execSPADraft(buildSPAPrompt(po, govLaw, ctx), document.getElementById('spa-resp'));
+}
+
+function runCtSPA() {
+  var po = spaGetPO('ct-spa-po-select');
+  if (!po) { alert('Select a PO to draft from.'); return; }
+  var govLaw = (document.getElementById('ct-spa-gov-law') || {}).value || 'UAE (DIFC)';
+  var ctx = ((document.getElementById('ct-spa-context') || {}).value || '').trim();
+  execSPADraft(buildSPAPrompt(po, govLaw, ctx), document.getElementById('ct-spa-resp'));
+}
+
+// ── NDA AI GENERATOR ──────────────────────────────────────────────────────────
+function ndaPopulate() {
+  var el = document.getElementById('nda-po-select');
+  if (!el) return;
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  el.innerHTML = '<option value="">— select PO —</option>';
+  pos.forEach(function(p, i) {
+    var opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = (p.po_num || 'PO-'+(i+1)) + ' · ' + (p.product||'') + ' · ' + (p.buyer||'');
+    el.appendChild(opt);
+  });
+}
+
+function ndaLoadPO() {
+  var el = document.getElementById('nda-po-select');
+  if (!el || el.value === '') return;
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  var po = pos[parseInt(el.value, 10)];
+  if (!po) return;
+  var disc = document.getElementById('nda-disclosing');
+  var recv = document.getElementById('nda-receiving');
+  var ctx  = document.getElementById('nda-context');
+  if (disc) disc.value = po.supplier || po.seller || '';
+  if (recv) recv.value = po.buyer || '';
+  if (ctx && !ctx.value) ctx.value = 'Evaluation of a commodity supply agreement for ' + (po.product || 'the product') + ' (PO ref: ' + (po.po_num || '') + ').';
+}
+
+function buildNDAPrompt() {
+  var type  = (document.getElementById('nda-type') || {}).value || 'mutual';
+  var disc  = (document.getElementById('nda-disclosing') || {}).value || '[Disclosing Party]';
+  var recv  = (document.getElementById('nda-receiving')  || {}).value || '[Receiving Party]';
+  var dur   = (document.getElementById('nda-duration')   || {}).value || '3 years';
+  var law   = (document.getElementById('nda-law')        || {}).value || 'UAE (DIFC)';
+  var ctx   = ((document.getElementById('nda-context')   || {}).value || '').trim();
+  var scope = [];
+  if (document.getElementById('nda-scope-price')     && document.getElementById('nda-scope-price').checked)     scope.push('pricing, offers, and commercial terms');
+  if (document.getElementById('nda-scope-supplier')  && document.getElementById('nda-scope-supplier').checked)  scope.push('supplier identities and contact details');
+  if (document.getElementById('nda-scope-route')     && document.getElementById('nda-scope-route').checked)     scope.push('trade routes, logistics arrangements, and shipping methods');
+  if (document.getElementById('nda-scope-financial') && document.getElementById('nda-scope-financial').checked) scope.push('financial terms and payment structures');
+  if (document.getElementById('nda-scope-tech')      && document.getElementById('nda-scope-tech').checked)      scope.push('technical specifications and quality standards');
+  return 'You are a senior international trade lawyer. Draft a complete, formal '
+    + (type === 'mutual' ? 'Mutual' : 'One-Way') + ' Non-Disclosure Agreement (NDA) for a commodity trading transaction.\n\n'
+    + 'PARTIES:\n- Disclosing Party: ' + disc + '\n- Receiving Party: ' + recv + '\n\n'
+    + 'TERMS:\n- NDA Type: ' + (type === 'mutual' ? 'Mutual — both parties exchange confidential information' : 'One-Way — only the Disclosing Party shares confidential information') + '\n'
+    + '- Duration: ' + dur + ' from the date of signing\n'
+    + '- Governing Law: ' + law + '\n'
+    + '- Confidential Information includes: ' + (scope.length ? scope.join('; ') : 'all business information') + '\n'
+    + (ctx ? '- Context: ' + ctx + '\n' : '')
+    + '\nDraft the full NDA with these sections:\n'
+    + '1. PARTIES\n2. DEFINITIONS — "Confidential Information", "Disclosing Party", "Receiving Party"\n'
+    + '3. OBLIGATIONS OF RECEIVING PARTY\n4. SCOPE OF CONFIDENTIAL INFORMATION\n'
+    + '5. EXCLUSIONS FROM CONFIDENTIALITY\n6. DURATION & TERMINATION\n'
+    + '7. RETURN OR DESTRUCTION OF INFORMATION\n8. REMEDIES — injunctive relief clause\n'
+    + '9. NO LICENSE OR WARRANTY\n10. GOVERNING LAW & DISPUTE RESOLUTION\n'
+    + '11. ENTIRE AGREEMENT & AMENDMENTS\n12. SIGNATURES\n\n'
+    + 'Use formal legal language. Include a commodity-trading-specific clause protecting supplier identity and pricing data from disclosure to third-party traders. Use [PLACEHOLDER] for missing details.';
+}
+
+function runAdminNDA() {
+  var respEl = document.getElementById('nda-resp');
+  var key = localStorage.getItem('sf_claude_key') || '';
+  if (!key) { respEl.style.display = ''; respEl.textContent = 'No Claude API key — set sf_claude_key in localStorage.'; return; }
+  respEl.style.display = '';
+  respEl.textContent = '⏳ Drafting NDA…';
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1500, messages: [{ role: 'user', content: buildNDAPrompt() }] })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) { respEl.textContent = (res.content && res.content[0]) ? res.content[0].text : 'No response received.'; })
+  .catch(function(e) { respEl.textContent = 'Error: ' + e.message; });
+}
+
 // ── ADMIN AI HELPER ───────────────────────────────────────────────────────────
 function callAdminAI(prompt, onSuccess, onError) {
   var key = localStorage.getItem('sf_claude_key') || '';
@@ -3688,6 +3926,1163 @@ function deleteSupplier(idx) {
     </div>
   </div>
 </div>
+
+<!-- ══ COMMERCIAL INVOICE MODAL ════════════════════════════════════════════════ -->
+<div class="modal-bg" id="ci-modal-bg" onclick="if(event.target===this)closeCIModal()">
+  <div class="modal" style="max-width:940px;width:calc(100vw - 24px);max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">🧾 Commercial Invoice Generator</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Formal trade invoice for customs, LC, and buyer · auto-filled from PO data</div>
+      </div>
+      <button class="modal-close" onclick="closeCIModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;min-height:0">
+      <!-- LEFT: Form -->
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source PO</div>
+          <div id="ci-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:150px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div><label class="flabel">Invoice No.</label><input class="inp" id="ci-ref" readonly style="color:var(--teal);font-size:12px"/></div>
+          <div><label class="flabel">Issue Date</label><input class="inp" id="ci-date" type="date" oninput="ciRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Due Date</label><input class="inp" id="ci-due" type="date" oninput="ciRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">HS Code</label><input class="inp" id="ci-hs" placeholder="e.g. 7213.10" oninput="ciRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Country of Origin</label><input class="inp" id="ci-origin" placeholder="e.g. Turkey" oninput="ciRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Currency</label><select class="inp" id="ci-currency" onchange="ciRefresh()" style="font-size:12px"><option>USD</option><option>EUR</option><option>GBP</option><option>AED</option></select></div>
+          <div><label class="flabel">Port of Loading</label><input class="inp" id="ci-pol" placeholder="e.g. Mersin, Turkey" oninput="ciRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Port of Destination</label><input class="inp" id="ci-pod" placeholder="e.g. Jebel Ali, UAE" oninput="ciRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Seller</label><input class="inp" id="ci-seller" value="SLOI AI Trading LLC" oninput="ciRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Buyer</label><input class="inp" id="ci-buyer" oninput="ciRefresh()" style="font-size:12px"/></div>
+        </div>
+        <div><label class="flabel">Bank / Payment Details</label><textarea class="inp" id="ci-bank" rows="3" style="resize:vertical;line-height:1.6;font-size:12px" oninput="ciRefresh()">IBAN: AE07 0331 2345 6789 0123 456
+Bank: Emirates NBD · Dubai, UAE
+SWIFT: EBILAEAD</textarea></div>
+        <div><label class="flabel">Notes (optional)</label><textarea class="inp" id="ci-notes" rows="2" style="resize:vertical;line-height:1.6;font-size:12px" placeholder="e.g. Subject to quality inspection at port of origin…" oninput="ciRefresh()"></textarea></div>
+      </div>
+      <!-- RIGHT: Preview -->
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Live preview</div>
+        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #d0cee8">
+          <div style="background:linear-gradient(135deg,#14142a,#0c2340);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#7b7ff8;font-size:12px;font-weight:700" id="ci-doc-ref">CI-—</div><div style="color:#52526e;font-size:11px" id="ci-doc-date">—</div></div>
+          </div>
+          <div style="background:#dde8f8;border-bottom:2px solid #9bbde0;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#0c2340;letter-spacing:.14em;text-transform:uppercase">COMMERCIAL INVOICE</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #d0cee8">
+            <div style="padding:10px 14px;border-right:1px solid #d0cee8">
+              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">SELLER / EXPORTER</div>
+              <div style="font-size:12px;font-weight:600;color:#14142a" id="ci-doc-seller">—</div>
+              <div style="font-size:11px;color:#52526e;margin-top:2px" id="ci-doc-seller-addr">Dubai, UAE</div>
+            </div>
+            <div style="padding:10px 14px">
+              <div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">BUYER / IMPORTER</div>
+              <div style="font-size:12px;font-weight:600;color:#14142a" id="ci-doc-buyer">—</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #d0cee8;font-size:11px">
+            <div style="padding:8px 14px;border-right:1px solid #d0cee8"><div style="color:#6b6b8e;margin-bottom:2px">PO REFERENCE</div><div style="color:#14142a;font-weight:600" id="ci-doc-po">—</div></div>
+            <div style="padding:8px 14px;border-right:1px solid #d0cee8"><div style="color:#6b6b8e;margin-bottom:2px">HS CODE</div><div style="color:#14142a;font-weight:600" id="ci-doc-hs">—</div></div>
+            <div style="padding:8px 14px"><div style="color:#6b6b8e;margin-bottom:2px">ORIGIN</div><div style="color:#14142a;font-weight:600" id="ci-doc-origin">—</div></div>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:11px">
+            <tr style="background:#eeedf8"><th style="padding:7px 14px;text-align:left;color:#6b6b8e;font-weight:700;letter-spacing:.06em">DESCRIPTION</th><th style="padding:7px 10px;text-align:right;color:#6b6b8e;font-weight:700">INCOTERM</th><th style="padding:7px 10px;text-align:right;color:#6b6b8e;font-weight:700">PAYMENT</th><th style="padding:7px 14px;text-align:right;color:#6b6b8e;font-weight:700">TOTAL</th></tr>
+            <tr><td style="padding:10px 14px;color:#14142a;font-weight:600" id="ci-doc-product">—</td><td style="padding:10px;text-align:right;color:#14142a" id="ci-doc-incoterm">—</td><td style="padding:10px;text-align:right;color:#14142a" id="ci-doc-payment">—</td><td style="padding:10px 14px;text-align:right;font-weight:700;color:#0c2340" id="ci-doc-total">—</td></tr>
+          </table>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #d0cee8;font-size:11px">
+            <div style="padding:10px 14px;border-right:1px solid #d0cee8"><div style="color:#6b6b8e;margin-bottom:2px">PORT OF LOADING</div><div style="color:#14142a;font-weight:600" id="ci-doc-pol">—</div></div>
+            <div style="padding:10px 14px"><div style="color:#6b6b8e;margin-bottom:2px">PORT OF DESTINATION</div><div style="color:#14142a;font-weight:600" id="ci-doc-pod">—</div></div>
+          </div>
+          <div style="padding:10px 14px;border-top:1px solid #d0cee8;font-size:11px">
+            <div style="color:#6b6b8e;margin-bottom:3px;letter-spacing:.06em;text-transform:uppercase">BANK / PAYMENT DETAILS</div>
+            <div style="color:#14142a;white-space:pre-line;line-height:1.6" id="ci-doc-bank">—</div>
+          </div>
+          <div id="ci-doc-notes-row" style="display:none;padding:8px 14px;background:#eeedf8;font-size:11px;color:#52526e;border-top:1px solid #d0cee8" id="ci-doc-notes">—</div>
+          <div style="padding:7px 14px;background:#dde8f8;text-align:center;font-size:10px;color:#0c5080;font-style:italic">This commercial invoice is issued for customs and trade purposes. Subject to final contract terms.</div>
+          <div style="padding:5px 14px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closeCIModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openCIModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="alert('Downloading Commercial Invoice PDF…')">↓ Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PACKING LIST MODAL ═══════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="pl-modal-bg" onclick="if(event.target===this)closePLModal()">
+  <div class="modal" style="max-width:940px;width:calc(100vw - 24px);max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">📦 Packing List Generator</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Package details, weights &amp; dimensions for customs and shipping · pulled from PO data</div>
+      </div>
+      <button class="modal-close" onclick="closePLModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source PO</div>
+          <div id="pl-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:150px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div><label class="flabel">PL Reference</label><input class="inp" id="pl-ref" readonly style="color:var(--gold);font-size:12px"/></div>
+          <div><label class="flabel">Date</label><input class="inp" id="pl-date" type="date" oninput="plRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Shipper / Seller</label><input class="inp" id="pl-seller" value="SLOI AI Trading LLC" oninput="plRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Consignee / Buyer</label><input class="inp" id="pl-buyer" oninput="plRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">No. of Packages</label><input class="inp" id="pl-pkgs" type="number" placeholder="e.g. 500" oninput="plRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Package Type</label><select class="inp" id="pl-pkg-type" onchange="plRefresh()" style="font-size:12px"><option>Bags</option><option>Jumbo Bags</option><option>Cartons</option><option>Pallets</option><option>Drums</option><option>Bales</option><option>Coils</option></select></div>
+          <div><label class="flabel">Net Weight (MT)</label><input class="inp" id="pl-net-wt" type="number" step="0.001" placeholder="e.g. 50.000" oninput="plRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Gross Weight (MT)</label><input class="inp" id="pl-gross-wt" type="number" step="0.001" placeholder="e.g. 50.500" oninput="plRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Port of Loading</label><input class="inp" id="pl-pol" oninput="plRefresh()" placeholder="e.g. Mersin, Turkey" style="font-size:12px"/></div>
+          <div><label class="flabel">Port of Destination</label><input class="inp" id="pl-pod" oninput="plRefresh()" placeholder="e.g. Jebel Ali, UAE" style="font-size:12px"/></div>
+          <div style="grid-column:span 2"><label class="flabel">Container No. (optional)</label><input class="inp" id="pl-container" placeholder="e.g. MSCU1234567" oninput="plRefresh()" style="font-size:12px"/></div>
+          <div style="grid-column:span 2"><label class="flabel">Marks &amp; Numbers</label><textarea class="inp" id="pl-marks" rows="2" style="resize:vertical;font-size:12px" placeholder="e.g. SLOI-2026 / UAE / PO-2026-001 / 1-500" oninput="plRefresh()"></textarea></div>
+        </div>
+      </div>
+      <!-- RIGHT: Preview -->
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Live preview</div>
+        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #d0cee8">
+          <div style="background:linear-gradient(135deg,#14142a,#1a1000);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#e8a94a;font-size:12px;font-weight:700" id="pl-doc-ref">PL-—</div><div style="color:#52526e;font-size:11px" id="pl-doc-date">—</div></div>
+          </div>
+          <div style="background:#fef3c7;border-bottom:2px solid #d97706;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#78350f;letter-spacing:.14em;text-transform:uppercase">PACKING LIST</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #d0cee8">
+            <div style="padding:10px 14px;border-right:1px solid #d0cee8"><div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">SHIPPER</div><div style="font-size:12px;font-weight:600;color:#14142a" id="pl-doc-seller">—</div></div>
+            <div style="padding:10px 14px"><div style="font-size:10px;color:#6b6b8e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px">CONSIGNEE</div><div style="font-size:12px;font-weight:600;color:#14142a" id="pl-doc-buyer">—</div></div>
+          </div>
+          <div style="padding:10px 14px;border-bottom:1px solid #d0cee8;font-size:11px"><div style="color:#6b6b8e;margin-bottom:2px">COMMODITY / PO REFERENCE</div><div style="color:#14142a;font-weight:600" id="pl-doc-product">—</div></div>
+          <table style="width:100%;border-collapse:collapse;font-size:11px">
+            <tr style="background:#fef9e7"><th style="padding:7px 14px;text-align:left;color:#6b6b8e;font-weight:700">PACKAGES</th><th style="padding:7px 10px;text-align:right;color:#6b6b8e;font-weight:700">TYPE</th><th style="padding:7px 10px;text-align:right;color:#6b6b8e;font-weight:700">NET WT</th><th style="padding:7px 14px;text-align:right;color:#6b6b8e;font-weight:700">GROSS WT</th></tr>
+            <tr><td style="padding:10px 14px;font-weight:600;color:#14142a" id="pl-doc-pkgs">—</td><td style="padding:10px;text-align:right;color:#14142a" id="pl-doc-pkg-type">—</td><td style="padding:10px;text-align:right;color:#14142a" id="pl-doc-net">— MT</td><td style="padding:10px 14px;text-align:right;font-weight:700;color:#78350f" id="pl-doc-gross">— MT</td></tr>
+          </table>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #d0cee8;font-size:11px">
+            <div style="padding:8px 14px;border-right:1px solid #d0cee8"><div style="color:#6b6b8e;margin-bottom:2px">PORT OF LOADING</div><div style="color:#14142a;font-weight:600" id="pl-doc-pol">—</div></div>
+            <div style="padding:8px 14px"><div style="color:#6b6b8e;margin-bottom:2px">PORT OF DESTINATION</div><div style="color:#14142a;font-weight:600" id="pl-doc-pod">—</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #d0cee8;font-size:11px">
+            <div style="padding:8px 14px;border-right:1px solid #d0cee8"><div style="color:#6b6b8e;margin-bottom:2px">CONTAINER NO.</div><div style="color:#14142a;font-weight:600" id="pl-doc-container">—</div></div>
+            <div style="padding:8px 14px"><div style="color:#6b6b8e;margin-bottom:2px">MARKS &amp; NUMBERS</div><div style="color:#14142a;font-weight:600;white-space:pre-line" id="pl-doc-marks">—</div></div>
+          </div>
+          <div style="padding:5px 14px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e;border-top:1px solid #d0cee8">Generated by SLOI AI · sloiai.com</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closePLModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openPLModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="alert('Downloading Packing List PDF…')">↓ Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SGS INSPECTION REPORT MODAL ══════════════════════════════════════════════ -->
+<div class="modal-bg" id="sgs-modal-bg" onclick="if(event.target===this)closeSGSModal()">
+  <div class="modal" style="max-width:940px;width:calc(100vw - 24px);max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">🔬 SGS Inspection Report</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Pre-shipment inspection certificate · quality, quantity &amp; HS code verification</div>
+      </div>
+      <button class="modal-close" onclick="closeSGSModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source PO</div>
+          <div id="sgs-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:150px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div><label class="flabel">Certificate No.</label><input class="inp" id="sgs-ref" readonly style="color:var(--green);font-size:12px"/></div>
+          <div><label class="flabel">Inspection Date</label><input class="inp" id="sgs-date" type="date" oninput="sgsRefresh()" style="font-size:12px"/></div>
+          <div style="grid-column:span 2"><label class="flabel">Place of Inspection</label><input class="inp" id="sgs-location" placeholder="e.g. Mersin Port Warehouse, Turkey" oninput="sgsRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">HS Code</label><input class="inp" id="sgs-hs" placeholder="e.g. 1001.99" oninput="sgsRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Country of Origin</label><input class="inp" id="sgs-origin" placeholder="e.g. Turkey" oninput="sgsRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Quantity Inspected</label><input class="inp" id="sgs-qty" placeholder="e.g. 50 MT" oninput="sgsRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Gross Weight (MT)</label><input class="inp" id="sgs-wt" type="number" step="0.001" placeholder="e.g. 50.500" oninput="sgsRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Inspector Name</label><input class="inp" id="sgs-inspector" placeholder="e.g. Ahmed Al-Mansouri" oninput="sgsRefresh()" style="font-size:12px"/></div>
+          <div><label class="flabel">Overall Findings</label>
+            <select class="inp" id="sgs-finding" onchange="sgsRefresh()" style="font-size:12px">
+              <option value="SAT">✓ Satisfactory</option>
+              <option value="COND">⚠ Conditionally Satisfactory</option>
+              <option value="FAIL">✗ Not Satisfactory</option>
+            </select>
+          </div>
+        </div>
+        <div><label class="flabel">Remarks / Special Notes</label><textarea class="inp" id="sgs-remarks" rows="3" style="resize:vertical;font-size:12px" placeholder="e.g. Moisture content within spec. No visible contamination. Cargo ready for shipment." oninput="sgsRefresh()"></textarea></div>
+      </div>
+      <!-- RIGHT: Preview -->
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Live preview</div>
+        <div style="background:#f9fff9;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #c6dfc6">
+          <div style="background:linear-gradient(135deg,#0a2a0a,#0c2340);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+              <div style="font-size:10px;color:#52886e;margin-top:2px;letter-spacing:.06em">INSPECTION SERVICES</div>
+            </div>
+            <div style="text-align:right"><div style="color:#4ade80;font-size:12px;font-weight:700" id="sgs-doc-ref">SGS-—</div><div style="color:#52526e;font-size:11px" id="sgs-doc-date">—</div></div>
+          </div>
+          <div style="background:#dcfce7;border-bottom:2px solid #16a34a;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#14532d;letter-spacing:.12em;text-transform:uppercase">PRE-SHIPMENT INSPECTION CERTIFICATE</div>
+          <div style="padding:10px 14px;border-bottom:1px solid #c6dfc6;font-size:11px">
+            <div style="color:#527852;margin-bottom:4px;font-weight:700;letter-spacing:.06em">INSPECTION DETAILS</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <div><span style="color:#6b8e6b">Commodity: </span><span style="color:#14142a;font-weight:600" id="sgs-doc-product">—</span></div>
+              <div><span style="color:#6b8e6b">PO Ref: </span><span style="color:#14142a;font-weight:600" id="sgs-doc-po">—</span></div>
+              <div><span style="color:#6b8e6b">Seller: </span><span style="color:#14142a" id="sgs-doc-seller">—</span></div>
+              <div><span style="color:#6b8e6b">Buyer: </span><span style="color:#14142a" id="sgs-doc-buyer">—</span></div>
+              <div><span style="color:#6b8e6b">HS Code: </span><span style="color:#14142a;font-weight:600" id="sgs-doc-hs">—</span></div>
+              <div><span style="color:#6b8e6b">Origin: </span><span style="color:#14142a" id="sgs-doc-origin">—</span></div>
+              <div><span style="color:#6b8e6b">Location: </span><span style="color:#14142a" id="sgs-doc-location">—</span></div>
+              <div><span style="color:#6b8e6b">Inspector: </span><span style="color:#14142a" id="sgs-doc-inspector">—</span></div>
+            </div>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:11px">
+            <tr style="background:#f0fdf4"><th style="padding:7px 14px;text-align:left;color:#527852;font-weight:700">CHECK</th><th style="padding:7px 10px;text-align:right;color:#527852;font-weight:700">QUANTITY</th><th style="padding:7px 14px;text-align:right;color:#527852;font-weight:700">GROSS WT</th></tr>
+            <tr><td style="padding:10px 14px;color:#14142a;font-weight:600" id="sgs-doc-check">Quantity &amp; Weight</td><td style="padding:10px;text-align:right;color:#14142a" id="sgs-doc-qty">—</td><td style="padding:10px 14px;text-align:right;font-weight:700;color:#14532d" id="sgs-doc-wt">—</td></tr>
+          </table>
+          <div id="sgs-doc-verdict" style="padding:12px 18px;border-top:2px solid #16a34a;display:flex;align-items:center;gap:12px">
+            <div style="font-size:24px" id="sgs-verdict-icon">✅</div>
+            <div><div style="font-size:13px;font-weight:700;color:#14532d" id="sgs-verdict-label">SATISFACTORY</div><div style="font-size:11px;color:#527852;margin-top:2px">Cargo approved for shipment</div></div>
+          </div>
+          <div id="sgs-doc-remarks-row" style="display:none;padding:10px 14px;border-top:1px solid #c6dfc6;font-size:11px;color:#14142a;white-space:pre-line;line-height:1.6" id="sgs-doc-remarks">—</div>
+          <div style="padding:7px 14px;background:#dcfce7;text-align:center;font-size:10px;color:#14532d;font-style:italic;border-top:1px solid #c6dfc6">This certificate is issued based on inspection at origin. Final quality subject to discharge port inspection.</div>
+          <div style="padding:5px 14px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closeSGSModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openSGSModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="alert('Downloading SGS Certificate PDF…')">↓ Download PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── SHARED PO LOADER FOR DOCUMENT SUITE ──────────────────────────────────────
+function docSuiteGetPOs() {
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+  return pos.length ? pos : [
+    {po_num:'PO-2026-001',product:'Hard Wheat · 50 MT',buyer:'Atlas Grain Trading',supplier:'Mersin Grain Co.',incoterm:'FOB',total:'$56,000',payment_terms:'LC at sight',loi_ref:'SL-LOI-20260501-003'},
+    {po_num:'PO-2026-002',product:'Aluminum 6061-T6 · 5 MT',buyer:'Gulf Steel Industries',supplier:'Dubai Metals LLC',incoterm:'FOB',total:'$46,000',payment_terms:'TT advance',loi_ref:'SL-LOI-20260430-002'},
+    {po_num:'PO-2026-003',product:'Steel Rebar G60 · 100 MT',buyer:'EuroSteel GmbH',supplier:'Kardemir Steel',incoterm:'CIF',total:'$282,000',payment_terms:'LC 60 days',loi_ref:'SL-LOI-20260604-004'}
+  ];
+}
+
+function docSuiteListHTML(listId, onSelectFn) {
+  var el = document.getElementById(listId);
+  if (!el) return;
+  var pos = docSuiteGetPOs();
+  el.innerHTML = pos.map(function(p, i) {
+    return '<div class="ds-po-row" style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;cursor:pointer;transition:border-color .12s" onclick="' + onSelectFn + '(' + i + ',this)">'
+      + '<div style="font-size:16px">📦</div>'
+      + '<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + (p.po_num||'PO') + ' · ' + (p.product||'—') + '</div>'
+      + '<div style="font-size:11px;color:var(--muted)">' + (p.buyer||'—') + ' · ' + (p.total||'—') + '</div></div>'
+      + '<span class="badge bm" style="font-size:11px;flex-shrink:0">Select</span></div>';
+  }).join('');
+  el._pos = pos;
+}
+
+function dsHighlight(listId, el) {
+  document.querySelectorAll('#' + listId + ' .ds-po-row').forEach(function(r){r.style.borderColor='var(--border2)';r.style.background='var(--surface2)';});
+  el.style.borderColor = 'rgba(91,95,239,.5)';
+  el.style.background = 'rgba(91,95,239,.06)';
+}
+
+function fmtDate(d) { return d.toISOString().split('T')[0]; }
+function todayStr() { return fmtDate(new Date()); }
+function futureStr(days) { var d=new Date(); d.setDate(d.getDate()+days); return fmtDate(d); }
+function randCode(prefix) { return prefix + '-' + new Date().getFullYear() + '-' + String(Math.floor(Math.random()*9000)+1000); }
+
+// ── COMMERCIAL INVOICE ────────────────────────────────────────────────────────
+var _ciPO = null;
+function openCIModal() { _ciPO=null; docSuiteListHTML('ci-po-list','ciSelect'); ciRefresh(); document.getElementById('ci-modal-bg').classList.add('open'); }
+function closeCIModal() { document.getElementById('ci-modal-bg').classList.remove('open'); }
+function ciSelect(i, el) {
+  _ciPO = document.getElementById('ci-po-list')._pos[i];
+  dsHighlight('ci-po-list', el);
+  document.getElementById('ci-ref').value = randCode('CI');
+  document.getElementById('ci-date').value = todayStr();
+  document.getElementById('ci-due').value = futureStr(30);
+  document.getElementById('ci-buyer').value = _ciPO.buyer || '';
+  ciRefresh();
+}
+function ciRefresh() {
+  function set(id,v){ var e=document.getElementById(id); if(e)e.textContent=v||'—'; }
+  set('ci-doc-ref', document.getElementById('ci-ref').value || 'CI-—');
+  set('ci-doc-date', 'Date: ' + (document.getElementById('ci-date').value || '—'));
+  set('ci-doc-seller', document.getElementById('ci-seller').value);
+  set('ci-doc-buyer', document.getElementById('ci-buyer').value);
+  set('ci-doc-hs', document.getElementById('ci-hs').value);
+  set('ci-doc-origin', document.getElementById('ci-origin').value);
+  set('ci-doc-pol', document.getElementById('ci-pol').value);
+  set('ci-doc-pod', document.getElementById('ci-pod').value);
+  set('ci-doc-bank', document.getElementById('ci-bank').value);
+  var notes = document.getElementById('ci-notes').value;
+  var nr = document.getElementById('ci-doc-notes-row'); if(nr) nr.style.display = notes ? 'block' : 'none';
+  var ne = document.getElementById('ci-doc-notes'); if(ne) ne.textContent = notes;
+  if (_ciPO) {
+    set('ci-doc-po', _ciPO.po_num); set('ci-doc-product', _ciPO.product);
+    set('ci-doc-incoterm', _ciPO.incoterm); set('ci-doc-payment', _ciPO.payment_terms||_ciPO.payment);
+    set('ci-doc-total', _ciPO.total);
+  }
+}
+
+// ── PACKING LIST ──────────────────────────────────────────────────────────────
+var _plPO = null;
+function openPLModal() { _plPO=null; docSuiteListHTML('pl-po-list','plSelect'); plRefresh(); document.getElementById('pl-modal-bg').classList.add('open'); }
+function closePLModal() { document.getElementById('pl-modal-bg').classList.remove('open'); }
+function plSelect(i, el) {
+  _plPO = document.getElementById('pl-po-list')._pos[i];
+  dsHighlight('pl-po-list', el);
+  document.getElementById('pl-ref').value = randCode('PL');
+  document.getElementById('pl-date').value = todayStr();
+  document.getElementById('pl-buyer').value = _plPO.buyer || '';
+  plRefresh();
+}
+function plRefresh() {
+  function set(id,v){ var e=document.getElementById(id); if(e)e.textContent=v||'—'; }
+  set('pl-doc-ref', document.getElementById('pl-ref').value || 'PL-—');
+  set('pl-doc-date', 'Date: ' + (document.getElementById('pl-date').value || '—'));
+  set('pl-doc-seller', document.getElementById('pl-seller').value);
+  set('pl-doc-buyer', document.getElementById('pl-buyer').value);
+  var pkgs = document.getElementById('pl-pkgs').value;
+  set('pl-doc-pkgs', pkgs ? pkgs + ' packages' : '—');
+  set('pl-doc-pkg-type', document.getElementById('pl-pkg-type').value);
+  var nw = document.getElementById('pl-net-wt').value;
+  set('pl-doc-net', nw ? nw + ' MT' : '—');
+  var gw = document.getElementById('pl-gross-wt').value;
+  set('pl-doc-gross', gw ? gw + ' MT' : '—');
+  set('pl-doc-pol', document.getElementById('pl-pol').value);
+  set('pl-doc-pod', document.getElementById('pl-pod').value);
+  set('pl-doc-container', document.getElementById('pl-container').value || 'N/A');
+  set('pl-doc-marks', document.getElementById('pl-marks').value);
+  if (_plPO) set('pl-doc-product', (_plPO.product||'—') + ' · ' + (_plPO.po_num||''));
+}
+
+// ── SGS INSPECTION REPORT ─────────────────────────────────────────────────────
+var _sgsPO = null;
+function openSGSModal() { _sgsPO=null; docSuiteListHTML('sgs-po-list','sgsSelect'); sgsRefresh(); document.getElementById('sgs-modal-bg').classList.add('open'); }
+function closeSGSModal() { document.getElementById('sgs-modal-bg').classList.remove('open'); }
+function sgsSelect(i, el) {
+  _sgsPO = document.getElementById('sgs-po-list')._pos[i];
+  dsHighlight('sgs-po-list', el);
+  document.getElementById('sgs-ref').value = randCode('SGS');
+  document.getElementById('sgs-date').value = todayStr();
+  sgsRefresh();
+}
+function sgsRefresh() {
+  function set(id,v){ var e=document.getElementById(id); if(e)e.textContent=v||'—'; }
+  set('sgs-doc-ref', document.getElementById('sgs-ref').value || 'SGS-—');
+  set('sgs-doc-date', 'Date: ' + (document.getElementById('sgs-date').value || '—'));
+  set('sgs-doc-location', document.getElementById('sgs-location').value);
+  set('sgs-doc-hs', document.getElementById('sgs-hs').value);
+  set('sgs-doc-origin', document.getElementById('sgs-origin').value);
+  set('sgs-doc-qty', document.getElementById('sgs-qty').value);
+  var wt = document.getElementById('sgs-wt').value;
+  set('sgs-doc-wt', wt ? wt + ' MT' : '—');
+  set('sgs-doc-inspector', document.getElementById('sgs-inspector').value);
+  if (_sgsPO) {
+    set('sgs-doc-product', _sgsPO.product); set('sgs-doc-po', _sgsPO.po_num);
+    set('sgs-doc-seller', _sgsPO.supplier||_sgsPO.seller||'—'); set('sgs-doc-buyer', _sgsPO.buyer);
+  }
+  var finding = document.getElementById('sgs-finding').value;
+  var iconEl = document.getElementById('sgs-verdict-icon');
+  var labelEl = document.getElementById('sgs-verdict-label');
+  var verdictEl = document.getElementById('sgs-doc-verdict');
+  if (iconEl && labelEl && verdictEl) {
+    var map = { SAT:['✅','SATISFACTORY','#16a34a','Cargo approved for shipment'], COND:['⚠️','CONDITIONALLY SATISFACTORY','#d97706','Minor issues noted — see remarks'], FAIL:['❌','NOT SATISFACTORY','#dc2626','Cargo not approved — remediation required'] };
+    var v = map[finding] || map.SAT;
+    iconEl.textContent = v[0]; labelEl.textContent = v[1]; labelEl.style.color = v[2];
+    verdictEl.style.borderTopColor = v[2];
+    var subEl = verdictEl.querySelector('div:last-child'); if(subEl) subEl.textContent = v[3];
+  }
+  var remarks = document.getElementById('sgs-remarks').value;
+  var rr = document.getElementById('sgs-doc-remarks-row'); if(rr) { rr.style.display = remarks ? 'block' : 'none'; rr.textContent = remarks; }
+}
+</script>
+
+<!-- ══ FREIGHT ADVISOR MODAL ═══════════════════════════════════════════════════ -->
+<div class="modal-bg" id="freight-modal-bg" onclick="if(event.target===this)closeFreightModal()">
+  <div class="modal" style="max-width:980px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">🚢 Freight Advisor</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Best route · forwarder type · rate estimate · ETA · port congestion alerts · from PO data</div>
+      </div>
+      <button class="modal-close" onclick="closeFreightModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:370px 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source PO</div>
+          <div id="freight-m-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:180px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <label class="flabel">Origin port / city</label>
+            <input class="inp" id="freight-m-origin" placeholder="e.g. Dubai, UAE" style="font-size:13px"/>
+          </div>
+          <div>
+            <label class="flabel">Destination port / city</label>
+            <input class="inp" id="freight-m-dest" placeholder="e.g. Hamburg, Germany" style="font-size:13px"/>
+          </div>
+          <div>
+            <label class="flabel">Shipping mode</label>
+            <select class="inp" id="freight-m-mode" style="font-size:13px">
+              <option>FCL 20′ (Full Container)</option>
+              <option>FCL 40′ (Full Container)</option>
+              <option>LCL (Less than Container)</option>
+              <option>Bulk carrier</option>
+              <option>Air freight</option>
+              <option>Road / truck</option>
+            </select>
+          </div>
+          <div>
+            <label class="flabel">Urgency</label>
+            <select class="inp" id="freight-m-urgency" style="font-size:13px">
+              <option>Standard (10–30 days)</option>
+              <option>Express (5–10 days)</option>
+              <option>Urgent (&lt; 5 days)</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="flabel">Additional context</label>
+          <textarea class="inp" id="freight-m-context" rows="3" placeholder="e.g. Hazmat cargo, temperature controlled, consolidation needed, preferred forwarder…" style="resize:vertical;font-size:13px"></textarea>
+        </div>
+        <button class="btn btn-sm" style="background:rgba(45,212,191,.15);border-color:rgba(45,212,191,.4);color:var(--teal);width:100%;justify-content:center" onclick="runFreightModal()">🚢 Get Freight Advice</button>
+      </div>
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">AI freight report</div>
+        <div style="background:#f0faf9;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #a7e8e0">
+          <div style="background:linear-gradient(135deg,#042a28,#063d38);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#2dd4bf;font-size:12px;font-weight:700">FREIGHT ADVISORY REPORT</div><div id="freight-m-doc-ref" style="color:#4a6e6c;font-size:11px">— select a PO to begin —</div></div>
+          </div>
+          <div style="background:#ccf5f0;border-bottom:2px solid #0d9488;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#064e3b;letter-spacing:.14em;text-transform:uppercase">FREIGHT &amp; ROUTING ADVISORY</div>
+          <div style="padding:16px 18px;min-height:300px">
+            <div id="freight-m-placeholder" style="color:#6b8e8c;font-style:italic;text-align:center;margin-top:60px">Select a PO on the left, set route details, and click "Get Freight Advice".</div>
+            <div id="freight-m-output" style="display:none;white-space:pre-wrap;font-size:12px;color:#042a28;line-height:1.8"></div>
+          </div>
+          <div style="padding:5px 14px;background:#e0f5f2;text-align:center;font-size:11px;color:#4a6e6c">Generated by SLOI AI · sloiai.com · Rates are estimates — confirm with freight forwarder</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closeFreightModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openFreightModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="copyFreightDoc()">⎘ Copy report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HS CODE & DUTY MODAL ════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="hs-modal-bg" onclick="if(event.target===this)closeHSModal()">
+  <div class="modal" style="max-width:980px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">🛃 HS Code &amp; Duty Lookup</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">HS tariff code · duty rate · import permits · required certificates · by commodity &amp; country</div>
+      </div>
+      <button class="modal-close" onclick="closeHSModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:370px 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source PO</div>
+          <div id="hs-m-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:160px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div>
+          <label class="flabel">Destination country</label>
+          <select class="inp" id="hs-m-country" style="font-size:13px">
+            <option>UAE</option><option>Saudi Arabia</option><option>Egypt</option><option>Iraq</option><option>Kuwait</option><option>Qatar</option><option>Oman</option><option>Jordan</option><option>Germany</option><option>France</option><option>United Kingdom</option><option>United States</option><option>China</option><option>India</option><option>Turkey</option><option>Pakistan</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Direction</label>
+          <select class="inp" id="hs-m-direction" style="font-size:13px">
+            <option>Import (buying into destination)</option>
+            <option>Export (shipping from origin)</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Commodity override (optional)</label>
+          <input class="inp" id="hs-m-commodity" placeholder="Leave blank to auto-read from PO" style="font-size:13px"/>
+        </div>
+        <div>
+          <label class="flabel">Additional context</label>
+          <textarea class="inp" id="hs-m-context" rows="3" placeholder="e.g. Re-export from free zone, specific alloy grade, food-grade packaging, dual-use concerns…" style="resize:vertical;font-size:13px"></textarea>
+        </div>
+        <button class="btn btn-sm" style="background:rgba(139,143,248,.15);border-color:rgba(139,143,248,.4);color:var(--violet);width:100%;justify-content:center" onclick="runHSModal()">🔍 Look Up HS Code &amp; Duties</button>
+      </div>
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Customs report</div>
+        <div style="background:#f8f7ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #cac8f0">
+          <div style="background:linear-gradient(135deg,#14142a,#1a1240);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#a5b4fc;font-size:12px;font-weight:700">HS CODE &amp; DUTY REPORT</div><div id="hs-m-doc-ref" style="color:#52526e;font-size:11px">— select a PO to begin —</div></div>
+          </div>
+          <div style="background:#ede9fe;border-bottom:2px solid #5b5fef;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#2e1065;letter-spacing:.14em;text-transform:uppercase">CUSTOMS TARIFF &amp; DUTY ANALYSIS</div>
+          <div style="padding:16px 18px;min-height:300px">
+            <div id="hs-m-placeholder" style="color:#6b6b8e;font-style:italic;text-align:center;margin-top:60px">Select a PO on the left, choose destination country, and click "Look Up HS Code &amp; Duties".</div>
+            <div id="hs-m-output" style="display:none;white-space:pre-wrap;font-size:12px;color:#14142a;line-height:1.8"></div>
+          </div>
+          <div style="padding:5px 14px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com · Verify with official customs authority before import/export</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closeHSModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openHSModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="copyHSDoc()">⎘ Copy report</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SPA AI MODAL ════════════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="spa-modal-bg" onclick="if(event.target===this)closeSPAModal()">
+  <div class="modal" style="max-width:980px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">📜 SPA AI — Share Purchase Agreement</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">ICC-aligned commodity sale agreement · auto-filled from PO · governs title transfer &amp; warranties</div>
+      </div>
+      <button class="modal-close" onclick="closeSPAModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:370px 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source PO</div>
+          <div id="spa-m-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:200px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div>
+          <label class="flabel">Governing Law</label>
+          <select class="inp" id="spa-m-gov-law" style="font-size:13px">
+            <option>UAE (DIFC)</option><option>England &amp; Wales</option><option>Germany</option><option>Singapore</option><option>Saudi Arabia</option><option>France</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Special clauses / additional context</label>
+          <textarea class="inp" id="spa-m-context" rows="4" placeholder="e.g. Force majeure for port delays, ICC Paris arbitration, title transfer on B/L date…" style="resize:vertical;font-size:13px"></textarea>
+        </div>
+        <button class="btn btn-sm" style="background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.4);color:#c084fc;width:100%;justify-content:center" onclick="runSPAModal()">📜 Draft SPA</button>
+      </div>
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Document preview</div>
+        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #d0cee8">
+          <div style="background:linear-gradient(135deg,#14142a,#1a0830);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#c084fc;font-size:12px;font-weight:700">SHARE PURCHASE AGREEMENT</div><div id="spa-m-doc-ref" style="color:#52526e;font-size:11px">— select a PO to begin —</div></div>
+          </div>
+          <div style="background:#f0e8fb;border-bottom:2px solid #9333ea;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#3b0764;letter-spacing:.14em;text-transform:uppercase">SPA — SHARE PURCHASE AGREEMENT</div>
+          <div style="padding:16px 18px;min-height:300px">
+            <div id="spa-m-placeholder" style="color:#6b6b8e;font-style:italic;text-align:center;margin-top:60px">Select a PO on the left and click "Draft SPA" to generate the agreement.</div>
+            <div id="spa-m-output" style="display:none;white-space:pre-wrap;font-size:12px;color:#14142a;line-height:1.8"></div>
+          </div>
+          <div style="padding:5px 14px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com · For review by qualified legal counsel</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closeSPAModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openSPAModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="copySPADoc()">⎘ Copy document</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NDA AI MODAL ════════════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="nda-modal-bg" onclick="if(event.target===this)closeNDAModal()">
+  <div class="modal" style="max-width:980px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">🔏 NDA AI — Non-Disclosure Agreement</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Mutual or one-way NDA · supplier &amp; pricing confidentiality · commodity-specific clauses · ICC-aligned</div>
+      </div>
+      <button class="modal-close" onclick="closeNDAModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:400px 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source PO</div>
+          <div id="nda-m-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:150px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <label class="flabel">NDA Type</label>
+            <select class="inp" id="nda-type" style="font-size:13px">
+              <option value="mutual">Mutual (both parties)</option>
+              <option value="oneway">One-way (supplier → buyer)</option>
+            </select>
+          </div>
+          <div>
+            <label class="flabel">Duration</label>
+            <select class="inp" id="nda-duration" style="font-size:13px">
+              <option>1 year</option><option>2 years</option><option selected>3 years</option><option>5 years</option>
+            </select>
+          </div>
+          <div>
+            <label class="flabel">Disclosing Party</label>
+            <input class="inp" id="nda-disclosing" placeholder="Auto-filled from PO" style="font-size:13px"/>
+          </div>
+          <div>
+            <label class="flabel">Receiving Party</label>
+            <input class="inp" id="nda-receiving" placeholder="Auto-filled from PO" style="font-size:13px"/>
+          </div>
+          <div style="grid-column:span 2">
+            <label class="flabel">Governing Law</label>
+            <select class="inp" id="nda-law" style="font-size:13px">
+              <option>UAE (DIFC)</option><option>England &amp; Wales</option><option>Germany</option><option>Singapore</option><option>Saudi Arabia</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="flabel">Confidentiality scope</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:5px">
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="nda-scope-price" checked style="accent-color:var(--blue)"> Pricing &amp; offers</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="nda-scope-supplier" checked style="accent-color:var(--blue)"> Supplier identities</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="nda-scope-route" checked style="accent-color:var(--blue)"> Trade routes &amp; logistics</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="nda-scope-financial" style="accent-color:var(--blue)"> Financial terms</label>
+            <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="nda-scope-tech" style="accent-color:var(--blue)"> Technical specs</label>
+          </div>
+        </div>
+        <div>
+          <label class="flabel">Purpose / additional context</label>
+          <textarea class="inp" id="nda-context" rows="3" placeholder="e.g. Evaluation of a long-term cement supply agreement. Arbitration at ICC Paris." style="resize:vertical;font-size:13px"></textarea>
+        </div>
+        <button class="btn btn-sm" style="background:rgba(59,130,246,.15);border-color:rgba(59,130,246,.4);color:var(--blue);width:100%;justify-content:center" onclick="runNDAModal()">🔏 Draft NDA</button>
+      </div>
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Document preview</div>
+        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #d0cee8">
+          <div style="background:linear-gradient(135deg,#14142a,#0c2340);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#60a5fa;font-size:12px;font-weight:700">NON-DISCLOSURE AGREEMENT</div><div id="nda-m-doc-ref" style="color:#52526e;font-size:11px">— select a PO to begin —</div></div>
+          </div>
+          <div style="background:#e0eeff;border-bottom:2px solid #3b82f6;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#1e3a8a;letter-spacing:.14em;text-transform:uppercase">NON-DISCLOSURE AGREEMENT</div>
+          <div style="padding:16px 18px;min-height:300px">
+            <div id="nda-m-placeholder" style="color:#6b6b8e;font-style:italic;text-align:center;margin-top:60px">Select a PO on the left and click "Draft NDA" to generate the agreement.</div>
+            <div id="nda-m-output" style="display:none;white-space:pre-wrap;font-size:12px;color:#14142a;line-height:1.8"></div>
+          </div>
+          <div style="padding:5px 14px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com · For review by qualified legal counsel</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closeNDAModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openNDAModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="copyNDADoc()">⎘ Copy document</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LEGALCONTRACT AI MODAL ══════════════════════════════════════════════════ -->
+<div class="modal-bg" id="lc-modal-bg" onclick="if(event.target===this)closeLCModal()">
+  <div class="modal" style="max-width:980px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">⚖️ LegalContract AI — Commodity Sale Contract</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">ICC/UNIDROIT-compliant sale contract · full T&amp;Cs · from PO data · ready to send to lawyer</div>
+      </div>
+      <button class="modal-close" onclick="closeLCModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:370px 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source PO</div>
+          <div id="lc-m-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:180px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div>
+          <label class="flabel">Contract Type</label>
+          <select class="inp" id="lc-m-type" style="font-size:13px">
+            <option>ICC Commodity Sale Contract</option>
+            <option>CISG — International Sale of Goods</option>
+            <option>GAFTA Standard Grain Contract</option>
+            <option>LME Metal Trade Contract</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Governing Law</label>
+          <select class="inp" id="lc-m-gov-law" style="font-size:13px">
+            <option>UAE (DIFC)</option><option>England &amp; Wales</option><option>Germany</option><option>Singapore</option><option>France</option>
+          </select>
+        </div>
+        <div>
+          <label class="flabel">Lawyer email (optional)</label>
+          <input class="inp" id="lc-m-lawyer" type="email" placeholder="lawyer@firm.com" style="font-size:13px"/>
+        </div>
+        <div>
+          <label class="flabel">Special clauses / context</label>
+          <textarea class="inp" id="lc-m-context" rows="3" placeholder="e.g. Arbitration at ICC Paris, quality inspection at origin, 30-day dispute notice period…" style="resize:vertical;font-size:13px"></textarea>
+        </div>
+        <button class="btn btn-sm" style="background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.4);color:#c084fc;width:100%;justify-content:center" onclick="runLCModal()">⚖️ Draft Contract</button>
+      </div>
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Document preview</div>
+        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #d0cee8">
+          <div style="background:linear-gradient(135deg,#14142a,#1a0830);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#c084fc;font-size:12px;font-weight:700">COMMODITY SALE CONTRACT</div><div id="lc-m-doc-ref" style="color:#52526e;font-size:11px">— select a PO to begin —</div></div>
+          </div>
+          <div style="background:#f0e4ff;border-bottom:2px solid #7c3aed;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#3b0764;letter-spacing:.14em;text-transform:uppercase">ICC COMMODITY SALE CONTRACT</div>
+          <div style="padding:16px 18px;min-height:300px">
+            <div id="lc-m-placeholder" style="color:#6b6b8e;font-style:italic;text-align:center;margin-top:60px">Select a PO on the left and click "Draft Contract" to generate.</div>
+            <div id="lc-m-output" style="display:none;white-space:pre-wrap;font-size:12px;color:#14142a;line-height:1.8"></div>
+          </div>
+          <div style="padding:5px 14px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com · For review by qualified legal counsel</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closeLCModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openLCModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="copyLCDoc()">⎘ Copy document</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRADEFINANCEAI MODAL ═════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="tf-modal-bg" onclick="if(event.target===this)closeTFModal()">
+  <div class="modal" style="max-width:980px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">💳 TradeFinanceAI — LC / SBLC Application</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Drafts Letter of Credit or Standby LC application from PO data · UCP 600 · bank-ready format</div>
+      </div>
+      <button class="modal-close" onclick="closeTFModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:370px 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source PO</div>
+          <div id="tf-m-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:180px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <label class="flabel">LC / SBLC Type</label>
+            <select class="inp" id="tf-m-lc-type" style="font-size:13px">
+              <option>LC at sight (Documentary)</option>
+              <option>LC Usance 60 days</option>
+              <option>LC Usance 90 days</option>
+              <option>SBLC (Standby LC)</option>
+            </select>
+          </div>
+          <div>
+            <label class="flabel">Expiry (days from issue)</label>
+            <input class="inp" id="tf-m-expiry" type="number" value="90" style="font-size:13px"/>
+          </div>
+          <div style="grid-column:span 2">
+            <label class="flabel">Issuing Bank</label>
+            <input class="inp" id="tf-m-bank" placeholder="e.g. Emirates NBD · Dubai, UAE" style="font-size:13px"/>
+          </div>
+        </div>
+        <div>
+          <label class="flabel">Special conditions</label>
+          <textarea class="inp" id="tf-m-conditions" rows="3" placeholder="e.g. Partial shipments not allowed, transhipment permitted, latest shipment 30 days before expiry…" style="resize:vertical;font-size:13px"></textarea>
+        </div>
+        <button class="btn btn-sm" style="background:rgba(232,169,74,.15);border-color:rgba(232,169,74,.4);color:var(--gold);width:100%;justify-content:center" onclick="runTFModal()">💳 Draft LC Application</button>
+      </div>
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Document preview</div>
+        <div style="background:#f9f8ff;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #d0cee8">
+          <div style="background:linear-gradient(135deg,#14142a,#1a1000);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#e8a94a;font-size:12px;font-weight:700">LC / SBLC APPLICATION</div><div id="tf-m-doc-ref" style="color:#52526e;font-size:11px">— select a PO to begin —</div></div>
+          </div>
+          <div style="background:#fef3c7;border-bottom:2px solid #d97706;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#78350f;letter-spacing:.14em;text-transform:uppercase">DOCUMENTARY LETTER OF CREDIT — APPLICATION</div>
+          <div style="padding:16px 18px;min-height:300px">
+            <div id="tf-m-placeholder" style="color:#6b6b8e;font-style:italic;text-align:center;margin-top:60px">Select a PO on the left and click "Draft LC Application" to generate.</div>
+            <div id="tf-m-output" style="display:none;white-space:pre-wrap;font-size:12px;color:#14142a;line-height:1.8"></div>
+          </div>
+          <div style="padding:5px 14px;background:#f0eff8;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com · Subject to bank and compliance review</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closeTFModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openTFModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="copyTFDoc()">⎘ Copy document</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── FREIGHT ADVISOR MODAL ─────────────────────────────────────────────────────
+var _freightMPO = null;
+function openFreightModal() {
+  _freightMPO = null;
+  docSuiteListHTML('freight-m-po-list', 'freightModalSelect');
+  document.getElementById('freight-m-placeholder').style.display = '';
+  document.getElementById('freight-m-output').style.display = 'none';
+  document.getElementById('freight-m-output').textContent = '';
+  document.getElementById('freight-m-doc-ref').textContent = '— select a PO to begin —';
+  document.getElementById('freight-modal-bg').classList.add('open');
+}
+function closeFreightModal() { document.getElementById('freight-modal-bg').classList.remove('open'); }
+function freightModalSelect(i, el) {
+  _freightMPO = docSuiteGetPOs()[i];
+  dsHighlight('freight-m-po-list', el);
+  document.getElementById('freight-m-doc-ref').textContent = (_freightMPO.po_num || 'PO-' + (i + 1)) + ' · ' + (_freightMPO.product || '');
+  var orig = document.getElementById('freight-m-origin');
+  var dest = document.getElementById('freight-m-dest');
+  if (orig && !orig.value && _freightMPO.origin) orig.value = _freightMPO.origin;
+  if (dest && !dest.value && _freightMPO.destination) dest.value = _freightMPO.destination;
+}
+function runFreightModal() {
+  if (!_freightMPO) { alert('Select a PO first.'); return; }
+  var origin = document.getElementById('freight-m-origin').value.trim() || 'origin port (not specified)';
+  var dest = document.getElementById('freight-m-dest').value.trim() || 'destination port (not specified)';
+  var mode = document.getElementById('freight-m-mode').value;
+  var urgency = document.getElementById('freight-m-urgency').value;
+  var ctx = document.getElementById('freight-m-context').value.trim();
+  var prompt = 'You are a senior international freight and logistics specialist with expertise in commodity trade routes.\n\n'
+    + 'Provide a detailed freight advisory report for the following shipment:\n\n'
+    + 'SHIPMENT DETAILS (from PO ' + (_freightMPO.po_num || '') + '):\n'
+    + '- Commodity: ' + (_freightMPO.product || 'N/A') + '\n'
+    + '- Quantity / Weight: ' + (_freightMPO.qty || _freightMPO.quantity || 'N/A') + '\n'
+    + '- Total Value: ' + (_freightMPO.total || 'N/A') + '\n'
+    + '- Incoterms: ' + (_freightMPO.incoterm || 'N/A') + '\n'
+    + '- Origin: ' + origin + '\n'
+    + '- Destination: ' + dest + '\n'
+    + '- Shipping Mode: ' + mode + '\n'
+    + '- Urgency: ' + urgency + '\n'
+    + (ctx ? '- Additional notes: ' + ctx + '\n' : '')
+    + '\nProvide a structured report with these sections:\n'
+    + '1. RECOMMENDED ROUTE — best shipping route with waypoints, transit hubs, canal or land crossings\n'
+    + '2. ESTIMATED FREIGHT RATE — rate per container or per MT, total cost estimate in USD\n'
+    + '3. TRANSIT TIME — realistic ETA with buffer for delays\n'
+    + '4. PORT & ROUTE ALERTS — known congestion, sanctions, seasonal delays, geopolitical risks\n'
+    + '5. FORWARDER TYPE — recommended freight forwarder type (NVOCC, direct carrier, consolidator) and 2–3 names to consider\n'
+    + '6. REQUIRED SHIPPING DOCUMENTS — B/L, packing list, COO, insurance cert, etc.\n'
+    + '7. COST OPTIMISATION TIPS — ways to reduce freight cost or transit time\n\n'
+    + 'Be specific and practical. Use [ESTIMATE] tags where exact figures are uncertain.';
+  adminAIFetch(prompt, 1500, document.getElementById('freight-m-output'), 'freight-m-placeholder');
+}
+function copyFreightDoc() {
+  var t = (document.getElementById('freight-m-output') || {}).textContent || '';
+  if (!t.trim()) { alert('Generate a report first.'); return; }
+  navigator.clipboard.writeText(t).then(function() { alert('✓ Freight report copied to clipboard.'); });
+}
+
+// ── HS CODE & DUTY MODAL ──────────────────────────────────────────────────────
+var _hsMPO = null;
+function openHSModal() {
+  _hsMPO = null;
+  docSuiteListHTML('hs-m-po-list', 'hsModalSelect');
+  document.getElementById('hs-m-placeholder').style.display = '';
+  document.getElementById('hs-m-output').style.display = 'none';
+  document.getElementById('hs-m-output').textContent = '';
+  document.getElementById('hs-m-doc-ref').textContent = '— select a PO to begin —';
+  document.getElementById('hs-m-commodity').value = '';
+  document.getElementById('hs-m-context').value = '';
+  document.getElementById('hs-modal-bg').classList.add('open');
+}
+function closeHSModal() { document.getElementById('hs-modal-bg').classList.remove('open'); }
+function hsModalSelect(i, el) {
+  _hsMPO = docSuiteGetPOs()[i];
+  dsHighlight('hs-m-po-list', el);
+  document.getElementById('hs-m-doc-ref').textContent = (_hsMPO.po_num || 'PO-' + (i + 1)) + ' · ' + (_hsMPO.product || '');
+}
+function runHSModal() {
+  if (!_hsMPO) { alert('Select a PO first.'); return; }
+  var country = document.getElementById('hs-m-country').value;
+  var direction = document.getElementById('hs-m-direction').value;
+  var commodity = document.getElementById('hs-m-commodity').value.trim() || (_hsMPO.product || 'the commodity');
+  var ctx = document.getElementById('hs-m-context').value.trim();
+  var prompt = 'You are a certified customs broker and trade compliance expert.\n\n'
+    + 'Provide a detailed HS code and customs duty analysis for the following:\n\n'
+    + 'TRADE DETAILS (PO ' + (_hsMPO.po_num || '') + '):\n'
+    + '- Commodity: ' + commodity + '\n'
+    + '- Destination Country: ' + country + '\n'
+    + '- Direction: ' + direction + '\n'
+    + '- Supplier: ' + (_hsMPO.supplier || 'N/A') + '\n'
+    + '- Buyer: ' + (_hsMPO.buyer || 'N/A') + '\n'
+    + '- Total Value: ' + (_hsMPO.total || 'N/A') + '\n'
+    + '- Incoterms: ' + (_hsMPO.incoterm || 'N/A') + '\n'
+    + (ctx ? '- Additional context: ' + ctx + '\n' : '')
+    + '\nProvide a structured report with:\n'
+    + '1. HS CODE — 6-digit HS code and full description. Note if national subheadings apply for ' + country + '\n'
+    + '2. DUTY RATE — standard MFN import/export duty rate for ' + country + '. Note any preferential rates (FTAs, GCC, EU, etc.)\n'
+    + '3. VAT / GST — applicable consumption tax on import\n'
+    + '4. IMPORT / EXPORT PERMITS — any licences, quotas, or government approvals required\n'
+    + '5. REQUIRED CERTIFICATES — SGS/pre-shipment inspection, COO, halal cert, fumigation, phytosanitary, etc.\n'
+    + '6. RESTRICTED / PROHIBITED — any sanctions, dual-use, or restricted goods considerations\n'
+    + '7. DUTY SAVINGS OPPORTUNITIES — free zones, bonded warehouses, tariff suspensions, FTA eligibility\n'
+    + '8. ESTIMATED LANDED DUTY COST — rough calculation based on declared value\n\n'
+    + 'Be specific to ' + country + '. Use [VERIFY] tags where official confirmation is needed.';
+  adminAIFetch(prompt, 1500, document.getElementById('hs-m-output'), 'hs-m-placeholder');
+}
+function copyHSDoc() {
+  var t = (document.getElementById('hs-m-output') || {}).textContent || '';
+  if (!t.trim()) { alert('Generate a report first.'); return; }
+  navigator.clipboard.writeText(t).then(function() { alert('✓ Customs report copied to clipboard.'); });
+}
+
+// ── LEGAL AI SUITE + TRADEFINANCE MODALS ──────────────────────────────────────
+
+function adminAIFetch(prompt, maxTokens, outEl, placeholderId) {
+  var key = localStorage.getItem('sf_claude_key') || '';
+  if (!key) {
+    if (outEl) { outEl.style.display = ''; outEl.textContent = 'No Claude API key — set sf_claude_key in localStorage.'; }
+    return;
+  }
+  var ph = placeholderId ? document.getElementById(placeholderId) : null;
+  if (ph) ph.style.display = 'none';
+  if (outEl) { outEl.style.display = ''; outEl.textContent = '⏳ Drafting document… this may take 10–20 seconds.'; }
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: maxTokens || 1500, messages: [{ role: 'user', content: prompt }] })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) { if (outEl) outEl.textContent = (res.content && res.content[0]) ? res.content[0].text : 'No response received.'; })
+  .catch(function(e) { if (outEl) outEl.textContent = 'Error: ' + e.message; });
+}
+
+// ── SPA AI MODAL ──────────────────────────────────────────────────────────────
+var _spaMPO = null;
+function openSPAModal() {
+  _spaMPO = null;
+  docSuiteListHTML('spa-m-po-list', 'spaModalSelect');
+  document.getElementById('spa-m-placeholder').style.display = '';
+  document.getElementById('spa-m-output').style.display = 'none';
+  document.getElementById('spa-m-output').textContent = '';
+  document.getElementById('spa-m-doc-ref').textContent = '— select a PO to begin —';
+  document.getElementById('spa-modal-bg').classList.add('open');
+}
+function closeSPAModal() { document.getElementById('spa-modal-bg').classList.remove('open'); }
+function spaModalSelect(i, el) {
+  _spaMPO = docSuiteGetPOs()[i];
+  dsHighlight('spa-m-po-list', el);
+  document.getElementById('spa-m-doc-ref').textContent = (_spaMPO.po_num || 'PO-' + (i + 1)) + ' · ' + (_spaMPO.buyer || '');
+}
+function runSPAModal() {
+  if (!_spaMPO) { alert('Select a PO first.'); return; }
+  var govLaw = document.getElementById('spa-m-gov-law').value;
+  var ctx = document.getElementById('spa-m-context').value.trim();
+  adminAIFetch(buildSPAPrompt(_spaMPO, govLaw, ctx), 1500, document.getElementById('spa-m-output'), 'spa-m-placeholder');
+}
+function copySPADoc() {
+  var t = (document.getElementById('spa-m-output') || {}).textContent || '';
+  if (!t.trim()) { alert('Generate a draft first.'); return; }
+  navigator.clipboard.writeText(t).then(function() { alert('✓ SPA document copied to clipboard.'); });
+}
+
+// ── NDA AI MODAL ──────────────────────────────────────────────────────────────
+var _ndaMPO = null;
+function openNDAModal() {
+  _ndaMPO = null;
+  docSuiteListHTML('nda-m-po-list', 'ndaModalSelect');
+  document.getElementById('nda-m-placeholder').style.display = '';
+  document.getElementById('nda-m-output').style.display = 'none';
+  document.getElementById('nda-m-output').textContent = '';
+  document.getElementById('nda-m-doc-ref').textContent = '— select a PO to begin —';
+  var disc = document.getElementById('nda-disclosing'), recv = document.getElementById('nda-receiving'), ctx = document.getElementById('nda-context');
+  if (disc) disc.value = ''; if (recv) recv.value = ''; if (ctx) ctx.value = '';
+  document.getElementById('nda-modal-bg').classList.add('open');
+}
+function closeNDAModal() { document.getElementById('nda-modal-bg').classList.remove('open'); }
+function ndaModalSelect(i, el) {
+  _ndaMPO = docSuiteGetPOs()[i];
+  dsHighlight('nda-m-po-list', el);
+  document.getElementById('nda-m-doc-ref').textContent = (_ndaMPO.po_num || 'PO-' + (i + 1)) + ' · ' + (_ndaMPO.buyer || '');
+  var disc = document.getElementById('nda-disclosing'), recv = document.getElementById('nda-receiving'), ctx = document.getElementById('nda-context');
+  if (disc) disc.value = _ndaMPO.supplier || _ndaMPO.seller || '';
+  if (recv) recv.value = _ndaMPO.buyer || '';
+  if (ctx && !ctx.value) ctx.value = 'Evaluation of commodity supply agreement for ' + (_ndaMPO.product || 'the product') + ' (ref: ' + (_ndaMPO.po_num || '') + ').';
+}
+function runNDAModal() {
+  if (!_ndaMPO) { alert('Select a PO first.'); return; }
+  adminAIFetch(buildNDAPrompt(), 1500, document.getElementById('nda-m-output'), 'nda-m-placeholder');
+}
+function copyNDADoc() {
+  var t = (document.getElementById('nda-m-output') || {}).textContent || '';
+  if (!t.trim()) { alert('Generate a draft first.'); return; }
+  navigator.clipboard.writeText(t).then(function() { alert('✓ NDA document copied to clipboard.'); });
+}
+
+// ── LEGALCONTRACT AI MODAL ────────────────────────────────────────────────────
+var _lcMPO = null;
+function openLCModal() {
+  _lcMPO = null;
+  docSuiteListHTML('lc-m-po-list', 'lcModalSelect');
+  document.getElementById('lc-m-placeholder').style.display = '';
+  document.getElementById('lc-m-output').style.display = 'none';
+  document.getElementById('lc-m-output').textContent = '';
+  document.getElementById('lc-m-doc-ref').textContent = '— select a PO to begin —';
+  document.getElementById('lc-modal-bg').classList.add('open');
+}
+function closeLCModal() { document.getElementById('lc-modal-bg').classList.remove('open'); }
+function lcModalSelect(i, el) {
+  _lcMPO = docSuiteGetPOs()[i];
+  dsHighlight('lc-m-po-list', el);
+  document.getElementById('lc-m-doc-ref').textContent = (_lcMPO.po_num || 'PO-' + (i + 1)) + ' · ' + (_lcMPO.buyer || '');
+}
+function runLCModal() {
+  if (!_lcMPO) { alert('Select a PO first.'); return; }
+  var ctype = document.getElementById('lc-m-type').value;
+  var law = document.getElementById('lc-m-gov-law').value;
+  var ctx = document.getElementById('lc-m-context').value.trim();
+  var prompt = 'You are a senior international trade lawyer specialising in commodity transactions.\n'
+    + 'Draft a complete, formal ' + ctype + ' for the following commodity deal.\n\n'
+    + 'DEAL DATA (from Purchase Order ' + (_lcMPO.po_num || '') + '):\n'
+    + '- Product: ' + (_lcMPO.product || 'N/A') + '\n'
+    + '- Seller / Supplier: ' + (_lcMPO.supplier || 'N/A') + '\n'
+    + '- Buyer: ' + (_lcMPO.buyer || 'N/A') + '\n'
+    + '- Total Value: ' + (_lcMPO.total || 'N/A') + '\n'
+    + '- Incoterms: ' + (_lcMPO.incoterm || 'N/A') + '\n'
+    + '- Payment Terms: ' + (_lcMPO.payment_terms || _lcMPO.payment || 'N/A') + '\n'
+    + (_lcMPO.loi_ref ? '- LOI Reference: ' + _lcMPO.loi_ref + '\n' : '')
+    + '- Governing Law: ' + law + '\n'
+    + (ctx ? '- Additional instructions: ' + ctx + '\n' : '')
+    + '\nInclude numbered sections:\n'
+    + '1. PARTIES & RECITALS  2. DEFINITIONS  3. DESCRIPTION OF GOODS  4. PRICE & PAYMENT\n'
+    + '5. DELIVERY & INCOTERMS (2020)  6. TITLE & RISK OF LOSS  7. INSPECTION & QUALITY\n'
+    + '8. REPRESENTATIONS & WARRANTIES  9. FORCE MAJEURE  10. DEFAULT & REMEDIES\n'
+    + '11. GOVERNING LAW & DISPUTE RESOLUTION  12. MISCELLANEOUS  13. SIGNATURES\n\n'
+    + 'Use [PLACEHOLDER] for missing details. Formal legal language throughout.';
+  adminAIFetch(prompt, 1500, document.getElementById('lc-m-output'), 'lc-m-placeholder');
+}
+function copyLCDoc() {
+  var t = (document.getElementById('lc-m-output') || {}).textContent || '';
+  if (!t.trim()) { alert('Generate a draft first.'); return; }
+  navigator.clipboard.writeText(t).then(function() { alert('✓ Contract document copied to clipboard.'); });
+}
+
+// ── TRADEFINANCEAI MODAL ──────────────────────────────────────────────────────
+var _tfMPO = null;
+function openTFModal() {
+  _tfMPO = null;
+  docSuiteListHTML('tf-m-po-list', 'tfModalSelect');
+  document.getElementById('tf-m-placeholder').style.display = '';
+  document.getElementById('tf-m-output').style.display = 'none';
+  document.getElementById('tf-m-output').textContent = '';
+  document.getElementById('tf-m-doc-ref').textContent = '— select a PO to begin —';
+  document.getElementById('tf-modal-bg').classList.add('open');
+}
+function closeTFModal() { document.getElementById('tf-modal-bg').classList.remove('open'); }
+function tfModalSelect(i, el) {
+  _tfMPO = docSuiteGetPOs()[i];
+  dsHighlight('tf-m-po-list', el);
+  document.getElementById('tf-m-doc-ref').textContent = (_tfMPO.po_num || 'PO-' + (i + 1)) + ' · ' + (_tfMPO.buyer || '');
+}
+function runTFModal() {
+  if (!_tfMPO) { alert('Select a PO first.'); return; }
+  var lcType = document.getElementById('tf-m-lc-type').value;
+  var bank = document.getElementById('tf-m-bank').value.trim() || '[ISSUING BANK]';
+  var expiry = document.getElementById('tf-m-expiry').value || '90';
+  var conditions = document.getElementById('tf-m-conditions').value.trim();
+  var prompt = 'You are a trade finance specialist. Draft a complete ' + lcType + ' application for the following commodity transaction.\n\n'
+    + 'DEAL DATA:\n'
+    + '- PO Reference: ' + (_tfMPO.po_num || 'N/A') + '\n'
+    + '- Commodity / Product: ' + (_tfMPO.product || 'N/A') + '\n'
+    + '- Applicant (Buyer): ' + (_tfMPO.buyer || 'N/A') + '\n'
+    + '- Beneficiary (Supplier): ' + (_tfMPO.supplier || 'N/A') + '\n'
+    + '- Amount: ' + (_tfMPO.total || 'N/A') + '\n'
+    + '- Incoterms: ' + (_tfMPO.incoterm || 'N/A') + '\n'
+    + '- Issuing Bank: ' + bank + '\n'
+    + '- Expiry: ' + expiry + ' days from date of issue\n'
+    + (conditions ? '- Special conditions: ' + conditions + '\n' : '')
+    + '\nDraft the application with sections:\n'
+    + '1. LC APPLICATION DETAILS (type, amount, currency, expiry)\n'
+    + '2. APPLICANT & BENEFICIARY\n'
+    + '3. DESCRIPTION OF GOODS\n'
+    + '4. REQUIRED DOCUMENTS (Commercial Invoice, B/L, Packing List, SGS Certificate, COO)\n'
+    + '5. SHIPMENT TERMS\n'
+    + '6. SPECIAL CONDITIONS & INSTRUCTIONS\n'
+    + '7. CONFIRMATION INSTRUCTIONS\n'
+    + '8. CHARGES\n'
+    + '9. APPLICANT DECLARATION & SIGNATURE BLOCK\n\n'
+    + 'Reference UCP 600. Use [PLACEHOLDER] for missing info.';
+  adminAIFetch(prompt, 1500, document.getElementById('tf-m-output'), 'tf-m-placeholder');
+}
+function copyTFDoc() {
+  var t = (document.getElementById('tf-m-output') || {}).textContent || '';
+  if (!t.trim()) { alert('Generate a draft first.'); return; }
+  navigator.clipboard.writeText(t).then(function() { alert('✓ LC Application copied to clipboard.'); });
+}
+
+// ── SOURCING & INTEL AI ───────────────────────────────────────────────────────
+function runAdminLeadScan() {
+  var key = localStorage.getItem('sf_claude_key') || '';
+  var el = document.getElementById('lead-finder-results');
+  if (!el) return;
+  if (!key) { el.innerHTML = '<div style="color:var(--red);font-size:13px">No Claude API key — set sf_claude_key in localStorage.</div>'; return; }
+  el.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 0">⏳ Claude scanning for commodity leads…</div>';
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 700, messages: [{ role: 'user', content: 'List 6 specific commodity procurement opportunities in the MENA/IMEC corridor for 2026. Include infrastructure megaprojects, government tenders, and import buyers needing steel rebar, OPC cement, wheat, aluminum, or diesel. For each lead give: name, country, estimated value, commodity needed, and why it is a priority. Number them 1–6.' }] })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) {
+    var text = (res.content && res.content[0]) ? res.content[0].text : 'No response.';
+    var html = '';
+    text.split('\n').forEach(function(line) {
+      line = line.trim(); if (!line) return;
+      if (/^\d+[.)]\s/.test(line)) {
+        html += '<div style="color:var(--white);font-weight:600;font-size:13px;margin-top:8px;margin-bottom:2px">' + line + '</div>';
+      } else {
+        html += '<div style="color:var(--muted);font-size:12px;padding-left:8px;line-height:1.6">' + line + '</div>';
+      }
+    });
+    el.innerHTML = html || '<div style="color:var(--muted);font-size:13px">' + text + '</div>';
+  })
+  .catch(function(e) { el.innerHTML = '<div style="color:var(--red);font-size:13px">Error: ' + e.message + '</div>'; });
+}
+
+function runAdminSupplierScan() {
+  var key = localStorage.getItem('sf_claude_key') || '';
+  var panel = document.getElementById('si-panel-suppliers');
+  if (!panel) return;
+  if (!key) { alert('No Claude API key — set sf_claude_key in localStorage.'); return; }
+  var listEl = document.getElementById('si-sup-results');
+  if (!listEl) {
+    listEl = document.createElement('div');
+    listEl.id = 'si-sup-results';
+    listEl.style.cssText = 'margin-top:8px;padding-top:8px;border-top:1px solid var(--border)';
+    var btns = panel.querySelector('[style*="margin-top:8px"]');
+    if (btns) panel.insertBefore(listEl, btns); else panel.appendChild(listEl);
+  }
+  listEl.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:4px 0">⏳ Claude finding verified suppliers…</div>';
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 600, messages: [{ role: 'user', content: 'List 5 verified commodity suppliers for a UAE-based trading firm in 2026. Each should deal in steel rebar, OPC cement, hard wheat, aluminum 6061, or industrial diesel. For each: name, country, main commodity, certification (ISO/GAFTA/LME), and one reason to use them. Number them 1–5.' }] })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) {
+    var text = (res.content && res.content[0]) ? res.content[0].text : 'No response.';
+    var html = '<div style="font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px">AI-found suppliers</div>';
+    text.split('\n').forEach(function(line) {
+      line = line.trim(); if (!line) return;
+      if (/^\d+[.)]\s/.test(line)) {
+        html += '<div style="color:var(--white);font-weight:600;font-size:12px;margin-top:6px">' + line + '</div>';
+      } else {
+        html += '<div style="color:var(--muted);font-size:11px;padding-left:8px;line-height:1.5">' + line + '</div>';
+      }
+    });
+    listEl.innerHTML = html;
+  })
+  .catch(function(e) { listEl.innerHTML = '<div style="color:var(--red);font-size:12px">Error: ' + e.message + '</div>'; });
+}
+</script>
 
 </body>
 </html>
