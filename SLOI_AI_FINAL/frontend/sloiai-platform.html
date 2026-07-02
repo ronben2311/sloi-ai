@@ -6113,11 +6113,31 @@ Content-Type: application/json
               parseFloat(data.deal_price).toLocaleString() +
               '/unit</div><div style="font-size:15px;color:var(--muted)">Total: $' +
               parseFloat(data.total_value).toLocaleString() +
-              '</div><div style="margin-top:10px"><button class="btn btn-p btn-sm" onclick="show(\'lois\',document.getElementById(\'tb-lois\'))">📄 View LOI →</button></div></div>';
+              '</div><div style="margin-top:10px"><button class="btn btn-p btn-sm" onclick="show(\'lois\',document.getElementById(\'tb-lois\'))">📄 View LOI →</button>'
+              + '<button class="btn btn-sm" style="margin-left:8px;background:rgba(34,197,94,.15);color:var(--green)" onclick="show(\'documents\',document.getElementById(\'tb-documents\'))">📋 Trade Docs →</button>'
+              + '</div></div>';
             document.getElementById("neg-reset-btn").style.display =
               "inline-flex";
             loadNegotiations();
             loadLOIs();
+            // Auto-generate trade document suite
+            sloiAutoGen('NDA', data);
+            sloiAutoGen('SPA', data);
+            sloiAutoGen('Trade Contract', data);
+            sloi_showToast('📄 LOI signed — generating trade documents…', 'indigo');
+          })
+          .on("SPA_GENERATED", function (data) {
+            sloiAutoGen('LC Application', data);
+            sloi_showToast('📋 SPA generated — preparing LC Application…', 'green');
+          })
+          .on("TC_GENERATED", function (data) {
+            sloiAutoGen('Freight Advisory', data);
+            sloiAutoGen('HS Code Report', data);
+            sloi_showToast('⚖️ Trade Contract generated — freight & HS advisory incoming…', 'green');
+          })
+          .on("LC_GENERATED", function (data) {
+            renderAutoDocs();
+            sloi_showToast('💳 LC Application ready — ' + (data.loi_ref || ''), 'green');
           })
           .on("NEGOTIATION_FAILED", function (data) {
             document.getElementById("neg-live-title").textContent =
@@ -8895,6 +8915,196 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within thresh
     }, 800);
   };
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+// AUTO-DOCUMENT CASCADE — shared with admin, fires on deal approval
+// ══════════════════════════════════════════════════════════════════════════════
+var SLOI_AUTO_DOCS_KEY = 'sloi_auto_docs';
+
+var _autoDocPrompts = {
+  'NDA': function(d) {
+    return 'You are a commodity trade lawyer. Draft a Mutual Non-Disclosure Agreement.\n'
+      + 'Party A (Trader): SLOI AI Ltd\n'
+      + 'Party B: ' + (d.buyer_name || d.supplier || '[COUNTERPARTY]') + '\n'
+      + 'Product Context: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'LOI Reference: ' + (d.loi_ref || '[LOI REF]') + '\n'
+      + 'Deal Value: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[VALUE]') + '\n\n'
+      + 'Sections: 1. PARTIES  2. CONFIDENTIAL INFORMATION DEFINITION  3. OBLIGATIONS OF RECEIVING PARTY  '
+      + '4. TERM (2 years)  5. EXCLUSIONS  6. GOVERNING LAW (UAE / DIFC)  7. REMEDIES  8. SIGNATURES\n'
+      + 'Use [PLACEHOLDER] for unknown fields. Formal legal language throughout.';
+  },
+  'SPA': function(d) {
+    return 'You are a senior commodity trade lawyer. Draft a complete Sales & Purchase Agreement from this approved LOI.\n'
+      + 'LOI Reference: ' + (d.loi_ref || '[LOI REF]') + '\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'Deal Price: $' + (d.deal_price || '[PRICE]') + '/unit\n'
+      + 'Total Value: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[TOTAL]') + '\n'
+      + 'Buyer: ' + (d.buyer_name || '[BUYER]') + '\n'
+      + 'Framework: GAFTA / ICC 2020\n\n'
+      + 'Sections: 1. PARTIES & RECITALS  2. DESCRIPTION OF GOODS  3. PRICE & PAYMENT TERMS  '
+      + '4. DELIVERY & INCOTERMS (2020)  5. TITLE & RISK OF LOSS  6. INSPECTION & QUALITY  '
+      + '7. REPRESENTATIONS & WARRANTIES  8. FORCE MAJEURE  9. DEFAULT & REMEDIES  '
+      + '10. GOVERNING LAW & ICC ARBITRATION  11. MISCELLANEOUS  12. SIGNATURES\n'
+      + 'Use [PLACEHOLDER] for unknowns. Formal legal language.';
+  },
+  'Trade Contract': function(d) {
+    return 'You are a commodity trade lawyer. Draft an Incoterms 2020-compliant Trade Contract.\n'
+      + 'LOI Reference: ' + (d.loi_ref || '[LOI REF]') + '\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'Total Value: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[TOTAL]') + '\n'
+      + 'Buyer: ' + (d.buyer_name || '[BUYER]') + '\n\n'
+      + 'Incoterms 2020. Include:\n'
+      + '1. CONTRACT HEADER (ref, date, parties)  2. GOODS DESCRIPTION  3. PRICE & CURRENCY  '
+      + '4. PAYMENT TERMS (LC / TT)  5. DELIVERY CONDITIONS  6. INCOTERMS CLAUSE  '
+      + '7. INSPECTION & QUALITY STANDARDS  8. DOCUMENTATION REQUIRED  9. DEFAULT  '
+      + '10. FORCE MAJEURE  11. DISPUTE RESOLUTION (ICC Arbitration)  12. SIGNATURES\n'
+      + 'Use [PLACEHOLDER] for unknowns.';
+  },
+  'LC Application': function(d) {
+    return 'Draft a Letter of Credit application following UCP 600 for this commodity transaction.\n'
+      + 'LOI Reference: ' + (d.loi_ref || '[LOI REF]') + '\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'Amount: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[AMOUNT]') + '\n'
+      + 'Beneficiary: ' + (d.buyer_name || d.supplier || '[BENEFICIARY]') + '\n\n'
+      + 'Sections: 1. LC APPLICATION DETAILS (type, amount, currency, expiry)  2. APPLICANT & BENEFICIARY  '
+      + '3. DESCRIPTION OF GOODS  4. REQUIRED DOCUMENTS (Commercial Invoice, B/L, Packing List, SGS Cert, COO)  '
+      + '5. SHIPMENT TERMS  6. SPECIAL CONDITIONS  7. CHARGES  8. APPLICANT DECLARATION\n'
+      + 'Reference UCP 600. Use [PLACEHOLDER] for missing info.';
+  },
+  'Freight Advisory': function(d) {
+    return 'You are a freight and logistics specialist. Provide a Freight Advisory for this commodity shipment.\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'Total Value: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[VALUE]') + '\n'
+      + 'LOI Ref: ' + (d.loi_ref || '[LOI REF]') + '\n\n'
+      + 'Sections: 1. RECOMMENDED SHIPPING ROUTE  2. FREIGHT MODE & CARRIER TYPE  '
+      + '3. ESTIMATED FREIGHT RATE ($/MT or $/container)  4. TRANSIT TIME & ETA  '
+      + '5. PORT RECOMMENDATIONS (loading & discharge)  6. INCOTERMS RECOMMENDATION  '
+      + '7. INSURANCE & RISK NOTES  8. DOCUMENTATION CHECKLIST (B/L, COO, SGS, Phytosanitary)\n'
+      + 'Use [PLACEHOLDER] for unknowns.';
+  },
+  'HS Code Report': function(d) {
+    return 'You are a customs and trade classification specialist. Produce an HS Code & Duty Report.\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'LOI Ref: ' + (d.loi_ref || '[LOI REF]') + '\n\n'
+      + 'Sections: 1. HS CODE (6-digit international harmonised system code)  '
+      + '2. PRODUCT CLASSIFICATION RATIONALE  '
+      + '3. IMPORT DUTY RATES BY DESTINATION (UAE, KSA, Egypt, Germany, Singapore)  '
+      + '4. VAT / GST RATES  5. REQUIRED IMPORT LICENCES & PERMITS  '
+      + '6. EXPORT LICENSING & DUAL-USE CHECK  7. SANCTIONS & RESTRICTED PARTIES NOTE\n'
+      + 'Use [PLACEHOLDER] for unknowns. Reference WCO 2022 nomenclature.';
+  }
+};
+
+function sloiAutoGen(type, loiData) {
+  var key = localStorage.getItem('sf_claude_key') || '';
+  if (!key) { console.warn('sloiAutoGen: no API key — skipping ' + type); return; }
+  var buildPrompt = _autoDocPrompts[type];
+  if (!buildPrompt) return;
+  var prompt = buildPrompt(loiData);
+  var id = type.replace(/\s+/g,'-').toLowerCase() + '_' + Date.now();
+  var docs = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+  docs.push({ id: id, type: type, status: 'generating', loiRef: loiData.loi_ref, product: loiData.product, ts: new Date().toISOString() });
+  if (docs.length > 100) docs = docs.slice(-100);
+  localStorage.setItem(SLOI_AUTO_DOCS_KEY, JSON.stringify(docs));
+  renderAutoDocs();
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', 'x-api-key': key, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-calls':'true' },
+    body: JSON.stringify({ model:'claude-haiku-4-5-20251001', max_tokens:2000, messages:[{ role:'user', content:prompt }] })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) {
+    var text = (res.content && res.content[0]) ? res.content[0].text : 'Generation failed.';
+    var list = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+    var doc = list.find(function(d) { return d.id === id; });
+    if (doc) { doc.status = 'ready'; doc.content = text; }
+    localStorage.setItem(SLOI_AUTO_DOCS_KEY, JSON.stringify(list));
+    renderAutoDocs();
+    sloi_showToast('📄 ' + type + ' ready — ' + (loiData.loi_ref || ''), 'green');
+  })
+  .catch(function(e) {
+    var list = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+    var doc = list.find(function(d) { return d.id === id; });
+    if (doc) { doc.status = 'error'; doc.error = e.message; }
+    localStorage.setItem(SLOI_AUTO_DOCS_KEY, JSON.stringify(list));
+    renderAutoDocs();
+  });
+}
+
+function renderAutoDocs() {
+  var containers = document.querySelectorAll('.sloi-auto-docs-list');
+  var docs = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+  var cards = document.querySelectorAll('.sloi-auto-docs-card');
+  cards.forEach(function(c) { c.style.display = docs.length ? '' : 'none'; });
+  if (!docs.length) return;
+  var icons = { NDA:'🔏', SPA:'📋', 'Trade Contract':'⚖️', 'LC Application':'💳', 'Freight Advisory':'🚢', 'HS Code Report':'🛃' };
+  var html = docs.slice().reverse().slice(0,30).map(function(doc) {
+    var ic = icons[doc.type] || '📄';
+    var sc = doc.status === 'ready' ? 'var(--green)' : doc.status === 'error' ? 'var(--red)' : 'var(--gold)';
+    var sl = doc.status === 'ready' ? '✓ Ready' : doc.status === 'error' ? '✗ Error' : '⏳ Generating…';
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)">'
+      + '<span style="font-size:16px;flex-shrink:0">' + ic + '</span>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="font-size:13px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + doc.type + (doc.loiRef ? ' · <span style="color:var(--muted);font-weight:400">' + doc.loiRef + '</span>' : '') + '</div>'
+      + '<div style="font-size:11px;color:var(--muted)">' + new Date(doc.ts).toLocaleString() + (doc.product ? ' · ' + doc.product : '') + '</div>'
+      + '</div>'
+      + '<span style="font-size:11px;color:' + sc + ';flex-shrink:0;white-space:nowrap">' + sl + '</span>'
+      + (doc.status === 'ready' ? '<button class="btn btn-xs" style="flex-shrink:0;margin-left:4px" onclick="viewAutoDoc(\'' + doc.id + '\')">View</button>' : '')
+      + '</div>';
+  }).join('');
+  containers.forEach(function(c) { c.innerHTML = html; });
+}
+
+function viewAutoDoc(id) {
+  var docs = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+  var doc = docs.find(function(d) { return d.id === id; });
+  if (!doc || !doc.content) return;
+  var icons = { NDA:'🔏', SPA:'📋', 'Trade Contract':'⚖️', 'LC Application':'💳', 'Freight Advisory':'🚢', 'HS Code Report':'🛃' };
+  var el = document.getElementById('auto-doc-modal-bg');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'auto-doc-modal-bg';
+    el.className = 'modal-bg';
+    el.onclick = function(e) { if (e.target === el) el.classList.remove('open'); };
+    el.innerHTML = '<div class="modal" style="max-width:860px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">'
+      + '<div class="modal-hd" style="flex-shrink:0"><div id="auto-doc-modal-title" class="modal-title"></div><button class="modal-close" onclick="document.getElementById(\'auto-doc-modal-bg\').classList.remove(\'open\')">×</button></div>'
+      + '<div style="flex:1;overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">'
+      + '<div style="background:#f9f8ff;border-radius:8px;padding:20px 24px;font-family:\'IBM Plex Mono\',monospace;font-size:12px;border:1px solid #d0cee8;line-height:1.9">'
+      + '<div id="auto-doc-modal-content" style="white-space:pre-wrap;color:#14142a"></div>'
+      + '</div></div>'
+      + '<div class="modal-ft" style="flex-shrink:0">'
+      + '<button class="btn" onclick="document.getElementById(\'auto-doc-modal-bg\').classList.remove(\'open\')">Close</button>'
+      + '<button class="btn btn-g" id="auto-doc-copy-btn">⎘ Copy document</button>'
+      + '</div></div>';
+    document.body.appendChild(el);
+    document.getElementById('auto-doc-copy-btn').onclick = function() {
+      var t = document.getElementById('auto-doc-modal-content').textContent;
+      navigator.clipboard.writeText(t).then(function() { alert('✓ Copied to clipboard.'); });
+    };
+  }
+  document.getElementById('auto-doc-modal-title').textContent = (icons[doc.type] || '📄') + ' ' + doc.type + (doc.loiRef ? ' — ' + doc.loiRef : '');
+  document.getElementById('auto-doc-modal-content').textContent = doc.content;
+  el.classList.add('open');
+}
+
+function clearAutoDocs() {
+  if (!confirm('Clear all auto-generated documents?')) return;
+  localStorage.removeItem(SLOI_AUTO_DOCS_KEY);
+  renderAutoDocs();
+}
+
+// Platform toast (since platform doesn't have showToast)
+function sloi_showToast(msg, color) {
+  var colors = { green:'rgba(34,197,94,.9)', indigo:'rgba(91,95,239,.9)', gold:'rgba(232,169,74,.9)', red:'rgba(239,68,68,.9)' };
+  var t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;background:' + (colors[color] || colors.green) + ';color:#fff;font-size:13px;font-weight:600;padding:11px 18px;border-radius:6px;box-shadow:0 4px 20px rgba(0,0,0,.4);pointer-events:none;transition:opacity .4s';
+  document.body.appendChild(t);
+  setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 400); }, 3500);
+}
+
+// Init
+renderAutoDocs();
 </script>
 </body>
 </html>

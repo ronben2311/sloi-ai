@@ -255,8 +255,8 @@ select.inp option{background:var(--surface)}
   <button class="nav active" onclick="show('warroom',this)"><span class="nav-icon">🔴</span><span class="nav-label">War Room</span><span class="nav-badge nb-red" id="alert-count">3</span></button>
   <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold" id="neg-count">2</span></button>
   <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">11</span></button>
-  <div class="sb-section">Revenue</div>
-  <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">💰</span><span class="nav-label">Revenue</span></button>
+  <div class="sb-section">Contracts</div>
+  <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">📄</span><span class="nav-label">Contracts</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
   <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & CRM</span></button>
@@ -293,7 +293,7 @@ select.inp option{background:var(--surface)}
       <button class="nav" id="tb-negotiations" onclick="show('negotiations',this)">🤖 Negotiations <span class="nav-badge nb-gold" id="neg-count">2</span></button>
       <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg)">11</span></button>
       <div class="tb-nav-sep"></div>
-      <button class="nav" id="tb-revenue" onclick="show('revenue',this)">💰 Revenue</button>
+      <button class="nav" id="tb-revenue" onclick="show('revenue',this)">📄 Contracts</button>
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-products" onclick="show('products',this)">📦 Products &amp; Pricing</button>
       <button class="nav" id="tb-users" onclick="show('users',this)">👤 Users &amp; CRM</button>
@@ -821,13 +821,13 @@ select.inp option{background:var(--surface)}
   <div id="view-agents" class="view">
 
     <!-- HEADER -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
       <div style="font-size:15px;color:var(--muted)">10 agents running autonomously · all LOIs require Boss approval</div>
       <button class="btn btn-sm btn-p" onclick="runAllAgents()">▶ Run all agents now</button>
     </div>
 
     <!-- AGENT STATUS BAR -->
-    <div style="display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:18px;align-items:center">
+    <div style="display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:0;align-items:center">
       <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-right:4px;flex-shrink:0">Status</div>
       <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px">🔭 Sourcing & Intel <span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span></div>
       <div style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">📱 OutreachBot ⏸</div>
@@ -841,7 +841,20 @@ select.inp option{background:var(--surface)}
       <div style="display:flex;align-items:center;gap:4px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="show('agents',document.getElementById('tb-agents'))">📜 SPA AI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
     </div>
 
-    <!-- STAGE 01: DISCOVER & QUALIFY -->
+    <!-- ── TAB NAV ─────────────────────────────────────────────────────────────── -->
+    <div style="display:flex;gap:0;margin-top:16px;border-bottom:1px solid var(--border)">
+      <button id="at-tab-source" onclick="agentTab('source')" style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--indigo);color:#fff;cursor:pointer;margin-right:3px;letter-spacing:.01em">🔭 Source &amp; Qualify</button>
+      <button id="at-tab-execute" onclick="agentTab('execute')" style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--surface2);color:var(--muted);cursor:pointer;margin-right:3px;letter-spacing:.01em">⚙️ Execute</button>
+      <button id="at-tab-docs" onclick="agentTab('docs')" style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--surface2);color:var(--muted);cursor:pointer;margin-right:3px;letter-spacing:.01em">📄 Documents</button>
+      <button id="at-tab-activity" onclick="agentTab('activity')" style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--surface2);color:var(--muted);cursor:pointer;letter-spacing:.01em">📊 Activity</button>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 1: SOURCE & QUALIFY                                                   -->
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <div id="at-panel-source" style="padding-top:16px">
+
+    <!-- DISCOVER & QUALIFY -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <span style="background:var(--teal);color:var(--bg);font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">01</span>
       <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">DISCOVER &amp; QUALIFY</span>
@@ -984,9 +997,16 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
 
-    <!-- STAGE 03: EXECUTE -->
+    </div><!-- /at-panel-source -->
+
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 2: EXECUTE                                                            -->
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <div id="at-panel-execute" style="display:none;padding-top:16px">
+
+    <!-- EXECUTE -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <span style="background:var(--gold);color:var(--bg);font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">03</span>
+      <span style="background:var(--gold);color:var(--bg);font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">02</span>
       <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">EXECUTE — LOGISTICS, CUSTOMS &amp; TRADE FINANCE</span>
       <span style="flex:1;height:1px;background:var(--border)"></span>
     </div>
@@ -1105,112 +1125,118 @@ select.inp option{background:var(--surface)}
 
     </div>
 
-    <!-- STAGE 04: LEGAL + BILLING -->
+    </div><!-- /at-panel-execute -->
+
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 3: DOCUMENTS                                                          -->
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <div id="at-panel-docs" style="display:none;padding-top:16px">
+
+    <!-- LEGAL CONTRACTS -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-      <span style="background:rgba(168,85,247,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">04</span>
-      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">CLOSE — LEGAL, CONTRACT &amp; BILLING</span>
+      <span style="background:rgba(168,85,247,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">LEGAL</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Contracts &amp; Agreements</span>
       <span style="flex:1;height:1px;background:var(--border)"></span>
     </div>
-
-    <!-- LEGAL AI SUITE -->
-    <div style="background:var(--surface);border:1px solid rgba(168,85,247,.3);border-radius:8px;overflow:hidden;margin-bottom:18px">
-      <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:34px;height:34px;border-radius:8px;background:rgba(168,85,247,.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚖️</div>
-          <div>
-            <div style="font-size:14px;font-weight:600;color:var(--white)">Legal AI Suite</div>
-            <div style="font-size:13px;color:var(--muted)">LegalContract · SPA · NDA — AI-drafted from PO data · ICC-aligned · commodity-specific clauses</div>
-          </div>
-        </div>
-        <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 10px;border-radius:10px;font-size:13px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Ready</span>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+      <div style="background:var(--surface2);border:1px solid rgba(91,95,239,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="window.open('loi-generator.html','_blank')" onmouseover="this.style.borderColor='rgba(91,95,239,.6)'" onmouseout="this.style.borderColor='rgba(91,95,239,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">📄</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">LOI</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Letter of Intent · official template · drafted from active deal data</div>
+        <div style="margin-top:10px"><span style="background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.3);color:var(--indigo);padding:2px 9px;border-radius:8px;font-size:11px">Generate →</span></div>
       </div>
-      <div style="padding:14px 18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-        <div style="background:var(--surface2);border:1px solid rgba(168,85,247,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openLCModal()" onmouseover="this.style.borderColor='rgba(168,85,247,.6)'" onmouseout="this.style.borderColor='rgba(168,85,247,.25)'">
-          <div style="font-size:22px;margin-bottom:6px">⚖️</div>
-          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">LegalContract AI</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6">ICC/UNIDROIT commodity sale contract · full T&amp;Cs · from LOI or PO · send to lawyer</div>
-          <div style="margin-top:10px"><span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:2px 9px;border-radius:8px;font-size:11px">Open →</span></div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid rgba(168,85,247,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openSPAModal()" onmouseover="this.style.borderColor='rgba(168,85,247,.6)'" onmouseout="this.style.borderColor='rgba(168,85,247,.25)'">
-          <div style="font-size:22px;margin-bottom:6px">📜</div>
-          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">SPA AI</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6">Share Purchase Agreement · title transfer · warranties · from PO data</div>
-          <div style="margin-top:10px"><span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:2px 9px;border-radius:8px;font-size:11px">Open →</span></div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid rgba(59,130,246,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openNDAModal()" onmouseover="this.style.borderColor='rgba(59,130,246,.6)'" onmouseout="this.style.borderColor='rgba(59,130,246,.25)'">
-          <div style="font-size:22px;margin-bottom:6px">🔏</div>
-          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">NDA AI</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6">Mutual / one-way NDA · supplier &amp; pricing confidentiality · commodity-specific clauses</div>
-          <div style="margin-top:10px"><span style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--blue);padding:2px 9px;border-radius:8px;font-size:11px">Open →</span></div>
-        </div>
+      <div style="background:var(--surface2);border:1px solid rgba(59,130,246,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openNDAModal()" onmouseover="this.style.borderColor='rgba(59,130,246,.6)'" onmouseout="this.style.borderColor='rgba(59,130,246,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">🔏</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">NDA</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Mutual or one-way · supplier &amp; pricing confidentiality · commodity clauses</div>
+        <div style="margin-top:10px"><span style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:var(--blue);padding:2px 9px;border-radius:8px;font-size:11px">Generate →</span></div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(168,85,247,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openSPAModal()" onmouseover="this.style.borderColor='rgba(168,85,247,.6)'" onmouseout="this.style.borderColor='rgba(168,85,247,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">📜</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">SPA</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Sales &amp; Purchase Agreement · GAFTA/ICC framework · from signed LOI</div>
+        <div style="margin-top:10px"><span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:2px 9px;border-radius:8px;font-size:11px">Generate →</span></div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(168,85,247,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openLCModal()" onmouseover="this.style.borderColor='rgba(168,85,247,.6)'" onmouseout="this.style.borderColor='rgba(168,85,247,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">⚖️</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">LegalContract AI</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">ICC/UNIDROIT commodity sale contract · full T&amp;Cs · from PO · send to lawyer</div>
+        <div style="margin-top:10px"><span style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:2px 9px;border-radius:8px;font-size:11px">Generate →</span></div>
       </div>
     </div>
 
-    <!-- INVOICE GENERATOR AGENT -->
-    <div style="background:var(--surface);border:1px solid rgba(45,212,191,.3);border-radius:8px;overflow:hidden;margin-bottom:18px">
-      <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:34px;height:34px;border-radius:8px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🧾</div>
-          <div>
-            <div style="font-size:14px;font-weight:600;color:var(--white)">Proforma Invoice Generator</div>
-            <div style="font-size:13px;color:var(--muted)">Generates commercial invoices from signed POs · download PDF · send to buyer</div>
-          </div>
-        </div>
-        <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 10px;border-radius:10px;font-size:13px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Always on</span>
+    <!-- COMMERCIAL DOCUMENTS -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:rgba(45,212,191,.8);color:var(--bg);font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">TRADE</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Commercial &amp; Shipping Documents</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px">
+      <div style="background:var(--surface2);border:1px solid rgba(45,212,191,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openInvoiceModal()" onmouseover="this.style.borderColor='rgba(45,212,191,.6)'" onmouseout="this.style.borderColor='rgba(45,212,191,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">🧾</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">Proforma Invoice</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Commercial invoice for customs, bank &amp; buyer · from signed PO</div>
+        <div style="margin-top:10px"><span style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.3);color:var(--teal);padding:2px 9px;border-radius:8px;font-size:11px">Generate →</span></div>
       </div>
-      <div style="padding:12px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:center">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
-          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--teal)">3</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Invoices this week</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
-          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--white)">$384K</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Total invoiced</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px;text-align:center">
-          <div style="font-family:Fraunces,serif;font-size:22px;font-weight:700;color:var(--gold)">1</div>
-          <div style="font-size:12px;color:var(--muted);margin-top:2px">Awaiting payment</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <button class="btn btn-xs btn-g" onclick="openInvoiceModal()" style="width:100%;justify-content:center">🧾 New invoice from PO</button>
-          <button class="btn btn-xs" onclick="alert('Invoice history — showing all 3 invoices')" style="width:100%;justify-content:center">↓ Invoice history</button>
-        </div>
+      <div style="background:var(--surface2);border:1px solid rgba(59,130,246,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openCIModal()" onmouseover="this.style.borderColor='rgba(59,130,246,.55)'" onmouseout="this.style.borderColor='rgba(59,130,246,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">📋</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">Commercial Invoice</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Formal invoice for customs, bank &amp; buyer · pulls from PO data</div>
+        <div style="margin-top:10px"><span class="badge bt" style="font-size:11px">Generate →</span></div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(232,169,74,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openPLModal()" onmouseover="this.style.borderColor='rgba(232,169,74,.55)'" onmouseout="this.style.borderColor='rgba(232,169,74,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">📦</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">Packing List</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Package count, weights, dimensions, container &amp; marks · required by customs</div>
+        <div style="margin-top:10px"><span class="badge ba" style="font-size:11px">Generate →</span></div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(34,197,94,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openSGSModal()" onmouseover="this.style.borderColor='rgba(34,197,94,.55)'" onmouseout="this.style.borderColor='rgba(34,197,94,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">🔬</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">SGS Inspection</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Pre-shipment inspection certificate · quality, quantity &amp; HS code verification</div>
+        <div style="margin-top:10px"><span class="badge bg" style="font-size:11px">Generate →</span></div>
       </div>
     </div>
 
-    <!-- DOCUMENT GENERATION SUITE -->
-    <div style="background:var(--surface);border:1px solid rgba(45,212,191,.25);border-radius:8px;overflow:hidden;margin-bottom:18px">
-      <div style="padding:12px 18px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:space-between">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:34px;height:34px;border-radius:8px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📑</div>
-          <div>
-            <div style="font-size:14px;font-weight:600;color:var(--white)">Document Generation Suite</div>
-            <div style="font-size:13px;color:var(--muted)">Commercial Invoice · Packing List · SGS Inspection Report — generated from PO data</div>
-          </div>
-        </div>
-        <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 10px;border-radius:10px;font-size:13px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Ready</span>
+    <!-- KYC & COMPLIANCE -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:rgba(34,197,94,.8);color:#fff;font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">KYC</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Compliance &amp; Due Diligence</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:4px">
+      <div style="background:var(--surface2);border:1px solid rgba(34,197,94,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openKYCModal()" onmouseover="this.style.borderColor='rgba(34,197,94,.6)'" onmouseout="this.style.borderColor='rgba(34,197,94,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">🪪</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">KYC Documents</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Corporate registration · certificate of incorporation · company profile</div>
+        <div style="margin-top:10px"><span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.3);color:var(--green);padding:2px 9px;border-radius:8px;font-size:11px">Generate →</span></div>
       </div>
-      <div style="padding:14px 18px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
-        <div style="background:var(--surface2);border:1px solid rgba(59,130,246,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openCIModal()" onmouseover="this.style.borderColor='rgba(59,130,246,.55)'" onmouseout="this.style.borderColor='rgba(59,130,246,.25)'">
-          <div style="font-size:22px;margin-bottom:6px">🧾</div>
-          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">Commercial Invoice</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6">Formal invoice for customs, bank, and buyer · pulls from PO data</div>
-          <div style="margin-top:10px"><span class="badge bt" style="font-size:11px">Open →</span></div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid rgba(232,169,74,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openPLModal()" onmouseover="this.style.borderColor='rgba(232,169,74,.55)'" onmouseout="this.style.borderColor='rgba(232,169,74,.25)'">
-          <div style="font-size:22px;margin-bottom:6px">📦</div>
-          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">Packing List</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6">Package count, weights, dimensions, container &amp; marks · required by customs</div>
-          <div style="margin-top:10px"><span class="badge ba" style="font-size:11px">Open →</span></div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid rgba(34,197,94,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openSGSModal()" onmouseover="this.style.borderColor='rgba(34,197,94,.55)'" onmouseout="this.style.borderColor='rgba(34,197,94,.25)'">
-          <div style="font-size:22px;margin-bottom:6px">🔬</div>
-          <div style="font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">SGS Inspection Report</div>
-          <div style="font-size:12px;color:var(--muted);line-height:1.6">Pre-shipment inspection certificate · quality, quantity &amp; HS code verification</div>
-          <div style="margin-top:10px"><span class="badge bg" style="font-size:11px">Open →</span></div>
-        </div>
+      <div style="background:var(--surface2);border:1px solid rgba(232,169,74,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openPOFModal()" onmouseover="this.style.borderColor='rgba(232,169,74,.6)'" onmouseout="this.style.borderColor='rgba(232,169,74,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">💰</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">POF Letter</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Proof of Funds · bank confirmation letter · verifiable financial proof</div>
+        <div style="margin-top:10px"><span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.3);color:var(--gold);padding:2px 9px;border-radius:8px;font-size:11px">Generate →</span></div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(232,169,74,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openTFModal()" onmouseover="this.style.borderColor='rgba(232,169,74,.6)'" onmouseout="this.style.borderColor='rgba(232,169,74,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">💳</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">LC Application</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Letter of Credit / SBLC · UCP 600 · bank-ready format · from PO data</div>
+        <div style="margin-top:10px"><span style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.3);color:var(--gold);padding:2px 9px;border-radius:8px;font-size:11px">Generate →</span></div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid rgba(139,143,248,.25);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s" onclick="openHSModal()" onmouseover="this.style.borderColor='rgba(139,143,248,.6)'" onmouseout="this.style.borderColor='rgba(139,143,248,.25)'">
+        <div style="font-size:22px;margin-bottom:6px">🛃</div>
+        <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">HS Code Report</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">HS code lookup · duty rate · import permits · required certificates by country</div>
+        <div style="margin-top:10px"><span style="background:rgba(139,143,248,.12);border:1px solid rgba(139,143,248,.3);color:var(--violet);padding:2px 9px;border-radius:8px;font-size:11px">Generate →</span></div>
       </div>
     </div>
+
+    </div><!-- /at-panel-docs -->
+
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <!-- TAB 4: ACTIVITY                                                           -->
+    <!-- ══════════════════════════════════════════════════════════════════════════ -->
+    <div id="at-panel-activity" style="display:none;padding-top:16px">
 
     <!-- AGENT LOG -->
     <div class="card">
@@ -1218,6 +1244,17 @@ select.inp option{background:var(--surface)}
       <div style="max-height:180px;overflow-y:auto" id="agent-log">
         <!-- rendered by JS -->
       </div>
+    </div>
+
+    <!-- AUTO-GENERATED DOCUMENTS -->
+    <div class="card sloi-auto-docs-card" style="margin-top:14px;display:none">
+      <div class="card-title" style="display:flex;align-items:center;gap:8px">
+        <span>// AUTO-GENERATED DOCUMENTS</span>
+        <span style="flex:1"></span>
+        <span style="font-size:10px;color:var(--green);background:rgba(34,197,94,.12);padding:2px 8px;border-radius:3px;letter-spacing:.06em">ON APPROVAL</span>
+        <button class="btn btn-xs" style="background:transparent;color:var(--muted);font-size:11px" onclick="clearAutoDocs()">Clear all</button>
+      </div>
+      <div class="sloi-auto-docs-list" style="max-height:280px;overflow-y:auto"></div>
     </div>
 
     <!-- ═══════════════════════════════════════════════════════ -->
@@ -1418,6 +1455,8 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
 
+    </div><!-- /at-panel-activity -->
+
   </div>
 
   <!-- SETTINGS -->
@@ -1573,7 +1612,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['💰 Revenue','LOI fees + credit sales'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
+var TITLES={agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['📄 Contracts','Purchase orders · signed deals · document suite'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────
@@ -2657,6 +2696,23 @@ if (api && api.agui) {
     .on('LOI_GENERATED', function(data) {
       prependFeed('📄', 'LOI signed — ' + (data.loi_ref || '') + (data.total_value ? ' · $' + Number(data.total_value).toLocaleString() : ''));
       loadNegotiations();
+      // Auto-generate trade document suite
+      sloiAutoGen('NDA', data);
+      sloiAutoGen('SPA', data);
+      sloiAutoGen('Trade Contract', data);
+    })
+    .on('SPA_GENERATED', function(data) {
+      prependFeed('📋', 'SPA generated — ' + (data.loi_ref || ''));
+      sloiAutoGen('LC Application', data);
+    })
+    .on('TC_GENERATED', function(data) {
+      prependFeed('⚖️', 'Trade Contract generated — ' + (data.loi_ref || ''));
+      sloiAutoGen('Freight Advisory', data);
+      sloiAutoGen('HS Code Report', data);
+    })
+    .on('LC_GENERATED', function(data) {
+      prependFeed('💳', 'LC Application ready — ' + (data.loi_ref || ''));
+      renderAutoDocs();
     })
     .on('PRICE_ALERT', function(data) {
       prependFeed('📡', 'Price alert: ' + (data.product || '') + (data.current_price ? ' $' + data.current_price : ''));
@@ -2679,7 +2735,7 @@ if (api && api.agui) {
 }
 
 renderKanban();renderBrokers();renderTraderLOIs();renderTraderPOs();renderProducts();renderUsers();
-renderLeadFinder();renderPriceScoutFeed();renderAgentLog();
+renderLeadFinder();renderPriceScoutFeed();renderAgentLog();renderAutoDocs();
 loadCatalogStatus();
 loadNegotiations();
 loadRevenue();
@@ -5082,7 +5138,469 @@ function runAdminSupplierScan() {
   })
   .catch(function(e) { listEl.innerHTML = '<div style="color:var(--red);font-size:12px">Error: ' + e.message + '</div>'; });
 }
+
+
+// ══════════════════════════════════════════════════════════════════════════════
+// AUTO-DOCUMENT CASCADE — fires on LOI approval, generates all trade docs
+// ══════════════════════════════════════════════════════════════════════════════
+var SLOI_AUTO_DOCS_KEY = 'sloi_auto_docs';
+
+var _autoDocPrompts = {
+  'NDA': function(d) {
+    return 'You are a commodity trade lawyer. Draft a Mutual Non-Disclosure Agreement.\n'
+      + 'Party A (Trader): SLOI AI Ltd\n'
+      + 'Party B: ' + (d.buyer_name || d.supplier || '[COUNTERPARTY]') + '\n'
+      + 'Product Context: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'LOI Reference: ' + (d.loi_ref || '[LOI REF]') + '\n'
+      + 'Deal Value: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[VALUE]') + '\n\n'
+      + 'Sections: 1. PARTIES  2. CONFIDENTIAL INFORMATION DEFINITION  3. OBLIGATIONS OF RECEIVING PARTY  '
+      + '4. TERM (2 years)  5. EXCLUSIONS  6. GOVERNING LAW (UAE / DIFC)  7. REMEDIES  8. SIGNATURES\n'
+      + 'Use [PLACEHOLDER] for unknown fields. Formal legal language throughout.';
+  },
+  'SPA': function(d) {
+    return 'You are a senior commodity trade lawyer. Draft a complete Sales & Purchase Agreement from this approved LOI.\n'
+      + 'LOI Reference: ' + (d.loi_ref || '[LOI REF]') + '\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'Deal Price: $' + (d.deal_price || '[PRICE]') + '/unit\n'
+      + 'Total Value: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[TOTAL]') + '\n'
+      + 'Buyer: ' + (d.buyer_name || '[BUYER]') + '\n'
+      + 'Framework: GAFTA / ICC 2020\n\n'
+      + 'Sections: 1. PARTIES & RECITALS  2. DESCRIPTION OF GOODS  3. PRICE & PAYMENT TERMS  '
+      + '4. DELIVERY & INCOTERMS (2020)  5. TITLE & RISK OF LOSS  6. INSPECTION & QUALITY  '
+      + '7. REPRESENTATIONS & WARRANTIES  8. FORCE MAJEURE  9. DEFAULT & REMEDIES  '
+      + '10. GOVERNING LAW & ICC ARBITRATION  11. MISCELLANEOUS  12. SIGNATURES\n'
+      + 'Use [PLACEHOLDER] for unknowns. Formal legal language.';
+  },
+  'Trade Contract': function(d) {
+    return 'You are a commodity trade lawyer. Draft an Incoterms 2020-compliant Trade Contract.\n'
+      + 'LOI Reference: ' + (d.loi_ref || '[LOI REF]') + '\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'Total Value: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[TOTAL]') + '\n'
+      + 'Buyer: ' + (d.buyer_name || '[BUYER]') + '\n\n'
+      + 'Incoterms 2020. Include:\n'
+      + '1. CONTRACT HEADER (ref, date, parties)  2. GOODS DESCRIPTION  3. PRICE & CURRENCY  '
+      + '4. PAYMENT TERMS (LC / TT)  5. DELIVERY CONDITIONS  6. INCOTERMS CLAUSE  '
+      + '7. INSPECTION & QUALITY STANDARDS  8. DOCUMENTATION REQUIRED  9. DEFAULT  '
+      + '10. FORCE MAJEURE  11. DISPUTE RESOLUTION (ICC Arbitration)  12. SIGNATURES\n'
+      + 'Use [PLACEHOLDER] for unknowns.';
+  },
+  'LC Application': function(d) {
+    return 'Draft a Letter of Credit application following UCP 600 for this commodity transaction.\n'
+      + 'LOI Reference: ' + (d.loi_ref || '[LOI REF]') + '\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'Amount: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[AMOUNT]') + '\n'
+      + 'Beneficiary: ' + (d.buyer_name || d.supplier || '[BENEFICIARY]') + '\n\n'
+      + 'Sections: 1. LC APPLICATION DETAILS (type, amount, currency, expiry)  2. APPLICANT & BENEFICIARY  '
+      + '3. DESCRIPTION OF GOODS  4. REQUIRED DOCUMENTS (Commercial Invoice, B/L, Packing List, SGS Cert, COO)  '
+      + '5. SHIPMENT TERMS  6. SPECIAL CONDITIONS  7. CHARGES  8. APPLICANT DECLARATION\n'
+      + 'Reference UCP 600. Use [PLACEHOLDER] for missing info.';
+  },
+  'Freight Advisory': function(d) {
+    return 'You are a freight and logistics specialist. Provide a Freight Advisory for this commodity shipment.\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'Total Value: $' + (d.total_value ? Number(d.total_value).toLocaleString() : '[VALUE]') + '\n'
+      + 'LOI Ref: ' + (d.loi_ref || '[LOI REF]') + '\n\n'
+      + 'Sections: 1. RECOMMENDED SHIPPING ROUTE  2. FREIGHT MODE & CARRIER TYPE  '
+      + '3. ESTIMATED FREIGHT RATE ($/MT or $/container)  4. TRANSIT TIME & ETA  '
+      + '5. PORT RECOMMENDATIONS (loading & discharge)  6. INCOTERMS RECOMMENDATION  '
+      + '7. INSURANCE & RISK NOTES  8. DOCUMENTATION CHECKLIST (B/L, COO, SGS, Phytosanitary)\n'
+      + 'Use [PLACEHOLDER] for unknowns.';
+  },
+  'HS Code Report': function(d) {
+    return 'You are a customs and trade classification specialist. Produce an HS Code & Duty Report.\n'
+      + 'Product: ' + (d.product || '[PRODUCT]') + '\n'
+      + 'LOI Ref: ' + (d.loi_ref || '[LOI REF]') + '\n\n'
+      + 'Sections: 1. HS CODE (6-digit international harmonised system code)  '
+      + '2. PRODUCT CLASSIFICATION RATIONALE  '
+      + '3. IMPORT DUTY RATES BY DESTINATION (UAE, KSA, Egypt, Germany, Singapore)  '
+      + '4. VAT / GST RATES  5. REQUIRED IMPORT LICENCES & PERMITS  '
+      + '6. EXPORT LICENSING & DUAL-USE CHECK  7. SANCTIONS & RESTRICTED PARTIES NOTE\n'
+      + 'Use [PLACEHOLDER] for unknowns. Reference WCO 2022 nomenclature.';
+  }
+};
+
+function sloiAutoGen(type, loiData) {
+  var key = localStorage.getItem('sf_claude_key') || '';
+  if (!key) { console.warn('sloiAutoGen: no API key — skipping ' + type); return; }
+  var buildPrompt = _autoDocPrompts[type];
+  if (!buildPrompt) return;
+  var prompt = buildPrompt(loiData);
+  var id = type.replace(/\s+/g,'-').toLowerCase() + '_' + Date.now();
+  var docs = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+  docs.push({ id: id, type: type, status: 'generating', loiRef: loiData.loi_ref, product: loiData.product, ts: new Date().toISOString() });
+  if (docs.length > 100) docs = docs.slice(-100);
+  localStorage.setItem(SLOI_AUTO_DOCS_KEY, JSON.stringify(docs));
+  renderAutoDocs();
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type':'application/json', 'x-api-key': key, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-calls':'true' },
+    body: JSON.stringify({ model:'claude-haiku-4-5-20251001', max_tokens:2000, messages:[{ role:'user', content:prompt }] })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(res) {
+    var text = (res.content && res.content[0]) ? res.content[0].text : 'Generation failed.';
+    var list = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+    var doc = list.find(function(d) { return d.id === id; });
+    if (doc) { doc.status = 'ready'; doc.content = text; }
+    localStorage.setItem(SLOI_AUTO_DOCS_KEY, JSON.stringify(list));
+    renderAutoDocs();
+    if (typeof showToast === 'function') showToast('📄 ' + type + ' ready — ' + (loiData.loi_ref || ''), 'green');
+  })
+  .catch(function(e) {
+    var list = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+    var doc = list.find(function(d) { return d.id === id; });
+    if (doc) { doc.status = 'error'; doc.error = e.message; }
+    localStorage.setItem(SLOI_AUTO_DOCS_KEY, JSON.stringify(list));
+    renderAutoDocs();
+  });
+}
+
+function renderAutoDocs() {
+  var containers = document.querySelectorAll('.sloi-auto-docs-list');
+  var docs = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+  var cards = document.querySelectorAll('.sloi-auto-docs-card');
+  cards.forEach(function(c) { c.style.display = docs.length ? '' : 'none'; });
+  if (!docs.length) return;
+  var icons = { NDA:'🔏', SPA:'📋', 'Trade Contract':'⚖️', 'LC Application':'💳', 'Freight Advisory':'🚢', 'HS Code Report':'🛃' };
+  var html = docs.slice().reverse().slice(0,30).map(function(doc) {
+    var ic = icons[doc.type] || '📄';
+    var sc = doc.status === 'ready' ? 'var(--green)' : doc.status === 'error' ? 'var(--red)' : 'var(--gold)';
+    var sl = doc.status === 'ready' ? '✓ Ready' : doc.status === 'error' ? '✗ Error' : '⏳ Generating…';
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--border)">'
+      + '<span style="font-size:16px;flex-shrink:0">' + ic + '</span>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="font-size:13px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + doc.type + (doc.loiRef ? ' · <span style="color:var(--muted);font-weight:400">' + doc.loiRef + '</span>' : '') + '</div>'
+      + '<div style="font-size:11px;color:var(--muted)">' + new Date(doc.ts).toLocaleString() + (doc.product ? ' · ' + doc.product : '') + '</div>'
+      + '</div>'
+      + '<span style="font-size:11px;color:' + sc + ';flex-shrink:0;white-space:nowrap">' + sl + '</span>'
+      + (doc.status === 'ready' ? '<button class="btn btn-xs" style="flex-shrink:0;margin-left:4px" onclick="viewAutoDoc(\'' + doc.id + '\')">View</button>' : '')
+      + '</div>';
+  }).join('');
+  containers.forEach(function(c) { c.innerHTML = html; });
+}
+
+function viewAutoDoc(id) {
+  var docs = JSON.parse(localStorage.getItem(SLOI_AUTO_DOCS_KEY) || '[]');
+  var doc = docs.find(function(d) { return d.id === id; });
+  if (!doc || !doc.content) return;
+  var icons = { NDA:'🔏', SPA:'📋', 'Trade Contract':'⚖️', 'LC Application':'💳', 'Freight Advisory':'🚢', 'HS Code Report':'🛃' };
+  var el = document.getElementById('auto-doc-modal-bg');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'auto-doc-modal-bg';
+    el.className = 'modal-bg';
+    el.onclick = function(e) { if (e.target === el) el.classList.remove('open'); };
+    el.innerHTML = '<div class="modal" style="max-width:860px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">'
+      + '<div class="modal-hd" style="flex-shrink:0"><div id="auto-doc-modal-title" class="modal-title"></div><button class="modal-close" onclick="document.getElementById(\'auto-doc-modal-bg\').classList.remove(\'open\')">×</button></div>'
+      + '<div style="flex:1;overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">'
+      + '<div style="background:#f9f8ff;border-radius:8px;padding:20px 24px;font-family:\'IBM Plex Mono\',monospace;font-size:12px;border:1px solid #d0cee8;line-height:1.9">'
+      + '<div id="auto-doc-modal-content" style="white-space:pre-wrap;color:#14142a"></div>'
+      + '</div></div>'
+      + '<div class="modal-ft" style="flex-shrink:0">'
+      + '<button class="btn" onclick="document.getElementById(\'auto-doc-modal-bg\').classList.remove(\'open\')">Close</button>'
+      + '<button class="btn btn-g" id="auto-doc-copy-btn">⎘ Copy document</button>'
+      + '</div></div>';
+    document.body.appendChild(el);
+    document.getElementById('auto-doc-copy-btn').onclick = function() {
+      var t = document.getElementById('auto-doc-modal-content').textContent;
+      navigator.clipboard.writeText(t).then(function() { alert('✓ Copied to clipboard.'); });
+    };
+  }
+  document.getElementById('auto-doc-modal-title').textContent = (icons[doc.type] || '📄') + ' ' + doc.type + (doc.loiRef ? ' — ' + doc.loiRef : '');
+  document.getElementById('auto-doc-modal-content').textContent = doc.content;
+  el.classList.add('open');
+}
+
+function clearAutoDocs() {
+  if (!confirm('Clear all auto-generated documents?')) return;
+  localStorage.removeItem(SLOI_AUTO_DOCS_KEY);
+  renderAutoDocs();
+}
+
+// ── AI TOOLS TAB SWITCHER ─────────────────────────────────────────────────────
+function agentTab(t) {
+  var tabs = ['source','execute','docs','activity'];
+  var colors = { source: 'var(--teal)', execute: 'var(--gold)', docs: 'rgba(168,85,247,.85)', activity: 'var(--indigo)' };
+  tabs.forEach(function(k) {
+    var btn = document.getElementById('at-tab-' + k);
+    var panel = document.getElementById('at-panel-' + k);
+    var active = k === t;
+    if (btn) {
+      btn.style.background = active ? colors[k] : 'var(--surface2)';
+      btn.style.color = active ? '#fff' : 'var(--muted)';
+      btn.style.fontWeight = active ? '700' : '600';
+    }
+    if (panel) panel.style.display = active ? '' : 'none';
+  });
+}
+
+// ── KYC DOCUMENT MODAL ────────────────────────────────────────────────────────
+var _kycData = {};
+function openKYCModal() {
+  _kycData = {};
+  var pos = docSuiteGetPOs ? docSuiteGetPOs() : [];
+  var sel = document.getElementById('kyc-m-party');
+  if (sel) {
+    sel.innerHTML = '<option value="">— select counterparty —</option>';
+    pos.forEach(function(po, i) {
+      var opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = (po.supplier || po.buyer || 'Party ' + (i + 1)) + ' · ' + (po.product || '');
+      sel.appendChild(opt);
+    });
+    if (!pos.length) {
+      var opt = document.createElement('option');
+      opt.value = '-1';
+      opt.textContent = 'Manual entry (no POs yet)';
+      sel.appendChild(opt);
+    }
+    sel.onchange = function() {
+      var po = pos[parseInt(sel.value)];
+      if (!po) return;
+      var n = document.getElementById('kyc-m-company');
+      var c = document.getElementById('kyc-m-country');
+      if (n) n.value = po.supplier || po.buyer || '';
+      if (c) c.value = po.country || '';
+      _kycData = po;
+    };
+  }
+  document.getElementById('kyc-m-placeholder').style.display = '';
+  document.getElementById('kyc-m-output').style.display = 'none';
+  document.getElementById('kyc-m-output').textContent = '';
+  document.getElementById('kyc-modal-bg').classList.add('open');
+}
+function closeKYCModal() { document.getElementById('kyc-modal-bg').classList.remove('open'); }
+function runKYCModal() {
+  var company = (document.getElementById('kyc-m-company') || {}).value || (_kycData.supplier || _kycData.buyer || '[COMPANY]');
+  var country = (document.getElementById('kyc-m-country') || {}).value || (_kycData.country || '[COUNTRY]');
+  var regNo = (document.getElementById('kyc-m-reg') || {}).value || '[REGISTRATION NUMBER]';
+  var type = (document.getElementById('kyc-m-type') || {}).value || 'Full KYC Package';
+  var prompt = 'You are a KYC (Know Your Customer) compliance specialist for an international commodity trading company.\n'
+    + 'Generate a complete ' + type + ' for the following company.\n\n'
+    + 'COMPANY DETAILS:\n'
+    + '- Company Name: ' + company + '\n'
+    + '- Country of Registration: ' + country + '\n'
+    + '- Registration Number: ' + regNo + '\n'
+    + (_kycData.product ? '- Trade Context: Commodity deal — ' + _kycData.product + '\n' : '')
+    + '\nProduce a structured KYC document with these sections:\n\n'
+    + '1. CORPORATE REGISTRATION SUMMARY\n'
+    + '   Full legal name, registration number, country, date of incorporation, registered address, status\n\n'
+    + '2. CERTIFICATE OF INCORPORATION\n'
+    + '   Issuing authority, certificate reference, date issued, authorised capital, share structure\n\n'
+    + '3. COMPANY PROFILE\n'
+    + '   Business activities, industry sector, years in operation, geographic presence, key products/services\n\n'
+    + '4. BENEFICIAL OWNERSHIP\n'
+    + '   UBO declaration structure, ownership threshold (25%), politically exposed persons (PEP) check placeholder\n\n'
+    + '5. REQUIRED DOCUMENTS CHECKLIST\n'
+    + '   List all documents required for full KYC clearance (MOA, AOA, Board resolution, shareholder IDs, bank ref, etc.)\n\n'
+    + '6. COMPLIANCE SCREENING NOTES\n'
+    + '   OFAC · UN · EU sanctions check note · AML risk level · recommended due diligence tier\n\n'
+    + '7. VERIFICATION SIGN-OFF\n'
+    + '   Compliance officer signature block · date · reference number\n\n'
+    + 'Use [PLACEHOLDER] for unknown fields. Formal compliance language throughout.';
+  adminAIFetch(prompt, 2000, document.getElementById('kyc-m-output'), 'kyc-m-placeholder');
+}
+function copyKYCDoc() {
+  var t = (document.getElementById('kyc-m-output') || {}).textContent || '';
+  if (!t.trim()) { alert('Generate a draft first.'); return; }
+  navigator.clipboard.writeText(t).then(function() { alert('✓ KYC document copied to clipboard.'); });
+}
+
+// ── POF DOCUMENT MODAL ────────────────────────────────────────────────────────
+var _pofMPO = null;
+function openPOFModal() {
+  _pofMPO = null;
+  docSuiteListHTML('pof-m-po-list', 'pofModalSelect');
+  document.getElementById('pof-m-placeholder').style.display = '';
+  document.getElementById('pof-m-output').style.display = 'none';
+  document.getElementById('pof-m-output').textContent = '';
+  document.getElementById('pof-m-doc-ref').textContent = '— select a deal to begin —';
+  document.getElementById('pof-modal-bg').classList.add('open');
+}
+function closePOFModal() { document.getElementById('pof-modal-bg').classList.remove('open'); }
+function pofModalSelect(i, el) {
+  _pofMPO = docSuiteGetPOs()[i];
+  dsHighlight('pof-m-po-list', el);
+  document.getElementById('pof-m-doc-ref').textContent = (_pofMPO.po_num || 'PO-' + (i + 1)) + ' · ' + (_pofMPO.buyer || '');
+  var bank = document.getElementById('pof-m-bank');
+  if (bank && !bank.value) bank.value = _pofMPO.bank || '';
+  var amt = document.getElementById('pof-m-amount');
+  if (amt && !amt.value) amt.value = _pofMPO.total || '';
+}
+function runPOFModal() {
+  var bank = (document.getElementById('pof-m-bank') || {}).value || '[ISSUING BANK]';
+  var amount = (document.getElementById('pof-m-amount') || {}).value || (_pofMPO ? _pofMPO.total : '[AMOUNT]') || '[AMOUNT]';
+  var holder = (document.getElementById('pof-m-holder') || {}).value || (_pofMPO ? (_pofMPO.buyer || '[ACCOUNT HOLDER]') : '[ACCOUNT HOLDER]');
+  var currency = (document.getElementById('pof-m-currency') || {}).value || 'USD';
+  var purpose = (document.getElementById('pof-m-purpose') || {}).value || (_pofMPO ? ('Commodity purchase — ' + (_pofMPO.product || '') + ' · ref: ' + (_pofMPO.po_num || '')) : '');
+  var prompt = 'You are a senior compliance officer at an international trade bank.\n'
+    + 'Draft a formal Proof of Funds (POF) bank confirmation letter for the following client.\n\n'
+    + 'DETAILS:\n'
+    + '- Account Holder / Applicant: ' + holder + '\n'
+    + '- Amount: ' + currency + ' ' + amount + '\n'
+    + '- Issuing Bank: ' + bank + '\n'
+    + (purpose ? '- Transaction Purpose: ' + purpose + '\n' : '')
+    + (_pofMPO ? '- Deal Reference: ' + (_pofMPO.po_num || '') + '\n' : '')
+    + '\nProduce a complete Proof of Funds letter with these sections:\n\n'
+    + 'BANK LETTERHEAD\n'
+    + '  Bank name, address, SWIFT/BIC, phone, date, reference number\n\n'
+    + 'TO WHOM IT MAY CONCERN\n\n'
+    + '1. CONFIRMATION OF FUNDS\n'
+    + '   Confirm account holder identity, account type, available balance / funds held, currency, date of verification\n\n'
+    + '2. ACCOUNT STANDING\n'
+    + '   Account in good standing, no encumbrances, authenticity statement\n\n'
+    + '3. PURPOSE STATEMENT\n'
+    + '   Funds earmarked / available for the stated transaction purpose\n\n'
+    + '4. BANK UNDERTAKING\n'
+    + '   Bank is prepared to provide confirmation upon presentation of relevant transaction documents\n\n'
+    + '5. SIGNATORY BLOCK\n'
+    + '   Authorised bank officer name, title, signature placeholder, stamp placeholder, contact details\n\n'
+    + '6. DISCLAIMER\n'
+    + '   Standard confidentiality and reliance disclaimer\n\n'
+    + 'Use [PLACEHOLDER] for unknown fields. Formal bank-grade language. This document is for trade verification purposes.';
+  adminAIFetch(prompt, 1500, document.getElementById('pof-m-output'), 'pof-m-placeholder');
+}
+function copyPOFDoc() {
+  var t = (document.getElementById('pof-m-output') || {}).textContent || '';
+  if (!t.trim()) { alert('Generate a draft first.'); return; }
+  navigator.clipboard.writeText(t).then(function() { alert('✓ POF document copied to clipboard.'); });
+}
 </script>
+
+<!-- ══ KYC DOCUMENT MODAL ══════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="kyc-modal-bg" onclick="if(event.target===this)closeKYCModal()">
+  <div class="modal" style="max-width:980px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">🪪 KYC Documents — Know Your Customer</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Corporate registration · certificate of incorporation · company profile · compliance screening</div>
+      </div>
+      <button class="modal-close" onclick="closeKYCModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:370px 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <label class="flabel">Link to deal / counterparty (optional)</label>
+          <select class="inp" id="kyc-m-party" style="font-size:13px"><option value="">— select counterparty —</option></select>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div>
+          <label class="flabel">Company Name</label>
+          <input class="inp" id="kyc-m-company" placeholder="e.g. Gulf Cement LLC" style="font-size:13px"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <label class="flabel">Country of Registration</label>
+            <input class="inp" id="kyc-m-country" placeholder="e.g. UAE" style="font-size:13px"/>
+          </div>
+          <div>
+            <label class="flabel">Registration Number</label>
+            <input class="inp" id="kyc-m-reg" placeholder="e.g. 12345-UAE" style="font-size:13px"/>
+          </div>
+        </div>
+        <div>
+          <label class="flabel">KYC Package Type</label>
+          <select class="inp" id="kyc-m-type" style="font-size:13px">
+            <option>Full KYC Package</option>
+            <option>Corporate Registration Summary</option>
+            <option>Beneficial Ownership Declaration</option>
+            <option>AML Risk Assessment</option>
+            <option>Document Checklist Only</option>
+          </select>
+        </div>
+        <button class="btn btn-sm" style="background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.4);color:var(--green);width:100%;justify-content:center" onclick="runKYCModal()">🪪 Generate KYC Document</button>
+      </div>
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Document preview</div>
+        <div style="background:#f0fdf4;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #bbf7d0">
+          <div style="background:linear-gradient(135deg,#14142a,#052e16);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#86efac;font-size:12px;font-weight:700">KYC — KNOW YOUR CUSTOMER</div><div style="color:#52526e;font-size:11px">Compliance &amp; Due Diligence</div></div>
+          </div>
+          <div style="background:#dcfce7;border-bottom:2px solid #16a34a;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#14532d;letter-spacing:.14em;text-transform:uppercase">KYC VERIFICATION DOCUMENT</div>
+          <div style="padding:16px 18px;min-height:300px">
+            <div id="kyc-m-placeholder" style="color:#4b7a5e;font-style:italic;text-align:center;margin-top:60px">Enter company details on the left and click "Generate KYC Document".</div>
+            <div id="kyc-m-output" style="display:none;white-space:pre-wrap;font-size:12px;color:#14142a;line-height:1.8"></div>
+          </div>
+          <div style="padding:5px 14px;background:#f0fdf4;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com · For compliance review purposes only</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closeKYCModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openKYCModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="copyKYCDoc()">⎘ Copy document</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ POF DOCUMENT MODAL ══════════════════════════════════════════════════════ -->
+<div class="modal-bg" id="pof-modal-bg" onclick="if(event.target===this)closePOFModal()">
+  <div class="modal" style="max-width:980px;width:calc(100vw - 24px);max-height:92vh;overflow:hidden;display:flex;flex-direction:column">
+    <div class="modal-hd" style="flex-shrink:0">
+      <div>
+        <div class="modal-title">💰 POF — Proof of Funds</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Bank confirmation letter · verifiable financial proof · auto-filled from deal data</div>
+      </div>
+      <button class="modal-close" onclick="closePOFModal()">×</button>
+    </div>
+    <div style="flex:1;overflow:hidden;display:grid;grid-template-columns:370px 1fr;min-height:0">
+      <div style="overflow-y:auto;padding:16px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px">Source Deal / PO</div>
+          <div id="pof-m-po-list" style="display:flex;flex-direction:column;gap:5px;max-height:180px;overflow-y:auto"></div>
+        </div>
+        <div style="height:1px;background:var(--border);flex-shrink:0"></div>
+        <div>
+          <label class="flabel">Account Holder / Applicant</label>
+          <input class="inp" id="pof-m-holder" placeholder="Auto-filled from PO / enter manually" style="font-size:13px"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div>
+            <label class="flabel">Amount</label>
+            <input class="inp" id="pof-m-amount" placeholder="e.g. 500,000" style="font-size:13px"/>
+          </div>
+          <div>
+            <label class="flabel">Currency</label>
+            <select class="inp" id="pof-m-currency" style="font-size:13px">
+              <option>USD</option><option>EUR</option><option>AED</option><option>GBP</option><option>SAR</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="flabel">Issuing Bank</label>
+          <input class="inp" id="pof-m-bank" placeholder="e.g. Emirates NBD · Dubai, UAE" style="font-size:13px"/>
+        </div>
+        <div>
+          <label class="flabel">Transaction Purpose</label>
+          <textarea class="inp" id="pof-m-purpose" rows="3" placeholder="e.g. Commodity purchase — Steel Rebar · ref: LOI-2026-001" style="resize:vertical;font-size:13px"></textarea>
+        </div>
+        <div id="pof-m-doc-ref" style="font-size:12px;color:var(--muted);font-style:italic">— select a deal above or fill manually —</div>
+        <button class="btn btn-sm" style="background:rgba(232,169,74,.15);border-color:rgba(232,169,74,.4);color:var(--gold);width:100%;justify-content:center" onclick="runPOFModal()">💰 Generate POF Letter</button>
+      </div>
+      <div style="overflow-y:auto;padding:16px;background:rgba(0,0,0,.15)">
+        <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Document preview</div>
+        <div style="background:#fffbeb;border-radius:8px;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:12px;border:1px solid #fde68a">
+          <div style="background:linear-gradient(135deg,#14142a,#1c1408);padding:13px 18px;display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:#fff">SLOI <em style="font-style:italic;color:#7b7ff8">AI</em></div>
+            <div style="text-align:right"><div style="color:#fcd34d;font-size:12px;font-weight:700">PROOF OF FUNDS LETTER</div><div style="color:#52526e;font-size:11px">Bank Confirmation Document</div></div>
+          </div>
+          <div style="background:#fef3c7;border-bottom:2px solid #d97706;padding:7px 18px;text-align:center;font-size:12px;font-weight:700;color:#78350f;letter-spacing:.14em;text-transform:uppercase">PROOF OF FUNDS — BANK CONFIRMATION</div>
+          <div style="padding:16px 18px;min-height:300px">
+            <div id="pof-m-placeholder" style="color:#927c40;font-style:italic;text-align:center;margin-top:60px">Select a deal or fill in the details on the left, then click "Generate POF Letter".</div>
+            <div id="pof-m-output" style="display:none;white-space:pre-wrap;font-size:12px;color:#14142a;line-height:1.8"></div>
+          </div>
+          <div style="padding:5px 14px;background:#fffbeb;text-align:center;font-size:11px;color:#6b6b8e">Generated by SLOI AI · sloiai.com · For verification by qualified financial institutions</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-ft" style="flex-shrink:0">
+      <button class="btn" onclick="closePOFModal()">Cancel</button>
+      <button class="btn btn-sm" onclick="openPOFModal()">↺ Reset</button>
+      <button class="btn btn-g" onclick="copyPOFDoc()">⎘ Copy document</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
