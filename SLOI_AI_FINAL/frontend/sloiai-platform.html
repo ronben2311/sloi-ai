@@ -2856,6 +2856,15 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
 
             <!-- ── COMPLIANCE & DOCUMENTS ── -->
             <div class="ag-section">Compliance &amp; Documents</div>
+            <div style="display:flex;align-items:center;gap:0;margin:0 0 14px;font-size:11px;font-family:'IBM Plex Mono',monospace;flex-wrap:wrap">
+              <span style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#f87171;padding:4px 12px;border-radius:4px 0 0 4px;white-space:nowrap">🛡️ Screen supplier</span>
+              <span style="background:rgba(0,0,0,.15);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4px 8px;color:var(--muted)">→</span>
+              <span style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 12px;white-space:nowrap">✓ Cleared</span>
+              <span style="background:rgba(0,0,0,.15);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4px 8px;color:var(--muted)">→</span>
+              <span style="background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:4px 12px;white-space:nowrap">📄 Sign LOI</span>
+              <span style="background:rgba(0,0,0,.15);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:4px 8px;color:var(--muted)">→</span>
+              <span style="background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:4px 12px;border-radius:0 4px 4px 0;white-space:nowrap;font-weight:700">🧾 Issue PO</span>
+            </div>
             <div class="agent-rows">
 
               <div>
@@ -2874,6 +2883,11 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                     <div class="ad-log-row"><span style="color:var(--muted)">Gulf Steel Industries</span><span class="badge bg">Cleared</span></div>
                     <div class="ad-log-row"><span style="color:var(--muted)">Atlas Grain Trading</span><span class="badge bg">Cleared</span></div>
                     <div class="ad-log-row"><span style="color:var(--muted)">EuroSteel GmbH</span><span class="badge ba">Review</span></div>
+                  </div>
+                  <div class="ad-btns" style="margin-bottom:10px">
+                    <button class="btn btn-xs" onclick="window.open('compliance.html','_blank')">🛡️ Full compliance check</button>
+                    <button class="btn btn-xs" style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:var(--green)" onclick="toggleAgent('loi')">📄 Go to LOI Generator →</button>
+                    <button class="btn btn-xs" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="openPOModal()">🧾 Issue PO directly →</button>
                   </div>
                   <div class="ai-panel">
                     <div class="ai-panel-title">🤖 AI Compliance Tools</div>
@@ -2938,6 +2952,11 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                     <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>PO-2026-001 &middot; Hard Wheat &middot; $56K &middot; Sent to Atlas Grain Trading</span></div>
                     <div class="ad-log-row"><span style="color:var(--green)">&#10003;</span><span>PO-2026-002 &middot; Aluminum &middot; $46K &middot; Sent to Gulf Steel Industries</span></div>
                     <div class="ad-log-row"><span style="color:var(--muted)">&#8987;</span><span>PO-2026-003 &middot; Steel Rebar &middot; LOI pending signature — PO on hold</span></div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;margin:10px 0 8px;padding:10px 12px;background:rgba(232,169,74,.05);border:1px solid rgba(232,169,74,.18);border-radius:6px">
+                    <span style="font-size:13px">🧾</span>
+                    <div style="flex:1;font-size:12px;color:var(--muted);line-height:1.4">PO Generator issues a Purchase Order directly from a signed LOI — auto-fills supplier, product, qty, and trade terms.</div>
+                    <button class="btn btn-xs" style="flex-shrink:0;background:rgba(232,169,74,.12);border-color:rgba(232,169,74,.35);color:var(--gold);font-weight:700" onclick="openPOModal()">🧾 Issue PO →</button>
                   </div>
                   <div class="ad-btns">
                     <button class="btn btn-xs btn-g" onclick="window.open('loi-generator.html','_blank')">&#128196; Generate LOI</button>
