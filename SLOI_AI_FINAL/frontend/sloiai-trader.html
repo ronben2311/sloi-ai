@@ -158,7 +158,7 @@ select.inp option{background:var(--surface)}
   <div class="sb-footer">
     <div class="sf-label">LOI FEES THIS MONTH</div>
     <div class="sf-val" id="sb-loi-fees-val">$0</div>
-    <div style="font-size:12px;color:var(--muted);margin-top:2px" id="sb-loi-fees-sub">0 LOIs × $500</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:2px" id="sb-loi-fees-sub">0 LOIs signed</div>
   </div>
 </aside>
 
@@ -191,7 +191,7 @@ select.inp option{background:var(--surface)}
     <div class="g4" style="margin-bottom:14px">
       <div class="stat"><div class="stat-top">Volume MTD</div><div class="stat-val" style="color:var(--violet)" id="dash-stat-volume">—</div><div class="stat-sub up">total LOI value</div></div>
       <div class="stat"><div class="stat-top">LOIs signed</div><div class="stat-val" style="color:var(--green)" id="dash-stat-lois">—</div><div class="stat-sub">this month</div></div>
-      <div class="stat"><div class="stat-top">LOI fees owed</div><div class="stat-val" style="color:var(--gold)" id="dash-stat-fees">—</div><div class="stat-sub">unpaid × $500</div></div>
+      <div class="stat"><div class="stat-top">LOI fees owed</div><div class="stat-val" style="color:var(--gold)" id="dash-stat-fees">—</div><div class="stat-sub">unpaid fees</div></div>
       <div class="stat"><div class="stat-top">Pipeline value</div><div class="stat-val">$420K</div><div class="stat-sub">8 active leads</div></div>
     </div>
 
@@ -214,7 +214,7 @@ select.inp option{background:var(--surface)}
   <!-- NEGOTIATIONS -->
   <div id="view-negotiations" class="view">
     <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:var(--muted);line-height:1.7">
-      🤖 <strong style="color:var(--white)">How it works:</strong> SLOI AI's agent negotiates with buyers on behalf of Boss, using your floor prices as the minimum. You see each round in real time. When agreement is reached, Boss approves and LOI is auto-generated. You pay a $500 LOI fee per signed deal.
+      🤖 <strong style="color:var(--white)">How it works:</strong> SLOI AI's agent negotiates with buyers on behalf of Boss, using your floor prices as the minimum. You see each round in real time. When agreement is reached, Boss approves and LOI is auto-generated. You pay an agreed LOI fee per signed deal.
     </div>
     <div class="g4" style="margin-bottom:14px">
       <div class="stat"><div class="stat-top">Active</div><div class="stat-val" style="color:var(--green)" id="neg-stat-active">—</div></div>
@@ -250,7 +250,7 @@ select.inp option{background:var(--surface)}
       <div class="stat"><div class="stat-top">Fees owed</div><div class="stat-val" style="color:var(--gold)" id="loi-stat-fees">—</div></div>
     </div>
     <div style="background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.25);border-radius:6px;padding:12px 16px;margin-bottom:14px;font-size:13px;color:var(--text);line-height:1.7">
-      💰 <strong style="color:var(--white)">LOI fee:</strong> $500 per signed LOI (your agreed rate). Invoiced monthly by SLOI AI. Payment via SWIFT to SLOI AI Ltd. bank account. Fees are separate from your deal margin.
+      💰 <strong style="color:var(--white)">LOI fee:</strong> Your agreed rate per signed LOI. Invoiced monthly by SLOI AI. Payment via SWIFT to SLOI AI Ltd. bank account. Fees are separate from your deal margin.
     </div>
     <div id="loi-list"></div>
   </div>
@@ -339,7 +339,7 @@ select.inp option{background:var(--surface)}
     </div>
     <div class="notif success">
       <div style="display:flex;justify-content:space-between;margin-bottom:5px"><div style="font-weight:600;color:var(--white)">📄 LOI signed — Steel Rebar · 100 MT · $284,000</div><div style="font-size:11px;color:var(--muted)">Today</div></div>
-      <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:8px">SL-LOI-20260501-003 · Agreed $2,840/MT FOB · LOI sent to buyer and supplier. LOI fee due: $500.</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:8px">SL-LOI-20260501-003 · Agreed $2,840/MT FOB · LOI sent to buyer and supplier. LOI fee due.</div>
       <div style="display:flex;gap:5px">
         <button class="btn btn-xs btn-g" onclick="show('lois',document.querySelectorAll('.nav')[2])">View LOI →</button>
         <button class="btn btn-xs" onclick="openTG()">📲 Contact Boss</button>
@@ -352,11 +352,11 @@ select.inp option{background:var(--surface)}
     </div>
     <div class="notif info">
       <div style="display:flex;justify-content:space-between;margin-bottom:5px"><div style="font-weight:600;color:var(--white)">💰 LOI fee invoice — $3,500 due</div><div style="font-size:11px;color:var(--muted)">Yesterday</div></div>
-      <div style="font-size:13px;color:var(--muted)">Monthly invoice for 7 LOIs × $500. Pay via SWIFT to SLOI AI Ltd. bank account. Due: 30 May 2026.</div>
+      <div style="font-size:13px;color:var(--muted)">Monthly invoice for 7 LOIs. Pay via SWIFT to SLOI AI Ltd. bank account. Due: 30 May 2026.</div>
     </div>
     <div class="notif read">
       <div style="display:flex;justify-content:space-between;margin-bottom:5px"><div style="font-weight:600;color:var(--white)">📄 LOI signed — Hard Wheat · 50 MT</div><div style="font-size:11px;color:var(--muted)">Yesterday</div></div>
-      <div style="font-size:13px;color:var(--muted)">SL-LOI-20260430-004 · $56,000 · Fee: $500 — included in monthly invoice.</div>
+      <div style="font-size:13px;color:var(--muted)">SL-LOI-20260430-004 · $56,000 · Fee included in monthly invoice.</div>
     </div>
   </div>
 
@@ -371,7 +371,7 @@ select.inp option{background:var(--surface)}
     <div style="background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.25);border-radius:6px;padding:14px 18px;margin-bottom:14px">
       <div style="font-size:14px;font-weight:600;color:var(--white);margin-bottom:4px">LOI fee model</div>
       <div style="font-size:13px;color:var(--muted);line-height:1.7">
-        You pay SLOI AI <strong style="color:var(--gold)">$500 per signed LOI</strong> (your negotiated rate). Invoiced monthly. Pay via SWIFT to SLOI AI Ltd. This fee covers: AI negotiation infrastructure, LOI auto-generation, compliance screening, and platform access. Your deal margin is entirely yours.
+        You pay SLOI AI an <strong style="color:var(--gold)">agreed fee per signed LOI</strong>. Invoiced monthly. Pay via SWIFT to SLOI AI Ltd. This fee covers: AI negotiation infrastructure, LOI auto-generation, compliance screening, and platform access. Your deal margin is entirely yours.
       </div>
     </div>
     <div class="card">
@@ -379,9 +379,9 @@ select.inp option{background:var(--surface)}
       <table>
         <thead><tr><th>Date</th><th>LOI ref</th><th>Deal</th><th>Deal value</th><th>LOI fee</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td style="color:var(--muted)">Today</td><td style="font-size:12px;color:var(--indigo)">SL-LOI-20260501-003</td><td>Steel Rebar · 100 MT</td><td style="color:var(--violet)">$284,000</td><td style="color:var(--gold);font-weight:700">$500</td><td><span class="badge ba">Due 30 May</span></td></tr>
-          <tr><td style="color:var(--muted)">Yesterday</td><td style="font-size:12px;color:var(--indigo)">SL-LOI-20260430-004</td><td>Hard Wheat · 50 MT</td><td style="color:var(--violet)">$56,000</td><td style="color:var(--gold);font-weight:700">$500</td><td><span class="badge ba">Due 30 May</span></td></tr>
-          <tr><td style="color:var(--muted)">28 Apr</td><td style="font-size:12px;color:var(--indigo)">SL-LOI-20260428-001</td><td>Steel Rebar · 50 MT</td><td style="color:var(--violet)">$142,000</td><td style="color:var(--green);font-weight:700">$500</td><td><span class="badge bg">Paid ✓</span></td></tr>
+          <tr><td style="color:var(--muted)">Today</td><td style="font-size:12px;color:var(--indigo)">SL-LOI-20260501-003</td><td>Steel Rebar · 100 MT</td><td style="color:var(--violet)">$284,000</td><td style="color:var(--gold);font-weight:700">Agreed</td><td><span class="badge ba">Due 30 May</span></td></tr>
+          <tr><td style="color:var(--muted)">Yesterday</td><td style="font-size:12px;color:var(--indigo)">SL-LOI-20260430-004</td><td>Hard Wheat · 50 MT</td><td style="color:var(--violet)">$56,000</td><td style="color:var(--gold);font-weight:700">Agreed</td><td><span class="badge ba">Due 30 May</span></td></tr>
+          <tr><td style="color:var(--muted)">28 Apr</td><td style="font-size:12px;color:var(--indigo)">SL-LOI-20260428-001</td><td>Steel Rebar · 50 MT</td><td style="color:var(--violet)">$142,000</td><td style="color:var(--green);font-weight:700">Agreed</td><td><span class="badge bg">Paid ✓</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -411,7 +411,7 @@ select.inp option{background:var(--surface)}
             <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Status</span><span class="badge bg">Active</span></div>
             <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">KYC verified</span><span class="badge bg">✓ Yes</span></div>
             <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Sanctions cleared</span><span class="badge bg">✓ Cleared</span></div>
-            <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">LOI fee rate</span><span style="color:var(--gold)">$500 per LOI</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">LOI fee rate</span><span style="color:var(--gold)">Agreed per LOI</span></div>
             <div style="display:flex;justify-content:space-between"><span style="color:var(--muted)">Approved since</span><span style="color:var(--text)">Jan 2026</span></div>
           </div>
         </div>

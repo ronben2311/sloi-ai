@@ -1025,16 +1025,25 @@
       .mcp-highlight strong{color:var(--teal)}
       /* services strip — plain-language summary above the technical tool cards */
       .svc-strip{padding:18px 18px 4px}
-      .svc-strip-hdr{margin-bottom:12px}
-      .svc-strip-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px}
-      .svc-strip-sub{font-size:12px;color:var(--muted)}
-      .svc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-      .svc-card{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:11px 12px;display:flex;flex-direction:column;gap:5px}
-      .svc-icon{font-size:17px}
+      .svc-strip-hdr{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
+      .svc-strip-title{font-size:14px;font-weight:700;color:var(--white)}
+      .svc-strip-sub{font-size:12px;color:var(--muted);margin-top:3px}
+      /* phase rows */
+      .svc-phase{display:flex;gap:0;margin-bottom:8px;border-radius:7px;overflow:hidden;border:1px solid var(--border)}
+      .svc-phase-lbl{width:88px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:10px 12px;border-right:1px solid var(--border)}
+      .svc-phase-num{font-size:10px;font-weight:700;letter-spacing:.1em;font-family:'IBM Plex Mono',monospace;margin-bottom:3px}
+      .svc-phase-name{font-size:12px;font-weight:700;color:var(--white)}
+      .svc-cards-row{display:flex;flex:1;gap:0}
+      .svc-card{flex:1;background:var(--bg);border-left:1px solid var(--border);padding:10px 13px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;transition:background .15s;text-decoration:none}
+      .svc-card:hover{background:var(--surface2)}
+      .svc-card:first-child{border-left:none}
+      .svc-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+      .svc-body{display:flex;flex-direction:column;gap:2px}
       .svc-name{font-size:12px;font-weight:700;color:var(--white)}
-      .svc-desc{font-size:11px;color:var(--muted);line-height:1.5}
-      @media(max-width:980px){.svc-grid{grid-template-columns:repeat(3,1fr)}}
-      @media(max-width:640px){.svc-grid{grid-template-columns:repeat(2,1fr)}}
+      .svc-desc{font-size:11px;color:var(--muted);line-height:1.45}
+      .svc-arrow{font-size:10px;margin-top:auto;padding-top:5px;font-family:'IBM Plex Mono',monospace;opacity:.6}
+      @media(max-width:860px){.svc-cards-row{flex-wrap:wrap}.svc-card{flex:none;width:50%}.svc-card:nth-child(2n+1){border-left:none}.svc-card:nth-child(n+3){border-top:1px solid var(--border)}}
+      @media(max-width:560px){.svc-phase{flex-direction:column}.svc-phase-lbl{width:auto;border-right:none;border-bottom:1px solid var(--border)}.svc-card{width:100%;border-left:none;border-top:1px solid var(--border)}.svc-card:first-child{border-top:none}}
       /* tool cards */
       .mcp-tools-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
       .mcp-tool-grid{display:flex;flex-direction:column;gap:6px}
@@ -1135,8 +1144,8 @@
           ><span class="nav-label">Exchange</span>
         </button>
         <button class="nav" onclick="show('products', this)">
-          <span class="nav-icon">📦</span
-          ><span class="nav-label">Products</span
+          <span class="nav-icon">🛒</span
+          ><span class="nav-label">Marketplace</span
           ><span class="nav-badge nb-ind" style="font-size:11px">72</span>
         </button>
         <button class="nav" onclick="show('agents', this)">
@@ -1216,7 +1225,7 @@
           </div>
           <div class="tb-row2">
             <button class="nav active" id="tb-dashboard" onclick="show('dashboard',this)">🏠 Dashboard</button>
-            <button class="nav" id="tb-products" onclick="show('products',this)">📦 Products &amp; Traders <span class="nav-badge nb-ind" style="font-size:10px">72</span></button>
+            <button class="nav" id="tb-products" onclick="show('products',this)">🛒 Marketplace <span class="nav-badge nb-ind" style="font-size:10px">72</span></button>
             <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg);font-size:10px">6</span></button>
             <button class="nav" id="tb-lois" onclick="show('lois',this)">📋 RFQs &amp; LOIs <span class="nav-badge nb-gold" style="font-size:10px">7</span></button>
             <button class="nav" id="tb-contracts" onclick="show('contracts',this)">📄 Contracts</button>
@@ -1283,11 +1292,11 @@
                 <div class="ac-desc">Analyzes LOIs &amp; POs — risk checks, clause drafting, LOI comparison &amp; document completeness.</div>
                 <div class="ac-cost bv" style="border:1px solid rgba(91,95,239,.25);margin-top:8px">● Always on · AI-powered · loads from your LOIs &amp; POs</div>
               </div>
-              <div class="action-card" onclick="show('agents',document.getElementById('tb-agents'));setTimeout(function(){var r=document.getElementById('row-payment');if(r&&!r.classList.contains('open'))r.click();r&&r.scrollIntoView({behavior:'smooth',block:'center'});},80)" style="border-color:rgba(232,169,74,.25)">
-                <div class="ac-icon">💳</div>
-                <div class="ac-title">Payment AI</div>
-                <div class="ac-desc">Tracks LCs &amp; payments, drafts SWIFT/MT103 &amp; LC application terms.</div>
-                <div class="ac-cost ba" style="border:1px solid rgba(232,169,74,.25);margin-top:8px">● Running · 3 LCs open · 1 overdue</div>
+              <div class="action-card" onclick="show('lois',document.getElementById('tb-lois'));setTimeout(function(){var d=document.querySelector('.sloi-auto-docs-card');if(d)d.scrollIntoView({behavior:'smooth',block:'center'});},80)" style="border-color:rgba(139,143,248,.25)">
+                <div class="ac-icon">📄</div>
+                <div class="ac-title">Documents AI</div>
+                <div class="ac-desc">Auto-generates LOI, SPA, NDA, Trade Contract, LC Application, Freight Advisory &amp; HS Code on deal approval.</div>
+                <div class="ac-cost bv" style="border:1px solid rgba(139,143,248,.25);margin-top:8px">● On approval · Full document suite · ICC / UCP 600</div>
               </div>
             </div>
             <div style="text-align:right;margin-top:-6px;margin-bottom:10px">
@@ -1921,7 +1930,7 @@
           <div id="view-products" class="view">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px">
               <div>
-                <div style="font-size:15px;font-weight:600;color:var(--white)">📦 Products &amp; Traders</div>
+                <div style="font-size:15px;font-weight:600;color:var(--white)">🛒 Marketplace</div>
                 <div style="font-size:13px;color:var(--muted)" id="prod-count-label">72 products · 9 sectors · MENA &amp; global supply chain</div>
               </div>
               <div style="display:flex;gap:8px;align-items:flex-start">
@@ -2044,6 +2053,38 @@
                 </div>
               </div>
             </div>
+
+            <!-- ── CONNECT MANAGED AGENT ── -->
+            <div id="connect-agent-card" style="background:var(--surface);border:1px solid var(--border2);border-radius:8px;margin-bottom:18px;overflow:hidden">
+              <!-- Header row -->
+              <div style="padding:14px 18px 10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+                <div style="width:36px;height:36px;border-radius:8px;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.28);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🤖</div>
+                <div style="flex:1;min-width:160px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+                    <span style="font-size:14px;font-weight:600;color:var(--white)">Managed Agent</span>
+                    <span id="agent-conn-badge" style="display:none;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)">● Connected</span>
+                    <span id="agent-disconn-badge" style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);color:#ef4444">● Not connected</span>
+                  </div>
+                  <div id="agent-conn-info" style="display:none;font-size:12px;color:var(--muted)"></div>
+                  <div id="agent-disconn-info" style="font-size:12px;color:var(--muted)">Choose a procurement profile below to activate your managed agent</div>
+                </div>
+                <button id="agent-disconnect-btn" class="btn btn-sm" onclick="disconnectManagedAgent()" style="display:none;flex-shrink:0;color:#ef4444;border-color:rgba(239,68,68,.3)">Disconnect</button>
+              </div>
+              <!-- Profile picker — hidden once connected -->
+              <div id="agent-profile-picker" style="padding:0 18px 14px;display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn btn-sm" onclick="activateProfile('saas')" style="border-color:rgba(232,169,74,.35);color:var(--gold)">🚀 SLOI AI SaaS</button>
+                <button class="btn btn-sm" onclick="activateProfile('construction')" style="border-color:rgba(45,212,191,.35);color:var(--teal)">🏗 Construction</button>
+                <button class="btn btn-sm" onclick="activateProfile('factory')" style="border-color:rgba(91,95,239,.35);color:var(--violet)">🏭 Advanced Factory</button>
+                <span style="font-size:11px;color:var(--muted);align-self:center;margin-left:4px">Select profile to connect</span>
+              </div>
+              <!-- Warning bar -->
+              <div id="agent-gate-bar" style="display:none;padding:8px 18px;background:rgba(239,68,68,.06);border-top:1px solid rgba(239,68,68,.2);font-size:12px;color:#ef4444;font-weight:600">
+                ⚠ Choose a procurement profile above to activate your managed agent
+              </div>
+            </div>
+
+            <!-- AI TOOLS BODY — gated when no agent connected -->
+            <div id="ai-tools-body">
 
             <!-- ── COMMODITIES ENGINE — MAIN AI TOOL ── -->
             <div class="hero-engine">
@@ -3512,21 +3553,151 @@ Content-Type: application/json
               <!-- ── SERVICES STRIP (plain language) ── -->
               <div class="svc-strip">
                 <div class="svc-strip-hdr">
-                  <div class="svc-strip-title">What your agent can do for you</div>
-                  <div class="svc-strip-sub">A plain-English summary of the 10 tools below — scroll down for the technical detail on each one</div>
+                  <div>
+                    <div class="svc-strip-title">What your agent can do for you</div>
+                    <div class="svc-strip-sub">Your deal flow — click any step to jump to the tool</div>
+                  </div>
+                  <span style="font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace">5 phases · 10 tools</span>
                 </div>
-                <div class="svc-grid">
-                  <div class="svc-card"><div class="svc-icon">🔍</div><div class="svc-name">Supplier Finder</div><div class="svc-desc">Finds verified suppliers and ranks them for you</div></div>
-                  <div class="svc-card"><div class="svc-icon">📋</div><div class="svc-name">RFQ Generator</div><div class="svc-desc">Sends a Request for Quote to matched suppliers</div></div>
-                  <div class="svc-card"><div class="svc-icon">🤖</div><div class="svc-name">Negotiation Engine</div><div class="svc-desc">Negotiates price with a supplier on your behalf</div></div>
-                  <div class="svc-card"><div class="svc-icon">🛡️</div><div class="svc-name">ComplianceBot</div><div class="svc-desc">Screens suppliers against global sanctions lists</div></div>
-                  <div class="svc-card"><div class="svc-icon">📄</div><div class="svc-name">LOI Engine</div><div class="svc-desc">Generates a Letter of Intent from agreed terms</div></div>
-                  <div class="svc-card"><div class="svc-icon">📑</div><div class="svc-name">Contract Advisor</div><div class="svc-desc">Reviews contracts and flags risk before you sign</div></div>
-                  <div class="svc-card"><div class="svc-icon">🧾</div><div class="svc-name">PO Generator</div><div class="svc-desc">Issues a Purchase Order from a confirmed LOI</div></div>
-                  <div class="svc-card"><div class="svc-icon">💳</div><div class="svc-name">Trade Finance AI</div><div class="svc-desc">Recommends the right payment method for the deal</div></div>
-                  <div class="svc-card"><div class="svc-icon">🚢</div><div class="svc-name">Logistics &amp; Customs</div><div class="svc-desc">Calculates landed cost and customs requirements</div></div>
-                  <div class="svc-card"><div class="svc-icon">📊</div><div class="svc-name">Price Monitor</div><div class="svc-desc">Tracks live market price and alerts you to buy</div></div>
+
+                <!-- Phase 01 — Source -->
+                <div class="svc-phase">
+                  <div class="svc-phase-lbl" style="background:rgba(45,212,191,.05)">
+                    <div class="svc-phase-num" style="color:var(--teal)">01 SOURCE</div>
+                    <div class="svc-phase-name">Find &amp; Quote</div>
+                  </div>
+                  <div class="svc-cards-row">
+                    <a class="svc-card" onclick="svcJump('sloi_find_suppliers')" href="javascript:void(0)">
+                      <div class="svc-icon">🔍</div>
+                      <div class="svc-body">
+                        <div class="svc-name">Supplier Finder</div>
+                        <div class="svc-desc">Finds and ranks verified suppliers for your product</div>
+                        <div class="svc-arrow" style="color:var(--teal)">→ Find suppliers</div>
+                      </div>
+                    </a>
+                    <a class="svc-card" onclick="svcJump('sloi_rfq')" href="javascript:void(0)">
+                      <div class="svc-icon">📋</div>
+                      <div class="svc-body">
+                        <div class="svc-name">RFQ Generator</div>
+                        <div class="svc-desc">Sends a professional Request for Quote to matched suppliers</div>
+                        <div class="svc-arrow" style="color:var(--teal)">→ Generate RFQ</div>
+                      </div>
+                    </a>
+                  </div>
                 </div>
+
+                <!-- Phase 02 — Negotiate -->
+                <div class="svc-phase">
+                  <div class="svc-phase-lbl" style="background:rgba(91,95,239,.05)">
+                    <div class="svc-phase-num" style="color:var(--violet)">02 NEGOTIATE</div>
+                    <div class="svc-phase-name">Price &amp; Screen</div>
+                  </div>
+                  <div class="svc-cards-row">
+                    <a class="svc-card" onclick="svcJump('sloi_negotiate')" href="javascript:void(0)">
+                      <div class="svc-icon">🤖</div>
+                      <div class="svc-body">
+                        <div class="svc-name">Negotiation Engine</div>
+                        <div class="svc-desc">Runs up to 7 price rounds with a supplier on your behalf</div>
+                        <div class="svc-arrow" style="color:var(--violet)">→ Start negotiation</div>
+                      </div>
+                    </a>
+                    <a class="svc-card" onclick="svcJump('sloi_compliance_check')" href="javascript:void(0)">
+                      <div class="svc-icon">🛡️</div>
+                      <div class="svc-body">
+                        <div class="svc-name">ComplianceBot</div>
+                        <div class="svc-desc">Screens supplier against OFAC, EU &amp; UN sanctions before any deal</div>
+                        <div class="svc-arrow" style="color:var(--violet)">→ Screen supplier</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Phase 03 — Document -->
+                <div class="svc-phase">
+                  <div class="svc-phase-lbl" style="background:rgba(139,143,248,.05)">
+                    <div class="svc-phase-num" style="color:#a5b4fc">03 DOCUMENT</div>
+                    <div class="svc-phase-name">LOI · SPA · Contract</div>
+                  </div>
+                  <div class="svc-cards-row">
+                    <a class="svc-card" onclick="svcJump('sloi_generate_loi')" href="javascript:void(0)">
+                      <div class="svc-icon">📄</div>
+                      <div class="svc-body">
+                        <div class="svc-name">LOI Engine</div>
+                        <div class="svc-desc">Generates an ICC-compliant Letter of Intent from agreed terms</div>
+                        <div class="svc-arrow" style="color:#a5b4fc">→ Generate LOI</div>
+                      </div>
+                    </a>
+                    <a class="svc-card" onclick="svcJump('sloi_generate_spa')" href="javascript:void(0)">
+                      <div class="svc-icon">📜</div>
+                      <div class="svc-body">
+                        <div class="svc-name">SPA Generator</div>
+                        <div class="svc-desc">Drafts a GAFTA or ICC Sales &amp; Purchase Agreement from a signed LOI</div>
+                        <div class="svc-arrow" style="color:#a5b4fc">→ Generate SPA</div>
+                      </div>
+                    </a>
+                    <a class="svc-card" onclick="svcJump('sloi_trade_contract')" href="javascript:void(0)">
+                      <div class="svc-icon">⚖️</div>
+                      <div class="svc-body">
+                        <div class="svc-name">Trade Contract</div>
+                        <div class="svc-desc">Incoterms 2020-compliant trade contract with risk &amp; cost allocation</div>
+                        <div class="svc-arrow" style="color:#a5b4fc">→ Generate contract</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Phase 04 — Finance -->
+                <div class="svc-phase">
+                  <div class="svc-phase-lbl" style="background:rgba(232,169,74,.05)">
+                    <div class="svc-phase-num" style="color:var(--gold)">04 FINANCE</div>
+                    <div class="svc-phase-name">Pay &amp; Order</div>
+                  </div>
+                  <div class="svc-cards-row">
+                    <a class="svc-card" onclick="svcJump('sloi_trade_finance')" href="javascript:void(0)">
+                      <div class="svc-icon">💳</div>
+                      <div class="svc-body">
+                        <div class="svc-name">Trade Finance AI</div>
+                        <div class="svc-desc">Structures LC requirements and recommends the right payment method</div>
+                        <div class="svc-arrow" style="color:var(--gold)">→ Structure finance</div>
+                      </div>
+                    </a>
+                    <a class="svc-card" onclick="svcJump('sloi_generate_po')" href="javascript:void(0)">
+                      <div class="svc-icon">🧾</div>
+                      <div class="svc-body">
+                        <div class="svc-name">PO Generator</div>
+                        <div class="svc-desc">Issues a Purchase Order automatically from a confirmed LOI</div>
+                        <div class="svc-arrow" style="color:var(--gold)">→ Generate PO</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Phase 05 — Ship -->
+                <div class="svc-phase" style="margin-bottom:14px">
+                  <div class="svc-phase-lbl" style="background:rgba(34,197,94,.05)">
+                    <div class="svc-phase-num" style="color:var(--green)">05 SHIP</div>
+                    <div class="svc-phase-name">Move &amp; Monitor</div>
+                  </div>
+                  <div class="svc-cards-row">
+                    <a class="svc-card" onclick="svcJump('sloi_logistics')" href="javascript:void(0)">
+                      <div class="svc-icon">🚢</div>
+                      <div class="svc-body">
+                        <div class="svc-name">Logistics &amp; Customs</div>
+                        <div class="svc-desc">Calculates freight route, landed cost, HS codes &amp; customs declarations</div>
+                        <div class="svc-arrow" style="color:var(--green)">→ Plan shipment</div>
+                      </div>
+                    </a>
+                    <a class="svc-card" onclick="svcJump('sloi_price_monitor')" href="javascript:void(0)">
+                      <div class="svc-icon">📊</div>
+                      <div class="svc-body">
+                        <div class="svc-name">Price Monitor</div>
+                        <div class="svc-desc">Tracks live market price and alerts you when it's the right time to buy</div>
+                        <div class="svc-arrow" style="color:var(--green)">→ Monitor prices</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
               </div>
 
               <!-- ── 10 TOOL CARDS ── -->
@@ -3710,6 +3881,8 @@ Content-Type: application/json
 
             </div><!-- /mcp-section -->
 
+            </div><!-- /ai-tools-body -->
+
           </div>
         </div>
       </div>
@@ -3792,6 +3965,17 @@ Content-Type: application/json
                   </div>
                 </div>
                 <div id="loi-list"></div>
+
+                <!-- AUTO-GENERATED TRADE DOCUMENTS -->
+                <div class="sloi-auto-docs-card" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-top:14px;display:none">
+                  <div style="padding:10px 14px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
+                    <span style="font-size:12px;font-weight:700;color:var(--white);letter-spacing:.06em;text-transform:uppercase">Trade Documents</span>
+                    <span style="font-size:10px;color:var(--green);background:rgba(34,197,94,.12);padding:2px 7px;border-radius:3px;letter-spacing:.06em">AUTO-GENERATED</span>
+                    <span style="flex:1"></span>
+                    <button style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;padding:0" onclick="clearAutoDocs()">Clear</button>
+                  </div>
+                  <div class="sloi-auto-docs-list" style="max-height:320px;overflow-y:auto"></div>
+                </div>
 
                 <!-- MY POs -->
                 <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:24px;margin-bottom:10px">// PURCHASE ORDERS</div>
@@ -5422,7 +5606,7 @@ Content-Type: application/json
           "📊 Exchange",
           "Live commodity market · order book · negotiate",
         ],
-        products: ["📦 Products", "72 products · 9 sectors · MENA &amp; global supply chain"],
+        products: ["🛒 Marketplace", "72 products · 9 sectors · MENA &amp; global supply chain"],
         prices: ["Price Discovery", "Compare verified suppliers · live prices"],
         negotiate: [
           "Start Negotiation",
@@ -6114,7 +6298,7 @@ Content-Type: application/json
               '/unit</div><div style="font-size:15px;color:var(--muted)">Total: $' +
               parseFloat(data.total_value).toLocaleString() +
               '</div><div style="margin-top:10px"><button class="btn btn-p btn-sm" onclick="show(\'lois\',document.getElementById(\'tb-lois\'))">📄 View LOI →</button>'
-              + '<button class="btn btn-sm" style="margin-left:8px;background:rgba(34,197,94,.15);color:var(--green)" onclick="show(\'documents\',document.getElementById(\'tb-documents\'))">📋 Trade Docs →</button>'
+              + '<button class="btn btn-sm" style="margin-left:8px;background:rgba(34,197,94,.15);color:var(--green)" onclick="show(\'lois\',document.getElementById(\'tb-lois\'))">📋 Trade Docs →</button>'
               + '</div></div>';
             document.getElementById("neg-reset-btn").style.display =
               "inline-flex";
@@ -7716,6 +7900,9 @@ Content-Type: application/json
         // Scroll mandate into view
         var mhdr = document.querySelector('.mandate-hdr');
         if (mhdr) setTimeout(function(){ mhdr.scrollIntoView({ behavior:'smooth', block:'nearest' }); }, 150);
+
+        // Connect managed agent with this profile
+        _setAgentConnected(type);
       }
 
       // Restore saved profile on load
@@ -9105,6 +9292,86 @@ function sloi_showToast(msg, color) {
 
 // Init
 renderAutoDocs();
+initManagedAgent();
+
+// ── SERVICE STRIP JUMP ───────────────────────────────────────────────────────
+function svcJump(toolName) {
+  var cards = document.querySelectorAll('.mcp-tool-card');
+  cards.forEach(function(c) {
+    var code = c.querySelector('.mcp-code');
+    if (code && code.textContent.indexOf(toolName) !== -1) {
+      c.scrollIntoView({behavior:'smooth', block:'center'});
+      var detail = c.querySelector('.mcp-tool-detail');
+      if (detail) detail.style.display = 'block';
+      c.style.borderColor = 'rgba(91,95,239,.5)';
+      setTimeout(function() { c.style.borderColor = ''; }, 1800);
+    }
+  });
+}
+
+// ── MANAGED AGENT CONNECT ────────────────────────────────────────────────────
+var AGENT_PROFILE_LABELS = {
+  saas:         { label: '🚀 SLOI AI SaaS',           color: 'var(--gold)',   info: 'Full-platform · all sectors · all document types' },
+  construction: { label: '🏗 Construction Procurement', color: 'var(--teal)',   info: 'Cement · Steel Rebar · Aggregates · DDP default' },
+  factory:      { label: '🏭 Advanced Factory',         color: 'var(--violet)', info: 'Raw materials · Chemicals · Metals · JIT delivery' }
+};
+
+function initManagedAgent() {
+  var saved = localStorage.getItem('sloi_profile');
+  if (saved && AGENT_PROFILE_LABELS[saved]) {
+    _setAgentConnected(saved);
+  } else {
+    _setAgentDisconnected();
+  }
+}
+
+function disconnectManagedAgent() {
+  localStorage.removeItem('sloi_profile');
+  _setAgentDisconnected();
+  // Reset profile UI
+  ['saas','construction','factory'].forEach(function(t) {
+    var card = document.getElementById('prof-card-' + t);
+    var chk  = document.getElementById('prof-check-' + t);
+    var btn  = document.getElementById('prof-btn-' + t);
+    var col  = {saas:'rgba(232,169,74,.3)',construction:'rgba(45,212,191,.3)',factory:'rgba(91,95,239,.3)'}[t];
+    var lbl  = {saas:'SaaS',construction:'Construction',factory:'Factory'}[t];
+    if (card) { card.classList.remove('prof-active'); card.style.borderColor = col; }
+    if (chk)  chk.style.display = 'none';
+    if (btn)  { btn.textContent = 'Activate ' + lbl + ' profile →'; btn.style.background = 'none'; }
+  });
+  var badge = document.getElementById('mp-active-badge');
+  if (badge) badge.style.display = 'none';
+  sloi_showToast('Agent disconnected', 'indigo');
+}
+
+function _setAgentConnected(type) {
+  var p = AGENT_PROFILE_LABELS[type] || {label: type, color: 'var(--green)', info: 'AI tools active'};
+  document.getElementById('agent-conn-badge').style.display = 'inline-flex';
+  document.getElementById('agent-disconn-badge').style.display = 'none';
+  document.getElementById('agent-conn-info').style.display = 'block';
+  document.getElementById('agent-conn-info').textContent = p.label + ' · ' + p.info;
+  document.getElementById('agent-conn-info').style.color = p.color;
+  document.getElementById('agent-disconn-info').style.display = 'none';
+  document.getElementById('agent-disconnect-btn').style.display = 'inline-flex';
+  document.getElementById('agent-profile-picker').style.display = 'none';
+  document.getElementById('agent-gate-bar').style.display = 'none';
+  document.getElementById('connect-agent-card').style.borderColor = p.color;
+  document.getElementById('ai-tools-body').style.opacity = '1';
+  document.getElementById('ai-tools-body').style.pointerEvents = 'auto';
+  sloi_showToast(p.label + ' connected — AI tools unlocked', 'green');
+}
+
+function _setAgentDisconnected() {
+  document.getElementById('agent-conn-badge').style.display = 'none';
+  document.getElementById('agent-disconn-badge').style.display = 'inline-flex';
+  document.getElementById('agent-conn-info').style.display = 'none';
+  document.getElementById('agent-disconn-info').style.display = 'block';
+  document.getElementById('agent-disconnect-btn').style.display = 'none';
+  document.getElementById('agent-profile-picker').style.display = 'flex';
+  document.getElementById('connect-agent-card').style.borderColor = '';
+  document.getElementById('ai-tools-body').style.opacity = '0.35';
+  document.getElementById('ai-tools-body').style.pointerEvents = 'none';
+}
 </script>
 </body>
 </html>

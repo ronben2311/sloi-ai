@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>Trader Profile — SLOI AI</title>
+<meta name="description" content="Verified commodity trader profile on SLOI AI. View products, sectors, and start an AI-negotiated LOI in 72 hours."/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06060e;--surface:#0d0d1a;--surface2:#11111e;--border:#1a1a2e;--border2:#22223a;
+  --indigo:#5b5fef;--violet:#8b8ff8;
+  --muted:#8888a8;--text:#cac8e4;--white:#eeedfa;
+  --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg);overflow-x:clip}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(91,95,239,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(91,95,239,.02) 1px,transparent 1px);
+  background-size:72px 72px}
+
+nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;
+  background:rgba(6,6,14,.94);border-bottom:1px solid rgba(255,255,255,.05);backdrop-filter:blur(20px);font-family:'IBM Plex Mono',monospace}
+.nav-logo{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.03em}
+.nav-logo em{font-style:italic;color:var(--indigo)}
+.nav-links{display:flex;gap:24px;font-size:13px}
+.nav-links a{color:var(--muted);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--white)}
+.btn-ghost{padding:7px 16px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;border:1px solid var(--border2);color:var(--muted);background:none}
+.btn-ghost:hover{border-color:rgba(91,95,239,.5);color:var(--violet)}
+.btn-cta{background:var(--indigo);color:#fff;border:none;padding:8px 18px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:opacity .15s}
+.btn-cta:hover{opacity:.85}
+
+.wrap{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:56px 32px 96px}
+
+/* BACK LINK */
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);text-decoration:none;font-family:'IBM Plex Mono',monospace;margin-bottom:32px;transition:color .15s}
+.back-link:hover{color:var(--violet)}
+
+/* HERO */
+.profile-hero{display:flex;align-items:flex-start;gap:24px;margin-bottom:36px;flex-wrap:wrap}
+.profile-flag{font-size:64px;line-height:1;flex-shrink:0}
+.profile-meta{flex:1;min-width:240px}
+.profile-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.profile-name{font-family:'Fraunces',serif;font-size:clamp(28px,5vw,48px);font-weight:900;color:var(--white);line-height:1;letter-spacing:-.03em;margin-bottom:6px}
+.profile-country{font-size:14px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:16px}
+.profile-desc{font-size:14px;color:var(--text);line-height:1.8;max-width:600px;margin-bottom:20px}
+.profile-ctas{display:flex;gap:10px;flex-wrap:wrap}
+.btn-primary{background:var(--indigo);color:#fff;border:none;padding:11px 22px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:opacity .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary:hover{opacity:.85}
+.btn-outline{background:none;border:1px solid var(--border2);color:var(--text);padding:11px 22px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-outline:hover{border-color:rgba(91,95,239,.5);color:var(--violet)}
+
+/* STATS BAR */
+.stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:36px}
+.stat-cell{background:var(--surface);padding:18px 20px;text-align:center}
+.stat-val{font-family:'Fraunces',serif;font-size:28px;font-weight:900;color:var(--white);line-height:1;margin-bottom:4px}
+.stat-lbl{font-size:12px;color:var(--muted)}
+
+/* SECTION HEADER */
+.sec-hdr{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+
+/* SECTORS */
+.sectors-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px}
+.sector-card{flex:1;min-width:180px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px;display:flex;align-items:center;gap:12px}
+.sector-icon{font-size:22px;flex-shrink:0}
+.sector-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:2px}
+.sector-desc{font-size:12px;color:var(--muted)}
+
+/* PRODUCTS */
+.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:32px}
+.prod-row{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.prod-name{font-size:13px;font-weight:600;color:var(--white)}
+.prod-spec{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-top:2px}
+
+/* TRADING TERMS */
+.terms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:36px}
+.term-card{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:14px 16px}
+.term-label{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-bottom:6px}
+.term-value{font-size:14px;font-weight:600;color:var(--white)}
+
+/* CTA BLOCK */
+.cta-block{background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:10px;padding:40px;text-align:center}
+.cta-title{font-family:'Fraunces',serif;font-size:clamp(24px,4vw,36px);font-weight:900;color:var(--white);letter-spacing:-.02em;margin-bottom:8px}
+.cta-title em{font-style:italic;color:var(--indigo)}
+.cta-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.7}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+
+/* NOT FOUND */
+.not-found{text-align:center;padding:80px 32px}
+.not-found h2{font-family:'Fraunces',serif;font-size:32px;font-weight:900;color:var(--white);margin-bottom:10px}
+.not-found p{color:var(--muted);margin-bottom:24px}
+
+@media(max-width:768px){
+  nav{padding:0 16px}.nav-links{display:none}
+  .wrap{padding:32px 16px 64px}
+  .stats-bar{grid-template-columns:repeat(2,1fr)}
+  .products-grid{grid-template-columns:1fr}
+  .terms-grid{grid-template-columns:1fr 1fr}
+  .cta-block{padding:28px 20px}
+}
+@media(max-width:480px){.terms-grid{grid-template-columns:1fr}.profile-flag{font-size:48px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="sloiai-home.html" class="nav-logo">Sloi<em>AI</em></a>
+  <div class="nav-links">
+    <a href="sloiai-home.html">Home</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div style="display:flex;gap:10px">
+    <a href="login.html" class="btn-ghost">Sign in</a>
+    <a href="agent-mandate.html" class="btn-cta">Request LOI →</a>
+  </div>
+</nav>
+
+<div class="wrap" id="profile-wrap">
+  <!-- populated by JS -->
+</div>
+
+<script>
+var TRADERS = [
+  { id:'gulf-steel-trading', name:'Gulf Steel Trading LLC', flag:'🇦🇪', country:'UAE — Dubai', sectors:['construction','metals'], products:['Steel Rebar G60','HRC Steel','Structural Steel A992','Copper Cable IEC'], desc:'Dubai-based steel trading house with direct mill access across Turkey and Ukraine. Specialises in ASTM and EN-grade structural steel for GCC construction projects.', status:'verified', deals:48, since:2019, incoterms:['CIF','FOB','DAP'], minOrder:'$50K' },
+  { id:'mena-energy-partners', name:'MENA Energy Partners', flag:'🇸🇦', country:'Saudi Arabia — Riyadh', sectors:['energy'], products:['Diesel EN590 ULSD 10ppm','HSFO 380 CST','VLSFO 0.5% IMO 2020','Base Oil SN500 (Group I)'], desc:'Riyadh-headquartered energy trading firm with offtake agreements from ARAMCO and ADNOC refineries. Covers marine fuels, diesel, and lubricant base stocks.', status:'verified', deals:72, since:2017, incoterms:['FOB','CIF'], minOrder:'$200K' },
+  { id:'eastern-cement-group', name:'Eastern Cement Group', flag:'🇪🇬', country:'Egypt — Cairo', sectors:['construction'], products:['OPC Cement 42.5N','Grey Clinker','Gypsum Board','Float Glass'], desc:"One of Egypt's leading cement and building materials exporters. Direct relationships with Suez Cement and ASEC plants. Serving African and MENA import markets.", status:'verified', deals:61, since:2016, incoterms:['FOB','CIF','DAP'], minOrder:'$30K' },
+  { id:'anatolian-commodities', name:'Anatolian Commodities A.Ş.', flag:'🇹🇷', country:'Turkey — Istanbul', sectors:['construction','metals'], products:['Steel Rebar G60','Float Glass','HRC Steel','Aluminum 6061'], desc:'Istanbul-based multi-commodity trader with direct mill relationships across Turkish steel and glass producers. Key supplier to MENA and North African markets.', status:'verified', deals:55, since:2018, incoterms:['FOB','CIF','FCA'], minOrder:'$40K' },
+  { id:'petrolink-gulf', name:'Petrolink Gulf FZE', flag:'🇦🇪', country:'UAE — Fujairah', sectors:['energy'], products:['Base Oil Group II (VHVI)','Base Oil SN150 (Group I)','Bitumen 60/70','Light Naphtha'], desc:'Fujairah-based petroleum products trader specialising in lubricant base stocks and refinery products. ADNOC-registered partner with Fujairah bunkering access.', status:'verified', deals:39, since:2020, incoterms:['FOB','CIF'], minOrder:'$100K' },
+  { id:'arabian-polymer-supply', name:'Arabian Polymer Supply Co.', flag:'🇸🇦', country:'Saudi Arabia — Jubail', sectors:['metals'], products:['Polypropylene (PP)','HDPE','Methanol','Urea Fertiliser 46%'], desc:'Jubail-based petrochemical trading firm with direct supply from SABIC and SIPCHEM. Specialises in polymers, methanol, and nitrogen fertilisers for global distribution.', status:'verified', deals:84, since:2015, incoterms:['FOB','DAP','DDP'], minOrder:'$80K' },
+  { id:'nile-trade-house', name:'Nile Trade House', flag:'🇪🇬', country:'Egypt — Alexandria', sectors:['construction','metals'], products:['OPC Cement 42.5N','Aluminum 6061','Aluminum 6063','Urea Fertiliser 46%'], desc:'Alexandria-based trading house covering construction materials and metals. Serves West African importers with Egyptian and Gulf-origin product lines.', status:'verified', deals:33, since:2020, incoterms:['FOB','CIF'], minOrder:'$25K' },
+  { id:'black-sea-commodities', name:'Black Sea Commodities Ltd', flag:'🇺🇦', country:'Ukraine — Odesa', sectors:['construction','metals'], products:['Steel Rebar G60','HRC Steel','Structural Steel A992'], desc:'Odesa-headquartered steel trader with mill-direct access to Metinvest and ArcelorMittal Ukraine. Competitive pricing on structural and long steel for export markets.', status:'verified', deals:27, since:2021, incoterms:['FOB','CFR'], minOrder:'$60K' },
+  { id:'qatar-energy-commodities', name:'Qatar Energy Commodities', flag:'🇶🇦', country:'Qatar — Doha', sectors:['energy'], products:['VLSFO 0.5% IMO 2020','Methanol','Heavy Naphtha','Light Naphtha'], desc:'Doha-based energy commodities firm with QatarEnergy affiliations. Covers marine fuels, naphtha, and methanol export across Asia and MENA trading routes.', status:'verified', deals:44, since:2019, incoterms:['FOB','DES'], minOrder:'$150K' },
+  { id:'levant-procurement', name:'Levant Procurement Partners', flag:'🇯🇴', country:'Jordan — Amman', sectors:['construction'], products:['OPC Cement 42.5N','Gypsum Board','Float Glass','Prefab Concrete Panels'], desc:'Amman-based procurement specialist serving infrastructure developers across Jordan, Iraq, and the Levant. Aggregates building materials from Egyptian and Gulf sources.', status:'active', deals:19, since:2022, incoterms:['DAP','DDP','CIF'], minOrder:'$20K' },
+  { id:'atlas-critical-minerals', name:'Atlas Critical Minerals', flag:'🇲🇦', country:'Morocco — Casablanca', sectors:['metals'], products:['Cobalt','Lithium Carbonate','Graphite','Copper Cable IEC'], desc:'Casablanca-based critical minerals trader with African sourcing networks in the DRC, Zambia, and Morocco. Supplying battery-grade minerals to European and Asian manufacturers.', status:'active', deals:22, since:2021, incoterms:['FOB','CIF','DAP'], minOrder:'$50K' },
+  { id:'gulf-bitumen-refinery', name:'Gulf Bitumen & Refinery Co.', flag:'🇰🇼', country:'Kuwait — Kuwait City', sectors:['energy','construction'], products:['Bitumen 60/70','Bitumen 80/100','PMB — Polymer Modified Bitumen','Green Petroleum Coke'], desc:'Kuwait-based refinery product trader with KNPC relationships. Covers all bitumen grades including PMB for road and airport projects across MENA and Africa.', status:'verified', deals:36, since:2018, incoterms:['FOB','CIF','DAP'], minOrder:'$70K' }
+];
+
+var SECTOR_META = {
+  construction: { icon:'🏗️', color:'var(--teal)',   border:'rgba(45,212,191,.3)',  label:'Construction', desc:'Cement · Steel · Glass · Prefab' },
+  metals:       { icon:'⚡',  color:'var(--violet)', border:'rgba(139,143,248,.3)', label:'Metals & Minerals', desc:'Aluminum · Copper · Polymers · Critical Minerals' },
+  energy:       { icon:'🛢️', color:'var(--gold)',   border:'rgba(232,169,74,.3)',  label:'Energy & Refinery', desc:'Fuels · Base Oils · Bitumen · Naphtha' }
+};
+
+function getParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+function init() {
+  var id = getParam('id');
+  var t = TRADERS.find(function(x){ return x.id === id; });
+  var wrap = document.getElementById('profile-wrap');
+
+  if (!t) {
+    wrap.innerHTML = '<div class="not-found"><h2>Trader not found</h2><p>This profile doesn\'t exist or the link may be outdated.</p><a href="marketplace.html" class="btn-primary">← Back to Marketplace</a></div>';
+    return;
+  }
+
+  document.title = t.name + ' — SLOI AI Trader Profile';
+
+  var primaryColor = SECTOR_META[t.sectors[0]] ? SECTOR_META[t.sectors[0]].color : 'var(--indigo)';
+  var badge = t.status === 'verified'
+    ? '<span style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:3px 10px;border-radius:10px;font-size:12px;font-weight:700">✓ Verified Trader</span>'
+    : '<span style="background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:var(--violet);padding:3px 10px;border-radius:10px;font-size:12px;font-weight:700">● Active Trader</span>';
+
+  var sectorCards = t.sectors.map(function(s) {
+    var sm = SECTOR_META[s];
+    return '<div class="sector-card" style="border-color:' + sm.border + ';border-left:3px solid ' + sm.color + '">'
+      + '<div class="sector-icon">' + sm.icon + '</div>'
+      + '<div><div class="sector-name" style="color:' + sm.color + '">' + sm.label + '</div><div class="sector-desc">' + sm.desc + '</div></div>'
+      + '</div>';
+  }).join('');
+
+  var productRows = t.products.map(function(name) {
+    return '<div class="prod-row">'
+      + '<div><div class="prod-name">' + name + '</div></div>'
+      + '<a href="agent-mandate.html?product=' + encodeURIComponent(name) + '&trader=' + encodeURIComponent(t.id) + '" style="font-size:11px;font-weight:700;color:var(--indigo);text-decoration:none;font-family:\'IBM Plex Mono\',monospace;white-space:nowrap;flex-shrink:0">Request LOI →</a>'
+      + '</div>';
+  }).join('');
+
+  var loiUrl = 'agent-mandate.html?trader=' + encodeURIComponent(t.id) + '&traderName=' + encodeURIComponent(t.name);
+
+  wrap.innerHTML = ''
+    + '<a href="marketplace.html?tab=traders" class="back-link">← Back to Marketplace</a>'
+
+    // HERO
+    + '<div class="profile-hero">'
+    + '<div class="profile-flag">' + t.flag + '</div>'
+    + '<div class="profile-meta">'
+    + '<div class="profile-eyebrow">' + badge + '</div>'
+    + '<h1 class="profile-name">' + t.name + '</h1>'
+    + '<div class="profile-country">' + t.country + '</div>'
+    + '<p class="profile-desc">' + t.desc + '</p>'
+    + '<div class="profile-ctas">'
+    + '<a href="' + loiUrl + '" class="btn-primary">Start Negotiation →</a>'
+    + '<a href="contact.html" class="btn-outline">Contact trader</a>'
+    + '</div>'
+    + '</div></div>'
+
+    // STATS BAR
+    + '<div class="stats-bar">'
+    + '<div class="stat-cell"><div class="stat-val" style="color:' + primaryColor + '">' + t.deals + '</div><div class="stat-lbl">Deals on SLOI AI</div></div>'
+    + '<div class="stat-cell"><div class="stat-val">' + t.since + '</div><div class="stat-lbl">Active since</div></div>'
+    + '<div class="stat-cell"><div class="stat-val">' + t.products.length + '</div><div class="stat-lbl">Products traded</div></div>'
+    + '<div class="stat-cell"><div class="stat-val">' + t.incoterms.join(' · ') + '</div><div class="stat-lbl">Incoterms</div></div>'
+    + '</div>'
+
+    // SECTORS
+    + '<div class="sec-hdr">// Sectors</div>'
+    + '<div class="sectors-row">' + sectorCards + '</div>'
+
+    // PRODUCTS
+    + '<div class="sec-hdr">// Products — click any to request LOI</div>'
+    + '<div class="products-grid">' + productRows + '</div>'
+
+    // TERMS
+    + '<div class="sec-hdr">// Trading Terms</div>'
+    + '<div class="terms-grid">'
+    + '<div class="term-card"><div class="term-label">Min. Order Value</div><div class="term-value">' + t.minOrder + '</div></div>'
+    + '<div class="term-card"><div class="term-label">Preferred Incoterms</div><div class="term-value">' + t.incoterms.join(' · ') + '</div></div>'
+    + '<div class="term-card"><div class="term-label">LOI turnaround</div><div class="term-value">72 hours</div></div>'
+    + '<div class="term-card"><div class="term-label">OFAC Screening</div><div class="term-value" style="color:var(--green)">✓ Pre-cleared</div></div>'
+    + '<div class="term-card"><div class="term-label">Document Standard</div><div class="term-value">ICC / UCP 600</div></div>'
+    + '<div class="term-card"><div class="term-label">Payment methods</div><div class="term-value">LC · CAD · TT</div></div>'
+    + '</div>'
+
+    // CTA
+    + '<div class="cta-block">'
+    + '<div class="cta-title">Ready to negotiate with<br/><em>' + t.name + '?</em></div>'
+    + '<p class="cta-sub">Submit your mandate and our AI negotiates price on your behalf.<br/>Boss approval required before any LOI is signed.</p>'
+    + '<div class="cta-btns">'
+    + '<a href="' + loiUrl + '" class="btn-primary">Start Negotiation →</a>'
+    + '<a href="marketplace.html" class="btn-outline">Browse all traders</a>'
+    + '</div></div>';
+}
+
+init();
+</script>
+</body>
+</html>
