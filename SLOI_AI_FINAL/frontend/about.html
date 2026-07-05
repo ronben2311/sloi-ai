@@ -81,17 +81,53 @@ h1 em{font-style:italic;background:linear-gradient(135deg,var(--indigo),var(--vi
 .tc-name{font-size:14px;font-weight:600;color:var(--white)}
 .tc-meta{font-size:12px;color:var(--muted);margin-top:2px}
 
-/* CONNECT CARDS */
-.connect-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:780px;margin:0 auto}
-.connect-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px;text-align:center;text-decoration:none;transition:border-color .2s,transform .2s;display:flex;flex-direction:column;align-items:center;gap:10px}
+/* PILLARS */
+.ab-pillars{display:flex;flex-direction:column;gap:10px;margin-top:36px}
+.ab-pillar{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
+.ab-pillar:hover{border-color:rgba(255,255,255,.1)}
+.ab-pillar-accent{width:4px;flex-shrink:0}
+.ab-pillar-body{padding:22px 26px;flex:1}
+.ab-pillar-hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.ab-pillar-icon{font-size:22px;line-height:1}
+.ab-pillar-name{font-size:16px;font-weight:700;color:var(--white)}
+.ab-pillar-desc{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:12px;max-width:640px}
+.ab-pillar-tags{display:flex;flex-wrap:wrap;gap:5px}
+.ab-pillar-tag{font-size:11px;font-weight:600;padding:2px 9px;border-radius:3px;letter-spacing:.04em}
+
+/* DOC STRIP */
+.doc-strip{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 20px;margin-top:10px}
+.doc-strip-label{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;font-family:'IBM Plex Mono',monospace}
+.doc-tags{display:flex;flex-wrap:wrap;gap:6px}
+.doc-tag{display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:5px 10px;font-size:11px;font-family:'IBM Plex Mono',monospace}
+
+/* PLAN CARDS */
+.plan-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.plan-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 18px;display:flex;flex-direction:column;gap:8px;text-decoration:none;transition:all .2s;position:relative;overflow:hidden}
+.plan-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .2s}
+.plan-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(0,0,0,.4)}
+.plan-card:hover::before{opacity:1}
+.plan-card.saas::before{background:var(--violet)}.plan-card.saas:hover{border-color:rgba(139,143,248,.3)}
+.plan-card.team::before{background:var(--teal)}.plan-card.team:hover{border-color:rgba(45,212,191,.3)}
+.plan-card.ent::before{background:var(--gold)}.plan-card.ent:hover{border-color:rgba(232,169,74,.3)}
+.plan-card.api::before{background:#4f6ef7}.plan-card.api:hover{border-color:rgba(79,110,247,.3)}
+.plan-icon{font-size:26px;line-height:1}
+.plan-who{font-size:11px;color:var(--muted);letter-spacing:.04em;font-family:'IBM Plex Mono',monospace}
+.plan-name{font-size:15px;font-weight:700;color:var(--white);letter-spacing:-.01em}
+.plan-desc{font-size:12px;color:var(--muted);line-height:1.6;flex:1}
+.plan-price{font-family:'Fraunces',serif;font-size:18px;font-weight:900;line-height:1;margin-top:4px}
+.plan-cta{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace;margin-top:2px}
+
+/* CONNECT CARDS (contact channels) */
+.connect-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:780px;margin:0 auto}
+.connect-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 18px;text-align:center;text-decoration:none;transition:border-color .2s,transform .2s;display:flex;flex-direction:column;align-items:center;gap:7px}
 .connect-card:hover{transform:translateY(-2px)}
 .connect-card.li:hover{border-color:rgba(10,102,194,.5)}
 .connect-card.wa:hover{border-color:rgba(37,211,102,.5)}
 .connect-card.em:hover{border-color:rgba(91,95,239,.5)}
-.cc-icon{font-size:30px}
-.cc-name{font-size:14px;font-weight:600;color:var(--white)}
-.cc-desc{font-size:13px;color:var(--muted);line-height:1.6}
-.cc-handle{font-size:12px;font-family:'IBM Plex Mono',monospace;margin-top:2px}
+.cc-icon{font-size:26px}
+.cc-name{font-size:13px;font-weight:600;color:var(--white)}
+.cc-desc{font-size:12px;color:var(--muted);line-height:1.5}
+.cc-handle{font-size:11px;font-family:'IBM Plex Mono',monospace;margin-top:1px}
 .cc-handle.li-c{color:#0a66c2}
 .cc-handle.wa-c{color:#25d366}
 .cc-handle.em-c{color:var(--violet)}
@@ -132,6 +168,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   .cta-inner{padding:32px 20px}
   .stats-bar{grid-template-columns:1fr 1fr;margin:0 16px 48px}
   .tech-grid,.traders-grid{grid-template-columns:1fr}
+  .plan-grid{grid-template-columns:1fr 1fr}
   .connect-grid{grid-template-columns:1fr}
   .sec-divider{margin:0 16px}
   footer{padding:20px 16px}
@@ -186,8 +223,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <div class="sb-label">Verified suppliers</div>
   </div>
   <div class="sb-item">
-    <div class="sb-val" style="color:var(--green)">&lt;10m</div>
-    <div class="sb-label">Mandate to signed LOI</div>
+    <div class="sb-val" style="color:var(--green)">7</div>
+    <div class="sb-label">Auto-generated docs</div>
   </div>
 </div>
 
@@ -202,6 +239,66 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <p>Commodity procurement is a chain of manual steps: call a broker, wait for the trader to call a supplier, negotiate by WhatsApp, draft an LOI in Word, argue over terms for two days. By the time it's done, the price has moved.</p>
     <p>We replaced that entire chain with an AI agent that negotiates in real time — up to 7 rounds — using the buyer's mandate and the supplier's floor price. The Boss approves the final deal. A legally structured LOI is generated in seconds.</p>
     <p>Suppliers stay anonymous. Buyers get the best price. Traders get paid per deal. No escrow, no payment processing, no shipping — just negotiation and a signed document.</p>
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<!-- THE ENGINE -->
+<div class="section">
+  <div class="section-eyebrow">How it works</div>
+  <div class="section-title">Three pillars.<br/><em>One platform.</em></div>
+  <div class="section-sub" style="margin-bottom:0">A negotiation engine, a verified supplier network, and a full document suite — all connected in one flow.</div>
+  <div class="ab-pillars">
+
+    <div class="ab-pillar">
+      <div class="ab-pillar-accent" style="background:var(--violet)"></div>
+      <div class="ab-pillar-body">
+        <div class="ab-pillar-hd"><span class="ab-pillar-icon">⚡</span><span class="ab-pillar-name">Negotiation Engine</span></div>
+        <div class="ab-pillar-desc">The engine bids, counters, and closes against pre-qualified suppliers — up to 7 rounds, strictly within the buyer's mandate. Pricing pegged to Platts, Argus, or LME. When the mandate floor is hit, the engine stops and waits for Boss approval. No broker. No markup.</div>
+        <div class="ab-pillar-tags">
+          <span class="ab-pillar-tag" style="background:rgba(139,143,248,.1);border:1px solid rgba(139,143,248,.25);color:var(--violet)">Up to 7 rounds</span>
+          <span class="ab-pillar-tag" style="background:rgba(139,143,248,.1);border:1px solid rgba(139,143,248,.25);color:var(--violet)">Platts / Argus / LME-linked</span>
+          <span class="ab-pillar-tag" style="background:rgba(139,143,248,.1);border:1px solid rgba(139,143,248,.25);color:var(--violet)">Auto-approve in mandate</span>
+          <span class="ab-pillar-tag" style="background:rgba(139,143,248,.1);border:1px solid rgba(139,143,248,.25);color:var(--violet)">Refinery &amp; mill-direct</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ab-pillar">
+      <div class="ab-pillar-accent" style="background:var(--teal)"></div>
+      <div class="ab-pillar-body">
+        <div class="ab-pillar-hd"><span class="ab-pillar-icon">🛡️</span><span class="ab-pillar-name">Verified Suppliers</span></div>
+        <div class="ab-pillar-desc">Every counterparty is KYC-cleared and OFAC-screened before a single negotiation round begins. Automated SDN, UN, and EU sanctions checks run before any contact. Every LOI carries a full audit trail — ready for US bank LC desks and international project financiers.</div>
+        <div class="ab-pillar-tags">
+          <span class="ab-pillar-tag" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)">KYC on file</span>
+          <span class="ab-pillar-tag" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)">OFAC / SDN screened</span>
+          <span class="ab-pillar-tag" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)">UN + EU sanctions</span>
+          <span class="ab-pillar-tag" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)">Full audit trail</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ab-pillar">
+      <div class="ab-pillar-accent" style="background:var(--gold)"></div>
+      <div class="ab-pillar-body">
+        <div class="ab-pillar-hd"><span class="ab-pillar-icon">📄</span><span class="ab-pillar-name">Automated Paperwork</span></div>
+        <div class="ab-pillar-desc">On Boss approval, the full document suite generates instantly and dispatches to all parties. No templates to fill in, no legal team required. Every document is spec-referenced and standard-compliant.</div>
+        <div class="doc-strip">
+          <div class="doc-strip-label">Documents auto-generated on approval</div>
+          <div class="doc-tags">
+            <div class="doc-tag"><span>📄</span><span style="color:var(--text)">Letter of Intent</span><span style="color:var(--muted);font-size:10px">ICC</span></div>
+            <div class="doc-tag"><span>🔏</span><span style="color:var(--text)">NDA</span><span style="color:var(--muted);font-size:10px">Bilateral / Unilateral</span></div>
+            <div class="doc-tag"><span>📋</span><span style="color:var(--text)">Sales &amp; Purchase Agreement</span><span style="color:var(--muted);font-size:10px">GAFTA / ICC</span></div>
+            <div class="doc-tag"><span>💳</span><span style="color:var(--text)">LC Application</span><span style="color:var(--muted);font-size:10px">UCP 600</span></div>
+            <div class="doc-tag"><span>⚖️</span><span style="color:var(--text)">Trade Contract</span><span style="color:var(--muted);font-size:10px">Incoterms 2020</span></div>
+            <div class="doc-tag"><span>🚢</span><span style="color:var(--text)">Freight Advisory</span><span style="color:var(--muted);font-size:10px">Route · Rate · ETA</span></div>
+            <div class="doc-tag"><span>🛃</span><span style="color:var(--text)">HS Code &amp; Duty Report</span><span style="color:var(--muted);font-size:10px">Per destination</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -244,8 +341,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <div class="principle">
       <div class="pr-n">5</div>
       <div>
-        <div class="pr-title">Flexible pricing — pay the way you work</div>
-        <div class="pr-desc">SaaS credits for occasional use (never expire, refundable). Local Agentic Team for unlimited sessions on your infrastructure ($599/mo). Enterprise on-premise for full deployment with no recurring fees ($999 one-time). No forced model, no vendor lock-in.</div>
+        <div class="pr-title">Four ways to connect — no vendor lock-in</div>
+        <div class="pr-desc">SaaS credits (no setup), Agentic Team MCP on your own servers ($599/mo), Enterprise on-premise with white-label docs ($999 one-time setup), or Open Network API for your own AI agent (free Read tier + 1% per signed LOI). See full details below.</div>
       </div>
     </div>
   </div>
@@ -324,50 +421,80 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 
 <div class="sec-divider"></div>
 
-<!-- CONNECT WITH US -->
+<!-- HOW TO CONNECT -->
 <div class="section">
-  <div class="section-eyebrow">Get in touch</div>
-  <div class="section-title">Connect<br/><em>with us.</em></div>
-  <div class="section-sub" style="margin-bottom:40px">Whether you're a buyer, a trader, a developer, or just curious — reach out on any channel.</div>
+  <div class="section-eyebrow">How to connect</div>
+  <div class="section-title">Four ways<br/><em>to get started.</em></div>
+  <div class="section-sub" style="margin-bottom:32px">Pick the model that fits how you work. All plans include OFAC screening, Boss approval gate, and the full document suite.</div>
 
+  <div class="plan-grid">
+    <a href="pricing.html#saas" class="plan-card saas">
+      <div class="plan-icon">☁</div>
+      <div class="plan-who">Occasional use · Solo buyer</div>
+      <div class="plan-name">SaaS Credits</div>
+      <div class="plan-desc">Buy a credit pack, run negotiation sessions, generate LOIs and the full doc suite. No setup. Start in 60 seconds. Credits never expire.</div>
+      <div class="plan-price" style="color:var(--violet)">$99 / $299</div>
+      <div class="plan-cta" style="color:var(--violet)">Buy credits →</div>
+    </a>
+    <a href="pricing.html#agentic-team" class="plan-card team">
+      <div class="plan-icon">🖥</div>
+      <div class="plan-who">Regular volume · Team use</div>
+      <div class="plan-name">Agentic Team</div>
+      <div class="plan-desc">MCP install in 2 minutes on your own machines — Claude Desktop, Cursor, or Windsurf. Unlimited sessions. Construction or Factory profile. Data stays on your servers.</div>
+      <div class="plan-price" style="color:var(--teal)">$599 / month</div>
+      <div class="plan-cta" style="color:var(--teal)">Install MCP →</div>
+    </a>
+    <a href="pricing.html#enterprise" class="plan-card ent">
+      <div class="plan-icon">🏢</div>
+      <div class="plan-who">One-time setup · Then $599/mo</div>
+      <div class="plan-name">Enterprise Setup</div>
+      <div class="plan-desc">We deploy and configure the full Agentic Team plan on your own servers — white-label LOI &amp; NDA, unlimited users, custom mandate rules, 48h onboarding included.</div>
+      <div class="plan-price" style="color:var(--gold)">$999 one-time</div>
+      <div class="plan-cta" style="color:var(--gold)">Contact us →</div>
+    </a>
+    <a href="pricing.html#open-network" class="plan-card api">
+      <div class="plan-icon">⬡</div>
+      <div class="plan-who">AI developers · Builders</div>
+      <div class="plan-name">Open Network API</div>
+      <div class="plan-desc">Register your AI agent via API. Read tier is free and instant. Transact tier earns 1% commission on every signed LOI — paid in USDC on Base.</div>
+      <div class="plan-price" style="color:#8aaeff">Free + 1%</div>
+      <div class="plan-cta" style="color:#8aaeff">Register agent →</div>
+    </a>
+  </div>
+
+  <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;text-align:center;margin-bottom:16px;font-family:'IBM Plex Mono',monospace">Or reach us directly</div>
   <div class="connect-grid">
     <a href="https://www.linkedin.com/company/sloiai/" target="_blank" rel="noopener" class="connect-card li">
-      <div class="cc-icon">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="#0a66c2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-      </div>
+      <div class="cc-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="#0a66c2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
       <div class="cc-name">LinkedIn</div>
-      <div class="cc-desc">Follow for product updates, market insights, and company news.</div>
+      <div class="cc-desc">Updates, market insights, company news</div>
       <div class="cc-handle li-c">SLOI AI on LinkedIn →</div>
     </a>
-
-    <a href="https://wa.me/97250XXXXXX" target="_blank" rel="noopener" class="connect-card wa">
-      <div class="cc-icon">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="#25d366"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-      </div>
+    <a href="https://wa.me/972544664428" target="_blank" rel="noopener" class="connect-card wa">
+      <div class="cc-icon"><svg viewBox="0 0 24 24" width="26" height="26" fill="#25d366"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
       <div class="cc-name">WhatsApp</div>
-      <div class="cc-desc">Quick questions, sourcing enquiries, or trader onboarding — message us directly.</div>
-      <div class="cc-handle wa-c">Message on WhatsApp →</div>
+      <div class="cc-desc">Sourcing enquiries, trader onboarding</div>
+      <div class="cc-handle wa-c">Message directly →</div>
     </a>
-
     <a href="mailto:hello@sloiai.com" class="connect-card em">
-      <div class="cc-icon" style="font-size:30px">✉️</div>
+      <div class="cc-icon">✉️</div>
       <div class="cc-name">Email</div>
-      <div class="cc-desc">General enquiries, partnerships, enterprise deals, and press.</div>
+      <div class="cc-desc">Partnerships, enterprise deals, press</div>
       <div class="cc-handle em-c">hello@sloiai.com</div>
     </a>
   </div>
 
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:780px;margin:18px auto 0;text-align:center">
-    <div style="font-size:13px;color:var(--muted)">
-      <div style="font-size:11px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Data &amp; Privacy</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:780px;margin:16px auto 0;text-align:center">
+    <div style="font-size:12px;color:var(--muted)">
+      <div style="font-size:10px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Data &amp; Privacy</div>
       <a href="mailto:privacy@sloiai.com" style="color:var(--muted);text-decoration:none">privacy@sloiai.com</a>
     </div>
-    <div style="font-size:13px;color:var(--muted)">
-      <div style="font-size:11px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Registered</div>
+    <div style="font-size:12px;color:var(--muted)">
+      <div style="font-size:10px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Registered</div>
       SLOI AI Ltd. · Dubai, UAE
     </div>
-    <div style="font-size:13px;color:var(--muted)">
-      <div style="font-size:11px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Response time</div>
+    <div style="font-size:12px;color:var(--muted)">
+      <div style="font-size:10px;color:var(--indigo);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Response time</div>
       Usually within 24 hours
     </div>
   </div>

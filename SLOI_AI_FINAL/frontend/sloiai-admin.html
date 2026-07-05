@@ -250,7 +250,6 @@ select.inp option{background:var(--surface)}
     <span class="sb-badge">BOSS</span>
     <div class="sb-logo-text">SLOI <em>AI</em><span style="font-size:13px;color:var(--muted);display:block;margin-top:2px;font-weight:400;letter-spacing:.04em">Smart negotiation · LOI generation</span></div>
   </div>
-  <button class="nav" onclick="show('briefing',this)" style="margin:8px 10px 4px;border-radius:5px;border:1px solid rgba(232,169,74,.3);background:rgba(232,169,74,.06);color:var(--gold);width:calc(100% - 20px);padding:9px 12px"><span class="nav-icon">☀️</span><span class="nav-label" style="font-weight:600">Daily Briefing</span></button>
   <div class="sb-section">Command</div>
   <button class="nav active" onclick="show('warroom',this)"><span class="nav-icon">🔴</span><span class="nav-label">War Room</span><span class="nav-badge nb-red" id="alert-count">3</span></button>
   <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold" id="neg-count">2</span></button>
@@ -287,8 +286,6 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
     <div class="tb-row2">
-      <button class="nav" id="tb-briefing" onclick="show('briefing',this)" style="color:var(--gold)">☀️ Daily Briefing</button>
-      <div class="tb-nav-sep"></div>
       <button class="nav active" id="tb-warroom" onclick="show('warroom',this)">🔴 War Room <span class="nav-badge nb-red" id="alert-count">3</span></button>
       <button class="nav" id="tb-negotiations" onclick="show('negotiations',this)">🤖 Negotiations <span class="nav-badge nb-gold" id="neg-count">2</span></button>
       <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg)">11</span></button>
@@ -311,20 +308,94 @@ select.inp option{background:var(--surface)}
 
   <!-- WAR ROOM -->
   <div id="view-warroom" class="view active">
-    <div class="g5" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">LOI Volume MTD</div><div class="stat-val" style="color:var(--indigo)">$1.84M</div><div class="stat-sub up">↑ 23%</div></div>
-      <div class="stat"><div class="stat-top">Revenue MTD</div><div class="stat-val" style="color:var(--green)">$18,420</div><div class="stat-sub up">Credits + LOI fees</div></div>
-      <div class="stat"><div class="stat-top">LOIs Signed</div><div class="stat-val">24</div><div class="stat-sub">avg $76.6K/deal</div></div>
-      <div class="stat"><div class="stat-top">Active Agents</div><div class="stat-val" style="color:var(--teal)">8</div><div class="stat-sub up">all running</div></div>
-      <div class="stat"><div class="stat-top">Open Pipeline</div><div class="stat-val" style="color:var(--gold)">$2.4M</div><div class="stat-sub warn">14 leads</div></div>
-    </div>
+
+    <!-- ALERTS -->
     <div class="card" style="margin-bottom:14px">
       <div class="card-title">// ALERTS <span class="badge br" id="alerts-header-badge">—</span></div>
       <div id="alerts-list"><div style="padding:12px;text-align:center;color:var(--muted);font-size:14px">Loading…</div></div>
     </div>
 
-    <!-- AI AGENTS QUICK LAUNCH -->
-    <div class="card" style="margin-top:12px;margin-bottom:0">
+    <!-- PIPELINE → DAILY BRIEFING REDIRECT -->
+    <div onclick="show('briefing',document.getElementById('tb-briefing'))" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:rgba(232,169,74,.05);border:1px solid rgba(232,169,74,.18);border-radius:7px;cursor:pointer;margin-bottom:14px;transition:border-color .15s" onmouseover="this.style.borderColor='rgba(232,169,74,.4)'" onmouseout="this.style.borderColor='rgba(232,169,74,.18)'">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:18px">☀️</span>
+        <div>
+          <div style="font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.04em">DAILY BRIEFING</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:1px">Pipeline · deal flow · market signals · open negotiations</div>
+        </div>
+      </div>
+      <span style="font-size:13px;color:var(--gold);font-family:'IBM Plex Mono',monospace">→ Open</span>
+    </div>
+
+    <!-- AUTO DOCS — DOCUMENT GENERATORS -->
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">
+        // AUTO DOCS
+        <span style="font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.02em">All document generators</span>
+      </div>
+      <div class="g4">
+
+        <div class="ai-agent-card" onclick="window.open('loi-generator.html','_blank')">
+          <div class="aac-icon" style="background:rgba(45,212,191,.1)">📄</div>
+          <div class="aac-name">LOI Generator</div>
+          <div class="aac-desc">Letter of Intent · auto-fills from negotiated deal · PDF &amp; digital signature</div>
+          <div class="aac-foot"><span class="badge bt" style="font-size:11px">Ready</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('po-generator.html','_blank')">
+          <div class="aac-icon" style="background:rgba(34,197,94,.1)">🧾</div>
+          <div class="aac-name">PO Generator</div>
+          <div class="aac-desc">Purchase Order from signed LOI · auto-fills supplier, qty, price &amp; trade terms</div>
+          <div class="aac-foot"><span class="badge bg" style="font-size:11px">Ready</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
+          <div class="aac-icon" style="background:rgba(91,95,239,.12)">📋</div>
+          <div class="aac-name">SPA Generator</div>
+          <div class="aac-desc">Sales &amp; Purchase Agreement · GAFTA 49/78/100 or ICC framework · arbitration clause</div>
+          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Auto</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
+          <div class="aac-icon" style="background:rgba(91,95,239,.1)">📑</div>
+          <div class="aac-name">Trade Contract</div>
+          <div class="aac-desc">Incoterms 2020 trade contract · payment terms · force majeure · governing law</div>
+          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Auto</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
+          <div class="aac-icon" style="background:rgba(59,130,246,.1)">🏦</div>
+          <div class="aac-name">LC Application</div>
+          <div class="aac-desc">Letter of Credit application · UCP 600 compliant · bank-ready export</div>
+          <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#3b82f6">Auto</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
+          <div class="aac-icon" style="background:rgba(232,169,74,.1)">🔢</div>
+          <div class="aac-name">HS Code &amp; Duty</div>
+          <div class="aac-desc">6-digit HS code per shipment · import duty rates · port of loading recommendation</div>
+          <div class="aac-foot"><span class="badge ba" style="font-size:11px">Auto</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
+          <div class="aac-icon" style="background:rgba(232,169,74,.08)">🤝</div>
+          <div class="aac-name">NDA Generator</div>
+          <div class="aac-desc">Mutual Non-Disclosure Agreement · bilateral or unilateral · jurisdiction-aware</div>
+          <div class="aac-foot"><span class="badge ba" style="font-size:11px">Auto</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="window.open('compliance.html','_blank')">
+          <div class="aac-icon" style="background:rgba(239,68,68,.1)">🛡️</div>
+          <div class="aac-name">ComplianceBot</div>
+          <div class="aac-desc">OFAC · EU · UN sanctions screening · KYC · country risk · runs before every LOI</div>
+          <div class="aac-foot"><span class="badge br" style="font-size:11px">Always on</span></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- AI AGENTS -->
+    <div class="card" style="margin-bottom:0">
       <div class="card-title">
         // AI AGENTS
         <span style="font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.02em">Quick launch</span>
@@ -338,34 +409,6 @@ select.inp option{background:var(--surface)}
           <div class="aac-foot"><span class="badge bv" style="font-size:11px">● Live</span></div>
         </div>
 
-        <div class="ai-agent-card" onclick="window.open('loi-generator.html','_blank')">
-          <div class="aac-icon" style="background:rgba(45,212,191,.1)">📄</div>
-          <div class="aac-name">LOI Generator</div>
-          <div class="aac-desc">Generate signed Letters of Intent from negotiated deals · PDF export &amp; digital signatures</div>
-          <div class="aac-foot"><span class="badge bt" style="font-size:11px">Ready</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('po-generator.html','_blank')">
-          <div class="aac-icon" style="background:rgba(34,197,94,.1)">📋</div>
-          <div class="aac-name">PO Generator</div>
-          <div class="aac-desc">Create Purchase Orders from signed LOIs · multi-line items · supplier bank routing</div>
-          <div class="aac-foot"><span class="badge bg" style="font-size:11px">Ready</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
-          <div class="aac-icon" style="background:rgba(91,95,239,.12)">📝</div>
-          <div class="aac-name">Contract Advisor</div>
-          <div class="aac-desc">AI contract analysis · risk checks · clause drafting · LOI vs PO comparison &amp; completeness</div>
-          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Always on</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
-          <div class="aac-icon" style="background:rgba(239,68,68,.1)">🛡️</div>
-          <div class="aac-name">Compliance Bot</div>
-          <div class="aac-desc">Entity screening · sanctions &amp; country risk · KYC checks · regulatory flags for MENA trade</div>
-          <div class="aac-foot"><span class="badge br" style="font-size:11px">Active</span></div>
-        </div>
-
         <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
           <div class="aac-icon" style="background:rgba(232,169,74,.1)">📡</div>
           <div class="aac-name">Market Intelligence</div>
@@ -373,28 +416,16 @@ select.inp option{background:var(--surface)}
           <div class="aac-foot"><span class="badge ba" style="font-size:11px">Live data</span></div>
         </div>
 
+        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
+          <div class="aac-icon" style="background:rgba(91,95,239,.12)">📝</div>
+          <div class="aac-name">Contract Advisor</div>
+          <div class="aac-desc">AI contract analysis · risk checks · clause drafting · LOI vs PO completeness</div>
+          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Always on</span></div>
+        </div>
+
       </div>
     </div>
 
-    <!-- PIPELINE (merged into War Room) -->
-    <div class="card-title" style="margin-top:18px">// PIPELINE</div>
-    <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Total Leads</div><div class="stat-val">14</div></div>
-      <div class="stat"><div class="stat-top">Pipeline Value</div><div class="stat-val" style="color:var(--gold)">$2.4M</div></div>
-      <div class="stat"><div class="stat-top">Conversion</div><div class="stat-val" style="color:var(--green)">32%</div></div>
-      <div class="stat"><div class="stat-top">Avg Deal Size</div><div class="stat-val">$171K</div></div>
-    </div>
-    <div class="card">
-      <div class="card-title">// ADD LEAD</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:8px;align-items:end">
-        <div><label class="flabel">Company</label><input class="inp" id="pl-co" placeholder="Gulf Cement LLC"/></div>
-        <div><label class="flabel">Product</label><input class="inp" id="pl-prod" placeholder="Cement OPC"/></div>
-        <div><label class="flabel">Value (USD)</label><input class="inp" id="pl-val" type="number" placeholder="250000"/></div>
-        <div><label class="flabel">Country</label><select class="inp" id="pl-cty"><option>UAE</option><option>KSA</option><option>Egypt</option><option>Jordan</option><option>Germany</option><option>Iraq</option><option>Other</option></select></div>
-        <button class="btn btn-p" onclick="addLead()">+ Add</button>
-      </div>
-    </div>
-    <div class="kanban" id="kanban"></div>
   </div>
 
   <!-- NEGOTIATIONS -->

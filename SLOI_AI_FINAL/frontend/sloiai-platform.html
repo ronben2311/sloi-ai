@@ -1256,7 +1256,7 @@
                   </button>
                   <button class="sn-dd-item" onclick="window.location.href='loi-generator.html'">
                     <span class="sn-dd-icon">📄</span>
-                    <span><span class="sn-dd-title">LOI / PO Generator</span><span class="sn-dd-sub">Draft a Letter of Intent or Purchase Order</span></span>
+                    <span><span class="sn-dd-title">Auto Docs</span><span class="sn-dd-sub">Generate all trade documents automatically</span></span>
                   </button>
                 </div>
               </div>
@@ -1276,7 +1276,7 @@
               </div>
               <div class="action-card" onclick="window.location.href='loi-generator.html'" style="border-color:rgba(34,197,94,.25)">
                 <div class="ac-icon">📄</div>
-                <div class="ac-title">LOI/PO Generator</div>
+                <div class="ac-title">Auto Docs</div>
                 <div class="ac-desc">Instant LOI draft from agreed terms, then issue the PO straight from the signed LOI.</div>
                 <div class="ac-cost bg" style="border:1px solid rgba(34,197,94,.25);margin-top:8px">● Always on · 3 LOIs · 2 POs this week</div>
               </div>
@@ -1937,7 +1937,7 @@
                 <input class="inp" id="prod-search" placeholder="Search name, origin, cert..." oninput="renderCatalog()" style="width:240px;font-size:13px;padding:6px 10px"/>
                 <div style="display:flex;flex-direction:column;gap:4px">
                   <button class="btn btn-sm btn-p" onclick="window.open('negotiation-agent.html','_blank')">🤖 Negotiate →</button>
-                  <button class="btn btn-sm btn-g" onclick="window.open('loi-generator.html','_blank')">📄 LOI/PO Generator</button>
+                  <button class="btn btn-sm btn-g" onclick="window.open('loi-generator.html','_blank')">📄 Auto Docs</button>
                 </div>
               </div>
             </div>
@@ -2085,32 +2085,6 @@
 
             <!-- AI TOOLS BODY — gated when no agent connected -->
             <div id="ai-tools-body">
-
-            <!-- ── COMMODITIES ENGINE — MAIN AI TOOL ── -->
-            <div class="hero-engine">
-              <div class="agent-row" id="row-neg" onclick="toggleAgent('neg')">
-                <div class="ar-icon" style="background:rgba(91,95,239,.15)">&#129302;</div>
-                <div class="ar-name">Commodities Engine</div>
-                <span class="hero-engine-tag">Main AI Tool</span>
-                <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>2 active rounds</span>
-                <div class="ar-metric">Steel R3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; Hard Wheat R1/5 &middot; opening offer sent</div>
-                <div class="ar-actions">
-                  <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('negotiation-agent.html','_blank')">&#9654; View live</button>
-                  <button class="btn btn-xs" onclick="event.stopPropagation();show('negotiate')">+ New</button>
-                </div>
-                <span class="ar-chev">&#9660;</span>
-              </div>
-              <div class="hero-engine-sub">Sources, negotiates &amp; closes commodity deals — within your Agent Mandate, fully documented, you approve before anything's committed.</div>
-              <div class="agent-detail" id="detail-neg">
-                <div class="ad-log">
-                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Steel Rebar</span><span>Round 3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; counter-offer pending</span></div>
-                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Hard Wheat</span><span>Round 1/5 &middot; opening offer sent &middot; awaiting reply</span></div>
-                </div>
-                <div class="ad-btns">
-                  <button class="btn btn-xs btn-p" onclick="window.open('negotiation-agent.html','_blank')">Open negotiation board &rarr;</button>
-                </div>
-              </div>
-            </div>
 
             <!-- ── PROCUREMENT MARKETPLACE ── -->
             <div style="margin-bottom:22px">
@@ -2847,6 +2821,32 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
               </div><!-- /arch-body-factory -->
             </div><!-- /arch-section factory -->
 
+            <!-- ── COMMODITIES ENGINE — MAIN AI TOOL ── -->
+            <div class="hero-engine">
+              <div class="agent-row" id="row-neg" onclick="toggleAgent('neg')">
+                <div class="ar-icon" style="background:rgba(91,95,239,.15)">&#129302;</div>
+                <div class="ar-name">Commodities Engine</div>
+                <span class="hero-engine-tag">Main AI Tool</span>
+                <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>2 active rounds</span>
+                <div class="ar-metric">Steel R3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; Hard Wheat R1/5 &middot; opening offer sent</div>
+                <div class="ar-actions">
+                  <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('negotiation-agent.html','_blank')">&#9654; View live</button>
+                  <button class="btn btn-xs" onclick="event.stopPropagation();show('negotiate')">+ New</button>
+                </div>
+                <span class="ar-chev">&#9660;</span>
+              </div>
+              <div class="hero-engine-sub">Sources, negotiates &amp; closes commodity deals — within your Agent Mandate, fully documented, you approve before anything's committed.</div>
+              <div class="agent-detail" id="detail-neg">
+                <div class="ad-log">
+                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Steel Rebar</span><span>Round 3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; counter-offer pending</span></div>
+                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Hard Wheat</span><span>Round 1/5 &middot; opening offer sent &middot; awaiting reply</span></div>
+                </div>
+                <div class="ad-btns">
+                  <button class="btn btn-xs btn-p" onclick="window.open('negotiation-agent.html','_blank')">Open negotiation board &rarr;</button>
+                </div>
+              </div>
+            </div>
+
             <!-- HEADER -->
             <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">// Powered by Commodities Engine</div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
@@ -2886,7 +2886,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                   </div>
                   <div class="ad-btns" style="margin-bottom:10px">
                     <button class="btn btn-xs" onclick="window.open('compliance.html','_blank')">🛡️ Full compliance check</button>
-                    <button class="btn btn-xs" style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:var(--green)" onclick="toggleAgent('loi')">📄 Go to LOI Generator →</button>
+                    <button class="btn btn-xs" style="background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.25);color:var(--green)" onclick="toggleAgent('loi')">📄 Go to Auto Docs →</button>
                     <button class="btn btn-xs" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="openPOModal()">🧾 Issue PO directly →</button>
                   </div>
                   <div class="ai-panel">
@@ -2930,7 +2930,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
               <div>
                 <div class="agent-row" id="row-loi" onclick="toggleAgent('loi')">
                   <div class="ar-icon" style="background:rgba(34,197,94,.1)">&#128196;</div>
-                  <div class="ar-name">LOI/PO Generator</div>
+                  <div class="ar-name">Auto Docs</div>
                   <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
                   <div class="ar-metric">3 LOIs &middot; <span style="color:var(--green)">$148K signed</span> &middot; 2 POs &middot; <span style="color:var(--green)">$102K covered</span></div>
                   <div class="ar-actions">
@@ -4039,12 +4039,12 @@ Content-Type: application/json
                   <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="alert('Running compliance check…')">Run check</button>
                 </div>
 
-                <!-- LOI/PO Generator -->
+                <!-- Auto Docs -->
                 <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
                     <div style="width:26px;height:26px;border-radius:5px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128196;</div>
                     <div style="flex:1;min-width:0">
-                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LOI/PO Generator</div>
+                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Auto Docs</div>
                       <div style="font-size:11px;color:var(--muted);margin-top:2px">3 LOIs &middot; 2 POs this week</div>
                     </div>
                   </div>
@@ -4160,11 +4160,11 @@ Content-Type: application/json
                   Quick Actions<span style="flex:1;height:1px;background:var(--border);display:block"></span>
                 </div>
 
-                <!-- LOI/PO Generator -->
+                <!-- Auto Docs -->
                 <div style="background:var(--surface);border:1px solid rgba(91,95,239,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
                   <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
                     <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📋</div>
-                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">LOI/PO Generator</div><div style="font-size:11px;color:var(--muted)">Draft an LOI, then issue the PO</div></div>
+                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">Auto Docs</div><div style="font-size:11px;color:var(--muted)">LOI · PO · SPA · Contract · LC — all auto-generated</div></div>
                   </div>
                   <div style="padding:8px;display:flex;gap:6px">
                     <button class="btn btn-xs" style="flex:1;justify-content:center;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="window.open('loi-generator.html','_blank')">📋 LOI</button>
@@ -5090,7 +5090,7 @@ Content-Type: application/json
                       style="justify-content: flex-start"
                       onclick="window.open('loi-generator.html', '_blank')"
                     >
-                      📄 LOI Generator
+                      📄 Auto Docs
                     </button>
                     <button
                       class="btn btn-sm"
