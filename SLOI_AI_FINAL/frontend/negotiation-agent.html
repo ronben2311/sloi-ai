@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-<meta name="description" content="SLOI AI negotiation agent — autonomous AI that negotiates commodity prices, terms, and logistics across MENA markets without manual back-and-forth."/>
-    <title>SLOI AI — Agent Console</title>
+<meta name="description" content="SLOI AI Orchestrator — Trust as a Service engine for enterprise commodity procurement. Every counterparty screened, every mandate private, every document audit-ready and anchored for immutability."/>
+    <title>SLOI AI — Orchestrator Console</title>
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap"
       rel="stylesheet"
@@ -1303,7 +1303,7 @@
       <div class="topbar">
         <div style="display: flex; align-items: center; gap: 8px">
           <a href="sloiai-home.html" class="logo"
-            >SLOI <em>AI</em><span class="logo-sub">/ Agent Console</span></a
+            >SLOI <em>AI</em><span class="logo-sub">/ Orchestrator</span></
           >
           <a href="sloiai-platform.html" style="font-size:12px;color:var(--muted);text-decoration:none;border:1px solid var(--border);border-radius:4px;padding:3px 9px;margin-left:4px" onmouseover="this.style.color='var(--violet)'" onmouseout="this.style.color='var(--muted)'">← Platform</a>
         </div>
@@ -1312,7 +1312,7 @@
           <div class="api-indicator">🤖 Claude API · live</div>
           <div class="live-badge">
             <div class="live-dot"></div>
-            <span id="agent-status">4 agents active</span>
+            <span id="agent-status">4 orchestrators active</span>
           </div>
           <div id="clock" style="font-size: 13px; color: var(--muted)"></div>
         </div>
@@ -1322,7 +1322,7 @@
       <div class="tabs">
         <button class="tab active" onclick="switchTab('neg', this)">
           <div class="tab-dot td-gold"></div>
-          🤖 Negotiation<span class="tab-count" id="tc-neg">2 live</span>
+          🔄 Orchestration<span class="tab-count" id="tc-neg">2 live</span>
         </button>
         <button class="tab" onclick="switchTab('nda', this)">
           <div class="tab-dot" style="background:var(--blue)"></div>
@@ -1438,8 +1438,8 @@
                   &nbsp;·&nbsp; Opening: <span id="ph-opening" style="color:var(--green)"></span>
                   &nbsp;·&nbsp; Walk-away: <span id="ph-walkaway" style="color:var(--gold)"></span><br/>
                   Trader floor: <span id="ph-floor" style="color:var(--red)"></span>
-                  &nbsp;·&nbsp; Concession: <span id="ph-conc"></span>/round
-                  &nbsp;·&nbsp; Rounds: <span id="ph-rounds"></span>
+                  &nbsp;·&nbsp; Concession: <span id="ph-conc"></span>/stage
+                  &nbsp;·&nbsp; Stages: <span id="ph-rounds"></span>
                 </div>
 
                 <div style="display:grid;grid-template-columns:2fr 1fr;gap:6px">
@@ -1502,11 +1502,11 @@
                     </select>
                   </div>
                   <div>
-                    <label class="flabel">Max rounds</label>
+                    <label class="flabel">Process Stages</label>
                     <select class="inp" id="m-rounds">
-                      <option value="3">3 rounds</option>
-                      <option value="5" selected>5 rounds</option>
-                      <option value="7">7 rounds</option>
+                      <option value="3">3 stages</option>
+                      <option value="5" selected>5 stages</option>
+                      <option value="7">7 stages</option>
                     </select>
                   </div>
                 </div>
@@ -1585,7 +1585,7 @@
                 <div class="strat sel" id="s-deal-hunter" style="display:flex;align-items:center;gap:10px;text-align:left">
                   <div class="strat-icon" style="font-size:20px">🎯</div>
                   <div>
-                    <div class="strat-name">Best Deal Engine</div>
+                    <div class="strat-name">Trade Orchestration Engine</div>
                     <div class="strat-cost">Price + Quality + Delivery + Payment</div>
                   </div>
                 </div>
@@ -1613,7 +1613,7 @@
                 id="start-btn"
                 onclick="startNegotiation()"
               >
-                ▶ Start agent
+                ⚡ Orchestrate
               </button>
               <button class="btn btn-a btn-sm" onclick="manualOverride()">
                 Override
@@ -1628,7 +1628,7 @@
               "
             >
               Balance: <span style="color: var(--teal)">320 credits</span> ·
-              Boss approval required for LOI
+              Boss authorization required for LOI
             </div>
           </div>
         </div>
@@ -1645,14 +1645,14 @@
                   🔩 Steel Rebar G60 12mm · 100 MT · Gulf Cement LLC
                 </div>
                 <div style="font-size: 12px; color: var(--muted)" id="neg-meta">
-                  NEG-001 · Deal Hunter · BRK-UAE-001
+                  ORC-001 · Trade Corridor · BRK-UAE-001
                 </div>
               </div>
-              <span class="badge bg" id="round-badge">● Round 0</span>
+              <span class="badge bg" id="round-badge">● Stage 0</span>
             </div>
             <div style="display: flex; gap: 6px">
               <button class="btn btn-sm" onclick="pauseNeg()" id="pause-btn">
-                ⏸ Pause
+                ⏸ Suspend
               </button>
               <button class="btn btn-sm" onclick="clearChat()">✕ Clear</button>
             </div>
@@ -1668,15 +1668,14 @@
           <div class="chat-wrap">
             <div class="chat-area" id="chat-area">
               <div class="bubble b-system">
-                Agent Console ready · Powered by Claude API · Set mandate and
-                click ▶ Start agent
+                Orchestrator ready · Powered by Claude API · Configure mandate and click ⚡ Orchestrate
               </div>
             </div>
 
             <!-- FOOTER: ROUNDS + LIVE PRICES -->
             <div class="neg-footer">
               <div>
-                <div class="foot-label">Rounds</div>
+                <div class="foot-label">Stages</div>
                 <div class="rounds-bar" id="rounds-bar">
                   <div class="rb empty"></div>
                   <div class="rb empty"></div>
@@ -1690,7 +1689,7 @@
                 <div class="foot-label">Live prices</div>
                 <div class="prices-grid">
                   <div class="price-cell">
-                    <div class="price-cell-label">🤖 Agent</div>
+                    <div class="price-cell-label">🔍 Orchestrator</div>
                     <div
                       class="price-cell-val"
                       id="d-agent"
@@ -1699,9 +1698,9 @@
                       —
                     </div>
                   </div>
-                  <div class="gap-pill" id="gap-pill">Gap</div>
+                  <div class="gap-pill" id="gap-pill">Variance</div>
                   <div class="price-cell">
-                    <div class="price-cell-label">🏭 Trader</div>
+                    <div class="price-cell-label">🏭 Counterparty</div>
                     <div
                       class="price-cell-val"
                       id="d-trader"
@@ -1717,7 +1716,7 @@
             <!-- BOSS APPROVAL -->
             <div class="approval-section" id="approval-section">
               <div class="approval-title" id="approval-title">
-                ⚡ Boss approval required
+                ⚡ Compliance Review Required
               </div>
               <div class="approval-grid" id="approval-grid"></div>
               <div class="approve-row">
@@ -1726,14 +1725,14 @@
                   id="approve-btn"
                   onclick="approveDeal()"
                 >
-                  ✅ Approve → Generate LOI
+                  ✅ Authorize → Generate LOI
                 </button>
                 <button
                   class="btn btn-r btn-sm"
                   id="reject-btn"
                   onclick="rejectDeal()"
                 >
-                  ✗ Reject
+                  ✗ Decline
                 </button>
                 <span class="auto-msg" id="auto-msg"></span>
               </div>
@@ -1765,7 +1764,7 @@
             <span style="font-size:20px">🔏</span>
             <div>
               <div style="font-size:13px;font-weight:600;color:var(--white)">Non-Disclosure Agreement</div>
-              <div style="font-size:12px;color:var(--muted);margin-top:2px">Parties and product will be pulled from the active negotiation mandate. Edit any field before generating.</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:2px">Parties and product will be pulled from the active orchestration mandate. Edit any field before generating.</div>
             </div>
             <button class="btn btn-xs" style="margin-left:auto;flex-shrink:0;border-color:rgba(59,130,246,.4);color:#60a5fa" onclick="ndaPrefill()">↺ Pull from deal</button>
           </div>
@@ -1861,7 +1860,7 @@
                   <input class="inp" id="loi-ref" value="LOI-2026-001" style="font-size:12px;color:var(--violet);font-weight:700"/>
                 </div>
                 <div>
-                  <label class="flabel">Deal / Negotiation ID</label>
+                  <label class="flabel">Trade / Orchestration ID</label>
                   <input class="inp" id="loi-neg-id" placeholder="NEG-xxx or manual" style="font-size:12px"/>
                 </div>
               </div>
@@ -2167,7 +2166,7 @@
         <div class="section-body">
           <div class="section-main">
             <div style="background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.2);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--gold);font-family:'IBM Plex Mono',monospace">
-              ⚡ Click "Pull from deal" to auto-fill from the active negotiation mandate.
+              ⚡ Click "Pull from deal" to auto-fill from the active orchestration mandate.
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
               <div>
@@ -2294,7 +2293,7 @@
         <div class="section-body">
           <div class="section-main">
             <div style="background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.2);border-radius:6px;padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--violet);font-family:'IBM Plex Mono',monospace">
-              ⚡ Click "Pull from deal" to auto-fill from the active negotiation mandate &amp; LOI.
+              ⚡ Click "Pull from deal" to auto-fill from the active orchestration mandate &amp; LOI.
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
               <div>
@@ -3080,7 +3079,7 @@
         agreed: false,
       };
       let negHistory = []; // Claude message history for this negotiation
-      const NEG_ID = "NEG-" + String(Math.floor(Math.random() * 900) + 100);
+      const NEG_ID = "ORC-" + String(Math.floor(Math.random() * 900) + 100);
 
       // ── DEAL WEIGHTS ───────────────────────────────────────────────────────────────
       function getDealWeights() {
@@ -3194,9 +3193,9 @@
       var _steerResolve = null;
 
       var STEER_INSTRUCTIONS = {
-        hold:    "BUYER INSTRUCTION: Hold firm — do not concede further this round. Reiterate your current offer and emphasize the total deal value, not just price.",
-        push:    "BUYER INSTRUCTION: Push harder — be more assertive and demand a bigger price reduction and better deal terms from the supplier.",
-        annual:  "BUYER INSTRUCTION: Pivot strategy — propose a 12-month annual supply framework agreement. Emphasize the volume commitment to justify a better unit price and stronger quality guarantees.",
+        hold:    "ORCHESTRATOR DIRECTIVE: Hold position — do not concede further this stage. Reiterate your compliance-anchored position and emphasize total contract value and audit integrity.",
+        push:    "ORCHESTRATOR DIRECTIVE: Escalate terms — be more assertive on price validation and demand stronger compliance guarantees from the counterparty.",
+        annual:  "ORCHESTRATOR DIRECTIVE: Propose a 12-month framework agreement — emphasize the volume commitment and audit continuity to justify a stronger unit price and compliance guarantee.",
         surplus: "BUYER INSTRUCTION: Ask directly whether the supplier has surplus, off-spec, or excess inventory available at a steeper discount. Clarify quality status.",
         inspect: "BUYER INSTRUCTION: Insist on a pre-shipment inspection clause (SGS or Bureau Veritas) and a Certificate of Analysis (COA) as non-negotiable deal conditions. State clearly: no inspection, no deal. Offer a small price concession if needed to secure these quality guarantees.",
         auto:    null,
@@ -3210,8 +3209,8 @@
           panel.id = "steer-panel";
           panel.className = "steer-panel";
           panel.innerHTML =
-            '<div class="steer-title">⬆ Your move — steer the agent</div>' +
-            '<div class="steer-sub">Supplier offered: ' +
+            '<div class="steer-title">⬆ Your directive — guide the orchestration</div>' +
+            '<div class="steer-sub">Counterparty position: ' +
             (brokerPrice
               ? '<strong style="color:var(--gold)">$' +
                 brokerPrice.toLocaleString() +
@@ -3219,17 +3218,17 @@
                 unit +
                 "</strong>"
               : "—") +
-            " · Round " +
+            " · Stage " +
             round +
-            " complete</div>" +
+            " complete · Compliance Alert cleared</div>" +
             '<div class="steer-chips">' +
-            '<div class="steer-chip" onclick="buyerPick(\'hold\')">🛡️ Hold firm</div>' +
-            '<div class="steer-chip" onclick="buyerPick(\'push\')">⚡ Push harder</div>' +
-            '<div class="steer-chip" onclick="buyerPick(\'inspect\')">🔍 Demand inspection clause</div>' +
-            '<div class="steer-chip" onclick="buyerPick(\'annual\')">📅 Offer annual deal</div>' +
-            '<div class="steer-chip" onclick="buyerPick(\'surplus\')">📉 Ask about surplus</div>' +
-            '<div class="steer-chip" onclick="buyerPick(\'auto\')">🤖 Let agent decide</div>' +
-            '<div class="steer-chip sc-accept" onclick="buyerPick(\'accept\')">✅ Accept this offer</div>' +
+            '<div class="steer-chip" onclick="buyerPick(\'hold\')">🛡️ Hold position</div>' +
+            '<div class="steer-chip" onclick="buyerPick(\'push\')">⚡ Escalate terms</div>' +
+            '<div class="steer-chip" onclick="buyerPick(\'inspect\')">🔍 Require compliance clause</div>' +
+            '<div class="steer-chip" onclick="buyerPick(\'annual\')">📅 Propose framework agreement</div>' +
+            '<div class="steer-chip" onclick="buyerPick(\'surplus\')">📉 Inquire surplus capacity</div>' +
+            '<div class="steer-chip" onclick="buyerPick(\'auto\')">🤖 Auto-orchestrate</div>' +
+            '<div class="steer-chip sc-accept" onclick="buyerPick(\'accept\')">✅ Authorize this position</div>' +
             "</div>";
           area.appendChild(panel);
           area.scrollTop = area.scrollHeight;
@@ -3241,11 +3240,11 @@
         if (panel) {
           var label =
             {
-              hold: "🛡️ Hold firm",
-              push: "⚡ Push harder",
-              annual: "📅 Offer annual deal",
-              surplus: "📉 Ask about surplus",
-              auto: "🤖 Agent decides",
+              hold: "🛡️ Hold position",
+              push: "⚡ Escalate terms",
+              annual: "📅 Propose framework agreement",
+              surplus: "📉 Inquire surplus capacity",
+              auto: "🤖 Auto-orchestrate",
               accept: "✅ Accept offer",
             }[action] || action;
           panel.innerHTML =
@@ -3376,10 +3375,10 @@
         bar.innerHTML = html;
         document.getElementById("rounds-label").textContent =
           round <= max
-            ? "Round " + round + " of " + max + " · Best Deal Engine"
-            : "Complete · " + round + " rounds";
+            ? "Stage " + round + " of " + max + " · Trade Orchestration Engine"
+            : "Complete · " + round + " stages";
         document.getElementById("round-badge").textContent =
-          "● Round " + round + "/" + max;
+          "● Stage " + round + "/" + max;
       }
 
       function updatePriceDisplay(agentP, brokerP) {
@@ -3468,7 +3467,7 @@
           return;
         }
         if (negState.running) {
-          alert("A negotiation is already running.");
+          alert("An orchestration is already in progress.");
           return;
         }
 
@@ -3495,13 +3494,13 @@
           "🔩 " + product + " · " + qty + " " + unit + " · " + buyer;
         document.getElementById("neg-meta").textContent =
           NEG_ID +
-          " · Deal Hunter · " +
+          " · Trade Corridor · " +
           incoterm +
           " · " +
           payment +
           " · " +
           maxRoundsVal +
-          " rounds";
+          " stages";
         document.getElementById("start-btn").disabled = true;
 
         // Mandate pills
@@ -3520,7 +3519,7 @@
           "/" +
           unit +
           "</b></div>" +
-          '<div class="mpill">Strategy <b>Best Deal Engine</b></div>' +
+          '<div class="mpill">Strategy <b>Trade Orchestration Engine</b></div>' +
           '<div class="mpill">Incoterm <b>' + incoterm + "</b></div>" +
           '<div class="mpill">Payment <b>' + payment + "</b></div>" +
           '<div class="mpill">📍 <b>' + location + "</b></div>" +
@@ -3540,7 +3539,7 @@
         // Reset panels
         document.getElementById("approval-section").style.display = "none";
         document.getElementById("loi-section").style.display = "none";
-        document.getElementById("gap-pill").textContent = "Gap";
+        document.getElementById("gap-pill").textContent = "Variance";
         document.getElementById("gap-pill").style.cssText = "";
         document.getElementById("d-agent").textContent = "—";
         document.getElementById("d-trader").textContent = "—";
@@ -3548,17 +3547,17 @@
           '<div class="rb empty"></div>'.repeat(maxRoundsVal);
         document.getElementById("rounds-label").textContent = "Not started";
         document.getElementById("round-badge").textContent =
-          "● Round 0/" + maxRoundsVal;
+          "● Stage 0/" + maxRoundsVal;
 
         // Clear chat
         var area = document.getElementById("chat-area");
         area.innerHTML = "";
         addSystemBubble(
-          "🚀 Negotiation started · " +
+          "⚡ Orchestration initiated · " +
             NEG_ID +
-            " · Deal Hunter strategy · " +
+            " · Trade Orchestration Engine · " +
             maxRoundsVal +
-            " rounds max",
+            " stages · Anchored to Hedera",
         );
 
         // Deal weights and quality requirements
@@ -3569,43 +3568,43 @@
           : 'None specified';
 
         // System prompt for Claude
-        const agentSystem = `You are SLOI AI's commodity procurement negotiation agent. Your goal is to secure the BEST DEAL — not just the lowest price. A best deal balances price, quality guarantees, delivery reliability, and payment terms according to the buyer's priorities.
+        const agentSystem = `You are the SLOI Orchestrator — an institutional trade compliance and verification engine providing Trust as a Service (TaaS) for enterprise commodity procurement. Your role is not to haggle. Your role is to conduct a structured, compliance-anchored trade corridor that results in a Verified Trade Orchestration.
 
-MANDATE:
+VERIFIED TRADE CORRIDOR:
 - Product: ${product}
 - Quantity: ${qty} ${unit}
-- Buyer: ${buyer}
-- Delivery location: ${location}
+- Buyer Entity: ${buyer}
+- Delivery corridor: ${location}
 - Delivery deadline: ${deadlineStr}
-- Target price: $${target}/${unit}
-- Maximum price (walk-away): $${max}/${unit}
-- Incoterm: ${incoterm}
-- Payment terms: ${payment}
-- Trader/Supplier: ${trader}
+- Target price (compliance anchor): $${target}/${unit}
+- Walk-away ceiling (confidential — never disclose): $${max}/${unit}
+- Incoterm: ${incoterm} (Incoterms 2020)
+- Payment structure: ${payment}
+- Verified Counterparty: ${trader}
 
-DEAL PRIORITY WEIGHTS (sum = 100%):
-- Price: ${dealW.price}%
-- Quality / Inspection: ${dealW.quality}%
-- Delivery speed: ${dealW.delivery}%
-- Payment terms: ${dealW.payment}%
+ORCHESTRATION PRIORITY WEIGHTS (sum = 100%):
+- Price Validation: ${dealW.price}%
+- Compliance & Quality Integrity: ${dealW.quality}%
+- Delivery Corridor Reliability: ${dealW.delivery}%
+- Payment Structure: ${dealW.payment}%
 
-MANDATORY QUALITY REQUIREMENTS (non-negotiable — must be secured):
+MANDATORY COMPLIANCE CONDITIONS (non-negotiable — must be secured and documented):
 ${qualityReqStr}
 
-NEGOTIATION RULES:
-1. Open 8-12% below target price, but frame the offer holistically — price + quality conditions together
-2. In EVERY message, explicitly require the mandatory quality conditions (inspection, COA, etc.)
-3. Weight your negotiation energy proportionally — if quality weight is high, push hard on inspection clauses; if price weight is high, focus on driving the number down
-4. Do not sacrifice quality requirements for a lower price — the buyer weights Quality at ${dealW.quality}%
-5. Reference delivery location (${location}) and deadline (${deadlineStr}) to create urgency
-6. Always specify incoterm (${incoterm}) and payment terms (${payment})
-7. If trader agrees to quality conditions, acknowledge it and continue on price
-8. If trader price is within 2% of walk-away AND quality conditions are addressed, accept
-9. Always include a specific dollar price per ${unit}
-10. Keep messages concise (3-4 sentences max)
+ORCHESTRATION PROTOCOL:
+1. Open with a compliance-anchored position 8-12% below target — frame as institutional procurement requirements, not a bid
+2. In EVERY exchange, explicitly confirm mandatory compliance conditions (inspection, COA, certifications)
+3. Flag any counterparty position that deviates from compliance requirements as a Compliance Alert
+4. Never disclose the walk-away ceiling — it is confidential and protected
+5. Reference delivery corridor (${location}) and deadline (${deadlineStr}) as operational constraints, not negotiating tactics
+6. Always confirm incoterm (${incoterm}) and payment structure (${payment}) in each exchange
+7. When counterparty confirms compliance conditions, acknowledge formally and advance the price validation stage
+8. When counterparty position is within 2% of ceiling AND all compliance conditions are confirmed, accept and issue Verified Trade Orchestration
+9. State your price position clearly as: $X,XXX/${unit}
+10. Tone: institutional, precise, authoritative. 3-4 sentences maximum.
 
-Respond ONLY as the agent (your message to the trader). No meta-commentary.
-Format your price clearly as: $X,XXX/${unit}`;
+Respond ONLY as the Orchestrator (your message to the counterparty). No meta-commentary.
+Format your price position clearly as: $X,XXX/${unit}`;
 
         // Use real negotiation params from Excel if available, otherwise derive
         const ap = window._activeParams || {};
@@ -3617,33 +3616,33 @@ Format your price clearly as: $X,XXX/${unit}`;
           : Math.round(max * 1.02);
         const concPct = ap.concession_pct ? ap.concession_pct : 3;
 
-        const brokerSystem = `You are a commodity supplier/trader receiving a procurement inquiry. The buyer is negotiating for the best overall deal — price AND quality conditions.
+        const brokerSystem = `You are a verified commodity counterparty responding to a structured trade corridor initiated by an institutional procurement orchestrator. This is a compliance-anchored procurement process — respond professionally and with institutional precision.
 
-Product you are selling: ${product}
-Delivery to: ${location}
+Product: ${product}
+Delivery corridor: ${location}
 Delivery deadline: ${deadlineStr}
-Incoterm: ${incoterm}
-Payment terms: ${payment}
-Your starting asking price: $${brokerAsk}/${unit}
-Your floor price (minimum acceptable): $${brokerFloor}/${unit}
-Max concession per round: ${concPct}%
+Incoterm: ${incoterm} (Incoterms 2020)
+Payment structure: ${payment}
+Your opening position: $${brokerAsk}/${unit}
+Your floor position (minimum): $${brokerFloor}/${unit}
+Max concession per validation stage: ${concPct}%
 
-QUALITY POSITION:
-- You can offer pre-shipment inspection (3rd party, buyer-appointed) — mention this proactively
-- COA is available with every shipment — state this clearly
-- Defect liability: you offer 90-day liability as standard; can extend to 6 months for larger orders
-- You are ISO 9001 certified; CE/EN certification depends on product grade
+COMPLIANCE POSITION:
+- Pre-shipment inspection (3rd-party, buyer-appointed) is available — confirm proactively
+- Certificate of Analysis (COA) is issued with every shipment — state clearly
+- Defect liability: 90-day standard; extendable to 6 months for volume orders
+- ISO 9001 certified; CE/EN certification subject to product grade
 
-RULES:
-1. Start at your asking price ($${brokerAsk}/${unit})
-2. Come down by at most ${concPct}% per round
-3. Proactively mention quality guarantees, certifications, and inspection availability — these are selling points
-4. Reference delivery timeline to ${location} — confirm you can meet the ${deadlineStr} deadline
-5. Reference incoterm (${incoterm}) and payment terms (${payment}) in your response
-6. If buyer presses hard on quality/inspection, agree to it (it differentiates you) and hold firmer on price
-7. If buyer offers within 3% of your floor price ($${brokerFloor}/${unit}), accept the deal
+PROTOCOL:
+1. Open at your stated position ($${brokerAsk}/${unit}) — institutional tone
+2. Concede by no more than ${concPct}% per validation stage
+3. Proactively confirm compliance credentials, certifications, and inspection availability
+4. Confirm delivery corridor to ${location} and ability to meet ${deadlineStr} deadline
+5. Confirm incoterm (${incoterm}) and payment structure (${payment}) in every exchange
+6. If orchestrator presses on compliance/inspection clauses, agree — this validates your position — and hold firmer on price
+7. If orchestrator's position is within 3% of your floor ($${brokerFloor}/${unit}), confirm the Verified Trade Orchestration
 
-Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your price clearly.`;
+Respond ONLY as the counterparty. Institutional tone. 3-4 sentences. State your price position clearly.`;
 
         // Run negotiation rounds
         await runNegRound(
@@ -3678,17 +3677,17 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
         // Agent's turn
         addThinking("agent");
         document.getElementById("agent-status").textContent =
-          "Agent thinking… Round " + round;
+          "Orchestrating… Stage " + round;
 
         var basePrompt =
           round === 1
-            ? "Start the negotiation. Make your opening offer."
-            : "The trader responded. Make your next counter-offer.";
+            ? "Initiate the trade corridor. Submit your compliance-anchored opening position."
+            : "The counterparty has responded. Advance to the next validation stage.";
         if (buyerInstruction) basePrompt += "\n\n" + buyerInstruction;
 
         const agentMsg = await callClaude(
           [...negHistory, { role: "user", content: basePrompt }],
-          agentSystem + "\n\nThis is round " + round + " of " + maxR + ".",
+          agentSystem + "\n\nThis is validation stage " + round + " of " + maxR + ".",
           300,
         );
 
@@ -3706,7 +3705,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
         if (agentPrice) updatePriceDisplay(agentPrice, null);
 
         await addAgentBubble(
-          "🤖 AGENT → BROKER  ·  Round " + round,
+          "🔍 ORCHESTRATOR → COUNTERPARTY  ·  Stage " + round,
           agentMsg,
           agentPrice,
           unit,
@@ -3730,9 +3729,9 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
             { role: "user", content: "Respond to this offer." },
           ],
           brokerSystem +
-            "\n\nThis is round " +
+            "\n\nThis is validation stage " +
             round +
-            ". Agent last offered: " +
+            ". Orchestrator last position: " +
             (agentPrice ? "$" + agentPrice + "/" + unit : "unknown price") +
             ".",
           300,
@@ -3750,14 +3749,14 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
         if (brokerPrice) updatePriceDisplay(null, brokerPrice);
 
         await addBrokerBubble(
-          "🏭 BROKER → AGENT  ·  Round " + round,
+          "🏭 COUNTERPARTY → ORCHESTRATOR  ·  Stage " + round,
           brokerMsg,
           brokerPrice,
           unit,
         );
         negHistory.push({ role: "user", content: brokerMsg });
 
-        document.getElementById("agent-status").textContent = "4 agents active";
+        document.getElementById("agent-status").textContent = "4 orchestrators active";
 
         // Check if deal reached automatically (gap < 5% within budget)
         if (agentPrice && brokerPrice) {
@@ -3770,11 +3769,11 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
             negState.running = false;
             await new Promise((r) => setTimeout(r, 700));
             addSystemBubble(
-              "✅ Agreement reached in round " +
+              "✅ Verified Trade Orchestration complete — Stage " +
                 round +
-                " · Gap closed to " +
+                " · Variance closed to " +
                 gap.toFixed(1) +
-                "%",
+                "% · Anchored to Hedera",
             );
             showApprovalBox(dealPrice, qty, unit, round);
             document.getElementById("start-btn").disabled = false;
@@ -3799,9 +3798,9 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
           negState.running = false;
           await new Promise((r) => setTimeout(r, 700));
           addSystemBubble(
-            "⏱️ Max rounds reached · Gap: " +
+            "⏱️ All validation stages complete · Variance: " +
               gapFinal +
-              " · Approve at best price or reject",
+              " · Authorize Verified Trade Orchestration or decline",
           );
           showApprovalBox(dealPrice, qty, unit, round);
           document.getElementById("start-btn").disabled = false;
@@ -3815,11 +3814,11 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
             ? (((brokerPrice - agentPrice) / brokerPrice) * 100).toFixed(1)
             : "?";
         addSystemBubble(
-          "── Round " +
+          "── Stage " +
             round +
-            " complete · Gap: " +
+            " complete · Variance: " +
             gapAmt +
-            "% · Your move ──",
+            "% · Await directive ──",
         );
 
         const steerAction = await waitForBuyerDirection(
@@ -3834,12 +3833,13 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
           negState.agreed = true;
           negState.running = false;
           addSystemBubble(
-            "✋ You accepted — $" +
+            "✅ Position authorized — $" +
               brokerPrice.toLocaleString() +
               "/" +
               unit +
-              " · Round " +
-              round,
+              " · Stage " +
+              round +
+              " · Proceeding to LOI",
           );
           showApprovalBox(brokerPrice, qty, unit, round);
           document.getElementById("start-btn").disabled = false;
@@ -3873,7 +3873,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
         var qr = getQualityReqs();
         var sc = calcDealScore(dealPrice, target, max, qr, brokerMsgs);
         var overallColor = sc.overall >= 80 ? 'var(--green)' : sc.overall >= 60 ? 'var(--gold)' : 'var(--red)';
-        var overallLabel = sc.overall >= 80 ? 'GREAT DEAL' : sc.overall >= 60 ? 'GOOD DEAL' : 'WEAK DEAL';
+        var overallLabel = sc.overall >= 80 ? 'VERIFIED' : sc.overall >= 60 ? 'VALIDATED' : 'REVIEW';
 
         function factorBar(label, score, weight) {
           var col = score >= 75 ? 'var(--green)' : score >= 50 ? 'var(--gold)' : 'var(--red)';
@@ -3889,7 +3889,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
 
         var w = getDealWeights();
         document.getElementById("approval-title").textContent =
-          "⚡ Boss approval required — " + round + " round" + (round !== 1 ? "s" : "");
+          "⚡ Compliance Review Required — " + round + " stage" + (round !== 1 ? "s" : "");
 
         document.getElementById("approval-grid").innerHTML =
           '<div style="display:grid;grid-template-columns:100px 1fr;gap:14px;align-items:start">' +
@@ -3899,7 +3899,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
               '<div class="ds-label" style="color:' + overallColor + '">' + overallLabel + '</div>' +
               '<div style="margin-top:10px;font-size:11px;color:var(--muted)">$' + dealPrice.toLocaleString() + '/' + unit + '</div>' +
               '<div style="font-size:11px;color:var(--muted)">$' + totalVal.toLocaleString() + ' total</div>' +
-              '<div style="font-size:11px;color:var(--gold);margin-top:4px">LOI generated</div>' +
+              '<div style="font-size:11px;color:var(--gold);margin-top:4px">LOI pending authorization</div>' +
             '</div>' +
             '<div style="padding-top:4px">' +
               factorBar('💰 Price',    sc.price,    w.price) +
@@ -3912,7 +3912,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
             '</div>' +
           '</div>';
 
-        document.getElementById("approve-btn").textContent = "✅ Approve → Generate LOI";
+        document.getElementById("approve-btn").textContent = "✅ Authorize → Generate LOI";
         document.getElementById("approve-btn").disabled = false;
         var approvalEl = document.getElementById("approval-section");
         approvalEl.style.display = "block";
@@ -3927,7 +3927,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
         // Auto-approve countdown
         var secs = 30;
         var msgEl = document.getElementById("auto-msg");
-        msgEl.textContent = "Deal Score: " + sc.overall + "/100 · Auto-approving in " + secs + "s…";
+        msgEl.textContent = "Compliance Score: " + sc.overall + "/100 · Auto-authorizing in " + secs + "s…";
         window._autoTimer = setInterval(function () {
           secs--;
           if (secs <= 0) {
@@ -3935,7 +3935,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
             window._autoTimer = null;
             approveDeal();
           } else {
-            msgEl.textContent = "Deal Score: " + sc.overall + "/100 · Auto-approving in " + secs + "s…";
+            msgEl.textContent = "Compliance Score: " + sc.overall + "/100 · Auto-authorizing in " + secs + "s…";
           }
         }, 1000);
       }
@@ -4025,9 +4025,9 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
           deadlineStr +
           "</div></div>" +
           "</div>" +
-          '<div class="loi-note">✓ LOI emailed to buyer and trader &nbsp;·&nbsp; ✓ Compliance cleared &nbsp;·&nbsp; ✓ ' +
+          '<div class="loi-note">✓ LOI dispatched to all parties &nbsp;·&nbsp; ✓ Compliance validated &nbsp;·&nbsp; ✓ Anchored to Hedera &nbsp;·&nbsp; ✓ ' +
           negState.round +
-          ' rounds &nbsp;·&nbsp; <button class="btn btn-xs" style="background:var(--indigo);color:#fff;padding:3px 10px;font-size:11px" onclick="switchTab(\'lead\',document.querySelector(\'.tab[onclick*=\\\'lead\\\']\'))">📄 Open LOI Generator →</button></div>';
+          ' stages &nbsp;·&nbsp; <button class="btn btn-xs" style="background:var(--indigo);color:#fff;padding:3px 10px;font-size:11px" onclick="switchTab(\'lead\',document.querySelector(\'.tab[onclick*=\\\'lead\\\']\'))">📄 Open LOI Generator →</button></div>';
         loiEl.style.display = "block";
 
         completedSessions.push({
@@ -4177,7 +4177,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
           window._autoTimer = null;
         }
         addSystemBubble(
-          "✗ Deal rejected · Negotiation closed · No LOI generated",
+          "✗ Trade Orchestration declined · Compliance review closed · No LOI issued",
         );
         document.getElementById("approval-section").style.display = "none";
         negState.running = false;
@@ -4188,9 +4188,9 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
         negState.paused = !negState.paused;
         document.getElementById("pause-btn").textContent = negState.paused
           ? "▶ Resume"
-          : "⏸ Pause";
+          : "⏸ Suspend";
         addSystemBubble(
-          negState.paused ? "⏸ Negotiation paused" : "▶ Negotiation resumed",
+          negState.paused ? "⏸ Orchestration suspended" : "▶ Orchestration resumed",
         );
         if (negState.paused && _steerResolve) {
           _steerResolve("auto");
@@ -4220,7 +4220,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
           _steerResolve = null;
         }
         document.getElementById("chat-area").innerHTML =
-          '<div class="bubble b-system">Chat cleared · Set mandate and click ▶ Start agent</div>';
+          '<div class="bubble b-system">Console cleared · Configure mandate and click ⚡ Orchestrate</div>';
         negState = {
           running: false,
           paused: false,
@@ -4241,7 +4241,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
         document.getElementById("round-badge").textContent = "● Round 0";
         document.getElementById("d-agent").textContent = "—";
         document.getElementById("d-trader").textContent = "—";
-        document.getElementById("gap-pill").textContent = "Gap";
+        document.getElementById("gap-pill").textContent = "Variance";
         document.getElementById("gap-pill").style.cssText = "";
       }
 
@@ -4267,7 +4267,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
             s.id +
             "</div>";
           html +=
-            '<span class="badge bv" style="font-size:10px">● R' +
+            '<span class="badge bv" style="font-size:10px">● S' +
             s.round +
             "/" +
             s.maxRounds +
@@ -5328,7 +5328,7 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         await new Promise(function(r){ setTimeout(r, 1200); });
         btn.disabled = false;
         btn.innerHTML = "▶ Run all";
-        document.getElementById("agent-status").textContent = "4 agents active";
+        document.getElementById("agent-status").textContent = "4 orchestrators active";
       }
 
       // ── ADMIN SYNC ────────────────────────────────────────────────────────────────
@@ -5431,7 +5431,7 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         var unit = document.getElementById("m-unit").value;
         var maxR = parseInt(document.getElementById("m-rounds").value) || 5;
         var sessionSnap = {
-          id: "NEG-" + String(Date.now()).slice(-4),
+          id: "ORC-" + String(Date.now()).slice(-4),
           product,
           buyer,
           qty,
