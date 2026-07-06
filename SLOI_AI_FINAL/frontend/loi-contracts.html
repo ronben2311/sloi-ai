@@ -193,6 +193,34 @@ textarea.inp{resize:vertical;min-height:72px;line-height:1.6}
         <span class="tn-desc">Bilateral or Unilateral · Claude</span>
       </div>
     </button>
+    <button class="tn-btn" onclick="switchTab('lca',this)">
+      <span class="tn-icon">💳</span>
+      <div>
+        <span class="tn-name">LC Application</span>
+        <span class="tn-desc">UCP 600 · bank-ready draft</span>
+      </div>
+    </button>
+    <button class="tn-btn" onclick="switchTab('spa',this)">
+      <span class="tn-icon">⚖️</span>
+      <div>
+        <span class="tn-name">Trade Contract / SPA</span>
+        <span class="tn-desc">GAFTA/ICC · Incoterms 2020</span>
+      </div>
+    </button>
+    <button class="tn-btn" onclick="switchTab('freight',this)">
+      <span class="tn-icon">🚢</span>
+      <div>
+        <span class="tn-name">Freight Advisory</span>
+        <span class="tn-desc">Route · rate · ETA</span>
+      </div>
+    </button>
+    <button class="tn-btn" onclick="switchTab('hs',this)">
+      <span class="tn-icon">🛃</span>
+      <div>
+        <span class="tn-name">HS Code & Duty Report</span>
+        <span class="tn-desc">HS code · import duty · permits</span>
+      </div>
+    </button>
   </div>
 
   <div class="hist-wrap" id="hist-wrap" style="display:none">
@@ -400,6 +428,178 @@ textarea.inp{resize:vertical;min-height:72px;line-height:1.6}
       </div>
     </div>
 
+    <!-- ══ LC APPLICATION PANEL ══ -->
+    <div class="doc-panel" id="panel-lca">
+
+      <div class="sec-lbl">Applicant (Buyer)</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Applicant Company</label><input class="inp" id="lca-app-co" placeholder="Your company name"/></div>
+        <div class="field"><label class="flabel">Country</label><input class="inp" id="lca-app-country" placeholder="e.g. UAE"/></div>
+        <div class="field"><label class="flabel">Applicant's Bank</label><input class="inp" id="lca-app-bank" placeholder="e.g. Emirates NBD"/></div>
+        <div class="field"><label class="flabel">Bank SWIFT Code</label><input class="inp" id="lca-app-swift" placeholder="e.g. EBILAEAD"/></div>
+      </div>
+
+      <div class="sec-lbl">Beneficiary (Supplier)</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Beneficiary Company</label><input class="inp" id="lca-ben-co" placeholder="Supplier company"/></div>
+        <div class="field"><label class="flabel">Country</label><input class="inp" id="lca-ben-country" placeholder="e.g. Turkey"/></div>
+        <div class="field"><label class="flabel">Beneficiary Bank</label><input class="inp" id="lca-ben-bank" placeholder="e.g. Ziraat Bankasi"/></div>
+        <div class="field"><label class="flabel">Bank SWIFT Code</label><input class="inp" id="lca-ben-swift" placeholder="e.g. TCZBTR2A"/></div>
+      </div>
+
+      <div class="sec-lbl">LC Terms</div>
+      <div class="fg g4">
+        <div class="field" style="grid-column:span 2"><label class="flabel">LC Type</label><select class="inp" id="lca-type"><option>Irrevocable Sight LC</option><option>Irrevocable Usance LC 30 days</option><option>Irrevocable Usance LC 60 days</option><option>Irrevocable Usance LC 90 days</option><option>Standby LC (SBLC)</option></select></div>
+        <div class="field"><label class="flabel">Currency</label><select class="inp" id="lca-currency"><option>USD</option><option>EUR</option><option>SAR</option><option>AED</option><option>GBP</option></select></div>
+        <div class="field"><label class="flabel">Amount</label><input class="inp" id="lca-amount" placeholder="e.g. 1,317,500"/></div>
+        <div class="field"><label class="flabel">Expiry Date</label><input class="inp" type="date" id="lca-expiry"/></div>
+        <div class="field"><label class="flabel">Place of Expiry</label><input class="inp" id="lca-expiry-place" placeholder="e.g. UAE"/></div>
+        <div class="field"><label class="flabel">Latest Shipment Date</label><input class="inp" type="date" id="lca-ship-date"/></div>
+        <div class="field"><label class="flabel">Partial Shipments</label><select class="inp" id="lca-partial"><option>Not Allowed</option><option>Allowed</option></select></div>
+      </div>
+
+      <div class="sec-lbl">Cargo</div>
+      <div class="fg g2">
+        <div class="field" style="grid-column:span 2"><label class="flabel">Commodity / Product</label><input class="inp" id="lca-product" placeholder="e.g. Steel Rebar G60 · ASTM A615 · 2,500 MT"/></div>
+        <div class="field"><label class="flabel">Port of Loading</label><input class="inp" id="lca-pol" placeholder="e.g. Izmir, Turkey"/></div>
+        <div class="field"><label class="flabel">Port of Discharge</label><input class="inp" id="lca-pod" placeholder="e.g. Jebel Ali, UAE"/></div>
+        <div class="field"><label class="flabel">Incoterm</label><select class="inp" id="lca-incoterm"><option>CIF</option><option>FOB</option><option>CFR</option><option>DDP</option><option>DAP</option></select></div>
+      </div>
+
+      <div class="sec-lbl">Required Documents</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px">
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-bl" checked style="accent-color:var(--indigo)"> Full set clean on-board BL</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-inv" checked style="accent-color:var(--indigo)"> Commercial Invoice</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-pl" checked style="accent-color:var(--indigo)"> Packing List</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-co" checked style="accent-color:var(--indigo)"> Certificate of Origin</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-mtc" style="accent-color:var(--indigo)"> Mill Test Certificate</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-insp" style="accent-color:var(--indigo)"> Third-party Inspection Report</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-ins" style="accent-color:var(--indigo)"> Insurance Certificate (110%)</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text);cursor:pointer"><input type="checkbox" id="lca-doc-phyto" style="accent-color:var(--indigo)"> Phytosanitary Certificate</label>
+      </div>
+
+      <div class="sec-lbl">Special Conditions (optional)</div>
+      <div style="margin-bottom:20px"><textarea class="inp" id="lca-conditions" placeholder="e.g. Documents to be presented within 21 days of B/L date · All documents in English · Transhipment not allowed" style="min-height:60px"></textarea></div>
+
+      <button class="btn-gen" id="lca-btn" onclick="genLCA()"><span id="lca-icon">⚡</span> Generate LC Application</button>
+      <div class="preview-box" id="lca-preview"></div>
+      <div class="preview-actions" id="lca-actions">
+        <button class="pa pa-pdf" onclick="printDoc('lca')">📥 Download PDF</button>
+        <button class="pa pa-wa"  onclick="shareWA('lca')">💬 WhatsApp</button>
+        <button class="pa pa-em"  onclick="shareEmail('lca')">✉️ Email</button>
+        <button class="pa pa-cp"  onclick="copyDoc('lca')">⧉ Copy text</button>
+      </div>
+    </div>
+
+    <!-- ══ TRADE CONTRACT / SPA PANEL ══ -->
+    <div class="doc-panel" id="panel-spa">
+
+      <div class="sec-lbl">Seller</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Company</label><input class="inp" id="spa-sel-co" placeholder="Seller company"/></div>
+        <div class="field"><label class="flabel">Country / Jurisdiction</label><input class="inp" id="spa-sel-country" placeholder="e.g. Turkey"/></div>
+        <div class="field"><label class="flabel">Registered Address</label><input class="inp" id="spa-sel-addr" placeholder="Address (optional)"/></div>
+        <div class="field"><label class="flabel">Signatory</label><input class="inp" id="spa-sel-sig" placeholder="Name · Title"/></div>
+      </div>
+
+      <div class="sec-lbl">Buyer</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Company</label><input class="inp" id="spa-buy-co" placeholder="Buyer company"/></div>
+        <div class="field"><label class="flabel">Country / Jurisdiction</label><input class="inp" id="spa-buy-country" placeholder="e.g. UAE"/></div>
+        <div class="field"><label class="flabel">Registered Address</label><input class="inp" id="spa-buy-addr" placeholder="Address (optional)"/></div>
+        <div class="field"><label class="flabel">Signatory</label><input class="inp" id="spa-buy-sig" placeholder="Name · Title"/></div>
+      </div>
+
+      <div class="sec-lbl">Contract Terms</div>
+      <div class="fg g4">
+        <div class="field" style="grid-column:span 2"><label class="flabel">Product / Commodity</label><input class="inp" id="spa-product" placeholder="e.g. Steel Rebar G60 · ASTM A615"/></div>
+        <div class="field"><label class="flabel">Quantity</label><input class="inp" id="spa-qty" placeholder="e.g. 2500"/></div>
+        <div class="field"><label class="flabel">Unit</label><select class="inp" id="spa-unit"><option>MT</option><option>TON</option><option>KG</option><option>L</option><option>BBL</option><option>M³</option><option>PCS</option></select></div>
+        <div class="field"><label class="flabel">Unit Price</label><input class="inp" id="spa-price" placeholder="e.g. 527"/></div>
+        <div class="field"><label class="flabel">Currency</label><select class="inp" id="spa-currency"><option>USD</option><option>EUR</option><option>SAR</option><option>AED</option><option>GBP</option></select></div>
+        <div class="field"><label class="flabel">Incoterm</label><select class="inp" id="spa-incoterm"><option>CIF</option><option>FOB</option><option>DDP</option><option>CFR</option><option>DAP</option><option>EXW</option><option>FCA</option></select></div>
+        <div class="field"><label class="flabel">Payment Terms</label><select class="inp" id="spa-payment"><option>LC at sight (UCP 600)</option><option>LC 30 days</option><option>LC 60 days</option><option>TT 30% advance + 70% BL</option><option>TT 100% advance</option><option>Open Account 30 days</option><option>SBLC</option></select></div>
+        <div class="field"><label class="flabel">Port of Loading</label><input class="inp" id="spa-pol" placeholder="e.g. Izmir, Turkey"/></div>
+        <div class="field"><label class="flabel">Port of Discharge</label><input class="inp" id="spa-pod" placeholder="e.g. Jebel Ali, UAE"/></div>
+        <div class="field"><label class="flabel">Delivery Date</label><input class="inp" type="date" id="spa-delivery"/></div>
+        <div class="field"><label class="flabel">Governing Law</label><select class="inp" id="spa-law"><option>UAE Law — DIFC Courts</option><option>English Law — ICC Arbitration</option><option>Saudi Law — CRCICA</option><option>US Law — New York</option><option>Swiss Law — ICC Geneva</option><option>GAFTA Arbitration</option></select></div>
+      </div>
+
+      <div class="sec-lbl">Quality & Inspection (optional)</div>
+      <div style="margin-bottom:20px"><textarea class="inp" id="spa-quality" placeholder="e.g. Product to conform to ASTM A615 Grade 60 · Mill Test Certificates required · SGS inspection at origin port" style="min-height:60px"></textarea></div>
+
+      <button class="btn-gen" id="spa-btn" onclick="genSPA()"><span id="spa-icon">⚡</span> Generate Trade Contract / SPA</button>
+      <div class="preview-box" id="spa-preview"></div>
+      <div class="preview-actions" id="spa-actions">
+        <button class="pa pa-pdf" onclick="printDoc('spa')">📥 Download PDF</button>
+        <button class="pa pa-wa"  onclick="shareWA('spa')">💬 WhatsApp</button>
+        <button class="pa pa-em"  onclick="shareEmail('spa')">✉️ Email</button>
+        <button class="pa pa-cp"  onclick="copyDoc('spa')">⧉ Copy text</button>
+      </div>
+    </div>
+
+    <!-- ══ FREIGHT ADVISORY PANEL ══ -->
+    <div class="doc-panel" id="panel-freight">
+
+      <div class="sec-lbl">Cargo</div>
+      <div class="fg g2">
+        <div class="field" style="grid-column:span 2"><label class="flabel">Commodity / Product</label><input class="inp" id="fr-product" placeholder="e.g. Steel Rebar G60 · 2,500 MT"/></div>
+        <div class="field"><label class="flabel">Gross Weight (MT)</label><input class="inp" id="fr-weight" placeholder="e.g. 2500"/></div>
+        <div class="field"><label class="flabel">Cargo Type</label><select class="inp" id="fr-type"><option>Bulk — Open Hatch</option><option>Containerized (FCL)</option><option>Containerized (LCL)</option><option>Break Bulk</option><option>Tanker / Liquid Bulk</option><option>Ro-Ro</option></select></div>
+        <div class="field"><label class="flabel">Hazardous?</label><select class="inp" id="fr-haz"><option>No</option><option>Yes — IMDG classified</option></select></div>
+        <div class="field"><label class="flabel">Incoterm</label><select class="inp" id="fr-incoterm"><option>FOB</option><option>CIF</option><option>CFR</option><option>DDP</option><option>EXW</option><option>FCA</option></select></div>
+      </div>
+
+      <div class="sec-lbl">Route</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Port of Loading</label><input class="inp" id="fr-pol" placeholder="e.g. Izmir, Turkey"/></div>
+        <div class="field"><label class="flabel">Port of Discharge</label><input class="inp" id="fr-pod" placeholder="e.g. Jebel Ali, UAE"/></div>
+        <div class="field"><label class="flabel">Required Delivery Date</label><input class="inp" type="date" id="fr-delivery"/></div>
+        <div class="field"><label class="flabel">Preferred Carrier (optional)</label><input class="inp" id="fr-carrier" placeholder="e.g. MSC, CMA CGM — or leave blank for open"/></div>
+      </div>
+
+      <div class="sec-lbl">Special Requirements (optional)</div>
+      <div style="margin-bottom:20px"><textarea class="inp" id="fr-notes" placeholder="e.g. Temperature controlled · No transhipment · Full war-risk insurance required" style="min-height:60px"></textarea></div>
+
+      <button class="btn-gen" id="freight-btn" onclick="genFreight()"><span id="freight-icon">⚡</span> Generate Freight Advisory</button>
+      <div class="preview-box" id="freight-preview"></div>
+      <div class="preview-actions" id="freight-actions">
+        <button class="pa pa-pdf" onclick="printDoc('freight')">📥 Download PDF</button>
+        <button class="pa pa-wa"  onclick="shareWA('freight')">💬 WhatsApp</button>
+        <button class="pa pa-em"  onclick="shareEmail('freight')">✉️ Email</button>
+        <button class="pa pa-cp"  onclick="copyDoc('freight')">⧉ Copy text</button>
+      </div>
+    </div>
+
+    <!-- ══ HS CODE & DUTY REPORT PANEL ══ -->
+    <div class="doc-panel" id="panel-hs">
+
+      <div class="sec-lbl">Product</div>
+      <div class="fg g2">
+        <div class="field" style="grid-column:span 2"><label class="flabel">Product Description</label><input class="inp" id="hs-product" placeholder="e.g. Steel reinforcing bars, deformed, not further worked than hot-rolled"/></div>
+        <div class="field" style="grid-column:span 2"><label class="flabel">Technical Specifications (optional)</label><input class="inp" id="hs-specs" placeholder="e.g. ASTM A615 Grade 60 · Carbon steel · 12mm diameter"/></div>
+        <div class="field"><label class="flabel">Quantity</label><input class="inp" id="hs-qty" placeholder="e.g. 2500"/></div>
+        <div class="field"><label class="flabel">Unit</label><select class="inp" id="hs-unit"><option>MT</option><option>TON</option><option>KG</option><option>L</option><option>BBL</option><option>M³</option><option>PCS</option></select></div>
+        <div class="field"><label class="flabel">Estimated Value (USD)</label><input class="inp" id="hs-value" placeholder="e.g. 1,317,500"/></div>
+        <div class="field"><label class="flabel">Intended Use</label><input class="inp" id="hs-use" placeholder="e.g. Construction · Infrastructure"/></div>
+      </div>
+
+      <div class="sec-lbl">Trade Route</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Country of Origin</label><input class="inp" id="hs-origin" placeholder="e.g. Turkey"/></div>
+        <div class="field"><label class="flabel">Country of Destination</label><input class="inp" id="hs-dest" placeholder="e.g. United Arab Emirates"/></div>
+      </div>
+
+      <button class="btn-gen" id="hs-btn" onclick="genHS()"><span id="hs-icon">⚡</span> Generate HS Code & Duty Report</button>
+      <div class="preview-box" id="hs-preview"></div>
+      <div class="preview-actions" id="hs-actions">
+        <button class="pa pa-pdf" onclick="printDoc('hs')">📥 Download PDF</button>
+        <button class="pa pa-wa"  onclick="shareWA('hs')">💬 WhatsApp</button>
+        <button class="pa pa-em"  onclick="shareEmail('hs')">✉️ Email</button>
+        <button class="pa pa-cp"  onclick="copyDoc('hs')">⧉ Copy text</button>
+      </div>
+    </div>
+
   </div>
 </div>
 </div>
@@ -410,12 +610,16 @@ var activeTab  = 'loi';
 var loiStd     = 'eu';
 var ndaType    = 'bilateral';
 var lines      = [];
-var docs       = { loi:'', po:'', nda:'' };
+var docs       = { loi:'', po:'', nda:'', lca:'', spa:'', freight:'', hs:'' };
 
 var META = {
-  loi: { title:'Letter of Intent',           sub:'AI-generated · ICC-referenced · ready to sign' },
-  po:  { title:'Purchase Order',              sub:'Line items · delivery terms · countersign-ready' },
-  nda: { title:'Non-Disclosure Agreement',   sub:'Bilateral or Unilateral · Claude-generated' }
+  loi:     { title:'Letter of Intent',         sub:'AI-generated · ICC-referenced · ready to sign' },
+  po:      { title:'Purchase Order',            sub:'Line items · delivery terms · countersign-ready' },
+  nda:     { title:'Non-Disclosure Agreement', sub:'Bilateral or Unilateral · Claude-generated' },
+  lca:     { title:'LC Application',           sub:'UCP 600 · bank-ready draft · AI-generated' },
+  spa:     { title:'Trade Contract / SPA',      sub:'GAFTA/ICC · Incoterms 2020 · AI-generated' },
+  freight: { title:'Freight Advisory',          sub:'Route · rate estimate · ETA · AI-generated' },
+  hs:      { title:'HS Code & Duty Report',     sub:'HS code · import duty · permits · AI-generated' }
 };
 
 // ── TAB SWITCHING ────────────────────────────────────────
@@ -791,7 +995,7 @@ function shareEmail(id) {
 // ── DOCUMENT HISTORY ─────────────────────────────────────
 var HIST_KEY = 'sloi_docs';
 var HIST_MAX = 20;
-var HIST_ICON = { loi:'📄', po:'📋', nda:'🔏' };
+var HIST_ICON = { loi:'📄', po:'📋', nda:'🔏', lca:'💳', spa:'⚖️', freight:'🚢', hs:'🛃' };
 
 function saveDoc(type, title, text) {
   var list = [];
@@ -832,6 +1036,206 @@ function clearHistory() {
   if (!confirm('Clear all saved documents from this browser?')) return;
   localStorage.removeItem(HIST_KEY);
   renderHistory();
+}
+
+// ── GENERATE LC APPLICATION ───────────────────────────────
+async function genLCA() {
+  var docList = [];
+  if (document.getElementById('lca-doc-bl').checked)    docList.push('Full set (3/3) of clean on-board Bills of Lading, marked "Freight Prepaid", made out to Order and blank endorsed');
+  if (document.getElementById('lca-doc-inv').checked)   docList.push('Signed Commercial Invoice in triplicate showing LC number, commodity description, unit price, and total value');
+  if (document.getElementById('lca-doc-pl').checked)    docList.push('Detailed Packing List in duplicate showing gross/net weight and dimensions');
+  if (document.getElementById('lca-doc-co').checked)    docList.push('Certificate of Origin issued by authorized Chamber of Commerce, certifying origin of goods');
+  if (document.getElementById('lca-doc-mtc').checked)   docList.push('Mill Test Certificate / Material Test Report from the manufacturer confirming compliance with specified standards');
+  if (document.getElementById('lca-doc-insp').checked)  docList.push('SGS / Bureau Veritas Third-party Inspection Certificate at port of loading confirming quantity and quality');
+  if (document.getElementById('lca-doc-ins').checked)   docList.push('Insurance Certificate / Policy covering 110% of invoice value, all risks including war and SRCC');
+  if (document.getElementById('lca-doc-phyto').checked) docList.push('Phytosanitary Certificate issued by competent government authority of exporting country');
+  var f = {
+    appCo:       document.getElementById('lca-app-co').value.trim(),
+    appCountry:  document.getElementById('lca-app-country').value.trim(),
+    appBank:     document.getElementById('lca-app-bank').value.trim(),
+    appSwift:    document.getElementById('lca-app-swift').value.trim(),
+    benCo:       document.getElementById('lca-ben-co').value.trim(),
+    benCountry:  document.getElementById('lca-ben-country').value.trim(),
+    benBank:     document.getElementById('lca-ben-bank').value.trim(),
+    benSwift:    document.getElementById('lca-ben-swift').value.trim(),
+    type:        document.getElementById('lca-type').value,
+    currency:    document.getElementById('lca-currency').value,
+    amount:      document.getElementById('lca-amount').value.trim(),
+    expiry:      document.getElementById('lca-expiry').value,
+    expiryPlace: document.getElementById('lca-expiry-place').value.trim(),
+    shipDate:    document.getElementById('lca-ship-date').value,
+    product:     document.getElementById('lca-product').value.trim(),
+    pol:         document.getElementById('lca-pol').value.trim(),
+    pod:         document.getElementById('lca-pod').value.trim(),
+    incoterm:    document.getElementById('lca-incoterm').value,
+    partial:     document.getElementById('lca-partial').value,
+    conditions:  document.getElementById('lca-conditions').value.trim()
+  };
+  if (!f.appCo || !f.benCo || !f.product) { alert('Please fill in Applicant, Beneficiary, and Product.'); return; }
+  setBusy('lca', true);
+  try {
+    var prompt =
+      'Generate a formal Letter of Credit Application (Documentary Credit) compliant with UCP 600, structured in SWIFT MT700 field format. ' +
+      'Format as a professional bank submission document.\n\n' +
+      'APPLICANT: ' + f.appCo + (f.appCountry ? ', ' + f.appCountry : '') + '\n' +
+      'ISSUING BANK: ' + (f.appBank || '[Bank Name]') + (f.appSwift ? ' · SWIFT: ' + f.appSwift : '') + '\n' +
+      'BENEFICIARY: ' + f.benCo + (f.benCountry ? ', ' + f.benCountry : '') + '\n' +
+      'ADVISING BANK: ' + (f.benBank || '[Advising Bank]') + (f.benSwift ? ' · SWIFT: ' + f.benSwift : '') + '\n\n' +
+      'LC TYPE: ' + f.type + '\n' +
+      'AMOUNT: ' + f.currency + ' ' + f.amount + '\n' +
+      'EXPIRY DATE: ' + f.expiry + (f.expiryPlace ? ' — Place of Expiry: ' + f.expiryPlace : '') + '\n' +
+      'LATEST SHIPMENT DATE: ' + f.shipDate + '\n' +
+      'COMMODITY: ' + f.product + '\n' +
+      'PORT OF LOADING: ' + (f.pol || 'As per Bill of Lading') + '\n' +
+      'PORT OF DISCHARGE: ' + (f.pod || 'As per Bill of Lading') + '\n' +
+      'INCOTERM: ' + f.incoterm + ' (Incoterms 2020)\n' +
+      'PARTIAL SHIPMENTS: ' + f.partial + '\n' +
+      'TRANSHIPMENT: Not Allowed\n' +
+      'PRESENTATION PERIOD: Documents to be presented within 21 days after shipment date but within LC validity\n\n' +
+      'REQUIRED DOCUMENTS:\n' + docList.map(function(d,i){ return (i+1)+'. '+d; }).join('\n') +
+      (f.conditions ? '\n\nSPECIAL CONDITIONS:\n' + f.conditions : '') +
+      '\n\nInclude: full UCP 600 field structure (40A through 79), applicant declaration, bank charges clause (each bank covers own charges), ' +
+      'confirmation instructions, and applicant signature/authorization block. Return only the document, no markdown.';
+    var text = await claude(prompt);
+    showResult('lca', text);
+    saveDoc('lca', (f.product || 'LC') + ' · ' + (f.appCo || 'Applicant'), text);
+  } catch(e) { alert('Generation failed: ' + e.message); }
+  finally { setBusy('lca', false); }
+}
+
+// ── GENERATE TRADE CONTRACT / SPA ─────────────────────────
+async function genSPA() {
+  var f = {
+    selCo:      document.getElementById('spa-sel-co').value.trim(),
+    selCountry: document.getElementById('spa-sel-country').value.trim(),
+    selAddr:    document.getElementById('spa-sel-addr').value.trim(),
+    selSig:     document.getElementById('spa-sel-sig').value.trim(),
+    buyCo:      document.getElementById('spa-buy-co').value.trim(),
+    buyCountry: document.getElementById('spa-buy-country').value.trim(),
+    buyAddr:    document.getElementById('spa-buy-addr').value.trim(),
+    buySig:     document.getElementById('spa-buy-sig').value.trim(),
+    product:    document.getElementById('spa-product').value.trim(),
+    qty:        document.getElementById('spa-qty').value.trim(),
+    unit:       document.getElementById('spa-unit').value,
+    price:      document.getElementById('spa-price').value.trim(),
+    currency:   document.getElementById('spa-currency').value,
+    incoterm:   document.getElementById('spa-incoterm').value,
+    payment:    document.getElementById('spa-payment').value,
+    pol:        document.getElementById('spa-pol').value.trim(),
+    pod:        document.getElementById('spa-pod').value.trim(),
+    delivery:   document.getElementById('spa-delivery').value,
+    law:        document.getElementById('spa-law').value,
+    quality:    document.getElementById('spa-quality').value.trim()
+  };
+  if (!f.selCo || !f.buyCo || !f.product) { alert('Please fill in Seller, Buyer, and Product.'); return; }
+  var total = (parseFloat(f.qty)||0) * (parseFloat(f.price)||0);
+  setBusy('spa', true);
+  try {
+    var prompt =
+      'Generate a formal Sales and Purchase Agreement (SPA / Trade Contract) for an international commodity trade, ' +
+      'ICC and Incoterms 2020 referenced, with numbered clauses in professional legal language.\n\n' +
+      'SELLER: ' + f.selCo + (f.selAddr ? ', ' + f.selAddr : '') + (f.selCountry ? ', ' + f.selCountry : '') + (f.selSig ? ' · Signatory: ' + f.selSig : '') + '\n' +
+      'BUYER: ' + f.buyCo + (f.buyAddr ? ', ' + f.buyAddr : '') + (f.buyCountry ? ', ' + f.buyCountry : '') + (f.buySig ? ' · Signatory: ' + f.buySig : '') + '\n\n' +
+      'COMMODITY: ' + f.product + '\n' +
+      'QUANTITY: ' + f.qty + ' ' + f.unit + '\n' +
+      'UNIT PRICE: ' + f.currency + ' ' + f.price + ' / ' + f.unit + '\n' +
+      (total ? 'TOTAL CONTRACT VALUE: ' + f.currency + ' ' + total.toLocaleString(undefined,{maximumFractionDigits:2}) + '\n' : '') +
+      'INCOTERM: ' + f.incoterm + ' (Incoterms 2020)\n' +
+      'PAYMENT TERMS: ' + f.payment + '\n' +
+      (f.pol ? 'PORT OF LOADING: ' + f.pol + '\n' : '') +
+      (f.pod ? 'PORT OF DISCHARGE: ' + f.pod + '\n' : '') +
+      'DELIVERY DATE: ' + f.delivery + '\n' +
+      'GOVERNING LAW & ARBITRATION: ' + f.law + '\n' +
+      (f.quality ? 'QUALITY & INSPECTION: ' + f.quality + '\n' : '') +
+      '\nInclude numbered clauses: 1. Definitions  2. Sale and Purchase  3. Price and Payment  4. Delivery and Risk  ' +
+      '5. Quality and Inspection  6. Documents  7. Title Transfer  8. Force Majeure  9. Warranties  ' +
+      '10. Default and Remedies  11. Confidentiality  12. Governing Law and Arbitration  13. Entire Agreement  ' +
+      '14. Signature Blocks with date lines for both parties. Return only the document, no markdown.';
+    var text = await claude(prompt);
+    showResult('spa', text);
+    saveDoc('spa', (f.product || 'SPA') + ' · ' + (f.selCo || 'Seller') + ' ↔ ' + (f.buyCo || 'Buyer'), text);
+  } catch(e) { alert('Generation failed: ' + e.message); }
+  finally { setBusy('spa', false); }
+}
+
+// ── GENERATE FREIGHT ADVISORY ─────────────────────────────
+async function genFreight() {
+  var f = {
+    product:  document.getElementById('fr-product').value.trim(),
+    weight:   document.getElementById('fr-weight').value.trim(),
+    type:     document.getElementById('fr-type').value,
+    haz:      document.getElementById('fr-haz').value,
+    incoterm: document.getElementById('fr-incoterm').value,
+    pol:      document.getElementById('fr-pol').value.trim(),
+    pod:      document.getElementById('fr-pod').value.trim(),
+    delivery: document.getElementById('fr-delivery').value,
+    carrier:  document.getElementById('fr-carrier').value.trim(),
+    notes:    document.getElementById('fr-notes').value.trim()
+  };
+  if (!f.product || !f.pol || !f.pod) { alert('Please fill in Product, Port of Loading, and Port of Discharge.'); return; }
+  setBusy('freight', true);
+  try {
+    var prompt =
+      'Generate a professional Freight Advisory document for an international commodity shipment. ' +
+      'Include route analysis, estimated transit time, rate guidance, recommended shipping terms, ' +
+      'required documents, and operational recommendations. Use a structured report format.\n\n' +
+      'COMMODITY: ' + f.product + '\n' +
+      (f.weight ? 'GROSS WEIGHT: ' + f.weight + ' MT\n' : '') +
+      'CARGO TYPE: ' + f.type + '\n' +
+      'HAZARDOUS: ' + f.haz + '\n' +
+      'INCOTERM: ' + f.incoterm + ' (Incoterms 2020)\n' +
+      'PORT OF LOADING: ' + f.pol + '\n' +
+      'PORT OF DISCHARGE: ' + f.pod + '\n' +
+      (f.delivery ? 'REQUIRED DELIVERY DATE: ' + f.delivery + '\n' : '') +
+      (f.carrier ? 'PREFERRED CARRIER: ' + f.carrier + '\n' : 'CARRIER: Open to competitive quotes\n') +
+      (f.notes ? 'SPECIAL REQUIREMENTS: ' + f.notes + '\n' : '') +
+      '\nInclude sections: 1. Route Summary & Key Ports  2. Estimated Transit Time & Schedule  ' +
+      '3. Freight Rate Guidance (range estimate, based on current market)  4. Recommended Shipping Terms  ' +
+      '5. Required Documentation  6. Insurance Recommendation  7. Key Risks & Mitigants  ' +
+      '8. Operational Recommendations. Be specific with port names, transit days, and rate ranges. Return only the advisory document, no markdown.';
+    var text = await claude(prompt);
+    showResult('freight', text);
+    saveDoc('freight', (f.product || 'Freight') + ' · ' + f.pol + ' → ' + f.pod, text);
+  } catch(e) { alert('Generation failed: ' + e.message); }
+  finally { setBusy('freight', false); }
+}
+
+// ── GENERATE HS CODE & DUTY REPORT ───────────────────────
+async function genHS() {
+  var f = {
+    product: document.getElementById('hs-product').value.trim(),
+    specs:   document.getElementById('hs-specs').value.trim(),
+    qty:     document.getElementById('hs-qty').value.trim(),
+    unit:    document.getElementById('hs-unit').value,
+    value:   document.getElementById('hs-value').value.trim(),
+    use:     document.getElementById('hs-use').value.trim(),
+    origin:  document.getElementById('hs-origin').value.trim(),
+    dest:    document.getElementById('hs-dest').value.trim()
+  };
+  if (!f.product || !f.origin || !f.dest) { alert('Please fill in Product, Country of Origin, and Country of Destination.'); return; }
+  setBusy('hs', true);
+  try {
+    var prompt =
+      'Generate a professional HS Code & Import Duty Report for an international commodity shipment. ' +
+      'Use the Harmonized System (HS) 2022 nomenclature. Provide accurate, actionable trade compliance information.\n\n' +
+      'PRODUCT: ' + f.product + '\n' +
+      (f.specs ? 'SPECIFICATIONS: ' + f.specs + '\n' : '') +
+      (f.qty ? 'QUANTITY: ' + f.qty + ' ' + f.unit + '\n' : '') +
+      (f.value ? 'ESTIMATED VALUE: USD ' + f.value + '\n' : '') +
+      (f.use ? 'INTENDED USE: ' + f.use + '\n' : '') +
+      'COUNTRY OF ORIGIN: ' + f.origin + '\n' +
+      'COUNTRY OF DESTINATION: ' + f.dest + '\n' +
+      '\nInclude: 1. HS Code Classification (6-digit HS code + country-specific extension where applicable)  ' +
+      '2. Product Description as per HS  3. Import Duty Rate (MFN rate)  4. Preferential Duty Rates (FTA/bilateral agreements)  ' +
+      '5. VAT / GST on Import  6. Anti-Dumping or Countervailing Duties (if applicable)  ' +
+      '7. Required Import Permits or Licenses  8. Prohibited/Restricted Goods Check  ' +
+      '9. Customs Valuation Method  10. Estimated Total Landed Cost Summary  ' +
+      '11. Compliance Notes & Recommendations. Be specific with actual duty percentages. Return only the report, no markdown.';
+    var text = await claude(prompt);
+    showResult('hs', text);
+    saveDoc('hs', (f.product || 'HS Report') + ' · ' + f.origin + ' → ' + f.dest, text);
+  } catch(e) { alert('Generation failed: ' + e.message); }
+  finally { setBusy('hs', false); }
 }
 </script>
 </body>

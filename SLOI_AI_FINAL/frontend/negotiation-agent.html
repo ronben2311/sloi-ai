@@ -1129,6 +1129,29 @@
       /* Show hamburger only on mobile */
       .mob-burger { display: none; }
 
+      /* ── PROCESS MODAL ── */
+      .proc-overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;display:flex;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px);animation:proc-fade-in .18s ease}
+      @keyframes proc-fade-in{from{opacity:0}to{opacity:1}}
+      .proc-modal{background:var(--surface);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;animation:proc-slide-in .2s ease}
+      @keyframes proc-slide-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+      .proc-hd{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1}
+      .proc-title{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white);letter-spacing:-.02em}
+      .proc-close{background:none;border:1px solid var(--border2);color:var(--muted);border-radius:5px;width:28px;height:28px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+      .proc-close:hover{border-color:var(--red);color:var(--red)}
+      .proc-body{padding:18px 20px 22px}
+      .proc-intro{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:20px}
+      .proc-steps{display:flex;flex-direction:column;gap:10px}
+      .proc-step{display:flex;gap:14px;padding:14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;transition:border-color .15s}
+      .proc-step:hover{border-color:rgba(91,95,239,.3)}
+      .proc-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+      .proc-step-body{flex:1}
+      .proc-step-title{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
+      .proc-step-desc{font-size:12px;color:var(--muted);line-height:1.65}
+      .proc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+      .proc-tag{font-size:10px;font-weight:600;padding:2px 8px;border-radius:3px;letter-spacing:.04em;font-family:'IBM Plex Mono',monospace}
+      .proc-footer{margin-top:18px;padding:12px 14px;background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);border-radius:7px;font-size:12px;color:var(--muted);line-height:1.65}
+      .proc-footer strong{color:var(--violet)}
+
       /* ── MOBILE ──────────────────────────────────────────────────────────── */
       @media (max-width: 768px) {
         html, body { overflow: hidden; }
@@ -1297,6 +1320,100 @@
     <script src="/api-client.js"></script>
   </head>
   <body>
+    <!-- PROCESS MODAL -->
+    <div id="proc-overlay" class="proc-overlay" style="display:none" onclick="if(event.target===this)closeProcModal()">
+      <div class="proc-modal">
+        <div class="proc-hd">
+          <div class="proc-title">How the Orchestrator works</div>
+          <button class="proc-close" onclick="closeProcModal()">✕</button>
+        </div>
+        <div class="proc-body">
+          <p class="proc-intro">SLOI AI acts as your trust layer. You set the mandate — the Orchestrator handles everything else until it's time for your authorization. Here's the full flow:</p>
+          <div class="proc-steps">
+
+            <div class="proc-step">
+              <div class="proc-num" style="background:var(--indigo-dim);color:var(--violet)">01</div>
+              <div class="proc-step-body">
+                <div class="proc-step-title">Set your mandate</div>
+                <div class="proc-step-desc">Choose product, quantity, destination port, target price, and price ceiling. Takes 3 minutes. Your mandate is encrypted — counterparties never see your limits or terms until you authorize.</div>
+                <div class="proc-tags">
+                  <span class="proc-tag" style="background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);color:var(--violet)">You · 3 min</span>
+                  <span class="proc-tag" style="background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);color:var(--violet)">Private mandate</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="proc-step">
+              <div class="proc-num" style="background:rgba(45,212,191,.1);color:var(--teal)">02</div>
+              <div class="proc-step-body">
+                <div class="proc-step-title">KYC & OFAC screening</div>
+                <div class="proc-step-desc">Every counterparty is screened before your mandate reaches them — SDN list, UN/EU sanctions, corporate registration, and certificate of incorporation. Reconstruction-zone deals (Libya, Iraq, Gaza, Ukraine) get an additional compliance layer.</div>
+                <div class="proc-tags">
+                  <span class="proc-tag" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)">OFAC / SDN</span>
+                  <span class="proc-tag" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)">UN + EU sanctions</span>
+                  <span class="proc-tag" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)">Full audit trail</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="proc-step">
+              <div class="proc-num" style="background:rgba(139,143,248,.1);color:var(--violet)">03</div>
+              <div class="proc-step-body">
+                <div class="proc-step-title">Orchestration stages (up to 7)</div>
+                <div class="proc-step-desc">The Orchestrator advances your position stage by stage — benchmarked to Platts, Argus, or LME — strictly within your private price ceiling. No broker markup. No information leakage. You can watch the live chat log in real time.</div>
+                <div class="proc-tags">
+                  <span class="proc-tag" style="background:rgba(139,143,248,.1);border:1px solid rgba(139,143,248,.25);color:var(--violet)">Platts / Argus / LME</span>
+                  <span class="proc-tag" style="background:rgba(139,143,248,.1);border:1px solid rgba(139,143,248,.25);color:var(--violet)">Up to 7 stages</span>
+                  <span class="proc-tag" style="background:rgba(139,143,248,.1);border:1px solid rgba(139,143,248,.25);color:var(--violet)">Live log</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="proc-step">
+              <div class="proc-num" style="background:rgba(232,169,74,.1);color:var(--gold)">04</div>
+              <div class="proc-step-body">
+                <div class="proc-step-title">Steer between stages (optional)</div>
+                <div class="proc-step-desc">After each stage you can push harder, hold position, request better payment terms, or accept the current offer. Or set <strong style="color:var(--white)">auto-authorize in mandate</strong> and the Orchestrator completes without interruption when your target is hit.</div>
+                <div class="proc-tags">
+                  <span class="proc-tag" style="background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold)">Push · Hold · Accept</span>
+                  <span class="proc-tag" style="background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold)">Auto-authorize option</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="proc-step">
+              <div class="proc-num" style="background:var(--green-dim);color:var(--green)">05</div>
+              <div class="proc-step-body">
+                <div class="proc-step-title">Authorize — one click</div>
+                <div class="proc-step-desc">When the Orchestrator reaches your target (or you choose to accept), you authorize the deal. The full document suite generates instantly and dispatches to all parties: LOI, NDA, SPA, LC Application, Trade Contract, Freight Advisory, and HS Report.</div>
+                <div class="proc-tags">
+                  <span class="proc-tag" style="background:var(--green-dim);border:1px solid rgba(34,197,94,.25);color:var(--green)">LOI · NDA · SPA</span>
+                  <span class="proc-tag" style="background:var(--green-dim);border:1px solid rgba(34,197,94,.25);color:var(--green)">LC Application</span>
+                  <span class="proc-tag" style="background:var(--green-dim);border:1px solid rgba(34,197,94,.25);color:var(--green)">7 docs instant</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="proc-step">
+              <div class="proc-num" style="background:rgba(59,130,246,.1);color:#60a5fa">06</div>
+              <div class="proc-step-body">
+                <div class="proc-step-title">Documents dispatched & anchored</div>
+                <div class="proc-step-desc">Every document is spec-referenced, AI-reviewed, and ready for your bank's LC desk. The verified trade record is anchored to Hedera for immutability — a permanent, tamper-proof audit trail.</div>
+                <div class="proc-tags">
+                  <span class="proc-tag" style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#60a5fa">Anchored to Hedera</span>
+                  <span class="proc-tag" style="background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#60a5fa">US bank LC-ready</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="proc-footer">
+            <strong>You make two decisions:</strong> set the mandate, and authorize the deal. Everything in between is the Orchestrator. Your price ceiling is never exposed, no broker takes a cut, and every counterparty is screened before they see your requirements.
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="mob-overlay" onclick="closeSidebar()"></div>
     <div class="shell">
       <!-- TOPBAR -->
@@ -1309,6 +1426,7 @@
         </div>
         <div class="tb-right">
           <button class="mob-burger" onclick="toggleSidebar()" id="mob-burger-btn" title="Toggle mandate panel">☰</button>
+          <button onclick="openProcModal()" title="How the Orchestrator works" style="background:var(--indigo-dim);border:1px solid rgba(91,95,239,.3);color:var(--violet);border-radius:5px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'IBM Plex Mono',monospace;display:flex;align-items:center;gap:5px;transition:all .15s" onmouseover="this.style.background='rgba(91,95,239,.2)'" onmouseout="this.style.background='var(--indigo-dim)'">? How it works</button>
           <div class="api-indicator">🤖 Claude API · live</div>
           <div class="live-badge">
             <div class="live-dot"></div>
@@ -5355,6 +5473,21 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
       }
       setInterval(tick, 1000);
       tick();
+
+      // ── PROCESS MODAL ─────────────────────────────────────────────────────────────
+      function openProcModal() {
+        var el = document.getElementById('proc-overlay');
+        el.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+      function closeProcModal() {
+        var el = document.getElementById('proc-overlay');
+        el.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeProcModal();
+      });
 
       // ── HASH ROUTING ──────────────────────────────────────────────────────────────
       function routeHash() {
