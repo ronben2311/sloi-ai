@@ -575,7 +575,7 @@ function runCheck(){
     // Actions
     var actHtml = '';
     if(verdict === 'CLEARED'){
-      actHtml += '<button class="btn btn-g" onclick="window.open(\'loi-generator.html\',\'_blank\')">📄 Generate LOI →</button>';
+      actHtml += '<button class="btn btn-g" onclick="window.open(\'loi-contracts.html?tool=loi\',\'_blank\')">📄 Generate LOI →</button>';
       actHtml += '<button class="btn btn-p" onclick="downloadReport()">⬇ Download compliance report</button>';
       actHtml += '<button class="btn" onclick="resetForm()">Run another check</button>';
     } else if(verdict === 'REVIEW'){
@@ -633,7 +633,7 @@ function approveRestricted(buyer, country){
     document.getElementById('rc-verdict').style.color = 'var(--green)';
     document.getElementById('rc-title').textContent = 'Boss manual approval granted. Proceed with enhanced KYC.';
     document.getElementById('rc-actions').innerHTML =
-      '<button class="btn btn-g" onclick="window.open(\'loi-generator.html\',\'_blank\')">📄 Generate LOI →</button>' +
+      '<button class="btn btn-g" onclick="window.open(\'loi-contracts.html?tool=loi\',\'_blank\')">📄 Generate LOI →</button>' +
       '<button class="btn btn-p" onclick="downloadReport()">⬇ Download approval record</button>';
     // Update log
     if(checkLog.length) checkLog[0].verdict = 'APPROVED';

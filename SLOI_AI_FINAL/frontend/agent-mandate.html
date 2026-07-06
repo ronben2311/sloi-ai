@@ -349,10 +349,10 @@ select.inp option{background:var(--surface2);color:var(--white)}
   </div>
 
   <div class="left-trust">
-    <div class="trust-row"><div class="t-dot t-green"></div>Automation engine negotiates — you review and approve every offer</div>
-    <div class="trust-row"><div class="t-dot t-green"></div>No commitment to start · full audit trail included</div>
-    <div class="trust-row"><div class="t-dot t-green"></div>Price indication within 24 hours based on pre-qualified supplier network</div>
-    <div class="trust-row"><div class="t-dot t-violet"></div>Pre-qualified suppliers · MENA &amp; global corridors</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>Every supplier screened — identity, capacity &amp; compliance verified</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>Your mandate stays private — suppliers never see your ceiling or each other</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>Every document AI-reviewed — LOIs checked before they reach you</div>
+    <div class="trust-row"><div class="t-dot t-violet"></div>Escrow-ready settlement — no credit risk, no wire risk</div>
   </div>
 </div>
 
@@ -371,16 +371,16 @@ select.inp option{background:var(--surface2);color:var(--white)}
 
     <!-- ── STEP 0 — WELCOME ── -->
     <div class="step active" id="step-0">
-      <div class="q-eyebrow">Your AI sourcing agent — no commitment</div>
-      <div class="q-title">Set your<br/>Agent Mandate.<br/><em>Let AI source for you.</em></div>
-      <div class="q-sub">An Agent Mandate is a simple rulebook for your AI sourcing agent — what to buy, your price ceiling, and how much autonomy it has. It negotiates with pre-qualified suppliers inside those limits and delivers a fully documented price offer. You approve before anything is committed.</div>
+      <div class="q-eyebrow">Your protected sourcing layer — zero commitment to start</div>
+      <div class="q-title">Source with certainty.<br/><em>Trust as a Service.</em></div>
+      <div class="q-sub">SLOI AI acts as your trust layer between you and the supply chain. Every supplier is verified before your mandate reaches them. Every offer is documented and AI-reviewed. Every step is yours to approve — nothing is committed without your sign-off. Set your mandate in 2 minutes and let a trusted agent do the rest.</div>
 
       <!-- PRIMARY CTA -->
       <div onclick="selectEntry('form')" id="ec-form-hero" style="background:linear-gradient(135deg,rgba(91,95,239,.12),rgba(139,143,248,.06));border:1px solid rgba(91,95,239,.4);border-radius:12px;padding:22px 22px;cursor:pointer;margin-bottom:12px;transition:all .2s;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden" onmouseover="this.style.borderColor='rgba(91,95,239,.7)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(91,95,239,.4)';this.style.transform=''">
         <div style="width:52px;height:52px;border-radius:10px;background:var(--indigo);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">📝</div>
         <div style="flex:1">
-          <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px">Define your mandate</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.5">Commodity · limits · automation level. 2 minutes. Your agent activates immediately.</div>
+          <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px">Define your trusted mandate</div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.5">Commodity · limits · verification standards. 2 minutes. Your protected agent activates immediately.</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
           <span style="background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.05em">RECOMMENDED</span>
@@ -391,8 +391,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <!-- SECONDARY OPTIONS -->
       <div style="font-size:11px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px">Or import from existing documents</div>
       <div class="entry-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
-        <div class="ec" id="ec-po" style="opacity:0.4;pointer-events:none;position:relative">
-          <div style="position:absolute;top:6px;right:6px;background:var(--indigo);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;letter-spacing:.05em">COMING SOON</div>
+        <div class="ec" id="ec-po" onclick="selectEntry('po')" style="position:relative">
           <div class="ec-icon" style="font-size:22px">📎</div>
           <div class="ec-name" style="font-size:13px">Upload PO</div>
           <div class="ec-desc">PDF · Excel · Word</div>
@@ -489,7 +488,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
     <div class="step" id="step-1">
       <div class="q-eyebrow">Step 1</div>
       <div class="q-title">What should your<br/><em>agent source?</em></div>
-      <div class="q-sub">Select a commodity category — this sets the scope of your mandate. Your agent matches pre-qualified suppliers and negotiates within your limits; you review every offer before commitment.</div>
+      <div class="q-sub">Select a commodity category — this sets the scope of your mandate. Your agent matches screened, verified suppliers and negotiates within your limits; you review every offer before commitment.</div>
 
       <div class="prod-grid">
         <div class="pc" onclick="selectProduct(this,'Building materials','steel, cement, concrete, rebar, clinker')">
@@ -539,7 +538,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <!-- catalog product dropdown — shown after category pick -->
       <div class="cat-wrap" id="cat-wrap">
         <div class="cat-hdr">
-          <div class="field-lbl" style="margin:0">Select commodity from pre-qualified catalog</div>
+          <div class="field-lbl" style="margin:0">Select commodity from verified catalog</div>
           <span class="cat-badge" id="cat-count"></span>
         </div>
         <select class="inp" id="product-select" onchange="onProductSelect()">
@@ -807,7 +806,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
     <div class="step" id="step-4">
       <div class="q-eyebrow">Review</div>
       <div class="q-title">Mandate<br/><em>summary.</em></div>
-      <div class="q-sub">Review your mandate below. Once activated, your agent engages pre-qualified suppliers and delivers a documented price offer within 24 hours.</div>
+      <div class="q-sub">Review your mandate below. Once activated, your agent engages only screened and verified suppliers — every offer is AI-reviewed and documented before it reaches you.</div>
 
       <div class="sum-grid">
         <div class="sum-cell hi">
@@ -845,10 +844,10 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </div>
 
       <div class="gbox">
-        <div class="g-row"><span class="g-chk">✓</span>Automation engine negotiates against your mandate with pre-qualified suppliers</div>
-        <div class="g-row"><span class="g-chk">✓</span>Price indication within 24 hours based on pre-qualified supplier network</div>
-        <div class="g-row"><span class="g-chk">✓</span>You review and approve every offer — zero commitment at this stage</div>
-        <div class="g-row"><span class="g-chk">✓</span>No credit card required · full audit trail provided</div>
+        <div class="g-row"><span class="g-chk">✓</span>All suppliers screened for identity, capacity &amp; compliance before your mandate reaches them</div>
+        <div class="g-row"><span class="g-chk">✓</span>Your price ceiling and terms remain confidential — suppliers never see each other's offers</div>
+        <div class="g-row"><span class="g-chk">✓</span>Every offer is AI-reviewed and documented — you approve before anything is committed</div>
+        <div class="g-row"><span class="g-chk">✓</span>Escrow-ready settlement structure · full audit trail · no credit card required</div>
       </div>
 
       <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Activate my mandate →</button>
@@ -862,13 +861,13 @@ select.inp option{background:var(--surface2);color:var(--white)}
         <div class="suc-head">
           <div class="suc-icon">🎯</div>
           <div class="suc-title">Mandate<br/><em>activated.</em></div>
-          <div class="suc-sub">Your agent is now live — scanning the pre-qualified supplier network within your mandate. Expect a documented price offer within 24 hours.</div>
+          <div class="suc-sub">Your trust layer is active — your agent is now matching verified suppliers to your mandate. Every step is protected, documented, and yours to approve.</div>
         </div>
 
         <div class="flow-list">
-          <div class="fl-item"><div class="fl-num">1</div><div class="fl-text">Your agent matches pre-qualified suppliers to your mandate — commodity, volume, and limits</div></div>
-          <div class="fl-item"><div class="fl-num">2</div><div class="fl-text">It negotiates the best available price — strictly within your mandate</div></div>
-          <div class="fl-item"><div class="fl-num">3</div><div class="fl-text">Documented price offer delivered — review and approve or decline, no obligation</div></div>
+          <div class="fl-item"><div class="fl-num">1</div><div class="fl-text">Your agent matches only screened, verified suppliers — commodity, volume, and limits are confirmed before outreach</div></div>
+          <div class="fl-item"><div class="fl-num">2</div><div class="fl-text">Negotiations happen inside your mandate — your ceiling stays private, suppliers compete without seeing each other</div></div>
+          <div class="fl-item"><div class="fl-num">3</div><div class="fl-text">AI-reviewed, documented offer delivered to you — approve, counter, or decline with zero obligation</div></div>
           <div class="fl-item"><div class="fl-num">4</div><div class="fl-text">If approved — a professional Letter of Intent (LOI) is generated and sent to all parties</div></div>
           <div class="fl-item"><div class="fl-num g">✓</div><div class="fl-text" style="color:var(--green)">You deal directly with the supplier — SLOI AI never touches your funds</div></div>
         </div>
@@ -1162,17 +1161,32 @@ function selectEntry(type) {
 function parsePO() {
   var btn = document.getElementById('btn-po-continue');
   if (btn && btn.disabled) return;
-  var orig = btn ? btn.textContent : '';
-  if (btn) { btn.textContent = 'Parsing…'; btn.disabled = true; }
-  setTimeout(function() {
-    if (btn) { btn.textContent = orig; btn.disabled = false; }
+  var fileInput = document.getElementById('po-file-input');
+  var file = fileInput && fileInput.files && fileInput.files[0];
+  if (!file) return;
+  if (btn) { btn.textContent = '⏳ Reading file…'; btn.disabled = true; btn.style.opacity = '.5'; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var raw = e.target.result || '';
+    // Strip binary noise, keep printable ASCII text
+    var txt = raw.replace(/[^\x09\x0A\x0D\x20-\x7E]/g, ' ').replace(/[ \t]{4,}/g, ' ').replace(/\n{3,}/g, '\n\n');
+    var found = extractFromText(txt);
+    if (btn) { btn.textContent = 'Extract & continue →'; btn.disabled = false; btn.style.opacity = '1'; }
+    if (!found) {
+      var sub = document.getElementById('dz-sub');
+      if (sub) sub.innerHTML = '⚠ No fields found in this file — try <strong>AI Parse</strong> or <strong>Paste from ERP</strong>';
+      return;
+    }
     goStep(1);
-  }, 900);
+  };
+  reader.onerror = function() {
+    if (btn) { btn.textContent = 'Extract & continue →'; btn.disabled = false; btn.style.opacity = '1'; }
+  };
+  reader.readAsText(file, 'utf-8');
 }
 
-function parseERP() {
-  var txt = (document.getElementById('erp-paste') || {}).value || '';
-  if (!txt.trim()) { alert('Please paste your order text first.'); return; }
+function extractFromText(txt) {
+  var found = false;
 
   // ── Quantity & unit ──
   var qtyMatch = txt.match(/(?:qty|quantity|volume|amount)[:\s]*([0-9][0-9,\.]*)\s*(mt|ton|tons|kg|unit|units|pcs|barrel|bbl|liter|liters|m2|m3|m)/i)
@@ -1182,11 +1196,8 @@ function parseERP() {
     if (qf) qf.value = qtyMatch[1].replace(/,/g, '');
     var rawUnit = (qtyMatch[2] || 'MT').toUpperCase().replace('TONS','MT').replace('TON','MT').replace('LITERS','Liters').replace('LITER','Liters').replace('UNITS','Units').replace('UNIT','Units').replace('PCS','Units');
     var uf = document.getElementById('unit');
-    if (uf) {
-      for (var i = 0; i < uf.options.length; i++) {
-        if (uf.options[i].value.toUpperCase() === rawUnit || uf.options[i].text.toUpperCase() === rawUnit) { uf.selectedIndex = i; break; }
-      }
-    }
+    if (uf) { for (var i = 0; i < uf.options.length; i++) { if (uf.options[i].value.toUpperCase() === rawUnit || uf.options[i].text.toUpperCase() === rawUnit) { uf.selectedIndex = i; break; } } }
+    found = true;
   }
 
   // ── Price / budget ──
@@ -1194,50 +1205,49 @@ function parseERP() {
                    || txt.match(/\$\s*([\d,\.]+)\s*(?:\/\s*(?:mt|ton|kg|unit|liter))?/i);
   if (priceMatch) {
     var bf = document.getElementById('budget');
-    if (bf) bf.value = '$' + priceMatch[1].replace(/,/g,'').replace(/\.00$/,'');
+    if (bf) { bf.value = '$' + priceMatch[1].replace(/,/g,'').replace(/\.00$/,''); found = true; }
   }
 
   // ── Country ──
   var countryList = ['UAE','Saudi Arabia','Qatar','Kuwait','Bahrain','Oman','Egypt','Jordan','Iraq','Lebanon','Palestine','Libya','Turkey','China','India','Germany','France','Netherlands','UK','USA','United States','Morocco','Tunisia','Algeria'];
-  var countryMatch = null;
   for (var ci = 0; ci < countryList.length; ci++) {
     var re = new RegExp('\\b' + countryList[ci].replace(' ','\\s') + '\\b', 'i');
-    if (re.test(txt)) { countryMatch = countryList[ci]; break; }
-  }
-  if (countryMatch) {
-    var cf = document.getElementById('country');
-    if (cf) {
-      for (var oi = 0; oi < cf.options.length; oi++) {
-        if (cf.options[oi].text.toLowerCase() === countryMatch.toLowerCase()) { cf.selectedIndex = oi; break; }
-      }
+    if (re.test(txt)) {
+      var cf = document.getElementById('country');
+      if (cf) { for (var oi = 0; oi < cf.options.length; oi++) { if (cf.options[oi].text.toLowerCase() === countryList[ci].toLowerCase()) { cf.selectedIndex = oi; break; } } }
+      found = true; break;
     }
   }
 
-  // ── Product / spec line → pre-fill detail field ──
+  // ── Product / spec line ──
   var productMatch = txt.match(/(?:product|item|commodity|material|description)[:\s]+([^\n\r,;]{3,60})/i);
   if (productMatch) {
     var df = document.getElementById('product-detail');
-    if (df) df.value = productMatch[1].trim();
+    if (df) { df.value = productMatch[1].trim(); found = true; }
   }
 
   // ── PO / project reference ──
   var refMatch = txt.match(/(?:po|purchase order|ref|reference|order no|order#)[:\s#]*([A-Z0-9\-\/]{3,30})/i);
   if (refMatch) {
     var rf = document.getElementById('project-ref');
-    if (rf) rf.value = refMatch[1].trim();
+    if (rf) { rf.value = refMatch[1].trim(); found = true; }
   }
 
   // ── Incoterms ──
   var incoMatch = txt.match(/\b(FOB|CIF|DAP|DDP|EXW|CFR|FAS|FCA)\b/i);
   if (incoMatch) {
     var inf = document.getElementById('incoterms');
-    if (inf) {
-      for (var ii = 0; ii < inf.options.length; ii++) {
-        if (inf.options[ii].value.toUpperCase() === incoMatch[1].toUpperCase()) { inf.selectedIndex = ii; break; }
-      }
-    }
+    if (inf) { for (var ii = 0; ii < inf.options.length; ii++) { if (inf.options[ii].value.toUpperCase() === incoMatch[1].toUpperCase()) { inf.selectedIndex = ii; break; } } }
+    found = true;
   }
 
+  return found;
+}
+
+function parseERP() {
+  var txt = (document.getElementById('erp-paste') || {}).value || '';
+  if (!txt.trim()) { alert('Please paste your order text first.'); return; }
+  extractFromText(txt);
   goStep(1);
 }
 

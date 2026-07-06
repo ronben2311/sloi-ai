@@ -3976,7 +3976,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
           String(Math.floor(Math.random() * 900) + 100);
         var totalVal = dealPrice * parseInt(qty);
         var loiUrl =
-          "loi-generator.html?ref=" +
+          "loi-contracts.html?tool=loi&ref=" +
           loiRef +
           "&product=" +
           encodeURIComponent(product) +
@@ -4292,7 +4292,7 @@ Respond ONLY as the trader/supplier. Keep it to 3-4 sentences. Include your pric
           .reverse()
           .forEach(function (s) {
             var loiUrl =
-              "loi-generator.html?ref=" +
+              "loi-contracts.html?tool=loi&ref=" +
               s.id +
               "&product=" +
               encodeURIComponent(s.product) +
@@ -4912,7 +4912,7 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
           localStorage.setItem('sloi_lois', JSON.stringify(lois));
         } catch(e) {}
 
-        // Build URL params — loi-generator.html reads all of these
+        // Build URL params — loi-contracts.html?tool=loi reads all of these
         var p = new URLSearchParams();
         if (ref)     p.set('ref',          ref);
         if (buyer)   p.set('buyer',        buyer);
@@ -4932,7 +4932,7 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         document.getElementById('tc-lead').textContent = 'loaded ↓';
         var loiWrap = document.getElementById('loi-preview');
         loiWrap.style.cssText = 'padding:0;display:block;text-align:left;min-height:0';
-        loiWrap.innerHTML = '<iframe src="loi-generator.html?' + p.toString() + '" title="LOI Generator" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:6px;background:#07070f;display:block"></iframe>';
+        loiWrap.innerHTML = '<iframe src="loi-contracts.html?tool=loi&' + p.toString() + '" title="LOI Generator" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:6px;background:#07070f;display:block"></iframe>';
         showToast('✓ LOI Generator loaded below', 'green');
       }
 
@@ -5048,7 +5048,7 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         var unit    = lineInputs[2] ? lineInputs[2].value.trim() : '';
         var price   = lineInputs[3] ? lineInputs[3].value.trim() : '';
 
-        // Build URL params — po-generator.html reads all of these
+        // Build URL params — loi-contracts.html?tool=po reads all of these
         var p = new URLSearchParams();
         if (product)  p.set('product',  product);
         if (qty)      p.set('qty',      qty);
@@ -5081,12 +5081,12 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         document.getElementById('tc-price').textContent = 'loaded ↓';
         var poWrap = document.getElementById('po-preview');
         poWrap.style.cssText = 'padding:0;display:block;text-align:left;min-height:0';
-        poWrap.innerHTML = '<iframe src="po-generator.html?' + p.toString() + '" title="PO Generator" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:6px;background:#07070f;display:block"></iframe>';
+        poWrap.innerHTML = '<iframe src="loi-contracts.html?tool=po&' + p.toString() + '" title="PO Generator" style="width:100%;height:78vh;border:1px solid var(--border);border-radius:6px;background:#07070f;display:block"></iframe>';
         showToast('✓ PO Generator loaded below', 'green');
       }
 
       function copyPO() {
-        // Build a quick text summary to copy while full PO is in po-generator.html
+        // Build a quick text summary to copy while full PO is in loi-contracts.html?tool=po
         var loi     = document.getElementById('po-loi').value.trim();
         var buyer   = document.getElementById('po-buyer-co').value.trim() || '[Buyer]';
         var supplier= document.getElementById('po-supplier').value.trim() || '[Supplier]';

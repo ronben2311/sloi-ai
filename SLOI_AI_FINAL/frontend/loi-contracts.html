@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<title>LOI &amp; Contracts — SLOI AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#06060e;--surface:#0d0d1a;--surface2:#11111e;--border:#1a1a2e;--border2:#22223a;
+  --indigo:#5b5fef;--violet:#8b8ff8;--teal:#2dd4bf;--green:#22c55e;--gold:#e8a94a;--red:#ef4444;
+  --muted:#8888a8;--text:#cac8e4;--white:#eeedfa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:14px;color:var(--text);background:var(--bg);overflow:hidden}
+
+/* SHELL */
+.shell{display:grid;grid-template-columns:300px 1fr;height:100vh}
+
+/* LEFT */
+.left{background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;padding:28px 22px;overflow-y:auto}
+.left-logo{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.03em;display:block}
+.left-logo em{font-style:italic;color:var(--indigo)}
+.left-logo-sub{display:block;font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:26px;margin-top:2px}
+
+.tab-nav{display:flex;flex-direction:column;gap:4px}
+.tn-btn{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:7px;border:1px solid transparent;background:none;color:var(--muted);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:13px;transition:all .15s;text-align:left;width:100%}
+.tn-btn:hover{background:rgba(91,95,239,.06);color:var(--text)}
+.tn-btn.active{background:rgba(91,95,239,.1);border-color:rgba(91,95,239,.28);color:var(--violet)}
+.tn-icon{font-size:18px;flex-shrink:0;width:22px;text-align:center}
+.tn-name{font-size:13px;font-weight:700;display:block}
+.tn-desc{font-size:11px;color:var(--muted);display:block;margin-top:1px}
+.tn-btn.active .tn-desc{color:rgba(139,143,248,.65)}
+
+.left-trust{margin-top:auto;padding-top:24px;border-top:1px solid var(--border2);display:flex;flex-direction:column;gap:10px}
+.trust-row{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--muted);line-height:1.5}
+.t-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.t-green{background:var(--green)}
+.t-violet{background:var(--violet)}
+
+/* RIGHT */
+.right{display:flex;flex-direction:column;overflow:hidden}
+.right-head{padding:14px 26px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--surface)}
+.rh-title{font-size:15px;font-weight:700;color:var(--white)}
+.rh-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.exit-link{font-size:12px;color:var(--muted);text-decoration:none;transition:color .15s;white-space:nowrap}
+.exit-link:hover{color:var(--white)}
+.right-body{flex:1;overflow-y:auto;padding:24px 26px 40px}
+
+/* PANELS */
+.doc-panel{display:none}
+.doc-panel.active{display:block}
+
+/* FORMS */
+.fg{display:grid;gap:12px;margin-bottom:18px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:1fr 1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.flabel{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.inp{background:var(--surface);border:1px solid var(--border2);border-radius:7px;padding:10px 12px;color:var(--white);font-family:'IBM Plex Mono',monospace;font-size:13px;outline:none;width:100%;transition:all .2s}
+.inp:focus{border-color:var(--indigo);background:rgba(91,95,239,.04);box-shadow:0 0 0 3px rgba(91,95,239,.08)}
+.inp::placeholder{color:var(--muted);font-size:12px}
+select.inp option{background:var(--surface2);color:var(--white)}
+textarea.inp{resize:vertical;min-height:72px;line-height:1.6}
+.inp[readonly]{color:var(--teal);cursor:default}
+
+/* SECTION LABEL */
+.sec-lbl{font-size:10px;color:var(--indigo);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px;padding-bottom:7px;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:8px}
+.sec-lbl::before{content:'';width:12px;height:1px;background:var(--indigo)}
+
+/* STANDARDS */
+.std-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.std-btn{background:var(--surface);border:1px solid var(--border2);border-radius:5px;padding:6px 11px;color:var(--muted);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;transition:all .15s}
+.std-btn:hover{border-color:rgba(91,95,239,.4);color:var(--text)}
+.std-btn.active{border-color:var(--indigo);background:rgba(91,95,239,.1);color:var(--violet)}
+
+/* LINE ITEMS */
+.li-table{width:100%;border-collapse:collapse;margin-bottom:8px}
+.li-table th{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;padding:5px 6px;text-align:left;border-bottom:1px solid var(--border2)}
+.li-table td{padding:3px 3px}
+.li-table td .inp{padding:7px 9px;font-size:12px}
+.li-rm{background:none;border:none;color:var(--red);cursor:pointer;font-size:17px;padding:0 6px;opacity:.4;transition:opacity .15s;line-height:1}
+.li-rm:hover{opacity:1}
+.add-row{background:none;border:1px dashed var(--border2);border-radius:5px;color:var(--muted);padding:7px 14px;cursor:pointer;font-size:12px;font-family:'IBM Plex Mono',monospace;width:100%;transition:all .15s;margin-bottom:16px}
+.add-row:hover{border-color:rgba(91,95,239,.4);color:var(--violet)}
+
+/* NDA TYPE */
+.type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+.type-card{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:14px;text-align:center;cursor:pointer;transition:all .15s}
+.type-card:hover{border-color:rgba(91,95,239,.4)}
+.type-card.active{border-color:var(--indigo);background:rgba(91,95,239,.08)}
+.type-icon{font-size:24px;margin-bottom:6px}
+.type-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px}
+.type-card.active .type-name{color:var(--violet)}
+.type-desc{font-size:11px;color:var(--muted)}
+
+/* TOTALS BAR */
+.totals-bar{background:var(--surface);border:1px solid var(--border2);border-radius:7px;padding:12px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.totals-label{font-size:11px;color:var(--muted)}
+.totals-val{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--teal)}
+
+/* API KEY */
+.key-bar{background:rgba(232,169,74,.05);border:1px solid rgba(232,169,74,.18);border-radius:7px;padding:10px 14px;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.key-label{font-size:11px;color:var(--gold);white-space:nowrap;font-weight:600;flex-shrink:0}
+.key-bar .inp{flex:1;padding:7px 11px;font-size:12px;margin:0}
+.key-status{font-size:11px;color:var(--muted);white-space:nowrap}
+
+/* BUTTONS */
+.btn-gen{width:100%;background:var(--indigo);color:#fff;border:none;border-radius:7px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
+.btn-gen:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+.btn-gen:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* PREVIEW */
+.preview-box{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:20px 22px;margin-top:16px;white-space:pre-wrap;font-size:12px;line-height:1.85;color:var(--text);max-height:460px;overflow-y:auto;display:none;font-family:'IBM Plex Mono',monospace}
+.preview-box.show{display:block}
+.preview-actions{display:none;gap:8px;margin-top:10px;flex-wrap:wrap}
+.preview-actions.show{display:flex}
+.pa{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;border:none}
+.pa-pdf{background:var(--indigo);color:#fff}
+.pa-pdf:hover{opacity:.85}
+.pa-wa{background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.28);color:#25d366}
+.pa-wa:hover{background:rgba(37,211,102,.18)}
+.pa-em{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.28);color:var(--violet)}
+.pa-em:hover{background:rgba(91,95,239,.18)}
+.pa-cp{background:var(--surface2);border:1px solid var(--border2);color:var(--muted)}
+.pa-cp:hover{border-color:var(--indigo);color:var(--violet)}
+
+/* SPINNER */
+.spin{display:inline-block;width:13px;height:13px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:sp .6s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+/* HISTORY */
+.hist-wrap{margin-top:20px;padding-top:16px;border-top:1px solid var(--border2)}
+.hist-hdr{display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.hist-hdr button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:0;line-height:1;transition:color .15s}
+.hist-hdr button:hover{color:var(--red)}
+.hist-card{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:9px 10px;margin-bottom:5px;cursor:pointer;transition:border-color .15s}
+.hist-card:hover{border-color:rgba(91,95,239,.35)}
+.hist-card-type{font-size:9px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.hist-card-title{font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hist-card-date{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* MOBILE */
+@media(max-width:760px){
+  html,body{overflow:auto}
+  .shell{grid-template-columns:1fr;height:auto}
+  .left{display:none}
+  .right{overflow:visible;min-height:100vh}
+  .right-body{padding:16px}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+}
+
+/* PRINT */
+@media print{
+  .left,.right-head,.btn-gen,.preview-actions,.key-bar,.std-wrap,.fg,.sec-lbl,.add-row,.type-grid,.totals-bar,.li-table thead{display:none!important}
+  .shell{display:block}
+  .right{overflow:visible}
+  .right-body{padding:0}
+  .preview-box{display:block!important;max-height:none;border:none;padding:0;font-size:11pt;color:#000;background:#fff}
+  @page{margin:2cm}
+}
+</style>
+<link rel="stylesheet" href="/main.css"/>
+<script src="/api-client.js"></script>
+</head>
+<body>
+<div class="shell">
+
+<!-- ══════════════════ LEFT PANEL ══════════════════ -->
+<div class="left">
+  <a href="sloiai-home.html" class="left-logo">SLOI <em>AI</em><span class="left-logo-sub">LOI &amp; Contracts</span></a>
+
+  <div class="tab-nav">
+    <button class="tn-btn active" onclick="switchTab('loi',this)">
+      <span class="tn-icon">📄</span>
+      <div>
+        <span class="tn-name">Letter of Intent</span>
+        <span class="tn-desc">ICC-referenced · AI-generated</span>
+      </div>
+    </button>
+    <button class="tn-btn" onclick="switchTab('po',this)">
+      <span class="tn-icon">📋</span>
+      <div>
+        <span class="tn-name">Purchase Order</span>
+        <span class="tn-desc">Line items · delivery · terms</span>
+      </div>
+    </button>
+    <button class="tn-btn" onclick="switchTab('nda',this)">
+      <span class="tn-icon">🔏</span>
+      <div>
+        <span class="tn-name">NDA</span>
+        <span class="tn-desc">Bilateral or Unilateral · Claude</span>
+      </div>
+    </button>
+  </div>
+
+  <div class="hist-wrap" id="hist-wrap" style="display:none">
+    <div class="hist-hdr">
+      <span>Recent Documents</span>
+      <button onclick="clearHistory()" title="Clear all">✕ clear</button>
+    </div>
+    <div id="doc-history"></div>
+  </div>
+
+  <div class="left-trust">
+    <div class="trust-row"><div class="t-dot t-green"></div>Every document AI-reviewed before it reaches you</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>ICC, GAFTA &amp; Incoterms 2020 referenced throughout</div>
+    <div class="trust-row"><div class="t-dot t-green"></div>Ready for your bank's LC desk on download</div>
+    <div class="trust-row"><div class="t-dot t-violet"></div>Countersign-ready for all parties</div>
+  </div>
+</div>
+
+<!-- ══════════════════ RIGHT PANEL ══════════════════ -->
+<div class="right">
+
+  <div class="right-head">
+    <div>
+      <div class="rh-title" id="rh-title">Letter of Intent</div>
+      <div class="rh-sub" id="rh-sub">AI-generated · ICC-referenced · ready to sign</div>
+    </div>
+    <a href="sloiai-platform.html" class="exit-link">← Back to platform</a>
+  </div>
+
+  <div class="right-body">
+
+    <!-- API KEY -->
+    <div class="key-bar">
+      <span class="key-label">🔑 Claude API Key</span>
+      <input class="inp" type="password" id="api-key" placeholder="sk-ant-api03-…" oninput="saveKey(this.value)"/>
+      <span class="key-status" id="key-status"></span>
+    </div>
+
+    <!-- ══ LOI PANEL ══ -->
+    <div class="doc-panel active" id="panel-loi">
+
+      <div class="sec-lbl">Buyer Details</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Full Name</label><input class="inp" id="loi-buyer-name" placeholder="e.g. Mohammed Al-Rashidi"/></div>
+        <div class="field"><label class="flabel">Company / Organisation</label><input class="inp" id="loi-buyer-company" placeholder="e.g. Gulf Cement LLC"/></div>
+        <div class="field"><label class="flabel">Delivery Site / Location</label><input class="inp" id="loi-buyer-site" placeholder="e.g. NEOM Site B, Tabuk"/></div>
+        <div class="field"><label class="flabel">Country / Port</label><input class="inp" id="loi-buyer-country" placeholder="e.g. UAE — Jebel Ali"/></div>
+      </div>
+
+      <div class="sec-lbl">Supplier Details</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Supplier Company</label><input class="inp" id="loi-sup-company" placeholder="e.g. Izmir Steel Co."/></div>
+        <div class="field"><label class="flabel">Country / Origin</label><input class="inp" id="loi-sup-country" placeholder="e.g. Turkey"/></div>
+        <div class="field"><label class="flabel">Supplier Contact</label><input class="inp" id="loi-sup-contact" placeholder="Name or email (optional)"/></div>
+        <div class="field"><label class="flabel">Supplier Reference</label><input class="inp" id="loi-sup-ref" placeholder="e.g. REF-MET-001 (optional)"/></div>
+      </div>
+
+      <div class="sec-lbl">Deal Terms</div>
+      <div class="fg g4">
+        <div class="field" style="grid-column:span 2"><label class="flabel">Product / Commodity</label><input class="inp" id="loi-product" placeholder="e.g. Steel Rebar G60 · ASTM A615"/></div>
+        <div class="field"><label class="flabel">Quantity</label><input class="inp" id="loi-qty" placeholder="e.g. 2500"/></div>
+        <div class="field"><label class="flabel">Unit</label><select class="inp" id="loi-unit"><option>MT</option><option>TON</option><option>KG</option><option>L</option><option>BBL</option><option>M³</option><option>PCS</option></select></div>
+        <div class="field"><label class="flabel">Unit Price</label><input class="inp" id="loi-price" placeholder="e.g. 527"/></div>
+        <div class="field"><label class="flabel">Currency</label><select class="inp" id="loi-currency"><option>USD</option><option>EUR</option><option>SAR</option><option>AED</option><option>GBP</option></select></div>
+        <div class="field"><label class="flabel">Total Value</label><input class="inp" id="loi-total" readonly placeholder="Auto-calculated"/></div>
+        <div class="field"><label class="flabel">Incoterm</label><select class="inp" id="loi-incoterm"><option>CIF</option><option>FOB</option><option>DDP</option><option>CFR</option><option>DAP</option><option>EXW</option><option>FCA</option></select></div>
+        <div class="field"><label class="flabel">Payment Terms</label><select class="inp" id="loi-payment"><option>LC at sight (UCP 600)</option><option>LC 30 days</option><option>LC 60 days</option><option>TT 30% advance + 70% BL</option><option>TT 100% advance</option><option>Open Account 30 days</option><option>SBLC</option></select></div>
+        <div class="field"><label class="flabel">Delivery Date</label><input class="inp" type="date" id="loi-delivery"/></div>
+        <div class="field"><label class="flabel">LOI Validity</label><select class="inp" id="loi-validity"><option>7 days</option><option>14 days</option><option>30 days</option><option>45 days</option><option>60 days</option></select></div>
+      </div>
+
+      <div class="sec-lbl">Standards &amp; Specs</div>
+      <div class="std-wrap">
+        <button class="std-btn" id="loi-std-us" onclick="setStd('loi','us')">🇺🇸 American — ASTM · Imperial · USD</button>
+        <button class="std-btn active" id="loi-std-eu" onclick="setStd('loi','eu')">🇪🇺 European — EN/ISO · Metric · EUR</button>
+        <button class="std-btn" id="loi-std-sa" onclick="setStd('loi','sa')">🇸🇦 Saudi — SASO · Metric · SAR</button>
+        <button class="std-btn" id="loi-std-ae" onclick="setStd('loi','ae')">🇦🇪 UAE — ESMA · Metric · AED</button>
+      </div>
+
+      <div class="sec-lbl">Special Conditions (optional)</div>
+      <div style="margin-bottom:20px">
+        <textarea class="inp" id="loi-conditions" placeholder="e.g. Mill Test Certificates required · Third-party inspection at origin port · Phytosanitary certificate included"></textarea>
+      </div>
+
+      <button class="btn-gen" id="loi-btn" onclick="genLOI()">
+        <span id="loi-icon">⚡</span> Generate LOI
+      </button>
+      <div class="preview-box" id="loi-preview"></div>
+      <div class="preview-actions" id="loi-actions">
+        <button class="pa pa-pdf" onclick="printDoc('loi')">📥 Download PDF</button>
+        <button class="pa pa-wa"  onclick="shareWA('loi')">💬 WhatsApp</button>
+        <button class="pa pa-em"  onclick="shareEmail('loi')">✉️ Email</button>
+        <button class="pa pa-cp"  onclick="copyDoc('loi')">⧉ Copy text</button>
+      </div>
+    </div>
+
+    <!-- ══ PO PANEL ══ -->
+    <div class="doc-panel" id="panel-po">
+
+      <div class="sec-lbl">PO Info</div>
+      <div class="fg g4">
+        <div class="field" style="grid-column:span 2"><label class="flabel">PO Number</label><input class="inp" id="po-number" placeholder="Auto-generated"/></div>
+        <div class="field"><label class="flabel">PO Date</label><input class="inp" type="date" id="po-date"/></div>
+        <div class="field"><label class="flabel">Currency</label><select class="inp" id="po-currency" onchange="calcPOTotal()"><option>USD</option><option>EUR</option><option>SAR</option><option>AED</option><option>GBP</option></select></div>
+      </div>
+
+      <div class="sec-lbl">Buyer</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Company</label><input class="inp" id="po-buyer-co" placeholder="Your company"/></div>
+        <div class="field"><label class="flabel">Country / Address</label><input class="inp" id="po-buyer-addr" placeholder="City, Country"/></div>
+        <div class="field"><label class="flabel">Contact Person</label><input class="inp" id="po-buyer-contact" placeholder="Full name"/></div>
+        <div class="field"><label class="flabel">Email</label><input class="inp" id="po-buyer-email" placeholder="email@company.com"/></div>
+      </div>
+
+      <div class="sec-lbl">Supplier</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Company</label><input class="inp" id="po-sup-co" placeholder="Supplier company"/></div>
+        <div class="field"><label class="flabel">Country / Address</label><input class="inp" id="po-sup-addr" placeholder="City, Country"/></div>
+      </div>
+
+      <div class="sec-lbl">Line Items</div>
+      <table class="li-table" id="li-table">
+        <thead><tr><th style="width:36%">Description</th><th style="width:10%">Qty</th><th style="width:9%">Unit</th><th style="width:14%">Unit Price</th><th style="width:14%">Total</th><th style="width:5%"></th></tr></thead>
+        <tbody id="li-body"></tbody>
+      </table>
+      <button class="add-row" onclick="addLine()">+ Add line item</button>
+
+      <div class="sec-lbl">Delivery &amp; Terms</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Incoterm</label><select class="inp" id="po-incoterm"><option>CIF</option><option>FOB</option><option>DDP</option><option>CFR</option><option>DAP</option><option>EXW</option></select></div>
+        <div class="field"><label class="flabel">Payment Terms</label><select class="inp" id="po-payment"><option>LC at sight (UCP 600)</option><option>LC 30 days</option><option>TT 30% advance + 70% BL</option><option>TT 100% advance</option><option>Open Account 30 days</option></select></div>
+        <div class="field"><label class="flabel">Delivery Date</label><input class="inp" type="date" id="po-delivery"/></div>
+        <div class="field"><label class="flabel">Port of Destination</label><input class="inp" id="po-port" placeholder="e.g. Jebel Ali, UAE"/></div>
+      </div>
+      <div class="field" style="margin-bottom:14px"><label class="flabel">Special Instructions (optional)</label><textarea class="inp" id="po-notes" placeholder="Quality standards, inspection, packaging…" style="min-height:60px"></textarea></div>
+
+      <div class="totals-bar">
+        <span class="totals-label">Total PO Value</span>
+        <span class="totals-val" id="po-total">USD 0.00</span>
+      </div>
+
+      <button class="btn-gen" id="po-btn" onclick="genPO()">
+        <span id="po-icon">⚡</span> Generate Purchase Order
+      </button>
+      <div class="preview-box" id="po-preview"></div>
+      <div class="preview-actions" id="po-actions">
+        <button class="pa pa-pdf" onclick="printDoc('po')">📥 Download PDF</button>
+        <button class="pa pa-wa"  onclick="shareWA('po')">💬 WhatsApp</button>
+        <button class="pa pa-em"  onclick="shareEmail('po')">✉️ Email</button>
+        <button class="pa pa-cp"  onclick="copyDoc('po')">⧉ Copy text</button>
+      </div>
+    </div>
+
+    <!-- ══ NDA PANEL ══ -->
+    <div class="doc-panel" id="panel-nda">
+
+      <div class="sec-lbl">NDA Type</div>
+      <div class="type-grid">
+        <div class="type-card active" id="nda-bi" onclick="setNdaType('bilateral')">
+          <div class="type-icon">🤝</div>
+          <div class="type-name">Bilateral</div>
+          <div class="type-desc">Both parties share confidential info</div>
+        </div>
+        <div class="type-card" id="nda-uni" onclick="setNdaType('unilateral')">
+          <div class="type-icon">🔒</div>
+          <div class="type-name">Unilateral</div>
+          <div class="type-desc">One party discloses to the other</div>
+        </div>
+      </div>
+
+      <div class="sec-lbl">Party A — Disclosing Party</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Company / Name</label><input class="inp" id="nda-a-name" placeholder="Your company or name"/></div>
+        <div class="field"><label class="flabel">Country / Jurisdiction</label><input class="inp" id="nda-a-country" placeholder="e.g. UAE"/></div>
+        <div class="field"><label class="flabel">Registered Address</label><input class="inp" id="nda-a-addr" placeholder="Address (optional)"/></div>
+        <div class="field"><label class="flabel">Signatory Name &amp; Title</label><input class="inp" id="nda-a-sig" placeholder="e.g. Ahmed Al-Farsi, CEO"/></div>
+      </div>
+
+      <div class="sec-lbl">Party B — Receiving Party</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Company / Name</label><input class="inp" id="nda-b-name" placeholder="Counterparty name or company"/></div>
+        <div class="field"><label class="flabel">Country / Jurisdiction</label><input class="inp" id="nda-b-country" placeholder="e.g. Turkey"/></div>
+        <div class="field"><label class="flabel">Registered Address</label><input class="inp" id="nda-b-addr" placeholder="Address (optional)"/></div>
+        <div class="field"><label class="flabel">Signatory Name &amp; Title</label><input class="inp" id="nda-b-sig" placeholder="e.g. Mehmet Yilmaz, Director"/></div>
+      </div>
+
+      <div class="sec-lbl">NDA Terms</div>
+      <div class="fg g2">
+        <div class="field"><label class="flabel">Purpose / Scope</label><input class="inp" id="nda-purpose" placeholder="e.g. Commodity sourcing — steel rebar"/></div>
+        <div class="field"><label class="flabel">Duration</label><select class="inp" id="nda-duration"><option>1 year</option><option>2 years</option><option>3 years</option><option>5 years</option><option>Indefinite</option></select></div>
+        <div class="field"><label class="flabel">Governing Law</label><select class="inp" id="nda-law"><option>UAE Law — DIFC Courts</option><option>English Law — ICC Arbitration</option><option>Saudi Law — CRCICA</option><option>US Law — New York</option><option>Swiss Law — ICC Geneva</option></select></div>
+        <div class="field"><label class="flabel">Effective Date</label><input class="inp" type="date" id="nda-date"/></div>
+      </div>
+      <div class="field" style="margin-bottom:20px"><label class="flabel">Confidential Information Scope (optional)</label><textarea class="inp" id="nda-scope" placeholder="e.g. Pricing data, supplier identities, negotiation strategies, technical specifications…" style="min-height:60px"></textarea></div>
+
+      <button class="btn-gen" id="nda-btn" onclick="genNDA()">
+        <span id="nda-icon">⚡</span> Generate NDA
+      </button>
+      <div class="preview-box" id="nda-preview"></div>
+      <div class="preview-actions" id="nda-actions">
+        <button class="pa pa-pdf" onclick="printDoc('nda')">📥 Download PDF</button>
+        <button class="pa pa-wa"  onclick="shareWA('nda')">💬 WhatsApp</button>
+        <button class="pa pa-em"  onclick="shareEmail('nda')">✉️ Email</button>
+        <button class="pa pa-cp"  onclick="copyDoc('nda')">⧉ Copy text</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+// ── STATE ────────────────────────────────────────────────
+var activeTab  = 'loi';
+var loiStd     = 'eu';
+var ndaType    = 'bilateral';
+var lines      = [];
+var docs       = { loi:'', po:'', nda:'' };
+
+var META = {
+  loi: { title:'Letter of Intent',           sub:'AI-generated · ICC-referenced · ready to sign' },
+  po:  { title:'Purchase Order',              sub:'Line items · delivery terms · countersign-ready' },
+  nda: { title:'Non-Disclosure Agreement',   sub:'Bilateral or Unilateral · Claude-generated' }
+};
+
+// ── TAB SWITCHING ────────────────────────────────────────
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tn-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.doc-panel').forEach(function(p){ p.classList.remove('active'); });
+  document.getElementById('panel-' + tab).classList.add('active');
+  document.getElementById('rh-title').textContent = META[tab].title;
+  document.getElementById('rh-sub').textContent   = META[tab].sub;
+  activeTab = tab;
+}
+
+// ── URL PARAM (allow ?tool=loi|po|nda) ──────────────────
+(function checkParam(){
+  var p = new URLSearchParams(window.location.search).get('tool');
+  if (p && META[p]) {
+    var btn = document.querySelector('.tn-btn[onclick*="\'' + p + '\'"]');
+    if (btn) switchTab(p, btn);
+  }
+})();
+
+// ── API KEY ──────────────────────────────────────────────
+function saveKey(v) {
+  localStorage.setItem('sloi_claude_key', v);
+  document.getElementById('key-status').textContent = v ? '✓ saved' : '';
+}
+(function loadKey(){
+  var k = localStorage.getItem('sloi_claude_key') || '';
+  if (k) { document.getElementById('api-key').value = k; document.getElementById('key-status').textContent = '✓ saved'; }
+})();
+
+// ── USER PRE-FILL ────────────────────────────────────────
+(function prefill(){
+  try {
+    var u = JSON.parse(localStorage.getItem('sloi_user') || '{}');
+    if (!u.name) return;
+    function set(id, val){ var el=document.getElementById(id); if(el&&!el.value) el.value=val||''; }
+    set('loi-buyer-name',    u.name);
+    set('loi-buyer-company', u.org_name);
+    set('loi-buyer-country', u.country);
+    set('po-buyer-co',       u.org_name);
+    set('po-buyer-addr',     u.country);
+    set('po-buyer-contact',  u.name);
+    set('po-buyer-email',    u.email);
+    set('nda-a-name',        u.org_name || u.name);
+    set('nda-a-country',     u.country);
+    set('nda-a-sig',         u.name);
+  } catch(e){}
+})();
+
+// ── STANDARDS ────────────────────────────────────────────
+var STD_CUR = { us:'USD', eu:'EUR', sa:'SAR', ae:'AED' };
+function setStd(prefix, s) {
+  loiStd = s;
+  ['us','eu','sa','ae'].forEach(function(k){
+    document.getElementById(prefix+'-std-'+k).classList.toggle('active', k===s);
+  });
+  document.getElementById(prefix+'-currency').value = STD_CUR[s];
+}
+
+// ── LOI TOTAL ────────────────────────────────────────────
+['loi-qty','loi-price'].forEach(function(id){
+  document.getElementById(id).addEventListener('input', function(){
+    var q = parseFloat((document.getElementById('loi-qty').value||'').replace(/,/g,''))||0;
+    var p = parseFloat((document.getElementById('loi-price').value||'').replace(/,/g,''))||0;
+    document.getElementById('loi-total').value = (q&&p) ? (q*p).toLocaleString(undefined,{maximumFractionDigits:2}) : '';
+  });
+});
+
+// ── LINE ITEMS ───────────────────────────────────────────
+function addLine() {
+  lines.push({ desc:'', qty:'', unit:'MT', price:'', total:'' });
+  renderLines();
+}
+function rmLine(i) { lines.splice(i,1); renderLines(); calcPOTotal(); }
+function renderLines() {
+  var tb = document.getElementById('li-body');
+  tb.innerHTML = '';
+  lines.forEach(function(ln, i){
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><input class="inp" value="'+h(ln.desc)+'" placeholder="Product / description" oninput="lines['+i+'].desc=this.value"/></td>'+
+      '<td><input class="inp" value="'+h(ln.qty)+'" placeholder="0" oninput="lines['+i+'].qty=this.value;calcLine('+i+')"/></td>'+
+      '<td><select class="inp" onchange="lines['+i+'].unit=this.value">'+
+        ['MT','TON','KG','L','BBL','PCS'].map(function(u){ return '<option'+(ln.unit===u?' selected':'')+'>'+u+'</option>'; }).join('')+
+      '</select></td>'+
+      '<td><input class="inp" value="'+h(ln.price)+'" placeholder="0.00" oninput="lines['+i+'].price=this.value;calcLine('+i+')"/></td>'+
+      '<td><input class="inp" id="lt-'+i+'" value="'+h(ln.total)+'" readonly/></td>'+
+      '<td><button class="li-rm" onclick="rmLine('+i+')">×</button></td>';
+    tb.appendChild(tr);
+  });
+}
+function calcLine(i) {
+  var q = parseFloat((lines[i].qty  ||'').replace(/,/g,''))||0;
+  var p = parseFloat((lines[i].price||'').replace(/,/g,''))||0;
+  lines[i].total = (q&&p) ? (q*p).toFixed(2) : '';
+  var el = document.getElementById('lt-'+i);
+  if (el) el.value = lines[i].total;
+  calcPOTotal();
+}
+function calcPOTotal() {
+  var t = lines.reduce(function(s,l){ return s+(parseFloat(l.total)||0); },0);
+  var cur = document.getElementById('po-currency').value;
+  document.getElementById('po-total').textContent = cur+' '+t.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+function h(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+// ── NDA TYPE ─────────────────────────────────────────────
+function setNdaType(t) {
+  ndaType = t;
+  document.getElementById('nda-bi').classList.toggle('active', t==='bilateral');
+  document.getElementById('nda-uni').classList.toggle('active', t==='unilateral');
+}
+
+// ── INIT DEFAULTS ────────────────────────────────────────
+(function init(){
+  var today = new Date().toISOString().slice(0,10);
+  var plus30 = new Date(Date.now()+30*864e5).toISOString().slice(0,10);
+  document.getElementById('po-number').value  = 'PO-' + Date.now().toString().slice(-6);
+  document.getElementById('po-date').value    = today;
+  document.getElementById('nda-date').value   = today;
+  document.getElementById('loi-delivery').value = plus30;
+  document.getElementById('po-delivery').value  = plus30;
+  addLine();
+  renderHistory();
+})();
+
+// ── CLAUDE API ───────────────────────────────────────────
+async function claude(prompt) {
+  var key = document.getElementById('api-key').value.trim();
+  if (!key) { alert('Please enter your Claude API key at the top.'); return null; }
+  var res = await fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key': key,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body: JSON.stringify({
+      model:'claude-haiku-4-5-20251001',
+      max_tokens:2048,
+      messages:[{ role:'user', content:prompt }]
+    })
+  });
+  if (!res.ok) {
+    var err = await res.json().catch(function(){return{};});
+    throw new Error((err.error&&err.error.message)||'API error '+res.status);
+  }
+  var d = await res.json();
+  return d.content[0].text;
+}
+
+function setBusy(id, busy) {
+  var btn  = document.getElementById(id+'-btn');
+  var icon = document.getElementById(id+'-icon');
+  btn.disabled = busy;
+  icon.innerHTML = busy ? '<span class="spin"></span>' : '⚡';
+}
+
+function showResult(id, text) {
+  docs[id] = text;
+  var box = document.getElementById(id+'-preview');
+  var acts = document.getElementById(id+'-actions');
+  box.textContent = text;
+  box.classList.add('show');
+  acts.classList.add('show');
+}
+
+// ── GENERATE LOI ─────────────────────────────────────────
+async function genLOI() {
+  var f = {
+    buyerName:    document.getElementById('loi-buyer-name').value.trim(),
+    buyerCo:      document.getElementById('loi-buyer-company').value.trim(),
+    buyerSite:    document.getElementById('loi-buyer-site').value.trim(),
+    buyerCountry: document.getElementById('loi-buyer-country').value.trim(),
+    supCo:        document.getElementById('loi-sup-company').value.trim(),
+    supCountry:   document.getElementById('loi-sup-country').value.trim(),
+    supContact:   document.getElementById('loi-sup-contact').value.trim(),
+    supRef:       document.getElementById('loi-sup-ref').value.trim(),
+    product:      document.getElementById('loi-product').value.trim(),
+    qty:          document.getElementById('loi-qty').value.trim(),
+    unit:         document.getElementById('loi-unit').value,
+    price:        document.getElementById('loi-price').value.trim(),
+    currency:     document.getElementById('loi-currency').value,
+    total:        document.getElementById('loi-total').value.trim(),
+    incoterm:     document.getElementById('loi-incoterm').value,
+    payment:      document.getElementById('loi-payment').value,
+    delivery:     document.getElementById('loi-delivery').value,
+    validity:     document.getElementById('loi-validity').value,
+    conditions:   document.getElementById('loi-conditions').value.trim()
+  };
+  var stdLabel = {us:'American (ASTM · Imperial · USD)',eu:'European (EN/ISO · Metric · EUR)',sa:'Saudi (SASO · Metric · SAR)',ae:'UAE (ESMA · Metric · AED)'}[loiStd];
+  if (!f.product || !f.buyerCo || !f.supCo) { alert('Please fill in Product, Buyer Company, and Supplier Company.'); return; }
+  var loiRef = 'SL-LOI-' + new Date().toISOString().slice(0,10).replace(/-/g,'') + '-' + String(Math.floor(Math.random()*900)+100);
+  setBusy('loi', true);
+  try {
+    var prompt =
+      'Generate a formal Letter of Intent (LOI) for an international commodity trade deal. ' +
+      'Format it as a professional legal-grade trade document with proper numbered sections, ' +
+      'ICC standard references, Incoterms 2020 references, and formal language.\n\n' +
+      'BUYER: '+(f.buyerName?f.buyerName+', ':'')+f.buyerCo+(f.buyerSite?' · Site: '+f.buyerSite:'')+(f.buyerCountry?' · '+f.buyerCountry:'')+'\n'+
+      'SUPPLIER: '+f.supCo+(f.supCountry?', '+f.supCountry:'')+(f.supContact?' · Contact: '+f.supContact:'')+(f.supRef?' · Ref: '+f.supRef:'')+'\n'+
+      'PRODUCT: '+f.product+'\n'+
+      'QUANTITY: '+f.qty+' '+f.unit+'\n'+
+      'UNIT PRICE: '+f.currency+' '+f.price+' / '+f.unit+'\n'+
+      'TOTAL VALUE: '+f.currency+' '+f.total+'\n'+
+      'INCOTERM: '+f.incoterm+' (Incoterms 2020)\n'+
+      'PAYMENT: '+f.payment+'\n'+
+      'DELIVERY: '+f.delivery+'\n'+
+      'LOI VALIDITY: '+f.validity+'\n'+
+      'STANDARDS: '+stdLabel+'\n'+
+      (f.conditions?'SPECIAL CONDITIONS: '+f.conditions+'\n':'')+
+      '\nInclude: LOI reference number: '+loiRef+', date, recitals, ' +
+      'product specifications clause, quantity and delivery clause, pricing and payment clause, ' +
+      'quality and inspection clause, force majeure clause, confidentiality clause, ' +
+      'governing law (ICC Arbitration), signature blocks for both parties with date lines. ' +
+      'Return only the document text, no explanations or markdown.';
+    var text = await claude(prompt);
+    showResult('loi', text);
+    saveDoc('loi', (f.product||'LOI')+' · '+(f.buyerCo||'Buyer'), text);
+    // Write structured record so sloiai-platform.html can read it
+    saveLOIRecord({ ref:loiRef, product:f.product, qty:f.qty, unit:f.unit,
+      price:parseFloat(f.price)||0, total:parseFloat((f.total||'').replace(/,/g,''))||0,
+      buyer:f.buyerCo, seller:f.supCo, incoterm:f.incoterm, payment:f.payment,
+      date:new Date().toISOString().slice(0,10), created_at:new Date().toISOString() });
+  } catch(e) { alert('Generation failed: '+e.message); }
+  finally { setBusy('loi', false); }
+}
+
+function saveLOIRecord(rec) {
+  var list = [];
+  try { list = JSON.parse(localStorage.getItem('sloi_lois') || '[]'); } catch(e){}
+  if (!list.some(function(l){ return l.ref === rec.ref; })) list.unshift(rec);
+  localStorage.setItem('sloi_lois', JSON.stringify(list));
+}
+
+// ── GENERATE PO ──────────────────────────────────────────
+async function genPO() {
+  var itemLines = lines.filter(function(l){return l.desc;}).map(function(l,n){
+    return (n+1)+'. '+l.desc+' — Qty: '+l.qty+' '+l.unit+' @ '+document.getElementById('po-currency').value+' '+l.price+'/'+l.unit+' = '+document.getElementById('po-currency').value+' '+l.total;
+  }).join('\n');
+  var f = {
+    num:     document.getElementById('po-number').value.trim(),
+    date:    document.getElementById('po-date').value,
+    cur:     document.getElementById('po-currency').value,
+    buyerCo: document.getElementById('po-buyer-co').value.trim(),
+    buyerAd: document.getElementById('po-buyer-addr').value.trim(),
+    buyerCt: document.getElementById('po-buyer-contact').value.trim(),
+    buyerEm: document.getElementById('po-buyer-email').value.trim(),
+    supCo:   document.getElementById('po-sup-co').value.trim(),
+    supAd:   document.getElementById('po-sup-addr').value.trim(),
+    incot:   document.getElementById('po-incoterm').value,
+    payment: document.getElementById('po-payment').value,
+    deliv:   document.getElementById('po-delivery').value,
+    port:    document.getElementById('po-port').value.trim(),
+    notes:   document.getElementById('po-notes').value.trim()
+  };
+  if (!f.buyerCo || !f.supCo || !itemLines) { alert('Please fill in Buyer, Supplier, and at least one line item.'); return; }
+  setBusy('po', true);
+  try {
+    var prompt =
+      'Generate a formal Purchase Order document for an international commodity trade. ' +
+      'Format as a professional trade document with proper sections.\n\n' +
+      'PO NUMBER: '+f.num+'\nDATE: '+f.date+'\nCURRENCY: '+f.cur+'\n\n'+
+      'BUYER: '+f.buyerCo+(f.buyerAd?', '+f.buyerAd:'')+(f.buyerCt?' · Attn: '+f.buyerCt:'')+(f.buyerEm?' · '+f.buyerEm:'')+'\n'+
+      'SUPPLIER: '+f.supCo+(f.supAd?', '+f.supAd:'')+'\n\n'+
+      'LINE ITEMS:\n'+itemLines+'\n\n'+
+      'INCOTERM: '+f.incot+' (Incoterms 2020)\n'+
+      'PAYMENT TERMS: '+f.payment+'\n'+
+      'DELIVERY DATE: '+f.deliv+'\n'+
+      (f.port?'PORT OF DESTINATION: '+f.port+'\n':'')+
+      (f.notes?'SPECIAL INSTRUCTIONS: '+f.notes+'\n':'')+
+      '\nInclude: PO header, buyer and supplier details, itemized goods table with totals, ' +
+      'delivery and payment terms, quality/acceptance conditions, cancellation clause, ' +
+      'signature blocks. Return only the document, no explanations or markdown.';
+    var text = await claude(prompt);
+    showResult('po', text);
+    saveDoc('po', (f.num||'PO')+' · '+(f.buyerCo||'Buyer'), text);
+    // Write structured record so sloiai-platform.html can read it
+    var poTotal = lines.reduce(function(s,l){ return s+(parseFloat(l.total)||0); }, 0);
+    savePORecord({ po_num:f.num, product:lines.filter(function(l){return l.desc;}).map(function(l){return l.desc;}).join(', '),
+      buyer:f.buyerCo, supplier:f.supCo, incoterm:f.incot, payment_terms:f.payment,
+      currency:f.cur, total:poTotal, status:'draft',
+      date:f.date, created_at:new Date().toISOString() });
+  } catch(e) { alert('Generation failed: '+e.message); }
+  finally { setBusy('po', false); }
+}
+
+function savePORecord(rec) {
+  var list = [];
+  try { list = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e){}
+  if (!list.some(function(p){ return p.po_num === rec.po_num; })) list.unshift(rec);
+  localStorage.setItem('sloi_pos', JSON.stringify(list));
+}
+
+// ── GENERATE NDA ─────────────────────────────────────────
+async function genNDA() {
+  var f = {
+    type:    ndaType==='bilateral'?'Bilateral (Mutual)':'Unilateral (One-Way)',
+    aName:   document.getElementById('nda-a-name').value.trim(),
+    aCo:     document.getElementById('nda-a-country').value.trim(),
+    aAd:     document.getElementById('nda-a-addr').value.trim(),
+    aSig:    document.getElementById('nda-a-sig').value.trim(),
+    bName:   document.getElementById('nda-b-name').value.trim(),
+    bCo:     document.getElementById('nda-b-country').value.trim(),
+    bAd:     document.getElementById('nda-b-addr').value.trim(),
+    bSig:    document.getElementById('nda-b-sig').value.trim(),
+    purpose: document.getElementById('nda-purpose').value.trim(),
+    dur:     document.getElementById('nda-duration').value,
+    law:     document.getElementById('nda-law').value,
+    date:    document.getElementById('nda-date').value,
+    scope:   document.getElementById('nda-scope').value.trim()
+  };
+  if (!f.aName || !f.bName) { alert('Please fill in both Party A and Party B.'); return; }
+  setBusy('nda', true);
+  try {
+    var prompt =
+      'Generate a formal '+f.type+' Non-Disclosure Agreement (NDA) for an international commodity trade context. ' +
+      'Format as a professional legal document with numbered clauses.\n\n'+
+      'EFFECTIVE DATE: '+f.date+'\nTYPE: '+f.type+'\n\n'+
+      'PARTY A: '+f.aName+(f.aAd?', '+f.aAd:'')+(f.aCo?', '+f.aCo:'')+(f.aSig?' · Signatory: '+f.aSig:'')+'\n'+
+      'PARTY B: '+f.bName+(f.bAd?', '+f.bAd:'')+(f.bCo?', '+f.bCo:'')+(f.bSig?' · Signatory: '+f.bSig:'')+'\n\n'+
+      'PURPOSE: '+(f.purpose||'Commodity trade discussions and sourcing negotiations')+'\n'+
+      'DURATION: '+f.dur+'\n'+
+      'GOVERNING LAW: '+f.law+'\n'+
+      (f.scope?'CONFIDENTIAL INFORMATION SCOPE: '+f.scope+'\n':'')+
+      '\nInclude: recitals, definition of confidential information, mutual obligations (or one-way), ' +
+      'permitted disclosures, return of materials clause, term and termination, remedies and injunctive relief, ' +
+      'entire agreement clause, signature blocks with date lines for both parties. ' +
+      'Return only the document text, no explanations or markdown.';
+    var text = await claude(prompt);
+    showResult('nda', text);
+    saveDoc('nda', (f.aName||'Party A')+' ↔ '+(f.bName||'Party B'), text);
+  } catch(e) { alert('Generation failed: '+e.message); }
+  finally { setBusy('nda', false); }
+}
+
+// ── EXPORT ───────────────────────────────────────────────
+function printDoc(id) {
+  var doc = docs[id]; if (!doc) return;
+  var w = window.open('','_blank');
+  w.document.write(
+    '<html><head><title>SLOI AI — '+META[id].title+'</title>'+
+    '<style>body{font-family:"IBM Plex Mono",monospace;font-size:10.5pt;line-height:1.85;'+
+    'color:#000;padding:2cm;white-space:pre-wrap;max-width:800px;margin:0 auto}'+
+    '@page{margin:2cm}</style></head><body>'+
+    doc.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')+
+    '</body></html>'
+  );
+  w.document.close(); w.print();
+}
+
+function copyDoc(id) {
+  var doc = docs[id]; if (!doc) return;
+  navigator.clipboard.writeText(doc)
+    .then(function(){ alert('Copied to clipboard.'); })
+    .catch(function(){ alert('Copy failed — please select text manually.'); });
+}
+
+function shareWA(id) {
+  var doc = docs[id]; if (!doc) return;
+  var text = META[id].title+' — SLOI AI\n\n'+doc.substring(0,900)+(doc.length>900?'\n…':'');
+  window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');
+}
+
+function shareEmail(id) {
+  var doc = docs[id]; if (!doc) return;
+  window.open('mailto:?subject='+encodeURIComponent('SLOI AI — '+META[id].title)+'&body='+encodeURIComponent(doc),'_blank');
+}
+
+// ── DOCUMENT HISTORY ─────────────────────────────────────
+var HIST_KEY = 'sloi_docs';
+var HIST_MAX = 20;
+var HIST_ICON = { loi:'📄', po:'📋', nda:'🔏' };
+
+function saveDoc(type, title, text) {
+  var list = [];
+  try { list = JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e){}
+  list.unshift({ type:type, title:title, date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}), text:text });
+  if (list.length > HIST_MAX) list = list.slice(0, HIST_MAX);
+  localStorage.setItem(HIST_KEY, JSON.stringify(list));
+  renderHistory();
+}
+
+function renderHistory() {
+  var list = [];
+  try { list = JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e){}
+  var wrap = document.getElementById('hist-wrap');
+  var el   = document.getElementById('doc-history');
+  if (!list.length) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  el.innerHTML = list.map(function(d, i){
+    return '<div class="hist-card" onclick="reopenDoc('+i+')" title="'+h(d.title)+'">' +
+      '<div class="hist-card-type">'+(HIST_ICON[d.type]||'📄')+' '+d.type.toUpperCase()+'</div>' +
+      '<div class="hist-card-title">'+h(d.title)+'</div>' +
+      '<div class="hist-card-date">'+h(d.date)+'</div>' +
+    '</div>';
+  }).join('');
+}
+
+function reopenDoc(i) {
+  var list = [];
+  try { list = JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e){}
+  var d = list[i]; if (!d) return;
+  var btn = document.querySelector('.tn-btn[onclick*="\''+d.type+'\'"]');
+  if (btn) switchTab(d.type, btn);
+  showResult(d.type, d.text);
+  document.getElementById('panel-'+d.type).scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function clearHistory() {
+  if (!confirm('Clear all saved documents from this browser?')) return;
+  localStorage.removeItem(HIST_KEY);
+  renderHistory();
+}
+</script>
+</body>
+</html>

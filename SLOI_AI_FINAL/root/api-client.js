@@ -13,6 +13,9 @@ const SLOI_API_BASE =
     ? "http://localhost:3000/v1"
     : "https://sloi-ai-production.up.railway.app/v1";
 
+// Expose on window so pages that load api-client.js optionally can reference it
+window.SLOI_API_BASE = SLOI_API_BASE;
+
 class SloiAPI {
   constructor() {
     this.base = SLOI_API_BASE;
@@ -36,12 +39,12 @@ class SloiAPI {
   _devMock(path) {
     const p = path.split("?")[0];
     if (p.includes("/credits/balance"))  return { balance: 340 };
-    if (p.includes("/negotiations"))     return { negotiations: [] };
-    if (p.includes("/lois"))             return { lois: [] };
-    if (p.includes("/products"))         return { products: [] };
-    if (p.includes("/mandates"))         return { mandates: [] };
-    if (p.includes("/price-watches"))    return { watches: [] };
-    if (p.includes("/pipeline"))         return { pipeline: [] };
+    if (p.includes("/negotiations"))     return [];
+    if (p.includes("/lois"))             return [];
+    if (p.includes("/products"))         return [];
+    if (p.includes("/mandates"))         return [];
+    if (p.includes("/price-watches"))    return [];
+    if (p.includes("/pipeline"))         return [];
     if (p.includes("/brief"))            return { brief: "Dev mock mode — no live data." };
     if (p.includes("/revenue"))          return { revenue: 0 };
     return {};
@@ -592,14 +595,24 @@ class SloiNegotiation {
 function initPortal(requiredRole) {
   const api = new SloiAPI();
 
-  // Auth check
-  if (!api.isLoggedIn()) {
-    window.location.href = "/login.html";
-    return api;
-  }
-  if (requiredRole && api.role !== requiredRole && api.role !== "boss") {
-    window.location.href = "/login.html";
-    return api;
+  // On localhost without a token — activate dev mock instead of redirecting
+  const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.protocol === "file:";
+  if (isLocal && !api.isLoggedIn()) {
+    localStorage.setItem("sloi_dev_mock", "1");
+    const mockRole = requiredRole || "buyer";
+    localStorage.setItem("sloi_role", mockRole);
+    localStorage.setItem("sloi_user", JSON.stringify({ name: "Demo User", email: "demo@sloiai.com", role: mockRole, org_name: "Demo Org" }));
+    api.role = mockRole;
+  } else {
+    // Auth check
+    if (!api.isLoggedIn()) {
+      window.location.href = "/login.html";
+      return api;
+    }
+    if (requiredRole && api.role !== requiredRole && api.role !== "boss") {
+      window.location.href = "/login.html";
+      return api;
+    }
   }
 
   // Populate user info in UI
