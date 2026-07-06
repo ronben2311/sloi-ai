@@ -1278,7 +1278,7 @@
                 <div class="stat-sub" id="stat-credits-sub">loading</div>
               </div>
               <div class="stat">
-                <div class="stat-top">Active negotiations</div>
+                <div class="stat-top">Active orchestrations</div>
                 <div class="stat-val" style="color: var(--indigo)">2</div>
                 <div class="stat-sub">running now</div>
               </div>
@@ -1346,7 +1346,7 @@
                       </div>
                     </div>
                     <div>
-                      <div style="color: var(--muted)">Trader price</div>
+                      <div style="color: var(--muted)">Counterparty price</div>
                       <div style="color: var(--gold); font-weight: 600">
                         $2,850/MT
                       </div>
@@ -1384,7 +1384,7 @@
                     >
                       🌾 Hard Wheat · 50 MT
                     </div>
-                    <span class="badge bt">● Round 1/5</span>
+                    <span class="badge bt">● Stage 1/5</span>
                   </div>
                   <div
                     style="
@@ -1393,7 +1393,7 @@
                       margin-bottom: 8px;
                     "
                   >
-                    Agent sending first offer · Awaiting trader
+                    Orchestrator initiating · Awaiting counterparty
                   </div>
                   <button
                     class="btn btn-sm"
@@ -1860,7 +1860,7 @@
               <div style="display:flex;gap:8px;align-items:flex-start">
                 <input class="inp" id="prod-search" placeholder="Search name, origin, cert..." oninput="renderCatalog()" style="width:240px;font-size:13px;padding:6px 10px"/>
                 <div style="display:flex;flex-direction:column;gap:4px">
-                  <button class="btn btn-sm btn-p" onclick="window.open('negotiation-agent.html','_blank')">🤖 Negotiate →</button>
+                  <button class="btn btn-sm btn-p" onclick="window.open('negotiation-agent.html','_blank')">🔄 Orchestrate →</button>
                   <button class="btn btn-sm btn-g" onclick="window.open('loi-contracts.html?tool=loi','_blank')">📄 Auto Docs</button>
                 </div>
               </div>
@@ -1890,7 +1890,7 @@
                     <th>Min Deal</th>
                     <th>Lead</th>
                     <th>Payment</th>
-                    <th>Trader</th>
+                    <th>Counterparty</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -2763,22 +2763,22 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                 <div class="ar-icon" style="background:rgba(91,95,239,.15)">&#129302;</div>
                 <div class="ar-name">Commodities Engine</div>
                 <span class="hero-engine-tag">Main AI Tool</span>
-                <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>2 active rounds</span>
-                <div class="ar-metric">Steel R3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; Hard Wheat R1/5 &middot; opening offer sent</div>
+                <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>2 active stages</span>
+                <div class="ar-metric">Steel S3/5 &middot; variance <span style="color:var(--gold)">$30/MT</span> &middot; Hard Wheat S1/5 &middot; opening position sent</div>
                 <div class="ar-actions">
                   <button class="btn btn-xs btn-p" onclick="event.stopPropagation();window.open('negotiation-agent.html','_blank')">&#9654; View live</button>
                   <button class="btn btn-xs" onclick="event.stopPropagation();show('negotiate')">+ New</button>
                 </div>
                 <span class="ar-chev">&#9660;</span>
               </div>
-              <div class="hero-engine-sub">Sources, negotiates &amp; closes commodity deals — within your Agent Mandate, fully documented, you approve before anything's committed.</div>
+              <div class="hero-engine-sub">Sources, orchestrates &amp; closes commodity deals — within your mandate, fully documented, you authorize before anything's committed.</div>
               <div class="agent-detail" id="detail-neg">
                 <div class="ad-log">
-                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Steel Rebar</span><span>Round 3/5 &middot; gap <span style="color:var(--gold)">$30/MT</span> &middot; counter-offer pending</span></div>
-                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Hard Wheat</span><span>Round 1/5 &middot; opening offer sent &middot; awaiting reply</span></div>
+                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Steel Rebar</span><span>Stage 3/5 &middot; variance <span style="color:var(--gold)">$30/MT</span> &middot; counter-position pending</span></div>
+                  <div class="ad-log-row"><span style="color:var(--white);font-weight:600">Hard Wheat</span><span>Stage 1/5 &middot; opening position sent &middot; awaiting counterparty</span></div>
                 </div>
                 <div class="ad-btns">
-                  <button class="btn btn-xs btn-p" onclick="window.open('negotiation-agent.html','_blank')">Open negotiation board &rarr;</button>
+                  <button class="btn btn-xs btn-p" onclick="window.open('negotiation-agent.html','_blank')">Open Orchestrator &rarr;</button>
                 </div>
               </div>
             </div>
@@ -3551,9 +3551,9 @@ Content-Type: application/json
                     <a class="svc-card" onclick="svcJump('sloi_negotiate')" href="javascript:void(0)">
                       <div class="svc-icon">🤖</div>
                       <div class="svc-body">
-                        <div class="svc-name">Negotiation Engine</div>
-                        <div class="svc-desc">Runs up to 7 price rounds with a supplier on your behalf</div>
-                        <div class="svc-arrow" style="color:var(--violet)">→ Start negotiation</div>
+                        <div class="svc-name">Trade Orchestration Engine</div>
+                        <div class="svc-desc">Runs up to 7 validation stages with a counterparty on your behalf</div>
+                        <div class="svc-arrow" style="color:var(--violet)">→ Start orchestration</div>
                       </div>
                     </a>
                     <a class="svc-card" onclick="svcJump('sloi_compliance_check')" href="javascript:void(0)">
@@ -3956,11 +3956,11 @@ Content-Type: application/json
                   <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
                     <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#129302;</div>
                     <div style="flex:1;min-width:0">
-                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">NegotiationAgent</div>
+                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">OrchestratorAgent</div>
                       <div style="display:flex;align-items:center;gap:4px;margin-top:2px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span><span style="font-size:11px;color:var(--green)">2 active</span></div>
                     </div>
                   </div>
-                  <button class="btn btn-xs btn-p" style="width:100%;justify-content:center" onclick="show('negotiate')">+ New negotiation</button>
+                  <button class="btn btn-xs btn-p" style="width:100%;justify-content:center" onclick="show('negotiate')">+ New orchestration</button>
                 </div>
 
                 <!-- ComplianceBot -->
@@ -4243,12 +4243,11 @@ Content-Type: application/json
             </div>
             <div class="notif-item unread">
               <div class="ni-top">
-                <div class="ni-title">💬 Round 3 — Steel Rebar negotiation</div>
+                <div class="ni-title">💬 Stage 3 — Steel Rebar orchestration</div>
                 <div class="ni-time">4h ago</div>
               </div>
               <div class="ni-body">
-                Agent submitted $2,820/MT. Trader: $2,850/MT. Gap: $30/MT. Round
-                4 starting.
+                Orchestrator: $2,820/MT. Counterparty: $2,850/MT. Variance: $30/MT. Stage 4 initiated.
               </div>
               <div class="ni-actions">
                 <button
@@ -6147,7 +6146,7 @@ Content-Type: application/json
         document.getElementById("neg-live-title").textContent = "Starting…";
         document.getElementById("neg-live-id").textContent = "";
         document.getElementById("neg-chat").textContent =
-          "Connecting to negotiation engine…";
+          "Connecting to Orchestrator…";
         document.getElementById("neg-prices").style.display = "none";
         document.getElementById("neg-result").innerHTML = "";
         document.getElementById("neg-reset-btn").style.display = "none";

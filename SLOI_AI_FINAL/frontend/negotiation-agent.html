@@ -1465,7 +1465,7 @@
                     </div>
                     <div>
                       <label class="flabel">Walk-away max ($/unit)</label>
-                      <input class="inp" id="m-max" type="number" min="0" placeholder="—" readonly style="background:var(--surface);color:var(--gold);font-weight:700;cursor:default"/>
+                      <input class="inp" id="m-max" type="number" min="0" placeholder="—" style="color:var(--gold);font-weight:700"/>
                     </div>
                   </div>
                   <div id="price-warning" style="display:none;margin-top:6px;font-size:12px;color:var(--red);background:var(--red-dim);border:1px solid rgba(239,68,68,.25);border-radius:3px;padding:5px 8px">
@@ -5983,6 +5983,34 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
           // Purchase type → pre-select preference chips
           if (m.purchaseType === "recurring") {
             selectPref("deal", "annual");
+          }
+
+          // company → buyer field (company name is more relevant than contact name)
+          if (m.company) {
+            var buyEl = document.getElementById("m-buyer");
+            if (buyEl) buyEl.value = m.company;
+          }
+
+          // budget → price ceiling; parse unit-price formats like "$2,800/MT"
+          if (m.budget && m.budget !== "Not specified") {
+            var bStr = m.budget.replace(/,/g, "");
+            var bMatch = bStr.match(/\$?([\d.]+)\s*\/\s*(?:MT|ton|kg|unit|liter|m)/i);
+            if (bMatch) {
+              var maxEl = document.getElementById("m-max");
+              if (maxEl) maxEl.value = parseFloat(bMatch[1]);
+            }
+          }
+
+          // incoterms → hidden m-incoterm field used in LOI/doc generation
+          if (m.incoterms) {
+            var incEl = document.getElementById("m-incoterm");
+            if (incEl) incEl.value = m.incoterms.toUpperCase();
+          }
+
+          // unit → pre-fill before product catalog loads
+          if (m.unit) {
+            var unitEl = document.getElementById("m-unit");
+            if (unitEl) unitEl.value = m.unit;
           }
         } catch (e) {}
       }
