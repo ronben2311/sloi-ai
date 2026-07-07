@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="Frequently asked questions about SLOI AI — commodity sourcing, LOI generation, traders, payments, compliance, and geo-specific coverage across MENA, UAE, Egypt, and Europe."/>
+<meta name="description" content="Frequently asked questions about SLOI AI — the AI-powered trust layer for commodity sourcing. Mandates, Orchestrator, compliance, legal documents, pricing, US market, and geographic coverage."/>
 <title>FAQ — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
@@ -17,10 +17,14 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none;transition:color .15s}
 .nav-links a:hover,.nav-links a.active{color:var(--violet)}
+.nav-links a.nav-us{color:#60a5fa;font-weight:600}
 .nav-right{flex:1;display:flex;justify-content:flex-end;align-items:center;gap:10px}
+.btn-ghost-sm{padding:6px 13px;border-radius:4px;font-size:12px;font-weight:500;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;transition:all .15s;display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border2);color:var(--muted);background:none}
+.btn-ghost-sm:hover{border-color:rgba(91,95,239,.5);color:var(--violet)}
+.btn-cta-sm{background:var(--indigo);color:#fff;border:none;padding:7px 14px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none}
 .mob-nav-btn{display:none;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:18px;width:34px;height:34px;cursor:pointer;align-items:center;justify-content:center}
 .wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:60px 28px 100px}
-.eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace}
 .eyebrow::before{content:'';width:24px;height:1px;background:var(--indigo)}
 h1{font-family:'Fraunces',serif;font-size:clamp(40px,6vw,64px);font-weight:900;line-height:1;letter-spacing:-.03em;color:var(--white);margin-bottom:16px}
 h1 em{font-style:italic;color:var(--indigo)}
@@ -54,6 +58,7 @@ h1 em{font-style:italic;color:var(--indigo)}
 .faq-a li{color:var(--text)}
 .tag{display:inline-flex;font-size:11px;font-weight:700;padding:2px 7px;border-radius:2px;margin-left:8px;vertical-align:middle}
 .tag-geo{background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:#e8a94a}
+.tag-us{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#60a5fa}
 .tag-new{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.25);color:#8b8ff8}
 
 /* GEO CARDS */
@@ -102,21 +107,24 @@ h1 em{font-style:italic;color:var(--indigo)}
 <nav>
   <a href="sloiai-home.html" class="nav-logo">SLOI <em>AI</em></a>
   <div class="nav-links" id="mob-nav">
-    <a href="about.html">About</a>
-    <a href="docs.html">Docs</a>
+    <a href="sloiai-home.html#how">How it works</a>
+    <a href="sloiai-platform.html">Marketplace</a>
+    <a href="sloiai-home.html#us-infra" class="nav-us">🇺🇸 US Market</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="open-network.html">MCP</a>
     <a href="faq.html" class="active">FAQ</a>
-    <a href="broker-onboarding.html">Become a Trader</a>
-    <a href="login.html">Platform</a>
   </div>
   <div class="nav-right">
     <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+    <a href="negotiation-agent.html" class="btn-ghost-sm">🔄 Orchestrator</a>
+    <a href="agent-mandate.html" class="btn-cta-sm">Set Mandate →</a>
   </div>
 </nav>
 
 <div class="wrap">
   <div class="eyebrow">Help Center</div>
   <h1>Frequently asked <em>questions.</em></h1>
-  <p class="hero-sub">Everything you need to know about commodity sourcing, LOI generation, trader onboarding, payments, and our geographic coverage across MENA, UAE, Egypt, and Europe.</p>
+  <p class="hero-sub">Everything you need to know about setting a mandate, how the Orchestrator works, compliance screening, legal document generation, pricing, and our geographic coverage.</p>
 
   <!-- SEARCH -->
   <div class="search-wrap">
@@ -128,11 +136,12 @@ h1 em{font-style:italic;color:var(--indigo)}
   <div class="tab-bar" id="tab-bar">
     <button class="tab active" onclick="filterTab('all',this)">All</button>
     <button class="tab" onclick="filterTab('platform',this)">Platform</button>
-    <button class="tab" onclick="filterTab('sourcing',this)">Sourcing & Deals</button>
-    <button class="tab" onclick="filterTab('traders',this)">Traders & Suppliers</button>
-    <button class="tab" onclick="filterTab('payments',this)">Payments & Credits</button>
-    <button class="tab" onclick="filterTab('compliance',this)">Compliance & Legal</button>
-    <button class="tab" onclick="filterTab('geo',this)">Geographic Coverage</button>
+    <button class="tab" onclick="filterTab('sourcing',this)">Mandates & Deals</button>
+    <button class="tab" onclick="filterTab('docs',this)">Documents</button>
+    <button class="tab" onclick="filterTab('payments',this)">Pricing & Credits</button>
+    <button class="tab" onclick="filterTab('compliance',this)">Compliance</button>
+    <button class="tab" onclick="filterTab('us',this)">🇺🇸 US Market</button>
+    <button class="tab" onclick="filterTab('geo',this)">Coverage</button>
   </div>
 
   <!-- PLATFORM -->
@@ -145,7 +154,17 @@ h1 em{font-style:italic;color:var(--indigo)}
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        SLOI AI is an AI-powered B2B commodity procurement platform. Buyers submit an RFQ, our AI agents run multi-round negotiations with vetted suppliers, and a legally formatted Letter of Intent (LOI) is generated — all without manual back-and-forth. The platform covers Energy, Petrochemicals, Building Materials, Agriculture, Reconstruction, and Engineering Equipment.
+        SLOI AI is a <strong style="color:var(--white)">Trust as a Service</strong> platform for international commodity sourcing. You set a mandate — product, volume, target price, destination port — and the AI Orchestrator handles everything between that and your authorization: counterparty screening, multi-stage negotiation, and instant legal document generation. Your price ceiling is never exposed. Nothing is committed until you approve.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="platform">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is the Trade Orchestration Engine?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        The Orchestrator is the AI engine that runs up to 7 negotiation stages with a KYC-cleared, OFAC-screened counterparty — strictly within the private ceiling you set in your mandate. It never reveals your target price, never exceeds your budget, and stops the moment a deal is ready for your authorization. You can monitor every stage live in the <a href="negotiation-agent.html">Orchestrator dashboard</a>.
       </div>
     </div>
 
@@ -155,262 +174,398 @@ h1 em{font-style:italic;color:var(--indigo)}
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        Three types of users:
+        Three primary user types:
         <ul>
-          <li><strong style="color:var(--white)">Buyers</strong> — companies that need commodities and want AI to handle negotiation and LOI drafting.</li>
-          <li><strong style="color:var(--white)">Traders / Suppliers</strong> — commodity traders who join the network to receive RFQs and earn per signed deal.</li>
-          <li><strong style="color:var(--white)">AI Agents</strong> — external LLM bots that connect via the Open Network API to participate in the exchange autonomously.</li>
+          <li><strong style="color:var(--white)">Buyers</strong> — infrastructure contractors, importers, and trading companies that source commodities internationally and want AI to handle negotiation and legal paperwork.</li>
+          <li><strong style="color:var(--white)">US buyers</strong> — companies deploying IIJA or CHIPS Act budgets who need OFAC-compliant, ASTM-spec supply from Gulf and MENA origins at 15–25% below US domestic pricing.</li>
+          <li><strong style="color:var(--white)">Enterprise / teams</strong> — organizations that want the Orchestrator deployed on their own infrastructure with unlimited sessions, white-label documents, and on-premise data.</li>
         </ul>
       </div>
     </div>
 
     <div class="faq-item" data-cat="platform">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">What commodity sectors do you cover?</span>
+        <span class="faq-q-text">What commodities can I source?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        We cover six sectors with 150+ SKUs:
+        29+ products across four categories sourced from MENA refineries and mills:
         <ul>
-          <li>🏗️ <strong style="color:var(--white)">Building Materials</strong> — steel, rebar, cement, clinker, concrete</li>
-          <li>🏛️ <strong style="color:var(--white)">Reconstruction</strong> — bundled packages (steel + cement + generators + cranes) for post-conflict rebuilding</li>
-          <li>⚡ <strong style="color:var(--white)">Energy</strong> — diesel, fuel oil, LPG, bitumen, crude</li>
-          <li>🧪 <strong style="color:var(--white)">Petrochemicals</strong> — urea, methanol, ethylene</li>
-          <li>🌾 <strong style="color:var(--white)">Agriculture</strong> — wheat, sugar, palm oil, soybean</li>
-          <li>⚙️ <strong style="color:var(--white)">Engineering Equipment</strong> — generators, pumps, compressors, cranes, excavators</li>
+          <li>🏗️ <strong style="color:var(--white)">Construction</strong> — Steel Rebar G60, HRC Steel, OPC Cement 42.5N, Float Glass</li>
+          <li>⚡ <strong style="color:var(--white)">Energy</strong> — Bitumen 60/70, Diesel EN590, Fuel Oil, LPG</li>
+          <li>🔩 <strong style="color:var(--white)">Metals</strong> — Aluminum 6061-T6, Copper Cable, Structural Steel</li>
+          <li>🧪 <strong style="color:var(--white)">Refinery / Petrochemicals</strong> — Base Oil SN150, Base Oil SN500, Urea, Methanol</li>
         </ul>
+        Browse the full catalog on the <a href="sloiai-platform.html">Marketplace</a>.
       </div>
     </div>
 
     <div class="faq-item" data-cat="platform">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Is there a demo or sample LOI I can view?</span>
+        <span class="faq-q-text">Is there a demo or sample I can view before committing?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        Yes — visit <a href="loi-preview.html">loi-preview.html</a> to see a live sample LOI. You can also start a no-commitment order via <a href="agent-mandate.html">Agent Mandate</a> to see the full 5-step flow before any deal is created.
+        Yes — <a href="loi-preview.html">view a live sample LOI</a> with all generated fields populated. You can also submit a mandate with no commitment: nothing is authorized and no credits are consumed until you explicitly approve a deal.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="platform">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How is SLOI AI different from a commodity broker?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        A broker sees your budget, works on commission, and introduces counterparties you can't verify. SLOI AI is the opposite:
+        <ul>
+          <li>Your price ceiling is <strong style="color:var(--white)">never exposed</strong> — the Orchestrator negotiates within it blindly from the counterparty's perspective.</li>
+          <li>Every counterparty is <strong style="color:var(--white)">KYC-cleared and OFAC-screened</strong> before your mandate reaches them.</li>
+          <li>SLOI AI charges a <strong style="color:var(--white)">flat credit fee</strong> — never a percentage of your deal value.</li>
+          <li>7 legal documents are generated instantly on authorization — no legal team or template negotiation needed.</li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <!-- SOURCING & DEALS -->
+  <!-- MANDATES & DEALS -->
   <div class="faq-section" data-cat="sourcing">
-    <div class="faq-section-title"><span class="faq-section-icon">📦</span> Sourcing & Deals</div>
+    <div class="faq-section-title"><span class="faq-section-icon">📦</span> Mandates & Deals</div>
 
     <div class="faq-item" data-cat="sourcing">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">How does the LOI generation process work?</span>
+        <span class="faq-q-text">How does the three-step flow work?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        <strong style="color:var(--white)">Step 1</strong> — You submit an RFQ: commodity, quantity, destination, and target price.<br/>
-        <strong style="color:var(--white)">Step 2</strong> — Our AI NegotiationAgent runs up to 7 rounds of automated negotiation with matched suppliers (identities hidden).<br/>
-        <strong style="color:var(--white)">Step 3</strong> — The boss reviews and approves the best offer.<br/>
-        <strong style="color:var(--white)">Step 4</strong> — An LOI is auto-generated with all agreed terms, signed by both parties.<br/>
-        The whole process typically takes 24–72 hours.
+        <strong style="color:var(--white)">Step 01 — You set the mandate (3 minutes)</strong><br/>
+        Product, volume, target price, destination port, and incoterm. Your mandate stays private until you authorize.<br/><br/>
+        <strong style="color:var(--white)">Step 02 — Orchestrator runs (10–48 hours)</strong><br/>
+        The AI runs up to 7 negotiation stages with a screened counterparty — strictly within your ceiling. You can monitor live.<br/><br/>
+        <strong style="color:var(--white)">Step 03 — You authorize — paperwork issued instantly</strong><br/>
+        One click generates 7 legal documents and dispatches them to all parties. Nothing moves until this step.
       </div>
     </div>
 
     <div class="faq-item" data-cat="sourcing">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">What is the minimum order quantity (MOQ)?</span>
+        <span class="faq-q-text">Is my price ceiling ever revealed to the counterparty?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        MOQ varies by commodity:
+        No. Your target price and walk-away threshold are stored in your private mandate and never shared. The Orchestrator negotiates using its own AI strategy — the counterparty only sees round-by-round offers, never your ceiling. If no deal is reached within your limits, the negotiation closes and no credits are consumed.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="sourcing">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What are the minimum order quantities?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        MOQ by product (indicative):
         <ul>
-          <li>Diesel / Fuel Oil: 1,000 MT minimum</li>
-          <li>Cement / Clinker: 500 MT minimum</li>
-          <li>Steel / Rebar: 100 MT minimum</li>
-          <li>Wheat / Sugar: 250 MT minimum</li>
-          <li>Engineering Equipment: 1 unit minimum</li>
+          <li>Steel Rebar G60 — 500 MT · FOB origin</li>
+          <li>OPC Cement 42.5N — 1,000 MT · FOB origin</li>
+          <li>Bitumen 60/70 — 100 MT · CFR your port</li>
+          <li>Aluminum 6061-T6 — 50 MT · CIF your port</li>
+          <li>Diesel EN590 — 1,000 MT · FOB origin</li>
+          <li>Base Oil SN150 / SN500 — 200 MT · FOB origin</li>
         </ul>
-        SMB buyers can start with smaller test orders — contact us to discuss.
+        Exact MOQs are shown on each product card in the <a href="sloiai-platform.html">Marketplace</a>. Contact us for smaller test-order arrangements.
       </div>
     </div>
 
     <div class="faq-item" data-cat="sourcing">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Are supplier identities revealed during negotiation?</span>
+        <span class="faq-q-text">How long does a full orchestration take?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        No. Supplier identities are fully anonymized throughout the negotiation rounds. They are only disclosed once both parties have agreed on terms and the LOI is being finalized. This protects both sides and keeps negotiations fair.
+        Typical range is <strong style="color:var(--white)">10–48 hours</strong> from mandate submission to a deal ready for authorization. Simple, in-stock products (rebar, cement) at market-adjacent prices complete faster. Complex mandates with tight price targets or multiple stages take longer. You can set a mandate deadline and the Orchestrator will prioritize accordingly.
       </div>
     </div>
 
     <div class="faq-item" data-cat="sourcing">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Can I set a target price or maximum budget?</span>
+        <span class="faq-q-text">When are counterparty identities revealed?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        Yes. During the RFQ step you specify your target price and the AI negotiates to get as close to it as possible across multiple rounds. You also set a walk-away threshold — if no supplier meets it, the deal is not finalized and no credits are charged.
+        Counterparty identity is disclosed only at the <strong style="color:var(--white)">authorization step</strong> — after a deal is reached and before you sign the LOI. You see the company name, KYC summary, and OFAC screening result before committing. If you decline to authorize, the deal closes with no obligation.
       </div>
     </div>
 
     <div class="faq-item" data-cat="sourcing">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">What does the Reconstruction package include?</span>
+        <span class="faq-q-text">Can I set auto-authorize rules in my mandate?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        The Reconstruction category is specifically designed for post-conflict rebuilding (IMEC corridor, MENA reconstruction projects). It bundles 33 products across Building Materials + Engineering Equipment in a single RFQ — steel, cement, concrete, cranes, generators, excavators, and more — with a single negotiation round and unified LOI. <span class="tag tag-geo">MENA-focused</span>
+        Yes, on the Agentic Team and Enterprise tiers. You can set thresholds (e.g. "auto-authorize any deal at or below $520/MT for rebar") and the Orchestrator will close and generate documents without waiting for manual approval. Full audit logging is maintained regardless. Auto-authorize requires an elevated account trust tier.
       </div>
     </div>
   </div>
 
-  <!-- TRADERS & SUPPLIERS -->
-  <div class="faq-section" data-cat="traders">
-    <div class="faq-section-title"><span class="faq-section-icon">🤝</span> Traders & Suppliers</div>
+  <!-- DOCUMENTS -->
+  <div class="faq-section" data-cat="docs">
+    <div class="faq-section-title"><span class="faq-section-icon">📄</span> Documents</div>
 
-    <div class="faq-item" data-cat="traders">
+    <div class="faq-item" data-cat="docs">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">How do I join as a trader or supplier?</span>
+        <span class="faq-q-text">What documents are generated on authorization?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        Complete the 5-step <a href="broker-onboarding.html">Trader Onboarding</a> form — it takes about 10 minutes. You'll submit KYC documents, select your commodity specializations, set your floor prices, and sign the trader agreement. Applications are reviewed within 48 hours.
-      </div>
-    </div>
-
-    <div class="faq-item" data-cat="traders">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">How much do traders earn per deal?</span>
-        <span class="faq-chevron">▼</span>
-      </div>
-      <div class="faq-a">
-        Traders earn an <strong style="color:var(--white)">agreed fee per signed LOI</strong>. You set your own floor prices — everything negotiated above that floor is your margin. The platform charges no additional commission from the trader side. Volume bonuses apply for traders closing 10+ deals per month.
-      </div>
-    </div>
-
-    <div class="faq-item" data-cat="traders">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Do traders need to be present during negotiations?</span>
-        <span class="faq-chevron">▼</span>
-      </div>
-      <div class="faq-a">
-        No. The AI NegotiationAgent handles all rounds automatically based on the floor prices you set. You only need to confirm the final deal before the LOI is generated. You can monitor live rounds via the <a href="sloiai-trader.html">Trader Portal</a>.
-      </div>
-    </div>
-
-    <div class="faq-item" data-cat="traders">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">What happens if a deal falls through after the LOI is signed?</span>
-        <span class="faq-chevron">▼</span>
-      </div>
-      <div class="faq-a">
-        The LOI is non-binding by default (standard commodity LOI terms). However, if both parties have agreed to a binding LOI with escrow, payment release is handled via the platform. Disputes go to <a href="mailto:legal@sloiai.com">legal@sloiai.com</a>. The agreed LOI fee is still due on signature regardless of whether the full trade executes.
-      </div>
-    </div>
-  </div>
-
-  <!-- PAYMENTS & CREDITS -->
-  <div class="faq-section" data-cat="payments">
-    <div class="faq-section-title"><span class="faq-section-icon">💳</span> Payments & Credits</div>
-
-    <div class="faq-item" data-cat="payments">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">How does the credit system work?</span>
-        <span class="faq-chevron">▼</span>
-      </div>
-      <div class="faq-a">
-        Credits are the platform currency. You buy packs and spend them per action:
+        One click at authorization instantly generates and dispatches all 7 documents:
         <ul>
-          <li><strong style="color:var(--white)">NegotiationAgent</strong> — 10 credits (up to 7 rounds, boss approval required)</li>
-          <li><strong style="color:var(--white)">Autopilot</strong> — 20 credits (fully autonomous, no human needed)</li>
-          <li><strong style="color:var(--white)">LOI Generation</strong> — 5 credits</li>
-          <li><strong style="color:var(--white)">Price Watcher</strong> — 1 credit/day</li>
-          <li><strong style="color:var(--white)">ComplianceBot</strong> — 3 credits per screening</li>
+          <li>📄 <strong style="color:var(--white)">LOI</strong> — Letter of Intent · ICC-referenced</li>
+          <li>🔒 <strong style="color:var(--white)">NDA</strong> — Non-Disclosure Agreement · Bilateral or Unilateral</li>
+          <li>📑 <strong style="color:var(--white)">SPA</strong> — Sales & Purchase Agreement · GAFTA / ICC</li>
+          <li>🏦 <strong style="color:var(--white)">LC Application</strong> — Letter of Credit · UCP 600 compliant</li>
+          <li>⚖️ <strong style="color:var(--white)">Trade Contract</strong> — Incoterms 2020</li>
+          <li>🚢 <strong style="color:var(--white)">Freight Advisory</strong> — Port, vessel, and routing recommendation</li>
+          <li>🧾 <strong style="color:var(--white)">HS Code & Duty Report</strong> — Destination country import classification</li>
         </ul>
-        Credits never expire. See <a href="pricing.html">Pricing</a> for pack options.
+        All documents are pre-filled with agreed deal terms and dispatched to both parties simultaneously.
       </div>
     </div>
 
-    <div class="faq-item" data-cat="payments">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">What payment methods do you accept?</span>
-        <span class="faq-chevron">▼</span>
-      </div>
-      <div class="faq-a">
-        <ul>
-          <li><strong style="color:var(--white)">USDC on Base</strong> — crypto payments via Coinbase AgentKit, instant settlement</li>
-          <li><strong style="color:var(--white)">Stripe</strong> — credit card, bank transfer, SEPA (USD / EUR / AED)</li>
-          <li><strong style="color:var(--white)">Wire transfer</strong> — for enterprise plans ($10,000+ credit packs)</li>
-        </ul>
-        AI agents using the Open Network API can purchase credits autonomously via USDC on Base.
-      </div>
-    </div>
-
-    <div class="faq-item" data-cat="payments">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Are there refunds if a negotiation fails to produce a deal?</span>
-        <span class="faq-chevron">▼</span>
-      </div>
-      <div class="faq-a">
-        If no supplier meets your walk-away price and no LOI is generated, the negotiation credits are refunded in full. Credits are only consumed on a successful match. LOI generation credits (5 credits) are consumed only when an LOI is actually produced.
-      </div>
-    </div>
-
-    <div class="faq-item" data-cat="payments">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Is there a free tier or trial?</span>
-        <span class="faq-chevron">▼</span>
-      </div>
-      <div class="faq-a">
-        The <strong style="color:var(--white)">Open Network Read API</strong> is completely free — no credits needed for price discovery and market data. New accounts receive a small starter credit allocation to run one test negotiation. Contact <a href="mailto:hello@sloiai.com">hello@sloiai.com</a> for enterprise trial arrangements.
-      </div>
-    </div>
-  </div>
-
-  <!-- COMPLIANCE & LEGAL -->
-  <div class="faq-section" data-cat="compliance">
-    <div class="faq-section-title"><span class="faq-section-icon">⚖️</span> Compliance & Legal</div>
-
-    <div class="faq-item" data-cat="compliance">
+    <div class="faq-item" data-cat="docs">
       <div class="faq-q" onclick="toggleFaq(this)">
         <span class="faq-q-text">Is the LOI legally binding?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        Standard LOIs generated by SLOI AI are <strong style="color:var(--white)">non-binding by default</strong> — they document agreed terms and intent but do not constitute a final purchase contract. Both parties can optionally upgrade to a binding LOI with escrow through the platform. Always consult your legal team before treating an LOI as a binding contract in your jurisdiction.
+        Standard LOIs generated by SLOI AI are <strong style="color:var(--white)">non-binding by default</strong> — they document agreed terms and intent but are not a final purchase contract. Both parties can optionally upgrade to a binding LOI with escrow through the platform. Always consult your legal team before treating an LOI as binding in your jurisdiction. <a href="loi-preview.html">View a sample LOI →</a>
       </div>
     </div>
 
-    <div class="faq-item" data-cat="compliance">
+    <div class="faq-item" data-cat="docs">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">What sanctions screening do you perform?</span>
+        <span class="faq-q-text">Are the documents accepted by US banks for LC issuance?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        Every negotiation round passes through our <a href="compliance.html">ComplianceBot</a> which screens against:
+        Yes. The LC Application is structured to UCP 600 standards with a full OFAC compliance audit trail — the same documentation package US bank trade desks require before issuing a Letter of Credit for international commodity imports. The SPA includes Incoterms 2020 terms and the Trade Contract covers US import-specific requirements. <span class="tag tag-us">🇺🇸 US LC-ready</span>
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="docs">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Can documents be white-labeled with my company branding?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Yes — white-label LOI, NDA, and SPA with your company logo and letterhead is available on the <strong style="color:var(--white)">Enterprise Setup</strong> tier. Arabic, French, and Turkish language versions of documents are also available on Enterprise. See <a href="pricing.html">Pricing</a> for plan details.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="docs">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What happens if a deal falls through after the LOI is signed?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        The LOI is non-binding by default, so there is no contractual obligation to proceed to physical delivery. If you selected a binding LOI with escrow and a dispute arises, escalate to <a href="mailto:legal@sloiai.com">legal@sloiai.com</a>. The platform credit fee is consumed on authorization regardless of whether the trade ultimately executes — credits cover the Orchestration and document generation services, not the physical commodity transaction.
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING & CREDITS -->
+  <div class="faq-section" data-cat="payments">
+    <div class="faq-section-title"><span class="faq-section-icon">💳</span> Pricing & Credits</div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">How does pricing work?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Two tracks:
         <ul>
-          <li>OFAC (US) sanctions list</li>
-          <li>EU consolidated sanctions list</li>
-          <li>Dual-use goods restrictions</li>
-          <li>Destination country embargoes</li>
+          <li><strong style="color:var(--white)">SaaS Credits (cloud-hosted)</strong> — buy a credit pack and spend per orchestration session. No setup, no subscription. Credits never expire.</li>
+          <li><strong style="color:var(--white)">Deploy (your infrastructure)</strong> — flat monthly or one-time fee for unlimited sessions with data on-premise. Right for teams running multiple deals per month.</li>
         </ul>
-        Flagged deals are automatically blocked and escalated to the boss for manual review. A compliance report is attached to every generated LOI.
+        SLOI AI charges a flat fee — <strong style="color:var(--white)">never a percentage of your deal value</strong>. See <a href="pricing.html">full pricing →</a>
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What credit packs are available?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Two SaaS starter packs:
+        <ul>
+          <li><strong style="color:var(--white)">Starter — $99</strong> · 100 credits · $0.99/credit · ~10 orchestration sessions</li>
+          <li><strong style="color:var(--white)">Most Popular — $299</strong> · 350 credits · $0.85/credit (save 14%) · ~35 sessions + 70 LOIs</li>
+        </ul>
+        Credits never expire. Payment via Stripe (card / bank transfer) or USDC on Base. Enterprise wire transfer available for $10,000+ packs.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What are the Deploy (infrastructure) tiers?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        <ul>
+          <li><strong style="color:var(--white)">⚡ Agentic Team — $599/month</strong> · MCP install in 2 minutes · 5 seats · Unlimited sessions · Data on your servers · Auto-authorize rules · OFAC built-in · Cancel anytime</li>
+          <li><strong style="color:var(--white)">🏢 Enterprise Setup — $999 one-time</strong> · Full on-premise deployment · White-label LOI & NDA · Unlimited users · Custom mandate rules · 48h onboarding · 6 months support included</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Are credits refunded if no deal is reached?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Yes. If the Orchestrator completes all stages and no counterparty meets your walk-away price, <strong style="color:var(--white)">orchestration credits are refunded in full</strong>. Credits are consumed only on a successful authorization. Document generation credits are consumed only when documents are actually produced.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What payment methods are accepted?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        <ul>
+          <li><strong style="color:var(--white)">Stripe</strong> — credit card, bank transfer, SEPA (USD / EUR / AED)</li>
+          <li><strong style="color:var(--white)">USDC on Base</strong> — crypto payment via Coinbase, confirmed in ~2 seconds. The Orchestrator agent can also manage its own wallet and pay autonomously via USDC.</li>
+          <li><strong style="color:var(--white)">Wire transfer</strong> — for enterprise packs ($10,000+)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="payments">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Is there a free trial?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        The <a href="loi-preview.html">sample LOI</a> and marketplace price data are free with no account required. You can submit a mandate and monitor the Orchestrator in read-only mode before committing. New accounts receive a small starter credit allocation for one test orchestration. Contact <a href="mailto:hello@sloiai.com">hello@sloiai.com</a> for enterprise trial arrangements.
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLIANCE -->
+  <div class="faq-section" data-cat="compliance">
+    <div class="faq-section-title"><span class="faq-section-icon">⚖️</span> Compliance & Screening</div>
+
+    <div class="faq-item" data-cat="compliance">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What counterparty screening do you perform?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Every counterparty in the SLOI AI network is screened <strong style="color:var(--white)">before your mandate reaches them</strong>:
+        <ul>
+          <li>OFAC SDN list (US sanctions)</li>
+          <li>EU consolidated sanctions list</li>
+          <li>UN sanctions list</li>
+          <li>KYC documentation on file (company registration, beneficial owner, trade license)</li>
+          <li>Destination country embargo checks</li>
+        </ul>
+        A compliance report with screening results is attached to every generated LOI.
       </div>
     </div>
 
     <div class="faq-item" data-cat="compliance">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">What data do you store and for how long?</span>
+        <span class="faq-q-text">Is the screening sufficient for US bank LC desks?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        We store deal history, negotiation logs, and LOI documents for 7 years (standard trade documentation requirement). Personal data is handled per our <a href="privacy.html">Privacy Policy</a> under GDPR and UAE PDPL. You can request data deletion for personal data not subject to regulatory retention requirements.
+        Yes. The audit trail produced — OFAC SDN check result, KYC on file confirmation, and deal terms — is structured to satisfy the compliance requirements US trade finance desks need to issue a Letter of Credit for international commodity imports. US buyers are encouraged to share the compliance report directly with their bank before LC application. <span class="tag tag-us">🇺🇸 US LC-ready</span>
       </div>
     </div>
 
     <div class="faq-item" data-cat="compliance">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Can AI agents sign deals autonomously without human approval?</span>
+        <span class="faq-q-text">What data is stored and for how long?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        Yes, with <a href="autonomous-mode.html">Autonomous Mode</a> enabled (20 credits / Autopilot tier). The agent operates under a pre-set mandate with approval thresholds — no human sign-off needed per round. Autonomous mode requires an elevated account trust tier and carries full audit logging. See <a href="risk-disclosure.html">Risk Disclosure</a> for autonomous mode limitations.
+        Deal history, negotiation logs, and generated documents are retained for 7 years — the standard trade documentation requirement. Personal data is handled per our <a href="privacy.html">Privacy Policy</a> under GDPR and UAE PDPL. You may request deletion of personal data not subject to mandatory retention periods.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="compliance">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Can the Orchestrator run fully autonomously without human sign-off?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Yes — with auto-authorize rules configured in your mandate (Agentic Team and Enterprise tiers). The Orchestrator closes and generates documents within your pre-set thresholds without waiting for manual approval per deal. Full audit logging is maintained. Standard SaaS Credit accounts require explicit boss authorization on every deal — nothing commits without your click.
+      </div>
+    </div>
+  </div>
+
+  <!-- US MARKET -->
+  <div class="faq-section" data-cat="us">
+    <div class="faq-section-title"><span class="faq-section-icon">🇺🇸</span> US Market</div>
+
+    <div class="faq-item" data-cat="us">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Why should US buyers use SLOI AI?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        $1.2T in IIJA and $52B in CHIPS Act construction budgets are being deployed through 2027. Gulf and MENA origins price 15–25% below US domestic mills for the same ASTM-spec product — but international sourcing requires OFAC compliance, KYC-cleared counterparties, and LC-ready documentation. SLOI AI handles the entire compliance and negotiation layer so US contractors can buy internationally without a trade finance team. <a href="sloiai-home.html#us-infra">Learn more →</a>
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="us">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Which US specifications are covered?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        All products sourced for US buyers are available in US-spec:
+        <ul>
+          <li>Rebar — ASTM A615 Grade 60</li>
+          <li>Cement — ASTM C150 Type I/II</li>
+          <li>Aluminum — 6061-T6 and 6063 extrusion</li>
+          <li>Structural Steel — A992 / A36</li>
+          <li>Bitumen — PG 64-22 (US performance grading)</li>
+          <li>Copper Cable — NEC / ICEA rated</li>
+        </ul>
+        Mill test certificates and third-party inspection reports (SGS, Bureau Veritas) are included in the document package.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="us">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Are counterparties compliant for US import and LC requirements?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Yes. Every counterparty in the network passes OFAC SDN screening before your mandate reaches them. The full compliance audit trail — KYC on file, OFAC check result, ASTM certification confirmation — is produced alongside the LC Application document, structured to UCP 600 standards that US bank trade desks accept. <span class="tag tag-us">🇺🇸 US bank LC-ready</span>
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="us">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">What is the typical delivery route for US buyers?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        Most Gulf and MENA origins ship to US East Coast ports (Houston, Baltimore, Savannah) in 18–25 days. FOB origin or CIF your port incoterms are both available. The Freight Advisory document generated at authorization includes recommended vessel type, port pair, and transit time estimate based on the product and volume in your mandate.
+      </div>
+    </div>
+
+    <div class="faq-item" data-cat="us">
+      <div class="faq-q" onclick="toggleFaq(this)">
+        <span class="faq-q-text">Do I need a trade finance team to use SLOI AI?</span>
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">
+        No. The Orchestrator and document generation package are designed so that a procurement manager — not a trade finance specialist — can execute an international commodity deal. The LC Application is pre-filled and structured for your bank. The compliance report is ready to share directly with your bank's trade desk. For complex multi-shipment programs, the Enterprise tier includes a 48h onboarding call with the SLOI AI team.
       </div>
     </div>
   </div>
@@ -421,31 +576,42 @@ h1 em{font-style:italic;color:var(--indigo)}
 
     <div class="faq-item" data-cat="geo">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Which countries and regions do you operate in?</span>
+        <span class="faq-q-text">Which supply origins do you cover?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        SLOI AI operates across the MENA corridor and connects buyers and suppliers globally. Primary coverage:
+        Supply is sourced from screened mills and refineries across 8+ origins:
         <ul>
-          <li>🇦🇪 UAE — headquarters, primary operations</li>
-          <li>🇸🇦 KSA — energy, petrochemicals, building materials</li>
-          <li>🇪🇬 Egypt — reconstruction, agriculture, cement</li>
-          <li>🇮🇶 Iraq — reconstruction, energy, engineering equipment</li>
-          <li>🇱🇾 Libya — reconstruction, building materials</li>
-          <li>🇹🇷 Turkey — manufacturing, building materials, engineering</li>
-          <li>🇪🇺 Europe — petrochemicals, agricultural commodities</li>
+          <li>🇸🇦 Saudi Arabia — energy, petrochemicals, cement (Yanbu, Jubail)</li>
+          <li>🇦🇪 UAE — metals, aluminum, bitumen (Ruwais, Dubai, Jebel Ali)</li>
+          <li>🇶🇦 Qatar — diesel, LNG, petrochemicals (Ras Laffan)</li>
+          <li>🇹🇷 Turkey — steel rebar, building materials (Izmir, Istanbul)</li>
+          <li>🇪🇬 Egypt — cement, construction, agriculture</li>
+          <li>🇩🇿 Algeria — energy, petrochemicals</li>
+          <li>🇺🇦 Ukraine — steel, grain</li>
+          <li>🇨🇳 China — metals, manufacturing inputs</li>
         </ul>
-        Suppliers ship globally. Buyers from any country are accepted (subject to sanctions screening).
+        Buyers from any country are accepted subject to sanctions screening.
       </div>
     </div>
 
     <div class="faq-item" data-cat="geo">
       <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Do you support the IMEC corridor and post-conflict reconstruction?</span>
+        <span class="faq-q-text">Which buyer countries are supported?</span>
         <span class="faq-chevron">▼</span>
       </div>
       <div class="faq-a">
-        Yes — the <strong style="color:var(--white)">Reconstruction</strong> category is specifically designed for IMEC corridor and post-conflict rebuilding procurement. It bundles building materials + engineering equipment in unified RFQs, with streamlined compliance for reconstruction project buyers and NGO procurement. <span class="tag tag-geo">MENA-focused</span>
+        Buyers from any non-sanctioned country can submit mandates. Primary buyer markets active on the platform:
+        <ul>
+          <li>🇺🇸 United States — IIJA/CHIPS infrastructure buyers <span class="tag tag-us">🇺🇸 Growing fast</span></li>
+          <li>🇦🇪 UAE — all sectors</li>
+          <li>🇸🇦 Saudi Arabia — energy, construction</li>
+          <li>🇪🇬 Egypt — reconstruction, agriculture</li>
+          <li>🇮🇶 Iraq — reconstruction, energy, equipment</li>
+          <li>🇱🇾 Libya — reconstruction, building materials</li>
+          <li>🇪🇺 Europe — petrochemicals, agricultural commodities</li>
+        </ul>
+        Buyers from OFAC and EU-sanctioned countries are automatically blocked by the compliance engine.
       </div>
     </div>
 
@@ -456,32 +622,18 @@ h1 em{font-style:italic;color:var(--indigo)}
       </div>
       <div class="faq-a">
         <strong style="color:var(--white)">Currencies:</strong> USD (primary), AED, EUR. Crypto: USDC on Base.<br/>
-        <strong style="color:var(--white)">Languages:</strong> English is the platform language. LOI documents can be generated in Arabic, French, or Turkish on request (enterprise plans). The AI chat agent on the contact page responds in the language you write in.
-      </div>
-    </div>
-
-    <div class="faq-item" data-cat="geo">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Are there restrictions on which countries can buy or sell?</span>
-        <span class="faq-chevron">▼</span>
-      </div>
-      <div class="faq-a">
-        Buyers and suppliers from OFAC and EU-sanctioned countries are automatically blocked by the ComplianceBot. Dual-use commodities (certain chemicals, equipment) are subject to additional origin/destination checks. If your deal is flagged, you'll receive a compliance report explaining the reason. Contact <a href="mailto:legal@sloiai.com">legal@sloiai.com</a> for jurisdiction-specific questions.
-      </div>
-    </div>
-
-    <div class="faq-item" data-cat="geo">
-      <div class="faq-q" onclick="toggleFaq(this)">
-        <span class="faq-q-text">Do you have local agents or representatives in the region?</span>
-        <span class="faq-chevron">▼</span>
-      </div>
-      <div class="faq-a">
-        We have representatives active in the UAE and Egypt. For KSA, Iraq, Turkey, and Europe, the platform operates fully remotely — all negotiations and LOI generation are handled digitally. For complex deals requiring in-country presence, contact <a href="mailto:hello@sloiai.com">hello@sloiai.com</a>.
+        <strong style="color:var(--white)">Languages:</strong> English is the platform language. Document generation in Arabic, French, and Turkish is available on Enterprise plans.
       </div>
     </div>
 
     <!-- GEO COVERAGE CARDS -->
     <div class="geo-grid">
+      <div class="geo-card">
+        <div class="geo-flag">🇺🇸</div>
+        <div class="geo-name">United States</div>
+        <div class="geo-desc">ASTM-spec supply · OFAC-compliant · US LC-ready</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
       <div class="geo-card">
         <div class="geo-flag">🇦🇪</div>
         <div class="geo-name">UAE</div>
@@ -491,7 +643,19 @@ h1 em{font-style:italic;color:var(--indigo)}
       <div class="geo-card">
         <div class="geo-flag">🇸🇦</div>
         <div class="geo-name">Saudi Arabia</div>
-        <div class="geo-desc">Energy · Petrochemicals · Building Materials</div>
+        <div class="geo-desc">Energy · Petrochemicals · Cement · Base Oils</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-flag">🇶🇦</div>
+        <div class="geo-name">Qatar</div>
+        <div class="geo-desc">Diesel · LNG · Petrochemicals · FOB Ras Laffan</div>
+        <div class="geo-status geo-live">Live</div>
+      </div>
+      <div class="geo-card">
+        <div class="geo-flag">🇹🇷</div>
+        <div class="geo-name">Turkey</div>
+        <div class="geo-desc">Steel Rebar · Building Materials · Metals</div>
         <div class="geo-status geo-live">Live</div>
       </div>
       <div class="geo-card">
@@ -503,19 +667,13 @@ h1 em{font-style:italic;color:var(--indigo)}
       <div class="geo-card">
         <div class="geo-flag">🇮🇶</div>
         <div class="geo-name">Iraq</div>
-        <div class="geo-desc">Reconstruction · Energy · Engineering</div>
+        <div class="geo-desc">Reconstruction · Energy · Engineering Equipment</div>
         <div class="geo-status geo-live">Live</div>
       </div>
       <div class="geo-card">
         <div class="geo-flag">🇱🇾</div>
         <div class="geo-name">Libya</div>
         <div class="geo-desc">Reconstruction · Building Materials</div>
-        <div class="geo-status geo-live">Live</div>
-      </div>
-      <div class="geo-card">
-        <div class="geo-flag">🇹🇷</div>
-        <div class="geo-name">Turkey</div>
-        <div class="geo-desc">Engineering · Building Materials · Metals</div>
         <div class="geo-status geo-live">Live</div>
       </div>
       <div class="geo-card">
@@ -539,11 +697,11 @@ h1 em{font-style:italic;color:var(--indigo)}
   <div class="cta-strip">
     <div class="cta-text">
       <h3>Still have questions?</h3>
-      <p>Our AI agent answers instantly, or reach a human within 24 hours.</p>
+      <p>Reach a human within 24 hours, or submit your first mandate with no commitment.</p>
     </div>
     <div class="cta-btns">
       <a href="contact.html" class="btn-primary">Contact us →</a>
-      <a href="agent-mandate.html" class="btn-ghost">Start an order</a>
+      <a href="agent-mandate.html" class="btn-ghost">Set a mandate</a>
     </div>
   </div>
 </div>
@@ -556,7 +714,6 @@ function toggleFaq(el) {
   var item = el.closest('.faq-item');
   var answer = item.querySelector('.faq-a');
   var isOpen = item.classList.contains('open');
-  // close all
   document.querySelectorAll('.faq-item.open').forEach(function(i){
     i.classList.remove('open');
     i.querySelector('.faq-a').classList.remove('show');
@@ -588,7 +745,6 @@ function filterTab(cat, btn) {
 
 function faqSearch(val) {
   var q = val.toLowerCase().trim();
-  // reset tabs
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
   document.querySelector('.tab').classList.add('active');
   var items = document.querySelectorAll('.faq-item');

@@ -224,8 +224,7 @@ select.inp option{background:var(--surface)}
   .view{padding:12px 12px 40px}
   .g2,.g3{grid-template-columns:1fr}
   .g4,.g5{grid-template-columns:1fr 1fr}
-  #view-negotiations [style*="grid-template-columns:300px"]{grid-template-columns:1fr!important}
-  #view-negotiations [style*="position:sticky"]{position:static!important}
+
   .kanban{overflow-x:auto;grid-template-columns:repeat(5,160px)}
   .kc{min-width:160px}
   .ab-grid{grid-template-columns:1fr 1fr}
@@ -252,11 +251,9 @@ select.inp option{background:var(--surface)}
   </div>
   <div class="sb-section">Command</div>
   <button class="nav active" onclick="show('warroom',this)"><span class="nav-icon">🔴</span><span class="nav-label">War Room</span><span class="nav-badge nb-red" id="alert-count">3</span></button>
-  <button class="nav" onclick="show('negotiations',this)"><span class="nav-icon">🤖</span><span class="nav-label">Negotiations</span><span class="nav-badge nb-gold" id="neg-count">2</span></button>
   <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">11</span></button>
-  <div class="sb-section">Contracts</div>
-  <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">📄</span><span class="nav-label">Contracts</span></button>
-  <button class="nav" id="sb-docs" onclick="show('docs',this)"><span class="nav-icon">🗂️</span><span class="nav-label">Documents</span><span class="nav-badge" style="background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);color:var(--teal);font-size:11px">DMS</span></button>
+  <div class="sb-section">Documents</div>
+  <button class="nav" id="sb-docs" onclick="show('docs',this)"><span class="nav-icon">🗂️</span><span class="nav-label">Documents & Contracts</span><span class="nav-badge" style="background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);color:var(--teal);font-size:11px">DMS</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
   <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & CRM</span></button>
@@ -289,11 +286,9 @@ select.inp option{background:var(--surface)}
     </div>
     <div class="tb-row2">
       <button class="nav active" id="tb-warroom" onclick="show('warroom',this)">🔴 War Room <span class="nav-badge nb-red" id="alert-count">3</span></button>
-      <button class="nav" id="tb-negotiations" onclick="show('negotiations',this)">🤖 Negotiations <span class="nav-badge nb-gold" id="neg-count">2</span></button>
       <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg)">11</span></button>
       <div class="tb-nav-sep"></div>
-      <button class="nav" id="tb-revenue" onclick="show('revenue',this)">📄 Contracts</button>
-      <button class="nav" id="tb-docs" onclick="show('docs',this)">🗂️ Documents</button>
+      <button class="nav" id="tb-docs" onclick="show('docs',this)">🗂️ Documents & Contracts</button>
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-products" onclick="show('products',this)">📦 Products &amp; Pricing</button>
       <button class="nav" id="tb-users" onclick="show('users',this)">👤 Users &amp; CRM</button>
@@ -505,8 +500,8 @@ select.inp option{background:var(--surface)}
 
   </div>
 
-  <!-- NEGOTIATIONS -->
-  <div id="view-negotiations" class="view">
+  <!-- NEGOTIATIONS REMOVED -->
+  <div id="view-negotiations" class="view" style="display:none!important">
 
     <!-- ── TOP STATS ROW ── -->
     <div class="g4" style="margin-bottom:10px">
@@ -619,8 +614,8 @@ select.inp option{background:var(--surface)}
 
   </div>
 
-  <!-- REVENUE -->
-  <div id="view-revenue" class="view">
+  <!-- REVENUE (hidden — content merged into docs view) -->
+  <div id="view-revenue" class="view" style="display:none!important">
     <div class="g4" style="margin-bottom:14px">
       <div class="stat"><div class="stat-top">Total Revenue MTD</div><div class="stat-val" style="color:var(--green)" id="rev-stat-total">—</div><div class="stat-sub up">LOI fees</div></div>
       <div class="stat"><div class="stat-top">LOI Fee Revenue</div><div class="stat-val" style="color:var(--violet)" id="rev-stat-loi">—</div><div class="stat-sub" id="rev-stat-loi-sub">— LOIs generated</div></div>
@@ -764,10 +759,34 @@ select.inp option{background:var(--surface)}
     </div>
   </div>
 
-  <!-- ══ DOCUMENT MANAGEMENT SYSTEM ══ -->
+  <!-- ══ DOCUMENT MANAGEMENT SYSTEM + CONTRACTS ══ -->
   <div id="view-docs" class="view">
 
-    <!-- Stats -->
+    <!-- ── CONTRACTS ── -->
+    <div class="card-title" style="margin-bottom:10px">// CONTRACTS</div>
+    <div class="g4" style="margin-bottom:14px">
+      <div class="stat"><div class="stat-top">Total POs</div><div class="stat-val" style="color:var(--white)" id="ct-stat-count">—</div><div class="stat-sub">All purchase orders</div></div>
+      <div class="stat"><div class="stat-top">Total Value</div><div class="stat-val" style="color:var(--violet)" id="ct-stat-value">—</div><div class="stat-sub">Across all deals</div></div>
+      <div class="stat"><div class="stat-top">Cleared</div><div class="stat-val" style="color:var(--green)" id="ct-stat-cleared">—</div><div class="stat-sub">Payment received</div></div>
+      <div class="stat"><div class="stat-top">Overdue / Pending</div><div class="stat-val" style="color:var(--red)" id="ct-stat-overdue">—</div><div class="stat-sub">Requires action</div></div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">// PURCHASE ORDERS
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-xs btn-p" onclick="window.open('loi-contracts.html?tool=po','_blank')">+ New PO</button>
+          <button class="btn btn-xs" onclick="exportContractsCsv()">&#8595; Export CSV</button>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>PO No.</th><th>Product</th><th>Buyer</th><th>Value</th><th>Payment Terms</th><th>LOI Ref</th><th>Status</th><th></th></tr></thead>
+        <tbody id="ct-po-tbody"><tr><td colspan="8" style="padding:18px;text-align:center;color:var(--muted)">Loading…</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="sec-divider" style="margin:18px 0;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)"></div>
+
+    <!-- ── DOCUMENTS ── -->
+    <div class="card-title" style="margin-bottom:10px">// DOCUMENT MANAGEMENT</div>
     <div class="g4" style="margin-bottom:14px">
       <div class="stat"><div class="stat-top">Total Documents</div><div class="stat-val" id="dms-stat-total" style="color:var(--teal)">—</div><div class="stat-sub">All records</div></div>
       <div class="stat"><div class="stat-top">Pending</div><div class="stat-val" id="dms-stat-pending" style="color:var(--gold)">—</div><div class="stat-sub">Awaiting receipt</div></div>
@@ -1899,7 +1918,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={activity:['📋 Activity Log','Admin actions · approvals · system events'],agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['📄 Contracts','Purchase orders · signed deals · document suite'],docs:['🗂️ Document Management','14 doc types · deal checklist · library · AI generation'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
+var TITLES={activity:['📋 Activity Log','Admin actions · approvals · system events'],agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],docs:['🗂️ Documents & Contracts','Purchase orders · deal checklist · 14 doc types · DMS'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────
@@ -1924,7 +1943,7 @@ function resumeOutreach(){
   openConsole('outreach');
 }
 
-function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];if(v==='revenue'){loadContracts();spaPopulate('ct-spa-po-select');}
+function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];if(v==='docs'){loadContracts();spaPopulate('ct-spa-po-select');}
 if(v==='docs'){dmsLoad();}
 if(v==='activity'){renderActivityLog();}
 if(v==='agents'){}}
@@ -2623,7 +2642,7 @@ function renderUserTable(data) {
       ? '<button class="btn btn-xs" style="background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.25);color:var(--red)" title="Incomplete registration">⚠ Fix</button>'
       : '<button class="btn btn-xs" onclick="openTG()" title="WhatsApp">📲</button>'
         + (u.email ? '<a href="mailto:' + u.email + '" class="btn btn-xs" title="Email" style="text-decoration:none">✉️</a>' : '')
-        + '<button class="btn btn-xs btn-p" onclick="show(\'negotiations\',document.getElementById(\'tb-negotiations\'))" title="Start negotiation" style="font-size:12px">🤖</button>';
+        + '<button class="btn btn-xs btn-p" onclick="show(\'warroom\',document.getElementById(\'tb-warroom\'))" title="View War Room" style="font-size:12px">🔴</button>';
     return '<tr' + (isIncomplete ? ' style="opacity:.6"' : '') + '>'
       + '<td>' + nameCell + '<div style="font-size:13px;color:var(--muted);margin-top:1px">' + created + '</div></td>'
       + '<td style="font-size:13px;color:var(--muted)">' + (u.email||'—') + '</td>'
@@ -2929,7 +2948,7 @@ function renderAlerts(negs, lois) {
       desc:  n.product + ' · ' + n.qty + ' ' + n.unit + ' · ' + priceStr + ' · ' + (n.buyer_name || '—') + contact,
       actions: '<button class="btn btn-xs btn-g" onclick="approveNegById(\''+id+'\')">✓ Approve → LOI</button>'
              + '<button class="btn btn-xs btn-r" onclick="rejectNegById(\''+id+'\')">✗ Reject</button>'
-             + '<button class="btn btn-xs" onclick="show(\'negotiations\',document.getElementById(\'tb-negotiations\'))">View</button>',
+             + '<button class="btn btn-xs" onclick="show(\'warroom\',document.getElementById(\'tb-warroom\'))">View</button>',
     });
   });
 

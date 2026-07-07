@@ -92,7 +92,7 @@
       /* ── SHELL ── */
       .shell {
         display: grid;
-        grid-template-rows: 48px 40px 1fr;
+        grid-template-rows: 48px 32px 1fr;
         height: 100vh;
         overflow: hidden;
       }
@@ -177,11 +177,11 @@
       .tab {
         display: flex;
         align-items: center;
-        gap: 6px;
-        padding: 0 14px;
-        height: 40px;
+        gap: 0;
+        padding: 0 11px;
+        height: 32px;
         cursor: pointer;
-        font-size: 13px;
+        font-size: 16px;
         color: var(--muted);
         border: none;
         background: none;
@@ -190,19 +190,38 @@
         transition: all 0.15s;
         white-space: nowrap;
         flex-shrink: 0;
+        position: relative;
       }
       .tab:hover {
         color: var(--text);
+        background: rgba(255,255,255,.03);
       }
       .tab.active {
         color: var(--violet);
         border-bottom-color: var(--indigo);
+        background: rgba(91,95,239,.05);
       }
-      .tab-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        flex-shrink: 0;
+      .tab-dot { display: none; }
+      .tab-label { display: none; }
+      .tab-count { display: none; }
+      /* Notification dot for tabs with pending items */
+      .tab[data-badge]::after {
+        content: attr(data-badge);
+        position: absolute;
+        top: 3px; right: 4px;
+        background: var(--red);
+        color: #fff;
+        font-size: 9px;
+        font-weight: 700;
+        min-width: 14px;
+        height: 14px;
+        border-radius: 7px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 3px;
+        font-family: 'IBM Plex Mono', monospace;
+        line-height: 1;
       }
       .td-green {
         background: var(--green);
@@ -1185,10 +1204,10 @@
         /* Off-canvas left panel for Negotiation */
         .neg-left {
           position: fixed;
-          top: 88px; /* topbar(48) + tabs(40) */
+          top: 80px; /* topbar(48) + tabs(32) */
           left: -320px;
           width: 300px;
-          height: calc(100vh - 88px);
+          height: calc(100vh - 80px);
           z-index: 200;
           transition: left 0.25s ease;
           border-right: 1px solid var(--border2);
@@ -1278,7 +1297,7 @@
         /* Shell height: use dynamic viewport height where supported */
         @supports (height: 100dvh) {
           .shell    { height: 100dvh; }
-          .neg-left { height: calc(100dvh - 88px); }
+          .neg-left { height: calc(100dvh - 80px); }
         }
 
         /* Bottom nav bar replacing horizontal tabs */
@@ -1441,41 +1460,32 @@
 
       <!-- TABS -->
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('neg', this)">
-          <div class="tab-dot td-gold"></div>
-          🔄 Orchestration<span class="tab-count" id="tc-neg">2 live</span>
+        <button class="tab active" onclick="switchTab('neg', this)" title="Orchestration — Run AI negotiation, set mandate, authorize deal">
+          🔄<span class="tab-label"> Orchestration</span><span class="tab-count" id="tc-neg">2 live</span>
         </button>
-        <button class="tab" onclick="switchTab('nda', this)">
-          <div class="tab-dot" style="background:var(--blue)"></div>
-          🔏 NDA<span class="tab-count" id="tc-nda">ready</span>
+        <button class="tab" onclick="switchTab('lead', this)" title="LOI — Generate Letter of Intent from authorized deal">
+          📄<span class="tab-label"> LOI</span><span class="tab-count" id="tc-lead">ready</span>
         </button>
-        <button class="tab" onclick="switchTab('lead', this)">
-          <div class="tab-dot td-green"></div>
-          📄 LOI Generator<span class="tab-count" id="tc-lead">ready</span>
+        <button class="tab" onclick="switchTab('nda', this)" title="NDA — Draft Non-Disclosure Agreement before sharing terms">
+          🔏<span class="tab-label"> NDA</span><span class="tab-count" id="tc-nda">ready</span>
         </button>
-        <button class="tab" onclick="switchTab('price', this)">
-          <div class="tab-dot td-green"></div>
-          📋 PO Generator<span class="tab-count" id="tc-price">ready</span>
+        <button class="tab" onclick="switchTab('spa', this)" title="SPA — Sales & Purchase Agreement (GAFTA/ICC)">
+          📜<span class="tab-label"> SPA</span><span class="tab-count">GAFTA/ICC</span>
         </button>
-        <button class="tab" onclick="switchTab('spa', this)">
-          <div class="tab-dot" style="background:var(--gold)"></div>
-          📜 SPA<span class="tab-count">GAFTA/ICC</span>
+        <button class="tab" onclick="switchTab('tc', this)" title="Trade Contract — Incoterms 2020">
+          ⚖️<span class="tab-label"> Trade Contract</span><span class="tab-count">Incoterms</span>
         </button>
-        <button class="tab" onclick="switchTab('tc', this)">
-          <div class="tab-dot" style="background:var(--violet)"></div>
-          ⚖️ Trade Contract<span class="tab-count">Incoterms</span>
+        <button class="tab" onclick="switchTab('lca', this)" title="LC Application — Letter of Credit (UCP 600)">
+          💳<span class="tab-label"> LC Application</span><span class="tab-count">UCP 600</span>
         </button>
-        <button class="tab" onclick="switchTab('lca', this)">
-          <div class="tab-dot" style="background:var(--teal)"></div>
-          💳 LC Application<span class="tab-count">UCP 600</span>
+        <button class="tab" onclick="switchTab('price', this)" title="PO — Purchase Order from signed LOI">
+          📋<span class="tab-label"> PO</span><span class="tab-count" id="tc-price">ready</span>
         </button>
-        <button class="tab" onclick="switchTab('outreach', this)">
-          <div class="tab-dot td-green"></div>
-          🚢 Customs & Logistics<span class="tab-count" id="tc-customs">docs</span>
+        <button class="tab" onclick="switchTab('outreach', this)" title="Customs — Customs docs & logistics coordination">
+          🚢<span class="tab-label"> Customs</span><span class="tab-count" id="tc-customs">docs</span>
         </button>
-        <button class="tab" onclick="switchTab('compliance', this)">
-          <div class="tab-dot td-green"></div>
-          🛡️ Compliance<span class="tab-count" id="tc-comp">1 review</span>
+        <button class="tab" onclick="switchTab('compliance', this)" title="Compliance — OFAC / KYC / sanctions monitoring">
+          🛡️<span class="tab-label"> Compliance</span><span class="tab-count" id="tc-comp">1 review</span>
         </button>
         <!-- Mandate summary strip — right-aligned in tab bar -->
         <div id="mandate-strip" style="display:none;margin-left:auto;align-items:center;gap:8px;padding:0 14px;font-size:11px;font-family:'IBM Plex Mono',monospace;white-space:nowrap;border-left:1px solid var(--border);flex-shrink:0">
@@ -1656,7 +1666,7 @@
 
             <!-- ② DEAL WEIGHTS -->
             <div class="mnd-section">
-              <div class="mnd-section-hdr" id="mnd-hdr-weights" onclick="mndToggle('weights')">
+              <div class="mnd-section-hdr open" id="mnd-hdr-weights" onclick="mndToggle('weights')">
                 <span class="mnd-section-icon">⚖️</span>
                 <span class="mnd-section-title">Deal Weights</span>
                 <span class="weight-total mnd-section-sum" id="weights-sum" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green);padding:1px 6px;border-radius:3px">100%</span>
@@ -1746,8 +1756,8 @@
               >
                 ⚡ Orchestrate
               </button>
-              <button class="btn btn-a btn-sm" onclick="manualOverride()">
-                Override
+              <button class="btn btn-a btn-sm" onclick="manualOverride()" title="Skip AI negotiation — enter deal price manually and go straight to authorization">
+                Manual deal
               </button>
             </div>
             <div
@@ -1989,7 +1999,7 @@
           <div style="font-size:13px;color:var(--white);font-weight:600">📄 LOI Generator</div>
           <div style="font-size:12px;color:var(--muted)">Generate signed Letters of Intent from negotiated deals</div>
           <div style="margin-left:auto;display:flex;gap:6px">
-            <button class="btn btn-p btn-sm" onclick="generateLOI()">📄 Load LOI Generator ↓</button>
+            <button class="btn btn-xs" style="border-color:rgba(91,95,239,.3);color:var(--violet)" onclick="switchTab('neg',document.querySelector('.tab[onclick*=\'neg\']'))">← Back to deal</button>
           </div>
         </div>
         <div class="lead-body">
