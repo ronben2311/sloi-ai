@@ -197,6 +197,48 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 .si-li:hover{border-color:rgba(10,102,194,.5);color:#0a66c2}
 .si-wa:hover{border-color:rgba(37,211,102,.5);color:#25d366}
 
+/* TICKER STRIP */
+.ticker-wrap{position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;height:38px;display:flex;align-items:center}
+.ticker-label{flex-shrink:0;padding:0 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;border-right:1px solid var(--border);height:100%;display:flex;align-items:center;background:var(--surface2);z-index:2;position:relative;gap:6px}
+.ticker-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 1.8s infinite;flex-shrink:0}
+.ticker-scroll{display:flex;gap:0;animation:ticker 55s linear infinite;white-space:nowrap}
+.ticker-wrap:hover .ticker-scroll{animation-play-state:paused}
+.ticker-item{display:flex;align-items:center;gap:8px;padding:0 22px;border-right:1px solid rgba(255,255,255,.05);font-family:'IBM Plex Mono',monospace;font-size:12px;height:38px;cursor:default}
+.t-name{color:var(--text);font-weight:600}
+.t-price{color:var(--white)}
+.t-up{color:var(--green);font-weight:700}
+.t-dn{color:var(--red);font-weight:700}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* MARKETPLACE */
+.mk-section-hd{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:32px}
+.mk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mk-card{background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;font-family:'IBM Plex Mono',monospace;transition:all .22s}
+.mk-card:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.45)}
+.mk-card-hd{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mk-cat{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:2px 8px;border-radius:3px}
+.mk-avail{font-size:10px;display:flex;align-items:center;gap:4px;color:var(--green)}
+.mk-avail-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;flex-shrink:0}
+.mk-card-body{padding:14px;flex:1}
+.mk-product{font-size:14px;font-weight:700;color:var(--white);margin-bottom:2px}
+.mk-spec{font-size:11px;color:var(--muted);margin-bottom:10px}
+.mk-origin{font-size:12px;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:5px}
+.mk-price-row{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:10px}
+.mk-price-wrap{}
+.mk-price-label{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
+.mk-price{font-family:'Fraunces',serif;font-size:24px;font-weight:900;color:var(--white);line-height:1}
+.mk-change{font-size:11px;font-weight:700;padding:3px 8px;border-radius:3px;align-self:flex-start;margin-top:4px}
+.mk-change.up{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2)}
+.mk-change.dn{background:rgba(239,68,68,.08);color:var(--red);border:1px solid rgba(239,68,68,.2)}
+.mk-meta{display:flex;gap:5px;flex-wrap:wrap}
+.mk-meta-tag{font-size:10px;padding:2px 7px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);color:var(--muted)}
+.mk-card-ft{padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mk-moq{font-size:10px;color:var(--muted)}
+.mk-quote-btn{font-size:11px;font-weight:700;color:var(--indigo);text-decoration:none;letter-spacing:.04em;transition:color .15s;display:flex;align-items:center;gap:3px}
+.mk-quote-btn:hover{color:var(--violet)}
+.mk-view-all{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--violet);text-decoration:none;font-weight:700;border:1px solid rgba(91,95,239,.3);padding:7px 14px;border-radius:5px;transition:all .15s;flex-shrink:0}
+.mk-view-all:hover{background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.5)}
+
 /* FADE */
 .fade-in{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
 .fade-in.visible{opacity:1;transform:translateY(0)}
@@ -208,10 +250,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   .steps3::before{display:none}
   .step3{padding:0}
   .verticals{grid-template-columns:1fr}
+  .mk-grid{grid-template-columns:1fr 1fr}
   .why3{grid-template-columns:1fr}
   .us-feature-inner{grid-template-columns:1fr;gap:28px}
   .us-stats{grid-template-columns:repeat(4,1fr)}
   .pricing-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+  .mk-grid{grid-template-columns:1fr}
+  .ticker-label{display:none}
 }
 @media(max-width:768px){
   nav{padding:0 16px}.nav-links{display:none}
@@ -323,6 +370,36 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   </div>
 </div>
 
+<!-- LIVE PRICE TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-label"><div class="ticker-dot"></div>LIVE PRICES</div>
+  <div style="overflow:hidden;flex:1;display:flex;align-items:center;position:relative">
+    <div class="ticker-scroll">
+      <div class="ticker-item"><span class="t-name">Steel Rebar G60</span><span class="t-price">$527/MT</span><span class="t-dn">↓ 2.1%</span></div>
+      <div class="ticker-item"><span class="t-name">OPC Cement 42.5N</span><span class="t-price">$57/MT</span><span class="t-up">↑ 0.8%</span></div>
+      <div class="ticker-item"><span class="t-name">Bitumen 60/70</span><span class="t-price">$318/MT</span><span class="t-dn">↓ 0.4%</span></div>
+      <div class="ticker-item"><span class="t-name">Aluminum 6061-T6</span><span class="t-price">$2,840/MT</span><span class="t-up">↑ 1.2%</span></div>
+      <div class="ticker-item"><span class="t-name">Diesel EN590</span><span class="t-price">$682/MT</span><span class="t-dn">↓ 0.6%</span></div>
+      <div class="ticker-item"><span class="t-name">Base Oil SN150</span><span class="t-price">$820/MT</span><span class="t-up">↑ 0.3%</span></div>
+      <div class="ticker-item"><span class="t-name">HRC Steel</span><span class="t-price">$498/MT</span><span class="t-dn">↓ 1.5%</span></div>
+      <div class="ticker-item"><span class="t-name">Lithium Carbonate</span><span class="t-price">$11,200/MT</span><span class="t-dn">↓ 3.1%</span></div>
+      <div class="ticker-item"><span class="t-name">Base Oil SN500</span><span class="t-price">$1,040/MT</span><span class="t-up">↑ 0.5%</span></div>
+      <div class="ticker-item"><span class="t-name">Float Glass 6mm</span><span class="t-price">$8.40/m²</span><span class="t-up">↑ 0.2%</span></div>
+      <!-- duplicate for seamless loop -->
+      <div class="ticker-item"><span class="t-name">Steel Rebar G60</span><span class="t-price">$527/MT</span><span class="t-dn">↓ 2.1%</span></div>
+      <div class="ticker-item"><span class="t-name">OPC Cement 42.5N</span><span class="t-price">$57/MT</span><span class="t-up">↑ 0.8%</span></div>
+      <div class="ticker-item"><span class="t-name">Bitumen 60/70</span><span class="t-price">$318/MT</span><span class="t-dn">↓ 0.4%</span></div>
+      <div class="ticker-item"><span class="t-name">Aluminum 6061-T6</span><span class="t-price">$2,840/MT</span><span class="t-up">↑ 1.2%</span></div>
+      <div class="ticker-item"><span class="t-name">Diesel EN590</span><span class="t-price">$682/MT</span><span class="t-dn">↓ 0.6%</span></div>
+      <div class="ticker-item"><span class="t-name">Base Oil SN150</span><span class="t-price">$820/MT</span><span class="t-up">↑ 0.3%</span></div>
+      <div class="ticker-item"><span class="t-name">HRC Steel</span><span class="t-price">$498/MT</span><span class="t-dn">↓ 1.5%</span></div>
+      <div class="ticker-item"><span class="t-name">Lithium Carbonate</span><span class="t-price">$11,200/MT</span><span class="t-dn">↓ 3.1%</span></div>
+      <div class="ticker-item"><span class="t-name">Base Oil SN500</span><span class="t-price">$1,040/MT</span><span class="t-up">↑ 0.5%</span></div>
+      <div class="ticker-item"><span class="t-name">Float Glass 6mm</span><span class="t-price">$8.40/m²</span><span class="t-up">↑ 0.2%</span></div>
+    </div>
+  </div>
+</div>
+
 <!-- TRUST BAR -->
 <div class="trust-bar fade-in">
   <div class="tb-item"><div class="tb-val" style="color:var(--violet)">7</div><div class="tb-label">Orchestration stages max</div></div>
@@ -372,84 +449,205 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 
 <div class="sec-divider"></div>
 
-<!-- WHAT WE SOURCE -->
+<!-- MARKETPLACE -->
 <div class="section" id="source">
-  <div class="fade-in">
-    <div class="section-eyebrow">What we source</div>
-    <div class="section-title">Three verticals.<br/><em>Mill &amp; refinery-direct.</em></div>
-    <div class="section-sub">Compliance-screened supply from MENA, Ukraine, and North Africa. Every origin selected for lowest landed cost to your destination port.</div>
-  </div>
-  <div class="verticals fade-in">
-
-    <a href="building-materials.html" class="vert-card" style="border-top:3px solid var(--teal)">
-      <div class="vert-card-top">
-        <span class="vert-icon">🏗️</span>
-        <div class="vert-name">Construction &amp; Infrastructure</div>
-        <div class="vert-desc">The complete reconstruction supply chain — from the first tonne of clinker to the last prefab panel. Turkey, Egypt, and Saudi origins. ASTM/EN certified.</div>
-        <div class="vert-products">
-          <span class="vert-tag">OPC Cement</span>
-          <span class="vert-tag">Steel Rebar</span>
-          <span class="vert-tag">Float Glass</span>
-          <span class="vert-tag">Prefab Panels</span>
-        </div>
-      </div>
-      <div class="vert-footer">
-        <span class="vert-price">$38–600K/unit</span>
-        <span class="vert-cta" style="color:var(--teal)">Explore →</span>
-      </div>
-    </a>
-
-    <a href="critical-minerals.html" class="vert-card" style="border-top:3px solid var(--violet)">
-      <div class="vert-card-top">
-        <span class="vert-icon">⚡</span>
-        <div class="vert-name">Industrial Commodities &amp; Metals</div>
-        <div class="vert-desc">Critical minerals for the energy transition, petrochemical feedstocks, and metals for advanced manufacturing. LME-linked and Platts-referenced pricing.</div>
-        <div class="vert-products">
-          <span class="vert-tag">Lithium Carbonate</span>
-          <span class="vert-tag">Cobalt</span>
-          <span class="vert-tag">Aluminum 6061/6063</span>
-          <span class="vert-tag">HRC Steel</span>
-        </div>
-      </div>
-      <div class="vert-footer">
-        <span class="vert-price">$880–$13,400/MT</span>
-        <span class="vert-cta" style="color:var(--violet)">Explore →</span>
-      </div>
-    </a>
-
-    <a href="energy-commodities.html" class="vert-card" style="border-top:3px solid var(--gold)">
-      <div class="vert-card-top">
-        <span class="vert-icon">🛢️</span>
-        <div class="vert-name">Energy &amp; Refinery Products</div>
-        <div class="vert-desc">Refinery outputs direct from Saudi Aramco and ADNOC Ruwais — the world's two deepest supply pools. OFAC-clean Gulf origin. Platts-linked at delivery.</div>
-        <div class="vert-products">
-          <span class="vert-tag">Bitumen 60/70 · PMB</span>
-          <span class="vert-tag">Base Oils SN150/500</span>
-          <span class="vert-tag">Diesel EN590</span>
-          <span class="vert-tag">HSFO · VLSFO</span>
-        </div>
-      </div>
-      <div class="vert-footer">
-        <span class="vert-price">$80–$950/MT FOB</span>
-        <span class="vert-cta" style="color:var(--gold)">Explore →</span>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- ORIGINS STRIP -->
-  <div style="margin-top:16px;display:flex;align-items:center;gap:18px;padding:14px 22px;background:var(--surface);border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;justify-content:center" class="fade-in">
-    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;flex-shrink:0">Sourcing from</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;align-items:center">
-      <span style="font-size:22px">🇸🇦</span>
-      <span style="font-size:22px">🇦🇪</span>
-      <span style="font-size:22px">🇹🇷</span>
-      <span style="font-size:22px">🇪🇬</span>
-      <span style="font-size:22px">🇶🇦</span>
-      <span style="font-size:22px">🇩🇿</span>
-      <span style="font-size:22px">🇺🇦</span>
-      <span style="font-size:22px">🇨🇳</span>
+  <div class="mk-section-hd fade-in">
+    <div>
+      <div class="section-eyebrow">Live Marketplace</div>
+      <div class="section-title" style="margin-bottom:8px">Source now.<br/><em>Mill-direct prices.</em></div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.7;max-width:480px">Compliance-screened supply from MENA refineries and mills. Prices indicative FOB Gulf — set your mandate and the Orchestrator negotiates to your ceiling.</div>
     </div>
+    <a href="sloiai-platform.html" class="mk-view-all">Full marketplace ↗</a>
+  </div>
+
+  <div class="mk-grid fade-in">
+
+    <!-- 1 -->
+    <div class="mk-card" style="border-top:2px solid var(--teal)">
+      <div class="mk-card-hd">
+        <span class="mk-cat" style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)">Construction</span>
+        <span class="mk-avail"><div class="mk-avail-dot"></div>In stock</span>
+      </div>
+      <div class="mk-card-body">
+        <div class="mk-product">Steel Rebar G60</div>
+        <div class="mk-spec">ASTM A615 · 12mm–32mm · Mill cert included</div>
+        <div class="mk-origin">🇹🇷 Izmir, Turkey &nbsp;·&nbsp; FOB</div>
+        <div class="mk-price-row">
+          <div class="mk-price-wrap">
+            <div class="mk-price-label">Indicative price</div>
+            <div class="mk-price">$527<span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--muted)">/MT</span></div>
+          </div>
+          <div class="mk-change dn">↓ 2.1%</div>
+        </div>
+        <div class="mk-meta">
+          <span class="mk-meta-tag">MOQ 500 MT</span>
+          <span class="mk-meta-tag">MTC ✓</span>
+          <span class="mk-meta-tag">OFAC ✓</span>
+          <span class="mk-meta-tag">LC-ready</span>
+        </div>
+      </div>
+      <div class="mk-card-ft">
+        <span class="mk-moq">Min 500 MT · FOB Izmir</span>
+        <a href="agent-mandate.html" class="mk-quote-btn">Request quote →</a>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="mk-card" style="border-top:2px solid var(--teal)">
+      <div class="mk-card-hd">
+        <span class="mk-cat" style="background:rgba(45,212,191,.1);border:1px solid rgba(45,212,191,.25);color:var(--teal)">Construction</span>
+        <span class="mk-avail"><div class="mk-avail-dot"></div>Confirmed supply</span>
+      </div>
+      <div class="mk-card-body">
+        <div class="mk-product">OPC Cement 42.5N</div>
+        <div class="mk-spec">EN 197-1 · Bulk or bagged · Saudi Aramco affiliate</div>
+        <div class="mk-origin">🇸🇦 Yanbu, Saudi Arabia &nbsp;·&nbsp; FOB</div>
+        <div class="mk-price-row">
+          <div class="mk-price-wrap">
+            <div class="mk-price-label">Indicative price</div>
+            <div class="mk-price">$57<span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--muted)">/MT</span></div>
+          </div>
+          <div class="mk-change up">↑ 0.8%</div>
+        </div>
+        <div class="mk-meta">
+          <span class="mk-meta-tag">MOQ 1,000 MT</span>
+          <span class="mk-meta-tag">ISO 9001 ✓</span>
+          <span class="mk-meta-tag">Bulk / Bags</span>
+        </div>
+      </div>
+      <div class="mk-card-ft">
+        <span class="mk-moq">Min 1,000 MT · FOB Yanbu</span>
+        <a href="agent-mandate.html" class="mk-quote-btn">Request quote →</a>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="mk-card" style="border-top:2px solid var(--gold)">
+      <div class="mk-card-hd">
+        <span class="mk-cat" style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)">Energy</span>
+        <span class="mk-avail"><div class="mk-avail-dot"></div>Available now</span>
+      </div>
+      <div class="mk-card-body">
+        <div class="mk-product">Bitumen 60/70</div>
+        <div class="mk-spec">ASTM D946 / EN 12591 · PMB available · ADNOC Ruwais</div>
+        <div class="mk-origin">🇦🇪 Ruwais, UAE &nbsp;·&nbsp; CFR</div>
+        <div class="mk-price-row">
+          <div class="mk-price-wrap">
+            <div class="mk-price-label">Indicative price</div>
+            <div class="mk-price">$318<span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--muted)">/MT</span></div>
+          </div>
+          <div class="mk-change dn">↓ 0.4%</div>
+        </div>
+        <div class="mk-meta">
+          <span class="mk-meta-tag">MOQ 100 MT</span>
+          <span class="mk-meta-tag">ISO Tanks</span>
+          <span class="mk-meta-tag">Platts-linked</span>
+        </div>
+      </div>
+      <div class="mk-card-ft">
+        <span class="mk-moq">Min 100 MT · CFR your port</span>
+        <a href="agent-mandate.html" class="mk-quote-btn">Request quote →</a>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="mk-card" style="border-top:2px solid var(--violet)">
+      <div class="mk-card-hd">
+        <span class="mk-cat" style="background:rgba(139,143,248,.1);border:1px solid rgba(139,143,248,.25);color:var(--violet)">Metals</span>
+        <span class="mk-avail"><div class="mk-avail-dot"></div>In stock</span>
+      </div>
+      <div class="mk-card-body">
+        <div class="mk-product">Aluminum 6061-T6</div>
+        <div class="mk-spec">EN AW-6061 · Billet / Extrusion · LME-linked</div>
+        <div class="mk-origin">🇦🇪 Dubai, UAE &nbsp;·&nbsp; CIF</div>
+        <div class="mk-price-row">
+          <div class="mk-price-wrap">
+            <div class="mk-price-label">Indicative price</div>
+            <div class="mk-price">$2,840<span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--muted)">/MT</span></div>
+          </div>
+          <div class="mk-change up">↑ 1.2%</div>
+        </div>
+        <div class="mk-meta">
+          <span class="mk-meta-tag">MOQ 50 MT</span>
+          <span class="mk-meta-tag">SGS cert</span>
+          <span class="mk-meta-tag">LME +$240 prem</span>
+        </div>
+      </div>
+      <div class="mk-card-ft">
+        <span class="mk-moq">Min 50 MT · CIF your port</span>
+        <a href="agent-mandate.html" class="mk-quote-btn">Request quote →</a>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="mk-card" style="border-top:2px solid var(--gold)">
+      <div class="mk-card-hd">
+        <span class="mk-cat" style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)">Energy</span>
+        <span class="mk-avail"><div class="mk-avail-dot"></div>Available now</span>
+      </div>
+      <div class="mk-card-body">
+        <div class="mk-product">Diesel EN590</div>
+        <div class="mk-spec">10ppm sulphur · EURO V · RasGas affiliate</div>
+        <div class="mk-origin">🇶🇦 Ras Laffan, Qatar &nbsp;·&nbsp; FOB</div>
+        <div class="mk-price-row">
+          <div class="mk-price-wrap">
+            <div class="mk-price-label">Indicative price</div>
+            <div class="mk-price">$682<span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--muted)">/MT</span></div>
+          </div>
+          <div class="mk-change dn">↓ 0.6%</div>
+        </div>
+        <div class="mk-meta">
+          <span class="mk-meta-tag">MOQ 1,000 MT</span>
+          <span class="mk-meta-tag">Q88 ✓</span>
+          <span class="mk-meta-tag">Platts Sing. ref.</span>
+        </div>
+      </div>
+      <div class="mk-card-ft">
+        <span class="mk-moq">Min 1,000 MT · FOB Ras Laffan</span>
+        <a href="agent-mandate.html" class="mk-quote-btn">Request quote →</a>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="mk-card" style="border-top:2px solid var(--gold)">
+      <div class="mk-card-hd">
+        <span class="mk-cat" style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold)">Refinery</span>
+        <span class="mk-avail"><div class="mk-avail-dot"></div>Confirmed supply</span>
+      </div>
+      <div class="mk-card-body">
+        <div class="mk-product">Base Oil SN150</div>
+        <div class="mk-spec">API Group I · Saudi Aramco Lubricants · SN150 &amp; SN500</div>
+        <div class="mk-origin">🇸🇦 Jubail, Saudi Arabia &nbsp;·&nbsp; FOB</div>
+        <div class="mk-price-row">
+          <div class="mk-price-wrap">
+            <div class="mk-price-label">Indicative price</div>
+            <div class="mk-price">$820<span style="font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:500;color:var(--muted)">/MT</span></div>
+          </div>
+          <div class="mk-change up">↑ 0.3%</div>
+        </div>
+        <div class="mk-meta">
+          <span class="mk-meta-tag">MOQ 200 MT</span>
+          <span class="mk-meta-tag">ISO Tanks</span>
+          <span class="mk-meta-tag">COA included</span>
+        </div>
+      </div>
+      <div class="mk-card-ft">
+        <span class="mk-moq">Min 200 MT · FOB Jubail</span>
+        <a href="agent-mandate.html" class="mk-quote-btn">Request quote →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ORIGINS + VIEW ALL STRIP -->
+  <div style="margin-top:14px;display:flex;align-items:center;gap:18px;padding:12px 22px;background:var(--surface);border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;justify-content:space-between" class="fade-in">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;flex-shrink:0">Sourcing from</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span style="font-size:20px">🇸🇦</span><span style="font-size:20px">🇦🇪</span><span style="font-size:20px">🇹🇷</span><span style="font-size:20px">🇪🇬</span><span style="font-size:20px">🇶🇦</span><span style="font-size:20px">🇩🇿</span><span style="font-size:20px">🇺🇦</span><span style="font-size:20px">🇨🇳</span>
+      </div>
+    </div>
+    <a href="sloiai-platform.html" style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--violet);text-decoration:none;font-weight:700;white-space:nowrap">View all 29+ products →</a>
   </div>
 </div>
 

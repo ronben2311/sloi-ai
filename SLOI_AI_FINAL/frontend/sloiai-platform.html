@@ -1149,12 +1149,8 @@
           ><span class="nav-badge nb-ind" style="font-size:11px">72</span>
         </button>
         <div class="sb-section">Deals</div>
-        <button class="nav" onclick="show('lois', this)">
-          <span class="nav-icon">📋</span><span class="nav-label">RFQs &amp; LOIs</span
-          ><span class="nav-badge nb-gold">7</span>
-        </button>
-        <button class="nav" id="nav-contracts" onclick="show('contracts', this)">
-          <span class="nav-icon">📄</span><span class="nav-label">Contracts</span>
+        <button class="nav" id="nav-documents" onclick="show('documents', this)">
+          <span class="nav-icon">🗂️</span><span class="nav-label">Documents</span>
         </button>
         <div class="sb-section">Account</div>
         <button class="nav" id="nav-credits" onclick="show('profile', this)">
@@ -1184,6 +1180,9 @@
         <div class="sb-footer">
           <div class="sf-label">CREDIT BALANCE</div>
           <div class="sf-credits" id="sf-credits">—</div>
+          <div style="height:4px;background:var(--border);border-radius:2px;margin:7px 0 5px;overflow:hidden">
+            <div id="sf-credit-bar" style="height:100%;width:0%;background:var(--teal);border-radius:2px;transition:width .5s ease,background .5s"></div>
+          </div>
           <div style="font-size:14px; color: var(--muted); margin-top: 2px" id="sf-credits-sub">
             ~32 sessions remaining
           </div>
@@ -1207,6 +1206,11 @@
               </div>
             </div>
             <div class="tb-right">
+              <button class="btn btn-sm" onclick="openSearch()" style="background:rgba(255,255,255,.04);border-color:var(--border2);color:var(--muted);font-size:12px;gap:6px;min-width:140px;justify-content:space-between">
+                <span style="display:flex;align-items:center;gap:6px">🔍 <span style="color:var(--muted)">Search…</span></span>
+                <kbd style="font-size:10px;background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:1px 5px;color:var(--muted);font-family:'IBM Plex Mono',monospace">⌘K</kbd>
+              </button>
+              <button class="btn btn-sm" onclick="openHowItWorks()" style="background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet);font-size:12px;gap:5px">❓ How it works</button>
               <button class="btn btn-sm" id="topbar-notif-btn" onclick="show('notifications',this)" style="position:relative;padding:0 10px;background:rgba(255,255,255,.04);border-color:var(--border2)">🔔<span id="notif-badge" style="position:absolute;top:-5px;right:-5px;background:var(--red);color:#fff;font-size:9px;font-family:'IBM Plex Mono',monospace;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 3px;line-height:1">3</span></button>
               <div style="width:1px;height:20px;background:var(--border);margin:0 2px;flex-shrink:0"></div>
               <button id="tb-profile" onclick="show('agents',this)" style="display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border2);border-radius:20px;padding:5px 14px 5px 6px;cursor:pointer;transition:border-color .15s" onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='var(--border2)'">
@@ -1220,8 +1224,7 @@
             <button class="nav active" id="tb-dashboard" onclick="show('dashboard',this)">🏠 Dashboard</button>
             <button class="nav" id="tb-products" onclick="show('products',this)">🛒 Marketplace <span class="nav-badge nb-ind" style="font-size:10px">72</span></button>
 
-            <button class="nav" id="tb-lois" onclick="show('lois',this)">📋 RFQs &amp; LOIs <span class="nav-badge nb-gold" style="font-size:10px">7</span></button>
-            <button class="nav" id="tb-contracts" onclick="show('contracts',this)">📄 Contracts</button>
+            <button class="nav" id="tb-documents" onclick="show('documents',this)">🗂️ Documents</button>
           </div>
         </div>
 
@@ -1443,7 +1446,7 @@
                 <button
                   class="btn btn-sm"
                   style="width: 100%; justify-content: center"
-                  onclick="show('lois', document.getElementById('tb-lois'))"
+                  onclick="show('documents', document.getElementById('tb-documents'))"
                 >
                   View all LOIs →
                 </button>
@@ -2872,7 +2875,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                   <div class="ar-actions">
                     <button class="btn btn-xs btn-g" onclick="event.stopPropagation();window.open('loi-contracts.html?tool=loi','_blank')">&#128196; Generate LOI</button>
                     <button class="btn btn-xs" style="background:var(--gold-dim);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="event.stopPropagation();openPOModal()">&#129534; Generate PO</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();show('lois',document.getElementById('tb-lois'))">View all</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('documents',document.getElementById('tb-documents'))">View all</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
@@ -2911,7 +2914,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                   <div class="ar-metric">Sales &amp; Purchase Agreement &nbsp;&middot;&nbsp; GAFTA / ICC &nbsp;&middot;&nbsp; drafts from signed LOI</div>
                   <div class="ar-actions">
                     <button class="btn btn-xs" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="event.stopPropagation();openSPAModal()">📜 Generate SPA</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();show('contracts',document.getElementById('nav-contracts'))">View all</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('documents',document.getElementById('nav-documents'))">View all</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
@@ -2938,7 +2941,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                   <div class="ar-metric">Incoterms 2020 &nbsp;&middot;&nbsp; from SPA or LOI &nbsp;&middot;&nbsp; full clause set</div>
                   <div class="ar-actions">
                     <button class="btn btn-xs btn-p" onclick="event.stopPropagation();openTradeContractModal()">⚖️ Generate Contract</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();show('contracts',document.getElementById('nav-contracts'))">View all</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('documents',document.getElementById('nav-documents'))">View all</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
@@ -2965,7 +2968,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                   <div class="ar-metric">UCP 600 &nbsp;&middot;&nbsp; from LOI or SPA &nbsp;&middot;&nbsp; bank-ready draft</div>
                   <div class="ar-actions">
                     <button class="btn btn-xs" style="background:rgba(45,212,191,.1);border-color:rgba(45,212,191,.3);color:var(--teal)" onclick="event.stopPropagation();openLCAppModal()">💳 Draft LC Application</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();show('contracts',document.getElementById('nav-contracts'))">View all</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('documents',document.getElementById('nav-documents'))">View all</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
@@ -3016,8 +3019,8 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                   <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">Always on</span>
                   <div class="ar-metric">Analyzes LOIs &amp; POs &nbsp;&middot;&nbsp; risk checks &nbsp;&middot;&nbsp; clause drafting &nbsp;&middot;&nbsp; LOI comparison</div>
                   <div class="ar-actions">
-                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();show('contracts',document.getElementById('nav-contracts'))">📄 Contracts</button>
-                    <button class="btn btn-xs" onclick="event.stopPropagation();show('lois')">View LOIs</button>
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();show('documents',document.getElementById('nav-documents'))">📄 Contracts</button>
+                    <button class="btn btn-xs" onclick="event.stopPropagation();show('documents')">View LOIs</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
                 </div>
@@ -3238,7 +3241,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                   <span style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span>Running</span>
                   <div class="ar-metric">3 LCs open &middot; $145.2K pending &middot; <span style="color:var(--red)">&#9888; 1 overdue</span> &middot; <span style="color:var(--green)">$56K cleared</span></div>
                   <div class="ar-actions">
-                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();show('lois',document.getElementById('tb-lois'))">&#9654; Review</button>
+                    <button class="btn btn-xs btn-p" onclick="event.stopPropagation();show('documents',document.getElementById('tb-documents'))">&#9654; Review</button>
                     <button class="btn btn-xs" onclick="event.stopPropagation();alert('Overdue reminder sent to supplier for SL-LOI-20260428-001 (Cement OPC).')">Remind</button>
                   </div>
                   <span class="ar-chev">&#9660;</span>
@@ -3288,7 +3291,7 @@ Tone: urgent, decisive, action-first. Do not ask for approval when within the em
                     </div>
                   </div>
                   <div class="ad-btns">
-                    <button class="btn btn-xs btn-p" onclick="show('lois',document.getElementById('tb-lois'))">View LOIs &rarr;</button>
+                    <button class="btn btn-xs btn-p" onclick="show('documents',document.getElementById('tb-documents'))">View LOIs &rarr;</button>
                     <button class="btn btn-xs" onclick="alert('Overdue reminder sent to supplier for SL-LOI-20260428-001 (Cement OPC 52.5R). Due date: 2026-05-28.')">Send reminder</button>
                     <button class="btn btn-xs" onclick="alert('MT103 SWIFT draft generated for SL-LOI-20260430-002 (Aluminum · $46,000). Check your email.')">MT103 draft</button>
                     <button class="btn btn-xs" onclick="alert('Payment ledger exported: 4 transactions, $201,200 total.')">&#8595; Export</button>
@@ -3868,346 +3871,53 @@ Content-Type: application/json
           </div>
 
           <!-- RFQs & LOIs (merged) -->
-          <div id="view-lois" class="view">
-            <div style="display:grid;grid-template-columns:1fr 230px;gap:20px;align-items:start">
-
-              <!-- LEFT: main content -->
-              <div>
-                <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// RFQ TRACKER</div>
-                <div class="g4" style="margin-bottom: 14px">
-                  <div class="stat">
-                    <div class="stat-top">Sent this month</div>
-                    <div class="stat-val" id="rfq-stat-sent">12</div>
-                  </div>
-                  <div class="stat">
-                    <div class="stat-top">Awaiting reply</div>
-                    <div class="stat-val" style="color: var(--gold)" id="rfq-stat-pending">4</div>
-                  </div>
-                  <div class="stat">
-                    <div class="stat-top">Quoted</div>
-                    <div class="stat-val" style="color: var(--green)" id="rfq-stat-quoted">6</div>
-                  </div>
-                  <div class="stat">
-                    <div class="stat-top">Converted to LOI</div>
-                    <div class="stat-val" style="color: var(--indigo)" id="rfq-stat-converted">3</div>
-                  </div>
-                </div>
-                <div class="card" style="margin-bottom:18px">
-                  <div class="card-title">
-                    // ACTIVE RFQs
-                    <button class="btn btn-xs btn-p" onclick="show('negotiate')">+ New RFQ</button>
-                  </div>
-                  <div id="rfq-list"></div>
-                </div>
-
-                <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px">// MY LOIs</div>
-                <div class="g4" style="margin-bottom: 14px">
-                  <div class="stat">
-                    <div class="stat-top">Total LOIs</div>
-                    <div class="stat-val" id="loi-stat-total">—</div>
-                  </div>
-                  <div class="stat">
-                    <div class="stat-top">This month</div>
-                    <div class="stat-val" style="color: var(--green)" id="loi-stat-month">—</div>
-                  </div>
-                  <div class="stat">
-                    <div class="stat-top">Total value</div>
-                    <div class="stat-val" id="loi-stat-value">—</div>
-                  </div>
-                  <div class="stat">
-                    <div class="stat-top">Credits spent</div>
-                    <div class="stat-val" style="color: var(--teal)" id="loi-stat-credits">—</div>
-                  </div>
-                </div>
-                <div id="loi-list"></div>
-
-                <!-- AUTO-GENERATED TRADE DOCUMENTS -->
-                <div class="sloi-auto-docs-card" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-top:14px;display:none">
-                  <div style="padding:10px 14px 8px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <span style="font-size:12px;font-weight:700;color:var(--white);letter-spacing:.06em;text-transform:uppercase">Trade Documents</span>
-                    <span style="font-size:10px;color:var(--green);background:rgba(34,197,94,.12);padding:2px 7px;border-radius:3px;letter-spacing:.06em">AUTO-GENERATED</span>
-                    <span style="flex:1"></span>
-                    <button style="background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;padding:0" onclick="clearAutoDocs()">Clear</button>
-                  </div>
-                  <div class="sloi-auto-docs-list" style="max-height:320px;overflow-y:auto"></div>
-                </div>
-
-                <!-- MY POs -->
-                <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:24px;margin-bottom:10px">// PURCHASE ORDERS</div>
-                <div class="g4" style="margin-bottom:14px">
-                  <div class="stat"><div class="stat-top">Total POs</div><div class="stat-val" id="po-stat-total">—</div></div>
-                  <div class="stat"><div class="stat-top">This month</div><div class="stat-val" style="color:var(--green)" id="po-stat-month">—</div></div>
-                  <div class="stat"><div class="stat-top">PO value</div><div class="stat-val" id="po-stat-value">—</div></div>
-                  <div class="stat"><div class="stat-top">Pending</div><div class="stat-val" style="color:var(--gold)" id="po-stat-pending">—</div></div>
-                </div>
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-                  <div style="font-size:13px;color:var(--muted)">Generated from signed LOIs</div>
-                  <button class="btn btn-xs" style="background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="openPOModal()">🧾 New PO</button>
-                </div>
-                <div id="po-list"></div>
-              </div>
-
-              <!-- RIGHT: AI Tools column -->
-              <div style="position:sticky;top:0">
-                <div style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px">AI Tools<span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
-
-                <!-- NegotiationAgent -->
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#129302;</div>
-                    <div style="flex:1;min-width:0">
-                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">OrchestratorAgent</div>
-                      <div style="display:flex;align-items:center;gap:4px;margin-top:2px"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span><span style="font-size:11px;color:var(--green)">2 active</span></div>
-                    </div>
-                  </div>
-                  <button class="btn btn-xs btn-p" style="width:100%;justify-content:center" onclick="show('negotiate')">+ New orchestration</button>
-                </div>
-
-                <!-- ComplianceBot -->
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(239,68,68,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128737;&#65039;</div>
-                    <div style="flex:1;min-width:0">
-                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">ComplianceBot</div>
-                      <div style="font-size:11px;color:var(--muted);margin-top:2px">1 review pending</div>
-                    </div>
-                  </div>
-                  <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="alert('Running compliance check…')">Run check</button>
-                </div>
-
-                <!-- Auto Docs -->
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(34,197,94,.1);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128196;</div>
-                    <div style="flex:1;min-width:0">
-                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Auto Docs</div>
-                      <div style="font-size:11px;color:var(--muted);margin-top:2px">3 LOIs &middot; 2 POs this week</div>
-                    </div>
-                  </div>
-                  <div style="display:flex;gap:6px">
-                    <button class="btn btn-xs btn-g" style="flex:1;justify-content:center" onclick="window.open('loi-contracts.html?tool=loi','_blank')">&#128196; LOI</button>
-                    <button class="btn btn-xs" style="flex:1;justify-content:center;background:rgba(232,169,74,.1);border-color:rgba(232,169,74,.3);color:var(--gold)" onclick="openPOModal()">&#129534; PO</button>
-                  </div>
-                </div>
-
-                <!-- LogisticsAI -->
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.15);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128674;</div>
-                    <div style="flex:1;min-width:0">
-                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">LogisticsAI</div>
-                      <div style="font-size:11px;color:var(--gold);margin-top:2px">&#9888; Port Said +2d</div>
-                    </div>
-                  </div>
-                  <button class="btn btn-xs btn-p" style="width:100%;justify-content:center" onclick="alert('Track shipment…')">&#9654; Track shipment</button>
-                </div>
-
-                <!-- CustomsAI -->
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:6px">
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(139,143,248,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">&#128707;</div>
-                    <div style="flex:1;min-width:0">
-                      <div style="font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">CustomsAI</div>
-                      <div style="font-size:11px;color:var(--muted);margin-top:2px">$14.2K duty savings</div>
-                    </div>
-                  </div>
-                  <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="alert('HS code lookup…')">&#128269; HS Lookup</button>
-                </div>
-
-                <!-- AI Contract Advisor -->
-                <div id="loi-ai-panel" style="background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:7px;overflow:hidden;margin-bottom:6px">
-                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🤖</div>
-                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">AI Contract Advisor</div><div style="font-size:11px;color:var(--muted)">Click 🤖 on any RFQ or LOI</div></div>
-                  </div>
-                  <div style="padding:8px 10px">
-                    <div id="loi-ai-label" style="font-size:11px;color:var(--violet);min-height:15px;margin-bottom:6px">No item selected</div>
-                    <textarea class="inp" id="loi-ai-context" style="height:52px;resize:none;font-size:11px;margin-bottom:8px;font-family:'IBM Plex Mono',monospace" placeholder="Select an RFQ or LOI row to load context…" readonly></textarea>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px">
-                      <button class="btn btn-xs" onclick="runLOIAI('summarize')" style="font-size:11px;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">📋 Summarize</button>
-                      <button class="btn btn-xs" onclick="runLOIAI('risk')" style="font-size:11px;background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2);color:var(--red)">⚠ Risk Check</button>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px">
-                      <button class="btn btn-xs" onclick="runLOIAI('reply')" style="font-size:11px;background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--teal)">✉ Draft Reply</button>
-                      <button class="btn btn-xs" onclick="runLOIAI('completeness')" style="font-size:11px;background:rgba(232,169,74,.06);border-color:rgba(232,169,74,.2);color:var(--gold)">✓ Completeness</button>
-                    </div>
-                    <div id="loi-ai-resp" class="ai-response" style="max-height:200px;font-size:11px;line-height:1.7"></div>
-                  </div>
-                </div>
-
-                <button class="btn btn-xs" style="width:100%;justify-content:center;margin-top:4px" onclick="show('agents')">View all AI Tools →</button>
-              </div>
-
+          <!-- DOCUMENTS -->
+          <div id="view-documents" class="view">
+            <!-- Stats -->
+            <div class="g4" style="margin-bottom:14px">
+              <div class="stat"><div class="stat-top">Total Documents</div><div class="stat-val" id="docsv-stat-total" style="color:var(--teal)">—</div><div class="stat-sub">All records</div></div>
+              <div class="stat"><div class="stat-top">Letters of Intent</div><div class="stat-val" id="docsv-stat-lois" style="color:var(--indigo)">—</div><div class="stat-sub">Signed LOIs</div></div>
+              <div class="stat"><div class="stat-top">Purchase Orders</div><div class="stat-val" id="docsv-stat-pos" style="color:var(--gold)">—</div><div class="stat-sub">Active POs</div></div>
+              <div class="stat"><div class="stat-top">Generated Docs</div><div class="stat-val" id="docsv-stat-gen" style="color:var(--green)">—</div><div class="stat-sub">From Doc Studio</div></div>
             </div>
-          </div>
-
-          <!-- CONTRACTS & DOCUMENTS -->
-          <div id="view-contracts" class="view">
-            <div style="display:grid;grid-template-columns:1fr 220px;gap:20px;align-items:start">
-
-              <!-- LEFT -->
-              <div>
-                <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px">// CONTRACTS &amp; DOCUMENTS</div>
-
-                <!-- Stats -->
-                <div class="g4" style="margin-bottom:16px">
-                  <div class="stat"><div class="stat-top">Purchase Orders</div><div class="stat-val" id="ct-stat-pos">—</div></div>
-                  <div class="stat"><div class="stat-top">PO Value</div><div class="stat-val" id="ct-stat-val">—</div></div>
-                  <div class="stat"><div class="stat-top">Signed Contracts</div><div class="stat-val" style="color:var(--green)" id="ct-stat-signed">—</div></div>
-                  <div class="stat"><div class="stat-top">Pending Signature</div><div class="stat-val" style="color:var(--gold)" id="ct-stat-pending">—</div></div>
-                </div>
-
-                <!-- Deal Flow Timeline -->
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:20px">
-                  <div style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px">Deal Flow</div>
-                  <div id="ct-timeline" style="display:flex;align-items:center"></div>
-                </div>
-
-                <!-- Purchase Orders -->
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-                  <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">// PURCHASE ORDERS</div>
-                  <button class="btn btn-xs" onclick="window.open('loi-contracts.html?tool=po','_blank')" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold);font-size:12px">🧾 New PO</button>
-                </div>
-                <div id="ct-po-list" style="margin-bottom:24px"></div>
-
-                <!-- Signed Contracts -->
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-                  <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">// SIGNED CONTRACTS</div>
-                </div>
-                <div id="ct-contracts-list"></div>
-                <!-- Upload area -->
-                <div id="ct-upload-area"
-                  onclick="document.getElementById('ct-file-input').click()"
-                  ondragover="event.preventDefault();this.style.borderColor='var(--indigo)'"
-                  ondragleave="this.style.borderColor='var(--border2)'"
-                  ondrop="event.preventDefault();this.style.borderColor='var(--border2)';uploadContract(event.dataTransfer.files[0])"
-                  style="border:1px dashed var(--border2);border-radius:6px;padding:24px;text-align:center;cursor:pointer;transition:border-color .15s;margin-top:8px"
-                  onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='var(--border2)'">
-                  <div style="font-size:22px;margin-bottom:6px">📁</div>
-                  <div style="font-size:13px;color:var(--muted)">Drop a signed contract PDF here, or click to upload</div>
-                  <div style="font-size:12px;color:var(--muted);margin-top:3px;opacity:.6">PDF only · stored in your browser</div>
-                  <input type="file" id="ct-file-input" accept=".pdf" style="display:none" onchange="uploadContract(this.files[0])"/>
-                </div>
+            <!-- Header + actions -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <div style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">// ALL DOCUMENTS</div>
+              <div style="display:flex;gap:6px">
+                <button class="btn btn-xs btn-g" onclick="window.open('loi-contracts.html','_blank')">📄 Doc Studio</button>
+                <button class="btn btn-xs btn-p" onclick="show('negotiate')">+ New Orchestration</button>
               </div>
-
-              <!-- RIGHT: Quick Actions -->
-              <div style="position:sticky;top:0">
-                <div style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px">
-                  Quick Actions<span style="flex:1;height:1px;background:var(--border);display:block"></span>
-                </div>
-
-                <!-- Auto Docs -->
-                <div style="background:var(--surface);border:1px solid rgba(91,95,239,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
-                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">📋</div>
-                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">Auto Docs</div><div style="font-size:11px;color:var(--muted)">LOI · PO · SPA · Contract · LC — all auto-generated</div></div>
-                  </div>
-                  <div style="padding:8px;display:flex;gap:6px">
-                    <button class="btn btn-xs" style="flex:1;justify-content:center;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="window.open('loi-contracts.html?tool=loi','_blank')">📋 LOI</button>
-                    <button class="btn btn-xs" style="flex:1;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="window.open('loi-contracts.html?tool=po','_blank')">🧾 PO</button>
-                  </div>
-                </div>
-
-                <!-- Document Suite label -->
-                <div style="font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:4px 0 6px;display:flex;align-items:center;gap:6px">Document Suite<span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
-
-                <!-- SPA Generator -->
-                <div style="background:var(--surface);border:1px solid rgba(232,169,74,.2);border-radius:7px;overflow:hidden;margin-bottom:6px">
-                  <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <div style="width:22px;height:22px;border-radius:4px;background:rgba(232,169,74,.12);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">📜</div>
-                    <div><div style="font-size:12px;font-weight:600;color:var(--white)">SPA Generator</div><div style="font-size:11px;color:var(--muted)">GAFTA / ICC</div></div>
-                  </div>
-                  <div style="padding:6px 8px">
-                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.25);color:var(--gold)" onclick="openSPAModal()">📜 Generate SPA</button>
-                  </div>
-                </div>
-
-                <!-- Trade Contract Generator -->
-                <div style="background:var(--surface);border:1px solid rgba(91,95,239,.2);border-radius:7px;overflow:hidden;margin-bottom:6px">
-                  <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <div style="width:22px;height:22px;border-radius:4px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">⚖️</div>
-                    <div><div style="font-size:12px;font-weight:600;color:var(--white)">Trade Contract</div><div style="font-size:11px;color:var(--muted)">Incoterms 2020</div></div>
-                  </div>
-                  <div style="padding:6px 8px">
-                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)" onclick="openTradeContractModal()">⚖️ Generate Contract</button>
-                  </div>
-                </div>
-
-                <!-- LC Application Generator -->
-                <div style="background:var(--surface);border:1px solid rgba(45,212,191,.2);border-radius:7px;overflow:hidden;margin-bottom:6px">
-                  <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <div style="width:22px;height:22px;border-radius:4px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">💳</div>
-                    <div><div style="font-size:12px;font-weight:600;color:var(--white)">LC Application</div><div style="font-size:11px;color:var(--muted)">UCP 600</div></div>
-                  </div>
-                  <div style="padding:6px 8px">
-                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="openLCAppModal()">💳 Draft LC Application</button>
-                  </div>
-                </div>
-
-                <!-- Trade Intelligence label -->
-                <div style="font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin:8px 0 6px;display:flex;align-items:center;gap:6px">Trade Intelligence<span style="flex:1;height:1px;background:var(--border);display:block"></span></div>
-
-                <!-- HS Code & Duty -->
-                <div style="background:var(--surface);border:1px solid rgba(45,212,191,.15);border-radius:7px;overflow:hidden;margin-bottom:8px">
-                  <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <div style="width:22px;height:22px;border-radius:4px;background:rgba(45,212,191,.08);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">🛃</div>
-                    <div><div style="font-size:12px;font-weight:600;color:var(--white)">HS Code &amp; Duty</div><div style="font-size:11px;color:var(--muted)">Per destination · FTA rates</div></div>
-                  </div>
-                  <div style="padding:6px 8px">
-                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--teal)" onclick="openHSModal()">🛃 HS Lookup</button>
-                  </div>
-                </div>
-
-                <!-- Invoice Generator -->
-                <div style="background:var(--surface);border:1px solid rgba(45,212,191,.2);border-radius:7px;overflow:hidden;margin-bottom:8px">
-                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(45,212,191,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🧾</div>
-                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">Invoice Generator</div><div style="font-size:11px;color:var(--muted)">Bill from signed PO</div></div>
-                  </div>
-                  <div style="padding:8px">
-                    <button class="btn btn-xs" style="width:100%;justify-content:center;background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="show('lois',document.getElementById('nav-contracts'))">🧾 View LOIs</button>
-                  </div>
-                </div>
-
-                <!-- LOIs shortcut -->
-                <div style="background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:10px 12px;margin-bottom:8px">
-                  <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Linked Documents</div>
-                  <button class="btn btn-xs" style="width:100%;justify-content:center;margin-bottom:4px" onclick="show('lois',document.getElementById('tb-lois'))">📋 View RFQs &amp; LOIs</button>
-                  <button class="btn btn-xs" style="width:100%;justify-content:center" onclick="show('notifications',document.getElementById('topbar-notif-btn'))">🔔 Notifications</button>
-                </div>
-
-                <!-- AI Contract Advisor -->
-                <div id="ct-ai-panel" style="background:var(--surface);border:1px solid rgba(91,95,239,.3);border-radius:7px;overflow:hidden;margin-bottom:8px">
-                  <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px">
-                    <div style="width:26px;height:26px;border-radius:5px;background:rgba(91,95,239,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🤖</div>
-                    <div><div style="font-size:13px;font-weight:600;color:var(--white)">AI Contract Advisor</div><div style="font-size:11px;color:var(--muted)">Click 🤖 on any row</div></div>
-                  </div>
-                  <div style="padding:8px 10px">
-                    <div id="ct-ai-label" style="font-size:11px;color:var(--violet);min-height:15px;margin-bottom:6px">No item selected</div>
-                    <textarea class="inp" id="ct-ai-context" style="height:52px;resize:none;font-size:11px;margin-bottom:8px;font-family:'IBM Plex Mono',monospace" placeholder="Select a PO or contract row to load context…" readonly></textarea>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px">
-                      <button class="btn btn-xs" onclick="runContractAI('summarize')" style="font-size:11px;background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--violet)">📋 Summarize</button>
-                      <button class="btn btn-xs" onclick="runContractAI('risk')" style="font-size:11px;background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2);color:var(--red)">⚠ Risk Check</button>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:5px">
-                      <button class="btn btn-xs" onclick="runContractAI('compare')" style="font-size:11px;background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--teal)">⇄ vs LOI</button>
-                      <div style="display:flex;gap:2px">
-                        <select id="ct-ai-clause-type" class="inp" style="font-size:11px;padding:3px 5px;flex:1">
-                          <option value="Force Majeure">Force Majeure</option>
-                          <option value="Penalty &amp; Liquidated Damages">Penalty</option>
-                          <option value="Inspection &amp; Quality">Inspection</option>
-                          <option value="Payment">Payment</option>
-                          <option value="Dispute Resolution">Dispute</option>
-                        </select>
-                        <button class="btn btn-xs" onclick="runContractAI('clause')" style="font-size:11px;padding:3px 7px;flex-shrink:0" title="Draft clause">✍</button>
-                      </div>
-                    </div>
-                    <div id="ct-ai-resp" class="ai-response" style="max-height:200px;font-size:11px;line-height:1.7"></div>
-                  </div>
-                </div>
-              </div>
-
             </div>
+            <!-- Type filter chips -->
+            <div id="docsv-filters" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">
+              <button class="btn btn-xs btn-p" onclick="docsFilterSet('all',this)">All</button>
+              <button class="btn btn-xs" onclick="docsFilterSet('loi',this)">📋 LOI</button>
+              <button class="btn btn-xs" onclick="docsFilterSet('po',this)">🧾 PO</button>
+              <button class="btn btn-xs" onclick="docsFilterSet('nda',this)">🔏 NDA</button>
+              <button class="btn btn-xs" onclick="docsFilterSet('spa',this)">⚖️ SPA</button>
+              <button class="btn btn-xs" onclick="docsFilterSet('lca',this)">💳 LC App</button>
+              <button class="btn btn-xs" onclick="docsFilterSet('freight',this)">⚓ Freight</button>
+              <button class="btn btn-xs" onclick="docsFilterSet('hs',this)">🛃 HS Report</button>
+            </div>
+            <!-- Table -->
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+              <table style="width:100%;border-collapse:collapse">
+                <thead>
+                  <tr style="border-bottom:1px solid var(--border)">
+                    <th style="padding:10px 12px;text-align:left;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600;width:40px"></th>
+                    <th style="padding:10px 6px;text-align:left;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600">Type</th>
+                    <th style="padding:10px 6px;text-align:left;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600">Title / Reference</th>
+                    <th style="padding:10px 6px;text-align:left;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600">Date</th>
+                    <th style="padding:10px 6px;text-align:left;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600">Source</th>
+                    <th style="padding:10px 12px;text-align:left;font-size:11px;color:var(--muted);letter-spacing:.08em;font-weight:600">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="docsv-table-body">
+                  <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted);font-size:13px">Loading…</td></tr>
+                </tbody>
+              </table>
+            </div>
+
           </div>
 
           <!-- NOTIFICATIONS -->
@@ -5164,6 +4874,12 @@ Content-Type: application/json
             var bal = d.balance;
             document.getElementById("sf-credits").textContent = bal;
             document.getElementById("sf-credits-sub").textContent = "~" + Math.floor(bal / 10) + " sessions remaining";
+            var barEl = document.getElementById('sf-credit-bar');
+            if (barEl) {
+              var pct = Math.min(Math.round(bal / 500 * 100), 100);
+              barEl.style.width = pct + '%';
+              barEl.style.background = bal < 50 ? 'var(--red)' : bal < 150 ? 'var(--gold)' : 'var(--teal)';
+            }
             document.getElementById("stat-credits").textContent = bal;
             document.getElementById("stat-credits-sub").textContent =
               "~" + Math.floor(bal / 10) + " sessions";
@@ -5561,6 +5277,286 @@ Content-Type: application/json
         renderContractsView();
       }
 
+      // ── CMD+K SEARCH ─────────────────────────────────────────────────────────
+      var _searchIdx = -1;
+
+      var SEARCH_PAGES = [
+        { icon:'🏠', label:'Dashboard',     sub:'Overview & active orchestrations', action:function(){ show('dashboard', document.getElementById('tb-dashboard')); } },
+        { icon:'📊', label:'Exchange',       sub:'Live commodity market & order book', action:function(){ show('exchange'); } },
+        { icon:'🛒', label:'Marketplace',    sub:'72 products · browse & filter',    action:function(){ show('products', document.getElementById('tb-products')); } },
+        { icon:'🗂️', label:'Documents',      sub:'LOIs · POs · generated trade docs', action:function(){ show('documents', document.getElementById('tb-documents')); } },
+        { icon:'🤖', label:'AI Tools',       sub:'6 agents running autonomously',    action:function(){ show('agents'); } },
+        { icon:'🌐', label:'Open Network',   sub:'Connect managed agent · earn 1%',  action:function(){ show('opennetwork'); } },
+        { icon:'👤', label:'Profile & Credits', sub:'Account settings · buy credits', action:function(){ show('profile', document.getElementById('nav-credits')); } },
+        { icon:'🎧', label:'Support',        sub:'AI chat · submit a ticket',        action:function(){ show('support'); } },
+        { icon:'❓', label:'How it works',   sub:'5-step platform walkthrough',      action:function(){ openHowItWorks(); } },
+        { icon:'🤖', label:'Start Orchestration', sub:'Configure mandate · launch AI negotiation', action:function(){ show('negotiate'); } },
+        { icon:'📄', label:'Doc Studio',     sub:'Generate LOI, PO, SPA, LC and more', action:function(){ window.open('loi-contracts.html','_blank'); } },
+      ];
+
+      function openSearch() {
+        var m = document.getElementById('search-modal');
+        m.style.display = 'flex';
+        var inp = document.getElementById('search-input');
+        inp.value = '';
+        _searchIdx = -1;
+        runSearch('');
+        setTimeout(function(){ inp.focus(); }, 50);
+      }
+
+      function closeSearch() {
+        document.getElementById('search-modal').style.display = 'none';
+      }
+
+      var _searchActions = [];
+
+      function searchResultRow(icon, label, sub, idx) {
+        return '<div class="search-row" data-idx="' + idx + '" onclick="searchActivate(' + idx + ')" onmouseover="searchHover(' + idx + ')"'
+          + ' style="display:flex;align-items:center;gap:12px;padding:9px 14px;cursor:pointer;transition:background .1s">'
+          + '<span style="font-size:17px;flex-shrink:0;width:24px;text-align:center">' + icon + '</span>'
+          + '<div style="flex:1;min-width:0">'
+          + '<div style="font-size:13px;font-weight:600;color:var(--white)">' + label + '</div>'
+          + '<div style="font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + sub + '</div>'
+          + '</div>'
+          + '<span style="font-size:12px;color:var(--muted)">↵</span>'
+          + '</div>';
+      }
+
+      function runSearch(q) {
+        _searchIdx = -1;
+        _searchActions = [];
+        var el = document.getElementById('search-results');
+        q = (q || '').trim().toLowerCase();
+
+        if (!q) {
+          var html = '<div style="padding:4px 12px 6px;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">Pages</div>';
+          SEARCH_PAGES.slice(0, 6).forEach(function(r){
+            html += searchResultRow(r.icon, r.label, r.sub, _searchActions.length);
+            _searchActions.push(r.action);
+          });
+          el.innerHTML = html;
+          return;
+        }
+
+        var html = '';
+
+        var pageHits = SEARCH_PAGES.filter(function(p){
+          return p.label.toLowerCase().includes(q) || p.sub.toLowerCase().includes(q);
+        });
+        if (pageHits.length) {
+          html += '<div style="padding:8px 12px 4px;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">Pages</div>';
+          pageHits.forEach(function(r){
+            html += searchResultRow(r.icon, r.label, r.sub, _searchActions.length);
+            _searchActions.push(r.action);
+          });
+        }
+
+        var prodHits = PRODUCTS.filter(function(p){
+          return (p.name||'').toLowerCase().includes(q) || (p.sector||'').toLowerCase().includes(q);
+        }).slice(0, 5);
+        if (prodHits.length) {
+          html += '<div style="padding:8px 12px 4px;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">Products</div>';
+          prodHits.forEach(function(p){
+            html += searchResultRow(p.emoji||'📦', p.name, (p.sector||'') + ' · $' + (p.price||'—') + '/' + (p.unit||'MT'), _searchActions.length);
+            _searchActions.push(function(){ show('products', document.getElementById('tb-products')); });
+          });
+        }
+
+        var lois = [];
+        try { lois = JSON.parse(localStorage.getItem('sloi_lois')||'[]'); } catch(e){}
+        var loiHits = lois.filter(function(l){
+          return (l.ref||'').toLowerCase().includes(q) || (l.product||'').toLowerCase().includes(q);
+        }).slice(0, 4);
+        if (loiHits.length) {
+          html += '<div style="padding:8px 12px 4px;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">LOIs</div>';
+          loiHits.forEach(function(l){
+            html += searchResultRow('📋', l.ref||'LOI', (l.product||'') + (l.qty ? ' · '+l.qty+' '+(l.unit||'MT') : ''), _searchActions.length);
+            _searchActions.push(function(){ show('documents', document.getElementById('tb-documents')); });
+          });
+        }
+
+        var gdocs = [];
+        try { gdocs = JSON.parse(localStorage.getItem('sloi_docs')||'[]'); } catch(e){}
+        var docHits = gdocs.filter(function(d){
+          return (d.title||'').toLowerCase().includes(q) || (d.type||'').toLowerCase().includes(q);
+        }).slice(0, 4);
+        if (docHits.length) {
+          html += '<div style="padding:8px 12px 4px;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase">Documents</div>';
+          docHits.forEach(function(d){
+            html += searchResultRow(d.icon||'📄', d.title||'Document', (d.type||'').toUpperCase(), _searchActions.length);
+            _searchActions.push(function(){ show('documents', document.getElementById('tb-documents')); });
+          });
+        }
+
+        if (!html) {
+          el.innerHTML = '<div style="padding:32px 16px;text-align:center;color:var(--muted);font-size:13px">No results for "<strong style="color:var(--text)">' + q + '</strong>"</div>';
+          return;
+        }
+        el.innerHTML = html;
+      }
+
+      function searchHover(idx) {
+        _searchIdx = idx;
+        document.querySelectorAll('.search-row').forEach(function(r){
+          r.style.background = parseInt(r.dataset.idx) === idx ? 'rgba(91,95,239,.12)' : '';
+        });
+      }
+
+      function searchActivate(idx) {
+        if (_searchActions[idx]) { closeSearch(); _searchActions[idx](); }
+      }
+
+      function searchKeyNav(e) {
+        var rows = document.querySelectorAll('.search-row');
+        if (e.key === 'Escape') { closeSearch(); return; }
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          _searchIdx = Math.min(_searchIdx + 1, rows.length - 1);
+          searchHover(_searchIdx);
+          rows[_searchIdx] && rows[_searchIdx].scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          _searchIdx = Math.max(_searchIdx - 1, 0);
+          searchHover(_searchIdx);
+          rows[_searchIdx] && rows[_searchIdx].scrollIntoView({ block: 'nearest' });
+        } else if (e.key === 'Enter') {
+          if (_searchIdx >= 0) searchActivate(_searchIdx);
+        }
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+          e.preventDefault();
+          if (document.getElementById('search-modal').style.display === 'flex') closeSearch();
+          else openSearch();
+        }
+        if (e.key === 'Escape' && document.getElementById('search-modal').style.display === 'flex') closeSearch();
+      });
+
+      // ── HOW IT WORKS ─────────────────────────────────────────────────────────
+      function openHowItWorks() {
+        document.getElementById('hiw-modal').style.display = 'flex';
+      }
+      function closeHowItWorks() {
+        document.getElementById('hiw-modal').style.display = 'none';
+      }
+
+      // ── DOCUMENTS VIEW ────────────────────────────────────────────────────────
+      var DOC_FILTER = 'all';
+
+      function docTypeName(type) {
+        var map = { loi:'Letter of Intent', po:'Purchase Order', nda:'NDA', lca:'LC Application', spa:'Trade Contract / SPA', freight:'Freight Advisory', hs:'HS Code Report' };
+        return map[type] || (type ? type.toUpperCase() : 'Document');
+      }
+
+      function docsFilterSet(type, el) {
+        DOC_FILTER = type;
+        document.querySelectorAll('#docsv-filters .btn').forEach(function(b){ b.classList.remove('btn-p'); });
+        el.classList.add('btn-p');
+        loadDocuments();
+      }
+
+      function docsPreview(btn) {
+        var title = decodeURIComponent(btn.getAttribute('data-title') || '');
+        var text  = decodeURIComponent(btn.getAttribute('data-text')  || '');
+        var m = document.getElementById('docs-preview-modal');
+        if (!m) return;
+        document.getElementById('docs-preview-title').textContent = title;
+        document.getElementById('docs-preview-body').textContent  = text;
+        m.style.display = 'flex';
+      }
+
+      function loadDocuments() {
+        var docs = [];
+        var generated = [];
+        try { generated = JSON.parse(localStorage.getItem('sloi_docs') || '[]'); } catch(e) {}
+        generated.forEach(function(d) {
+          docs.push({
+            icon: d.icon || '📄',
+            type: d.type || 'doc',
+            typeName: docTypeName(d.type),
+            title: d.title || 'Document',
+            details: '',
+            date: d.ts ? new Date(d.ts).toLocaleDateString() : '—',
+            source: 'Generated',
+            text: d.text || '',
+            _ts: d.ts || 0
+          });
+        });
+        var lois = [];
+        try { lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]'); } catch(e) {}
+        var seenLoi = {};
+        lois.forEach(function(l) {
+          if (seenLoi[l.ref]) return;
+          seenLoi[l.ref] = true;
+          var ts = l.created_at ? new Date(l.created_at).getTime() : 0;
+          docs.push({
+            icon: '📋',
+            type: 'loi',
+            typeName: 'Letter of Intent',
+            title: l.ref || 'LOI',
+            details: (l.product || '') + (l.qty ? ' · ' + l.qty + ' ' + (l.unit || 'MT') : ''),
+            date: l.date || (l.created_at ? new Date(l.created_at).toLocaleDateString() : '—'),
+            source: 'LOI',
+            text: '',
+            _ts: ts
+          });
+        });
+        var pos = [];
+        try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e) {}
+        pos.forEach(function(p) {
+          var ts = p.created_at ? new Date(p.created_at).getTime() : 0;
+          docs.push({
+            icon: '🧾',
+            type: 'po',
+            typeName: 'Purchase Order',
+            title: p.ref || 'PO',
+            details: (p.product || '') + (p.qty ? ' · ' + p.qty + ' ' + (p.unit || 'MT') : ''),
+            date: p.date || (p.created_at ? new Date(p.created_at).toLocaleDateString() : '—'),
+            source: 'PO',
+            text: '',
+            _ts: ts
+          });
+        });
+        docs.sort(function(a, b) { return (b._ts || 0) - (a._ts || 0); });
+        var genCount = docs.filter(function(d){ return d.source === 'Generated'; }).length;
+        var loiCount = docs.filter(function(d){ return d.type === 'loi'; }).length;
+        var poCount  = docs.filter(function(d){ return d.type === 'po'; }).length;
+        var el;
+        el = document.getElementById('docsv-stat-total'); if(el) el.textContent = docs.length || '—';
+        el = document.getElementById('docsv-stat-lois');  if(el) el.textContent = loiCount || '—';
+        el = document.getElementById('docsv-stat-pos');   if(el) el.textContent = poCount || '—';
+        el = document.getElementById('docsv-stat-gen');   if(el) el.textContent = genCount || '—';
+        var filtered = DOC_FILTER === 'all' ? docs : docs.filter(function(d){ return d.type === DOC_FILTER; });
+        var tbody = document.getElementById('docsv-table-body');
+        if (!tbody) return;
+        if (!filtered.length) {
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted);font-size:13px">'
+            + 'No documents yet — generate docs in <a href="loi-contracts.html" target="_blank" style="color:var(--indigo)">Doc Studio</a> or run an orchestration'
+            + '</td></tr>';
+          return;
+        }
+        tbody.innerHTML = filtered.map(function(d) {
+          var srcColor, srcBg, srcBorder;
+          if (d.source === 'Generated') { srcColor='var(--green)'; srcBg='rgba(34,197,94,.08)'; srcBorder='rgba(34,197,94,.2)'; }
+          else if (d.source === 'LOI')  { srcColor='var(--indigo)'; srcBg='rgba(91,95,239,.08)'; srcBorder='rgba(91,95,239,.2)'; }
+          else                          { srcColor='var(--gold)'; srcBg='rgba(232,169,74,.08)'; srcBorder='rgba(232,169,74,.2)'; }
+          var actions = d.text
+            ? '<button class="btn btn-xs" onclick="docsPreview(this)" data-text="' + encodeURIComponent(d.text) + '" data-title="' + encodeURIComponent(d.title) + '" style="background:rgba(91,95,239,.08);border-color:rgba(91,95,239,.25);color:var(--indigo)">Preview</button>'
+            : '<button class="btn btn-xs" style="background:rgba(45,212,191,.08);border-color:rgba(45,212,191,.25);color:var(--teal)" onclick="window.open(\'loi-contracts.html\',\'_blank\')">Open Studio</button>';
+          return '<tr style="border-bottom:1px solid var(--border)">'
+            + '<td style="padding:10px 12px;font-size:18px;text-align:center">' + d.icon + '</td>'
+            + '<td style="padding:10px 6px;font-size:12px;color:var(--muted);white-space:nowrap">' + d.typeName + '</td>'
+            + '<td style="padding:10px 6px;font-size:13px;font-weight:600;color:var(--white);font-family:\'IBM Plex Mono\',monospace">' + d.title
+              + (d.details ? '<div style="font-size:11px;color:var(--muted);font-weight:400;font-family:sans-serif;margin-top:2px">' + d.details + '</div>' : '')
+              + '</td>'
+            + '<td style="padding:10px 6px;font-size:12px;color:var(--muted);white-space:nowrap">' + d.date + '</td>'
+            + '<td style="padding:10px 6px"><span style="font-size:11px;padding:2px 8px;border-radius:3px;border:1px solid ' + srcBorder + ';background:' + srcBg + ';color:' + srcColor + '">' + d.source + '</span></td>'
+            + '<td style="padding:10px 12px">' + actions + '</td>'
+            + '</tr>';
+        }).join('');
+      }
+
       var TITLES = {
         agents: ["&#129504; AI Tools", "6 tools running autonomously on your behalf"],
         opennetwork: [
@@ -5578,8 +5574,7 @@ Content-Type: application/json
           "Start Negotiation",
           "Configure mandate · AI negotiates for you",
         ],
-        lois: ["📋 RFQs & LOIs", "Quote requests · Signed Letters of Intent"],
-        contracts: ["📄 Contracts", "Purchase Orders · Signed contracts · Deal documents"],
+        documents: ["🗂️ Documents", "LOIs · Purchase Orders · Generated trade documents"],
         notifications: ["Notifications", "Alerts and updates"],
         profile: ["Profile & Credits", "Account settings · buy credits · history"],
         support: ["🎧 Support", "AI chat · submit a ticket · FAQ"],
@@ -5914,22 +5909,20 @@ Content-Type: application/json
         document.getElementById("tb-title").textContent = t[0];
         document.getElementById("tb-sub").textContent = t[1];
         if (v === 'products') setTimeout(renderCatalog, 0);
-        if (v === 'lois') { loadNegotiations(); loadLOIs(); }
-        if (v === 'contracts') renderContractsView();
+        if (v === 'documents') loadDocuments();
         if (v === 'notifications') clearNotifBadge();
       }
 
       // negotiation-agent.html runs in a separate tab/window and writes deals
       // straight to localStorage — keep the platform's views in sync with it.
       window.addEventListener('storage', function (e) {
-        if (e.key === 'sloi_lois') { loadNegotiations(); loadLOIs(); }
-        if (e.key === 'sloi_pos' || e.key === 'sloi_contracts') {
-          if (document.getElementById('view-contracts').classList.contains('active')) renderContractsView();
+        if (e.key === 'sloi_lois' || e.key === 'sloi_pos' || e.key === 'sloi_docs' || e.key === 'sloi_contracts') {
+          if (document.getElementById('view-documents').classList.contains('active')) loadDocuments();
+          if (e.key === 'sloi_lois') loadNegotiations();
         }
       });
       window.addEventListener('focus', function () {
-        if (document.getElementById('view-lois').classList.contains('active')) { loadNegotiations(); loadLOIs(); }
-        if (document.getElementById('view-contracts').classList.contains('active')) renderContractsView();
+        if (document.getElementById('view-documents').classList.contains('active')) { loadNegotiations(); loadDocuments(); }
       });
 
       function toggleStartNewDD(e) {
@@ -8094,6 +8087,148 @@ Content-Type: application/json
     <div class="modal-ft">
       <button class="btn" onclick="closeLIModal()">Cancel</button>
       <button class="btn btn-p" id="li-btn" onclick="importLinkedIn()">🔗 Autofill profile →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CMD+K SEARCH MODAL -->
+<div id="search-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.7);align-items:flex-start;justify-content:center;padding-top:120px" onclick="if(event.target===this)closeSearch()">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;width:min(580px,94vw);box-shadow:0 24px 64px rgba(0,0,0,.6);overflow:hidden">
+    <!-- Input row -->
+    <div style="display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border)">
+      <span style="font-size:16px;color:var(--muted);flex-shrink:0">🔍</span>
+      <input id="search-input" type="text" placeholder="Search pages, products, documents…" autocomplete="off"
+        style="flex:1;background:none;border:none;outline:none;font-size:14px;color:var(--white);font-family:'IBM Plex Mono',monospace"
+        oninput="runSearch(this.value)" onkeydown="searchKeyNav(event)">
+      <kbd style="font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:2px 6px;flex-shrink:0;font-family:'IBM Plex Mono',monospace">Esc</kbd>
+    </div>
+    <!-- Results -->
+    <div id="search-results" style="max-height:420px;overflow-y:auto;padding:8px 0">
+      <div style="padding:32px 16px;text-align:center;color:var(--muted);font-size:13px">Start typing to search…</div>
+    </div>
+    <!-- Footer hint -->
+    <div style="padding:8px 16px;border-top:1px solid var(--border);display:flex;gap:16px;font-size:11px;color:var(--muted)">
+      <span><kbd style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:'IBM Plex Mono',monospace">↑↓</kbd> navigate</span>
+      <span><kbd style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:'IBM Plex Mono',monospace">↵</kbd> open</span>
+      <span><kbd style="background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-family:'IBM Plex Mono',monospace">Esc</kbd> close</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS MODAL -->
+<div id="hiw-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);align-items:center;justify-content:center" onclick="if(event.target===this)closeHowItWorks()">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;width:min(680px,96vw);max-height:90vh;display:flex;flex-direction:column;overflow:hidden">
+    <!-- Header -->
+    <div style="padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0">
+      <div>
+        <div style="font-size:18px;font-weight:700;color:var(--white);letter-spacing:-.01em">How SLOI<em style="color:var(--indigo);font-style:italic">AI</em> Works</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">AI-powered commodity trading · from discovery to signed documents</div>
+      </div>
+      <button onclick="closeHowItWorks()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:0 4px;margin-top:-2px">×</button>
+    </div>
+    <!-- Steps -->
+    <div style="overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:0">
+
+      <!-- Step 1 -->
+      <div style="display:flex;gap:16px;padding-bottom:24px;position:relative">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(91,95,239,.15);border:1.5px solid rgba(91,95,239,.4);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🛒</div>
+          <div style="width:1px;flex:1;background:var(--border);margin-top:8px;min-height:24px"></div>
+        </div>
+        <div style="padding-top:6px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-size:10px;font-weight:700;color:var(--indigo);letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace">Step 01</span>
+            <span style="font-size:14px;font-weight:700;color:var(--white)">Discover &amp; Browse</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7">Browse <strong style="color:var(--text)">72 verified commodities</strong> across 9 sectors — steel, grains, chemicals, energy and more. Filter by origin, Incoterm, and price range. View live market prices and supplier credentials before committing.</div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div style="display:flex;gap:16px;padding-bottom:24px;position:relative">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(139,143,248,.12);border:1.5px solid rgba(139,143,248,.35);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">⚙️</div>
+          <div style="width:1px;flex:1;background:var(--border);margin-top:8px;min-height:24px"></div>
+        </div>
+        <div style="padding-top:6px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-size:10px;font-weight:700;color:var(--violet);letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace">Step 02</span>
+            <span style="font-size:14px;font-weight:700;color:var(--white)">Configure Your Mandate</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7">Set your <strong style="color:var(--text)">target price, quantity, Incoterms, and payment terms</strong>. Define your walk-away price and choose a strategy — Watcher, Standard, or Aggressive. The AI agent will never exceed your mandate without your authorization.</div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div style="display:flex;gap:16px;padding-bottom:24px;position:relative">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(45,212,191,.1);border:1.5px solid rgba(45,212,191,.3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🤖</div>
+          <div style="width:1px;flex:1;background:var(--border);margin-top:8px;min-height:24px"></div>
+        </div>
+        <div style="padding-top:6px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-size:10px;font-weight:700;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace">Step 03</span>
+            <span style="font-size:14px;font-weight:700;color:var(--white)">AI Orchestration Runs</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7">The <strong style="color:var(--text)">OrchestratorAgent</strong> negotiates autonomously with counterparties across multiple stages. It handles counter-offers, applies trade rules, checks compliance, and works toward the best deal — 24/7, without your involvement.</div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div style="display:flex;gap:16px;padding-bottom:24px;position:relative">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(232,169,74,.1);border:1.5px solid rgba(232,169,74,.3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">✅</div>
+          <div style="width:1px;flex:1;background:var(--border);margin-top:8px;min-height:24px"></div>
+        </div>
+        <div style="padding-top:6px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-size:10px;font-weight:700;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace">Step 04</span>
+            <span style="font-size:14px;font-weight:700;color:var(--white)">Review &amp; Authorize</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7">When a deal is reached, you receive a <strong style="color:var(--text)">full summary with term sheet</strong> for review. Deals within your mandate auto-authorize. Deals outside it require your explicit sign-off. You stay in control — the AI just does the legwork.</div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div style="display:flex;gap:16px;">
+        <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+          <div style="width:40px;height:40px;border-radius:50%;background:rgba(34,197,94,.1);border:1.5px solid rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📄</div>
+        </div>
+        <div style="padding-top:6px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <span style="font-size:10px;font-weight:700;color:var(--green);letter-spacing:.1em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace">Step 05</span>
+            <span style="font-size:14px;font-weight:700;color:var(--white)">Documents Generated</span>
+          </div>
+          <div style="font-size:13px;color:var(--muted);line-height:1.7">Once authorized, <strong style="color:var(--text)">all trade documents are auto-generated</strong> — LOI, Purchase Order, SPA, LC Application, Commercial Invoice, Bill of Lading, and more. Everything is stored in your Documents library, ready to send or download.</div>
+        </div>
+      </div>
+
+    </div>
+    <!-- Footer -->
+    <div style="padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:rgba(255,255,255,.02)">
+      <div style="font-size:12px;color:var(--muted)">Questions? <a href="#" onclick="closeHowItWorks();show('support')" style="color:var(--indigo);text-decoration:none">Contact support →</a></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-xs" onclick="closeHowItWorks();show('products',document.getElementById('tb-products'))">🛒 Browse Marketplace</button>
+        <button class="btn btn-xs btn-p" onclick="closeHowItWorks();show('negotiate')">🤖 Start Orchestration</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DOCS PREVIEW MODAL -->
+<div id="docs-preview-modal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.72);align-items:center;justify-content:center" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;width:min(700px,94vw);max-height:85vh;display:flex;flex-direction:column">
+    <div style="padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+      <div id="docs-preview-title" style="font-size:14px;font-weight:700;color:var(--white)"></div>
+      <button onclick="document.getElementById('docs-preview-modal').style.display='none'" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:0 4px">×</button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:16px 18px">
+      <pre id="docs-preview-body" style="font-family:'IBM Plex Mono',monospace;font-size:12px;white-space:pre-wrap;color:var(--text);line-height:1.7;margin:0"></pre>
+    </div>
+    <div style="padding:10px 18px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0">
+      <button class="btn btn-xs" onclick="navigator.clipboard.writeText(document.getElementById('docs-preview-body').textContent).then(function(){this.textContent='Copied!';setTimeout(function(){document.querySelector('#docs-preview-modal .btn').textContent='Copy';},1500)}.bind(this))">Copy</button>
+      <button class="btn btn-xs" onclick="window.print()">Print</button>
+      <button class="btn btn-xs btn-p" onclick="document.getElementById('docs-preview-modal').style.display='none'">Close</button>
     </div>
   </div>
 </div>

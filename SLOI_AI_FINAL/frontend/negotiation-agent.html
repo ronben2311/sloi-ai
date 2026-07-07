@@ -587,6 +587,9 @@
         background: var(--surface2);
         flex-shrink: 0;
       }
+      .neg-footer.has-chart {
+        grid-template-columns: 1fr 1fr auto;
+      }
       .foot-label {
         font-size: 11px;
         color: var(--muted);
@@ -1474,6 +1477,16 @@
           <div class="tab-dot td-green"></div>
           🛡️ Compliance<span class="tab-count" id="tc-comp">1 review</span>
         </button>
+        <!-- Mandate summary strip — right-aligned in tab bar -->
+        <div id="mandate-strip" style="display:none;margin-left:auto;align-items:center;gap:8px;padding:0 14px;font-size:11px;font-family:'IBM Plex Mono',monospace;white-space:nowrap;border-left:1px solid var(--border);flex-shrink:0">
+          <span id="ms-product" style="color:var(--violet);font-weight:600"></span>
+          <span style="color:var(--border2)">·</span>
+          <span id="ms-qty" style="color:var(--teal)"></span>
+          <span style="color:var(--border2)">·</span>
+          <span id="ms-price" style="color:var(--green)"></span>
+          <span style="color:var(--border2)">·</span>
+          <span id="ms-stage" style="color:var(--gold)">Stage —</span>
+        </div>
       </div>
 
       <!-- ════════════════════════════════════
@@ -1769,11 +1782,17 @@
               <span class="badge bg" id="round-badge">● Stage 0</span>
             </div>
             <div style="display: flex; gap: 6px">
+              <button class="btn btn-sm" onclick="exportTranscript()" id="export-btn" style="display:none;background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--teal)">↓ Transcript</button>
               <button class="btn btn-sm" onclick="pauseNeg()" id="pause-btn">
                 ⏸ Suspend
               </button>
               <button class="btn btn-sm" onclick="clearChat()">✕ Clear</button>
             </div>
+          </div>
+
+          <!-- STAGE PROGRESS BAR -->
+          <div id="stage-progress-wrap" style="display:none;height:3px;background:var(--border);position:relative;flex-shrink:0">
+            <div id="stage-progress-fill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--indigo),var(--teal));transition:width .6s ease;border-radius:0 2px 2px 0"></div>
           </div>
 
           <!-- MANDATE PILLS -->
@@ -1828,6 +1847,11 @@
                     </div>
                   </div>
                 </div>
+              </div>
+              <!-- Price convergence chart -->
+              <div id="price-chart-wrap" style="display:none;flex-direction:column;justify-content:center">
+                <div class="foot-label" style="margin-bottom:4px">Price convergence</div>
+                <svg id="price-chart-svg" width="180" height="40" style="display:block;overflow:visible" viewBox="0 0 180 40"></svg>
               </div>
             </div>
 
@@ -3491,46 +3515,90 @@
             '"></div>';
         }
         bar.innerHTML = html;
-        document.getElementById("rounds-label").textContent =
-          round <= max
-            ? "Stage " + round + " of " + max + " · Trade Orchestration Engine"
-            : "Complete · " + round + " stages";
-        document.getElementById("round-badge").textContent =
-          "● Stage " + round + "/" + max;
+        var stageLabel = round <= max
+          ? "Stage " + round + " of " + max + " · Trade Orchestration Engine"
+          : "Complete · " + round + " stages";
+        document.getElementById("rounds-label").textContent = stageLabel;
+        document.getElementById("round-badge").textContent = "● Stage " + round + "/" + max;
+
+        // Stage progress bar
+        var pct = Math.min(Math.round((round / max) * 100), 100);
+        var pw = document.getElementById("stage-progress-wrap");
+        var pf = document.getElementById("stage-progress-fill");
+        if (pw) { pw.style.display = "block"; }
+        if (pf) { pf.style.width = pct + "%"; }
+
+        // Mandate strip stage update
+        var ms = document.getElementById("ms-stage");
+        if (ms) ms.textContent = round <= max ? "Stage " + round + "/" + max : "✓ Done";
       }
+
+      var _priceHistory = [];
 
       function updatePriceDisplay(agentP, brokerP) {
         if (agentP) {
           negState.agentPrice = agentP;
-          document.getElementById("d-agent").textContent =
-            "$" + agentP.toLocaleString();
+          document.getElementById("d-agent").textContent = "$" + agentP.toLocaleString();
         }
         if (brokerP) {
           negState.brokerPrice = brokerP;
-          document.getElementById("d-trader").textContent =
-            "$" + brokerP.toLocaleString();
+          document.getElementById("d-trader").textContent = "$" + brokerP.toLocaleString();
         }
-        var a = negState.agentPrice,
-          b = negState.brokerPrice;
+        var a = negState.agentPrice, b = negState.brokerPrice;
         if (a && b) {
           var gapPct = (((b - a) / b) * 100).toFixed(1);
-          var col =
-            parseFloat(gapPct) <= 2.5
-              ? "#22c55e"
-              : parseFloat(gapPct) <= 8
-                ? "#e8a94a"
-                : "#ef4444";
+          var col = parseFloat(gapPct) <= 2.5 ? "#22c55e" : parseFloat(gapPct) <= 8 ? "#e8a94a" : "#ef4444";
           var gapEl = document.getElementById("gap-pill");
           gapEl.textContent = gapPct + "%";
-          gapEl.style.cssText =
-            "font-size:11px;font-weight:700;padding:4px 8px;border-radius:3px;text-align:center;transition:all .5s;color:" +
-            col +
-            ";border:1px solid " +
-            col +
-            "44;background:" +
-            col +
-            "11";
+          gapEl.style.cssText = "font-size:11px;font-weight:700;padding:4px 8px;border-radius:3px;text-align:center;transition:all .5s;color:" + col + ";border:1px solid " + col + "44;background:" + col + "11";
+
+          // Track history and redraw chart
+          _priceHistory.push({ stage: negState.round, agent: a, broker: b });
+          drawPriceChart();
         }
+      }
+
+      function drawPriceChart() {
+        var wrap = document.getElementById("price-chart-wrap");
+        var svg = document.getElementById("price-chart-svg");
+        var footer = document.querySelector(".neg-footer");
+        if (!wrap || !svg || _priceHistory.length < 2) return;
+        wrap.style.display = "flex";
+        if (footer) footer.classList.add("has-chart");
+
+        var W = 180, H = 40, pad = 4;
+        var allPrices = _priceHistory.flatMap(function(p){ return [p.agent, p.broker]; });
+        var minP = Math.min.apply(null, allPrices);
+        var maxP = Math.max.apply(null, allPrices);
+        var range = maxP - minP || 1;
+        var n = _priceHistory.length;
+
+        function px(i) { return pad + (i / (n > 1 ? n - 1 : 1)) * (W - pad * 2); }
+        function py(v) { return H - pad - ((v - minP) / range) * (H - pad * 2); }
+
+        function makePath(key, col) {
+          var pts = _priceHistory.map(function(p, i){ return px(i) + "," + py(p[key]); }).join(" L ");
+          return '<polyline points="' + pts + '" fill="none" stroke="' + col + '" stroke-width="1.5" stroke-linejoin="round" opacity="0.85"/>';
+        }
+        function makeDot(p, i, key, col) {
+          return '<circle cx="' + px(i) + '" cy="' + py(p[key]) + '" r="2.5" fill="' + col + '"/>';
+        }
+
+        var lines = makePath("broker", "#e8a94a") + makePath("agent", "#8b8ff8");
+        var dots = _priceHistory.map(function(p, i){
+          return makeDot(p, i, "broker", "#e8a94a") + makeDot(p, i, "agent", "#8b8ff8");
+        }).join("");
+
+        // Convergence area between lines (last point)
+        var last = _priceHistory[_priceHistory.length - 1];
+        var lastX = px(_priceHistory.length - 1);
+        var agY = py(last.agent), brY = py(last.broker);
+        var midY = (agY + brY) / 2;
+        var midLabel = "$" + Math.round((last.agent + last.broker) / 2).toLocaleString();
+
+        svg.innerHTML = lines + dots
+          + '<line x1="' + lastX + '" y1="' + agY + '" x2="' + lastX + '" y2="' + brY + '" stroke="rgba(255,255,255,.15)" stroke-width="1" stroke-dasharray="2,2"/>'
+          + '<text x="' + (lastX + 3) + '" y="' + (midY + 3) + '" font-size="8" fill="rgba(255,255,255,.35)" font-family="IBM Plex Mono,monospace">' + midLabel + '</text>';
       }
 
       async function startNegotiation() {
@@ -3653,6 +3721,36 @@
               : '';
           })();
         pillsEl.style.display = "flex";
+
+        // Mandate strip in tab bar
+        var productLabel = document.getElementById("m-product").options[document.getElementById("m-product").selectedIndex].text;
+        var mstrip = document.getElementById("mandate-strip");
+        if (mstrip) {
+          document.getElementById("ms-product").textContent = productLabel || product;
+          document.getElementById("ms-qty").textContent = qty + " " + unit;
+          document.getElementById("ms-price").textContent = "$" + target.toLocaleString() + "/" + unit;
+          document.getElementById("ms-stage").textContent = "Stage 0/" + maxRoundsVal;
+          mstrip.style.display = "flex";
+        }
+
+        // Reset price chart
+        _priceHistory = [];
+        var chartWrap = document.getElementById("price-chart-wrap");
+        if (chartWrap) chartWrap.style.display = "none";
+        var footer = document.querySelector(".neg-footer");
+        if (footer) footer.classList.remove("has-chart");
+        var svg = document.getElementById("price-chart-svg");
+        if (svg) svg.innerHTML = "";
+
+        // Show export button
+        var expBtn = document.getElementById("export-btn");
+        if (expBtn) expBtn.style.display = "inline-flex";
+
+        // Stage progress bar reset
+        var pw = document.getElementById("stage-progress-wrap");
+        var pf = document.getElementById("stage-progress-fill");
+        if (pw) pw.style.display = "block";
+        if (pf) pf.style.width = "0%";
 
         // Reset panels
         document.getElementById("approval-section").style.display = "none";
@@ -4117,36 +4215,53 @@ Respond ONLY as the counterparty. Institutional tone. 3-4 sentences. State your 
 
         document.getElementById("approval-section").style.display = "none";
 
+        var maxBudget = parseInt(document.getElementById("m-max").value) || dealPrice;
+        var savedPerUnit = maxBudget - dealPrice;
+        var savedTotal = savedPerUnit * parseInt(qty);
+        var savingsStr = savedPerUnit > 0
+          ? '$' + savedPerUnit.toLocaleString() + '/' + unit + ' vs walk-away ceiling  ·  $' + savedTotal.toLocaleString() + ' total saved'
+          : 'Within mandate';
+
         var loiEl = document.getElementById("loi-section");
         loiEl.innerHTML =
-          '<div style="font-size:12px;font-weight:700;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">✅ LOI Generated — ' +
-          loiRef +
-          "</div>" +
-          '<div class="loi-grid">' +
-          '<div class="loi-cell" style="border-color:rgba(34,197,94,.25)"><div class="loi-label">LOI Reference</div><div style="color:var(--green);font-weight:700;font-size:12px;margin-top:2px">' +
-          loiRef +
-          "</div></div>" +
-          '<div class="loi-cell"><div class="loi-label">Deal price</div><div class="loi-val">$' +
-          dealPrice.toLocaleString() +
-          "/" +
-          unit +
-          "</div></div>" +
-          '<div class="loi-cell"><div class="loi-label">Total value</div><div class="loi-val">$' +
-          totalVal.toLocaleString() +
-          "</div></div>" +
-          "</div>" +
-          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">' +
-          '<div class="loi-cell"><div class="loi-label">📍 Delivery location</div><div style="font-size:13px;font-weight:600;color:var(--white);margin-top:2px">' +
-          location +
-          "</div></div>" +
-          '<div class="loi-cell"><div class="loi-label">📅 Deadline</div><div style="font-size:13px;font-weight:600;color:var(--teal);margin-top:2px">' +
-          deadlineStr +
-          "</div></div>" +
-          "</div>" +
-          '<div class="loi-note">✓ LOI dispatched to all parties &nbsp;·&nbsp; ✓ Compliance validated &nbsp;·&nbsp; ✓ Anchored to Hedera &nbsp;·&nbsp; ✓ ' +
-          negState.round +
-          ' stages &nbsp;·&nbsp; <button class="btn btn-xs" style="background:var(--indigo);color:#fff;padding:3px 10px;font-size:11px" onclick="switchTab(\'lead\',document.querySelector(\'.tab[onclick*=\\\'lead\\\']\'))">📄 Open LOI Generator →</button></div>';
+          // Success banner
+          '<div style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:8px;padding:14px 18px;margin-bottom:12px">' +
+            '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
+              '<div style="font-size:24px">✅</div>' +
+              '<div>' +
+                '<div style="font-size:15px;font-weight:700;color:var(--green);letter-spacing:-.01em">Verified Trade Orchestration</div>' +
+                '<div style="font-size:12px;color:var(--muted);margin-top:2px">' + loiRef + ' · ' + negState.round + ' stages · ' + savingsStr + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div class="loi-grid">' +
+              '<div class="loi-cell" style="border-color:rgba(34,197,94,.25)"><div class="loi-label">LOI Reference</div><div style="color:var(--green);font-weight:700;font-size:12px;margin-top:2px">' + loiRef + '</div></div>' +
+              '<div class="loi-cell"><div class="loi-label">Deal price</div><div class="loi-val">$' + dealPrice.toLocaleString() + '/' + unit + '</div></div>' +
+              '<div class="loi-cell"><div class="loi-label">Total value</div><div class="loi-val">$' + totalVal.toLocaleString() + '</div></div>' +
+            '</div>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">' +
+              '<div class="loi-cell"><div class="loi-label">📍 Delivery</div><div style="font-size:13px;font-weight:600;color:var(--white);margin-top:2px">' + location + '</div></div>' +
+              '<div class="loi-cell"><div class="loi-label">📅 Deadline</div><div style="font-size:13px;font-weight:600;color:var(--teal);margin-top:2px">' + deadlineStr + '</div></div>' +
+            '</div>' +
+          '</div>' +
+          // Next step action buttons
+          '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">' +
+            '<div style="font-size:11px;color:var(--muted);display:flex;align-items:center;margin-right:4px">→ Generate:</div>' +
+            '<button class="btn btn-xs btn-g" onclick="switchTab(\'lead\',document.querySelector(\'.tab[onclick*=\\\'lead\\\']\'))">📄 LOI</button>' +
+            '<button class="btn btn-xs" style="border-color:rgba(59,130,246,.35);color:#60a5fa;background:rgba(59,130,246,.08)" onclick="switchTab(\'nda\',document.querySelector(\'.tab[onclick*=\\\'nda\\\']\'))">🔏 NDA</button>' +
+            '<button class="btn btn-xs" style="border-color:rgba(232,169,74,.35);color:var(--gold);background:rgba(232,169,74,.08)" onclick="switchTab(\'price\',document.querySelector(\'.tab[onclick*=\\\'price\\\']\'))">📋 PO</button>' +
+            '<button class="btn btn-xs" style="border-color:rgba(139,143,248,.35);color:var(--violet);background:rgba(139,143,248,.08)" onclick="switchTab(\'spa\',document.querySelector(\'.tab[onclick*=\\\'spa\\\']\'))">📜 SPA</button>' +
+            '<button class="btn btn-xs" style="border-color:rgba(45,212,191,.35);color:var(--teal);background:rgba(45,212,191,.08)" onclick="switchTab(\'lca\',document.querySelector(\'.tab[onclick*=\\\'lca\\\']\'))">💳 LC App</button>' +
+            '<button class="btn btn-xs" onclick="exportTranscript()" style="margin-left:auto;border-color:rgba(45,212,191,.3);color:var(--teal);background:rgba(45,212,191,.06)">↓ Transcript</button>' +
+          '</div>' +
+          '<div class="loi-note">✓ All doc fields auto-filled from deal &nbsp;·&nbsp; ✓ Compliance validated &nbsp;·&nbsp; ✓ Anchored to Hedera</div>';
         loiEl.style.display = "block";
+
+        // Mandate strip: mark complete
+        var ms = document.getElementById("ms-stage");
+        if (ms) ms.textContent = "✓ Deal agreed · $" + dealPrice.toLocaleString() + "/" + unit;
+        // Fill progress bar to 100%
+        var pf = document.getElementById("stage-progress-fill");
+        if (pf) { pf.style.width = "100%"; pf.style.background = "var(--green)"; }
 
         completedSessions.push({
           id: loiRef,
@@ -4361,6 +4476,56 @@ Respond ONLY as the counterparty. Institutional tone. 3-4 sentences. State your 
         document.getElementById("d-trader").textContent = "—";
         document.getElementById("gap-pill").textContent = "Variance";
         document.getElementById("gap-pill").style.cssText = "";
+        // Reset progress bar and chart on clear
+        _priceHistory = [];
+        var pw = document.getElementById("stage-progress-wrap");
+        var pf = document.getElementById("stage-progress-fill");
+        if (pw) pw.style.display = "none";
+        if (pf) { pf.style.width = "0%"; pf.style.background = "linear-gradient(90deg,var(--indigo),var(--teal))"; }
+        var chartWrap = document.getElementById("price-chart-wrap");
+        if (chartWrap) chartWrap.style.display = "none";
+        var footer = document.querySelector(".neg-footer");
+        if (footer) footer.classList.remove("has-chart");
+        var svg = document.getElementById("price-chart-svg");
+        if (svg) svg.innerHTML = "";
+        var mstrip = document.getElementById("mandate-strip");
+        if (mstrip) mstrip.style.display = "none";
+        var expBtn = document.getElementById("export-btn");
+        if (expBtn) expBtn.style.display = "none";
+      }
+
+      function exportTranscript() {
+        var product = document.getElementById("m-product").value || "—";
+        var buyer = document.getElementById("m-buyer").value || "—";
+        var qty = document.getElementById("m-qty").value || "—";
+        var unit = document.getElementById("m-unit").value || "MT";
+        var lines = [
+          "SLOI AI — Orchestration Transcript",
+          "Generated : " + new Date().toLocaleString(),
+          "Product   : " + product,
+          "Buyer     : " + buyer,
+          "Quantity  : " + qty + " " + unit,
+          "Stages    : " + negState.round + " / " + negState.maxRounds,
+          "",
+          "═══════════════════════════════════════════",
+          ""
+        ];
+        document.querySelectorAll("#chat-area .bubble").forEach(function(b) {
+          var cls = b.className || "";
+          var role = cls.includes("b-agent") ? "ORCHESTRATOR  " : cls.includes("b-broker") ? "COUNTERPARTY  " : "SYSTEM        ";
+          var text = (b.innerText || b.textContent || "").trim().replace(/\n{3,}/g, "\n\n");
+          lines.push("[" + role + "] " + text);
+          lines.push("");
+        });
+        if (negState.agentPrice) lines.push("Final Orchestrator price: $" + negState.agentPrice.toLocaleString() + "/" + unit);
+        if (negState.brokerPrice) lines.push("Final Counterparty price: $" + negState.brokerPrice.toLocaleString() + "/" + unit);
+        var blob = new Blob([lines.join("\n")], { type: "text/plain" });
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "orchestration-" + new Date().toISOString().slice(0, 10) + ".txt";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       }
 
       function renderNegSessions() {

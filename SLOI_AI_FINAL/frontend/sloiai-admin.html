@@ -256,10 +256,12 @@ select.inp option{background:var(--surface)}
   <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">11</span></button>
   <div class="sb-section">Contracts</div>
   <button class="nav" onclick="show('revenue',this)"><span class="nav-icon">📄</span><span class="nav-label">Contracts</span></button>
+  <button class="nav" id="sb-docs" onclick="show('docs',this)"><span class="nav-icon">🗂️</span><span class="nav-label">Documents</span><span class="nav-badge" style="background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);color:var(--teal);font-size:11px">DMS</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
   <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & CRM</span></button>
   <div class="sb-section">System</div>
+  <button class="nav" onclick="show('activity',this)"><span class="nav-icon">📋</span><span class="nav-label">Activity Log</span><span class="nav-badge" id="activity-badge" style="background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);color:var(--teal);font-size:11px;display:none"></span></button>
   <button class="nav" onclick="show('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
   <div class="sb-footer">
     <div class="sf-label">LOI VOLUME MTD</div>
@@ -291,9 +293,12 @@ select.inp option{background:var(--surface)}
       <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg)">11</span></button>
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-revenue" onclick="show('revenue',this)">📄 Contracts</button>
+      <button class="nav" id="tb-docs" onclick="show('docs',this)">🗂️ Documents</button>
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-products" onclick="show('products',this)">📦 Products &amp; Pricing</button>
       <button class="nav" id="tb-users" onclick="show('users',this)">👤 Users &amp; CRM</button>
+      <div class="tb-nav-sep"></div>
+      <button class="nav" id="tb-activity" onclick="show('activity',this)">📋 Activity</button>
     </div>
   </div>
 
@@ -309,9 +314,39 @@ select.inp option{background:var(--surface)}
   <!-- WAR ROOM -->
   <div id="view-warroom" class="view active">
 
+    <!-- KPI STATS ROW -->
+    <div class="g4" style="margin-bottom:14px">
+      <div class="stat">
+        <div class="stat-top">Active Negotiations</div>
+        <div class="stat-val" id="wr-stat-active" style="color:var(--green)">—</div>
+        <div class="stat-sub" id="wr-stat-active-sub">Live sessions</div>
+      </div>
+      <div class="stat">
+        <div class="stat-top">Awaiting Boss</div>
+        <div class="stat-val" id="wr-stat-pending" style="color:var(--gold)">—</div>
+        <div class="stat-sub warn" id="wr-stat-pending-sub">Approval needed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-top">LOIs Signed Today</div>
+        <div class="stat-val" id="wr-stat-lois" style="color:var(--violet)">—</div>
+        <div class="stat-sub up" id="wr-stat-lois-sub">Revenue earned</div>
+      </div>
+      <div class="stat">
+        <div class="stat-top">Revenue MTD</div>
+        <div class="stat-val" id="wr-stat-revenue" style="color:var(--teal)">—</div>
+        <div class="stat-sub" id="wr-stat-revenue-sub">LOI fees</div>
+      </div>
+    </div>
+
     <!-- ALERTS -->
     <div class="card" style="margin-bottom:14px">
-      <div class="card-title">// ALERTS <span class="badge br" id="alerts-header-badge">—</span></div>
+      <div class="card-title">
+        // ALERTS <span class="badge br" id="alerts-header-badge">—</span>
+        <div style="display:flex;align-items:center;gap:8px;margin-left:auto">
+          <span id="wr-countdown" style="font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-weight:400"></span>
+          <button class="btn btn-xs" onclick="wrRefresh()" style="background:rgba(45,212,191,.06);border-color:rgba(45,212,191,.2);color:var(--teal)">⟳ Refresh</button>
+        </div>
+      </div>
       <div id="alerts-list"><div style="padding:12px;text-align:center;color:var(--muted);font-size:14px">Loading…</div></div>
     </div>
 
@@ -391,6 +426,48 @@ select.inp option{background:var(--surface)}
           <div class="aac-foot"><span class="badge br" style="font-size:11px">Always on</span></div>
         </div>
 
+        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('fco')">
+          <div class="aac-icon" style="background:rgba(232,169,74,.1)">📃</div>
+          <div class="aac-name">FCO Generator</div>
+          <div class="aac-desc">Full Corporate Offer — official commercial offer issued by the counterparty with price, specs &amp; validity</div>
+          <div class="aac-foot"><span class="badge ba" style="font-size:11px">Admin</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('ci')">
+          <div class="aac-icon" style="background:rgba(59,130,246,.1)">🧾</div>
+          <div class="aac-name">Commercial Invoice</div>
+          <div class="aac-desc">Final commercial invoice required for customs clearance and final payment — ICC compliant</div>
+          <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#3b82f6">Admin</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('pl')">
+          <div class="aac-icon" style="background:rgba(34,197,94,.1)">📦</div>
+          <div class="aac-name">Packing List</div>
+          <div class="aac-desc">Per-carton weight, dimensions, marks, total net &amp; gross — required for all sea &amp; air cargo</div>
+          <div class="aac-foot"><span class="badge bg" style="font-size:11px">Admin</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('coa')">
+          <div class="aac-icon" style="background:rgba(168,85,247,.1)">🔬</div>
+          <div class="aac-name">COA Generator</div>
+          <div class="aac-desc">Certificate of Analysis — lab/spec results: grade, purity, moisture, test method per SGS/ISO</div>
+          <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:#c084fc">Admin</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('coo')">
+          <div class="aac-icon" style="background:rgba(45,212,191,.1)">🌐</div>
+          <div class="aac-name">COO Generator</div>
+          <div class="aac-desc">Certificate of Origin — country of origin declaration, HS code, preferential or non-preferential</div>
+          <div class="aac-foot"><span class="badge bt" style="font-size:11px">Admin</span></div>
+        </div>
+
+        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('bl')">
+          <div class="aac-icon" style="background:rgba(91,95,239,.12)">🚢</div>
+          <div class="aac-name">B/L Generator</div>
+          <div class="aac-desc">Bill of Lading — carrier receipt confirming cargo dispatch: shipper, consignee, vessel, port details</div>
+          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Admin</span></div>
+        </div>
+
       </div>
     </div>
 
@@ -462,7 +539,12 @@ select.inp option{background:var(--surface)}
           </div>
           <div style="display:flex;gap:8px">
             <button class="btn btn-g" onclick="approveDeal()" style="flex:1;justify-content:center">✅ Approve — Generate LOI</button>
-            <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗</button>
+            <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗ Reject</button>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+            <button class="btn btn-xs" onclick="abCounterOffer()" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.3);color:var(--gold)">💬 Counter-offer</button>
+            <button class="btn btn-xs" onclick="abWhatsApp()" style="background:rgba(37,211,102,.06);border-color:rgba(37,211,102,.25);color:#25d366">📲 WhatsApp buyer</button>
+            <button class="btn btn-xs" onclick="abForwardTrader()" style="background:rgba(91,95,239,.06);border-color:rgba(91,95,239,.25);color:var(--violet)">📋 Forward to trader</button>
           </div>
         </div>
 
@@ -682,6 +764,90 @@ select.inp option{background:var(--surface)}
     </div>
   </div>
 
+  <!-- ══ DOCUMENT MANAGEMENT SYSTEM ══ -->
+  <div id="view-docs" class="view">
+
+    <!-- Stats -->
+    <div class="g4" style="margin-bottom:14px">
+      <div class="stat"><div class="stat-top">Total Documents</div><div class="stat-val" id="dms-stat-total" style="color:var(--teal)">—</div><div class="stat-sub">All records</div></div>
+      <div class="stat"><div class="stat-top">Pending</div><div class="stat-val" id="dms-stat-pending" style="color:var(--gold)">—</div><div class="stat-sub">Awaiting receipt</div></div>
+      <div class="stat"><div class="stat-top">Active Deals</div><div class="stat-val" id="dms-stat-deals" style="color:var(--violet)">—</div><div class="stat-sub">With documents</div></div>
+      <div class="stat"><div class="stat-top">Last Updated</div><div class="stat-val" id="dms-stat-last" style="font-size:13px;color:var(--green)">—</div></div>
+    </div>
+
+    <!-- Deal Doc Checklist -->
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">// DEAL DOCUMENT STATUS
+        <div style="display:flex;align-items:center;gap:8px">
+          <select class="inp" id="dms-deal-select" onchange="dmsLoadDeal()" style="font-size:13px;padding:5px 10px;width:260px">
+            <option value="">— Select a deal / LOI —</option>
+          </select>
+        </div>
+      </div>
+      <div id="dms-checklist" style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:4px">
+        <div style="text-align:center;color:var(--muted);font-size:13px;grid-column:1/-1;padding:18px">Select a deal above to see its document status</div>
+      </div>
+    </div>
+
+    <!-- Document List -->
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">// ALL DOCUMENTS
+        <div style="display:flex;gap:6px;align-items:center">
+          <input class="inp" id="dms-lib-search" placeholder="Search type, ref, counterparty, product…" oninput="dmsLibFilter()" style="width:240px;font-size:13px;padding:5px 9px">
+          <select class="inp" id="dms-status-filter" onchange="dmsLibFilter()" style="font-size:13px;padding:5px 9px;width:130px">
+            <option value="">All statuses</option>
+            <option>Received</option>
+            <option>Pending</option>
+            <option>Sent</option>
+            <option>Signed</option>
+            <option>Rejected</option>
+          </select>
+          <button class="btn btn-xs" onclick="dmsLibExportCsv()">↓ CSV</button>
+          <button class="btn btn-xs btn-r" onclick="dmsClearLib()">Clear all</button>
+        </div>
+      </div>
+
+      <!-- Type filter chips -->
+      <div style="display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="btn btn-xs" id="dlf-all"     onclick="dmsLibTypeFilter('all',this)"     style="border-color:var(--indigo);color:var(--violet)">All types</button>
+        <button class="btn btn-xs" id="dlf-fco"     onclick="dmsLibTypeFilter('fco',this)">📃 FCO</button>
+        <button class="btn btn-xs" id="dlf-pi"      onclick="dmsLibTypeFilter('pi',this)">📑 PI</button>
+        <button class="btn btn-xs" id="dlf-loi"     onclick="dmsLibTypeFilter('loi',this)">📄 LOI</button>
+        <button class="btn btn-xs" id="dlf-nda"     onclick="dmsLibTypeFilter('nda',this)">🔏 NDA</button>
+        <button class="btn btn-xs" id="dlf-spa"     onclick="dmsLibTypeFilter('spa',this)">⚖️ SPA</button>
+        <button class="btn btn-xs" id="dlf-lca"     onclick="dmsLibTypeFilter('lca',this)">💳 LC App</button>
+        <button class="btn btn-xs" id="dlf-po"      onclick="dmsLibTypeFilter('po',this)">📋 PO</button>
+        <button class="btn btn-xs" id="dlf-ci"      onclick="dmsLibTypeFilter('ci',this)">🧾 CI</button>
+        <button class="btn btn-xs" id="dlf-pl"      onclick="dmsLibTypeFilter('pl',this)">📦 Packing List</button>
+        <button class="btn btn-xs" id="dlf-coa"     onclick="dmsLibTypeFilter('coa',this)">🔬 COA</button>
+        <button class="btn btn-xs" id="dlf-coo"     onclick="dmsLibTypeFilter('coo',this)">🌐 COO</button>
+        <button class="btn btn-xs" id="dlf-bl"      onclick="dmsLibTypeFilter('bl',this)">🚢 B/L</button>
+        <button class="btn btn-xs" id="dlf-freight" onclick="dmsLibTypeFilter('freight',this)">⚓ Freight</button>
+        <button class="btn btn-xs" id="dlf-hs"      onclick="dmsLibTypeFilter('hs',this)">🛃 HS Report</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:32px"></th>
+            <th>Document</th>
+            <th>Ref / Deal</th>
+            <th>Counterparty</th>
+            <th>Product</th>
+            <th>Date</th>
+            <th>Issued by</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="dms-lib-tbody">
+          <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px;font-size:13px">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
   <!-- SUPPLIERS -->
   <div id="view-products" class="view">
 
@@ -702,6 +868,7 @@ select.inp option{background:var(--surface)}
         <option>Energy</option><option>Agriculture</option><option>Chemicals</option>
       </select>
       <div style="margin-left:auto;display:flex;gap:6px">
+        <button class="btn btn-sm" onclick="openBulkPriceModal()" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.3);color:var(--gold)">📊 Bulk Price Update</button>
         <button class="btn btn-sm" onclick="window.open('loi-contracts.html?tool=loi','_blank')">📄 LOI Generator</button>
         <button class="btn btn-sm" onclick="addProduct()">+ Add product</button>
         <button class="btn btn-p btn-sm" onclick="saveAllPrices()">💾 Save & sync to Exchange</button>
@@ -1535,6 +1702,44 @@ select.inp option{background:var(--surface)}
     </div>
   </div>
 
+  <!-- ACTIVITY LOG -->
+  <div id="view-activity" class="view">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div style="font-size:15px;font-weight:600;color:var(--white)">Admin activity log</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Approvals · rejections · price updates · document generations</div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-xs" onclick="exportActivityCsv()">↓ CSV</button>
+        <button class="btn btn-xs btn-r" onclick="clearActivityLog()">Clear log</button>
+      </div>
+    </div>
+    <div class="g4" style="margin-bottom:14px">
+      <div class="stat"><div class="stat-top">Total Events</div><div class="stat-val" id="act-stat-total" style="color:var(--teal)">0</div></div>
+      <div class="stat"><div class="stat-top">Approvals</div><div class="stat-val" id="act-stat-approved" style="color:var(--green)">0</div></div>
+      <div class="stat"><div class="stat-top">Rejections</div><div class="stat-val" id="act-stat-rejected" style="color:var(--red)">0</div></div>
+      <div class="stat"><div class="stat-top">Price Updates</div><div class="stat-val" id="act-stat-prices" style="color:var(--gold)">0</div></div>
+    </div>
+    <div class="card" style="margin-bottom:0;padding:0;overflow:hidden">
+      <div class="card-title" style="padding:12px 14px;border-bottom:1px solid var(--border)">
+        // EVENT LOG
+        <div style="display:flex;gap:6px">
+          <select class="inp" id="act-type-filter" onchange="renderActivityLog()" style="font-size:13px;padding:4px 8px;width:160px">
+            <option value="">All types</option>
+            <option value="approval">Approvals</option>
+            <option value="rejection">Rejections</option>
+            <option value="price_update">Price Updates</option>
+            <option value="doc_gen">Doc Generated</option>
+            <option value="user_action">User Actions</option>
+          </select>
+        </div>
+      </div>
+      <div id="activity-log-body" style="max-height:600px;overflow-y:auto">
+        <div style="padding:24px;text-align:center;color:var(--muted);font-size:14px">No activity recorded yet. Admin actions will appear here.</div>
+      </div>
+    </div>
+  </div>
+
   <!-- TERMS & PRIVACY -->
   <div id="view-terms" class="view" style="padding:0;overflow:hidden">
     <iframe src="terms.html?embed=1"
@@ -1586,6 +1791,57 @@ select.inp option{background:var(--surface)}
     <div class="modal-ft">
       <button class="btn" onclick="closeContractModal()">Cancel</button>
       <button class="btn" id="contract-send-btn" style="background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.4);color:#c084fc;opacity:.4;cursor:not-allowed" disabled onclick="sendContractToLawyer()">📧 Send to Lawyer</button>
+    </div>
+  </div>
+</div>
+
+<!-- BULK PRICE UPDATE MODAL -->
+<div class="modal-bg" id="bulk-price-modal" onclick="if(event.target===this)closeBulkPriceModal()">
+  <div class="modal" style="max-width:680px">
+    <div class="modal-hd">
+      <div class="modal-title">📊 Bulk Price Update</div>
+      <button class="modal-close" onclick="closeBulkPriceModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;padding:8px 12px;background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.2);border-radius:5px;font-size:14px;color:var(--gold)">
+        ⚠ Changes apply immediately and sync to the live exchange.
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <select class="inp" id="bpu-change-type" style="width:160px;font-size:14px" onchange="bpuPreview()">
+          <option value="fixed">Set fixed price</option>
+          <option value="pct_up">Increase by %</option>
+          <option value="pct_dn">Decrease by %</option>
+          <option value="abs_up">Increase by $</option>
+          <option value="abs_dn">Decrease by $</option>
+        </select>
+        <input class="inp" id="bpu-amount" type="number" placeholder="e.g. 5" style="width:120px;font-size:14px" oninput="bpuPreview()">
+        <select class="inp" id="bpu-sector-filter" style="width:140px;font-size:14px" onchange="bpuPreview()">
+          <option value="">All sectors</option>
+          <option>Metals</option><option>Building</option><option>Energy</option><option>Agriculture</option><option>Chemicals</option>
+        </select>
+        <button class="btn btn-sm" onclick="bpuSelectAll()">Select all</button>
+      </div>
+      <div style="max-height:400px;overflow-y:auto;border:1px solid var(--border);border-radius:5px">
+        <table style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr style="background:var(--surface2)">
+              <th style="width:32px;padding:7px 10px"><input type="checkbox" id="bpu-check-all" onchange="bpuToggleAll(this.checked)" style="accent-color:var(--indigo)"></th>
+              <th>Product</th>
+              <th style="text-align:right">Current</th>
+              <th style="text-align:right">New Price</th>
+              <th style="text-align:right">Change</th>
+            </tr>
+          </thead>
+          <tbody id="bpu-tbody">
+            <tr><td colspan="5" style="padding:16px;text-align:center;color:var(--muted)">Loading products…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px;font-size:14px;color:var(--muted)" id="bpu-summary">Select products and set a change value to preview</div>
+    </div>
+    <div class="modal-ft">
+      <button class="btn" onclick="closeBulkPriceModal()">Cancel</button>
+      <button class="btn btn-a" id="bpu-apply-btn" onclick="bpuApply()" disabled style="opacity:.4;cursor:not-allowed">Apply to selected</button>
     </div>
   </div>
 </div>
@@ -1643,7 +1899,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['📄 Contracts','Purchase orders · signed deals · document suite'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
+var TITLES={activity:['📋 Activity Log','Admin actions · approvals · system events'],agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],negotiations:['🤖 Negotiations','Active sessions · Boss control'],revenue:['📄 Contracts','Purchase orders · signed deals · document suite'],docs:['🗂️ Document Management','14 doc types · deal checklist · library · AI generation'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────
@@ -1669,6 +1925,8 @@ function resumeOutreach(){
 }
 
 function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];if(v==='revenue'){loadContracts();spaPopulate('ct-spa-po-select');}
+if(v==='docs'){dmsLoad();}
+if(v==='activity'){renderActivityLog();}
 if(v==='agents'){}}
 
 function renderKanban(){var cols=[{key:'new',label:'New',color:'var(--muted)'},{key:'contacted',label:'Contacted',color:'var(--blue)'},{key:'rfq',label:'RFQ sent',color:'var(--teal)'},{key:'negotiating',label:'Negotiating',color:'var(--gold)'},{key:'closed',label:'Closed ✓',color:'var(--green)'}];var html='';cols.forEach(function(col){var cards=PIPELINE[col.key]||[];html+='<div class="kc"><div class="kc-head" style="color:'+col.color+'">'+col.label+'<span class="kc-count">'+cards.length+'</span></div>';cards.forEach(function(c){html+='<div class="kcard'+(c.hot?' hot':'')+'"><div class="kcard-name">'+(c.hot?'🔥 ':'')+c.name+'</div><div class="kcard-sub">'+c.product+' · '+c.country+'</div><div class="kcard-val">$'+c.value.toLocaleString()+'</div><div class="kcard-actions">';if(col.key==='new')html+='<button class="btn btn-xs btn-g" onclick="openTG()">WA</button><button class="btn btn-xs btn-p" onclick="moveCard(\'new\',\'contacted\',\''+c.name+'\')">Contact</button>';else if(col.key==='contacted')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'contacted\',\'rfq\',\''+c.name+'\')">Send RFQ</button>';else if(col.key==='rfq')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'rfq\',\'negotiating\',\''+c.name+'\')">Negotiate</button>';else if(col.key==='negotiating')html+='<button class="btn btn-xs btn-g" onclick="moveCard(\'negotiating\',\'closed\',\''+c.name+'\')">Close ✓</button>';else html+='<button class="btn btn-xs" onclick="window.open(\'loi-contracts.html?tool=loi\',\'_blank\')">LOI</button>';html+='</div></div>';});html+='</div>';});document.getElementById('kanban').innerHTML=html;}
@@ -5632,6 +5890,843 @@ function copyPOFDoc() {
     </div>
   </div>
 </div>
+
+<!-- ══ DMS GENERATION MODAL ══ -->
+<div id="dms-gen-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:500;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)" onclick="if(event.target===this)closeDmsGen()">
+  <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;width:100%;max-width:680px;max-height:90vh;overflow-y:auto">
+    <div style="padding:16px 20px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div id="dms-modal-icon" style="font-size:20px;display:inline;margin-right:8px"></div>
+        <span id="dms-modal-title" style="font-size:15px;font-weight:700;color:var(--white)"></span>
+        <div id="dms-modal-sub" style="font-size:12px;color:var(--muted);margin-top:2px"></div>
+      </div>
+      <button onclick="closeDmsGen()" style="background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:0">✕</button>
+    </div>
+    <div id="dms-modal-body" style="padding:20px"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// DOCUMENT MANAGEMENT SYSTEM — DMS
+// ══════════════════════════════════════════════════════════
+
+var DMS_TYPES = [
+  { id:'loi',    icon:'📄', name:'Letter of Intent',       std:'ICC',       link:'loi-contracts.html?tool=loi' },
+  { id:'nda',    icon:'🔏', name:'NDA',                    std:'Bilateral', link:'loi-contracts.html?tool=nda' },
+  { id:'spa',    icon:'⚖️', name:'SPA / Trade Contract',   std:'GAFTA/ICC', link:'loi-contracts.html?tool=spa' },
+  { id:'lca',    icon:'💳', name:'LC Application',         std:'UCP 600',   link:'loi-contracts.html?tool=lca' },
+  { id:'po',     icon:'📋', name:'Purchase Order',         std:'Order',     link:'loi-contracts.html?tool=po'  },
+  { id:'freight',icon:'⚓', name:'Freight Advisory',       std:'Advisory',  link:'loi-contracts.html?tool=freight' },
+  { id:'hs',     icon:'🛃', name:'HS Code & Duty Report',  std:'HS 2022',   link:'loi-contracts.html?tool=hs'  },
+  { id:'fco',    icon:'📃', name:'Full Corporate Offer',   std:'FCO',       link:null },
+  { id:'pi',     icon:'📑', name:'Proforma Invoice',       std:'Proforma',  link:null, fn:'openInvoiceModal' },
+  { id:'ci',     icon:'🧾', name:'Commercial Invoice',     std:'Customs',   link:null },
+  { id:'pl',     icon:'📦', name:'Packing List',           std:'Cargo',     link:null },
+  { id:'coa',    icon:'🔬', name:'Certificate of Analysis',std:'SGS/ISO',   link:null },
+  { id:'coo',    icon:'🌐', name:'Certificate of Origin',  std:'Origin',    link:null },
+  { id:'bl',     icon:'🚢', name:'Bill of Lading',         std:'Carrier',   link:null }
+];
+
+var _dmsLibFilter = 'all';
+var _dmsCurrentType = null;
+
+function dmsCallClaude(prompt, elId, saveMeta) {
+  var key = localStorage.getItem('sf_claude_key') || '';
+  var el = document.getElementById(elId);
+  if (!el) return;
+  if (!key) { el.style.display=''; el.textContent='No Claude API key — set sf_claude_key in localStorage.'; return; }
+  el.style.display = '';
+  el.textContent = '⏳ Generating…';
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1800, messages: [{ role: 'user', content: prompt }] })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    var text = (res.content && res.content[0]) ? res.content[0].text : 'No response received.';
+    el.textContent = text;
+    if (saveMeta) dmsLibSave(saveMeta.type, saveMeta.ref, saveMeta.cp, saveMeta.product, text);
+  })
+  .catch(function(e){ el.textContent = 'Error: ' + e.message; });
+}
+
+function dmsLoad() {
+  dmsPopulateDealSelect();
+  dmsLibRender();
+  dmsUpdateStats();
+}
+
+function dmsUpdateStats() {
+  var lib = dmsLibGet();
+  document.getElementById('dms-stat-total').textContent = lib.length;
+  var deals = {}, pending = 0;
+  lib.forEach(function(d){
+    if (d.ref) deals[d.ref] = true;
+    if ((d.status||'').toLowerCase() === 'pending') pending++;
+  });
+  document.getElementById('dms-stat-deals').textContent = Object.keys(deals).length;
+  document.getElementById('dms-stat-pending').textContent = pending;
+  // last updated = most recent user-generated doc or latest demo date
+  var userDocs = lib.filter(function(d){ return !!d.ts; });
+  if (userDocs.length) {
+    var last = userDocs[userDocs.length-1];
+    document.getElementById('dms-stat-last').textContent = (DMS_TYPES.find(function(x){return x.id===last.type;})||{name:last.type}).name + ' · ' + new Date(last.ts).toLocaleDateString();
+  } else {
+    document.getElementById('dms-stat-last').textContent = 'Jun 14 2026';
+  }
+}
+
+function dmsPopulateDealSelect() {
+  var sel = document.getElementById('dms-deal-select');
+  if (!sel) return;
+  var lois = [];
+  try { lois = JSON.parse(localStorage.getItem('sloi_lois') || '[]'); } catch(e){}
+  var pos = [];
+  try { pos = JSON.parse(localStorage.getItem('sloi_pos') || '[]'); } catch(e){}
+  var opts = '<option value="">— Select a deal / LOI —</option>';
+  lois.forEach(function(l, i){
+    var ref = l.ref || l.loi_ref || ('LOI-'+i);
+    opts += '<option value="loi:'+i+'">'+ref+' · '+(l.product||l.buyer||'')+'</option>';
+  });
+  pos.forEach(function(p, i){
+    var ref = p.po_num || ('PO-'+i);
+    opts += '<option value="po:'+i+'">'+ref+' · '+(p.product||p.buyer||'')+'</option>';
+  });
+  if (lois.length === 0 && pos.length === 0) {
+    opts += '<option value="demo">DEMO-2601 · Steel Rebar · Gulf Cement LLC</option>';
+  }
+  sel.innerHTML = opts;
+}
+
+function dmsLoadDeal() {
+  var sel = document.getElementById('dms-deal-select');
+  if (!sel || !sel.value) return;
+  var val = sel.value;
+  var dealMeta = { ref:'', product:'', cp:'' };
+  if (val === 'demo') {
+    dealMeta = { ref:'DEMO-2601', product:'Steel Rebar 16mm', cp:'Gulf Cement LLC' };
+  } else {
+    var parts = val.split(':');
+    var arr = [];
+    try { arr = JSON.parse(localStorage.getItem('sloi_'+(parts[0]==='loi'?'lois':'pos')) || '[]'); } catch(e){}
+    var rec = arr[parseInt(parts[1], 10)] || {};
+    dealMeta.ref  = rec.ref || rec.loi_ref || rec.po_num || val;
+    dealMeta.product = rec.product || '';
+    dealMeta.cp   = rec.buyer || rec.seller || rec.company || '';
+  }
+
+  var lib = dmsLibGet();
+  var genSet = {};
+  lib.forEach(function(d){ if(d.ref === dealMeta.ref) genSet[d.type] = true; });
+
+  var html = '';
+  DMS_TYPES.forEach(function(t){
+    var done = genSet[t.id];
+    html += '<div style="background:var(--surface2);border:1px solid '+(done?'rgba(34,197,94,.3)':'var(--border)')+';border-radius:8px;padding:10px;text-align:center;cursor:pointer;transition:border-color .15s" onclick="dmsChecklistClick(\''+t.id+'\',\''+dealMeta.ref+'\',\''+dealMeta.cp+'\',\''+dealMeta.product+'\')">'
+      + '<div style="font-size:20px;margin-bottom:4px">'+t.icon+'</div>'
+      + '<div style="font-size:11px;font-weight:700;color:'+(done?'var(--green)':'var(--white)')+';margin-bottom:2px">'+t.name+'</div>'
+      + '<div style="font-size:10px;color:'+(done?'var(--green)':'var(--muted)')+'">'+( done ? '✓ Generated' : '+ Generate' )+'</div>'
+      + '</div>';
+  });
+  document.getElementById('dms-checklist').innerHTML = html;
+}
+
+function dmsChecklistClick(typeId, ref, cp, product) {
+  var t = DMS_TYPES.find(function(x){ return x.id === typeId; });
+  if (!t) return;
+  if (t.link) { window.open(t.link, '_blank'); return; }
+  if (t.fn) { window[t.fn](); return; }
+  openDmsGen(typeId, { ref:ref, cp:cp, product:product });
+}
+
+function dmsOpenAllForDeal() {
+  var sel = document.getElementById('dms-deal-select');
+  if (!sel || !sel.value) { alert('Select a deal first.'); return; }
+  DMS_TYPES.filter(function(t){ return t.link; }).forEach(function(t){
+    window.open(t.link, '_blank');
+  });
+}
+
+// ── Demo seed data ──────────────────────────────────────
+var DMS_DEMO = [
+  { type:'fco',     ref:'SL-LOI-2601', cp:'Emirates Steel LLC',     product:'Steel Rebar B500B 16mm · 5,000 MT',    date:'2026-06-01', issuedBy:'Emirates Steel LLC',   status:'Received', text:'' },
+  { type:'nda',     ref:'SL-LOI-2601', cp:'Emirates Steel LLC',     product:'Steel Rebar B500B 16mm',               date:'2026-06-02', issuedBy:'SLOI AI',               status:'Signed',   text:'' },
+  { type:'loi',     ref:'SL-LOI-2601', cp:'NEOM Procurement',       product:'Steel Rebar B500B 16mm · 5,000 MT',    date:'2026-06-03', issuedBy:'SLOI AI',               status:'Signed',   text:'' },
+  { type:'pi',      ref:'SL-LOI-2601', cp:'Emirates Steel LLC',     product:'Steel Rebar B500B 16mm · 5,000 MT',    date:'2026-06-04', issuedBy:'Emirates Steel LLC',   status:'Received', text:'' },
+  { type:'lca',     ref:'SL-LOI-2601', cp:'NEOM Procurement',       product:'Steel Rebar B500B 16mm · 5,000 MT',    date:'2026-06-05', issuedBy:'SLOI AI',               status:'Sent',     text:'' },
+  { type:'spa',     ref:'SL-LOI-2601', cp:'Emirates Steel LLC',     product:'Steel Rebar B500B 16mm · 5,000 MT',    date:'2026-06-06', issuedBy:'SLOI AI',               status:'Signed',   text:'' },
+  { type:'po',      ref:'SL-POA-2601', cp:'NEOM Procurement',       product:'Steel Rebar B500B 16mm · 5,000 MT',    date:'2026-06-07', issuedBy:'SLOI AI',               status:'Sent',     text:'' },
+  { type:'ci',      ref:'SL-LOI-2601', cp:'Emirates Steel LLC',     product:'Steel Rebar B500B 16mm · HS 7214.20', date:'2026-06-10', issuedBy:'Emirates Steel LLC',   status:'Received', text:'' },
+  { type:'pl',      ref:'SL-LOI-2601', cp:'Emirates Steel LLC',     product:'250 bundles · 5,000 MT gross',          date:'2026-06-10', issuedBy:'Emirates Steel LLC',   status:'Received', text:'' },
+  { type:'coa',     ref:'SL-LOI-2601', cp:'Emirates Steel LLC',     product:'Steel Rebar B500B · HEAT-2026-0412',   date:'2026-06-11', issuedBy:'SGS Gulf LLC',          status:'Received', text:'' },
+  { type:'coo',     ref:'SL-LOI-2601', cp:'Dubai Chamber',          product:'Steel Rebar · HS 7214.20 · UAE origin', date:'2026-06-11', issuedBy:'Dubai Chamber of Commerce', status:'Received', text:'' },
+  { type:'freight', ref:'SL-LOI-2601', cp:'MSC Mediterranean',      product:'Jebel Ali → King Abdullah Port',        date:'2026-06-12', issuedBy:'SLOI AI',               status:'Sent',     text:'' },
+  { type:'bl',      ref:'SL-LOI-2601', cp:'MSC Mediterranean',      product:'Steel Rebar 16mm · 5,000 MT · Voyage 2026-04', date:'2026-06-14', issuedBy:'MSC Mediterranean', status:'Pending', text:'' },
+  { type:'hs',      ref:'SL-LOI-2601', cp:'NEOM Procurement',       product:'Steel Rebar · HS 7214.20 · 18% import duty', date:'2026-06-04', issuedBy:'SLOI AI',        status:'Received', text:'' },
+  { type:'fco',     ref:'SL-LOI-2588', cp:'Atlas Grain Trading',    product:'Yellow Corn 10,000 MT · FOB Odessa',   date:'2026-05-20', issuedBy:'Atlas Grain Trading',   status:'Received', text:'' },
+  { type:'loi',     ref:'SL-LOI-2588', cp:'Gulf Grain Mills LLC',   product:'Yellow Corn 10,000 MT · FOB Odessa',   date:'2026-05-21', issuedBy:'SLOI AI',               status:'Signed',   text:'' },
+  { type:'nda',     ref:'SL-LOI-2588', cp:'Atlas Grain Trading',    product:'Yellow Corn Procurement',               date:'2026-05-21', issuedBy:'SLOI AI',               status:'Signed',   text:'' },
+  { type:'ci',      ref:'SL-LOI-2588', cp:'Atlas Grain Trading',    product:'Yellow Corn · HS 1005.90 · 10,000 MT', date:'2026-05-28', issuedBy:'Atlas Grain Trading',   status:'Received', text:'' },
+  { type:'bl',      ref:'SL-LOI-2588', cp:'CMA CGM Shipping',       product:'Yellow Corn 10,000 MT · Vessel Aurora', date:'2026-05-30', issuedBy:'CMA CGM',              status:'Received', text:'' },
+  { type:'coo',     ref:'SL-LOI-2588', cp:'Ukraine Chamber',        product:'Yellow Corn · HS 1005.90 · UA origin',  date:'2026-05-28', issuedBy:'Ukraine Chamber of Commerce', status:'Received', text:'' }
+];
+
+// ── Library persistence ─────────────────────────────────
+function dmsLibGet() {
+  var saved = [];
+  try { saved = JSON.parse(localStorage.getItem('sloi_dms_lib') || '[]'); } catch(e){}
+  // merge demo rows (demo rows have no .ts, saved rows have .ts)
+  var all = DMS_DEMO.concat(saved);
+  return all;
+}
+
+function dmsLibSave(type, ref, cp, product, text) {
+  var saved = [];
+  try { saved = JSON.parse(localStorage.getItem('sloi_dms_lib') || '[]'); } catch(e){}
+  saved.push({ type:type, ref:ref||'—', cp:cp||'—', product:product||'—', ts:Date.now(), status:'Generated', issuedBy:'SLOI AI', text:text });
+  localStorage.setItem('sloi_dms_lib', JSON.stringify(saved));
+  dmsLibRender();
+  dmsUpdateStats();
+}
+
+function dmsStatusBadge(s) {
+  var map = {
+    'Received':'<span class="badge bg" style="font-size:11px">✓ Received</span>',
+    'Signed':  '<span class="badge bg" style="font-size:11px">✍ Signed</span>',
+    'Sent':    '<span class="badge bt" style="font-size:11px">→ Sent</span>',
+    'Pending': '<span class="badge ba" style="font-size:11px">⏳ Pending</span>',
+    'Rejected':'<span class="badge br" style="font-size:11px">✕ Rejected</span>',
+    'Generated':'<span class="badge bv" style="font-size:11px">★ Generated</span>'
+  };
+  return map[s] || '<span class="badge bm" style="font-size:11px">'+s+'</span>';
+}
+
+function dmsLibRender() {
+  var lib = dmsLibGet();
+  var q   = ((document.getElementById('dms-lib-search')||{}).value||'').toLowerCase();
+  var sf  = ((document.getElementById('dms-status-filter')||{}).value||'').toLowerCase();
+  var filtered = lib.filter(function(d){
+    var typeMatch   = _dmsLibFilter === 'all' || d.type === _dmsLibFilter;
+    var statusMatch = !sf || (d.status||'').toLowerCase() === sf;
+    var textMatch   = !q  || (d.type+d.ref+d.cp+d.product+(d.issuedBy||'')).toLowerCase().indexOf(q) > -1;
+    return typeMatch && statusMatch && textMatch;
+  });
+  var tbody = document.getElementById('dms-lib-tbody');
+  if (!tbody) return;
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:24px;font-size:13px">No documents match the current filter.</td></tr>';
+    return;
+  }
+  var tm = DMS_TYPES.reduce(function(m,x){ m[x.id]=x; return m; }, {});
+  tbody.innerHTML = filtered.map(function(d, i){
+    var meta = tm[d.type] || { icon:'📄', name: d.type };
+    var dateStr = d.date || (d.ts ? new Date(d.ts).toLocaleDateString() : '—');
+    var isUser  = !!d.ts; // user-generated row (has timestamp)
+    return '<tr>'
+      + '<td style="font-size:17px;text-align:center;padding:8px 6px">'+meta.icon+'</td>'
+      + '<td style="font-weight:600;color:var(--white)">'+meta.name+'</td>'
+      + '<td style="color:var(--violet);font-family:\'IBM Plex Mono\',monospace;font-size:12px">'+d.ref+'</td>'
+      + '<td style="font-size:13px">'+d.cp+'</td>'
+      + '<td style="font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+d.product+'</td>'
+      + '<td style="color:var(--muted);font-size:12px;white-space:nowrap">'+dateStr+'</td>'
+      + '<td style="font-size:12px;color:var(--muted)">'+( d.issuedBy||'—' )+'</td>'
+      + '<td>'+dmsStatusBadge(d.status||'—')+'</td>'
+      + '<td style="white-space:nowrap">'
+        + (isUser ? '<button class="btn btn-xs" onclick="dmsPreview('+i+')" style="margin-right:4px">Preview</button><button class="btn btn-xs btn-r" onclick="dmsDelete('+i+')">✕</button>' : '<span style="font-size:12px;color:var(--muted)">—</span>')
+      + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+function dmsLibFilter() { dmsLibRender(); }
+
+function dmsLibTypeFilter(type, btn) {
+  _dmsLibFilter = type;
+  document.querySelectorAll('[id^="dlf-"]').forEach(function(b){ b.style.borderColor=''; b.style.color=''; });
+  if (btn) { btn.style.borderColor='var(--indigo)'; btn.style.color='var(--violet)'; }
+  dmsLibRender();
+}
+
+function dmsPreview(idx) {
+  var lib = dmsLibGet();
+  var d = lib[idx];
+  if (!d) return;
+  var meta = DMS_TYPES.find(function(x){ return x.id===d.type; }) || { icon:'📄', name:d.type };
+  var win = window.open('', '_blank', 'width=800,height=700');
+  win.document.write('<html><head><title>'+meta.name+'</title><style>body{font-family:monospace;font-size:13px;background:#07070f;color:#cac8e0;padding:32px;white-space:pre-wrap;line-height:1.8}h1{color:#eeedf8;font-size:15px;margin-bottom:8px}p{color:#8888a8;font-size:12px;margin-bottom:24px}</style></head><body><h1>'+meta.icon+' '+meta.name+'</h1><p>Ref: '+d.ref+' · '+d.cp+' · Generated: '+new Date(d.ts).toLocaleString()+'</p>'+d.text+'</body></html>');
+  win.document.close();
+}
+
+function dmsDelete(idx) {
+  // idx is position in the merged lib (demo + saved). Demo rows have no .ts.
+  var lib = dmsLibGet();
+  var d = lib[idx];
+  if (!d || !d.ts) { alert('Demo documents cannot be deleted.'); return; }
+  if (!confirm('Delete this document record?')) return;
+  var saved = [];
+  try { saved = JSON.parse(localStorage.getItem('sloi_dms_lib') || '[]'); } catch(e){}
+  var saveIdx = saved.findIndex(function(s){ return s.ts === d.ts && s.type === d.type; });
+  if (saveIdx > -1) saved.splice(saveIdx, 1);
+  localStorage.setItem('sloi_dms_lib', JSON.stringify(saved));
+  dmsLibRender();
+  dmsUpdateStats();
+}
+
+function dmsClearLib() {
+  if (!confirm('Clear all user-generated documents? Demo records are preserved.')) return;
+  localStorage.removeItem('sloi_dms_lib');
+  dmsLibRender();
+  dmsUpdateStats();
+}
+
+function dmsLibExportCsv() {
+  var lib = dmsLibGet();
+  var tm  = DMS_TYPES.reduce(function(m,x){ m[x.id]=x; return m; }, {});
+  var rows = [['Document Type','Ref / Deal','Counterparty','Product','Date','Issued By','Status']];
+  lib.forEach(function(d){
+    var name = (tm[d.type]||{name:d.type}).name;
+    var dateStr = d.date || (d.ts ? new Date(d.ts).toLocaleDateString() : '—');
+    rows.push([name, d.ref, d.cp, d.product, dateStr, d.issuedBy||'—', d.status||'—']);
+  });
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+(c||'').replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'sloi_dms_documents.csv';
+  a.click();
+}
+
+// ── DMS Modal ───────────────────────────────────────────
+var DMS_CONFIGS = {
+  fco: {
+    icon:'📃', title:'Full Corporate Offer (FCO)',
+    sub:'Official commercial offer issued by the counterparty',
+    fields: [
+      { id:'fco-seller',    label:'Seller / Issuing Company', ph:'Emirates Steel LLC' },
+      { id:'fco-buyer',     label:'Buyer Company',            ph:'NEOM Procurement' },
+      { id:'fco-product',   label:'Product & Specification',  ph:'Steel Rebar B500B · 16mm · ASTM A615' },
+      { id:'fco-qty',       label:'Quantity & Unit',          ph:'5,000 MT' },
+      { id:'fco-price',     label:'Unit Price & Currency',    ph:'USD 780/MT CIF Dubai' },
+      { id:'fco-payment',   label:'Payment Terms',            ph:'100% irrevocable LC at sight' },
+      { id:'fco-validity',  label:'Offer Validity',           ph:'30 days from date of issue' },
+      { id:'fco-delivery',  label:'Delivery Schedule',        ph:'45 days after LC establishment' },
+      { id:'fco-origin',    label:'Country of Origin',        ph:'UAE / Germany' }
+    ],
+    prompt: function(v) {
+      return 'Draft a formal Full Corporate Offer (FCO) for a commodity trade transaction.\n\nSeller: '+v.seller+'\nBuyer: '+v.buyer+'\nProduct: '+v.product+'\nQuantity: '+v.qty+'\nPrice: '+v.price+'\nPayment: '+v.payment+'\nValidity: '+v.validity+'\nDelivery: '+v.delivery+'\nOrigin: '+v.origin+'\n\nFormat as a professional FCO document with: header, offer number (auto-generate), date, all parties, product specs table, commercial terms, bank details placeholder, and authorized signatory block. Use formal trade document language.';
+    },
+    getVals: function() { return { seller:g('fco-seller'), buyer:g('fco-buyer'), product:g('fco-product'), qty:g('fco-qty'), price:g('fco-price'), payment:g('fco-payment'), validity:g('fco-validity'), delivery:g('fco-delivery'), origin:g('fco-origin') }; }
+  },
+  ci: {
+    icon:'🧾', title:'Commercial Invoice (CI)',
+    sub:'Final invoice for customs clearance and payment',
+    fields: [
+      { id:'ci-exporter',  label:'Exporter / Seller',        ph:'Emirates Steel LLC' },
+      { id:'ci-importer',  label:'Importer / Buyer',         ph:'NEOM Procurement LLC' },
+      { id:'ci-product',   label:'Product & HS Code',        ph:'Steel Rebar 16mm · HS 7214.20' },
+      { id:'ci-qty',       label:'Quantity & Unit',          ph:'5,000 MT' },
+      { id:'ci-uprice',    label:'Unit Price',               ph:'USD 780/MT' },
+      { id:'ci-incoterm',  label:'Incoterm',                 ph:'CIF Dubai (Incoterms 2020)' },
+      { id:'ci-payment',   label:'Payment Terms',            ph:'LC at sight · UCP 600' },
+      { id:'ci-pol',       label:'Port of Loading',          ph:'Jebel Ali, UAE' },
+      { id:'ci-pod',       label:'Port of Destination',      ph:'King Abdullah Port, KSA' }
+    ],
+    prompt: function(v) {
+      return 'Draft a Commercial Invoice for customs clearance and final payment.\n\nExporter: '+v.exporter+'\nImporter: '+v.importer+'\nProduct: '+v.product+'\nQuantity: '+v.qty+'\nUnit Price: '+v.uprice+'\nIncoterm: '+v.incoterm+'\nPayment: '+v.payment+'\nPort of Loading: '+v.pol+'\nPort of Destination: '+v.pod+'\n\nFormat as a professional Commercial Invoice document with: invoice number (auto-generate), date, exporter/importer addresses, line items table (description, quantity, unit price, total), subtotal, freight, total amount, bank transfer details placeholder, declaration of origin, and authorized signature block.';
+    },
+    getVals: function() { return { exporter:g('ci-exporter'), importer:g('ci-importer'), product:g('ci-product'), qty:g('ci-qty'), uprice:g('ci-uprice'), incoterm:g('ci-incoterm'), payment:g('ci-payment'), pol:g('ci-pol'), pod:g('ci-pod') }; }
+  },
+  pl: {
+    icon:'📦', title:'Packing List',
+    sub:'Per-carton weight, dimensions, marks, and totals',
+    fields: [
+      { id:'pl-exporter',  label:'Exporter',                 ph:'Emirates Steel LLC' },
+      { id:'pl-importer',  label:'Importer',                 ph:'NEOM Procurement LLC' },
+      { id:'pl-product',   label:'Product Description',      ph:'Steel Rebar 16mm × 12m' },
+      { id:'pl-qty',       label:'Total Quantity',           ph:'5,000 MT / 250 bundles' },
+      { id:'pl-pkgtype',   label:'Package Type',             ph:'Steel bundles, wire-strapped' },
+      { id:'pl-dims',      label:'Bundle Dimensions (L×W×H)',ph:'12m × 0.5m × 0.5m' },
+      { id:'pl-gwt',       label:'Gross Weight / Bundle',    ph:'20 MT per bundle' },
+      { id:'pl-nwt',       label:'Net Weight / Bundle',      ph:'20 MT (steel, no packaging)' },
+      { id:'pl-marks',     label:'Shipping Marks & Nos.',    ph:'NEOM-2026 / Dubai / 1-250' }
+    ],
+    prompt: function(v) {
+      return 'Draft a Packing List for a commodity sea shipment.\n\nExporter: '+v.exporter+'\nImporter: '+v.importer+'\nProduct: '+v.product+'\nTotal Quantity: '+v.qty+'\nPackage Type: '+v.pkgtype+'\nDimensions: '+v.dims+'\nGross Weight per unit: '+v.gwt+'\nNet Weight per unit: '+v.nwt+'\nShipping Marks: '+v.marks+'\n\nFormat as a professional Packing List with: packing list number (auto-generate), date, both parties, a table showing carton/bundle no., description, quantity, dimensions (L×W×H), gross weight, net weight, total summary rows, and declaration block. Use standard freight/customs format.';
+    },
+    getVals: function() { return { exporter:g('pl-exporter'), importer:g('pl-importer'), product:g('pl-product'), qty:g('pl-qty'), pkgtype:g('pl-pkgtype'), dims:g('pl-dims'), gwt:g('pl-gwt'), nwt:g('pl-nwt'), marks:g('pl-marks') }; }
+  },
+  coa: {
+    icon:'🔬', title:'Certificate of Analysis (COA)',
+    sub:'Technical quality and specification test report',
+    fields: [
+      { id:'coa-product',   label:'Product Name',            ph:'Steel Rebar B500B 16mm' },
+      { id:'coa-supplier',  label:'Manufacturer / Supplier', ph:'Emirates Steel LLC' },
+      { id:'coa-buyer',     label:'Buyer',                   ph:'NEOM Procurement LLC' },
+      { id:'coa-batch',     label:'Batch / Heat Number',     ph:'HEAT-2026-0412' },
+      { id:'coa-qty',       label:'Quantity Tested',         ph:'5,000 MT' },
+      { id:'coa-std',       label:'Standard / Norm',         ph:'BS 4449:2005 / ASTM A615 Gr60 / EN 10080' },
+      { id:'coa-tests',     label:'Key Test Results',        ph:'Yield: 530 MPa, Tensile: 620 MPa, Elongation: 18%' },
+      { id:'coa-lab',       label:'Testing Laboratory',      ph:'SGS Gulf / Bureau Veritas' }
+    ],
+    prompt: function(v) {
+      return 'Draft a Certificate of Analysis (COA) for commodity goods.\n\nProduct: '+v.product+'\nManufacturer: '+v.supplier+'\nBuyer: '+v.buyer+'\nBatch/Heat No.: '+v.batch+'\nQuantity: '+v.qty+'\nApplicable Standard: '+v.std+'\nTest Results: '+v.tests+'\nTesting Lab: '+v.lab+'\n\nFormat as a professional Certificate of Analysis with: COA number (auto-generate), date, product details, batch info, a test results table (property, unit, required value, actual value, pass/fail), conclusion statement, laboratory certification, and authorized signatory block. Follow ISO/SGS format conventions.';
+    },
+    getVals: function() { return { product:g('coa-product'), supplier:g('coa-supplier'), buyer:g('coa-buyer'), batch:g('coa-batch'), qty:g('coa-qty'), std:g('coa-std'), tests:g('coa-tests'), lab:g('coa-lab') }; }
+  },
+  coo: {
+    icon:'🌐', title:'Certificate of Origin (COO)',
+    sub:'Official document certifying country of origin of goods',
+    fields: [
+      { id:'coo-exporter',  label:'Exporter / Producer',     ph:'Emirates Steel LLC, Dubai, UAE' },
+      { id:'coo-consignee', label:'Consignee / Importer',    ph:'NEOM Procurement LLC, KSA' },
+      { id:'coo-product',   label:'Product Description',     ph:'Steel Rebar 16mm, B500B grade' },
+      { id:'coo-hs',        label:'HS Code',                 ph:'7214.20.00' },
+      { id:'coo-qty',       label:'Quantity & Weight',       ph:'5,000 MT' },
+      { id:'coo-origin',    label:'Country of Origin',       ph:'United Arab Emirates' },
+      { id:'coo-type',      label:'Preferential / Non-Pref', ph:'Non-preferential (standard)' },
+      { id:'coo-vessel',    label:'Vessel / Transport',      ph:'MSC Victoria / Jebel Ali → Dammam' },
+      { id:'coo-authority', label:'Issuing Authority',       ph:'Dubai Chamber of Commerce & Industry' }
+    ],
+    prompt: function(v) {
+      return 'Draft a Certificate of Origin (COO) for international trade.\n\nExporter: '+v.exporter+'\nConsignee: '+v.consignee+'\nProduct: '+v.product+'\nHS Code: '+v.hs+'\nQuantity: '+v.qty+'\nCountry of Origin: '+v.origin+'\nType: '+v.type+'\nTransport: '+v.vessel+'\nIssuing Authority: '+v.authority+'\n\nFormat as a professional Certificate of Origin following ICC / Chamber of Commerce format with: certificate number (auto-generate), declaration of origin, goods description table, transport details, country of origin statement, and certification block with issuing authority signature area.';
+    },
+    getVals: function() { return { exporter:g('coo-exporter'), consignee:g('coo-consignee'), product:g('coo-product'), hs:g('coo-hs'), qty:g('coo-qty'), origin:g('coo-origin'), type:g('coo-type'), vessel:g('coo-vessel'), authority:g('coo-authority') }; }
+  },
+  bl: {
+    icon:'🚢', title:'Bill of Lading (B/L)',
+    sub:'Transport document issued by the carrier',
+    fields: [
+      { id:'bl-shipper',   label:'Shipper / Exporter',       ph:'Emirates Steel LLC' },
+      { id:'bl-consignee', label:'Consignee',                ph:'NEOM Procurement LLC or Order' },
+      { id:'bl-notify',    label:'Notify Party',             ph:'NEOM Procurement LLC, +966-XX-XXXX' },
+      { id:'bl-vessel',    label:'Vessel Name & Voyage',     ph:'MSC Victoria / Voyage 2026-04' },
+      { id:'bl-pol',       label:'Port of Loading',          ph:'Jebel Ali, UAE' },
+      { id:'bl-pod',       label:'Port of Discharge',        ph:'King Abdullah Port, KSA' },
+      { id:'bl-product',   label:'Cargo Description',        ph:'Steel Rebar 16mm B500B — 5,000 MT' },
+      { id:'bl-marks',     label:'Marks & Numbers',          ph:'NEOM-2026 / 1-250 bundles' },
+      { id:'bl-freight',   label:'Freight Terms',            ph:'Freight Prepaid (CIF)' }
+    ],
+    prompt: function(v) {
+      return 'Draft a Bill of Lading (B/L) for a sea cargo shipment.\n\nShipper: '+v.shipper+'\nConsignee: '+v.consignee+'\nNotify Party: '+v.notify+'\nVessel: '+v.vessel+'\nPort of Loading: '+v.pol+'\nPort of Discharge: '+v.pod+'\nCargo: '+v.product+'\nMarks & Numbers: '+v.marks+'\nFreight: '+v.freight+'\n\nFormat as a professional Bill of Lading with: B/L number (auto-generate), date of issue, all party details, cargo description table (marks, packages, description, gross weight, measurement), freight/charges section, carrier declaration, and signature block. Use standard ocean B/L format (FCR or original B/L).';
+    },
+    getVals: function() { return { shipper:g('bl-shipper'), consignee:g('bl-consignee'), notify:g('bl-notify'), vessel:g('bl-vessel'), pol:g('bl-pol'), pod:g('bl-pod'), product:g('bl-product'), marks:g('bl-marks'), freight:g('bl-freight') }; }
+  }
+};
+
+function g(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+function openDmsGen(typeId, prefill) {
+  var cfg = DMS_CONFIGS[typeId];
+  if (!cfg) return;
+  _dmsCurrentType = typeId;
+  prefill = prefill || {};
+  document.getElementById('dms-modal-icon').textContent = cfg.icon;
+  document.getElementById('dms-modal-title').textContent = cfg.title;
+  document.getElementById('dms-modal-sub').textContent = cfg.sub;
+
+  var html = '';
+  // LOI Ref row + Counterparty (always present for library save)
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">'
+    + '<div><label style="font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:4px">LOI / Deal Reference</label><input class="inp" id="dms-gen-ref" value="'+(prefill.ref||'')+'" placeholder="SL-LOI-2601" style="font-size:13px"></div>'
+    + '<div><label style="font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:4px">Counterparty</label><input class="inp" id="dms-gen-cp" value="'+(prefill.cp||'')+'" placeholder="Company name" style="font-size:13px"></div>'
+    + '</div>';
+
+  // Doc-specific fields
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">';
+  cfg.fields.forEach(function(f){
+    var autofill = '';
+    if (prefill.product && f.label.toLowerCase().indexOf('product') > -1) autofill = prefill.product;
+    if (prefill.cp && (f.label.toLowerCase().indexOf('buyer') > -1 || f.label.toLowerCase().indexOf('importer') > -1 || f.label.toLowerCase().indexOf('consignee') > -1)) autofill = prefill.cp;
+    html += '<div>'
+      + '<label style="font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:4px">'+f.label+'</label>'
+      + '<input class="inp" id="'+f.id+'" value="'+autofill+'" placeholder="'+f.ph+'" style="font-size:13px">'
+      + '</div>';
+  });
+  html += '</div>';
+
+  // Generate button + response
+  html += '<button onclick="runDmsGen()" style="width:100%;background:var(--indigo);color:#fff;border:none;border-radius:7px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:\'IBM Plex Mono\',monospace;margin-bottom:10px">Generate '+cfg.icon+' '+cfg.title+'</button>';
+  html += '<div id="dms-gen-resp" style="display:none;white-space:pre-wrap;font-size:12px;color:var(--text);line-height:1.8;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:14px;max-height:380px;overflow-y:auto"></div>';
+  html += '<div id="dms-gen-actions" style="display:none;gap:8px;margin-top:8px;flex-wrap:wrap">'
+    + '<button onclick="dmsGenCopy()" class="btn btn-sm">⎘ Copy</button>'
+    + '<button onclick="dmsGenPrint()" class="btn btn-sm">🖨 Print</button>'
+    + '<button onclick="dmsGenSave()" class="btn btn-sm btn-g">💾 Save to Library</button>'
+    + '</div>';
+
+  document.getElementById('dms-modal-body').innerHTML = html;
+  document.getElementById('dms-gen-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDmsGen() {
+  document.getElementById('dms-gen-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function runDmsGen() {
+  var cfg = DMS_CONFIGS[_dmsCurrentType];
+  if (!cfg) return;
+  var vals = cfg.getVals();
+  var prompt = cfg.prompt(vals);
+  var respEl = document.getElementById('dms-gen-resp');
+  var actEl  = document.getElementById('dms-gen-actions');
+  respEl.style.display = '';
+  actEl.style.display = 'none';
+  var key = localStorage.getItem('sf_claude_key') || '';
+  if (!key) { respEl.textContent = 'No Claude API key — set sf_claude_key in localStorage.'; return; }
+  respEl.textContent = '⏳ Generating…';
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1800, messages: [{ role: 'user', content: prompt }] })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    var text = (res.content && res.content[0]) ? res.content[0].text : 'No response received.';
+    respEl.textContent = text;
+    actEl.style.display = 'flex';
+  })
+  .catch(function(e){ respEl.textContent = 'Error: ' + e.message; });
+}
+
+function dmsGenCopy() {
+  var el = document.getElementById('dms-gen-resp');
+  if (!el) return;
+  navigator.clipboard.writeText(el.textContent).then(function(){ alert('Copied to clipboard.'); });
+}
+
+function dmsGenPrint() {
+  var el = document.getElementById('dms-gen-resp');
+  var cfg = DMS_CONFIGS[_dmsCurrentType] || {};
+  var win = window.open('', '_blank', 'width=800,height=700');
+  win.document.write('<html><head><title>'+(cfg.title||'Document')+'</title><style>body{font-family:monospace;font-size:13px;padding:40px;white-space:pre-wrap;line-height:1.8}@media print{@page{margin:2cm}}</style></head><body>'+(el ? el.textContent : '')+'</body></html>');
+  win.document.close();
+  win.print();
+}
+
+function dmsGenSave() {
+  var el = document.getElementById('dms-gen-resp');
+  if (!el || !el.textContent || el.textContent === '⏳ Generating…') { alert('Generate the document first.'); return; }
+  var ref     = g('dms-gen-ref') || '—';
+  var cp      = g('dms-gen-cp') || '—';
+  var cfg     = DMS_CONFIGS[_dmsCurrentType] || {};
+  var product = '';
+  // try to find product from type-specific fields
+  var prodField = (cfg.fields || []).find(function(f){ return f.label.toLowerCase().indexOf('product') > -1; });
+  if (prodField) product = g(prodField.id);
+  dmsLibSave(_dmsCurrentType, ref, cp, product, el.textContent);
+  alert('Document saved to library.');
+  dmsLoad();
+}
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeDmsGen(); });
+
+// ── WAR ROOM KPI + AUTO-REFRESH ──────────────────────────────────────────────
+
+var _wrRefreshInterval = null;
+var _wrCountdown = 30;
+
+function wrRefresh() {
+  _wrCountdown = 30;
+  loadNegotiations();
+}
+
+function wrStartCountdown() {
+  if (_wrRefreshInterval) clearInterval(_wrRefreshInterval);
+  _wrCountdown = 30;
+  _wrRefreshInterval = setInterval(function() {
+    _wrCountdown--;
+    var el = document.getElementById('wr-countdown');
+    if (el) el.textContent = 'refresh in ' + _wrCountdown + 's';
+    if (_wrCountdown <= 0) {
+      _wrCountdown = 30;
+      loadNegotiations();
+    }
+  }, 1000);
+}
+
+// Wire KPI stats from negotiation data — called inside renderAlerts
+function updateWarRoomKPIs(negs, lois) {
+  var active  = negs.filter(function(n){ return n.status === 'running'; }).length;
+  var pending = negs.filter(function(n){ return n.status === 'awaiting_boss'; }).length;
+  var today   = new Date().toISOString().slice(0, 10);
+  var todayLOIs = (lois || []).filter(function(l){ return l.signed_at && l.signed_at.slice(0, 10) === today; });
+  var mtdRev  = (lois || []).reduce(function(s, l){ return s + (parseFloat(l.loi_fee_usd) || 500); }, 0);
+
+  var el;
+  el = document.getElementById('wr-stat-active');  if (el) el.textContent = active || '0';
+  el = document.getElementById('wr-stat-active-sub'); if (el) { el.textContent = active ? active + ' live session' + (active > 1 ? 's' : '') : 'No active sessions'; }
+  el = document.getElementById('wr-stat-pending'); if (el) el.textContent = pending || '0';
+  el = document.getElementById('wr-stat-pending-sub'); if (el) { el.textContent = pending ? '⚠ Action required' : 'All clear'; el.className = 'stat-sub' + (pending ? ' warn' : ' up'); }
+  el = document.getElementById('wr-stat-lois');    if (el) el.textContent = todayLOIs.length || '0';
+  el = document.getElementById('wr-stat-lois-sub');if (el) { el.textContent = todayLOIs.length ? '$' + (todayLOIs.length * 500).toLocaleString() + ' earned' : 'None today'; }
+  el = document.getElementById('wr-stat-revenue'); if (el) el.textContent = mtdRev ? '$' + Math.round(mtdRev).toLocaleString() : '—';
+  el = document.getElementById('wr-stat-revenue-sub'); if (el) { el.textContent = (lois||[]).length + ' LOI' + ((lois||[]).length !== 1 ? 's' : '') + ' total'; }
+}
+
+// Patch renderAlerts to also call updateWarRoomKPIs
+var _origRenderAlerts = renderAlerts;
+renderAlerts = function(negs, lois) {
+  _origRenderAlerts(negs, lois);
+  updateWarRoomKPIs(negs, lois);
+};
+
+wrStartCountdown();
+
+// ── BOSS APPROVAL QUICK ACTIONS ───────────────────────────────────────────────
+
+function abCounterOffer() {
+  var overrideEl = document.getElementById('ab-override');
+  if (!overrideEl) return;
+  overrideEl.focus();
+  overrideEl.style.borderColor = 'var(--gold)';
+  overrideEl.placeholder = 'Enter counter-offer price…';
+  showToast('Enter your counter-offer price above, then click Approve', 'gold');
+  setTimeout(function(){ overrideEl.style.borderColor = ''; }, 3000);
+}
+
+function abWhatsApp() {
+  var buyer   = (document.getElementById('ab-buyer')   || {}).textContent || '—';
+  var product = (document.getElementById('ab-product') || {}).textContent || '—';
+  var price   = (document.getElementById('ab-price')   || {}).textContent || '—';
+  var msg = 'Hello ' + buyer + ',\n\nRegarding your enquiry for: ' + product + '\n\nOur negotiation AI has reached a tentative price of ' + price + '.\n\nPlease confirm if you wish to proceed.\n\nSLOI AI Trade Desk';
+  var wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  window.open(wa, '_blank');
+  logActivity('user_action', 'WhatsApp sent to buyer', buyer + ' · ' + product);
+}
+
+function abForwardTrader() {
+  var id      = (document.getElementById('ab-neg-id')  || {}).textContent || '—';
+  var product = (document.getElementById('ab-product') || {}).textContent || '—';
+  var price   = (document.getElementById('ab-price')   || {}).textContent || '—';
+  var trader  = (document.getElementById('ab-contact') || {}).textContent || '—';
+  var msg = '📋 Deal pending boss approval\n\nRef: ' + id + '\nProduct: ' + product + '\nAgreed price: ' + price + '\n\nPlease confirm your availability to handle shipment logistics.';
+  var wa = 'https://wa.me/?text=' + encodeURIComponent(msg);
+  window.open(wa, '_blank');
+  logActivity('user_action', 'Deal forwarded to trader', id + ' · ' + product);
+}
+
+// ── ACTIVITY LOG ──────────────────────────────────────────────────────────────
+
+var ACTIVITY_LOG_KEY = 'sloi_activity_log';
+
+function logActivity(type, title, detail) {
+  var log = [];
+  try { log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]'); } catch(e) {}
+  log.unshift({ type: type, title: title, detail: detail || '', ts: Date.now() });
+  if (log.length > 200) log = log.slice(0, 200);
+  localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
+  var badge = document.getElementById('activity-badge');
+  if (badge) { badge.textContent = log.length; badge.style.display = ''; }
+}
+
+function renderActivityLog() {
+  var log = [];
+  try { log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]'); } catch(e) {}
+  var typeFilter = (document.getElementById('act-type-filter') || {}).value || '';
+
+  var ICONS = { approval:'✅', rejection:'✗', price_update:'📊', doc_gen:'📄', user_action:'👤' };
+  var COLORS = { approval:'var(--green)', rejection:'var(--red)', price_update:'var(--gold)', doc_gen:'var(--teal)', user_action:'var(--violet)' };
+
+  var approvals = log.filter(function(e){ return e.type === 'approval'; }).length;
+  var rejections = log.filter(function(e){ return e.type === 'rejection'; }).length;
+  var prices = log.filter(function(e){ return e.type === 'price_update'; }).length;
+  var el;
+  el = document.getElementById('act-stat-total');    if (el) el.textContent = log.length;
+  el = document.getElementById('act-stat-approved');  if (el) el.textContent = approvals;
+  el = document.getElementById('act-stat-rejected');  if (el) el.textContent = rejections;
+  el = document.getElementById('act-stat-prices');    if (el) el.textContent = prices;
+
+  var filtered = typeFilter ? log.filter(function(e){ return e.type === typeFilter; }) : log;
+  var body = document.getElementById('activity-log-body');
+  if (!body) return;
+  if (!filtered.length) {
+    body.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:14px">' + (typeFilter ? 'No ' + typeFilter + ' events recorded' : 'No activity recorded yet') + '</div>';
+    return;
+  }
+  body.innerHTML = filtered.map(function(e) {
+    var d = new Date(e.ts);
+    var time = d.toLocaleString('en-GB', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'});
+    var icon = ICONS[e.type] || '●';
+    var color = COLORS[e.type] || 'var(--muted)';
+    return '<div style="display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border);font-size:14px">'
+      + '<div style="font-size:18px;width:24px;text-align:center;flex-shrink:0;margin-top:1px">' + icon + '</div>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="color:var(--white);font-weight:600;margin-bottom:2px">' + e.title + '</div>'
+      + (e.detail ? '<div style="color:var(--muted);font-size:13px">' + e.detail + '</div>' : '')
+      + '</div>'
+      + '<div style="font-size:12px;color:var(--muted);white-space:nowrap;flex-shrink:0;font-family:\'IBM Plex Mono\',monospace">' + time + '</div>'
+      + '<div style="width:70px;text-align:right;flex-shrink:0"><span style="font-size:11px;color:' + color + ';text-transform:uppercase;letter-spacing:.06em">' + (e.type||'').replace('_',' ') + '</span></div>'
+      + '</div>';
+  }).join('');
+}
+
+function exportActivityCsv() {
+  var log = [];
+  try { log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]'); } catch(e) {}
+  var hdr = 'Date,Type,Title,Detail\n';
+  var body = log.map(function(e){ return [new Date(e.ts).toLocaleString(), e.type||'', e.title||'', (e.detail||'').replace(/,/g,'·')].join(','); }).join('\n');
+  var blob = new Blob([hdr+body], {type:'text/csv'});
+  var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'sloi-activity-log.csv'; a.click();
+}
+
+function clearActivityLog() {
+  if (!confirm('Clear all activity log entries?')) return;
+  localStorage.removeItem(ACTIVITY_LOG_KEY);
+  renderActivityLog();
+}
+
+// Wire approveDeal + rejectDeal to log activities
+var _origApproveDeal = approveDeal;
+approveDeal = function() {
+  _origApproveDeal.apply(this, arguments);
+  if (_pendingNegId) {
+    var product = (document.getElementById('ab-product')||{}).textContent || '—';
+    var buyer   = (document.getElementById('ab-buyer')  ||{}).textContent || '—';
+    logActivity('approval', 'Deal approved — LOI generated', _pendingNegId + ' · ' + product + ' · ' + buyer);
+  }
+};
+
+var _origRejectDeal = rejectDeal;
+rejectDeal = function() {
+  if (_pendingNegId) {
+    var product = (document.getElementById('ab-product')||{}).textContent || '—';
+    logActivity('rejection', 'Deal rejected', _pendingNegId + ' · ' + product);
+  }
+  _origRejectDeal.apply(this, arguments);
+};
+
+// ── BULK PRICE UPDATE MODAL ───────────────────────────────────────────────────
+
+var _bpuProducts = [];
+
+function openBulkPriceModal() {
+  document.getElementById('bulk-price-modal').classList.add('open');
+  document.getElementById('bpu-amount').value = '';
+  document.getElementById('bpu-change-type').value = 'pct_up';
+  document.getElementById('bpu-sector-filter').value = '';
+  _bpuProducts = _PROD_DATA || [];
+  bpuRenderTable(_bpuProducts);
+  bpuPreview();
+}
+
+function closeBulkPriceModal() {
+  document.getElementById('bulk-price-modal').classList.remove('open');
+}
+
+function bpuRenderTable(products) {
+  var tbody = document.getElementById('bpu-tbody');
+  if (!tbody) return;
+  if (!products.length) {
+    tbody.innerHTML = '<tr><td colspan="5" style="padding:16px;text-align:center;color:var(--muted)">No products loaded</td></tr>';
+    return;
+  }
+  var EMOJI = {Metals:'🔩',Building:'🏗️',Energy:'⚡',Agriculture:'🌾',Chemicals:'🧪'};
+  tbody.innerHTML = products.map(function(p, i) {
+    var emoji = EMOJI[p.sector] || '📦';
+    var cur = Number(p.current_price || 0);
+    return '<tr>'
+      + '<td style="text-align:center;padding:7px 10px"><input type="checkbox" class="bpu-check" data-idx="' + i + '" onchange="bpuPreview()" style="accent-color:var(--indigo)"></td>'
+      + '<td><div style="font-weight:600;color:var(--white)">' + emoji + ' ' + p.name + '</div><div style="font-size:12px;color:var(--muted)">' + p.sector + ' · ' + p.unit + '</div></td>'
+      + '<td style="text-align:right;font-family:\'IBM Plex Mono\',monospace;color:var(--text)">$' + cur.toLocaleString() + '</td>'
+      + '<td style="text-align:right;font-family:\'IBM Plex Mono\',monospace" id="bpu-new-' + i + '" style="color:var(--muted)">—</td>'
+      + '<td style="text-align:right" id="bpu-chg-' + i + '">—</td>'
+      + '</tr>';
+  }).join('');
+}
+
+function bpuSelectAll() {
+  document.querySelectorAll('.bpu-check').forEach(function(c){ c.checked = true; });
+  var allCheck = document.getElementById('bpu-check-all');
+  if (allCheck) allCheck.checked = true;
+  bpuPreview();
+}
+
+function bpuToggleAll(checked) {
+  document.querySelectorAll('.bpu-check').forEach(function(c){ c.checked = checked; });
+  bpuPreview();
+}
+
+function bpuCalcNew(cur, type, amount) {
+  var a = parseFloat(amount) || 0;
+  if (type === 'fixed')   return a;
+  if (type === 'pct_up')  return cur * (1 + a / 100);
+  if (type === 'pct_dn')  return cur * (1 - a / 100);
+  if (type === 'abs_up')  return cur + a;
+  if (type === 'abs_dn')  return cur - a;
+  return cur;
+}
+
+function bpuPreview() {
+  var type   = (document.getElementById('bpu-change-type') || {}).value || 'pct_up';
+  var amount = (document.getElementById('bpu-amount') || {}).value || '';
+  var sector = (document.getElementById('bpu-sector-filter') || {}).value || '';
+  var selected = 0;
+  var products = sector ? _bpuProducts.filter(function(p){ return p.sector === sector; }) : _bpuProducts;
+  bpuRenderTable(products);
+  products.forEach(function(p, i) {
+    var cur = Number(p.current_price || 0);
+    var newP = amount ? bpuCalcNew(cur, type, amount) : null;
+    var newEl = document.getElementById('bpu-new-' + i);
+    var chgEl = document.getElementById('bpu-chg-' + i);
+    if (newEl) newEl.textContent = newP ? '$' + Math.round(newP).toLocaleString() : '—';
+    if (newEl) newEl.style.color = newP && newP > cur ? 'var(--green)' : newP && newP < cur ? 'var(--red)' : 'var(--muted)';
+    if (chgEl) {
+      var diff = newP ? newP - cur : 0;
+      chgEl.textContent = newP ? (diff >= 0 ? '+' : '') + '$' + Math.round(diff).toLocaleString() : '—';
+      chgEl.style.color = diff > 0 ? 'var(--green)' : diff < 0 ? 'var(--red)' : 'var(--muted)';
+    }
+    var cb = document.querySelector('.bpu-check[data-idx="' + i + '"]');
+    if (cb && cb.checked) selected++;
+  });
+  var sumEl = document.getElementById('bpu-summary');
+  if (sumEl) sumEl.textContent = selected ? selected + ' product' + (selected > 1 ? 's' : '') + ' selected · click "Apply" to update prices' : 'Select products and set a change value to preview';
+  var applyBtn = document.getElementById('bpu-apply-btn');
+  if (applyBtn) {
+    var enabled = selected > 0 && amount;
+    applyBtn.disabled = !enabled;
+    applyBtn.style.opacity = enabled ? '1' : '.4';
+    applyBtn.style.cursor  = enabled ? 'pointer' : 'not-allowed';
+  }
+}
+
+function bpuApply() {
+  var type   = (document.getElementById('bpu-change-type') || {}).value || 'pct_up';
+  var amount = (document.getElementById('bpu-amount') || {}).value || '';
+  var sector = (document.getElementById('bpu-sector-filter') || {}).value || '';
+  var products = sector ? _bpuProducts.filter(function(p){ return p.sector === sector; }) : _bpuProducts;
+  var updated = [];
+  document.querySelectorAll('.bpu-check').forEach(function(cb) {
+    if (!cb.checked) return;
+    var idx = parseInt(cb.getAttribute('data-idx'));
+    var p = products[idx];
+    if (!p) return;
+    var cur = Number(p.current_price || 0);
+    var newP = bpuCalcNew(cur, type, amount);
+    updated.push({ name: p.name, sku: p.sku, old_price: cur, new_price: Math.round(newP) });
+  });
+  if (!updated.length) return;
+  var promises = updated.map(function(u) {
+    return api.req('PATCH', '/admin/products/' + encodeURIComponent(u.sku) + '/price', { price: u.new_price }).catch(function(){});
+  });
+  Promise.all(promises).then(function() {
+    showToast('✓ ' + updated.length + ' price' + (updated.length > 1 ? 's' : '') + ' updated', 'green');
+    logActivity('price_update', 'Bulk price update — ' + updated.length + ' products', updated.map(function(u){ return u.name + ': $' + u.old_price + ' → $' + u.new_price; }).join(' | '));
+    closeBulkPriceModal();
+    renderProducts();
+  });
+}
+
+// ── INIT ACTIVITY BADGE ───────────────────────────────────────────────────────
+(function() {
+  var log = [];
+  try { log = JSON.parse(localStorage.getItem(ACTIVITY_LOG_KEY) || '[]'); } catch(e) {}
+  var badge = document.getElementById('activity-badge');
+  if (badge && log.length) { badge.textContent = log.length; badge.style.display = ''; }
+})();
+
+</script>
 
 </body>
 </html>
