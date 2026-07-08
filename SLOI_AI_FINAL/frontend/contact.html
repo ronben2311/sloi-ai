@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="description" content="Get in touch with the SLOI AI team. Questions about our procurement automation platform, enterprise plans, or partnerships — we respond fast."/>
 <title>Contact — SLOI AI</title>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="SLOI AI"/>
+<meta property="og:title" content="Contact — SLOI AI"/>
+<meta property="og:description" content="Get in touch with the SLOI AI team. Questions about our procurement automation platform, enterprise plans, or partnerships — we respond fast."/>
+<meta property="og:url" content="https://sloiai.com/contact.html"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Contact — SLOI AI"/>
+<meta name="twitter:description" content="Get in touch with the SLOI AI team. Enterprise plans, sourcing mandates, and partnerships."/>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
 :root{--bg:#07070f;--surface:#0e0e1a;--surface2:#12121e;--border:#1c1c2e;--border2:#252538;--indigo:#5b5fef;--violet:#8b8ff8;--muted:#8888a8;--text:#d4d2f0;--white:#eeedf8;--gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;}
@@ -17,6 +25,12 @@ nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-co
 .nav-links{display:flex;gap:20px;font-size:13px}
 .nav-links a{color:var(--muted);text-decoration:none}
 .nav-links a:hover{color:var(--violet)}
+.nav-links a.nav-us{color:#60a5fa;font-weight:600}
+.nav-links a.nav-us:hover{color:#93c5fd}
+.btn-ghost{padding:7px 14px;border-radius:5px;font-size:13px;font-weight:500;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;border:1px solid var(--border2);color:var(--muted);background:none;display:inline-flex;align-items:center;gap:5px}
+.btn-ghost:hover{border-color:rgba(91,95,239,.5);color:var(--violet)}
+.btn-cta-nav{background:var(--indigo);color:#fff;border:none;padding:8px 18px;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:opacity .15s}
+.btn-cta-nav:hover{opacity:.85}
 .nav-right{flex:1;display:flex;justify-content:flex-end;align-items:center;gap:10px}
 .wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:60px 28px 80px}
 .eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px}
@@ -109,14 +123,16 @@ h1 em{font-style:italic;color:var(--indigo)}
 <nav>
   <a href="sloiai-home.html" class="nav-logo">SLOI <em>AI</em></a>
   <div class="nav-links" id="mob-nav">
-    <a href="about.html">About</a>
-    <a href="docs.html">Docs</a>
+    <a href="marketplace.html">Marketplace</a>
+    <a href="sloiai-home.html#us-infra" class="nav-us">🇺🇸 US Market</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="open-network.html">MCP</a>
     <a href="faq.html">FAQ</a>
-    <a href="broker-onboarding.html">Become a Trader</a>
-    <a href="login.html">Platform</a>
   </div>
   <div class="nav-right">
     <button class="mob-nav-btn" onclick="toggleNav()" aria-label="Menu">☰</button>
+    <a href="negotiation-agent.html" class="btn-ghost">🔄 Orchestrator</a>
+    <a href="agent-mandate.html" class="btn-cta-nav">Set Mandate →</a>
   </div>
 </nav>
 <div class="wrap">
@@ -395,6 +411,21 @@ function cfSubmit() {
   document.getElementById('cf-success').classList.add('show');
 }
 </script>
+
+<footer style="position:relative;z-index:1;border-top:1px solid var(--border);padding:28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:13px;background:var(--surface)">
+  <a href="sloiai-home.html" style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
+  <div style="display:flex;gap:20px;flex-wrap:wrap">
+    <a href="sloiai-home.html" style="color:var(--muted);text-decoration:none">Home</a>
+    <a href="marketplace.html" style="color:var(--muted);text-decoration:none">Marketplace</a>
+    <a href="sloiai-home.html#us-infra" style="color:#60a5fa;text-decoration:none;font-weight:600">🇺🇸 US Market</a>
+    <a href="pricing.html" style="color:var(--muted);text-decoration:none">Pricing</a>
+    <a href="faq.html" style="color:var(--muted);text-decoration:none">FAQ</a>
+    <a href="about.html" style="color:var(--muted);text-decoration:none">About</a>
+    <a href="agent-mandate.html" style="color:var(--muted);text-decoration:none">Set Mandate</a>
+    <a href="legal.html" style="color:var(--muted);text-decoration:none">Legal</a>
+  </div>
+  <div style="font-size:12px;color:var(--muted)">© 2026 SLOI AI Ltd. · Trust as a Service</div>
+</footer>
 </body>
 </html>
 
