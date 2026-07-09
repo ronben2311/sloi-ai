@@ -587,8 +587,17 @@ select.inp option{background:var(--surface2);color:var(--white)}
 var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', country:'UAE', origin:'', urgency:'', name:'', company:'', email:'', wa:'', projectRef:'', incoterms:'' };
 
 function saveMandateAndGo(url) {
-  localStorage.setItem('sloiMandate', JSON.stringify(state));
-  window.location.href = url;
+  var mandate = {};
+  for (var k in state) mandate[k] = state[k];
+  mandate.date = new Date().toISOString().slice(0, 10);
+  mandate.id   = 'MAN-' + Date.now();
+  localStorage.setItem('sloiMandate', JSON.stringify(mandate));
+  var list = [];
+  try { list = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); } catch(e) {}
+  list.unshift(mandate);
+  if (list.length > 50) list = list.slice(0, 50);
+  localStorage.setItem('sloi_mandates', JSON.stringify(list));
+  window.location.href = url + (url.indexOf('?') > -1 ? '&' : '?') + 'view=docs';
 }
 
 // ── CATALOG ──────────────────────────────────────────────

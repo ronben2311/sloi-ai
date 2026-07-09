@@ -796,6 +796,26 @@ const DOCS = [
 let docTypeFilter = 'All';
 let docCorrFilter = 'all';
 
+function loadUserMandates() {
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); } catch(e) {}
+  return saved.map((m, i) => ({
+    id:       m.id || ('MAN-' + (i + 1)),
+    type:     'LOI',
+    icon:     '📄',
+    cls:      'db-loi',
+    product:  m.product  || 'Commodity',
+    dest:     m.country  || '—',
+    mandate:  m.projectRef || m.id || ('MAN-' + (i + 1)),
+    corridor: 'user',
+    corr:     '📋 My Mandate',
+    date:     m.date     || '—',
+    status:   'draft',
+    spec:     m.incoterms || 'Pending',
+    _user:    true
+  }));
+}
+
 function setTypeFilter(type) {
   docTypeFilter = type;
   document.querySelectorAll('#type-filters .fbtn').forEach(b => b.classList.toggle('on', b.dataset.type === type));
@@ -812,8 +832,9 @@ function renderDocsList() {
   const q = (document.getElementById('doc-search').value || '').toLowerCase();
   const stCls = { done:'dstat-done', pending:'dstat-pending', draft:'dstat-draft' };
   const stLbl = { done:'DONE', pending:'PENDING', draft:'DRAFT' };
+  const allDocs = [...loadUserMandates(), ...DOCS];
 
-  const rows = DOCS.filter(d => {
+  const rows = allDocs.filter(d => {
     const tOk = docTypeFilter === 'All' || d.type === docTypeFilter;
     const cOk = docCorrFilter === 'all' || d.corridor === docCorrFilter;
     const qOk = !q || [d.product, d.dest, d.mandate, d.type, d.spec].some(v => v.toLowerCase().includes(q));
@@ -840,10 +861,11 @@ function renderDocsList() {
 }
 
 function renderDocsPanel() {
-  const total = DOCS.length;
-  const done = DOCS.filter(d => d.status === 'done').length;
-  const pend = DOCS.filter(d => d.status === 'pending').length;
-  const draft = DOCS.filter(d => d.status === 'draft').length;
+  const allDocs = [...loadUserMandates(), ...DOCS];
+  const total = allDocs.length;
+  const done  = allDocs.filter(d => d.status === 'done').length;
+  const pend  = allDocs.filter(d => d.status === 'pending').length;
+  const draft = allDocs.filter(d => d.status === 'draft').length;
 
   document.getElementById('panel-corridor').innerHTML = `
     <div class="ci-name">📄 Documents</div>
@@ -856,18 +878,19 @@ function renderDocsPanel() {
     </div>`;
 
   const types = {};
-  DOCS.forEach(d => { types[d.type] = (types[d.type] || 0) + 1; });
+  allDocs.forEach(d => { types[d.type] = (types[d.type] || 0) + 1; });
   document.getElementById('plbl-alerts').textContent = '// By Document Type';
   document.getElementById('panel-alerts').innerHTML = Object.entries(types).map(([t, n]) =>
     `<div class="dtype-row"><div class="dtype-lbl">${t}</div><div class="dtype-val">${n}</div></div>`
   ).join('');
 
-  const corrs = { '🇺🇸 US Infrastructure': 0, '🇵🇸 Gaza Reconstruction': 0, '🇺🇦 Ukraine': 0, '🌊 Trans-Med': 0 };
-  DOCS.forEach(d => {
-    if (d.corridor === 'us')   corrs['🇺🇸 US Infrastructure']++;
+  const corrs = { '🇺🇸 US Infrastructure': 0, '🇵🇸 Gaza Reconstruction': 0, '🇺🇦 Ukraine': 0, '🌊 Trans-Med': 0, '📋 My Mandates': 0 };
+  allDocs.forEach(d => {
+    if (d.corridor === 'us')        corrs['🇺🇸 US Infrastructure']++;
     else if (d.corridor === 'gaza') corrs['🇵🇸 Gaza Reconstruction']++;
     else if (d.corridor === 'tmed') corrs['🌊 Trans-Med']++;
-    else corrs['🇺🇦 Ukraine']++;
+    else if (d.corridor === 'user') corrs['📋 My Mandates']++;
+    else                            corrs['🇺🇦 Ukraine']++;
   });
   document.getElementById('plbl-vault').textContent = '// By Corridor';
   document.getElementById('panel-vault').innerHTML = Object.entries(corrs).map(([c, n]) =>
@@ -916,7 +939,8 @@ function setCorridor(key) {
 ───────────────────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
-  setCorridor('us');
+  const _startView = new URLSearchParams(window.location.search).get('view');
+  setCorridor(_startView === 'docs' ? 'docs' : 'us');
 
   // Cost time ticker
   let mins = 0;

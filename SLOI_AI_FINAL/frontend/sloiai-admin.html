@@ -256,9 +256,8 @@ select.inp option{background:var(--surface)}
   <button class="nav" id="sb-docs" onclick="show('docs',this)"><span class="nav-icon">🗂️</span><span class="nav-label">Contracts</span><span class="nav-badge" style="background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);color:var(--teal);font-size:11px">DMS</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
-  <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & CRM</span></button>
+  <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & CRM</span><span class="nav-badge" id="activity-badge" style="background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);color:var(--teal);font-size:11px;display:none"></span></button>
   <div class="sb-section">System</div>
-  <button class="nav" onclick="show('activity',this)"><span class="nav-icon">📋</span><span class="nav-label">Activity Log</span><span class="nav-badge" id="activity-badge" style="background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);color:var(--teal);font-size:11px;display:none"></span></button>
   <button class="nav" onclick="show('settings',this)"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
   <div class="sb-footer">
     <div class="sf-label">LOI VOLUME MTD</div>
@@ -292,8 +291,6 @@ select.inp option{background:var(--surface)}
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-products" onclick="show('products',this)">📦 Products &amp; Pricing</button>
       <button class="nav" id="tb-users" onclick="show('users',this)">👤 Users &amp; CRM</button>
-      <div class="tb-nav-sep"></div>
-      <button class="nav" id="tb-activity" onclick="show('activity',this)">📋 Activity</button>
     </div>
   </div>
 
@@ -381,7 +378,7 @@ select.inp option{background:var(--surface)}
       <div class="card" style="margin-bottom:0">
         <div class="card-title">
           // RECENT ACTIVITY
-          <button class="btn btn-xs" onclick="show('activity',document.getElementById('tb-activity'))">Full log →</button>
+          <button class="btn btn-xs" onclick="show('users',document.getElementById('tb-users'))">Full log →</button>
         </div>
         <div id="wr-activity-feed" style="max-height:320px;overflow-y:auto">
           <div style="text-align:center;padding:18px;color:var(--muted);font-size:13px">No activity yet</div>
@@ -823,6 +820,43 @@ select.inp option{background:var(--surface)}
       </div>
       <table><thead><tr><th>Company / Name</th><th>Email</th><th>Country</th><th>Role</th><th>CRM Stage</th><th>Credits</th><th>LOIs</th><th>Account</th><th>Actions</th></tr></thead>
       <tbody id="user-tbody"></tbody></table>
+    </div>
+
+    <!-- ── ACTIVITY LOG ─────────────────────────────────────────────────────── -->
+    <div class="sec-divider" style="margin:20px 0;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent)"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div>
+        <div style="font-size:14px;font-weight:600;color:var(--white)">Activity Log</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Approvals · rejections · price updates · document generations</div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-xs" onclick="exportActivityCsv()">↓ CSV</button>
+        <button class="btn btn-xs btn-r" onclick="clearActivityLog()">Clear log</button>
+      </div>
+    </div>
+    <div class="g4" style="margin-bottom:14px">
+      <div class="stat"><div class="stat-top">Total Events</div><div class="stat-val" id="act-stat-total" style="color:var(--teal)">0</div></div>
+      <div class="stat"><div class="stat-top">Approvals</div><div class="stat-val" id="act-stat-approved" style="color:var(--green)">0</div></div>
+      <div class="stat"><div class="stat-top">Rejections</div><div class="stat-val" id="act-stat-rejected" style="color:var(--red)">0</div></div>
+      <div class="stat"><div class="stat-top">Price Updates</div><div class="stat-val" id="act-stat-prices" style="color:var(--gold)">0</div></div>
+    </div>
+    <div class="card" style="margin-bottom:0;padding:0;overflow:hidden">
+      <div class="card-title" style="padding:12px 14px;border-bottom:1px solid var(--border)">
+        // EVENT LOG
+        <div style="display:flex;gap:6px">
+          <select class="inp" id="act-type-filter" onchange="renderActivityLog()" style="font-size:13px;padding:4px 8px;width:160px">
+            <option value="">All types</option>
+            <option value="approval">Approvals</option>
+            <option value="rejection">Rejections</option>
+            <option value="price_update">Price Updates</option>
+            <option value="doc_gen">Doc Generated</option>
+            <option value="user_action">User Actions</option>
+          </select>
+        </div>
+      </div>
+      <div id="activity-log-body" style="max-height:480px;overflow-y:auto">
+        <div style="padding:24px;text-align:center;color:var(--muted);font-size:14px">No activity recorded yet. Admin actions will appear here.</div>
+      </div>
     </div>
   </div>
 
@@ -1689,43 +1723,6 @@ select.inp option{background:var(--surface)}
   </div>
 
   <!-- ACTIVITY LOG -->
-  <div id="view-activity" class="view">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
-      <div>
-        <div style="font-size:15px;font-weight:600;color:var(--white)">Admin activity log</div>
-        <div style="font-size:13px;color:var(--muted);margin-top:2px">Approvals · rejections · price updates · document generations</div>
-      </div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-xs" onclick="exportActivityCsv()">↓ CSV</button>
-        <button class="btn btn-xs btn-r" onclick="clearActivityLog()">Clear log</button>
-      </div>
-    </div>
-    <div class="g4" style="margin-bottom:14px">
-      <div class="stat"><div class="stat-top">Total Events</div><div class="stat-val" id="act-stat-total" style="color:var(--teal)">0</div></div>
-      <div class="stat"><div class="stat-top">Approvals</div><div class="stat-val" id="act-stat-approved" style="color:var(--green)">0</div></div>
-      <div class="stat"><div class="stat-top">Rejections</div><div class="stat-val" id="act-stat-rejected" style="color:var(--red)">0</div></div>
-      <div class="stat"><div class="stat-top">Price Updates</div><div class="stat-val" id="act-stat-prices" style="color:var(--gold)">0</div></div>
-    </div>
-    <div class="card" style="margin-bottom:0;padding:0;overflow:hidden">
-      <div class="card-title" style="padding:12px 14px;border-bottom:1px solid var(--border)">
-        // EVENT LOG
-        <div style="display:flex;gap:6px">
-          <select class="inp" id="act-type-filter" onchange="renderActivityLog()" style="font-size:13px;padding:4px 8px;width:160px">
-            <option value="">All types</option>
-            <option value="approval">Approvals</option>
-            <option value="rejection">Rejections</option>
-            <option value="price_update">Price Updates</option>
-            <option value="doc_gen">Doc Generated</option>
-            <option value="user_action">User Actions</option>
-          </select>
-        </div>
-      </div>
-      <div id="activity-log-body" style="max-height:600px;overflow-y:auto">
-        <div style="padding:24px;text-align:center;color:var(--muted);font-size:14px">No activity recorded yet. Admin actions will appear here.</div>
-      </div>
-    </div>
-  </div>
-
   <!-- TERMS & PRIVACY -->
   <div id="view-terms" class="view" style="padding:0;overflow:hidden">
     <iframe src="terms.html?embed=1"
@@ -1885,7 +1882,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={activity:['📋 Activity Log','Admin actions · approvals · system events'],agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],docs:['🗂️ Contracts','Purchase orders · deal checklist · 14 doc types · DMS'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
+var TITLES={agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],docs:['🗂️ Contracts','Purchase orders · deal checklist · 14 doc types · DMS'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & CRM','User management · activity log'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────
@@ -1912,7 +1909,7 @@ function resumeOutreach(){
 
 function show(v,btn){document.querySelectorAll('.view').forEach(function(x){x.classList.remove('active')});document.querySelectorAll('.nav').forEach(function(x){x.classList.remove('active')});document.getElementById('view-'+v).classList.add('active');if(btn)btn.classList.add('active');var t=TITLES[v]||[v,''];document.getElementById('tb-title').textContent=t[0];document.getElementById('tb-sub').textContent=t[1];if(v==='docs'){loadContracts();spaPopulate('ct-spa-po-select');}
 if(v==='docs'){dmsLoad();}
-if(v==='activity'){renderActivityLog();}
+if(v==='users'){renderActivityLog();}
 if(v==='agents'){}}
 
 function renderKanban(){var cols=[{key:'new',label:'New',color:'var(--muted)'},{key:'contacted',label:'Contacted',color:'var(--blue)'},{key:'rfq',label:'RFQ sent',color:'var(--teal)'},{key:'negotiating',label:'Negotiating',color:'var(--gold)'},{key:'closed',label:'Closed ✓',color:'var(--green)'}];var html='';cols.forEach(function(col){var cards=PIPELINE[col.key]||[];html+='<div class="kc"><div class="kc-head" style="color:'+col.color+'">'+col.label+'<span class="kc-count">'+cards.length+'</span></div>';cards.forEach(function(c){html+='<div class="kcard'+(c.hot?' hot':'')+'"><div class="kcard-name">'+(c.hot?'🔥 ':'')+c.name+'</div><div class="kcard-sub">'+c.product+' · '+c.country+'</div><div class="kcard-val">$'+c.value.toLocaleString()+'</div><div class="kcard-actions">';if(col.key==='new')html+='<button class="btn btn-xs btn-g" onclick="openTG()">WA</button><button class="btn btn-xs btn-p" onclick="moveCard(\'new\',\'contacted\',\''+c.name+'\')">Contact</button>';else if(col.key==='contacted')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'contacted\',\'rfq\',\''+c.name+'\')">Send RFQ</button>';else if(col.key==='rfq')html+='<button class="btn btn-xs btn-p" onclick="moveCard(\'rfq\',\'negotiating\',\''+c.name+'\')">Negotiate</button>';else if(col.key==='negotiating')html+='<button class="btn btn-xs btn-g" onclick="moveCard(\'negotiating\',\'closed\',\''+c.name+'\')">Close ✓</button>';else html+='<button class="btn btn-xs" onclick="window.open(\'loi-contracts.html?tool=loi\',\'_blank\')">LOI</button>';html+='</div></div>';});html+='</div>';});document.getElementById('kanban').innerHTML=html;}
