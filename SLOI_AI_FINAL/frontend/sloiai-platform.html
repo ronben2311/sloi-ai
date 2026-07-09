@@ -242,15 +242,15 @@
 
   <!-- ── TOPBAR ── -->
   <header class="topbar">
-    <div class="tb-logo">SLOI <em>AI</em></div>
+    <a href="sloiai-home.html" class="tb-logo" style="text-decoration:none">SLOI <em>AI</em></a>
     <div class="tb-sub">Trade Command Center</div>
     <div class="corridor-tabs">
       <button class="ctab active" id="ctab-us" onclick="setCorridor('us')">🇺🇸 US Infrastructure</button>
-      <button class="ctab" id="ctab-imec" onclick="setCorridor('imec')">🌍 IMEC Corridor</button>
-      <button class="ctab" id="ctab-ua" onclick="setCorridor('ua')">🇺🇦 Ukraine Reconstruction</button>
+      <button class="ctab" id="ctab-gaza" onclick="setCorridor('gaza')">🇵🇸 Gaza Reconstruction</button>
+      <button class="ctab" id="ctab-ua"   onclick="setCorridor('ua')">🇺🇦 Ukraine Reconstruction</button>
+      <button class="ctab" id="ctab-tmed" onclick="setCorridor('tmed')">🌊 Trans-Med Industrial</button>
     </div>
     <div class="tb-right">
-      <a href="sloiai-home.html" class="tb-btn">Home</a>
       <a href="profile.html" class="tb-btn">Profile</a>
       <a href="#" id="ctab-docs" class="tb-btn" onclick="setCorridor('docs');return false">📁 Projects</a>
       <a href="agent-mandate.html" class="tb-btn tb-newproj">＋ New Project</a>
@@ -310,9 +310,9 @@
                 <th>Product</th>
                 <th>Origin Port</th>
                 <th>FOB</th>
-                <th>Freight</th>
+                <th id="th-freight">Freight</th>
                 <th>Duty</th>
-                <th>Landed</th>
+                <th id="th-landed">Landed</th>
                 <th>7d Δ</th>
                 <th>Risk</th>
                 <th>Actions</th>
@@ -340,8 +340,9 @@
           <div style="display:flex;gap:4px" id="corr-filters">
             <button class="fbtn on" data-corr="all"  onclick="setCorrFilter('all')">All corridors</button>
             <button class="fbtn"    data-corr="us"   onclick="setCorrFilter('us')">🇺🇸 US</button>
-            <button class="fbtn"    data-corr="imec" onclick="setCorrFilter('imec')">🌍 IMEC</button>
+            <button class="fbtn"    data-corr="gaza" onclick="setCorrFilter('gaza')">🇵🇸 Gaza</button>
             <button class="fbtn"    data-corr="ua"   onclick="setCorrFilter('ua')">🇺🇦 Ukraine</button>
+            <button class="fbtn"    data-corr="tmed" onclick="setCorrFilter('tmed')">🌊 Trans-Med</button>
           </div>
         </div>
         <div class="dv-wrap">
@@ -434,62 +435,57 @@ const CORRIDORS = {
     ],
   },
 
-  imec: {
-    name: '🌍 IMEC Corridor',
-    desc: 'India–Middle East–Europe corridor via Suez Canal. Active for bulk commodities, base oil, and reconstruction materials bound for EU ports.',
+  gaza: {
+    name: '🇵🇸 Gaza Reconstruction',
+    desc: 'Humanitarian reconstruction corridor — MENA &amp; Mediterranean → Port Said → Al Arish → Gaza Strip via Kerem Shalom &amp; Rafah border crossings. Truck-based last-mile logistics with UN/COGAT-coordinated entry.',
     stats: [
-      { val:'$3T',  lbl:'Corridor Est.' },
-      { val:'4',    lbl:'Active Routes' },
-      { val:'3',    lbl:'Open Mandates' },
-      { val:'$576', lbl:'Rebar Landed/MT' },
+      { val:'$50B+', lbl:'Rebuild Est.'    },
+      { val:'4',     lbl:'Active Routes'   },
+      { val:'5',     lbl:'Open Mandates'   },
+      { val:'$112',  lbl:'Cement Landed/MT'},
     ],
-    mapCenter:[28, 38], mapZoom:4,
+    mapCenter:[31.3, 33.9], mapZoom:8,
     routes:[
-      { path:[[22.8,69.7],[18,58],[15,44],[20,38],[30,32.5],[34,26],[37.5,20],[37.9,23.6]], name:'Mundra → Piraeus',    color:'#2dd4bf', product:'Base Oil SN150 · API Group II' },
-      { path:[[25.0,55.1],[22,50],[18,44],[20,38],[28,32.5],[34,24],[40,18],[45.6,13.8]],  name:'Jebel Ali → Trieste', color:'#5b5fef', product:'Steel Rebar · ISO 6935-2' },
-      { path:[[26.4,50.1],[22,46],[18,44],[20,38],[28,32.5],[35,20],[42,12],[50,6],[51.9,4.1]], name:'Dammam → Rotterdam',  color:'#8b8ff8', product:'Cement 42.5N · EN 197-1' },
-      { path:[[32.8,34.9],[35,28],[36,20],[38,14],[44,10],[50,8],[53.5,9.9]],              name:'Haifa → Hamburg',     color:'#e8a94a', product:'Chemicals' },
+      { path:[[31.1,33.8],[31.2,34.0],[31.35,34.2],[31.5,34.45]], name:'Al Arish → Gaza (Truck)',        color:'#2dd4bf', product:'OPC Cement 42.5N · via Kerem Shalom' },
+      { path:[[31.2,32.3],[31.15,33.0],[31.1,33.8]],              name:'Port Said → Al Arish (Coastal)', color:'#e8a94a', product:'Steel Rebar · sea feed via Port Said'  },
     ],
     ports:{
       origins:[
-        { pos:[22.8,69.7], name:'Mundra Port',    country:'India'        },
-        { pos:[25.0,55.1], name:'Jebel Ali',      country:'UAE'          },
-        { pos:[26.4,50.1], name:'Dammam',         country:'Saudi Arabia' },
-        { pos:[32.8,34.9], name:'Haifa Port',     country:'Israel'       },
+        { pos:[31.2,32.3], name:'Port Said (Sea Hub)',  country:'Egypt' },
+        { pos:[31.1,33.8], name:'Al Arish Terminal',    country:'Egypt' },
       ],
       dests:[
-        { pos:[37.9,23.6], name:'Piraeus',   country:'Greece'      },
-        { pos:[45.6,13.8], name:'Trieste',   country:'Italy'       },
-        { pos:[51.9,4.1],  name:'Rotterdam', country:'Netherlands' },
-        { pos:[53.5,9.9],  name:'Hamburg',   country:'Germany'     },
+        { pos:[31.2,34.15], name:'Kerem Shalom Crossing', country:'Gaza/Israel' },
+        { pos:[31.35,34.2], name:'Rafah Crossing',        country:'Gaza/Egypt'  },
+        { pos:[31.5,34.45], name:'Gaza City (Delivery)',  country:'Palestine'   },
       ],
     },
     costs:[
-      { prod:'Steel Rebar G60',    spec:'ISO 6935-2 / BST 500',   origin:'Jebel Ali, AE', fob:'$527/MT', fr:'$32/MT', duty:'$12/MT', land:'$576/MT', ch:-1.4, risk:'med', email:'rebar@ezsteel.ae',           wa:'971503456789' },
-      { prod:'OPC Cement 42.5N',   spec:'EN 197-1 Type I',         origin:'Dammam, SA',   fob:'$57/MT',  fr:'$28/MT', duty:'$9/MT',  land:'$98/MT',  ch:+0.5, risk:'low', email:'cement@arabiacement.com.sa', wa:'966502345678' },
-      { prod:'Base Oil SN150',     spec:'API Group II / 150SN',    origin:'Mundra, IN',   fob:'$820/MT', fr:'$45/MT', duty:'$22/MT', land:'$895/MT', ch:+2.1, risk:'med', email:'baseoil@reliance.in',        wa:'919876543210' },
-      { prod:'Wheat (Durum)',      spec:'CBOT Grade 2 / 13% prot', origin:'Mundra, IN',   fob:'$248/MT', fr:'$24/MT', duty:'$18/MT', land:'$294/MT', ch:-0.9, risk:'low', email:'grain@mundratrade.in',       wa:'919812345678' },
-      { prod:'Urea Fertilizer',    spec:'Granular 46% N / prilled',origin:'Dammam, SA',   fob:'$315/MT', fr:'$30/MT', duty:'$0',     land:'$349/MT', ch:+1.8, risk:'low', email:'urea@sabic.com.sa',          wa:'966503456789' },
+      { prod:'OPC Cement 42.5N',   spec:'ASTM C150 / EN 197-1 · bulk',   origin:'Al Arish, EG',  fob:'$54/MT',    fr:'$38/MT',   duty:'$0', land:'$112/MT',   ch:-0.8, risk:'high', email:'cement@suezcement.eg',      wa:'201001234567' },
+      { prod:'Steel Rebar G60',    spec:'ASTM A615 / Grade 60',           origin:'Jubail, SA',    fob:'$519/MT',   fr:'$48/MT',   duty:'$0', land:'$572/MT',   ch:-1.6, risk:'high', email:'rebar@jubailport.com.sa',   wa:'966501234567' },
+      { prod:'Diesel Generators',  spec:'100–500 kVA / Tier 4 · UN-spec', origin:'Jebel Ali, AE', fob:'$44,000/u', fr:'$1,800/u', duty:'$0', land:'$46,200/u', ch:+2.1, risk:'med',  email:'generators@aggreko.ae',     wa:'971504567890' },
+      { prod:'HDPE Pipe DN200',    spec:'EN 12201 / PN10 · water/sewer',  origin:'Izmir, TR',     fob:'$1,220/MT', fr:'$32/MT',   duty:'$0', land:'$1,260/MT', ch:-1.2, risk:'med',  email:'hdpe@plastimet.com.tr',     wa:'905325678901' },
+      { prod:'Aggregate (Crushed)', spec:'20mm / ASTM C33 · road base',   origin:'Al Arish, EG',  fob:'$22/MT',    fr:'$12/MT',   duty:'$0', land:'$38/MT',    ch:+0.4, risk:'low',  email:'aggregate@alarish-port.eg', wa:'201002345678' },
     ],
     alerts:[
-      { icon:'🚢', title:'Suez Canal avg delay +1.4 days — rerouting via Cape not advised', tag:'t-warn',  lbl:'DELAY', time:'1h ago' },
-      { icon:'✅', title:'Haifa supplier #HF-112 KYC renewed — valid 12 months',            tag:'t-clear', lbl:'KYC',   time:'3h ago' },
-      { icon:'📊', title:'Base Oil SN150 Piraeus landed +$18/MT vs 30-day avg',             tag:'t-info',  lbl:'COST',  time:'5h ago' },
-      { icon:'🔄', title:'Cement mandate IM-88: 3 screened bids awaiting your auth',        tag:'t-info',  lbl:'LIVE',  time:'9h ago' },
+      { icon:'🚛', title:'Kerem Shalom crossing: 340 trucks cleared today — cement &amp; rebar priority', tag:'t-clear', lbl:'ENTRY', time:'1h ago'  },
+      { icon:'⚠️', title:'Rafah crossing: temporary closure — rerouting via Kerem Shalom active',          tag:'t-warn',  lbl:'ROUTE', time:'3h ago'  },
+      { icon:'📋', title:'Mandate GZ-07 authorized — OPC Cement 5,000 MT · UN coordination active',       tag:'t-info',  lbl:'AUTH',  time:'5h ago'  },
+      { icon:'✅', title:'Steel Rebar batch JB-441 MTC verified — ASTM A615 Grade 60 PASS',               tag:'t-clear', lbl:'MTC',   time:'7h ago'  },
     ],
     vault:[
-      { name:'OFAC SDN Screen',       st:'vs-clear',   lbl:'CLEAR'   },
-      { name:'EU Consolidated List',  st:'vs-clear',   lbl:'CLEAR'   },
-      { name:'KYC — Mundra Supplier', st:'vs-clear',   lbl:'VALID'   },
-      { name:'KYC — Haifa Supplier',  st:'vs-clear',   lbl:'VALID'   },
-      { name:'Country Risk (Israel)', st:'vs-pending', lbl:'REVIEW'  },
-      { name:'IMEC Rail Docs',        st:'vs-active',  lbl:'PENDING' },
+      { name:'OFAC SDN Screen',              st:'vs-clear',   lbl:'CLEAR'    },
+      { name:'UN Humanitarian Coordination', st:'vs-clear',   lbl:'ACTIVE'   },
+      { name:'COGAT Entry Authorization',    st:'vs-active',  lbl:'PENDING'  },
+      { name:'MTC — Jubail Rebar JB-441',   st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'Country Risk (Gaza)',          st:'vs-high',    lbl:'HIGH'     },
+      { name:'War Risk Insurance',           st:'vs-pending', lbl:'REQUIRED' },
     ],
     risks:[
-      { lbl:'Suez Canal (congestion)', score:68, color:'#e8a94a' },
-      { lbl:'Steel Rebar',             score:45, color:'#22c55e' },
-      { lbl:'Base Oil (Mundra)',        score:55, color:'#e8a94a' },
-      { lbl:'Geo-Political (ME)',       score:72, color:'#e8a94a' },
+      { lbl:'Border Crossing Access', score:80, color:'#ef4444' },
+      { lbl:'Logistics Disruption',   score:74, color:'#ef4444' },
+      { lbl:'Cement Supply Chain',    score:42, color:'#22c55e' },
+      { lbl:'Counterparty (EG/SA)',   score:32, color:'#22c55e' },
     ],
   },
 
@@ -547,6 +543,65 @@ const CORRIDORS = {
       { lbl:'Logistics Disruption',  score:78, color:'#ef4444' },
       { lbl:'Steel Rebar Supply',    score:72, color:'#e8a94a' },
       { lbl:'Counterparty (TR)',     score:44, color:'#22c55e' },
+    ],
+  },
+
+  tmed: {
+    name: '🌊 Trans-Med Industrial',
+    desc: 'North African bulk import corridor — Egypt (Port Said, Al Arish) &amp; Algeria (Oran, Annaba) supplying heavy industrial raw materials to US manufacturing plants. Mill Test Certificate (MTC) tracking &amp; multi-port congestion analytics active.',
+    stats: [
+      { val:'$2.1T',  lbl:'US Mfg Demand'   },
+      { val:'4',      lbl:'Active Routes'    },
+      { val:'6',      lbl:'Open Mandates'    },
+      { val:'$96',    lbl:'Cement Landed/MT' },
+    ],
+    mapCenter:[28, 8], mapZoom:3,
+    routes:[
+      { path:[[31.2,32.3],[30,28],[28,20],[36,-5.4],[33,-35],[29.8,-95.4]],   name:'Port Said → Houston',  color:'#2dd4bf', product:'OPC Cement 42.5N · ASTM C150'  },
+      { path:[[31.1,33.8],[30,28],[28,20],[36,-5.4],[36,-40],[39.3,-76.6]],   name:'Al Arish → Baltimore', color:'#5b5fef', product:'Clinker 52.5R · EN 197-1'       },
+      { path:[[36.9,7.8],[36.5,5],[36,-5.4],[34,-30],[32.1,-81.1]],           name:'Annaba → Savannah',    color:'#8b8ff8', product:'Steel Rebar G60 · ASTM A615'    },
+      { path:[[35.7,-0.6],[36,-5.4],[33,-50],[29.9,-90.1]],                   name:'Oran → New Orleans',   color:'#e8a94a', product:'Urea Fertilizer 46% N'          },
+    ],
+    ports:{
+      origins:[
+        { pos:[31.2,32.3], name:'Port Said',        country:'Egypt'   },
+        { pos:[31.1,33.8], name:'Al Arish Terminal', country:'Egypt'   },
+        { pos:[36.9,7.8],  name:'Annaba Port',       country:'Algeria' },
+        { pos:[35.7,-0.6], name:'Oran Port',         country:'Algeria' },
+      ],
+      dests:[
+        { pos:[29.8,-95.4], name:'Port of Houston',     country:'USA' },
+        { pos:[39.3,-76.6], name:'Port of Baltimore',   country:'USA' },
+        { pos:[32.1,-81.1], name:'Port of Savannah',    country:'USA' },
+        { pos:[29.9,-90.1], name:'Port of New Orleans', country:'USA' },
+      ],
+    },
+    costs:[
+      { prod:'OPC Cement 42.5N',  spec:'ASTM C150 Type I / EN 197-1',  origin:'Port Said, EG',  fob:'$54/MT',   fr:'$36/MT',  duty:'$3/MT',  land:'$96/MT',   ch:-1.2, risk:'low', email:'cement@suezcement.eg',     wa:'201001234567' },
+      { prod:'Clinker 52.5R',     spec:'EN 197-1 / CEM I 52.5R',       origin:'Al Arish, EG',   fob:'$38/MT',   fr:'$34/MT',  duty:'$2/MT',  land:'$77/MT',   ch:+0.6, risk:'low', email:'clinker@alarish-port.eg',  wa:'201002345678' },
+      { prod:'Steel Rebar G60',   spec:'ASTM A615 / Grade 60',          origin:'Annaba, DZ',     fob:'$519/MT',  fr:'$44/MT',  duty:'$0',     land:'$568/MT',  ch:-2.4, risk:'med', email:'rebar@sider.dz',           wa:'21321234567'  },
+      { prod:'Urea Fertilizer',   spec:'Granular 46% N / SGS-certified',origin:'Oran, DZ',       fob:'$298/MT',  fr:'$38/MT',  duty:'$0',     land:'$339/MT',  ch:+1.5, risk:'low', email:'urea@sonatrach.dz',        wa:'21331234567'  },
+      { prod:'Portland Clinker',  spec:'ASTM C150-compatible / bulk',   origin:'Port Said, EG',  fob:'$42/MT',   fr:'$36/MT',  duty:'$2/MT',  land:'$83/MT',   ch:-0.8, risk:'low', email:'clinker@portofportsaid.eg',wa:'201003456789' },
+    ],
+    alerts:[
+      { icon:'⚓', title:'Port Said bulk terminal: 2.1-day avg wait — congestion index MEDIUM',   tag:'t-warn',  lbl:'PORT',  time:'45m ago' },
+      { icon:'✅', title:'MTC verified: Annaba Rebar batch AN-2247 — ASTM A615 Grade 60 PASS',    tag:'t-clear', lbl:'MTC',   time:'2h ago'  },
+      { icon:'📊', title:'OPC Cement Houston landed -$7/MT — Port Said slot rate eased this week',tag:'t-info',  lbl:'COST',  time:'4h ago'  },
+      { icon:'⚠️', title:'Al Arish terminal: vessel queue +1 day — Clinker ETA revised to +36h',  tag:'t-warn',  lbl:'DELAY', time:'6h ago'  },
+    ],
+    vault:[
+      { name:'OFAC SDN Screen',              st:'vs-clear',   lbl:'CLEAR'    },
+      { name:'EU Consolidated List',         st:'vs-clear',   lbl:'CLEAR'    },
+      { name:'MTC — Annaba Rebar AN-2247',   st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'MTC — Port Said Cement PS-91', st:'vs-active',  lbl:'PENDING'  },
+      { name:'KYC — Sonatrach (DZ)',         st:'vs-clear',   lbl:'VALID'    },
+      { name:'Port Said Congestion Monitor', st:'vs-pending', lbl:'MEDIUM'   },
+    ],
+    risks:[
+      { lbl:'Port Said Congestion', score:55, color:'#e8a94a' },
+      { lbl:'Al Arish Terminal',    score:48, color:'#22c55e' },
+      { lbl:'Rebar Supply (DZ)',    score:38, color:'#22c55e' },
+      { lbl:'Suez Canal Slot',      score:62, color:'#e8a94a' },
     ],
   },
 
@@ -670,6 +725,9 @@ function renderRisks(key) {
 }
 
 function renderCosts(key) {
+  const isGaza = key === 'gaza';
+  document.getElementById('th-freight').textContent = isGaza ? 'Logistics' : 'Freight';
+  document.getElementById('th-landed').textContent  = isGaza ? 'Gate Price' : 'Landed';
   _contacts = CORRIDORS[key].costs.map(r => ({ email:r.email, wa:r.wa, prod:r.prod, spec:r.spec }));
   document.getElementById('cost-tbody').innerHTML = CORRIDORS[key].costs.map((row, i) => {
     const up = row.ch > 0;
@@ -726,12 +784,12 @@ const DOCS = [
   { id:'DOC-003', type:'NDA',              icon:'🔒', cls:'db-nda', product:'Aluminum 6061-T6',      dest:'Ruwais Supplier',  mandate:'US-392', corridor:'us',   corr:'🇺🇸 US',  date:'2026-07-06', status:'done',    spec:'Bilateral'      },
   { id:'DOC-004', type:'LC App',           icon:'🏦', cls:'db-lc',  product:'Bitumen PG 64-22',      dest:'New Orleans, LA',  mandate:'US-401', corridor:'us',   corr:'🇺🇸 US',  date:'2026-07-05', status:'pending', spec:'UCP 600'        },
   { id:'DOC-005', type:'Trade Contract',   icon:'📜', cls:'db-tc',  product:'Steel Rebar A500',      dest:'Odessa, UA',       mandate:'UA-19',  corridor:'ua',   corr:'🇺🇦 UA',  date:'2026-07-04', status:'draft',   spec:'Incoterms 2020' },
-  { id:'DOC-006', type:'Freight Advisory', icon:'🚢', cls:'db-fr',  product:'OPC Cement 42.5N',      dest:'Piraeus, GR',      mandate:'IM-88',  corridor:'imec', corr:'🌍 IMEC', date:'2026-07-03', status:'done',    spec:'SLOI AI'        },
+  { id:'DOC-006', type:'Freight Advisory', icon:'🚢', cls:'db-fr',  product:'OPC Cement 42.5N',      dest:'Gaza City, PS',    mandate:'GZ-07',  corridor:'gaza', corr:'🇵🇸 Gaza', date:'2026-07-03', status:'done',    spec:'SLOI AI'        },
   { id:'DOC-007', type:'HS Code Report',   icon:'🔢', cls:'db-hs',  product:'OPC Cement ASTM C150',  dest:'Baltimore, MD',    mandate:'US-388', corridor:'us',   corr:'🇺🇸 US',  date:'2026-07-02', status:'done',    spec:'HTS 2523.29'    },
-  { id:'DOC-008', type:'NDA',              icon:'🔒', cls:'db-nda', product:'Base Oil SN150',        dest:'Mundra Supplier',  mandate:'IM-44',  corridor:'imec', corr:'🌍 IMEC', date:'2026-07-01', status:'done',    spec:'Unilateral'     },
+  { id:'DOC-008', type:'LOI',              icon:'📄', cls:'db-loi', product:'Steel Rebar G60',        dest:'Gaza City, PS',    mandate:'GZ-05',  corridor:'gaza', corr:'🇵🇸 Gaza', date:'2026-07-01', status:'done',    spec:'ICC 522'        },
   { id:'DOC-009', type:'LOI',              icon:'📄', cls:'db-loi', product:'Float Glass 4–6mm',     dest:'Reni, UA',         mandate:'UA-12',  corridor:'ua',   corr:'🇺🇦 UA',  date:'2026-06-30', status:'done',    spec:'ICC 522'        },
   { id:'DOC-010', type:'SPA',              icon:'📋', cls:'db-spa', product:'Steel Rebar A500',      dest:'Constanta, RO',    mandate:'UA-15',  corridor:'ua',   corr:'🇺🇦 UA',  date:'2026-06-28', status:'done',    spec:'GAFTA/ICC'      },
-  { id:'DOC-011', type:'LC App',           icon:'🏦', cls:'db-lc',  product:'Base Oil SN150',        dest:'Piraeus, GR',      mandate:'IM-77',  corridor:'imec', corr:'🌍 IMEC', date:'2026-06-27', status:'done',    spec:'UCP 600'        },
+  { id:'DOC-011', type:'NDA',              icon:'🔒', cls:'db-nda', product:'Diesel Generators',     dest:'Al Arish Supplier',mandate:'GZ-03',  corridor:'gaza', corr:'🇵🇸 Gaza', date:'2026-06-27', status:'done',    spec:'Bilateral'      },
   { id:'DOC-012', type:'Trade Contract',   icon:'📜', cls:'db-tc',  product:'Diesel Generators',     dest:'Odessa, UA',       mandate:'UA-23',  corridor:'ua',   corr:'🇺🇦 UA',  date:'2026-06-25', status:'pending', spec:'Incoterms 2020' },
 ];
 
@@ -804,10 +862,11 @@ function renderDocsPanel() {
     `<div class="dtype-row"><div class="dtype-lbl">${t}</div><div class="dtype-val">${n}</div></div>`
   ).join('');
 
-  const corrs = { '🇺🇸 US Infrastructure': 0, '🌍 IMEC Corridor': 0, '🇺🇦 Ukraine': 0 };
+  const corrs = { '🇺🇸 US Infrastructure': 0, '🇵🇸 Gaza Reconstruction': 0, '🇺🇦 Ukraine': 0, '🌊 Trans-Med': 0 };
   DOCS.forEach(d => {
-    if (d.corridor === 'us') corrs['🇺🇸 US Infrastructure']++;
-    else if (d.corridor === 'imec') corrs['🌍 IMEC Corridor']++;
+    if (d.corridor === 'us')   corrs['🇺🇸 US Infrastructure']++;
+    else if (d.corridor === 'gaza') corrs['🇵🇸 Gaza Reconstruction']++;
+    else if (d.corridor === 'tmed') corrs['🌊 Trans-Med']++;
     else corrs['🇺🇦 Ukraine']++;
   });
   document.getElementById('plbl-vault').textContent = '// By Corridor';

@@ -251,29 +251,41 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   .step3{padding:0}
   .verticals{grid-template-columns:1fr}
   .mk-grid{grid-template-columns:1fr 1fr}
-  .why3{grid-template-columns:1fr}
   .us-feature-inner{grid-template-columns:1fr;gap:28px}
-  .us-stats{grid-template-columns:repeat(4,1fr)}
-  .pricing-grid{grid-template-columns:1fr 1fr}
+  .us-stats{grid-template-columns:repeat(2,1fr)}
+  .pricing-tracks{grid-template-columns:1fr}
 }
-@media(max-width:600px){
+@media(max-width:640px){
   .mk-grid{grid-template-columns:1fr}
   .ticker-label{display:none}
+  .hero-actions{flex-direction:column;gap:8px}
+  .hero-actions a{width:100%;justify-content:center}
+  .pricing-tracks{grid-template-columns:1fr}
+  h1{font-size:clamp(40px,11vw,64px)}
 }
 @media(max-width:768px){
-  nav{padding:0 16px}.nav-links{display:none}
-  .trust-bar{padding:14px 20px;gap:0;flex-wrap:wrap}
-  .tb-item{padding:8px 16px;border-right:none;border-bottom:1px solid var(--border)}
+  nav{padding:0 16px}
+  .nav-links{display:none}
+  .nav-right .btn-ghost:first-child{display:none}
+  .trust-bar{padding:12px 16px;gap:0;flex-wrap:wrap;justify-content:flex-start}
+  .tb-item{padding:10px 20px;border-right:none;border-bottom:1px solid var(--border);flex:1;min-width:45%}
+  .tb-item:last-child{border-bottom:none}
   .section{padding:52px 16px}
   .sec-divider{margin:0 16px}
   .us-feature{margin:0 16px}
-  .us-feature-inner{padding:32px 24px}
+  .us-feature-inner{padding:28px 20px}
   .us-stats{grid-template-columns:1fr 1fr}
-  footer{padding:20px 16px;flex-direction:column;align-items:flex-start}
+  footer{padding:20px 16px;flex-direction:column;align-items:flex-start;gap:20px}
+  .footer-links{gap:14px}
   .footer-right{align-items:flex-start}
   .cta-section{padding:48px 16px}
   .cta-inner{padding:36px 20px}
   .email-row{flex-direction:column}
+  .email-row .btn-primary{width:100%;justify-content:center}
+  .cc-row{grid-template-columns:1fr}
+  .deploy-mini{flex-direction:column;gap:12px}
+  .deploy-mini-price{text-align:left}
+  .us-feature-inner>div:last-child{order:-1}
 }
 </style>
 <link rel="stylesheet" href="/main.css"/>
@@ -288,7 +300,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   <a href="sloiai-home.html" class="nav-logo">Sloi<em>AI</em></a>
   <div class="nav-links">
     <a href="#how">How it works</a>
-    <a href="marketplace.html">Marketplace</a>
+    <a href="marketplace.html">Trade Hub</a>
     <a href="#us-infra" class="nav-us">🇺🇸 US Market</a>
     <a href="pricing.html">Pricing</a>
     <a href="open-network.html">MCP</a>
@@ -308,7 +320,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     <p class="hero-sub">AI-powered trust layer for commodity sourcing — every counterparty screened, every offer AI-reviewed. <strong>Nothing moves until you authorize.</strong></p>
     <div class="hero-actions">
       <a href="agent-mandate.html" class="btn-primary">Set your mandate →</a>
-      <a href="#how" class="btn-outline">How the Orchestrator works</a>
+      <a href="#how" class="btn-outline">How SLOI AI works</a>
     </div>
   </div>
 
@@ -398,9 +410,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <!-- HOW IT WORKS -->
 <div class="section" id="how">
   <div class="fade-in">
-    <div class="section-eyebrow">How the Orchestrator works</div>
+    <div class="section-eyebrow">How SLOI AI works</div>
     <div class="section-title">Three steps.<br/><em>Two are yours.</em></div>
-    <div class="section-sub">Define your mandate. The Orchestrator handles compliance verification, counterparty screening, and document generation. You make two decisions — the mandate and the authorization. Nothing else.</div>
+    <div class="section-sub">Define your mandate. SLOI AI handles compliance verification, counterparty screening, and document generation. You make two decisions — the mandate and the authorization. Nothing else.</div>
   </div>
   <div class="steps3 fade-in">
     <div class="step3">
@@ -430,11 +442,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <div class="section" id="source">
   <div class="mk-section-hd fade-in">
     <div>
-      <div class="section-eyebrow">Live Marketplace</div>
+      <div class="section-eyebrow">Live Trade Hub</div>
       <div class="section-title" style="margin-bottom:8px">Source now.<br/><em>Mill-direct prices.</em></div>
       <div style="font-size:14px;color:var(--muted);line-height:1.7;max-width:480px">Compliance-screened supply from MENA refineries and mills. Prices indicative FOB Gulf — set your mandate and the Orchestrator negotiates to your ceiling.</div>
     </div>
-    <a href="sloiai-platform.html" class="mk-view-all">Full marketplace ↗</a>
+    <a href="sloiai-platform.html" class="mk-view-all">Full Trade Hub ↗</a>
   </div>
 
   <div class="mk-grid fade-in">

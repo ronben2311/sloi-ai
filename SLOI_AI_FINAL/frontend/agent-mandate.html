@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="Set your trade mandate with SLOI AI. Every counterparty is KYC-cleared and OFAC-screened before your mandate reaches them. Trust as a Service for enterprise commodity procurement."/>
+<meta name="description" content="Set your trade mandate with SLOI AI. Every counterparty is KYC-cleared and OFAC-screened before your mandate reaches them."/>
 <title>Set Mandate — SLOI AI</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
 <style>
@@ -15,277 +15,210 @@
   --gold:#e8a94a;--teal:#2dd4bf;--green:#22c55e;--red:#ef4444;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg);overflow:hidden}
-
+html,body{font-family:'Inter',system-ui,sans-serif;font-size:15px;color:var(--text);background:var(--bg)}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes fade-up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
 /* ── SHELL ── */
-.shell{display:grid;grid-template-columns:360px 1fr;height:100vh}
+.shell{display:grid;grid-template-columns:320px 1fr;min-height:100vh}
 
-/* ── LEFT PANEL ── */
+/* ── LEFT ── */
 .left{
   background:linear-gradient(180deg,#0b0b1a 0%,#090914 100%);
   border-right:1px solid var(--border);
-  display:flex;flex-direction:column;padding:36px 32px;
-  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;padding:36px 26px;
+  position:sticky;top:0;height:100vh;overflow:hidden;
 }
-.left::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:280px;
-  background:radial-gradient(ellipse 100% 60% at 50% 0%,rgba(91,95,239,.13) 0%,transparent 70%);
-  pointer-events:none;
-}
-.left-logo{
-  position:relative;z-index:1;
-  font-family:'Fraunces',serif;font-size:17px;font-weight:900;
-  color:var(--white);text-decoration:none;letter-spacing:-.02em;
-  display:inline-block;margin-bottom:44px;
-}
+.left::before{content:'';position:absolute;top:0;left:0;right:0;height:240px;
+  background:radial-gradient(ellipse 100% 60% at 50% 0%,rgba(91,95,239,.12) 0%,transparent 70%);pointer-events:none}
+.left-logo{position:relative;z-index:1;font-family:'Fraunces',serif;font-size:17px;font-weight:900;
+  color:var(--white);text-decoration:none;letter-spacing:-.02em;display:inline-block;margin-bottom:34px}
 .left-logo em{font-style:italic;color:var(--indigo)}
 .left-logo-sub{font-size:11px;color:var(--muted);margin-left:5px;font-style:normal;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;font-weight:400}
 
-/* Step list */
-.steps-nav{position:relative;z-index:1;flex:1}
-.sn-row{display:flex;align-items:flex-start;gap:14px;cursor:pointer;padding:4px 0}
-.sn-col{display:flex;flex-direction:column;align-items:center}
-.sn-dot{
-  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:700;flex-shrink:0;transition:all .3s;
-  border:1px solid var(--border2);background:var(--surface);color:var(--muted);
-}
-.sn-dot.done{background:rgba(34,197,94,.15);border-color:rgba(34,197,94,.35);color:var(--green)}
-.sn-dot.active{background:var(--indigo);border-color:var(--indigo);color:#fff;box-shadow:0 0 0 4px rgba(91,95,239,.18)}
-.sn-line{width:1px;height:28px;background:var(--border2);margin:3px 0;transition:background .3s}
-.sn-line.done{background:rgba(34,197,94,.3)}
-.sn-info{padding-top:5px;flex:1}
-.sn-name{font-size:13px;font-weight:600;color:var(--muted);transition:color .2s;line-height:1}
-.sn-name.active{color:var(--white)}
-.sn-name.done{color:var(--green)}
-.sn-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4;display:none}
-.sn-name.active ~ .sn-desc{display:block}
-.sn-spacer{height:10px}
+.left-flow{position:relative;z-index:1;flex:1;margin-bottom:22px}
+.lf-heading{font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px;font-family:'IBM Plex Mono',monospace}
+.lf-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+.lf-num{width:22px;height:22px;border-radius:50%;background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.22);
+  display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--violet);
+  flex-shrink:0;margin-top:1px;font-family:'IBM Plex Mono',monospace}
+.lf-text{font-size:12px;color:var(--muted);line-height:1.55}
+.lf-text strong{color:var(--text)}
 
-/* Trust */
-.left-trust{position:relative;z-index:1;padding-top:24px;border-top:1px solid var(--border)}
-.trust-row{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted);margin-bottom:9px;line-height:1.3}
+.left-trust{position:relative;z-index:1;padding-top:18px;border-top:1px solid var(--border)}
+.trust-row{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--muted);margin-bottom:8px;line-height:1.4}
 .trust-row:last-child{margin-bottom:0}
-.t-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.t-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px}
 .t-green{background:var(--green)}
 .t-violet{background:var(--violet)}
 
-/* ── RIGHT PANEL ── */
-.right{display:flex;flex-direction:column;overflow:hidden}
+/* ── RIGHT ── */
+.right{display:flex;flex-direction:column}
 .right-head{
-  flex-shrink:0;height:60px;padding:0 52px;
+  position:sticky;top:0;z-index:100;height:54px;padding:0 52px;
   border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
-  background:rgba(7,7,15,.8);backdrop-filter:blur(10px);
+  background:rgba(7,7,15,.92);backdrop-filter:blur(12px);
 }
-.prog-wrap{display:flex;align-items:center;gap:10px}
-.prog-track{width:180px;height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--indigo),var(--violet));border-radius:2px;transition:width .45s ease}
-.prog-lbl{font-size:12px;color:var(--muted)}
+.rh-label{font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
 .exit-link{font-size:12px;color:var(--muted);text-decoration:none;transition:color .15s}
 .exit-link:hover{color:var(--violet)}
 
-.right-body{flex:1;overflow-y:auto;padding:56px 52px 80px}
+.right-body{padding:48px 52px 88px}
 
-/* ── STEP WRAPPER ── */
-.step{display:none;animation:fade-up .3s ease}
-.step.active{display:block}
-
-/* Question header */
-.q-eyebrow{font-size:12px;color:var(--indigo);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.q-eyebrow::before{content:'';width:18px;height:1px;background:var(--indigo)}
-.q-title{font-family:'Fraunces',serif;font-size:clamp(30px,3.5vw,46px);font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1.0;margin-bottom:10px}
+/* ── INTRO ── */
+.q-eyebrow{font-size:11px;color:var(--indigo);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace}
+.q-eyebrow::before{content:'';width:16px;height:1px;background:var(--indigo)}
+.q-title{font-family:'Fraunces',serif;font-size:clamp(28px,3vw,40px);font-weight:900;color:var(--white);
+  letter-spacing:-.03em;line-height:1.0;margin-bottom:8px}
 .q-title em{font-style:italic;color:var(--indigo)}
-.q-sub{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:38px;max-width:500px}
+.q-sub{font-size:14px;color:var(--muted);line-height:1.8;margin-bottom:28px;max-width:500px}
+
+/* ── IMPORT COLLAPSIBLE ── */
+.import-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--surface);border:1px solid var(--border2);border-radius:8px;
+  padding:10px 15px;cursor:pointer;font-size:12px;font-family:'IBM Plex Mono',monospace;
+  color:var(--muted);margin-bottom:6px;transition:border-color .15s;
+}
+.import-bar:hover{border-color:rgba(91,95,239,.3);color:var(--text)}
+.import-arrow{transition:transform .2s;font-size:10px}
+.import-arrow.open{transform:rotate(180deg)}
+.import-panel-wrap{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.import-panel-wrap.open{max-height:560px;margin-bottom:24px}
+.import-inner{background:var(--surface);border:1px solid var(--border2);border-top:none;
+  border-bottom-left-radius:8px;border-bottom-right-radius:8px;padding:14px}
+
+.itabs{display:flex;gap:0;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:2px;margin-bottom:14px}
+.itab{flex:1;padding:5px 10px;border-radius:3px;font-size:11px;font-weight:600;cursor:pointer;border:none;
+  background:none;color:var(--muted);font-family:'IBM Plex Mono',monospace;transition:all .15s;text-align:center}
+.itab.active{background:var(--indigo);color:#fff}
+.itab-body{display:none}
+.itab-body.active{display:block}
+
+/* ── PARSE BANNER ── */
+.parse-banner{display:none;background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);
+  border-radius:7px;padding:12px 16px;margin-bottom:24px;animation:fade-up .3s ease}
+.parse-banner.show{display:block}
+.parse-banner-lbl{font-size:10px;color:var(--green);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:8px;font-family:'IBM Plex Mono',monospace}
+.ai-result-item{display:flex;gap:10px;padding:2px 0;font-size:12px}
+.ai-result-item span:first-child{color:var(--muted);min-width:72px;flex-shrink:0;font-family:'IBM Plex Mono',monospace}
+.ai-result-item span:last-child{color:var(--white);font-weight:600}
+
+/* ── FORM SECTIONS ── */
+.form-section{margin-bottom:36px;padding-bottom:36px;border-bottom:1px solid var(--border)}
+.form-section:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.form-sec-hd{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.form-sec-num{font-family:'Fraunces',serif;font-size:32px;font-weight:900;
+  color:rgba(91,95,239,.2);line-height:1;letter-spacing:-.04em;flex-shrink:0}
+.form-sec-title{font-size:16px;font-weight:700;color:var(--white)}
 
 /* ── PRODUCT CARDS ── */
-.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:30px}
-.pc{
-  background:var(--surface);border:1px solid var(--border2);border-radius:10px;
-  padding:20px 14px 16px;cursor:pointer;transition:all .2s;
-  text-align:center;position:relative;overflow:hidden;
-}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.pc{background:var(--surface);border:1px solid var(--border2);border-radius:9px;
+  padding:16px 12px 13px;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden}
 .pc:hover{border-color:rgba(91,95,239,.45);transform:translateY(-2px);background:#0f0f20}
 .pc.sel{border-color:var(--indigo);background:rgba(91,95,239,.07)}
-.pc-check{
-  position:absolute;top:8px;right:9px;
-  font-size:11px;font-weight:700;color:var(--indigo);
-  background:rgba(91,95,239,.18);border-radius:3px;padding:2px 6px;
-  opacity:0;transition:opacity .2s;
-}
+.pc-check{position:absolute;top:7px;right:7px;font-size:10px;font-weight:700;color:var(--indigo);
+  background:rgba(91,95,239,.18);border-radius:3px;padding:2px 5px;opacity:0;transition:opacity .2s}
 .pc.sel .pc-check{opacity:1}
-.pc-icon{font-size:30px;margin-bottom:10px;display:block}
-.pc-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
-.pc-sub{font-size:12px;color:var(--muted);line-height:1.4}
+.pc-icon{font-size:24px;margin-bottom:7px;display:block}
+.pc-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px}
+.pc-sub{font-size:11px;color:var(--muted);line-height:1.35}
 
-/* ── FIELD SYSTEM ── */
-.field{display:flex;flex-direction:column;gap:5px;margin-bottom:18px}
-.field-lbl{font-size:12px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
-.req{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--indigo);margin-left:4px;vertical-align:middle}
-.inp{
-  background:var(--surface);border:1px solid var(--border2);border-radius:8px;
-  padding:13px 15px;color:var(--white);font-family:'IBM Plex Mono',monospace;
-  font-size:14px;outline:none;width:100%;transition:all .2s;
-}
+/* ── FIELDS ── */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}
+.field-lbl{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;font-family:'IBM Plex Mono',monospace}
+.req{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--indigo);margin-left:4px;vertical-align:middle}
+.inp{background:var(--surface);border:1px solid var(--border2);border-radius:7px;
+  padding:11px 14px;color:var(--white);font-family:'IBM Plex Mono',monospace;
+  font-size:14px;outline:none;width:100%;transition:all .2s}
 .inp:focus{border-color:var(--indigo);background:rgba(91,95,239,.04);box-shadow:0 0 0 3px rgba(91,95,239,.1)}
-.inp::placeholder{color:var(--muted);font-size:14px}
+.inp::placeholder{color:var(--muted);font-size:13px}
 select.inp option{background:var(--surface2);color:var(--white)}
 .inp.shake{animation:shake .3s ease;border-color:var(--red)!important}
 .field-hint{font-size:12px;color:var(--muted);line-height:1.5}
-.qty-row{display:grid;grid-template-columns:1fr 100px;gap:10px;margin-bottom:18px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.qty-row{display:grid;grid-template-columns:1fr 90px;gap:10px;margin-bottom:16px}
 
-/* ── TIMELINE CARDS ── */
-.tl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:30px}
-.tc{
-  background:var(--surface);border:1px solid var(--border2);border-radius:10px;
-  padding:18px 14px 16px;cursor:pointer;transition:all .2s;
-  position:relative;overflow:hidden;
-}
-.tc:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
-.tc.sel{border-color:var(--indigo);background:rgba(91,95,239,.07)}
-.tc-check{position:absolute;top:8px;right:9px;font-size:11px;font-weight:700;color:var(--indigo);background:rgba(91,95,239,.18);border-radius:3px;padding:2px 6px;opacity:0;transition:opacity .2s}
-.tc.sel .tc-check{opacity:1}
-.tc-icon{font-size:26px;margin-bottom:9px}
-.tc-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
-.tc-desc{font-size:12px;color:var(--muted);line-height:1.35;margin-bottom:8px}
-.tc-mode{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:3px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.2);color:var(--gold)}
-.tc.sel .tc-mode{background:rgba(91,95,239,.15);border-color:rgba(91,95,239,.3);color:var(--violet)}
-
-/* ── SUMMARY GRID ── */
-.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}
-.sum-cell{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:14px 16px}
-.sum-cell.hi{border-color:rgba(91,95,239,.3);background:rgba(91,95,239,.05)}
-.sum-lbl{font-size:11px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-bottom:5px}
-.sum-val{font-size:15px;font-weight:600;color:var(--white);line-height:1.3}
-.sum-cell.hi .sum-val{color:var(--violet)}
-
-/* ── GUARANTEE BOX ── */
-.gbox{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.14);border-radius:8px;padding:14px 16px;margin-bottom:22px}
-.g-row{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted);padding:3px 0;line-height:1.6}
-.g-chk{color:var(--green);flex-shrink:0;font-weight:700;font-size:14px;margin-top:1px}
-
-/* ── BUTTONS ── */
-.btn-p{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;background:var(--indigo);color:#fff;border:none;border-radius:8px;
-  padding:15px;font-size:14px;font-weight:700;cursor:pointer;
-  font-family:'IBM Plex Mono',monospace;transition:all .2s;margin-bottom:10px;
-}
-.btn-p:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
-.btn-p:disabled{opacity:.45;cursor:not-allowed;transform:none}
-.btn-s{
-  display:flex;align-items:center;justify-content:center;gap:6px;
-  width:100%;background:none;border:1px solid var(--border2);color:var(--muted);
-  border-radius:8px;padding:12px;font-size:14px;cursor:pointer;
-  font-family:'IBM Plex Mono',monospace;transition:all .2s;
-}
-.btn-s:hover{border-color:var(--border);color:var(--text)}
-
-/* Agent alt link */
-.agent-link{
-  display:flex;align-items:center;gap:12px;margin-top:20px;
-  background:rgba(91,95,239,.06);border:1px solid rgba(91,95,239,.18);
-  border-radius:8px;padding:14px 16px;text-decoration:none;transition:all .2s;
-}
-.agent-link:hover{background:rgba(91,95,239,.12);border-color:rgba(91,95,239,.38)}
-.al-icon{font-size:22px;flex-shrink:0}
-.al-body{flex:1}
-.al-title{font-size:16px;font-weight:600;color:var(--violet);margin-bottom:2px}
-.al-desc{font-size:15px;color:var(--muted)}
-.al-arrow{font-size:16px;color:var(--indigo);flex-shrink:0}
-
-/* ── SUCCESS ── */
-.suc-wrap{max-width:560px}
-.suc-head{text-align:center;margin-bottom:40px}
-.suc-icon{font-size:56px;margin-bottom:16px}
-.suc-title{font-family:'Fraunces',serif;font-size:clamp(30px,4vw,46px);font-weight:900;color:var(--white);letter-spacing:-.03em;line-height:1.0;margin-bottom:10px}
-.suc-title em{font-style:italic;color:var(--green)}
-.suc-sub{font-size:14px;color:var(--muted);line-height:1.8}
-.flow-list{margin-bottom:32px}
-.fl-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
-.fl-item:last-child{border-bottom:none}
-.fl-num{width:28px;height:28px;border-radius:50%;background:rgba(91,95,239,.12);border:1px solid rgba(91,95,239,.28);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--violet);flex-shrink:0;margin-top:2px}
-.fl-num.g{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.28);color:var(--green)}
-.fl-text{font-size:14px;color:var(--text);line-height:1.7}
-.cta-row{display:flex;gap:10px;flex-wrap:wrap}
-.cta-p{background:var(--indigo);color:#fff;padding:13px 24px;border-radius:6px;font-size:14px;font-weight:700;text-decoration:none;transition:opacity .15s}
-.cta-p:hover{opacity:.85}
-.cta-s{background:var(--surface);border:1px solid var(--border2);color:var(--text);padding:13px 24px;border-radius:6px;font-size:14px;text-decoration:none;transition:all .2s}
-.cta-s:hover{border-color:var(--indigo);color:var(--violet)}
-
-/* Agent type cards */
-.ptype-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
-.pt{
-  background:var(--surface);border:1px solid var(--border2);border-radius:10px;
-  padding:16px 14px;cursor:pointer;transition:all .2s;position:relative;
-}
-.pt:hover{border-color:rgba(91,95,239,.45);transform:translateY(-1px)}
-.pt.sel{border-color:var(--indigo);background:rgba(91,95,239,.07)}
-.pt-check{position:absolute;top:8px;right:9px;font-size:11px;font-weight:700;color:var(--indigo);background:rgba(91,95,239,.18);border-radius:3px;padding:2px 6px;opacity:0;transition:opacity .2s}
-.pt.sel .pt-check{opacity:1}
-.pt-icon{font-size:22px;margin-bottom:7px}
-.pt-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px}
-.pt-desc{font-size:12px;color:var(--muted);line-height:1.35}
-/* Annual volume field — shown only when Negotiation Agent selected */
-.annual-reveal{overflow:hidden;max-height:0;transition:max-height .35s ease;margin-bottom:0}
-.annual-reveal.open{max-height:120px;margin-bottom:18px}
-
-/* ── MOBILE ── */
-@media(max-width:760px){
-  html,body{overflow:auto}
-  .shell{grid-template-columns:1fr;height:auto}
-  .left{display:none}
-  .right{overflow:visible;min-height:100vh}
-  .right-body{padding:32px 20px 60px}
-  .right-head{padding:0 20px}
-  .prod-grid{grid-template-columns:1fr 1fr}
-  .tl-grid{grid-template-columns:1fr}
-  .sum-grid{grid-template-columns:1fr}
-  .prog-track{width:120px}
-}
-
-/* ── ENTRY OPTIONS (welcome screen) ── */
-.entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
-.ec{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:22px 16px;cursor:pointer;transition:all .2s;text-align:center;position:relative;overflow:hidden}
-.ec:hover{border-color:rgba(91,95,239,.45);transform:translateY(-2px);background:#0f0f20}
-.ec.sel{border-color:var(--indigo);background:rgba(91,95,239,.07)}
-.ec-icon{font-size:28px;margin-bottom:10px;display:block}
-.ec-name{font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px}
-.ec-desc{font-size:12px;color:var(--muted);line-height:1.4}
-/* ── ENTRY PANELS ── */
-.entry-panel{display:none;margin-bottom:4px;animation:fade-up .25s ease}
-.entry-panel.show{display:block}
-/* Dropzone */
-.dropzone{border:2px dashed var(--border2);border-radius:10px;padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:14px}
-.dropzone:hover,.dropzone.drag-over{border-color:rgba(91,95,239,.5);background:rgba(91,95,239,.04)}
-.dropzone.dz-chosen{border-style:solid;border-color:var(--teal);background:rgba(45,212,191,.04)}
-.dz-icon{font-size:34px;margin-bottom:10px;display:block}
-.dz-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:5px}
-.dz-sub{font-size:12px;color:var(--muted)}
-.dz-file-hidden{display:none}
-/* ── AI KEY WRAP ── */
-.ai-key-wrap{display:flex;gap:8px;margin-bottom:5px}
-.ai-key-wrap .inp{flex:1;margin-bottom:0}
-.key-toggle{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:0 14px;color:var(--muted);cursor:pointer;font-size:14px;flex-shrink:0;transition:all .2s}
-.key-toggle:hover{border-color:var(--indigo);color:var(--white)}
-.ai-result-item{display:flex;gap:10px;padding:4px 0;font-size:13px}
-.ai-result-item span:first-child{color:var(--muted);min-width:90px;flex-shrink:0}
-.ai-result-item span:last-child{color:var(--white);font-weight:600}
-
-/* ── CATALOG DROPDOWN ── */
+/* Catalog */
 .cat-wrap{margin-bottom:16px;display:none}
 .cat-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .cat-badge{font-size:11px;color:var(--indigo);letter-spacing:.06em;background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.2);border-radius:3px;padding:2px 7px}
 .cat-info{margin-top:8px;background:rgba(45,212,191,.05);border:1px solid rgba(45,212,191,.18);border-radius:7px;padding:10px 14px;display:none;gap:18px;flex-wrap:wrap}
 .cat-info.show{display:flex}
 .ci-item{display:flex;flex-direction:column;gap:2px}
-.ci-lbl{font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
-.ci-val{font-size:14px;font-weight:600;color:var(--teal)}
+.ci-lbl{font-size:10px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.ci-val{font-size:13px;font-weight:600;color:var(--teal)}
 .ci-val.price{color:var(--gold)}
+
+/* ── TIMELINE CARDS ── */
+.tl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:0}
+.tc{background:var(--surface);border:1px solid var(--border2);border-radius:9px;
+  padding:14px 12px 13px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.tc:hover{border-color:rgba(91,95,239,.4);transform:translateY(-2px)}
+.tc.sel{border-color:var(--indigo);background:rgba(91,95,239,.07)}
+.tc-check{position:absolute;top:7px;right:7px;font-size:10px;font-weight:700;color:var(--indigo);
+  background:rgba(91,95,239,.18);border-radius:3px;padding:2px 5px;opacity:0;transition:opacity .2s}
+.tc.sel .tc-check{opacity:1}
+.tc-icon{font-size:20px;margin-bottom:6px}
+.tc-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px}
+.tc-desc{font-size:11px;color:var(--muted);line-height:1.3;margin-bottom:6px}
+.tc-mode{display:inline-block;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;
+  background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.2);color:var(--gold)}
+.tc.sel .tc-mode{background:rgba(91,95,239,.15);border-color:rgba(91,95,239,.3);color:var(--violet)}
+
+/* ── GUARANTEE ── */
+.gbox{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.14);border-radius:8px;padding:14px 16px;margin-bottom:20px}
+.g-row{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--muted);padding:3px 0;line-height:1.6}
+.g-chk{color:var(--green);flex-shrink:0;font-weight:700;font-size:14px;margin-top:1px}
+
+/* ── BUTTONS ── */
+.btn-p{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+  background:var(--indigo);color:#fff;border:none;border-radius:8px;
+  padding:15px;font-size:15px;font-weight:700;cursor:pointer;
+  font-family:'IBM Plex Mono',monospace;transition:all .2s;margin-bottom:10px}
+.btn-p:hover:not(:disabled){opacity:.9;transform:translateY(-1px);box-shadow:0 8px 28px rgba(91,95,239,.3)}
+.btn-p:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.btn-s{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
+  background:none;border:1px solid var(--border2);color:var(--muted);border-radius:8px;
+  padding:11px;font-size:13px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .2s}
+.btn-s:hover{border-color:var(--border);color:var(--text)}
+
+/* AI key */
+.ai-key-wrap{display:flex;gap:8px;margin-bottom:5px}
+.ai-key-wrap .inp{flex:1;margin-bottom:0}
+.key-toggle{background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:0 14px;
+  color:var(--muted);cursor:pointer;font-size:14px;flex-shrink:0;transition:all .2s}
+.key-toggle:hover{border-color:var(--indigo);color:var(--white)}
+
+/* Dropzone */
+.dropzone{border:2px dashed var(--border2);border-radius:8px;padding:24px 16px;text-align:center;
+  cursor:pointer;transition:all .2s;margin-bottom:10px}
+.dropzone:hover,.dropzone.drag-over{border-color:rgba(91,95,239,.5);background:rgba(91,95,239,.04)}
+.dropzone.dz-chosen{border-style:solid;border-color:var(--teal);background:rgba(45,212,191,.04)}
+.dz-icon{font-size:26px;margin-bottom:6px;display:block}
+.dz-title{font-size:14px;font-weight:600;color:var(--white);margin-bottom:3px}
+.dz-sub{font-size:12px;color:var(--muted)}
+.dz-file-hidden{display:none}
+
+/* ── MOBILE ── */
+@media(max-width:860px){
+  .shell{grid-template-columns:1fr}
+  .left{display:none}
+  .right-body{padding:32px 20px 72px}
+  .right-head{padding:0 20px}
+  .prod-grid{grid-template-columns:1fr 1fr}
+  .tl-grid{grid-template-columns:1fr}
+  .fg2{grid-template-columns:1fr}
+  .qty-row{grid-template-columns:1fr 80px}
+}
+@media(max-width:480px){
+  .prod-grid{grid-template-columns:1fr}
+}
 </style>
 <link rel="stylesheet" href="/main.css"/>
 <script src="/api-client.js"></script>
@@ -294,58 +227,24 @@ select.inp option{background:var(--surface2);color:var(--white)}
 <body>
 <div class="shell">
 
-<!-- ════════════════════════ LEFT PANEL ════════════════════════ -->
+<!-- ════════════ LEFT PANEL ════════════ -->
 <div class="left">
   <a href="sloiai-home.html" class="left-logo">SLOI <em>AI</em><span class="left-logo-sub">/ Mandate</span></a>
 
-  <div class="steps-nav">
-
-    <div class="sn-row" onclick="tryGoStep(1)">
-      <div class="sn-col">
-        <div class="sn-dot" id="dot-1">1</div>
-        <div class="sn-line" id="line-1"></div>
-      </div>
-      <div class="sn-info">
-        <div class="sn-name" id="lname-1">What to source</div>
-        <div class="sn-desc">Define your sourcing mandate</div>
-      </div>
+  <div class="left-flow">
+    <div class="lf-heading">What happens next</div>
+    <div class="lf-item">
+      <div class="lf-num">1</div>
+      <div class="lf-text">Your mandate activates — the Orchestrator engages only <strong>screened, verified counterparties</strong> within your private limits</div>
     </div>
-    <div class="sn-spacer"></div>
-
-    <div class="sn-row" onclick="tryGoStep(2)">
-      <div class="sn-col">
-        <div class="sn-dot" id="dot-2">2</div>
-        <div class="sn-line" id="line-2"></div>
-      </div>
-      <div class="sn-info">
-        <div class="sn-name" id="lname-2">Set your limits</div>
-        <div class="sn-desc">Volume, price ceiling, delivery country</div>
-      </div>
+    <div class="lf-item">
+      <div class="lf-num">2</div>
+      <div class="lf-text">Compliance-validated offer delivered to you — <strong>authorize, counter, or decline</strong> with zero obligation</div>
     </div>
-    <div class="sn-spacer"></div>
-
-    <div class="sn-row" onclick="tryGoStep(3)">
-      <div class="sn-col">
-        <div class="sn-dot" id="dot-3">3</div>
-        <div class="sn-line" id="line-3"></div>
-      </div>
-      <div class="sn-info">
-        <div class="sn-name" id="lname-3">Timeline &amp; contact</div>
-        <div class="sn-desc">When you need it · how to reach you</div>
-      </div>
+    <div class="lf-item">
+      <div class="lf-num">3</div>
+      <div class="lf-text">On approval — <strong>LOI, NDA, SPA and all trade documents</strong> generated instantly and dispatched to all parties</div>
     </div>
-    <div class="sn-spacer"></div>
-
-    <div class="sn-row">
-      <div class="sn-col">
-        <div class="sn-dot" id="dot-4">✓</div>
-      </div>
-      <div class="sn-info">
-        <div class="sn-name" id="lname-4">Review &amp; activate</div>
-        <div class="sn-desc">Confirm your mandate · activate the Orchestrator</div>
-      </div>
-    </div>
-
   </div>
 
   <div class="left-trust">
@@ -356,189 +255,121 @@ select.inp option{background:var(--surface2);color:var(--white)}
   </div>
 </div>
 
-<!-- ════════════════════════ RIGHT PANEL ════════════════════════ -->
+<!-- ════════════ RIGHT PANEL ════════════ -->
 <div class="right">
-
   <div class="right-head">
-    <div class="prog-wrap">
-      <div class="prog-track"><div class="prog-fill" id="progress" style="width:0%"></div></div>
-      <div class="prog-lbl" id="prog-lbl">Get started</div>
-    </div>
+    <div class="rh-label">Set your mandate · 2 min · zero commitment</div>
     <a href="sloiai-home.html" class="exit-link">Exit ✕</a>
   </div>
 
   <div class="right-body">
 
-    <!-- ── STEP 0 — WELCOME ── -->
-    <div class="step active" id="step-0">
-      <div class="q-eyebrow">Your protected sourcing layer — zero commitment to start</div>
-      <div class="q-title">Source with certainty.<br/><em>Trust as a Service.</em></div>
-      <div class="q-sub">SLOI AI acts as your trust layer between you and the supply chain. Every supplier is verified before your mandate reaches them. Every offer is documented and AI-reviewed. Every step is yours to approve — nothing is committed without your sign-off. Set your mandate in 2 minutes and let a trusted agent do the rest.</div>
+    <div class="q-eyebrow">Your protected sourcing layer</div>
+    <div class="q-title">Source with certainty.<br/><em>Set your mandate.</em></div>
+    <div class="q-sub">Fill the form below — your Orchestrator activates immediately. Every counterparty is screened before your mandate reaches them. Nothing is committed without your sign-off.</div>
 
-      <!-- PRIMARY CTA -->
-      <div onclick="selectEntry('form')" id="ec-form-hero" style="background:linear-gradient(135deg,rgba(91,95,239,.12),rgba(139,143,248,.06));border:1px solid rgba(91,95,239,.4);border-radius:12px;padding:22px 22px;cursor:pointer;margin-bottom:12px;transition:all .2s;display:flex;align-items:center;gap:18px;position:relative;overflow:hidden" onmouseover="this.style.borderColor='rgba(91,95,239,.7)';this.style.transform='translateY(-2px)'" onmouseout="this.style.borderColor='rgba(91,95,239,.4)';this.style.transform=''">
-        <div style="width:52px;height:52px;border-radius:10px;background:var(--indigo);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">📝</div>
-        <div style="flex:1">
-          <div style="font-size:16px;font-weight:700;color:var(--white);margin-bottom:4px">Define your trusted mandate</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.5">Commodity · limits · verification standards. 2 minutes. Your protected agent activates immediately.</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">
-          <span style="background:var(--indigo);color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.05em">RECOMMENDED</span>
-          <span style="font-size:20px;color:var(--violet)">→</span>
-        </div>
-      </div>
+    <!-- Parse result banner -->
+    <div class="parse-banner" id="parse-banner">
+      <div class="parse-banner-lbl">✓ Fields auto-filled — review &amp; submit below</div>
+      <div id="parse-banner-rows"></div>
+    </div>
 
-      <!-- SECONDARY OPTIONS -->
-      <div style="font-size:11px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;margin-bottom:8px">Or import from existing documents</div>
-      <div class="entry-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:20px">
-        <div class="ec" id="ec-po" onclick="selectEntry('po')" style="position:relative">
-          <div class="ec-icon" style="font-size:22px">📎</div>
-          <div class="ec-name" style="font-size:13px">Upload PO</div>
-          <div class="ec-desc">PDF · Excel · Word</div>
+    <!-- Import collapsible -->
+    <div class="import-bar" onclick="toggleImport()">
+      <span>📎 Auto-fill from document — PO upload · ERP paste · AI parse</span>
+      <span class="import-arrow" id="import-arrow">▾</span>
+    </div>
+    <div class="import-panel-wrap" id="import-panel-wrap">
+      <div class="import-inner">
+        <div class="itabs">
+          <button class="itab active" id="itab-po"  onclick="switchImportTab('po')">📎 Upload PO</button>
+          <button class="itab"        id="itab-erp" onclick="switchImportTab('erp')">📋 Paste ERP</button>
+          <button class="itab"        id="itab-ai"  onclick="switchImportTab('ai')">🤖 AI Parse</button>
         </div>
-        <div class="ec" id="ec-erp" onclick="selectEntry('erp')" style="position:relative">
-          <div class="ec-icon" style="font-size:22px">📋</div>
-          <div class="ec-name" style="font-size:13px">Paste from ERP</div>
-          <div class="ec-desc">SAP · Oracle · any text</div>
-        </div>
-        <div class="ec" id="ec-ai" onclick="selectEntry('ai')" style="position:relative">
-          <div class="ec-icon" style="font-size:22px">🤖</div>
-          <div class="ec-name" style="font-size:13px">AI Parse</div>
-          <div class="ec-desc">Claude · Natural language</div>
-        </div>
-      </div>
-
-      <!-- PO UPLOAD PANEL -->
-      <div class="entry-panel" id="panel-po">
-        <div class="dropzone" id="dropzone" onclick="document.getElementById('po-file-input').click()"
-             ondragover="dzDrag(event,true)" ondragleave="dzDrag(event,false)" ondrop="dzDrop(event)">
-          <input type="file" id="po-file-input" class="dz-file-hidden"
-                 accept=".pdf,.xlsx,.xls,.docx,.doc,.csv" onchange="dzFileChosen(this)"/>
-          <div class="dz-icon" id="dz-icon">📎</div>
-          <div class="dz-title" id="dz-title">Drop your PO file here</div>
-          <div class="dz-sub" id="dz-sub">PDF · Excel · Word · CSV — or click to browse</div>
-        </div>
-        <button class="btn-p" id="btn-po-continue" onclick="parsePO()" disabled style="opacity:.4">Extract &amp; continue →</button>
-        <div style="font-size:12px;color:var(--muted);text-align:center;margin-top:6px">Automation engine extracts commodity, volume, and specifications automatically</div>
-      </div>
-
-      <!-- ERP PASTE PANEL -->
-      <div class="entry-panel" id="panel-erp">
-        <div class="field">
-          <div class="field-lbl">Paste your order details</div>
-          <textarea class="inp" id="erp-paste" rows="6"
-            placeholder="Paste any text — SAP export, order email, or plain description:&#10;&#10;Product: Steel Rebar G60 12mm&#10;Quantity: 500 MT&#10;Delivery: Dubai, UAE&#10;Budget: $2,800/MT" style="resize:vertical;line-height:1.7;font-size:14px"></textarea>
-          <div class="field-hint">Any format works — the agent extracts the key parameters.</div>
-        </div>
-        <button class="btn-p" id="btn-erp-continue" onclick="parseERP()">Parse &amp; continue →</button>
-      </div>
-
-      <!-- API PANEL -->
-      <div class="entry-panel" id="panel-api">
-        <div style="background:var(--surface);border:1px solid rgba(91,95,239,.22);border-radius:10px;overflow:hidden;margin-bottom:14px">
-          <div style="background:var(--surface2);padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px">
-            <div style="width:9px;height:9px;border-radius:50%;background:#ff5f57"></div>
-            <div style="width:9px;height:9px;border-radius:50%;background:#febc2e"></div>
-            <div style="width:9px;height:9px;border-radius:50%;background:#28c840"></div>
-            <span style="font-size:12px;color:var(--muted);margin-left:5px">POST /v1/orders</span>
+        <!-- PO Upload -->
+        <div class="itab-body active" id="ibody-po">
+          <div class="dropzone" id="dropzone" onclick="document.getElementById('po-file-input').click()"
+               ondragover="dzDrag(event,true)" ondragleave="dzDrag(event,false)" ondrop="dzDrop(event)">
+            <input type="file" id="po-file-input" class="dz-file-hidden" accept=".pdf,.xlsx,.xls,.docx,.doc,.csv" onchange="dzFileChosen(this)"/>
+            <div class="dz-icon" id="dz-icon">📎</div>
+            <div class="dz-title" id="dz-title">Drop your PO file here</div>
+            <div class="dz-sub" id="dz-sub">PDF · Excel · Word · CSV — or click to browse</div>
           </div>
-          <div style="padding:16px 18px;font-size:13px;line-height:2;color:var(--text)">
-            <div style="color:var(--muted)">// Direct API order submission</div>
-            <div><span style="color:var(--violet)">POST</span> <span style="color:var(--teal)">https://api.sloiai.com/v1/orders</span></div>
-            <div style="color:var(--muted)">Authorization: Bearer <span style="color:var(--gold)">sk-sloi-YOUR_KEY</span></div>
-            <div style="margin-top:2px;color:var(--muted)">{</div>
-            <div style="padding-left:16px"><span style="color:var(--muted)">"product":</span> <span style="color:var(--green)">"HDPE Pipe Grade"</span>,</div>
-            <div style="padding-left:16px"><span style="color:var(--muted)">"qty":</span> <span style="color:var(--gold)">500</span>, <span style="color:var(--muted)">"unit":</span> <span style="color:var(--green)">"MT"</span>,</div>
-            <div style="padding-left:16px"><span style="color:var(--muted)">"country":</span> <span style="color:var(--green)">"UAE"</span>, <span style="color:var(--muted)">"max_price":</span> <span style="color:var(--gold)">2960</span></div>
-            <div style="color:var(--muted)">}</div>
+          <button class="btn-p" id="btn-po-continue" onclick="parsePO()" disabled style="opacity:.4;margin-bottom:0">Extract &amp; fill form →</button>
+        </div>
+        <!-- ERP Paste -->
+        <div class="itab-body" id="ibody-erp">
+          <div class="field">
+            <div class="field-lbl">Paste your order details</div>
+            <textarea class="inp" id="erp-paste" rows="5" placeholder="Paste any text — SAP export, order email, or plain description:&#10;&#10;Product: Steel Rebar G60 12mm&#10;Quantity: 500 MT&#10;Delivery: Dubai, UAE&#10;Budget: $2,800/MT" style="resize:vertical;line-height:1.7;font-size:13px"></textarea>
           </div>
+          <button class="btn-p" onclick="parseERP()" style="margin-bottom:0">Parse &amp; fill form →</button>
         </div>
-        <div style="display:flex;gap:8px">
-          <a href="docs.html" class="btn-p" style="text-decoration:none;flex:1;display:flex;align-items:center;justify-content:center">API docs →</a>
-          <button class="btn-s" onclick="goStep(1)" style="flex:1">Continue manually →</button>
-        </div>
-      </div>
-
-      <!-- AI PARSE PANEL -->
-      <div class="entry-panel" id="panel-ai">
-        <div style="background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.22);border-radius:10px;padding:16px 18px;margin-bottom:14px">
-          <div style="font-size:12px;color:var(--indigo);font-weight:700;letter-spacing:.08em;margin-bottom:10px">CLAUDE API KEY <span style="color:var(--muted);font-weight:400;letter-spacing:0">— stored in your browser only</span></div>
-          <div class="ai-key-wrap">
-            <input class="inp" id="ai-key-inp" type="password" placeholder="sk-ant-api03-…" oninput="localStorage.setItem('sloi_claude_key',this.value.trim())"/>
-            <button class="key-toggle" onclick="toggleAIKey()" title="Show/hide key">👁</button>
+        <!-- AI Parse -->
+        <div class="itab-body" id="ibody-ai">
+          <div style="background:rgba(91,95,239,.05);border:1px solid rgba(91,95,239,.2);border-radius:7px;padding:12px 14px;margin-bottom:12px">
+            <div style="font-size:11px;color:var(--indigo);font-weight:700;letter-spacing:.08em;margin-bottom:8px">CLAUDE API KEY <span style="color:var(--muted);font-weight:400;letter-spacing:0">— stored in your browser only</span></div>
+            <div class="ai-key-wrap">
+              <input class="inp" id="ai-key-inp" type="password" placeholder="sk-ant-api03-…" oninput="localStorage.setItem('sloi_claude_key',this.value.trim())"/>
+              <button class="key-toggle" onclick="toggleAIKey()" title="Show/hide">👁</button>
+            </div>
+            <div class="field-hint" style="margin-top:4px">Calls Claude directly from your browser — never logged by SLOI AI. <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--violet);text-decoration:none">Get a key →</a></div>
           </div>
-          <div class="field-hint" style="margin-top:4px">Your key calls Claude directly from your browser — never logged by SLOI AI. <a href="https://console.anthropic.com" target="_blank" rel="noopener" style="color:var(--violet);text-decoration:none">Get a key →</a></div>
+          <div class="field">
+            <div class="field-lbl">Describe your need</div>
+            <textarea class="inp" id="ai-describe" rows="4" placeholder="e.g. I need 500 MT of steel rebar G60 12mm for delivery in Dubai by end of Q3, max $1.4M CIF. Turkish or Chinese origin." style="resize:vertical;line-height:1.7;font-size:13px"></textarea>
+          </div>
+          <button class="btn-p" id="btn-ai-parse" onclick="parseWithAI()" style="margin-bottom:0">🤖 Parse with AI →</button>
         </div>
-
-        <div class="field">
-          <div class="field-lbl">Describe your procurement need</div>
-          <textarea class="inp" id="ai-describe" rows="5"
-            placeholder="e.g. I need 500 MT of steel rebar G60 12mm for delivery in Dubai by end of Q3, max budget $1.4M CIF. Prefer Turkish or Chinese origin." style="resize:vertical;line-height:1.7;font-size:14px"></textarea>
-          <div class="field-hint">Plain language · paste ERP text · any format — Claude extracts commodity, quantity, budget, country, timeline automatically.</div>
-        </div>
-
-        <div id="ai-result-wrap"></div>
-
-        <button class="btn-p" id="btn-ai-parse" onclick="parseWithAI()">🤖 Parse with AI →</button>
-        <button class="btn-s" onclick="goStep(1)" style="margin-top:6px">Enter manually →</button>
       </div>
     </div>
 
-    <!-- ── STEP 1 ── -->
-    <div class="step" id="step-1">
-      <div class="q-eyebrow">Step 1</div>
-      <div class="q-title">What should your<br/><em>Orchestrator source?</em></div>
-      <div class="q-sub">Select a commodity category — this sets the scope of your mandate. Your Orchestrator matches screened, verified counterparties and validates compliance within your private limits; you authorize every offer before commitment.</div>
+    <!-- ══ SECTION 1 — WHAT TO SOURCE ══ -->
+    <div class="form-section">
+      <div class="form-sec-hd"><span class="form-sec-num">01</span><span class="form-sec-title">What to source</span></div>
 
       <div class="prod-grid">
         <div class="pc" onclick="selectProduct(this,'Building materials','steel, cement, concrete, rebar, clinker')">
-          <div class="pc-check">✓ selected</div>
+          <div class="pc-check">✓</div>
           <span class="pc-icon">🏗️</span>
           <div class="pc-name">Building materials</div>
-          <div class="pc-sub">Steel · Cement · Concrete · Rebar · Clinker</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $4.8/Unit · 21 products</div>
+          <div class="pc-sub">Steel · Cement · Rebar · Clinker</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Reconstruction Packages','generators, cranes, modular units, prefab, infrastructure')">
-          <div class="pc-check">✓ selected</div>
+          <div class="pc-check">✓</div>
           <span class="pc-icon">🏛️</span>
-          <div class="pc-name">Reconstruction Packages</div>
-          <div class="pc-sub">Modular Units · Prefab · Cranes · Generators · Infra</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">Full package · 33 products</div>
+          <div class="pc-name">Reconstruction</div>
+          <div class="pc-sub">Modular · Prefab · Cranes · Infra</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Energy','diesel, LPG, fuel oil')">
-          <div class="pc-check">✓ selected</div>
+          <div class="pc-check">✓</div>
           <span class="pc-icon">⚡</span>
           <div class="pc-name">Energy</div>
-          <div class="pc-sub">Diesel · LPG · Fuel oil · Gas</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $4.92/L · 3 products</div>
+          <div class="pc-sub">Diesel · LPG · Fuel oil</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Critical Minerals','lithium, cobalt, copper, rare earth, graphite, nickel')">
-          <div class="pc-check">✓ selected</div>
+          <div class="pc-check">✓</div>
           <span class="pc-icon">💎</span>
           <div class="pc-name">Critical Minerals</div>
-          <div class="pc-sub">Lithium · Cobalt · Copper · Rare Earth · Graphite</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $8,200/MT · 8 products</div>
+          <div class="pc-sub">Lithium · Cobalt · Copper · REE</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Petrochemicals','petrochemicals, sulfuric acid, caustic soda, HDPE, polypropylene, methanol')">
-          <div class="pc-check">✓ selected</div>
+          <div class="pc-check">✓</div>
           <span class="pc-icon">🧪</span>
           <div class="pc-name">Petrochemicals</div>
-          <div class="pc-sub">Sulfuric Acid · Caustic Soda · HDPE · Polypropylene · Methanol</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--teal);font-weight:600">from $380/MT · 18 products</div>
+          <div class="pc-sub">HDPE · Urea · Soda · Methanol</div>
         </div>
         <div class="pc" onclick="selectProduct(this,'Engineering equipment','generators, pumps, compressors, cranes')">
-          <div class="pc-check">✓ selected</div>
+          <div class="pc-check">✓</div>
           <span class="pc-icon">⚙️</span>
-          <div class="pc-name">Engineering equipment</div>
-          <div class="pc-sub">Generators, pumps, compressors &amp; more</div>
-          <div style="margin-top:8px;font-size:11px;color:var(--muted)">Heavy machinery · industrial units</div>
+          <div class="pc-name">Engineering</div>
+          <div class="pc-sub">Generators · Pumps · Compressors</div>
         </div>
       </div>
 
-      <!-- catalog product dropdown — shown after category pick -->
       <div class="cat-wrap" id="cat-wrap">
         <div class="cat-hdr">
-          <div class="field-lbl" style="margin:0">Select commodity from verified catalog</div>
+          <div class="field-lbl" style="margin:0">Select from verified catalog</div>
           <span class="cat-badge" id="cat-count"></span>
         </div>
         <select class="inp" id="product-select" onchange="onProductSelect()">
@@ -552,24 +383,20 @@ select.inp option{background:var(--surface2);color:var(--white)}
         </div>
       </div>
 
-      <div class="field">
-        <div class="field-lbl" id="detail-lbl">Additional specifications <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
-        <input class="inp" id="product-detail" placeholder="e.g. ISO certified · 12mm · special grade"/>
+      <div class="field" style="margin-bottom:0">
+        <div class="field-lbl">Specifications <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+        <input class="inp" id="product-detail" placeholder="e.g. ASTM A615 G60 · 12mm · ISO certified"/>
       </div>
-
-      <button class="btn-p" onclick="goStep(2)">Continue →</button>
     </div>
 
-    <!-- ── STEP 2 ── -->
-    <div class="step" id="step-2">
-      <div class="q-eyebrow">Step 2</div>
-      <div class="q-title">Set your<br/><em>limits.</em></div>
-      <div class="q-sub">A working estimate is sufficient. Your Orchestrator stays inside these private limits and drives toward the best validated market price — counterparties never see your ceiling.</div>
+    <!-- ══ SECTION 2 — VOLUME, BUDGET & DELIVERY ══ -->
+    <div class="form-section">
+      <div class="form-sec-hd"><span class="form-sec-num">02</span><span class="form-sec-title">Volume, budget &amp; delivery</span></div>
 
       <div class="qty-row">
         <div class="field" style="margin-bottom:0">
           <div class="field-lbl">Quantity <span class="req"></span></div>
-          <input class="inp" id="qty" type="number" min="1" placeholder="e.g. 100"/>
+          <input class="inp" id="qty" type="number" min="1" placeholder="e.g. 500"/>
         </div>
         <div class="field" style="margin-bottom:0">
           <div class="field-lbl">Unit</div>
@@ -580,334 +407,191 @@ select.inp option{background:var(--surface2);color:var(--white)}
         </div>
       </div>
 
-      <div class="field">
-        <div class="field-lbl">Price ceiling <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
-        <input class="inp" id="budget" placeholder="e.g. $2,800/MT  or  $280,000 total"/>
-        <div class="field-hint">Sets your agent's price ceiling — it negotiates hard to land under it. Not a commitment.</div>
+      <div class="fg2">
+        <div class="field">
+          <div class="field-lbl">Price ceiling <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+          <input class="inp" id="budget" placeholder="e.g. $2,800/MT"/>
+          <div class="field-hint">Your private limit — counterparties never see it.</div>
+        </div>
+        <div class="field">
+          <div class="field-lbl">Incoterms <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+          <select class="inp" id="incoterms">
+            <option value="">— Select —</option>
+            <option>FOB</option><option>CIF</option><option>DAP</option><option>DDP</option><option>EXW</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="fg2">
+        <div class="field">
+          <div class="field-lbl">Delivery country <span class="req"></span></div>
+          <select class="inp" id="country">
+            <optgroup label="── Reconstruction Markets ──">
+              <option>Ukraine</option><option>Palestine</option><option>Iraq</option><option>Syria</option>
+            </optgroup>
+            <optgroup label="── Gulf &amp; MENA ──">
+              <option>UAE</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option>
+              <option>Bahrain</option><option>Oman</option><option>Egypt</option><option>Jordan</option>
+              <option>Yemen</option><option>Lebanon</option><option>Libya</option><option>Tunisia</option>
+              <option>Algeria</option><option>Morocco</option><option>Sudan</option><option>Iran</option><option>Turkey</option>
+            </optgroup>
+            <optgroup label="── Europe ──">
+              <option>Germany</option><option>France</option><option>Italy</option><option>Spain</option>
+              <option>Netherlands</option><option>Belgium</option><option>Switzerland</option>
+              <option>Austria</option><option>Poland</option><option>Czech Republic</option>
+              <option>Romania</option><option>Hungary</option><option>Bulgaria</option>
+              <option>Greece</option><option>Portugal</option><option>Sweden</option>
+              <option>Norway</option><option>Denmark</option><option>Finland</option>
+              <option>United Kingdom</option><option>Ireland</option><option>Slovakia</option>
+              <option>Croatia</option><option>Serbia</option><option>Ukraine</option>
+              <option>Estonia</option><option>Latvia</option><option>Lithuania</option>
+              <option>Slovenia</option><option>Luxembourg</option><option>Malta</option><option>Cyprus</option>
+              <option>Albania</option><option>North Macedonia</option><option>Bosnia</option>
+              <option>Montenegro</option><option>Moldova</option><option>Kosovo</option>
+            </optgroup>
+            <optgroup label="── Asia ──">
+              <option>China</option><option>India</option><option>Japan</option>
+              <option>South Korea</option><option>Singapore</option><option>Malaysia</option>
+              <option>Thailand</option><option>Indonesia</option><option>Vietnam</option>
+              <option>Philippines</option><option>Taiwan</option><option>Hong Kong</option>
+              <option>Pakistan</option><option>Bangladesh</option><option>Sri Lanka</option>
+              <option>Kazakhstan</option><option>Uzbekistan</option><option>Azerbaijan</option>
+              <option>Georgia</option><option>Armenia</option><option>Afghanistan</option>
+              <option>Mongolia</option><option>Kyrgyzstan</option><option>Tajikistan</option>
+            </optgroup>
+            <optgroup label="── Africa ──">
+              <option>Nigeria</option><option>South Africa</option><option>Kenya</option>
+              <option>Ethiopia</option><option>Ghana</option><option>Tanzania</option>
+              <option>Uganda</option><option>Mozambique</option><option>Zambia</option>
+              <option>Zimbabwe</option><option>Angola</option><option>Cameroon</option>
+              <option>Senegal</option><option>Ivory Coast</option><option>DR Congo</option>
+              <option>Congo</option><option>Rwanda</option><option>Botswana</option>
+              <option>Namibia</option><option>Malawi</option><option>Mauritius</option>
+            </optgroup>
+            <optgroup label="── Americas ──">
+              <option>United States</option><option>Canada</option><option>Mexico</option>
+              <option>Brazil</option><option>Argentina</option><option>Chile</option>
+              <option>Colombia</option><option>Peru</option><option>Venezuela</option>
+              <option>Ecuador</option><option>Bolivia</option><option>Uruguay</option>
+              <option>Paraguay</option><option>Panama</option><option>Costa Rica</option>
+              <option>Guatemala</option><option>Honduras</option><option>El Salvador</option>
+              <option>Dominican Republic</option><option>Cuba</option><option>Jamaica</option>
+            </optgroup>
+            <optgroup label="── Oceania ──">
+              <option>Australia</option><option>New Zealand</option><option>Papua New Guinea</option><option>Fiji</option>
+            </optgroup>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <div class="field-lbl">Preferred origin <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+          <select class="inp" id="origin">
+            <option value="">— No preference —</option>
+            <optgroup label="── Gulf &amp; MENA ──">
+              <option>UAE</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option>
+              <option>Bahrain</option><option>Oman</option><option>Egypt</option><option>Jordan</option>
+              <option>Libya</option><option>Tunisia</option><option>Algeria</option><option>Morocco</option><option>Turkey</option>
+            </optgroup>
+            <optgroup label="── Europe ──">
+              <option>Germany</option><option>France</option><option>Italy</option><option>Spain</option>
+              <option>Netherlands</option><option>Belgium</option><option>Poland</option>
+              <option>United Kingdom</option><option>Ukraine</option>
+            </optgroup>
+            <optgroup label="── Asia ──">
+              <option>China</option><option>India</option><option>Japan</option>
+              <option>South Korea</option><option>Singapore</option><option>Malaysia</option>
+              <option>Thailand</option><option>Indonesia</option><option>Vietnam</option>
+              <option>Pakistan</option><option>Bangladesh</option>
+            </optgroup>
+            <option>Other</option>
+          </select>
+          <div class="field-hint">Leave blank to source from all verified origins.</div>
+        </div>
       </div>
 
       <div class="field">
-        <div class="field-lbl">Project name / PO reference <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+        <div class="field-lbl">Project / PO reference <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
         <input class="inp" id="project-ref" placeholder="e.g. Reconstruction Phase 2 / PO-2024-0187"/>
       </div>
 
-      <div class="field">
-        <div class="field-lbl">Incoterms <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
-        <select class="inp" id="incoterms">
-          <option value="">— Select Incoterms —</option>
-          <option>FOB</option><option>CIF</option><option>DAP</option><option>DDP</option><option>EXW</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <div class="field-lbl">Delivery country <span class="req"></span></div>
-        <select class="inp" id="country">
-          <optgroup label="── Reconstruction Markets ──">
-            <option>Ukraine</option><option>Palestine</option><option>Iraq</option><option>Syria</option>
-          </optgroup>
-          <optgroup label="── Gulf &amp; MENA ──">
-            <option>UAE</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option>
-            <option>Bahrain</option><option>Oman</option><option>Egypt</option><option>Jordan</option>
-            <option>Iraq</option><option>Yemen</option><option>Lebanon</option>
-            <option>Palestine</option><option>Libya</option><option>Tunisia</option><option>Algeria</option>
-            <option>Morocco</option><option>Sudan</option><option>Iran</option><option>Turkey</option>
-          </optgroup>
-          <optgroup label="── Europe ──">
-            <option>Germany</option><option>France</option><option>Italy</option><option>Spain</option>
-            <option>Netherlands</option><option>Belgium</option><option>Switzerland</option>
-            <option>Austria</option><option>Poland</option><option>Czech Republic</option>
-            <option>Romania</option><option>Hungary</option><option>Bulgaria</option>
-            <option>Greece</option><option>Portugal</option><option>Sweden</option>
-            <option>Norway</option><option>Denmark</option><option>Finland</option>
-            <option>United Kingdom</option><option>Ireland</option><option>Slovakia</option>
-            <option>Croatia</option><option>Serbia</option><option>Ukraine</option>
-            <option>Russia</option><option>Belarus</option><option>Estonia</option>
-            <option>Latvia</option><option>Lithuania</option><option>Slovenia</option>
-            <option>Luxembourg</option><option>Malta</option><option>Cyprus</option>
-            <option>Albania</option><option>North Macedonia</option><option>Bosnia</option>
-            <option>Montenegro</option><option>Moldova</option><option>Kosovo</option>
-          </optgroup>
-          <optgroup label="── Asia ──">
-            <option>China</option><option>India</option><option>Japan</option>
-            <option>South Korea</option><option>Singapore</option><option>Malaysia</option>
-            <option>Thailand</option><option>Indonesia</option><option>Vietnam</option>
-            <option>Philippines</option><option>Taiwan</option><option>Hong Kong</option>
-            <option>Pakistan</option><option>Bangladesh</option><option>Sri Lanka</option>
-            <option>Nepal</option><option>Myanmar</option><option>Cambodia</option>
-            <option>Kazakhstan</option><option>Uzbekistan</option><option>Azerbaijan</option>
-            <option>Georgia</option><option>Armenia</option><option>Turkmenistan</option>
-            <option>Afghanistan</option><option>Mongolia</option><option>Kyrgyzstan</option>
-            <option>Tajikistan</option>
-          </optgroup>
-          <optgroup label="── Africa ──">
-            <option>Nigeria</option><option>South Africa</option><option>Kenya</option>
-            <option>Ethiopia</option><option>Ghana</option><option>Tanzania</option>
-            <option>Uganda</option><option>Mozambique</option><option>Zambia</option>
-            <option>Zimbabwe</option><option>Angola</option><option>Cameroon</option>
-            <option>Senegal</option><option>Ivory Coast</option><option>DR Congo</option>
-            <option>Congo</option><option>Rwanda</option><option>Botswana</option>
-            <option>Namibia</option><option>Malawi</option><option>Mauritius</option>
-            <option>Madagascar</option><option>Somalia</option><option>Djibouti</option>
-          </optgroup>
-          <optgroup label="── Americas ──">
-            <option>United States</option><option>Canada</option><option>Mexico</option>
-            <option>Brazil</option><option>Argentina</option><option>Chile</option>
-            <option>Colombia</option><option>Peru</option><option>Venezuela</option>
-            <option>Ecuador</option><option>Bolivia</option><option>Uruguay</option>
-            <option>Paraguay</option><option>Panama</option><option>Costa Rica</option>
-            <option>Guatemala</option><option>Honduras</option><option>El Salvador</option>
-            <option>Dominican Republic</option><option>Cuba</option><option>Jamaica</option>
-          </optgroup>
-          <optgroup label="── Oceania ──">
-            <option>Australia</option><option>New Zealand</option><option>Papua New Guinea</option>
-            <option>Fiji</option>
-          </optgroup>
-          <option>Other</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <div class="field-lbl">Preferred origin <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
-        <select class="inp" id="origin">
-          <option value="">— No preference —</option>
-          <optgroup label="── Gulf &amp; MENA ──">
-            <option>UAE</option><option>Saudi Arabia</option><option>Qatar</option><option>Kuwait</option>
-            <option>Bahrain</option><option>Oman</option><option>Egypt</option><option>Jordan</option>
-            <option>Iraq</option><option>Yemen</option><option>Lebanon</option>
-            <option>Palestine</option><option>Libya</option><option>Tunisia</option><option>Algeria</option>
-            <option>Morocco</option><option>Sudan</option><option>Iran</option><option>Turkey</option>
-          </optgroup>
-          <optgroup label="── Europe ──">
-            <option>Germany</option><option>France</option><option>Italy</option><option>Spain</option>
-            <option>Netherlands</option><option>Belgium</option><option>Switzerland</option>
-            <option>Austria</option><option>Poland</option><option>Czech Republic</option>
-            <option>Romania</option><option>Hungary</option><option>Bulgaria</option>
-            <option>Greece</option><option>Portugal</option><option>Sweden</option>
-            <option>Norway</option><option>Denmark</option><option>Finland</option>
-            <option>United Kingdom</option><option>Ireland</option><option>Slovakia</option>
-            <option>Croatia</option><option>Serbia</option><option>Ukraine</option>
-            <option>Russia</option><option>Belarus</option><option>Estonia</option>
-            <option>Latvia</option><option>Lithuania</option><option>Slovenia</option>
-            <option>Luxembourg</option><option>Malta</option><option>Cyprus</option>
-            <option>Albania</option><option>North Macedonia</option><option>Bosnia</option>
-            <option>Montenegro</option><option>Moldova</option><option>Kosovo</option>
-          </optgroup>
-          <optgroup label="── Asia ──">
-            <option>China</option><option>India</option><option>Japan</option>
-            <option>South Korea</option><option>Singapore</option><option>Malaysia</option>
-            <option>Thailand</option><option>Indonesia</option><option>Vietnam</option>
-            <option>Philippines</option><option>Taiwan</option><option>Hong Kong</option>
-            <option>Pakistan</option><option>Bangladesh</option><option>Sri Lanka</option>
-            <option>Nepal</option><option>Myanmar</option><option>Cambodia</option>
-            <option>Kazakhstan</option><option>Uzbekistan</option><option>Azerbaijan</option>
-            <option>Georgia</option><option>Armenia</option><option>Turkmenistan</option>
-            <option>Afghanistan</option><option>Mongolia</option><option>Kyrgyzstan</option>
-            <option>Tajikistan</option>
-          </optgroup>
-          <optgroup label="── Africa ──">
-            <option>Nigeria</option><option>South Africa</option><option>Kenya</option>
-            <option>Ethiopia</option><option>Ghana</option><option>Tanzania</option>
-            <option>Uganda</option><option>Mozambique</option><option>Zambia</option>
-            <option>Zimbabwe</option><option>Angola</option><option>Cameroon</option>
-            <option>Senegal</option><option>Ivory Coast</option><option>DR Congo</option>
-            <option>Congo</option><option>Rwanda</option><option>Botswana</option>
-            <option>Namibia</option><option>Malawi</option><option>Mauritius</option>
-            <option>Madagascar</option><option>Somalia</option><option>Djibouti</option>
-          </optgroup>
-          <optgroup label="── Americas ──">
-            <option>United States</option><option>Canada</option><option>Mexico</option>
-            <option>Brazil</option><option>Argentina</option><option>Chile</option>
-            <option>Colombia</option><option>Peru</option><option>Venezuela</option>
-            <option>Ecuador</option><option>Bolivia</option><option>Uruguay</option>
-            <option>Paraguay</option><option>Panama</option><option>Costa Rica</option>
-            <option>Guatemala</option><option>Honduras</option><option>El Salvador</option>
-            <option>Dominican Republic</option><option>Cuba</option><option>Jamaica</option>
-          </optgroup>
-          <optgroup label="── Oceania ──">
-            <option>Australia</option><option>New Zealand</option><option>Papua New Guinea</option>
-            <option>Fiji</option>
-          </optgroup>
-          <option>Other</option>
-        </select>
-        <div class="field-hint">The Orchestrator will prioritise counterparties from this country. Leave blank to source from all verified origins.</div>
-      </div>
-
-      <button class="btn-p" onclick="goStep(3)">Continue →</button>
-      <button class="btn-s" onclick="goStep(1)">← Back</button>
-    </div>
-
-    <!-- ── STEP 3 ── -->
-    <div class="step" id="step-3">
-      <div class="q-eyebrow">Step 3</div>
-      <div class="q-title">Procurement<br/><em>timeline.</em></div>
-      <div class="q-sub">Timeline determines the orchestration strategy. Urgent procurement activates accelerated counterparty screening — flexible timelines allow maximum compliance validation and price optimisation.</div>
-
+      <div class="field-lbl" style="margin-bottom:10px">Procurement timeline <span class="req"></span></div>
       <div class="tl-grid">
         <div class="tc" onclick="selectUrgency(this,'ASAP — within 2 weeks')">
-          <div class="tc-check">✓ selected</div>
+          <div class="tc-check">✓</div>
           <div class="tc-icon">🚨</div>
           <div class="tc-name">ASAP</div>
           <div class="tc-desc">Urgent — under 30 days</div>
           <div class="tc-mode">Aggressive mode</div>
         </div>
         <div class="tc" onclick="selectUrgency(this,'1–2 months')">
-          <div class="tc-check">✓ selected</div>
+          <div class="tc-check">✓</div>
           <div class="tc-icon">📅</div>
           <div class="tc-name">1–2 months</div>
           <div class="tc-desc">Standard project timeline</div>
           <div class="tc-mode">Balanced mode</div>
         </div>
         <div class="tc" onclick="selectUrgency(this,'3+ months — flexible')">
-          <div class="tc-check">✓ selected</div>
+          <div class="tc-check">✓</div>
           <div class="tc-icon">🌊</div>
           <div class="tc-name">Flexible</div>
-          <div class="tc-desc">3+ months — no rush, max savings</div>
+          <div class="tc-desc">3+ months — max savings</div>
           <div class="tc-mode">Max savings mode</div>
         </div>
       </div>
+    </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px">
-        <div class="field" style="margin-bottom:0">
+    <!-- ══ SECTION 3 — YOUR DETAILS ══ -->
+    <div class="form-section">
+      <div class="form-sec-hd"><span class="form-sec-num">03</span><span class="form-sec-title">Your details</span></div>
+
+      <div class="fg2">
+        <div class="field">
           <div class="field-lbl">Your name <span class="req"></span></div>
           <input class="inp" id="contact-name" placeholder="Mohammed Al-Rashidi"/>
         </div>
-        <div class="field" style="margin-bottom:0">
+        <div class="field">
           <div class="field-lbl">Company</div>
           <input class="inp" id="contact-company" placeholder="Gulf Cement LLC"/>
         </div>
       </div>
-
-      <div class="field">
-        <div class="field-lbl">Email <span class="req"></span></div>
-        <input class="inp" id="contact-email" type="email" placeholder="you@company.com"/>
-        <div class="field-hint">Price offers and LOI documents are sent here.</div>
-      </div>
-
-      <div class="field">
-        <div class="field-lbl">Phone / WhatsApp <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional — faster updates)</span></div>
-        <input class="inp" id="contact-wa" placeholder="+1-XXX-XXX-XXXX"/>
-        <div class="field-hint">Get deal alerts via phone or WhatsApp. Response within 24h.</div>
-      </div>
-
-      <button class="btn-p" onclick="goStep(4)">Review my mandate →</button>
-      <button class="btn-s" onclick="goStep(2)">← Back</button>
-
-      <a href="javascript:void(0)" onclick="saveMandateAndGo('negotiation-agent.html')" class="agent-link">
-        <div class="al-icon">🔄</div>
-        <div class="al-body">
-          <div class="al-title">Launch Trade Orchestrator</div>
-          <div class="al-desc">Activate the live Orchestrator console · compliance-anchored sourcing in your browser</div>
+      <div class="fg2">
+        <div class="field" style="margin-bottom:0">
+          <div class="field-lbl">Email <span class="req"></span></div>
+          <input class="inp" id="contact-email" type="email" placeholder="you@company.com"/>
+          <div class="field-hint">Price offers and LOI documents sent here.</div>
         </div>
-        <div class="al-arrow">→</div>
-      </a>
-    </div>
-
-    <!-- ── STEP 4 — REVIEW ── -->
-    <div class="step" id="step-4">
-      <div class="q-eyebrow">Review</div>
-      <div class="q-title">Mandate<br/><em>summary.</em></div>
-      <div class="q-sub">Review your mandate below. Once activated, your Orchestrator engages only screened and verified counterparties — every offer is compliance-validated and documented before it reaches you.</div>
-
-      <div class="sum-grid">
-        <div class="sum-cell hi">
-          <div class="sum-lbl">Commodity</div>
-          <div class="sum-val" id="sum-product">—</div>
-        </div>
-        <div class="sum-cell">
-          <div class="sum-lbl">Quantity</div>
-          <div class="sum-val" id="sum-qty">—</div>
-        </div>
-        <div class="sum-cell">
-          <div class="sum-lbl">Target budget</div>
-          <div class="sum-val" id="sum-budget">—</div>
-        </div>
-        <div class="sum-cell">
-          <div class="sum-lbl">Delivery country</div>
-          <div class="sum-val" id="sum-country">—</div>
-        </div>
-        <div class="sum-cell" id="sum-origin-cell" style="display:none">
-          <div class="sum-lbl">Preferred origin</div>
-          <div class="sum-val" id="sum-origin" style="color:var(--teal)">—</div>
-        </div>
-        <div class="sum-cell">
-          <div class="sum-lbl">Timeline</div>
-          <div class="sum-val" id="sum-urgency">—</div>
-        </div>
-        <div class="sum-cell">
-          <div class="sum-lbl">Email</div>
-          <div class="sum-val" id="sum-email" style="font-size:13px">—</div>
-        </div>
-        <div class="sum-cell" id="sum-wa-cell">
-          <div class="sum-lbl">WhatsApp</div>
-          <div class="sum-val" id="sum-wa">—</div>
-        </div>
-      </div>
-
-      <div class="gbox">
-        <div class="g-row"><span class="g-chk">✓</span>All counterparties screened for identity, capacity &amp; compliance before your mandate reaches them</div>
-        <div class="g-row"><span class="g-chk">✓</span>Your price ceiling and terms remain confidential — counterparties never see each other's positions</div>
-        <div class="g-row"><span class="g-chk">✓</span>Every offer is compliance-validated and documented — you authorize before anything is committed</div>
-        <div class="g-row"><span class="g-chk">✓</span>Escrow-ready settlement structure · full audit trail · no credit card required</div>
-      </div>
-
-      <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Activate my mandate →</button>
-      <button class="btn-s" onclick="goStep(3)">← Back</button>
-      <div style="text-align:center;margin-top:12px;font-size:13px;color:var(--muted)">Already have an account? <a href="login.html" style="color:var(--violet);text-decoration:none;font-weight:600">Sign in →</a></div>
-    </div>
-
-    <!-- ── SUCCESS ── -->
-    <div class="step" id="step-success">
-      <div class="suc-wrap">
-        <div class="suc-head">
-          <div class="suc-icon">🎯</div>
-          <div class="suc-title">Mandate<br/><em>activated.</em></div>
-          <div class="suc-sub">Your trust layer is active — your Orchestrator is now matching verified counterparties to your mandate. Every step is compliance-validated, documented, and yours to authorize.</div>
-        </div>
-
-        <div class="flow-list">
-          <div class="fl-item"><div class="fl-num">1</div><div class="fl-text">Your Orchestrator matches only screened, verified counterparties — commodity, volume, and limits are compliance-confirmed before outreach</div></div>
-          <div class="fl-item"><div class="fl-num">2</div><div class="fl-text">Orchestration happens inside your mandate — your ceiling stays private, counterparties never see each other's positions</div></div>
-          <div class="fl-item"><div class="fl-num">3</div><div class="fl-text">Compliance-validated, documented offer delivered to you — authorize, counter, or decline with zero obligation</div></div>
-          <div class="fl-item"><div class="fl-num">4</div><div class="fl-text">If approved — a professional Letter of Intent (LOI) is generated and sent to all parties</div></div>
-          <div class="fl-item"><div class="fl-num g">✓</div><div class="fl-text" style="color:var(--green)">You deal directly with the supplier — SLOI AI never touches your funds</div></div>
-        </div>
-
-        <a href="sloiai-platform.html" style="display:block;text-align:center;padding:13px 20px;background:var(--indigo);color:#fff;border-radius:6px;font-size:15px;font-weight:700;text-decoration:none;margin-bottom:10px;font-family:'IBM Plex Mono',monospace;letter-spacing:.02em">Open your platform →</a>
-
-        <div style="margin-bottom:8px">
-          <div class="cta-p" style="text-align:center;cursor:default;user-select:none">📧 Check your email for confirmation</div>
-        </div>
-        <p style="font-size:13px;color:var(--muted);line-height:1.7;margin:12px 0">Every LOI is anchored to Hedera for tamper-proof immutability — no extra steps required.</p>
-        <a href="demo.html" style="display:inline-block;font-size:13px;color:var(--violet);text-decoration:none">Watch demo →</a>
-
-        <div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.18);border-radius:8px;padding:16px 18px;margin-top:24px;text-align:left">
-          <div style="font-size:15px;font-weight:600;color:var(--white);margin-bottom:6px">💰 Need financing for this deal?</div>
-          <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px">Connect to TradeFinex → Get funded against your LOI</div>
-          <a href="https://tradefinex.org" target="_blank" rel="noopener" style="color:var(--green);font-size:13px;font-weight:600;text-decoration:none">tradefinex.org →</a>
+        <div class="field" style="margin-bottom:0">
+          <div class="field-lbl">Phone / WhatsApp <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span></div>
+          <input class="inp" id="contact-wa" placeholder="+1-XXX-XXX-XXXX"/>
+          <div class="field-hint">Faster deal alerts via WhatsApp.</div>
         </div>
       </div>
     </div>
+
+    <!-- ══ SUBMIT ══ -->
+    <div class="gbox">
+      <div class="g-row"><span class="g-chk">✓</span>All counterparties screened before your mandate reaches them</div>
+      <div class="g-row"><span class="g-chk">✓</span>Your price ceiling stays confidential — never visible to suppliers</div>
+      <div class="g-row"><span class="g-chk">✓</span>Every offer documented and compliance-validated — you authorize before anything is committed</div>
+      <div class="g-row"><span class="g-chk">✓</span>Escrow-ready settlement · full audit trail · no credit card required</div>
+    </div>
+
+    <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Activate my mandate →</button>
+    <div style="text-align:center;font-size:13px;color:var(--muted)">Already have an account? <a href="login.html" style="color:var(--violet);text-decoration:none;font-weight:600">Sign in →</a></div>
 
   </div><!-- /right-body -->
 </div><!-- /right -->
 </div><!-- /shell -->
 
 <script>
-var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', purchaseType:'Recurring contract', annualVolume:'', country:'UAE', urgency:'', name:'', company:'', email:'', wa:'', projectRef:'', incoterms:'' };
+var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', country:'UAE', origin:'', urgency:'', name:'', company:'', email:'', wa:'', projectRef:'', incoterms:'' };
 
 function saveMandateAndGo(url) {
-  var nm = document.getElementById('contact-name').value.trim();
-  var em = document.getElementById('contact-email').value.trim();
-  var wa = document.getElementById('contact-wa').value.trim();
-  var co = document.getElementById('contact-company').value.trim();
-  if (nm) state.name    = nm;
-  if (em) state.email   = em;
-  if (wa) state.wa      = wa;
-  if (co) state.company = co;
   localStorage.setItem('sloiMandate', JSON.stringify(state));
   window.location.href = url;
 }
 
+// ── CATALOG ──────────────────────────────────────────────
 var CATALOG = [
   {sector:'Metals',    sku:'STL-12',    name:'Steel Rebar G60 12mm',         unit:'MT',    market:2840,  moq:10},
   {sector:'Metals',    sku:'STL-HRC',   name:'Steel HR Coil SS400',          unit:'MT',    market:3100,  moq:20},
@@ -944,27 +628,27 @@ var CATALOG = [
   {sector:'Chemicals', sku:'DAP-F',     name:'DAP Fertilizer 18-46-0',       unit:'MT',    market:620,   moq:50},
   {sector:'Chemicals', sku:'PP-GRN',    name:'PP Granules Homopolymer',      unit:'MT',    market:1280,  moq:20},
   {sector:'Chemicals', sku:'HDPE-BLW',  name:'HDPE Blow Grade',              unit:'MT',    market:1220,  moq:20},
-  {sector:'Engineering', sku:'GEN-100',  name:'Diesel Generator 100 kVA',     unit:'Unit',  market:8500,  moq:1},
-  {sector:'Engineering', sku:'GEN-500',  name:'Diesel Generator 500 kVA',     unit:'Unit',  market:38000, moq:1},
-  {sector:'Engineering', sku:'PMP-CTF',  name:'Centrifugal Pump 50HP',        unit:'Unit',  market:2200,  moq:2},
-  {sector:'Engineering', sku:'PMP-SUB',  name:'Submersible Pump 30HP',        unit:'Unit',  market:1800,  moq:2},
-  {sector:'Engineering', sku:'CMP-AIR',  name:'Air Compressor 50L 3HP',       unit:'Unit',  market:950,   moq:5},
-  {sector:'Engineering', sku:'CMP-SCR',  name:'Screw Compressor 75kW',        unit:'Unit',  market:22000, moq:1},
-  {sector:'Engineering', sku:'CRN-MOB',  name:'Mobile Crane 50T',             unit:'Unit',  market:185000,moq:1},
-  {sector:'Engineering', sku:'EXC-320',  name:'Hydraulic Excavator 20T',      unit:'Unit',  market:142000,moq:1},
-  {sector:'Engineering', sku:'FRK-3T',   name:'Forklift 3T Diesel',           unit:'Unit',  market:28000, moq:1},
-  {sector:'Engineering', sku:'TRF-1MV',  name:'Dry-type Transformer 1 MVA',   unit:'Unit',  market:32000, moq:1},
-  {sector:'Engineering', sku:'MTR-75',   name:'Electric Motor 75 kW IE3',     unit:'Unit',  market:4800,  moq:2},
-  {sector:'Engineering', sku:'HVAC-CH',  name:'HVAC Chiller 200 TR',          unit:'Unit',  market:58000, moq:1},
+  {sector:'Engineering',sku:'GEN-100',  name:'Diesel Generator 100 kVA',     unit:'Unit',  market:8500,  moq:1},
+  {sector:'Engineering',sku:'GEN-500',  name:'Diesel Generator 500 kVA',     unit:'Unit',  market:38000, moq:1},
+  {sector:'Engineering',sku:'PMP-CTF',  name:'Centrifugal Pump 50HP',        unit:'Unit',  market:2200,  moq:2},
+  {sector:'Engineering',sku:'PMP-SUB',  name:'Submersible Pump 30HP',        unit:'Unit',  market:1800,  moq:2},
+  {sector:'Engineering',sku:'CMP-AIR',  name:'Air Compressor 50L 3HP',       unit:'Unit',  market:950,   moq:5},
+  {sector:'Engineering',sku:'CMP-SCR',  name:'Screw Compressor 75kW',        unit:'Unit',  market:22000, moq:1},
+  {sector:'Engineering',sku:'CRN-MOB',  name:'Mobile Crane 50T',             unit:'Unit',  market:185000,moq:1},
+  {sector:'Engineering',sku:'EXC-320',  name:'Hydraulic Excavator 20T',      unit:'Unit',  market:142000,moq:1},
+  {sector:'Engineering',sku:'FRK-3T',   name:'Forklift 3T Diesel',           unit:'Unit',  market:28000, moq:1},
+  {sector:'Engineering',sku:'TRF-1MV',  name:'Dry-type Transformer 1 MVA',   unit:'Unit',  market:32000, moq:1},
+  {sector:'Engineering',sku:'MTR-75',   name:'Electric Motor 75 kW IE3',     unit:'Unit',  market:4800,  moq:2},
+  {sector:'Engineering',sku:'HVAC-CH',  name:'HVAC Chiller 200 TR',          unit:'Unit',  market:58000, moq:1},
 ];
 
 var SECTOR_MAP = {
-  'Building materials':    ['Metals','Cement','Building'],
-  'Petrochemicals':        'Petrochemicals',
-  'Energy':                'Energy',
-  'Critical Minerals':     'Chemicals',
-  'Engineering equipment': 'Engineering',
-  'Reconstruction Packages': ['Metals','Cement','Building','Engineering'],
+  'Building materials':     ['Metals','Cement','Building'],
+  'Petrochemicals':         'Chemicals',
+  'Energy':                 'Energy',
+  'Critical Minerals':      'Chemicals',
+  'Engineering equipment':  'Engineering',
+  'Reconstruction Packages':['Metals','Cement','Building','Engineering'],
 };
 
 function filterCatalog(categoryName) {
@@ -977,13 +661,10 @@ function filterCatalog(categoryName) {
   } else {
     items = CATALOG;
   }
-
   var sel   = document.getElementById('product-select');
   var wrap  = document.getElementById('cat-wrap');
   var badge = document.getElementById('cat-count');
-
   sel.innerHTML = '<option value="">— Browse verified products —</option>';
-
   if (Array.isArray(sectorVal)) {
     sectorVal.forEach(function(s){
       var grpItems = CATALOG.filter(function(p){ return p.sector === s; });
@@ -991,19 +672,6 @@ function filterCatalog(categoryName) {
       var grp = document.createElement('optgroup');
       grp.label = s;
       grpItems.forEach(function(p){
-        var opt = document.createElement('option');
-        opt.value = p.sku;
-        opt.textContent = p.name + '  ·  ' + p.sku + '  ·  ~$' + p.market + '/' + p.unit;
-        grp.appendChild(opt);
-      });
-      sel.appendChild(grp);
-    });
-  } else if (!sectorVal) {
-    var allSectors = ['Metals','Building','Energy','Agriculture','Chemicals','Engineering'];
-    allSectors.forEach(function(s){
-      var grp = document.createElement('optgroup');
-      grp.label = s;
-      CATALOG.filter(function(p){ return p.sector === s; }).forEach(function(p){
         var opt = document.createElement('option');
         opt.value = p.sku;
         opt.textContent = p.name + '  ·  ' + p.sku + '  ·  ~$' + p.market + '/' + p.unit;
@@ -1019,7 +687,6 @@ function filterCatalog(categoryName) {
       sel.appendChild(opt);
     });
   }
-
   badge.textContent = items.length + ' product' + (items.length !== 1 ? 's' : '');
   wrap.style.display = 'block';
   document.getElementById('cat-info').classList.remove('show');
@@ -1030,273 +697,43 @@ function onProductSelect() {
   var sel  = document.getElementById('product-select');
   var sku  = sel.value;
   var info = document.getElementById('cat-info');
-
-  if (!sku) {
-    info.classList.remove('show');
-    state.sku = '';
-    document.getElementById('detail-lbl').innerHTML = 'Additional specifications <span style="color:var(--muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none">(optional)</span>';
-    return;
-  }
-
+  if (!sku) { info.classList.remove('show'); state.sku = ''; return; }
   var prod = CATALOG.find(function(p){ return p.sku === sku; });
   if (!prod) return;
-
   state.sku = sku;
   document.getElementById('ci-price').textContent = '$' + prod.market.toLocaleString() + '/' + prod.unit;
   document.getElementById('ci-sku').textContent   = prod.sku;
   document.getElementById('ci-unit').textContent  = prod.unit;
   document.getElementById('ci-moq').textContent   = prod.moq.toLocaleString() + ' ' + prod.unit;
   info.classList.add('show');
-
-  var detailInput = document.getElementById('product-detail');
-  detailInput.placeholder = prod.name + ' · ' + prod.sku;
-
+  document.getElementById('product-detail').placeholder = prod.name + ' · ' + prod.sku;
   var unitSel = document.getElementById('unit');
   for (var i = 0; i < unitSel.options.length; i++) {
     if (unitSel.options[i].value === prod.unit || unitSel.options[i].text === prod.unit) {
-      unitSel.selectedIndex = i;
-      state.unit = unitSel.value;
-      break;
+      unitSel.selectedIndex = i; state.unit = unitSel.value; break;
     }
   }
 }
 
-var currentStep = 0;
-var maxReached  = 0;
-
-function tryGoStep(n) { if (n <= maxReached) goStep(n); }
-
-function goStep(n) {
-  if (n > currentStep) {
-    if (currentStep === 1) {
-      if (!state.product) { pulse(document.querySelector('.prod-grid')); return; }
-      state.detail = document.getElementById('product-detail').value;
-    }
-    if (currentStep === 2) {
-      var qv = document.getElementById('qty').value;
-      if (!qv || parseFloat(qv) <= 0) { shake('qty'); return; }
-      state.qty        = qv;
-      state.unit       = document.getElementById('unit').value;
-      state.budget     = document.getElementById('budget').value || 'Not specified';
-      state.country    = document.getElementById('country').value;
-      state.origin     = document.getElementById('origin').value || '';
-      state.projectRef   = document.getElementById('project-ref').value || '';
-      state.incoterms    = document.getElementById('incoterms').value || '';
-    }
-    if (currentStep === 3) {
-      if (!state.urgency) { pulse(document.querySelector('.tl-grid')); return; }
-      var nm  = document.getElementById('contact-name').value.trim();
-      var em  = document.getElementById('contact-email').value.trim();
-      var wa  = document.getElementById('contact-wa').value.trim();
-      var co  = document.getElementById('contact-company').value.trim();
-      if (!nm) { shake('contact-name'); return; }
-      if (!em || !em.includes('@')) { shake('contact-email'); return; }
-      state.name    = nm;
-      state.company = co;
-      state.email   = em;
-      state.wa      = wa;
-    }
-  }
-
-  document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
-  currentStep = n;
-  if (n > maxReached) maxReached = n;
-
-  if (n === 4) populateSummary();
-  var el = document.getElementById(n <= 4 ? 'step-' + n : 'step-success');
-  if (el) el.classList.add('active');
-
-  updateNav(n);
-  var rb = document.querySelector('.right-body');
-  if (rb) rb.scrollTop = 0;
+// ── IMPORT ───────────────────────────────────────────────
+function toggleImport() {
+  var wrap  = document.getElementById('import-panel-wrap');
+  var arrow = document.getElementById('import-arrow');
+  var open  = wrap.classList.toggle('open');
+  arrow.classList.toggle('open', open);
+}
+function closeImport() {
+  document.getElementById('import-panel-wrap').classList.remove('open');
+  document.getElementById('import-arrow').classList.remove('open');
+}
+function switchImportTab(tab) {
+  document.querySelectorAll('.itab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.itab-body').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('itab-' + tab).classList.add('active');
+  document.getElementById('ibody-' + tab).classList.add('active');
 }
 
-function updateNav(n) {
-  var pcts = {0:0,1:25,2:50,3:75,4:90};
-  var lbls = {0:'Start mandate',1:'Step 1 of 3',2:'Step 2 of 3',3:'Step 3 of 3',4:'Review mandate'};
-  document.getElementById('progress').style.width = (pcts[n] !== undefined ? pcts[n] : 100) + '%';
-  document.getElementById('prog-lbl').textContent = lbls[n] || 'Mandate active';
-
-  for (var i = 1; i <= 4; i++) {
-    var dot   = document.getElementById('dot-' + i);
-    var lname = document.getElementById('lname-' + i);
-    var line  = document.getElementById('line-' + i);
-    if (!dot) continue;
-    if (n === 0) {
-      dot.className = 'sn-dot'; dot.textContent = i < 4 ? i : '✓';
-      if (lname) lname.className = 'sn-name';
-      if (line)  line.className  = 'sn-line';
-    } else if (i < n) {
-      dot.className = 'sn-dot done'; dot.textContent = '✓';
-      if (lname) lname.className = 'sn-name done';
-      if (line)  line.className  = 'sn-line done';
-    } else if (i === n) {
-      dot.className = 'sn-dot active'; dot.textContent = i < 4 ? i : '✓';
-      if (lname) lname.className = 'sn-name active';
-      if (line)  line.className  = 'sn-line';
-    } else {
-      dot.className = 'sn-dot'; dot.textContent = i < 4 ? i : '✓';
-      if (lname) lname.className = 'sn-name';
-      if (line)  line.className  = 'sn-line';
-    }
-  }
-}
-
-/* ── WELCOME SCREEN ── */
-function selectEntry(type) {
-  document.querySelectorAll('.ec').forEach(function(c){ c.classList.remove('sel'); });
-  var card = document.getElementById('ec-' + type);
-  if (card) card.classList.add('sel');
-
-  document.querySelectorAll('.entry-panel').forEach(function(p){ p.classList.remove('show'); });
-
-  if (type === 'form') {
-    goStep(1);
-    return;
-  }
-  var panel = document.getElementById('panel-' + type);
-  if (panel) panel.classList.add('show');
-}
-
-function parsePO() {
-  var btn = document.getElementById('btn-po-continue');
-  if (btn && btn.disabled) return;
-  var fileInput = document.getElementById('po-file-input');
-  var file = fileInput && fileInput.files && fileInput.files[0];
-  if (!file) return;
-  if (btn) { btn.textContent = '⏳ Reading file…'; btn.disabled = true; btn.style.opacity = '.5'; }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var raw = e.target.result || '';
-    // Strip binary noise, keep printable ASCII text
-    var txt = raw.replace(/[^\x09\x0A\x0D\x20-\x7E]/g, ' ').replace(/[ \t]{4,}/g, ' ').replace(/\n{3,}/g, '\n\n');
-    var found = extractFromText(txt);
-    if (btn) { btn.textContent = 'Extract & continue →'; btn.disabled = false; btn.style.opacity = '1'; }
-    if (!found) {
-      var sub = document.getElementById('dz-sub');
-      if (sub) sub.innerHTML = '⚠ No fields found in this file — try <strong>AI Parse</strong> or <strong>Paste from ERP</strong>';
-      return;
-    }
-    goStep(1);
-  };
-  reader.onerror = function() {
-    if (btn) { btn.textContent = 'Extract & continue →'; btn.disabled = false; btn.style.opacity = '1'; }
-  };
-  reader.readAsText(file, 'utf-8');
-}
-
-function extractFromText(txt) {
-  var found = false;
-
-  // ── Quantity & unit ──
-  var qtyMatch = txt.match(/(?:qty|quantity|volume|amount)[:\s]*([0-9][0-9,\.]*)\s*(mt|ton|tons|kg|unit|units|pcs|barrel|bbl|liter|liters|m2|m3|m)/i)
-                 || txt.match(/([0-9][0-9,\.]*)\s*(mt|ton|tons|kg|unit|units|pcs|barrel|bbl|liter|liters)\b/i);
-  if (qtyMatch) {
-    var qf = document.getElementById('qty');
-    if (qf) qf.value = qtyMatch[1].replace(/,/g, '');
-    var rawUnit = (qtyMatch[2] || 'MT').toUpperCase().replace('TONS','MT').replace('TON','MT').replace('LITERS','Liters').replace('LITER','Liters').replace('UNITS','Units').replace('UNIT','Units').replace('PCS','Units');
-    var uf = document.getElementById('unit');
-    if (uf) { for (var i = 0; i < uf.options.length; i++) { if (uf.options[i].value.toUpperCase() === rawUnit || uf.options[i].text.toUpperCase() === rawUnit) { uf.selectedIndex = i; break; } } }
-    found = true;
-  }
-
-  // ── Price / budget ──
-  var priceMatch = txt.match(/(?:price|budget|rate|unit price|max price|target)[:\s]*\$?([\d,\.]+)/i)
-                   || txt.match(/\$\s*([\d,\.]+)\s*(?:\/\s*(?:mt|ton|kg|unit|liter))?/i);
-  if (priceMatch) {
-    var bf = document.getElementById('budget');
-    if (bf) { bf.value = '$' + priceMatch[1].replace(/,/g,'').replace(/\.00$/,''); found = true; }
-  }
-
-  // ── Country ──
-  var countryList = ['UAE','Saudi Arabia','Qatar','Kuwait','Bahrain','Oman','Egypt','Jordan','Iraq','Lebanon','Palestine','Libya','Turkey','China','India','Germany','France','Netherlands','UK','USA','United States','Morocco','Tunisia','Algeria'];
-  for (var ci = 0; ci < countryList.length; ci++) {
-    var re = new RegExp('\\b' + countryList[ci].replace(' ','\\s') + '\\b', 'i');
-    if (re.test(txt)) {
-      var cf = document.getElementById('country');
-      if (cf) { for (var oi = 0; oi < cf.options.length; oi++) { if (cf.options[oi].text.toLowerCase() === countryList[ci].toLowerCase()) { cf.selectedIndex = oi; break; } } }
-      found = true; break;
-    }
-  }
-
-  // ── Product / spec line ──
-  var productMatch = txt.match(/(?:product|item|commodity|material|description)[:\s]+([^\n\r,;]{3,60})/i);
-  if (productMatch) {
-    var df = document.getElementById('product-detail');
-    if (df) { df.value = productMatch[1].trim(); found = true; }
-  }
-
-  // ── PO / project reference ──
-  var refMatch = txt.match(/(?:po|purchase order|ref|reference|order no|order#)[:\s#]*([A-Z0-9\-\/]{3,30})/i);
-  if (refMatch) {
-    var rf = document.getElementById('project-ref');
-    if (rf) { rf.value = refMatch[1].trim(); found = true; }
-  }
-
-  // ── Incoterms ──
-  var incoMatch = txt.match(/\b(FOB|CIF|DAP|DDP|EXW|CFR|FAS|FCA)\b/i);
-  if (incoMatch) {
-    var inf = document.getElementById('incoterms');
-    if (inf) { for (var ii = 0; ii < inf.options.length; ii++) { if (inf.options[ii].value.toUpperCase() === incoMatch[1].toUpperCase()) { inf.selectedIndex = ii; break; } } }
-    found = true;
-  }
-
-  return found;
-}
-
-function parseERP() {
-  var txt = (document.getElementById('erp-paste') || {}).value || '';
-  if (!txt.trim()) { alert('Please paste your order text first.'); return; }
-  extractFromText(txt);
-  goStep(1);
-}
-
-function dzDrag(e, over) {
-  e.preventDefault();
-  var dz = document.getElementById('dropzone');
-  if (dz) dz.classList.toggle('drag-over', over);
-}
-
-function dzDrop(e) {
-  e.preventDefault();
-  var dz = document.getElementById('dropzone');
-  if (dz) dz.classList.remove('drag-over');
-  var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
-  if (file) setDropzoneFile(file);
-}
-
-function dzFileChosen(input) {
-  var file = input && input.files && input.files[0];
-  if (file) setDropzoneFile(file);
-}
-
-function setDropzoneFile(file) {
-  var dz = document.getElementById('dropzone');
-  if (dz) dz.classList.add('dz-chosen');
-  var icon  = document.getElementById('dz-icon');
-  var title = document.getElementById('dz-title');
-  var sub   = document.getElementById('dz-sub');
-  if (icon)  icon.textContent  = '✅';
-  if (title) title.textContent = file.name;
-  if (sub)   sub.textContent   = (Math.round(file.size / 1024)) + ' KB · ready to parse';
-  var btn = document.getElementById('btn-po-continue');
-  if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
-}
-
-function shake(id) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  el.classList.add('shake');
-  el.focus();
-  setTimeout(function(){ el.classList.remove('shake'); }, 400);
-}
-
-function pulse(el) {
-  if (!el) return;
-  el.style.animation = 'shake .3s ease';
-  setTimeout(function(){ el.style.animation = ''; }, 400);
-}
-
+// ── SELECT PRODUCT / URGENCY ─────────────────────────────
 function selectProduct(el, name) {
   document.querySelectorAll('.pc').forEach(function(c){ c.classList.remove('sel'); });
   el.classList.add('sel');
@@ -1307,118 +744,142 @@ function selectProduct(el, name) {
   state.sku = '';
   filterCatalog(name);
 }
-
 function selectUrgency(el, val) {
   document.querySelectorAll('.tc').forEach(function(c){ c.classList.remove('sel'); });
   el.classList.add('sel');
   state.urgency = val;
 }
 
-function populateSummary() {
-  var detail     = document.getElementById('product-detail').value;
-  var skuLabel   = state.sku ? ' [' + state.sku + ']' : '';
-  var prodLabel  = document.getElementById('product-select').value
-    ? (CATALOG.find(function(p){ return p.sku === state.sku; }) || {name: state.product}).name
-    : state.product;
-  document.getElementById('sum-product').textContent = prodLabel + skuLabel + (detail ? ' — ' + detail : '');
-  document.getElementById('sum-qty').textContent     = state.qty + ' ' + state.unit;
-  document.getElementById('sum-budget').textContent  = state.budget;
-  document.getElementById('sum-country').textContent = state.country;
-  if (state.origin) {
-    document.getElementById('sum-origin').textContent = state.origin;
-    document.getElementById('sum-origin-cell').style.display = '';
+// ── SHAKE / PULSE ────────────────────────────────────────
+function shake(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('shake');
+  el.focus();
+  setTimeout(function(){ el.classList.remove('shake'); }, 400);
+}
+function pulse(el) {
+  if (!el) return;
+  el.style.animation = 'shake .3s ease';
+  setTimeout(function(){ el.style.animation = ''; }, 400);
+}
+
+// ── PARSE BANNER ─────────────────────────────────────────
+function showParseBanner(rows) {
+  var banner = document.getElementById('parse-banner');
+  var rowsEl = document.getElementById('parse-banner-rows');
+  if (rows && rows.length && rowsEl) {
+    rowsEl.innerHTML = rows.filter(function(r){ return r[1]; }).map(function(r){
+      return '<div class="ai-result-item"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
+    }).join('');
   }
-  document.getElementById('sum-urgency').textContent = state.urgency;
-  document.getElementById('sum-email').textContent   = state.email || '—';
-  document.getElementById('sum-wa').textContent      = state.wa || '—';
-  var waCell = document.getElementById('sum-wa-cell');
-  if (waCell) waCell.style.display = state.wa ? 'block' : 'none';
+  if (banner) banner.classList.add('show');
+  closeImport();
+  window.scrollTo(0, 0);
 }
 
-function selectProceed(el, choice) {
-  document.querySelectorAll('#proceed-grid .pt').forEach(function(c){ c.classList.remove('sel'); });
-  el.classList.add('sel');
-  state.purchaseType = (choice === 'loi') ? 'One-time purchase' : 'Recurring contract';
+// ── FILE IMPORT ──────────────────────────────────────────
+function parsePO() {
+  var btn = document.getElementById('btn-po-continue');
+  if (btn && btn.disabled) return;
+  var fileInput = document.getElementById('po-file-input');
+  var file = fileInput && fileInput.files && fileInput.files[0];
+  if (!file) return;
+  if (btn) { btn.textContent = '⏳ Reading…'; btn.disabled = true; btn.style.opacity = '.5'; }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var raw = e.target.result || '';
+    var txt = raw.replace(/[^\x09\x0A\x0D\x20-\x7E]/g, ' ').replace(/[ \t]{4,}/g, ' ').replace(/\n{3,}/g, '\n\n');
+    extractFromText(txt);
+    if (btn) { btn.textContent = 'Extract & fill form →'; btn.disabled = false; btn.style.opacity = '1'; }
+    showParseBanner([['Source', file.name]]);
+  };
+  reader.onerror = function() { if (btn) { btn.textContent = 'Extract & fill form →'; btn.disabled = false; btn.style.opacity = '1'; } };
+  reader.readAsText(file, 'utf-8');
 }
 
-/* ── AI PARSE ── */
+function extractFromText(txt) {
+  var found = false;
+  var qtyMatch = txt.match(/(?:qty|quantity|volume|amount)[:\s]*([0-9][0-9,\.]*)\s*(mt|ton|tons|kg|unit|units|pcs|barrel|bbl|liter|liters|m2|m3|m)/i)
+                 || txt.match(/([0-9][0-9,\.]*)\s*(mt|ton|tons|kg|unit|units|pcs|barrel|bbl|liter|liters)\b/i);
+  if (qtyMatch) {
+    var qf = document.getElementById('qty');
+    if (qf) qf.value = qtyMatch[1].replace(/,/g, '');
+    var rawUnit = (qtyMatch[2] || 'MT').toUpperCase().replace('TONS','MT').replace('TON','MT').replace('LITERS','Liters').replace('LITER','Liters').replace('UNITS','Units').replace('UNIT','Units').replace('PCS','Units');
+    var uf = document.getElementById('unit');
+    if (uf) { for (var i = 0; i < uf.options.length; i++) { if (uf.options[i].value.toUpperCase() === rawUnit || uf.options[i].text.toUpperCase() === rawUnit) { uf.selectedIndex = i; break; } } }
+    found = true;
+  }
+  var priceMatch = txt.match(/(?:price|budget|rate|unit price|max price|target)[:\s]*\$?([\d,\.]+)/i) || txt.match(/\$\s*([\d,\.]+)\s*(?:\/\s*(?:mt|ton|kg|unit|liter))?/i);
+  if (priceMatch) { var bf = document.getElementById('budget'); if (bf) { bf.value = '$' + priceMatch[1].replace(/,/g,'').replace(/\.00$/,''); found = true; } }
+  var countryList = ['UAE','Saudi Arabia','Qatar','Kuwait','Bahrain','Oman','Egypt','Jordan','Iraq','Lebanon','Palestine','Libya','Turkey','China','India','Germany','France','Netherlands','UK','USA','United States','Morocco','Tunisia','Algeria'];
+  for (var ci = 0; ci < countryList.length; ci++) {
+    var re = new RegExp('\\b' + countryList[ci].replace(' ','\\s') + '\\b', 'i');
+    if (re.test(txt)) {
+      var cf = document.getElementById('country');
+      if (cf) { for (var oi = 0; oi < cf.options.length; oi++) { if (cf.options[oi].text.toLowerCase() === countryList[ci].toLowerCase()) { cf.selectedIndex = oi; break; } } }
+      found = true; break;
+    }
+  }
+  var productMatch = txt.match(/(?:product|item|commodity|material|description)[:\s]+([^\n\r,;]{3,60})/i);
+  if (productMatch) { var df = document.getElementById('product-detail'); if (df) { df.value = productMatch[1].trim(); found = true; } }
+  var refMatch = txt.match(/(?:po|purchase order|ref|reference|order no|order#)[:\s#]*([A-Z0-9\-\/]{3,30})/i);
+  if (refMatch) { var rf = document.getElementById('project-ref'); if (rf) { rf.value = refMatch[1].trim(); found = true; } }
+  var incoMatch = txt.match(/\b(FOB|CIF|DAP|DDP|EXW|CFR|FAS|FCA)\b/i);
+  if (incoMatch) { var inf = document.getElementById('incoterms'); if (inf) { for (var ii = 0; ii < inf.options.length; ii++) { if (inf.options[ii].value.toUpperCase() === incoMatch[1].toUpperCase()) { inf.selectedIndex = ii; break; } } } found = true; }
+  return found;
+}
+
+function parseERP() {
+  var txt = (document.getElementById('erp-paste') || {}).value || '';
+  if (!txt.trim()) { alert('Please paste your order text first.'); return; }
+  extractFromText(txt);
+  showParseBanner([['Source', 'ERP / pasted text']]);
+}
+
+function dzDrag(e, over) { e.preventDefault(); var dz = document.getElementById('dropzone'); if (dz) dz.classList.toggle('drag-over', over); }
+function dzDrop(e) { e.preventDefault(); var dz = document.getElementById('dropzone'); if (dz) dz.classList.remove('drag-over'); var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (file) setDropzoneFile(file); }
+function dzFileChosen(input) { var file = input && input.files && input.files[0]; if (file) setDropzoneFile(file); }
+function setDropzoneFile(file) {
+  var dz = document.getElementById('dropzone'); if (dz) dz.classList.add('dz-chosen');
+  var icon = document.getElementById('dz-icon'); var title = document.getElementById('dz-title'); var sub = document.getElementById('dz-sub');
+  if (icon) icon.textContent = '✅'; if (title) title.textContent = file.name; if (sub) sub.textContent = Math.round(file.size/1024) + ' KB · ready to parse';
+  var btn = document.getElementById('btn-po-continue'); if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+}
+
+// ── AI PARSE ─────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
   var saved = localStorage.getItem('sloi_claude_key') || '';
-  if (saved) {
-    var inp = document.getElementById('ai-key-inp');
-    if (inp) inp.value = saved;
-  }
+  if (saved) { var inp = document.getElementById('ai-key-inp'); if (inp) inp.value = saved; }
 });
-
-function toggleAIKey() {
-  var inp = document.getElementById('ai-key-inp');
-  if (!inp) return;
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-}
+function toggleAIKey() { var inp = document.getElementById('ai-key-inp'); if (!inp) return; inp.type = inp.type === 'password' ? 'text' : 'password'; }
 
 function parseWithAI() {
   var key = (localStorage.getItem('sloi_claude_key') || '').trim();
-  if (!key) {
-    var inp = document.getElementById('ai-key-inp');
-    if (inp) { inp.focus(); inp.classList.add('shake'); setTimeout(function(){ inp.classList.remove('shake'); }, 400); }
-    if (window.showToast) showToast('Enter your Claude API key first', '#ef4444');
-    else alert('Enter your Claude API key first.');
-    return;
-  }
+  if (!key) { var inp = document.getElementById('ai-key-inp'); if (inp) { inp.focus(); inp.classList.add('shake'); setTimeout(function(){ inp.classList.remove('shake'); }, 400); } alert('Enter your Claude API key first.'); return; }
   var txt = ((document.getElementById('ai-describe') || {}).value || '').trim();
-  if (!txt) {
-    var ta = document.getElementById('ai-describe');
-    if (ta) { ta.focus(); ta.classList.add('shake'); setTimeout(function(){ ta.classList.remove('shake'); }, 400); }
-    return;
-  }
-
+  if (!txt) { var ta = document.getElementById('ai-describe'); if (ta) { ta.focus(); ta.classList.add('shake'); setTimeout(function(){ ta.classList.remove('shake'); }, 400); } return; }
   var btn = document.getElementById('btn-ai-parse');
   var orig = btn ? btn.textContent : '';
   if (btn) { btn.textContent = '⏳ Parsing…'; btn.disabled = true; }
-
-  var SYS = 'You are a commodity procurement assistant. Extract order details from the user\'s description and return ONLY a valid JSON object — no markdown, no explanation — with exactly these fields:\n'
-    + '{"product":"string","qty":number_or_null,"unit":"MT|Tons|kg|m²|m³|Liters|Units|m","budget":"$X/unit or $X total or Not specified",'
-    + '"country":"delivery country","origin":"preferred origin country or null","incoterms":"FOB|CIF|DAP|DDP|EXW or null",'
-    + '"urgency":"ASAP — within 2 weeks|1–2 months|3+ months — flexible","detail":"additional specs or empty string","projectRef":"PO/ref number or null"}';
-
+  var SYS = 'You are a commodity procurement assistant. Extract order details from the user\'s description and return ONLY a valid JSON object — no markdown, no explanation — with exactly these fields:\n{"product":"string","qty":number_or_null,"unit":"MT|Tons|kg|m²|m³|Liters|Units|m","budget":"$X/unit or $X total or Not specified","country":"delivery country","origin":"preferred origin country or null","incoterms":"FOB|CIF|DAP|DDP|EXW or null","urgency":"ASAP — within 2 weeks|1–2 months|3+ months — flexible","detail":"additional specs or empty string","projectRef":"PO/ref number or null"}';
   fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true'
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 512,
-      system: SYS,
-      messages: [{ role: 'user', content: txt }]
-    })
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:512,system:SYS,messages:[{role:'user',content:txt}]})
   })
   .then(function(r){ return r.json(); })
   .then(function(data) {
     if (btn) { btn.textContent = orig; btn.disabled = false; }
-    if (data.error) {
-      var msg = data.error.message || 'API error';
-      if (window.showToast) showToast(msg, '#ef4444'); else alert(msg);
-      return;
-    }
+    if (data.error) { alert(data.error.message || 'API error'); return; }
     var raw = (data.content && data.content[0] && data.content[0].text) || '';
     raw = raw.replace(/^```(?:json)?\s*/,'').replace(/\s*```$/,'').trim();
-    var parsed;
-    try { parsed = JSON.parse(raw); }
-    catch(e) {
-      if (window.showToast) showToast('Could not parse AI response — try again.', '#ef4444');
-      else alert('Could not parse AI response.');
-      return;
-    }
+    var parsed; try { parsed = JSON.parse(raw); } catch(e) { alert('Could not parse AI response — try again.'); return; }
     applyAIParsed(parsed);
   })
   .catch(function(e) {
     if (btn) { btn.textContent = orig; btn.disabled = false; }
-    var msg = 'Network error: ' + (e.message || 'check your key and try again');
-    if (window.showToast) showToast(msg, '#ef4444'); else alert(msg);
+    alert('Network error: ' + (e.message || 'check your key and try again'));
   });
 }
 
@@ -1428,91 +889,69 @@ function applyAIParsed(d) {
   if (d.unit)    state.unit    = d.unit;
   if (d.budget)  state.budget  = d.budget;
   if (d.country) state.country = d.country;
-  state.origin     = d.origin || '';
-  state.incoterms  = d.incoterms || '';
-  if (d.urgency)   state.urgency   = d.urgency;
-  if (d.detail)    state.detail    = d.detail;
-  state.projectRef = d.projectRef || '';
-
-  var qtyF = document.getElementById('qty');
-  if (qtyF && d.qty != null) qtyF.value = d.qty;
-
-  var budgetF = document.getElementById('budget');
-  if (budgetF && d.budget && d.budget !== 'Not specified') budgetF.value = d.budget;
-
-  var detailF = document.getElementById('product-detail');
-  if (detailF && d.detail) detailF.value = d.detail;
-
-  var refF = document.getElementById('project-ref');
-  if (refF && d.projectRef) refF.value = d.projectRef;
-
+  state.origin    = d.origin    || '';
+  state.incoterms = d.incoterms || '';
+  if (d.urgency)    state.urgency    = d.urgency;
+  if (d.detail)     state.detail     = d.detail;
+  state.projectRef  = d.projectRef   || '';
+  var qtyF = document.getElementById('qty'); if (qtyF && d.qty != null) qtyF.value = d.qty;
+  var budgetF = document.getElementById('budget'); if (budgetF && d.budget && d.budget !== 'Not specified') budgetF.value = d.budget;
+  var detailF = document.getElementById('product-detail'); if (detailF && d.detail) detailF.value = d.detail;
+  var refF = document.getElementById('project-ref'); if (refF && d.projectRef) refF.value = d.projectRef;
   function setSelect(id, val) {
-    if (!val) return;
-    var sel = document.getElementById(id);
-    if (!sel) return;
+    if (!val) return; var sel = document.getElementById(id); if (!sel) return;
     var v = val.toLowerCase();
-    for (var i = 0; i < sel.options.length; i++) {
-      if (sel.options[i].text.toLowerCase() === v || sel.options[i].value.toLowerCase() === v) {
-        sel.selectedIndex = i; return;
-      }
-    }
+    for (var i = 0; i < sel.options.length; i++) { if (sel.options[i].text.toLowerCase() === v || sel.options[i].value.toLowerCase() === v) { sel.selectedIndex = i; return; } }
   }
-  setSelect('country', d.country);
-  setSelect('origin', d.origin);
-  setSelect('unit', d.unit);
-  setSelect('incoterms', d.incoterms);
-
+  setSelect('country', d.country); setSelect('origin', d.origin); setSelect('unit', d.unit); setSelect('incoterms', d.incoterms);
   if (d.urgency) {
     document.querySelectorAll('.tc').forEach(function(c){ c.classList.remove('sel'); });
     document.querySelectorAll('.tc').forEach(function(c){
-      var nm = c.querySelector('.tc-name');
-      var desc = c.querySelector('.tc-desc');
-      if ((nm && (d.urgency.toLowerCase().indexOf(nm.textContent.toLowerCase()) !== -1)) ||
-          (desc && (d.urgency.toLowerCase().indexOf(desc.textContent.toLowerCase().substring(0,6)) !== -1))) {
-        c.classList.add('sel');
-      }
+      var nm = c.querySelector('.tc-name'); var desc = c.querySelector('.tc-desc');
+      if ((nm && d.urgency.toLowerCase().indexOf(nm.textContent.toLowerCase()) !== -1) || (desc && d.urgency.toLowerCase().indexOf(desc.textContent.toLowerCase().substring(0,6)) !== -1)) { c.classList.add('sel'); }
     });
   }
-
-  showAIResult(d);
-}
-
-function showAIResult(d) {
-  var wrap = document.getElementById('ai-result-wrap');
-  if (!wrap) { populateSummary(); goStep(5); return; }
-
-  var rows = [
+  showParseBanner([
     ['Commodity', d.product],
-    ['Quantity', d.qty != null ? d.qty + ' ' + (d.unit || 'MT') : null],
-    ['Budget', d.budget && d.budget !== 'Not specified' ? d.budget : null],
-    ['Delivery', d.country],
-    ['Origin', d.origin || null],
-    ['Incoterms', d.incoterms || null],
-    ['Timeline', d.urgency],
-    ['Project ref', d.projectRef || null],
-  ].filter(function(r){ return r[1]; });
-
-  wrap.innerHTML = '<div style="background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.18);border-radius:8px;padding:14px 16px;margin-bottom:14px">'
-    + '<div style="font-size:11px;color:var(--green);font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px">AI extracted · review below</div>'
-    + rows.map(function(r){
-        return '<div class="ai-result-item"><span>' + r[0] + '</span><span>' + r[1] + '</span></div>';
-      }).join('')
-    + '</div>'
-    + '<button class="btn-p" onclick="populateSummary();goStep(5)" style="margin-bottom:8px">Review &amp; submit →</button>'
-    + '<button class="btn-s" onclick="document.getElementById(\'ai-result-wrap\').innerHTML=\'\'" style="font-size:13px">Re-describe →</button>';
+    ['Quantity',  d.qty != null ? d.qty + ' ' + (d.unit || 'MT') : null],
+    ['Budget',    d.budget && d.budget !== 'Not specified' ? d.budget : null],
+    ['Delivery',  d.country],
+    ['Timeline',  d.urgency],
+  ]);
 }
 
-
+// ── SUBMIT ───────────────────────────────────────────────
 function submitOrder() {
+  if (!state.product) { pulse(document.querySelector('.prod-grid')); document.querySelector('.prod-grid').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  var qty = document.getElementById('qty').value;
+  if (!qty || parseFloat(qty) <= 0) { shake('qty'); document.getElementById('qty').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  var country = document.getElementById('country').value;
+  if (!country) { shake('country'); return; }
+  if (!state.urgency) { pulse(document.querySelector('.tl-grid')); document.querySelector('.tl-grid').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  var nm = document.getElementById('contact-name').value.trim();
+  if (!nm) { shake('contact-name'); document.getElementById('contact-name').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  var em = document.getElementById('contact-email').value.trim();
+  if (!em || !em.includes('@')) { shake('contact-email'); return; }
+
+  state.qty        = qty;
+  state.unit       = document.getElementById('unit').value;
+  state.budget     = document.getElementById('budget').value     || 'Not specified';
+  state.country    = country;
+  state.origin     = document.getElementById('origin').value     || '';
+  state.projectRef = document.getElementById('project-ref').value|| '';
+  state.incoterms  = document.getElementById('incoterms').value  || '';
+  state.detail     = document.getElementById('product-detail').value;
+  state.name       = nm;
+  state.email      = em;
+  state.wa         = document.getElementById('contact-wa').value.trim();
+  state.company    = document.getElementById('contact-company').value.trim();
+
   var btn = document.getElementById('submit-btn');
   btn.textContent = '⏳ Activating mandate…';
   btn.disabled = true;
 
-  var productLabel = (state.sku
-    ? (CATALOG.find(function(p){ return p.sku===state.sku; })||{name:state.product}).name + ' [' + state.sku + ']'
-    : state.product) + (document.getElementById('product-detail').value ? ' — ' + document.getElementById('product-detail').value : '');
-
-  state.productLabel = productLabel;
+  var skuLabel = state.sku ? (CATALOG.find(function(p){ return p.sku === state.sku; }) || {name:state.product}).name + ' [' + state.sku + ']' : state.product;
+  state.productLabel = skuLabel + (state.detail ? ' — ' + state.detail : '');
 
   saveMandateAndGo('sloiai-platform.html');
 }

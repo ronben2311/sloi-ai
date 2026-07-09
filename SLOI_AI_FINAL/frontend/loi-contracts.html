@@ -16,6 +16,10 @@ html,body{height:100%;font-family:'IBM Plex Mono',monospace;font-size:14px;color
 
 /* SHELL */
 .shell{display:grid;grid-template-columns:300px 1fr;height:100vh}
+.shell.embed-mode{grid-template-columns:1fr}
+.shell.embed-mode .left{display:none}
+.shell.embed-mode .right-head{padding:10px 16px}
+.shell.embed-mode .right-body{padding:16px 16px 32px}
 
 /* LEFT */
 .left{background:var(--surface);border-right:1px solid var(--border2);display:flex;flex-direction:column;padding:28px 22px;overflow-y:auto}
@@ -141,6 +145,37 @@ textarea.inp{resize:vertical;min-height:72px;line-height:1.6}
 .hist-card-title{font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hist-card-date{font-size:10px;color:var(--muted);margin-top:2px}
 
+/* VAULT */
+.vault-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:16px}
+.vs-box{background:var(--surface);border:1px solid var(--border2);border-radius:6px;padding:10px 12px}
+.vs-label{font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.vs-val{font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:var(--white)}
+.vault-toolbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.vault-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.vault-tbl th{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;text-align:left;border-bottom:1px solid var(--border2);background:var(--surface);position:sticky;top:0}
+.vault-tbl td{padding:8px 10px;border-bottom:1px solid var(--border2);vertical-align:middle}
+.vault-tbl tr:hover td{background:rgba(91,95,239,.04)}
+.vst{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;cursor:pointer;font-weight:600;white-space:nowrap;border:none;display:inline-block;transition:filter .12s}
+.vst:hover{filter:brightness(1.18)}
+.vst-draft{background:rgba(136,136,168,.1);color:var(--muted)}
+.vst-sent{background:rgba(45,212,191,.1);color:var(--teal)}
+.vst-review{background:rgba(232,169,74,.12);color:var(--gold)}
+.vst-signed{background:rgba(34,197,94,.12);color:var(--green)}
+.vst-archived{background:rgba(136,136,168,.06);color:var(--muted);outline:1px solid var(--border2)}
+.vault-overlay{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+.vault-overlay.open{display:flex}
+.vault-modal-box{background:var(--surface);border:1px solid var(--border2);border-radius:10px;width:700px;max-width:calc(100vw - 32px);max-height:82vh;display:flex;flex-direction:column}
+.vault-modal-hd{padding:14px 18px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.vault-modal-title{font-size:13px;font-weight:700;color:var(--white);font-family:'IBM Plex Mono',monospace}
+.vault-modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
+.vault-modal-close:hover{color:var(--white)}
+.vault-modal-body{flex:1;overflow-y:auto;padding:16px 20px}
+.vault-modal-text{white-space:pre-wrap;font-size:11px;line-height:1.85;color:var(--text);font-family:'IBM Plex Mono',monospace}
+.vault-modal-ft{padding:10px 18px;border-top:1px solid var(--border2);display:flex;gap:8px;flex-shrink:0}
+.vault-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:12px;font-family:'IBM Plex Mono',monospace}
+.dact{background:none;border:1px solid var(--border2);border-radius:4px;color:var(--muted);font-size:11px;padding:3px 9px;cursor:pointer;font-family:'IBM Plex Mono',monospace;transition:all .12s}
+.dact:hover{background:var(--surface);color:var(--white)}
+
 /* MOBILE */
 @media(max-width:760px){
   html,body{overflow:auto}
@@ -219,6 +254,13 @@ textarea.inp{resize:vertical;min-height:72px;line-height:1.6}
       <div>
         <span class="tn-name">HS Code & Duty Report</span>
         <span class="tn-desc">HS code · import duty · permits</span>
+      </div>
+    </button>
+    <button class="tn-btn" onclick="switchTab('vault',this)">
+      <span class="tn-icon">📂</span>
+      <div>
+        <span class="tn-name">Document Vault</span>
+        <span class="tn-desc">All docs · status tracking · export</span>
       </div>
     </button>
   </div>
@@ -600,8 +642,67 @@ textarea.inp{resize:vertical;min-height:72px;line-height:1.6}
       </div>
     </div>
 
+    <!-- ══ DOCUMENT VAULT PANEL ══ -->
+    <div class="doc-panel" id="panel-vault">
+      <div class="vault-stats" id="vault-stats"></div>
+      <div class="vault-toolbar">
+        <input class="inp" id="vault-search" placeholder="Search title, type…" oninput="renderVault()" style="flex:1;min-width:140px;padding:7px 11px;font-size:12px"/>
+        <select class="inp" id="vault-type-filter" onchange="renderVault()" style="width:130px;padding:7px 11px;font-size:12px">
+          <option value="">All types</option>
+          <option value="loi">LOI</option>
+          <option value="po">PO</option>
+          <option value="nda">NDA</option>
+          <option value="lca">LC App</option>
+          <option value="spa">SPA</option>
+          <option value="freight">Freight</option>
+          <option value="hs">HS Report</option>
+        </select>
+        <select class="inp" id="vault-status-filter" onchange="renderVault()" style="width:142px;padding:7px 11px;font-size:12px">
+          <option value="">All statuses</option>
+          <option value="draft">Draft</option>
+          <option value="sent">Sent</option>
+          <option value="under-review">Under Review</option>
+          <option value="signed">Signed</option>
+          <option value="archived">Archived</option>
+        </select>
+        <button class="pa pa-pdf" onclick="vaultExportCsv()" style="padding:7px 14px;font-size:11px">↓ CSV</button>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="vault-tbl">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Type</th>
+              <th>Title / Details</th>
+              <th>Date</th>
+              <th>Status <span style="font-weight:400;color:var(--muted)">(click to cycle)</span></th>
+              <th style="text-align:right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="vault-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 </div>
+</div>
+
+<!-- Vault view modal -->
+<div class="vault-overlay" id="vault-overlay" onclick="if(event.target===this)closeVaultModal()">
+  <div class="vault-modal-box">
+    <div class="vault-modal-hd">
+      <div class="vault-modal-title" id="vault-modal-title">Document</div>
+      <button class="vault-modal-close" onclick="closeVaultModal()">✕</button>
+    </div>
+    <div class="vault-modal-body">
+      <div class="vault-modal-text" id="vault-modal-text"></div>
+    </div>
+    <div class="vault-modal-ft">
+      <button class="pa pa-pdf" onclick="printVaultDoc()" style="padding:7px 14px;font-size:11px">📥 Print / PDF</button>
+      <button class="pa pa-cp"  onclick="copyVaultDoc()"  style="padding:7px 14px;font-size:11px">⧉ Copy text</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -619,7 +720,8 @@ var META = {
   lca:     { title:'LC Application',           sub:'UCP 600 · bank-ready draft · AI-generated' },
   spa:     { title:'Trade Contract / SPA',      sub:'GAFTA/ICC · Incoterms 2020 · AI-generated' },
   freight: { title:'Freight Advisory',          sub:'Route · rate estimate · ETA · AI-generated' },
-  hs:      { title:'HS Code & Duty Report',     sub:'HS code · import duty · permits · AI-generated' }
+  hs:      { title:'HS Code & Duty Report',     sub:'HS code · import duty · permits · AI-generated' },
+  vault:   { title:'Document Vault',            sub:'All generated documents · status management · export' }
 };
 
 // ── TAB SWITCHING ────────────────────────────────────────
@@ -631,14 +733,19 @@ function switchTab(tab, btn) {
   document.getElementById('rh-title').textContent = META[tab].title;
   document.getElementById('rh-sub').textContent   = META[tab].sub;
   activeTab = tab;
+  if (tab === 'vault') renderVault();
 }
 
-// ── URL PARAM (allow ?tool=loi|po|nda) ──────────────────
+// ── URL PARAM (allow ?tool=loi|po|nda, ?embed=1) ─────────
 (function checkParam(){
-  var p = new URLSearchParams(window.location.search).get('tool');
+  var params = new URLSearchParams(window.location.search);
+  var p = params.get('tool');
   if (p && META[p]) {
     var btn = document.querySelector('.tn-btn[onclick*="\'' + p + '\'"]');
     if (btn) switchTab(p, btn);
+  }
+  if (params.get('embed') === '1') {
+    document.querySelector('.shell').classList.add('embed-mode');
   }
 })();
 
@@ -1000,7 +1107,7 @@ var HIST_ICON = { loi:'📄', po:'📋', nda:'🔏', lca:'💳', spa:'⚖️', f
 function saveDoc(type, title, text) {
   var list = [];
   try { list = JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e){}
-  list.unshift({ type:type, title:title, date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}), text:text });
+  list.unshift({ type:type, title:title, date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}), text:text, status:'draft' });
   if (list.length > HIST_MAX) list = list.slice(0, HIST_MAX);
   localStorage.setItem(HIST_KEY, JSON.stringify(list));
   renderHistory();
@@ -1236,6 +1343,145 @@ async function genHS() {
     saveDoc('hs', (f.product || 'HS Report') + ' · ' + f.origin + ' → ' + f.dest, text);
   } catch(e) { alert('Generation failed: ' + e.message); }
   finally { setBusy('hs', false); }
+}
+
+// ── DOCUMENT VAULT ───────────────────────────────────────
+var VAULT_CYCLE = ['draft','sent','under-review','signed','archived'];
+var VAULT_META  = {
+  'draft':        { cls:'vst-draft',   lbl:'Draft' },
+  'sent':         { cls:'vst-sent',    lbl:'Sent' },
+  'under-review': { cls:'vst-review',  lbl:'Under Review' },
+  'signed':       { cls:'vst-signed',  lbl:'Signed' },
+  'archived':     { cls:'vst-archived',lbl:'Archived' }
+};
+var VAULT_ICON = { loi:'📄', po:'📋', nda:'🔏', lca:'💳', spa:'⚖️', freight:'🚢', hs:'🛃' };
+var _vaultViewDoc = null;
+
+function _esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function vaultGetDocs() {
+  var list = [];
+  try { list = JSON.parse(localStorage.getItem(HIST_KEY) || '[]'); } catch(e){}
+  return list;
+}
+function vaultSaveDocs(list) {
+  localStorage.setItem(HIST_KEY, JSON.stringify(list));
+}
+
+function renderVault() {
+  var docs = vaultGetDocs();
+  var q  = (document.getElementById('vault-search') ? document.getElementById('vault-search').value : '').toLowerCase();
+  var tf = document.getElementById('vault-type-filter')   ? document.getElementById('vault-type-filter').value   : '';
+  var sf = document.getElementById('vault-status-filter') ? document.getElementById('vault-status-filter').value : '';
+
+  var counts = { total:docs.length, draft:0, sent:0, 'under-review':0, signed:0, archived:0 };
+  docs.forEach(function(d){ var s = d.status||'draft'; if (counts[s] !== undefined) counts[s]++; });
+
+  var statsEl = document.getElementById('vault-stats');
+  if (statsEl) statsEl.innerHTML =
+    '<div class="vs-box"><div class="vs-label">Total</div><div class="vs-val">'+counts.total+'</div></div>'+
+    '<div class="vs-box"><div class="vs-label">Draft</div><div class="vs-val" style="color:var(--muted)">'+counts.draft+'</div></div>'+
+    '<div class="vs-box"><div class="vs-label">Sent</div><div class="vs-val" style="color:var(--teal)">'+counts.sent+'</div></div>'+
+    '<div class="vs-box"><div class="vs-label">Under Review</div><div class="vs-val" style="color:var(--gold)">'+counts['under-review']+'</div></div>'+
+    '<div class="vs-box"><div class="vs-label">Signed</div><div class="vs-val" style="color:var(--green)">'+counts.signed+'</div></div>';
+
+  var filtered = [];
+  docs.forEach(function(d, i){
+    if (tf && d.type !== tf) return;
+    if (sf && (d.status||'draft') !== sf) return;
+    if (q && !(d.title||'').toLowerCase().includes(q) && !(d.type||'').toLowerCase().includes(q)) return;
+    filtered.push({ d:d, i:i });
+  });
+
+  var tbody = document.getElementById('vault-tbody');
+  if (!tbody) return;
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="vault-empty">No documents match the current filters.<br>Generate documents using the tabs above — they will appear here automatically.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(function(row){
+    var d    = row.d;
+    var i    = row.i;
+    var st   = d.status || 'draft';
+    var meta = VAULT_META[st] || VAULT_META['draft'];
+    var icon = VAULT_ICON[d.type] || '📄';
+    var typeLabel = (d.type||'').toUpperCase();
+    return '<tr>'+
+      '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--muted)">'+(i+1)+'</td>'+
+      '<td><span style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;background:rgba(91,95,239,.1);color:var(--violet);padding:2px 7px;border-radius:3px">'+icon+' '+_esc(typeLabel)+'</span></td>'+
+      '<td style="max-width:260px"><div style="font-size:12px;color:var(--white);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+_esc(d.title||'Untitled')+'</div></td>'+
+      '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--muted);white-space:nowrap">'+_esc(d.date||'—')+'</td>'+
+      '<td><button class="vst '+meta.cls+'" onclick="vaultCycleStatus('+i+')" title="Click to change status">'+_esc(meta.lbl)+' ▾</button></td>'+
+      '<td style="text-align:right;white-space:nowrap">'+
+        '<button class="dact" onclick="vaultView('+i+')" style="margin-right:4px">View</button>'+
+        '<button class="dact" onclick="vaultDelete('+i+')" style="color:var(--red)">Del</button>'+
+      '</td>'+
+    '</tr>';
+  }).join('');
+}
+
+function vaultCycleStatus(i) {
+  var list = vaultGetDocs();
+  if (!list[i]) return;
+  var cur  = list[i].status || 'draft';
+  var idx  = VAULT_CYCLE.indexOf(cur);
+  list[i].status = VAULT_CYCLE[(idx + 1) % VAULT_CYCLE.length];
+  vaultSaveDocs(list);
+  renderVault();
+}
+
+function vaultView(i) {
+  var list = vaultGetDocs();
+  var d = list[i];
+  if (!d) return;
+  _vaultViewDoc = d;
+  document.getElementById('vault-modal-title').textContent = (VAULT_ICON[d.type]||'📄') + ' ' + (d.title || 'Document');
+  document.getElementById('vault-modal-text').textContent  = d.text || '(no text saved)';
+  document.getElementById('vault-overlay').classList.add('open');
+}
+
+function closeVaultModal() {
+  document.getElementById('vault-overlay').classList.remove('open');
+  _vaultViewDoc = null;
+}
+
+function printVaultDoc() {
+  if (!_vaultViewDoc) return;
+  var w = window.open('','_blank');
+  var raw = (_vaultViewDoc.text||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  w.document.write('<html><head><title>SLOI AI — '+(_vaultViewDoc.title||'Document')+'</title><style>body{font-family:"IBM Plex Mono",monospace;font-size:10.5pt;line-height:1.85;color:#000;padding:2cm;white-space:pre-wrap;max-width:800px;margin:0 auto}@page{margin:2cm}</style></head><body>'+raw+'</body></html>');
+  w.document.close();
+  w.print();
+}
+
+function copyVaultDoc() {
+  if (!_vaultViewDoc) return;
+  navigator.clipboard.writeText(_vaultViewDoc.text||'').then(function(){ alert('Copied to clipboard.'); }).catch(function(){ alert('Copy failed — please select and copy manually.'); });
+}
+
+function vaultDelete(i) {
+  if (!confirm('Delete this document from the vault? This cannot be undone.')) return;
+  var list = vaultGetDocs();
+  list.splice(i, 1);
+  vaultSaveDocs(list);
+  renderVault();
+  renderHistory();
+}
+
+function vaultExportCsv() {
+  var docs = vaultGetDocs();
+  var rows = [['#','Type','Title','Date','Status']];
+  docs.forEach(function(d, i){
+    rows.push([i+1, d.type||'', (d.title||'').replace(/,/g,' '), d.date||'', d.status||'draft']);
+  });
+  var csv = rows.map(function(r){
+    return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(',');
+  }).join('\n');
+  var a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,﻿' + encodeURIComponent(csv);
+  a.download = 'sloi-ai-vault-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
 }
 </script>
 </body>

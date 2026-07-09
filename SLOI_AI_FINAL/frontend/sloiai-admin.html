@@ -252,8 +252,8 @@ select.inp option{background:var(--surface)}
   <div class="sb-section">Command</div>
   <button class="nav active" onclick="show('warroom',this)"><span class="nav-icon">🔴</span><span class="nav-label">War Room</span><span class="nav-badge nb-red" id="alert-count">3</span></button>
   <button class="nav" onclick="show('agents',this)"><span class="nav-icon">🧠</span><span class="nav-label">AI Tools</span><span class="nav-badge nb-ind" style="background:var(--teal);color:var(--bg)">11</span></button>
-  <div class="sb-section">Documents</div>
-  <button class="nav" id="sb-docs" onclick="show('docs',this)"><span class="nav-icon">🗂️</span><span class="nav-label">Documents & Contracts</span><span class="nav-badge" style="background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);color:var(--teal);font-size:11px">DMS</span></button>
+  <div class="sb-section">Contracts</div>
+  <button class="nav" id="sb-docs" onclick="show('docs',this)"><span class="nav-icon">🗂️</span><span class="nav-label">Contracts</span><span class="nav-badge" style="background:rgba(45,212,191,.15);border:1px solid rgba(45,212,191,.3);color:var(--teal);font-size:11px">DMS</span></button>
   <div class="sb-section">Network</div>
   <button class="nav" onclick="show('products',this)"><span class="nav-icon">📦</span><span class="nav-label">Products & Pricing</span></button>
   <button class="nav" onclick="show('users',this)"><span class="nav-icon">👤</span><span class="nav-label">Users & CRM</span></button>
@@ -288,7 +288,7 @@ select.inp option{background:var(--surface)}
       <button class="nav active" id="tb-warroom" onclick="show('warroom',this)">🔴 War Room <span class="nav-badge nb-red" id="alert-count">3</span></button>
       <button class="nav" id="tb-agents" onclick="show('agents',this)">🧠 AI Tools <span class="nav-badge" style="background:var(--teal);color:var(--bg)">11</span></button>
       <div class="tb-nav-sep"></div>
-      <button class="nav" id="tb-docs" onclick="show('docs',this)">🗂️ Documents & Contracts</button>
+      <button class="nav" id="tb-docs" onclick="show('docs',this)">🗂️ Contracts</button>
       <div class="tb-nav-sep"></div>
       <button class="nav" id="tb-products" onclick="show('products',this)">📦 Products &amp; Pricing</button>
       <button class="nav" id="tb-users" onclick="show('users',this)">👤 Users &amp; CRM</button>
@@ -357,262 +357,42 @@ select.inp option{background:var(--surface)}
       <span style="font-size:13px;color:var(--gold);font-family:'IBM Plex Mono',monospace">→ Open</span>
     </div>
 
-    <!-- AUTO DOCS — DOCUMENT GENERATORS -->
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title">
-        // AUTO DOCS
-        <span style="font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.02em">All document generators</span>
+    <!-- BOTTOM GRID: Pending Approvals + Recent Activity -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:0">
+
+      <!-- PENDING APPROVALS -->
+      <div class="card" style="margin-bottom:0;border-color:rgba(232,169,74,.2);background:rgba(232,169,74,.02)">
+        <div class="card-title" style="color:var(--gold)">
+          // PENDING APPROVALS
+          <div style="display:flex;align-items:center;gap:8px">
+            <span id="wr-pend-count" style="font-size:12px;color:var(--muted);font-weight:400"></span>
+            <button class="btn btn-xs" onclick="wrRenderPending()">↺</button>
+          </div>
+        </div>
+        <div id="wr-pending-list" style="max-height:320px;overflow-y:auto">
+          <div style="text-align:center;padding:18px;color:var(--muted);font-size:13px">Loading…</div>
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+          <button class="btn btn-xs" onclick="show('docs',document.getElementById('sb-docs'))" style="width:100%;justify-content:center;font-size:12px">View all in Contracts →</button>
+        </div>
       </div>
-      <div class="g4">
 
-        <div class="ai-agent-card" onclick="window.open('loi-contracts.html?tool=loi','_blank')">
-          <div class="aac-icon" style="background:rgba(45,212,191,.1)">📄</div>
-          <div class="aac-name">LOI Generator</div>
-          <div class="aac-desc">Letter of Intent · auto-fills from negotiated deal · PDF &amp; digital signature</div>
-          <div class="aac-foot"><span class="badge bt" style="font-size:11px">Ready</span></div>
+      <!-- RECENT ACTIVITY -->
+      <div class="card" style="margin-bottom:0">
+        <div class="card-title">
+          // RECENT ACTIVITY
+          <button class="btn btn-xs" onclick="show('activity',document.getElementById('tb-activity'))">Full log →</button>
         </div>
-
-        <div class="ai-agent-card" onclick="window.open('loi-contracts.html?tool=po','_blank')">
-          <div class="aac-icon" style="background:rgba(34,197,94,.1)">🧾</div>
-          <div class="aac-name">PO Generator</div>
-          <div class="aac-desc">Purchase Order from signed LOI · auto-fills supplier, qty, price &amp; trade terms</div>
-          <div class="aac-foot"><span class="badge bg" style="font-size:11px">Ready</span></div>
+        <div id="wr-activity-feed" style="max-height:320px;overflow-y:auto">
+          <div style="text-align:center;padding:18px;color:var(--muted);font-size:13px">No activity yet</div>
         </div>
-
-        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
-          <div class="aac-icon" style="background:rgba(91,95,239,.12)">📋</div>
-          <div class="aac-name">SPA Generator</div>
-          <div class="aac-desc">Sales &amp; Purchase Agreement · GAFTA 49/78/100 or ICC framework · arbitration clause</div>
-          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Auto</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
-          <div class="aac-icon" style="background:rgba(91,95,239,.1)">📑</div>
-          <div class="aac-name">Trade Contract</div>
-          <div class="aac-desc">Incoterms 2020 trade contract · payment terms · force majeure · governing law</div>
-          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Auto</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
-          <div class="aac-icon" style="background:rgba(59,130,246,.1)">🏦</div>
-          <div class="aac-name">LC Application</div>
-          <div class="aac-desc">Letter of Credit application · UCP 600 compliant · bank-ready export</div>
-          <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#3b82f6">Auto</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
-          <div class="aac-icon" style="background:rgba(232,169,74,.1)">🔢</div>
-          <div class="aac-name">HS Code &amp; Duty</div>
-          <div class="aac-desc">6-digit HS code per shipment · import duty rates · port of loading recommendation</div>
-          <div class="aac-foot"><span class="badge ba" style="font-size:11px">Auto</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
-          <div class="aac-icon" style="background:rgba(232,169,74,.08)">🤝</div>
-          <div class="aac-name">NDA Generator</div>
-          <div class="aac-desc">Mutual Non-Disclosure Agreement · bilateral or unilateral · jurisdiction-aware</div>
-          <div class="aac-foot"><span class="badge ba" style="font-size:11px">Auto</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('compliance.html','_blank')">
-          <div class="aac-icon" style="background:rgba(239,68,68,.1)">🛡️</div>
-          <div class="aac-name">ComplianceBot</div>
-          <div class="aac-desc">OFAC · EU · UN sanctions screening · KYC · country risk · runs before every LOI</div>
-          <div class="aac-foot"><span class="badge br" style="font-size:11px">Always on</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('fco')">
-          <div class="aac-icon" style="background:rgba(232,169,74,.1)">📃</div>
-          <div class="aac-name">FCO Generator</div>
-          <div class="aac-desc">Full Corporate Offer — official commercial offer issued by the counterparty with price, specs &amp; validity</div>
-          <div class="aac-foot"><span class="badge ba" style="font-size:11px">Admin</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('ci')">
-          <div class="aac-icon" style="background:rgba(59,130,246,.1)">🧾</div>
-          <div class="aac-name">Commercial Invoice</div>
-          <div class="aac-desc">Final commercial invoice required for customs clearance and final payment — ICC compliant</div>
-          <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.25);color:#3b82f6">Admin</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('pl')">
-          <div class="aac-icon" style="background:rgba(34,197,94,.1)">📦</div>
-          <div class="aac-name">Packing List</div>
-          <div class="aac-desc">Per-carton weight, dimensions, marks, total net &amp; gross — required for all sea &amp; air cargo</div>
-          <div class="aac-foot"><span class="badge bg" style="font-size:11px">Admin</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('coa')">
-          <div class="aac-icon" style="background:rgba(168,85,247,.1)">🔬</div>
-          <div class="aac-name">COA Generator</div>
-          <div class="aac-desc">Certificate of Analysis — lab/spec results: grade, purity, moisture, test method per SGS/ISO</div>
-          <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.25);color:#c084fc">Admin</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('coo')">
-          <div class="aac-icon" style="background:rgba(45,212,191,.1)">🌐</div>
-          <div class="aac-name">COO Generator</div>
-          <div class="aac-desc">Certificate of Origin — country of origin declaration, HS code, preferential or non-preferential</div>
-          <div class="aac-foot"><span class="badge bt" style="font-size:11px">Admin</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('bl')">
-          <div class="aac-icon" style="background:rgba(91,95,239,.12)">🚢</div>
-          <div class="aac-name">B/L Generator</div>
-          <div class="aac-desc">Bill of Lading — carrier receipt confirming cargo dispatch: shipper, consignee, vessel, port details</div>
-          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Admin</span></div>
-        </div>
-
       </div>
-    </div>
 
-    <!-- AI AGENTS -->
-    <div class="card" style="margin-bottom:0">
-      <div class="card-title">
-        // AI AGENTS
-        <span style="font-size:12px;font-weight:400;color:var(--muted);letter-spacing:.02em">Quick launch</span>
-      </div>
-      <div class="g3">
-
-        <div class="ai-agent-card" onclick="window.open('negotiation-agent.html','_blank')">
-          <div class="aac-icon" style="background:rgba(91,95,239,.12)">🤖</div>
-          <div class="aac-name">Negotiation Agent</div>
-          <div class="aac-desc">Multi-round AI negotiation · auto-approves best deal · handles price, quality &amp; delivery</div>
-          <div class="aac-foot"><span class="badge bv" style="font-size:11px">● Live</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
-          <div class="aac-icon" style="background:rgba(232,169,74,.1)">📡</div>
-          <div class="aac-name">Market Intelligence</div>
-          <div class="aac-desc">Live commodity prices · supply &amp; demand analysis · trade signals · MENA market briefs</div>
-          <div class="aac-foot"><span class="badge ba" style="font-size:11px">Live data</span></div>
-        </div>
-
-        <div class="ai-agent-card" onclick="window.open('sloiai-platform.html','_blank')">
-          <div class="aac-icon" style="background:rgba(91,95,239,.12)">📝</div>
-          <div class="aac-name">Contract Advisor</div>
-          <div class="aac-desc">AI contract analysis · risk checks · clause drafting · LOI vs PO completeness</div>
-          <div class="aac-foot"><span class="badge bv" style="font-size:11px">Always on</span></div>
-        </div>
-
-      </div>
     </div>
 
   </div>
 
-  <!-- NEGOTIATIONS REMOVED -->
-  <div id="view-negotiations" class="view" style="display:none!important">
 
-    <!-- ── TOP STATS ROW ── -->
-    <div class="g4" style="margin-bottom:10px">
-      <div class="stat"><div class="stat-top">Active Now</div><div class="stat-val" id="neg-stat-active" style="color:var(--green)">—</div></div>
-      <div class="stat"><div class="stat-top">Pending Boss</div><div class="stat-val" id="neg-stat-pending" style="color:var(--gold)">—</div></div>
-      <div class="stat"><div class="stat-top">Completed Today</div><div class="stat-val" id="neg-stat-completed">—</div></div>
-      <div class="stat"><div class="stat-top">Win Rate</div><div class="stat-val" id="neg-stat-winrate" style="color:var(--violet)">—</div></div>
-    </div>
-
-    <!-- ── TWO-COLUMN SPLIT ── -->
-    <div style="display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start">
-
-      <!-- LEFT: Live feed + Boss approval (sticky) -->
-      <div style="position:sticky;top:0;display:flex;flex-direction:column;gap:10px">
-
-        <!-- Boss approval box — shown only when there's a pending deal -->
-        <div class="approval-box" id="approval-box" style="display:none">
-          <div class="ab-title">⚡ Boss approval required · <span id="ab-neg-id" style="font-weight:400;opacity:.7"></span></div>
-          <div class="ab-grid">
-            <div><div class="abg-label">Buyer</div><div class="abg-val" id="ab-buyer">—</div></div>
-            <div><div class="abg-label">Contact</div><div class="abg-val" id="ab-contact" style="color:var(--teal)">—</div></div>
-            <div><div class="abg-label">Product</div><div class="abg-val" id="ab-product">—</div></div>
-            <div><div class="abg-label">Budget / Deal price</div><div class="abg-val" id="ab-price" style="color:var(--green)">—</div></div>
-            <div><div class="abg-label">Total value</div><div class="abg-val" id="ab-total">—</div></div>
-            
-          </div>
-          <div style="margin-bottom:8px">
-            <label style="font-size:13px;color:var(--muted);display:block;margin-bottom:4px">Override price (optional)</label>
-            <input class="inp" id="ab-override" type="number" placeholder="e.g. 2800" style="max-width:160px;padding:5px 9px;font-size:13px">
-          </div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-g" onclick="approveDeal()" style="flex:1;justify-content:center">✅ Approve — Generate LOI</button>
-            <button class="btn btn-r btn-sm" onclick="rejectDeal()">✗ Reject</button>
-          </div>
-          <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-            <button class="btn btn-xs" onclick="abCounterOffer()" style="background:rgba(232,169,74,.08);border-color:rgba(232,169,74,.3);color:var(--gold)">💬 Counter-offer</button>
-            <button class="btn btn-xs" onclick="abWhatsApp()" style="background:rgba(37,211,102,.06);border-color:rgba(37,211,102,.25);color:#25d366">📲 WhatsApp buyer</button>
-            <button class="btn btn-xs" onclick="abForwardTrader()" style="background:rgba(91,95,239,.06);border-color:rgba(91,95,239,.25);color:var(--violet)">📋 Forward to trader</button>
-          </div>
-        </div>
-
-        <!-- Live feed card -->
-        <div class="card" style="margin-bottom:0">
-          <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
-            <span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;animation:blink 2s infinite" id="live-pulse"></span>
-            <span style="font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;flex:1">Live Negotiations</span>
-            <span class="badge bg" id="live-neg-count" style="font-size:11px;padding:1px 8px">—</span>
-          </div>
-          <div id="neg-list" style="max-height:400px;overflow-y:auto"></div>
-          <div style="margin-top:10px;padding-top:9px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)">
-            <span>All-time: <b style="color:var(--white)" id="neg-stat-total">—</b></span>
-            <span style="width:1px;height:12px;background:var(--border);display:inline-block"></span>
-            <span>Today: <b style="color:var(--green)" id="neg-stat-revenue">$0</b></span>
-            <span style="margin-left:auto">⟳ 15s</span>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- RIGHT: History table + OC -->
-      <div>
-
-        <!-- All negotiations card -->
-        <div class="card" style="margin-bottom:0">
-          <div class="card-title">
-            // ALL NEGOTIATIONS
-            <div style="display:flex;gap:6px;align-items:center">
-              <input class="inp" id="neg-search" placeholder="Search ID, buyer, product…" oninput="negApplyFilter()" style="width:200px;font-size:13px;padding:5px 9px">
-            </div>
-          </div>
-          <div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">
-            <button class="btn btn-xs" id="nf-all" onclick="negFilter('all',this)" style="border-color:var(--indigo);color:var(--violet)">All</button>
-            <button class="btn btn-xs" id="nf-running" onclick="negFilter('running',this)">● Live</button>
-            <button class="btn btn-xs" id="nf-awaiting_boss" onclick="negFilter('awaiting_boss',this)">⏳ Awaiting Boss</button>
-            <button class="btn btn-xs" id="nf-completed" onclick="negFilter('completed',this)">✓ Completed</button>
-            <button class="btn btn-xs" id="nf-failed" onclick="negFilter('failed',this)">✗ Failed</button>
-          </div>
-          <table>
-            <thead><tr><th>ID</th><th>Buyer</th><th>Product</th><th style="text-align:center">Rounds</th><th>Deal Price</th><th>Value</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
-            <tbody id="neg-history-body">
-              <tr><td colspan="9" style="text-align:center;color:var(--muted);padding:20px">Loading…</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Order Confirmations card -->
-        <div class="card" style="margin-top:14px;margin-bottom:0">
-          <div class="card-title">
-            // ORDER CONFIRMATIONS
-            <div style="display:flex;gap:6px;align-items:center">
-              <div style="display:flex;gap:10px;font-size:12px;color:var(--muted)">
-                <span>Total: <b style="color:var(--white)" id="admin-po-stat-total">—</b></span>
-                <span>·</span>
-                <span>This month: <b style="color:var(--green)" id="admin-po-stat-month">—</b></span>
-                <span>·</span>
-                <span>Value: <b style="color:var(--violet)" id="admin-po-stat-value">—</b></span>
-                <span>·</span>
-                <span>Draft: <b style="color:var(--gold)" id="admin-po-stat-draft">—</b></span>
-              </div>
-              <button class="btn btn-xs btn-g" onclick="window.open('loi-contracts.html?tool=po','_blank')">+ New OC</button>
-            </div>
-          </div>
-          <div id="admin-po-list">
-            <div style="text-align:center;color:var(--muted);padding:24px;font-size:13px">No order confirmations yet — click + New OC or use the 🧾 OC button on a negotiation row above</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
 
   <!-- REVENUE (hidden — content merged into docs view) -->
   <div id="view-revenue" class="view" style="display:none!important">
@@ -761,6 +541,19 @@ select.inp option{background:var(--surface)}
 
   <!-- ══ DOCUMENT MANAGEMENT SYSTEM + CONTRACTS ══ -->
   <div id="view-docs" class="view">
+
+    <!-- ── PENDING APPROVALS (from loi-contracts.html via sloi_docs) ── -->
+    <div class="card" style="margin-bottom:18px;border-color:rgba(232,169,74,.25);background:rgba(232,169,74,.03)">
+      <div class="card-title" style="color:var(--gold)">// PENDING APPROVALS
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:12px;color:var(--muted);font-weight:400" id="pdms-count-label">Loading…</span>
+          <button class="btn btn-xs" onclick="pdmsRefresh()">↺ Refresh</button>
+        </div>
+      </div>
+      <div id="pdms-approval-list">
+        <div style="text-align:center;padding:18px;color:var(--muted);font-size:12px">Loading…</div>
+      </div>
+    </div>
 
     <!-- ── CONTRACTS ── -->
     <div class="card-title" style="margin-bottom:10px">// CONTRACTS</div>
@@ -1038,38 +831,23 @@ select.inp option{background:var(--surface)}
   <div id="view-agents" class="view">
 
     <!-- HEADER -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <div style="font-size:15px;color:var(--muted)">10 agents running autonomously · all LOIs require Boss approval</div>
-      <button class="btn btn-sm btn-p" onclick="runAllAgents()">▶ Run all agents now</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div style="font-size:15px;font-weight:600;color:var(--white)">AI Tools</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">9 autonomous agents · all LOIs require Boss approval</div>
+      </div>
+      <button class="btn btn-sm btn-p" onclick="runAllAgents()">▶ Run all agents</button>
     </div>
 
-    <!-- AGENT STATUS BAR -->
-    <div style="display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:0;align-items:center">
-      <div style="font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-right:4px;flex-shrink:0">Status</div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px">🔭 Sourcing & Intel <span style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block"></span></div>
-      <div style="background:rgba(232,169,74,.1);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">📱 OutreachBot ⏸</div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">🛡️ ComplianceBot <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px">🚢🛃 Logistics & Customs <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);padding:3px 9px;border-radius:10px;font-size:13px">💳 TradeFinanceAI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(91,95,239,.08);border:1px solid rgba(91,95,239,.25);color:var(--indigo);padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="window.open('loi-contracts.html?tool=loi','_blank')">📄 LOI Generator <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(232,169,74,.08);border:1px solid rgba(232,169,74,.25);color:var(--gold);padding:3px 9px;border-radius:10px;font-size:13px">🧾 PO Generator <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal);padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="openInvoiceModal()">📄 Proforma Invoice <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
-      <div style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px">⚖️ LegalContract</div>
-      <div style="display:flex;align-items:center;gap:4px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc;padding:3px 9px;border-radius:10px;font-size:13px;cursor:pointer" onclick="show('agents',document.getElementById('tb-agents'))">📜 SPA AI <span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block"></span></div>
+    <!-- TABS -->
+    <div style="display:flex;gap:3px;border-bottom:1px solid var(--border);margin-bottom:0">
+      <button id="ait-tab-agents"     onclick="aitTab('agents')"     style="padding:8px 18px;font-size:13px;font-weight:700;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--indigo);color:#fff;cursor:pointer">🤖 Agents</button>
+      <button id="ait-tab-generate"   onclick="aitTab('generate')"   style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--surface2);color:var(--muted);cursor:pointer">📄 Generate</button>
+      <button id="ait-tab-automation" onclick="aitTab('automation')" style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--surface2);color:var(--muted);cursor:pointer">⚙️ Automation</button>
     </div>
 
-    <!-- ── TAB NAV ─────────────────────────────────────────────────────────────── -->
-    <div style="display:flex;gap:0;margin-top:16px;border-bottom:1px solid var(--border)">
-      <button id="at-tab-source" onclick="agentTab('source')" style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--indigo);color:#fff;cursor:pointer;margin-right:3px;letter-spacing:.01em">🔭 Source &amp; Qualify</button>
-      <button id="at-tab-execute" onclick="agentTab('execute')" style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--surface2);color:var(--muted);cursor:pointer;margin-right:3px;letter-spacing:.01em">⚙️ Execute</button>
-      <button id="at-tab-docs" onclick="agentTab('docs')" style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--surface2);color:var(--muted);cursor:pointer;margin-right:3px;letter-spacing:.01em">📄 Documents</button>
-      <button id="at-tab-activity" onclick="agentTab('activity')" style="padding:8px 18px;font-size:13px;font-weight:600;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;background:var(--surface2);color:var(--muted);cursor:pointer;letter-spacing:.01em">📊 Activity</button>
-    </div>
-
-    <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <!-- TAB 1: SOURCE & QUALIFY                                                   -->
-    <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="at-panel-source" style="padding-top:16px">
+    <!-- ══ TAB: AGENTS ══════════════════════════════════════════════════════════ -->
+    <div id="ait-panel-agents" style="padding-top:16px">
 
     <!-- DISCOVER & QUALIFY -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
@@ -1214,12 +992,198 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
 
-    </div><!-- /at-panel-source -->
+    </div><!-- /ait-panel-agents (sourcing + compliance + outreach sections end here) -->
 
-    <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <!-- TAB 2: EXECUTE                                                            -->
-    <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="at-panel-execute" style="display:none;padding-top:16px">
+    <!-- ══ TAB: GENERATE ═════════════════════════════════════════════════════════ -->
+    <div id="ait-panel-generate" style="display:none;padding-top:16px">
+
+    <!-- DEAL DOCUMENTS -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:var(--indigo);color:#fff;font-size:10px;padding:2px 7px;border-radius:2px;font-weight:700;letter-spacing:.06em">DEAL</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Letter of Intent · Purchase Order · Agreements</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px">
+      <div class="ai-agent-card" onclick="openDocDrawer('loi','LOI Generator')">
+        <div class="aac-icon" style="background:rgba(91,95,239,.12)">📄</div>
+        <div class="aac-name">LOI</div>
+        <div class="aac-desc">Letter of Intent · AI smart fill · PDF &amp; digital sign</div>
+        <div class="aac-foot"><span class="badge bv" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openDocDrawer('po','PO Generator')">
+        <div class="aac-icon" style="background:rgba(34,197,94,.1)">🧾</div>
+        <div class="aac-name">PO Generator</div>
+        <div class="aac-desc">Purchase Order from signed LOI · trade terms auto-filled</div>
+        <div class="aac-foot"><span class="badge bg" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openDocDrawer('nda','NDA Generator')">
+        <div class="aac-icon" style="background:rgba(59,130,246,.1)">🔏</div>
+        <div class="aac-name">NDA</div>
+        <div class="aac-desc">Mutual or one-way · supplier &amp; pricing confidentiality</div>
+        <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:#3b82f6">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openDocDrawer('spa','SPA Generator')">
+        <div class="aac-icon" style="background:rgba(168,85,247,.1)">📜</div>
+        <div class="aac-name">SPA</div>
+        <div class="aac-desc">Sales &amp; Purchase Agreement · GAFTA/ICC · from signed LOI</div>
+        <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openLCModal()">
+        <div class="aac-icon" style="background:rgba(168,85,247,.1)">⚖️</div>
+        <div class="aac-name">LegalContract AI</div>
+        <div class="aac-desc">ICC/UNIDROIT commodity sale contract · full T&amp;Cs · sends to lawyer</div>
+        <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc">Open →</span></div>
+      </div>
+    </div>
+
+    <!-- FINANCE DOCUMENTS -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:var(--gold);color:var(--bg);font-size:10px;padding:2px 7px;border-radius:2px;font-weight:700;letter-spacing:.06em">FINANCE</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Letters of Credit · Trade Finance</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px">
+      <div class="ai-agent-card" onclick="openDocDrawer('lca','LC Application')">
+        <div class="aac-icon" style="background:rgba(232,169,74,.1)">💳</div>
+        <div class="aac-name">LC Application</div>
+        <div class="aac-desc">Letter of Credit / SBLC · UCP 600 · bank-ready format from PO</div>
+        <div class="aac-foot"><span class="badge ba" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openPOFModal()">
+        <div class="aac-icon" style="background:rgba(232,169,74,.1)">💰</div>
+        <div class="aac-name">POF Letter</div>
+        <div class="aac-desc">Proof of Funds · bank confirmation · verifiable financial proof</div>
+        <div class="aac-foot"><span class="badge ba" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openTFModal()">
+        <div class="aac-icon" style="background:rgba(45,212,191,.1)">⛓</div>
+        <div class="aac-name">TradeFinanceAI</div>
+        <div class="aac-desc">LC drafting · SBLC · factoring · TradeFinex blockchain link</div>
+        <div class="aac-foot"><span class="badge bt" style="font-size:11px">Open →</span></div>
+      </div>
+    </div>
+
+    <!-- SHIPPING DOCUMENTS -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:var(--teal);color:var(--bg);font-size:10px;padding:2px 7px;border-radius:2px;font-weight:700;letter-spacing:.06em">SHIPPING</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Invoices · Packing · Freight · Customs</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px">
+      <div class="ai-agent-card" onclick="openInvoiceModal()">
+        <div class="aac-icon" style="background:rgba(45,212,191,.1)">🧾</div>
+        <div class="aac-name">Proforma Invoice</div>
+        <div class="aac-desc">Commercial invoice for customs, bank &amp; buyer · from signed PO</div>
+        <div class="aac-foot"><span class="badge bt" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openCIModal()">
+        <div class="aac-icon" style="background:rgba(59,130,246,.1)">📋</div>
+        <div class="aac-name">Commercial Invoice</div>
+        <div class="aac-desc">Formal invoice for customs clearance · pulls from PO data</div>
+        <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:#3b82f6">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openPLModal()">
+        <div class="aac-icon" style="background:rgba(232,169,74,.1)">📦</div>
+        <div class="aac-name">Packing List</div>
+        <div class="aac-desc">Package count, weights, dimensions, container &amp; marks</div>
+        <div class="aac-foot"><span class="badge ba" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openDocDrawer('freight','Freight Advisor')">
+        <div class="aac-icon" style="background:rgba(45,212,191,.1)">🚢</div>
+        <div class="aac-name">Freight Advisor</div>
+        <div class="aac-desc">Best route · forwarder · rate estimate · ETA · port congestion</div>
+        <div class="aac-foot"><span class="badge bt" style="font-size:11px">Open →</span></div>
+      </div>
+    </div>
+
+    <!-- COMPLIANCE DOCUMENTS -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+      <span style="background:rgba(34,197,94,.8);color:#fff;font-size:10px;padding:2px 7px;border-radius:2px;font-weight:700;letter-spacing:.06em">COMPLIANCE</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">KYC · HS Code · Certificates · Quality</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:4px">
+      <div class="ai-agent-card" onclick="openDocDrawer('hs','HS Code & Duty')">
+        <div class="aac-icon" style="background:rgba(139,143,248,.1)">🛃</div>
+        <div class="aac-name">HS Code &amp; Duty</div>
+        <div class="aac-desc">6-digit HS code · import duty rate · required certs by country</div>
+        <div class="aac-foot"><span class="badge bv" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openKYCModal()">
+        <div class="aac-icon" style="background:rgba(34,197,94,.1)">🪪</div>
+        <div class="aac-name">KYC Documents</div>
+        <div class="aac-desc">Corporate registration · certificate of incorporation · profile</div>
+        <div class="aac-foot"><span class="badge bg" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="openSGSModal()">
+        <div class="aac-icon" style="background:rgba(34,197,94,.1)">🔬</div>
+        <div class="aac-name">SGS Inspection</div>
+        <div class="aac-desc">Pre-shipment inspection certificate · quality &amp; quantity verification</div>
+        <div class="aac-foot"><span class="badge bg" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('coa')">
+        <div class="aac-icon" style="background:rgba(168,85,247,.1)">🧪</div>
+        <div class="aac-name">COA</div>
+        <div class="aac-desc">Certificate of Analysis · grade, purity, moisture · SGS/ISO method</div>
+        <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:#c084fc">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('coo')">
+        <div class="aac-icon" style="background:rgba(45,212,191,.1)">🌐</div>
+        <div class="aac-name">COO</div>
+        <div class="aac-desc">Certificate of Origin · HS code · preferential or non-preferential</div>
+        <div class="aac-foot"><span class="badge bt" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('bl')">
+        <div class="aac-icon" style="background:rgba(91,95,239,.12)">🚢</div>
+        <div class="aac-name">Bill of Lading</div>
+        <div class="aac-desc">Carrier receipt · shipper, consignee, vessel, port details</div>
+        <div class="aac-foot"><span class="badge bv" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('fco')">
+        <div class="aac-icon" style="background:rgba(232,169,74,.1)">📃</div>
+        <div class="aac-name">FCO</div>
+        <div class="aac-desc">Full Corporate Offer · official commercial offer with price, specs &amp; validity</div>
+        <div class="aac-foot"><span class="badge ba" style="font-size:11px">Open →</span></div>
+      </div>
+      <div class="ai-agent-card" onclick="show('docs',document.getElementById('sb-docs'));openDmsGen('pi')">
+        <div class="aac-icon" style="background:rgba(59,130,246,.1)">📑</div>
+        <div class="aac-name">Proforma Invoice</div>
+        <div class="aac-desc">Pre-shipment commercial invoice for buyer approval &amp; LC issuance</div>
+        <div class="aac-foot"><span class="badge" style="font-size:11px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.3);color:#3b82f6">Open →</span></div>
+      </div>
+    </div>
+
+    </div><!-- /ait-panel-generate -->
+
+    <!-- ══ TAB: AUTOMATION ════════════════════════════════════════════════════════ -->
+    <div id="ait-panel-automation" style="display:none;padding-top:16px">
+
+    <!-- Agent log mini -->
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">// AGENT ACTIVITY LOG — TODAY</div>
+      <div style="max-height:180px;overflow-y:auto" id="agent-log"></div>
+    </div>
+    <!-- Auto-generated docs -->
+    <div class="card sloi-auto-docs-card" style="margin-bottom:14px;display:none">
+      <div class="card-title" style="display:flex;align-items:center;gap:8px">
+        <span>// AUTO-GENERATED DOCUMENTS</span><span style="flex:1"></span>
+        <span style="font-size:10px;color:var(--green);background:rgba(34,197,94,.12);padding:2px 8px;border-radius:3px;letter-spacing:.06em">ON APPROVAL</span>
+        <button class="btn btn-xs" style="background:transparent;color:var(--muted);font-size:11px" onclick="clearAutoDocs()">Clear all</button>
+      </div>
+      <div class="sloi-auto-docs-list" style="max-height:280px;overflow-y:auto"></div>
+    </div>
+
+    <!-- Per-agent schedule -->
+    <div style="display:flex;align-items:center;gap:8px;margin:0 0 12px">
+      <span style="background:rgba(91,95,239,.85);color:#fff;font-size:10px;padding:2px 8px;border-radius:2px;font-weight:700;letter-spacing:.06em">SCHEDULE</span>
+      <span style="font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase">Per-agent frequency &amp; active window</span>
+      <span style="flex:1;height:1px;background:var(--border)"></span>
+    </div>
+
+    <!-- (schedule table remains unchanged below, only moved here) -->
+    <div id="at-panel-execute" style="display:none;padding-top:16px"><!-- kept for JS compat, empty --></div>
+    <div id="at-panel-docs"    style="display:none;padding-top:16px"><!-- kept for JS compat, empty --></div>
+    <div id="at-panel-source"  style="display:none;padding-top:16px"><!-- kept for JS compat, empty --></div>
 
     <!-- EXECUTE -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
@@ -1342,13 +1306,10 @@ select.inp option{background:var(--surface)}
 
     </div>
 
-    </div><!-- /at-panel-execute -->
+    </div><!-- /old-execute-hidden -->
 
-    <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <!-- TAB 3: DOCUMENTS                                                          -->
-    <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="at-panel-docs" style="display:none;padding-top:16px">
-
+    <!-- old docs panel hidden -->
+    <div id="old-docs-hidden" style="display:none">
     <!-- LEGAL CONTRACTS -->
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
       <span style="background:rgba(168,85,247,.85);color:#fff;font-size:10px;padding:2px 6px;border-radius:2px;font-weight:700;letter-spacing:.06em;flex-shrink:0">LEGAL</span>
@@ -1448,20 +1409,10 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
 
-    </div><!-- /at-panel-docs -->
+    </div><!-- /old-docs-hidden -->
 
-    <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <!-- TAB 4: ACTIVITY                                                           -->
-    <!-- ══════════════════════════════════════════════════════════════════════════ -->
-    <div id="at-panel-activity" style="display:none;padding-top:16px">
-
-    <!-- AGENT LOG -->
-    <div class="card">
-      <div class="card-title">// AGENT ACTIVITY LOG — TODAY</div>
-      <div style="max-height:180px;overflow-y:auto" id="agent-log">
-        <!-- rendered by JS -->
-      </div>
-    </div>
+    <!-- compat stub for old JS refs -->
+    <div id="at-panel-activity" style="display:none"></div>
 
     <!-- AUTO-GENERATED DOCUMENTS -->
     <div class="card sloi-auto-docs-card" style="margin-top:14px;display:none">
@@ -1672,8 +1623,24 @@ select.inp option{background:var(--surface)}
       </div>
     </div>
 
-    </div><!-- /at-panel-activity -->
+    </div><!-- /ait-panel-automation -->
 
+  </div><!-- /view-agents -->
+
+  <!-- DOC DRAWER (right-side panel for Generate tab) -->
+  <div id="at-doc-overlay" onclick="closeDocDrawer()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:498"></div>
+  <div id="at-doc-drawer" style="position:fixed;top:0;right:-620px;width:600px;height:100vh;z-index:499;background:var(--surface);border-left:1px solid var(--border2);display:flex;flex-direction:column;transition:right .28s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 40px rgba(0,0,0,.4)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:50px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--surface2)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span id="at-drawer-icon" style="font-size:16px"></span>
+        <span id="at-drawer-title" style="font-size:14px;font-weight:700;color:var(--white)"></span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button onclick="openDrawerNewTab()" class="btn btn-xs" title="Open in new tab">↗ New tab</button>
+        <button onclick="closeDocDrawer()" style="background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:0">✕</button>
+      </div>
+    </div>
+    <iframe id="at-drawer-frame" src="" style="flex:1;border:none;width:100%;background:var(--bg)" title="Document Generator"></iframe>
   </div>
 
   <!-- SETTINGS -->
@@ -1918,7 +1885,7 @@ var SUPPLIERS=[{ref:'REF-BLD-001',emoji:'🏗️',name:'Supplier A',sector:'Buil
 var BROKERS=[{init:'AA',name:'Ali Al-Omari',company:'Gulf Trade Partners',territory:'UAE / KSA / Iraq',color:'rgba(91,95,239,.15)',ct:'var(--violet)',deals:7,volume:'$892K',fees:'$3,500',pipeline:'$420K'},{init:'KW',name:'Klaus Weber',company:'EuroChem Trading',territory:'Germany / EU',color:'rgba(45,212,191,.15)',ct:'var(--teal)',deals:4,volume:'$197K',fees:'$2,000',pipeline:'$340K'},{init:'MH',name:'Mohammed Hassan',company:'MENA Commodities',territory:'Egypt / Jordan',color:'rgba(232,169,74,.15)',ct:'var(--gold)',deals:2,volume:'$56K',fees:'$1,000',pipeline:'$280K'}];
 var USERS=[{name:'NEOM Procurement',country:'KSA',role:'Buyer',kyc:'Verified',credits:245,lois:7,status:'Active'},{name:'Atlas Trading',country:'Germany',role:'Buyer',kyc:'Verified',credits:80,lois:4,status:'Active'},{name:'Gulf Cement LLC',country:'UAE',role:'Buyer',kyc:'Pending',credits:320,lois:0,status:'Pending'},{name:'Kuwait Petro',country:'Kuwait',role:'Buyer',kyc:'Verified',credits:15,lois:2,status:'Active'},{name:'Al Mansour Trading',country:'Iraq',role:'Buyer',kyc:'Expired',credits:0,lois:12,status:'Suspended'}];
 var TG_TPLS={rfq:'SLOI AI — New RFQ\n\nA quote request has arrived for your products.\nPlease respond within 24 hours.\n\nhttps://sloiai.com\n\nPowered by SLOI AI',loi:'SLOI AI — LOI Signed\n\nYour LOI has been generated.\nRef: SL-LOI-20260501-XXX\n\nPowered by SLOI AI',doc:'SLOI AI — Action Required\n\nPlease respond to the pending request.\nhttps://sloiai.com\n\nPowered by SLOI AI',custom:''};
-var TITLES={activity:['📋 Activity Log','Admin actions · approvals · system events'],agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],docs:['🗂️ Documents & Contracts','Purchase orders · deal checklist · 14 doc types · DMS'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
+var TITLES={activity:['📋 Activity Log','Admin actions · approvals · system events'],agents:['🧠 AI Tools','Agents · automation · workflow rules'],briefing:['☀️ Daily Briefing','Your AI-generated action plan for today'],warroom:['🔴 War Room','Platform health · live view'],pipeline:['📊 Pipeline','Leads & deals'],docs:['🗂️ Contracts','Purchase orders · deal checklist · 14 doc types · DMS'],credits:['⚡ Credits','Credit sales & transactions'],contracts:['📄 Contracts','Purchase orders · signed deals · payment status'],traders:['👥 Traders','Partner network'],products:['📦 Products & Pricing','Manage commodity prices · trader floors · exchange sync'],compliance:['🛡️ Compliance','OFAC · dual-use · sanctions log'],users:['👤 Users & KYC','User management'],settings:['⚙️ Settings','Platform configuration'],support:['🎧 Support','AI chat · submit a ticket · FAQ'],terms:['📋 Terms & Privacy','Terms of service · Privacy policy · Legal']};
 
 
 // ── CONSOLE SYNC ──────────────────────────────────────────────────────────────
@@ -2848,7 +2815,7 @@ function addAllLeads(){
 
 function exportLeads(){ alert('Exporting '+LEADS.length+' leads to CSV...\n\nIn production this downloads leads.csv'); }
 function runLeadFinder(){ alert('LeadFinder running...\n\nSearching: news · LinkedIn · tender sites\nKeywords: NEOM · steel · cement · UAE construction\n\nResults will appear in 30 seconds.'); }
-function runAllAgents(){ alert('Running all 4 agents simultaneously...\n\n🔭 LeadFinder — searching\n📡 PriceScout — scanning\n📱 OutreachBot — queued\n🛡️ ComplianceBot — always running'); }
+function runAllAgents(){ alert('Running all 9 agents…\n\n🔭 LeadFinder — searching\n📡 PriceScout — scanning markets\n🏭 SupplierFinder — sourcing\n💬 TraderCommsAI — chasing docs\n📱 OutreachBot — queued\n🛡️ ComplianceBot — always on\n🚢 Logistics AI — routing\n🛃 Customs AI — HS lookup\n💳 TradeFinanceAI — LC pipeline'); }
 
 function configLeadFinder(){ alert('LeadFinder configuration\n\nKeywords: NEOM · steel · cement · grain · UAE construction\nRegions: UAE · KSA · Egypt · Germany\nSchedule: Every 6 hours\nSources: News · LinkedIn · Tenders\n\nEdit in Settings → Agents'); }
 function siTab(tab) {
@@ -5626,20 +5593,48 @@ function clearAutoDocs() {
 }
 
 // ── AI TOOLS TAB SWITCHER ─────────────────────────────────────────────────────
-function agentTab(t) {
-  var tabs = ['source','execute','docs','activity'];
-  var colors = { source: 'var(--teal)', execute: 'var(--gold)', docs: 'rgba(168,85,247,.85)', activity: 'var(--indigo)' };
+function agentTab(t) { aitTab(t === 'source' ? 'agents' : t === 'execute' || t === 'docs' ? 'generate' : 'automation'); }
+
+function aitTab(t) {
+  var tabs = ['agents','generate','automation'];
   tabs.forEach(function(k) {
-    var btn = document.getElementById('at-tab-' + k);
-    var panel = document.getElementById('at-panel-' + k);
+    var btn   = document.getElementById('ait-tab-' + k);
+    var panel = document.getElementById('ait-panel-' + k);
     var active = k === t;
     if (btn) {
-      btn.style.background = active ? colors[k] : 'var(--surface2)';
-      btn.style.color = active ? '#fff' : 'var(--muted)';
-      btn.style.fontWeight = active ? '700' : '600';
+      btn.style.background  = active ? 'var(--indigo)' : 'var(--surface2)';
+      btn.style.color       = active ? '#fff' : 'var(--muted)';
+      btn.style.fontWeight  = active ? '700' : '600';
     }
     if (panel) panel.style.display = active ? '' : 'none';
   });
+}
+
+// ── DOC DRAWER ────────────────────────────────────────────────────────────────
+var _drawerTool = '';
+var DOC_DRAWER_ICONS = { loi:'📄', po:'🧾', nda:'🔏', spa:'📜', lca:'💳', freight:'🚢', hs:'🛃' };
+
+function openDocDrawer(tool, title) {
+  _drawerTool = tool;
+  var icon = DOC_DRAWER_ICONS[tool] || '📄';
+  document.getElementById('at-drawer-icon').textContent  = icon;
+  document.getElementById('at-drawer-title').textContent = title || tool.toUpperCase();
+  document.getElementById('at-drawer-frame').src = 'loi-contracts.html?tool=' + tool + '&embed=1';
+  document.getElementById('at-doc-drawer').style.right   = '0';
+  document.getElementById('at-doc-overlay').style.display = 'block';
+  logActivity('user_action', 'Opened ' + (title || tool), 'Doc generator · admin panel');
+}
+
+function closeDocDrawer() {
+  document.getElementById('at-doc-drawer').style.right    = '-620px';
+  document.getElementById('at-doc-overlay').style.display = 'none';
+  setTimeout(function(){ document.getElementById('at-drawer-frame').src = ''; }, 300);
+  _drawerTool = '';
+}
+
+function openDrawerNewTab() {
+  if (_drawerTool) window.open('loi-contracts.html?tool=' + _drawerTool, '_blank');
+  closeDocDrawer();
 }
 
 // ── KYC DOCUMENT MODAL ────────────────────────────────────────────────────────
@@ -5975,6 +5970,7 @@ function dmsLoad() {
   dmsPopulateDealSelect();
   dmsLibRender();
   dmsUpdateStats();
+  renderPendingApprovals();
 }
 
 function dmsUpdateStats() {
@@ -6139,10 +6135,12 @@ function dmsLibRender() {
     return;
   }
   var tm = DMS_TYPES.reduce(function(m,x){ m[x.id]=x; return m; }, {});
+  Object.keys(_ctAiStore).forEach(function(k){ if(k.charAt(0)==='d') delete _ctAiStore[k]; });
   tbody.innerHTML = filtered.map(function(d, i){
     var meta = tm[d.type] || { icon:'📄', name: d.type };
     var dateStr = d.date || (d.ts ? new Date(d.ts).toLocaleDateString() : '—');
     var isUser  = !!d.ts; // user-generated row (has timestamp)
+    if (isUser) _ctAiStore['d'+i] = {title: meta.name + (d.ref ? ' — '+d.ref : ''), type: d.type||'doc', text: d.text||''};
     return '<tr>'
       + '<td style="font-size:17px;text-align:center;padding:8px 6px">'+meta.icon+'</td>'
       + '<td style="font-weight:600;color:var(--white)">'+meta.name+'</td>'
@@ -6153,7 +6151,11 @@ function dmsLibRender() {
       + '<td style="font-size:12px;color:var(--muted)">'+( d.issuedBy||'—' )+'</td>'
       + '<td>'+dmsStatusBadge(d.status||'—')+'</td>'
       + '<td style="white-space:nowrap">'
-        + (isUser ? '<button class="btn btn-xs" onclick="dmsPreview('+i+')" style="margin-right:4px">Preview</button><button class="btn btn-xs btn-r" onclick="dmsDelete('+i+')">✕</button>' : '<span style="font-size:12px;color:var(--muted)">—</span>')
+        + (isUser
+          ? '<button class="btn btn-xs" onclick="dmsPreview('+i+')" style="margin-right:4px">Preview</button>'
+            + '<button class="btn btn-xs btn-r" onclick="dmsDelete('+i+')" style="margin-right:4px">✕</button>'
+            + '<button class="btn btn-xs" onclick="openCTAI(\'d'+i+'\')" style="background:rgba(91,95,239,.1);color:var(--violet);border-color:rgba(91,95,239,.25)">✦ AI</button>'
+          : '<span style="font-size:12px;color:var(--muted)">—</span>')
       + '</td>'
       + '</tr>';
   }).join('');
@@ -6449,6 +6451,97 @@ var _wrCountdown = 30;
 function wrRefresh() {
   _wrCountdown = 30;
   loadNegotiations();
+  wrRenderPending();
+  wrRenderActivity();
+}
+
+var PDMS_ICON_WR = { loi:'📄', po:'📋', nda:'🔏', lca:'💳', spa:'⚖️', freight:'🚢', hs:'🛃' };
+var VAULT_STATUS_COLOR = { draft:'var(--muted)', sent:'var(--teal)', 'under-review':'var(--gold)', signed:'var(--green)', archived:'var(--muted)' };
+
+function wrRenderPending() {
+  var docs = [];
+  try { docs = JSON.parse(localStorage.getItem('sloi_docs') || '[]'); } catch(e) {}
+  var pending = docs.filter(function(d){ return d.status === 'sent' || d.status === 'under-review'; });
+
+  var countEl = document.getElementById('wr-pend-count');
+  if (countEl) countEl.textContent = pending.length ? pending.length + ' awaiting' : 'All clear';
+
+  var list = document.getElementById('wr-pending-list');
+  if (!list) return;
+  if (!pending.length) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:var(--green);font-size:13px">✓ No pending approvals</div>';
+    return;
+  }
+  list.innerHTML = pending.map(function(d, i) {
+    var idx = docs.indexOf(d);
+    var icon = PDMS_ICON_WR[d.type] || '📄';
+    var sColor = VAULT_STATUS_COLOR[d.status] || 'var(--muted)';
+    var sLabel = (d.status || 'draft').replace('-', ' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:1px solid var(--border);font-size:13px">'
+      + '<span style="font-size:15px;flex-shrink:0">' + icon + '</span>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="color:var(--white);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + (d.title||'Untitled') + '</div>'
+      + '<div style="color:var(--muted);font-size:12px;margin-top:1px">' + (d.buyer||'') + (d.buyer && d.product ? ' · ' : '') + (d.product||'') + '</div>'
+      + '</div>'
+      + '<span style="font-size:11px;color:' + sColor + ';font-weight:700;white-space:nowrap;flex-shrink:0">' + sLabel + '</span>'
+      + '<div style="display:flex;gap:4px;flex-shrink:0">'
+      + '<button class="btn btn-xs btn-g" style="padding:2px 7px" onclick="wrApprove(' + idx + ')">✓</button>'
+      + '<button class="btn btn-xs btn-r" style="padding:2px 7px" onclick="wrReject(' + idx + ')">✗</button>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function wrApprove(i) {
+  var docs = [];
+  try { docs = JSON.parse(localStorage.getItem('sloi_docs') || '[]'); } catch(e) {}
+  if (!docs[i]) return;
+  var title = docs[i].title || 'Document';
+  docs[i].status = 'signed';
+  localStorage.setItem('sloi_docs', JSON.stringify(docs));
+  logActivity('approval', 'Approved → Signed', title);
+  wrRenderPending();
+}
+
+function wrReject(i) {
+  var docs = [];
+  try { docs = JSON.parse(localStorage.getItem('sloi_docs') || '[]'); } catch(e) {}
+  if (!docs[i]) return;
+  var title = docs[i].title || 'Document';
+  docs[i].status = 'draft';
+  localStorage.setItem('sloi_docs', JSON.stringify(docs));
+  logActivity('rejection', 'Rejected → Draft', title);
+  wrRenderPending();
+}
+
+function wrRenderActivity() {
+  var log = [];
+  try { log = JSON.parse(localStorage.getItem('sloi_activity_log') || '[]'); } catch(e) {}
+  var feed = document.getElementById('wr-activity-feed');
+  if (!feed) return;
+  var ICONS = { approval:'✅', rejection:'✗', price_update:'📊', doc_gen:'📄', user_action:'👤', PDMS:'📂' };
+  var COLORS = { approval:'var(--green)', rejection:'var(--red)', price_update:'var(--gold)', doc_gen:'var(--teal)', user_action:'var(--violet)', PDMS:'var(--teal)' };
+  var recent = log.slice(0, 20);
+  if (!recent.length) {
+    feed.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px">No activity recorded yet</div>';
+    return;
+  }
+  feed.innerHTML = recent.map(function(e) {
+    var d = new Date(e.ts);
+    var now = Date.now();
+    var diff = Math.floor((now - e.ts) / 60000);
+    var ago = diff < 1 ? 'just now' : diff < 60 ? diff + 'm ago' : diff < 1440 ? Math.floor(diff/60) + 'h ago' : d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+    var icon = ICONS[e.type] || '●';
+    var color = COLORS[e.type] || 'var(--muted)';
+    return '<div style="display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-bottom:1px solid var(--border);font-size:13px">'
+      + '<div style="width:20px;text-align:center;flex-shrink:0;margin-top:1px;font-size:14px">' + icon + '</div>'
+      + '<div style="flex:1;min-width:0">'
+      + '<div style="color:var(--white);font-weight:600;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + (e.title||'') + '</div>'
+      + (e.detail ? '<div style="color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + e.detail + '</div>' : '')
+      + '</div>'
+      + '<div style="font-size:11px;color:var(--muted);white-space:nowrap;flex-shrink:0;font-family:\'IBM Plex Mono\',monospace">' + ago + '</div>'
+      + '</div>';
+  }).join('');
 }
 
 function wrStartCountdown() {
@@ -6492,6 +6585,8 @@ renderAlerts = function(negs, lois) {
 };
 
 wrStartCountdown();
+wrRenderPending();
+wrRenderActivity();
 
 // ── BOSS APPROVAL QUICK ACTIONS ───────────────────────────────────────────────
 
@@ -6538,6 +6633,7 @@ function logActivity(type, title, detail) {
   localStorage.setItem(ACTIVITY_LOG_KEY, JSON.stringify(log));
   var badge = document.getElementById('activity-badge');
   if (badge) { badge.textContent = log.length; badge.style.display = ''; }
+  wrRenderActivity();
 }
 
 function renderActivityLog() {
@@ -6745,7 +6841,169 @@ function bpuApply() {
   if (badge && log.length) { badge.textContent = log.length; badge.style.display = ''; }
 })();
 
+// ── PROCUREMENT DOCUMENT MANAGEMENT — PENDING APPROVALS ──────────────────────
+var PDMS_ICON  = { loi:'📄', po:'📋', nda:'🔏', lca:'💳', spa:'⚖️', freight:'🚢', hs:'🛃' };
+
+function _pdmsEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function pdmsGetContractDocs() {
+  var list = [];
+  try { list = JSON.parse(localStorage.getItem('sloi_docs') || '[]'); } catch(e) {}
+  return list;
+}
+
+function renderPendingApprovals() {
+  var docs    = pdmsGetContractDocs();
+  var pending = docs.filter(function(d){ var s = d.status||''; return s === 'sent' || s === 'under-review'; });
+  var label   = document.getElementById('pdms-count-label');
+  var listEl  = document.getElementById('pdms-approval-list');
+  if (!label || !listEl) return;
+
+  label.textContent = pending.length ? '(' + pending.length + ' awaiting action)' : '(none pending)';
+
+  if (!pending.length) {
+    listEl.innerHTML = '<div style="text-align:center;padding:18px 20px;color:var(--muted);font-size:12px;font-family:\'IBM Plex Mono\',monospace">'
+      + 'No documents pending approval.<br>'
+      + '<span style="font-size:11px;opacity:.7">Documents marked <strong>Sent</strong> or <strong>Under Review</strong> in the Contracts page will appear here.</span>'
+      + '</div>';
+    return;
+  }
+
+  Object.keys(_ctAiStore).forEach(function(k){ if(k.charAt(0)==='p') delete _ctAiStore[k]; });
+  pending.forEach(function(d, i){ _ctAiStore['p'+i] = {title:d.title||'Untitled', type:d.type||'doc', text:d.text||''}; });
+
+  var rows = pending.map(function(d, piIdx) {
+    var origIdx = docs.indexOf(d);
+    var icon    = PDMS_ICON[d.type] || '📄';
+    var stCls   = d.status === 'under-review' ? 'color:var(--gold)' : 'color:var(--teal)';
+    var stLbl   = d.status === 'under-review' ? 'Under Review'      : 'Sent';
+    return '<tr>'
+      + '<td><span style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;background:rgba(91,95,239,.1);color:var(--violet);padding:2px 7px;border-radius:3px">'
+      +   icon + ' ' + _pdmsEsc((d.type||'').toUpperCase()) + '</span></td>'
+      + '<td style="font-size:13px;font-weight:500;color:var(--white);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'
+      +   _pdmsEsc(d.title || 'Untitled') + '</td>'
+      + '<td style="font-size:11px;color:var(--muted);font-family:\'IBM Plex Mono\',monospace;white-space:nowrap">'
+      +   _pdmsEsc(d.date || '—') + '</td>'
+      + '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:11px;font-weight:600;' + stCls + '">' + stLbl + '</td>'
+      + '<td style="white-space:nowrap">'
+      +   '<button class="btn btn-xs btn-g" onclick="pdmsApprove(' + origIdx + ')" style="margin-right:4px">✓ Approve</button>'
+      +   '<button class="btn btn-xs" onclick="pdmsReject(' + origIdx + ')" style="background:rgba(239,68,68,.12);color:var(--red);border-color:rgba(239,68,68,.2);margin-right:4px">✕ Reject</button>'
+      +   '<button class="btn btn-xs" onclick="openCTAI(\'p' + piIdx + '\')" style="background:rgba(91,95,239,.1);color:var(--violet);border-color:rgba(91,95,239,.25)">✦ AI</button>'
+      + '</td>'
+      + '</tr>';
+  }).join('');
+
+  listEl.innerHTML = '<table>'
+    + '<thead><tr><th>Type</th><th>Title / Parties</th><th>Date</th><th>Status</th><th>Action</th></tr></thead>'
+    + '<tbody>' + rows + '</tbody>'
+    + '</table>';
+}
+
+function pdmsApprove(i) {
+  var docs = pdmsGetContractDocs();
+  if (docs[i]) {
+    docs[i].status = 'signed';
+    localStorage.setItem('sloi_docs', JSON.stringify(docs));
+    logActivity('PDMS', 'Approved → Signed', docs[i].title || 'Document');
+  }
+  renderPendingApprovals();
+}
+
+function pdmsReject(i) {
+  var docs = pdmsGetContractDocs();
+  if (docs[i]) {
+    docs[i].status = 'draft';
+    localStorage.setItem('sloi_docs', JSON.stringify(docs));
+    logActivity('PDMS', 'Rejected → Draft', docs[i].title || 'Document');
+  }
+  renderPendingApprovals();
+}
+
+function pdmsRefresh() {
+  renderPendingApprovals();
+}
+
+// ── CONTRACT AI ──────────────────────────────────────────────────────────────
+var _ctAiStore = {};
+var _ctAiCurrent = null;
+
+function openCTAI(key) {
+  var doc = _ctAiStore[key];
+  if (!doc) return;
+  _ctAiCurrent = doc;
+  document.getElementById('ct-ai-type-badge').textContent = '✦ ' + (doc.type||'doc').toUpperCase() + ' AI';
+  document.getElementById('ct-ai-modal-title').textContent = doc.title || 'Document';
+  document.getElementById('ct-ai-out').style.display = 'none';
+  document.getElementById('ct-ai-out').textContent = '';
+  document.getElementById('ct-ai-copy-row').style.display = 'none';
+  document.getElementById('ct-ai-overlay').style.display = 'block';
+  document.getElementById('ct-ai-modal').style.display = 'block';
+}
+
+function closeCTAI() {
+  document.getElementById('ct-ai-overlay').style.display = 'none';
+  document.getElementById('ct-ai-modal').style.display = 'none';
+  _ctAiCurrent = null;
+}
+
+function ctAiRun(action) {
+  if (!_ctAiCurrent) return;
+  var key = localStorage.getItem('sf_claude_key') || '';
+  var outEl = document.getElementById('ct-ai-out');
+  var copyRow = document.getElementById('ct-ai-copy-row');
+  outEl.style.display = '';
+  copyRow.style.display = 'none';
+  outEl.textContent = '⏳ Claude is analyzing…';
+  var typeLabel = (_ctAiCurrent.type || 'document').toLowerCase();
+  var docText = (_ctAiCurrent.text || '').substring(0, 5000) || '(no document text — generate the document first to enable AI analysis)';
+  var prompts = {
+    summarize: 'Summarize this ' + typeLabel + ' in 5 concise bullet points. Cover: parties involved, product/commodity, quantity and specs, price and payment terms, and key conditions. Use the actual values from the document.\n\nDOCUMENT:\n' + docText,
+    risk: 'You are a commodity trade compliance expert. Identify the top 4 legal or commercial risks the seller/supplier should know about in this ' + typeLabel + '. For each: give a short risk name, explain what it is, and suggest one mitigation step. Be specific and practical.\n\nDOCUMENT:\n' + docText,
+    reply: 'Draft a concise professional reply email to this ' + typeLabel + ' in international commodity trade. Acknowledge the terms, note any minor clarifications needed, and indicate readiness to proceed. Keep it to 3–4 paragraphs.\n\nDOCUMENT:\n' + docText,
+    next: 'Based on this ' + typeLabel + ', list the 5 most important immediate next steps the exporter/seller should take. Number each step and give a brief reason why it matters.\n\nDOCUMENT:\n' + docText
+  };
+  if (!key) { outEl.textContent = 'No Claude API key — set sf_claude_key in localStorage (Settings → API Key).'; return; }
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-calls': 'true' },
+    body: JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 1200, messages: [{ role: 'user', content: prompts[action] || prompts.summarize }] })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    outEl.textContent = (res.content && res.content[0]) ? res.content[0].text : 'No response.';
+    copyRow.style.display = 'flex';
+  })
+  .catch(function(e){ outEl.textContent = 'Error: ' + e.message; });
+}
+
+function ctAiCopy() {
+  var t = (document.getElementById('ct-ai-out')||{}).textContent || '';
+  navigator.clipboard.writeText(t).catch(function(){});
+}
+
 </script>
+
+<!-- ── CONTRACT AI MODAL ─────────────────────────────────────────────────── -->
+<div id="ct-ai-overlay" onclick="closeCTAI()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:700"></div>
+<div id="ct-ai-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:701;width:540px;max-width:95vw;background:var(--surface);border:1px solid var(--border2);border-radius:12px;box-shadow:0 24px 64px rgba(0,0,0,.8);padding:22px 24px">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px">
+    <div>
+      <div id="ct-ai-type-badge" style="font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--violet);letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">✦ CONTRACT AI</div>
+      <div id="ct-ai-modal-title" style="font-size:14px;font-weight:700;color:var(--white);line-height:1.3">Document</div>
+    </div>
+    <button onclick="closeCTAI()" style="background:none;border:1px solid var(--border);color:var(--muted);font-size:13px;cursor:pointer;padding:5px 10px;border-radius:5px;flex-shrink:0;margin-left:12px">✕ Close</button>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:14px">
+    <button class="btn btn-xs" onclick="ctAiRun('summarize')" style="justify-content:center;color:var(--teal);border-color:rgba(45,212,191,.3);background:rgba(45,212,191,.05);padding:8px 4px">📋 Summarize</button>
+    <button class="btn btn-xs" onclick="ctAiRun('risk')"      style="justify-content:center;color:var(--gold);border-color:rgba(232,169,74,.3);background:rgba(232,169,74,.05);padding:8px 4px">⚠ Risk Scan</button>
+    <button class="btn btn-xs" onclick="ctAiRun('reply')"     style="justify-content:center;color:var(--violet);border-color:rgba(139,143,248,.3);background:rgba(91,95,239,.06);padding:8px 4px">✉ Draft Reply</button>
+    <button class="btn btn-xs" onclick="ctAiRun('next')"      style="justify-content:center;color:var(--green);border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.05);padding:8px 4px">→ Next Steps</button>
+  </div>
+  <div id="ct-ai-out" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:14px 16px;font-size:12px;color:var(--text);line-height:1.75;max-height:340px;overflow-y:auto;white-space:pre-wrap;font-family:'IBM Plex Mono',monospace"></div>
+  <div id="ct-ai-copy-row" style="display:none;margin-top:10px;justify-content:flex-end">
+    <button class="btn btn-xs" onclick="ctAiCopy()" style="color:var(--muted)">↗ Copy to clipboard</button>
+  </div>
+</div>
 
 </body>
 </html>
