@@ -860,6 +860,8 @@ function setDropzoneFile(file) {
 document.addEventListener('DOMContentLoaded', function() {
   var saved = localStorage.getItem('sloi_claude_key') || '';
   if (saved) { var inp = document.getElementById('ai-key-inp'); if (inp) inp.value = saved; }
+  var leadEmail = localStorage.getItem('sloi_lead_email') || '';
+  if (leadEmail) { var em = document.getElementById('contact-email'); if (em && !em.value) em.value = leadEmail; }
 });
 function toggleAIKey() { var inp = document.getElementById('ai-key-inp'); if (!inp) return; inp.type = inp.type === 'password' ? 'text' : 'password'; }
 
