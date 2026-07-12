@@ -97,13 +97,19 @@ pre{padding:20px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-heigh
 .step-desc code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--surface2);border:1px solid var(--border2);padding:1px 6px;border-radius:3px;color:var(--violet)}
 
 /* TOOLS GRID */
-.tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px;transition:border-color .2s;position:relative;overflow:hidden}
-.tool-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--indigo),var(--violet));opacity:0;transition:opacity .2s}
-.tool-card:hover{border-color:rgba(91,95,239,.3)}
-.tool-card:hover::after{opacity:1}
-.tool-name{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--violet);margin-bottom:4px}
-.tool-desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.tools-section{margin-bottom:56px}
+.tools-sec-label{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.tools-sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.tools-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.tools-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.tool-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid transparent;border-radius:10px;padding:32px 28px;transition:border-color .2s,border-left-color .2s;position:relative}
+.tool-card.tc-free{border-left-color:var(--green)}
+.tool-card.tc-low{border-left-color:var(--teal)}
+.tool-card.tc-mid{border-left-color:var(--gold)}
+.tool-card:hover{border-color:rgba(91,95,239,.3);border-left-color:var(--violet)}
+.tool-icon{font-size:24px;margin-bottom:14px;line-height:1;display:block}
+.tool-name{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--violet);margin-bottom:10px}
+.tool-desc{font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:14px}
 .tool-cost{font-size:11px;font-family:'IBM Plex Mono',monospace}
 
 /* REPUTATION TIERS */
@@ -154,7 +160,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   .section{padding:44px 16px}
   .cta-section{padding:40px 16px 60px}
   .cta-inner{padding:32px 20px}
-  .tools-grid{grid-template-columns:1fr}
+  .tools-grid-3,.tools-grid-2{grid-template-columns:1fr}
   .tiers-grid{grid-template-columns:1fr 1fr}
   .sec-divider{margin:0 16px}
   footer{padding:20px 16px;flex-direction:column;align-items:flex-start}
@@ -426,92 +432,109 @@ mandate = httpx.post(<span class="fn">f"{BASE}/mandates"</span>, headers=headers
   <div class="section-eyebrow">MCP Tools</div>
   <div class="section-title">14 tools.<br/><em>Everything procurement needs.</em></div>
   <div class="section-sub">All tools available via MCP and REST API. Read-tier tools are free. Transact-tier tools deduct credits. Document generation tools (SPA, Trade Contract, LC Application) produce PDF-ready output automatically from your LOI reference.</div>
-  <div class="tools-grid">
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_list_products</div>
-      <div class="tool-desc">List available commodity products with live prices. Filter by sector: metals · building · energy · agriculture · chemicals.</div>
-      <div class="tool-cost"><span class="badge bg">Free</span> &nbsp;No auth required</div>
+  <!-- Browse & Account -->
+  <div class="tools-section">
+    <div class="tools-sec-label">Browse &amp; Account — Free · No auth required</div>
+    <div class="tools-grid-3">
+      <div class="tool-card tc-free">
+        <span class="tool-icon">📦</span>
+        <div class="tool-name">sloi_list_products</div>
+        <div class="tool-desc">List available commodity products with live prices. Filter by sector: metals · building · energy · agriculture · chemicals.</div>
+        <div class="tool-cost"><span class="badge bg">Free</span> &nbsp;No auth required</div>
+      </div>
+      <div class="tool-card tc-free">
+        <span class="tool-icon">📊</span>
+        <div class="tool-name">sloi_get_price</div>
+        <div class="tool-desc">Get current price and 7-day history for a specific product by reference SKU. Returns price, prev_price, change_pct, history_7d.</div>
+        <div class="tool-cost"><span class="badge bg">Free</span></div>
+      </div>
+      <div class="tool-card tc-free">
+        <span class="tool-icon">💳</span>
+        <div class="tool-name">sloi_get_balance</div>
+        <div class="tool-desc">Check current credit balance, total purchased, and total spent for this agent's API key.</div>
+        <div class="tool-cost"><span class="badge bg">Free</span></div>
+      </div>
+      <div class="tool-card tc-free">
+        <span class="tool-icon">⭐</span>
+        <div class="tool-name">sloi_get_reputation</div>
+        <div class="tool-desc">Get agent reputation tier, total deals, success rate, and floor price discount. Tiers unlock autonomous mode and better pricing.</div>
+        <div class="tool-cost"><span class="badge bg">Free</span></div>
+      </div>
+      <div class="tool-card tc-free">
+        <span class="tool-icon">📋</span>
+        <div class="tool-name">sloi_list_lois</div>
+        <div class="tool-desc">List LOIs generated by this agent. Returns ref, product, deal price, total value, signed timestamp, and PDF download URL.</div>
+        <div class="tool-cost"><span class="badge bg">Free</span></div>
+      </div>
+      <div class="tool-card tc-free">
+        <span class="tool-icon">📄</span>
+        <div class="tool-name">sloi_get_loi_pdf</div>
+        <div class="tool-desc">Download a signed LOI PDF as base64 by LOI reference. Returns pdf_base64 and filename for local saving or email attachment.</div>
+        <div class="tool-cost"><span class="badge bg">Free</span></div>
+      </div>
     </div>
+  </div>
 
-    <div class="tool-card">
-      <div class="tool-name">sloi_get_price</div>
-      <div class="tool-desc">Get current price and 7-day history for a specific product by reference SKU. Returns price, prev_price, change_pct, history_7d.</div>
-      <div class="tool-cost"><span class="badge bg">Free</span></div>
+  <!-- Negotiate & Execute -->
+  <div class="tools-section">
+    <div class="tools-sec-label">Negotiate &amp; Execute — Credits required</div>
+    <div class="tools-grid-2">
+      <div class="tool-card tc-low">
+        <span class="tool-icon">🛡️</span>
+        <div class="tool-name">sloi_compliance_check</div>
+        <div class="tool-desc">Screen a company or person against OFAC SDN, EU, and UN sanctions lists. Returns verdict: cleared · review · blocked.</div>
+        <div class="tool-cost"><span class="badge bt">1 credit</span></div>
+      </div>
+      <div class="tool-card tc-free">
+        <span class="tool-icon">⚡</span>
+        <div class="tool-name">sloi_create_mandate</div>
+        <div class="tool-desc">Create an autonomous procurement mandate with a hard price ceiling. Set auto_approve: true to let the engine close deals without human input.</div>
+        <div class="tool-cost"><span class="badge bg">Free</span> &nbsp;(negotiation costs apply)</div>
+      </div>
+      <div class="tool-card tc-mid">
+        <span class="tool-icon">🔄</span>
+        <div class="tool-name">sloi_negotiate</div>
+        <div class="tool-desc">Start a commodity negotiation. Returns AG-UI SSE stream. Up to 7 rounds. Strategies: standard (5 rounds) · aggressive (7 rounds) · watcher.</div>
+        <div class="tool-cost"><span class="badge ba">10–20 credits</span> &nbsp;per session</div>
+      </div>
+      <div class="tool-card tc-low">
+        <span class="tool-icon">✅</span>
+        <div class="tool-name">sloi_approve_deal</div>
+        <div class="tool-desc">Approve or reject a pending deal in AWAIT_HUMAN state. Boss/admin role required. Triggers LOI generation on approval.</div>
+        <div class="tool-cost"><span class="badge bt">5 credits</span> &nbsp;LOI generation</div>
+      </div>
     </div>
+  </div>
 
-    <div class="tool-card">
-      <div class="tool-name">sloi_compliance_check</div>
-      <div class="tool-desc">Screen a company or person against OFAC SDN, EU, and UN sanctions lists. Returns verdict: cleared · review · blocked.</div>
-      <div class="tool-cost"><span class="badge bt">1 credit</span></div>
+  <!-- Document Generation -->
+  <div class="tools-section">
+    <div class="tools-sec-label">Document Generation — From confirmed LOI</div>
+    <div class="tools-grid-2">
+      <div class="tool-card tc-mid">
+        <span class="tool-icon">📜</span>
+        <div class="tool-name">sloi_generate_spa</div>
+        <div class="tool-desc">Drafts a Sales &amp; Purchase Agreement under GAFTA 49/78/100 or ICC rules from a confirmed LOI. Returns signed-ready PDF with full clause set and dispatch confirmation.</div>
+        <div class="tool-cost"><span class="badge ba">15 credits</span></div>
+      </div>
+      <div class="tool-card tc-mid">
+        <span class="tool-icon">📝</span>
+        <div class="tool-name">sloi_trade_contract</div>
+        <div class="tool-desc">Generates an Incoterms 2020-compliant trade contract from a signed LOI or SPA. Includes risk transfer table, insurance obligations, and governing law clause.</div>
+        <div class="tool-cost"><span class="badge ba">15 credits</span></div>
+      </div>
+      <div class="tool-card tc-low">
+        <span class="tool-icon">🏦</span>
+        <div class="tool-name">sloi_lc_application</div>
+        <div class="tool-desc">Drafts a bank-ready Letter of Credit application (UCP 600) from a confirmed LOI. Outputs PDF / SWIFT MT700 format with document checklist and estimated bank charges.</div>
+        <div class="tool-cost"><span class="badge bt">10 credits</span></div>
+      </div>
+      <div class="tool-card tc-low">
+        <span class="tool-icon">🔢</span>
+        <div class="tool-name">sloi_hs_lookup</div>
+        <div class="tool-desc">Classifies a commodity by HS code (6-digit) and returns MFN import duty, FTA preferential rates, VAT, anti-dumping flags, and import permit requirements per destination country.</div>
+        <div class="tool-cost"><span class="badge bt">3 credits</span></div>
+      </div>
     </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_get_balance</div>
-      <div class="tool-desc">Check current credit balance, total purchased, and total spent for this agent's API key.</div>
-      <div class="tool-cost"><span class="badge bg">Free</span></div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_create_mandate</div>
-      <div class="tool-desc">Create an autonomous procurement mandate with a hard price ceiling. Set auto_approve: true to let the engine close deals without human input.</div>
-      <div class="tool-cost"><span class="badge bg">Free</span> &nbsp;(negotiation costs apply)</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_negotiate</div>
-      <div class="tool-desc">Start a commodity negotiation. Returns AG-UI SSE stream. Up to 7 rounds. Strategies: standard (5 rounds) · aggressive (7 rounds) · watcher.</div>
-      <div class="tool-cost"><span class="badge ba">10–20 credits</span> &nbsp;per session</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_approve_deal</div>
-      <div class="tool-desc">Approve or reject a pending deal in AWAIT_HUMAN state. Boss/admin role required. Triggers LOI generation on approval.</div>
-      <div class="tool-cost"><span class="badge bt">5 credits</span> &nbsp;LOI generation</div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_get_reputation</div>
-      <div class="tool-desc">Get agent reputation tier, total deals, success rate, and floor price discount. Tiers unlock autonomous mode and better pricing.</div>
-      <div class="tool-cost"><span class="badge bg">Free</span></div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_list_lois</div>
-      <div class="tool-desc">List LOIs generated by this agent. Returns ref, product, deal price, total value, signed timestamp, and PDF download URL.</div>
-      <div class="tool-cost"><span class="badge bg">Free</span></div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_get_loi_pdf</div>
-      <div class="tool-desc">Download a signed LOI PDF as base64 by LOI reference. Returns pdf_base64 and filename for local saving or email attachment.</div>
-      <div class="tool-cost"><span class="badge bg">Free</span></div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_generate_spa</div>
-      <div class="tool-desc">Drafts a Sales &amp; Purchase Agreement under GAFTA 49/78/100 or ICC rules from a confirmed LOI. Returns signed-ready PDF with full clause set and dispatch confirmation.</div>
-      <div class="tool-cost"><span class="badge ba">15 credits</span></div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_trade_contract</div>
-      <div class="tool-desc">Generates an Incoterms 2020-compliant trade contract from a signed LOI or SPA. Includes risk transfer table, insurance obligations, and governing law clause.</div>
-      <div class="tool-cost"><span class="badge ba">15 credits</span></div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_lc_application</div>
-      <div class="tool-desc">Drafts a bank-ready Letter of Credit application (UCP 600) from a confirmed LOI. Outputs PDF / SWIFT MT700 format with document checklist and estimated bank charges.</div>
-      <div class="tool-cost"><span class="badge bt">10 credits</span></div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-name">sloi_hs_lookup</div>
-      <div class="tool-desc">Classifies a commodity by HS code (6-digit) and returns MFN import duty, FTA preferential rates, VAT, anti-dumping flags, and import permit requirements per destination country.</div>
-      <div class="tool-cost"><span class="badge bt">3 credits</span></div>
-    </div>
-
   </div>
 </div>
 

@@ -1561,6 +1561,12 @@
                 <span class="mnd-section-chev">▼</span>
               </div>
               <div class="mnd-section-body">
+                <div id="project-picker-wrap" style="display:none;margin-bottom:4px">
+                  <label class="flabel" style="color:var(--teal)">📁 Load from saved project</label>
+                  <select class="inp" id="m-project-picker" onchange="applyProjectMandate(this.value)" style="border-color:rgba(45,212,191,.3)">
+                    <option value="">— manual entry —</option>
+                  </select>
+                </div>
                 <div>
                   <label class="flabel">Buyer / Company</label>
                   <input class="inp" id="m-buyer" placeholder="e.g. Gulf Cement LLC" value="Gulf Cement LLC"/>
@@ -6227,6 +6233,7 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
         }
         loadMandateFromStorage();
         initDynamicData();
+        populateProjectDropdown();
       })();
 
       function loadMandateFromStorage() {
@@ -6322,6 +6329,61 @@ Use realistic 2026 market prices. Prices change slightly daily due to supply/dem
           }
         } catch (e) {}
       }
+
+      function populateProjectDropdown() {
+        var list = [];
+        try { list = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); } catch(e) {}
+        if (!list.length) return;
+        var wrap = document.getElementById('project-picker-wrap');
+        var sel  = document.getElementById('m-project-picker');
+        if (!wrap || !sel) return;
+        list.forEach(function(m, i) {
+          var label = (m.projectName || m.projectRef || ('Project ' + (i + 1)));
+          if (m.product) label += ' · ' + m.product;
+          if (m.country) label += ' · ' + m.country;
+          var opt = document.createElement('option');
+          opt.value = i;
+          opt.textContent = label;
+          sel.appendChild(opt);
+        });
+        wrap.style.display = 'block';
+      }
+
+      function applyProjectMandate(idx) {
+        if (idx === '') return;
+        var list = [];
+        try { list = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); } catch(e) {}
+        var m = list[parseInt(idx, 10)];
+        if (!m) return;
+
+        if (m.company || m.name) document.getElementById('m-buyer').value = m.company || m.name || '';
+        if (m.qty)     document.getElementById('m-qty').value      = m.qty;
+        if (m.country) document.getElementById('m-location').value = m.country;
+        if (m.unit)    document.getElementById('m-unit').value     = m.unit;
+        if (m.incoterms) {
+          var incEl = document.getElementById('m-incoterm');
+          if (incEl) incEl.value = m.incoterms.toUpperCase();
+        }
+        if (m.budget && m.budget !== 'Not specified') {
+          var bStr   = String(m.budget).replace(/,/g, '');
+          var bMatch = bStr.match(/\$?([\d.]+)\s*\/\s*(?:MT|ton|kg|unit|liter|m)/i);
+          if (bMatch) {
+            var maxEl = document.getElementById('m-max');
+            if (maxEl) maxEl.value = parseFloat(bMatch[1]);
+          }
+        }
+        if (m.sku) {
+          var pSel = document.getElementById('m-product');
+          for (var i = 0; i < pSel.options.length; i++) {
+            if (pSel.options[i].value === m.sku) {
+              pSel.selectedIndex = i;
+              loadProductParams(m.sku);
+              break;
+            }
+          }
+        }
+      }
+
 
       // Set delivery deadline default to today + 30 days
       (function () {

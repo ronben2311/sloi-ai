@@ -747,6 +747,63 @@ function switchTab(tab, btn) {
   if (params.get('embed') === '1') {
     document.querySelector('.shell').classList.add('embed-mode');
   }
+
+  // Auto-fill from platform AI Tools modal
+  var product = params.get('product') || '';
+  var price   = params.get('price')   || '';
+  var unit    = params.get('unit')    || '';
+  var origin  = params.get('origin')  || '';
+  var email   = params.get('email')   || '';
+  if (!product) return;
+
+  function set(id, val) {
+    if (!val) return;
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'SELECT') {
+      var v = val.toUpperCase();
+      for (var i = 0; i < el.options.length; i++) {
+        if (el.options[i].value.toUpperCase() === v || el.options[i].text.toUpperCase().startsWith(v)) {
+          el.selectedIndex = i; return;
+        }
+      }
+    } else {
+      el.value = val;
+    }
+  }
+
+  var tool = p || 'loi';
+  if (tool === 'loi') {
+    set('loi-product',     product);
+    set('loi-price',       price);
+    set('loi-unit',        unit);
+    set('loi-sup-country', origin);
+    set('loi-sup-contact', email);
+    set('loi-incoterm',    'FOB');
+  }
+  if (tool === 'nda') {
+    set('nda-b-country', origin);
+    set('nda-purpose',   'Commodity sourcing — ' + product);
+  }
+  if (tool === 'spa') {
+    set('spa-product',     product);
+    set('spa-price',       price);
+    set('spa-unit',        unit);
+    set('spa-sel-country', origin);
+    set('spa-pol',         origin);
+    set('spa-incoterm',    'FOB');
+  }
+  if (tool === 'lca') {
+    set('lca-product', product + (price ? '  ·  FOB $' + price + '/' + unit : ''));
+    set('lca-pol',     origin);
+    set('lca-incoterm','FOB');
+  }
+  if (tool === 'freight') {
+    set('fr-product', product);
+  }
+  if (tool === 'hs') {
+    set('hs-product', product);
+  }
 })();
 
 // ── API KEY ──────────────────────────────────────────────

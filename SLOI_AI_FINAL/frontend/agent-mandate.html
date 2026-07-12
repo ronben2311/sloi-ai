@@ -324,6 +324,16 @@ select.inp option{background:var(--surface2);color:var(--white)}
       </div>
     </div>
 
+    <!-- ══ PROJECT NAME ══ -->
+    <div class="form-section">
+      <div class="form-sec-hd"><span class="form-sec-num" style="color:rgba(45,212,191,.35)">✦</span><span class="form-sec-title">Project name</span></div>
+      <div class="field" style="margin-bottom:0">
+        <div class="field-lbl">Name this project <span class="req"></span></div>
+        <input class="inp" id="project-name" placeholder="e.g. Gaza Reconstruction Phase 2 · NEOM Steel Contract" style="font-size:15px;padding:13px 16px"/>
+        <div class="field-hint">Used to identify this mandate in your Trade Hub and on all generated documents.</div>
+      </div>
+    </div>
+
     <!-- ══ SECTION 1 — WHAT TO SOURCE ══ -->
     <div class="form-section">
       <div class="form-sec-hd"><span class="form-sec-num">01</span><span class="form-sec-title">What to source</span></div>
@@ -576,6 +586,15 @@ select.inp option{background:var(--surface2);color:var(--white)}
       <div class="g-row"><span class="g-chk">✓</span>Escrow-ready settlement · full audit trail · no credit card required</div>
     </div>
 
+    <!-- CDE toggle -->
+    <label style="display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:12px 16px;cursor:pointer;margin-bottom:10px;transition:border-color .2s" id="cde-toggle-wrap" onmouseover="this.style.borderColor='rgba(45,212,191,.35)'" onmouseout="this.style.borderColor=document.getElementById('cde-save').checked?'rgba(45,212,191,.5)':'var(--border2)'">
+      <input type="checkbox" id="cde-save" style="width:16px;height:16px;accent-color:var(--teal);flex-shrink:0;cursor:pointer" onchange="document.getElementById('cde-toggle-wrap').style.borderColor=this.checked?'rgba(45,212,191,.5)':'var(--border2)'"/>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:var(--white)">📁 File this mandate in CDE</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">Saves a mandate document to your Common Data Environment — visible in <a href="cde.html" style="color:var(--teal);text-decoration:none">cde.html</a></div>
+      </div>
+    </label>
+
     <button class="btn-p" id="submit-btn" onclick="submitOrder()">✓ Activate my mandate →</button>
     <div style="text-align:center;font-size:13px;color:var(--muted)">Already have an account? <a href="login.html" style="color:var(--violet);text-decoration:none;font-weight:600">Sign in →</a></div>
 
@@ -584,7 +603,7 @@ select.inp option{background:var(--surface2);color:var(--white)}
 </div><!-- /shell -->
 
 <script>
-var state = { product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', country:'UAE', origin:'', urgency:'', name:'', company:'', email:'', wa:'', projectRef:'', incoterms:'' };
+var state = { projectName:'', product:'', detail:'', sku:'', qty:'', unit:'MT', budget:'', country:'UAE', origin:'', urgency:'', name:'', company:'', email:'', wa:'', projectRef:'', incoterms:'' };
 
 function saveMandateAndGo(url) {
   var mandate = {};
@@ -597,6 +616,33 @@ function saveMandateAndGo(url) {
   list.unshift(mandate);
   if (list.length > 50) list = list.slice(0, 50);
   localStorage.setItem('sloi_mandates', JSON.stringify(list));
+
+  var saveToCDE = document.getElementById('cde-save') && document.getElementById('cde-save').checked;
+  if (saveToCDE) {
+    var corridorMap = { Ukraine:'ua', Palestine:'gaza', Iraq:'gaza', Syria:'gaza', Libya:'tmed',
+      Morocco:'tmed', Tunisia:'tmed', Algeria:'tmed', Egypt:'tmed', Turkey:'tmed',
+      'Saudi Arabia':'cfs', Qatar:'cfs', Kuwait:'cfs', Bahrain:'cfs', Oman:'cfs' };
+    var corridor = corridorMap[mandate.country] || 'us';
+    var cdeDoc = {
+      id:       mandate.id,
+      name:     (mandate.projectName || 'Mandate') + ' — ' + (mandate.product || 'Commodity'),
+      type:     'LOI',
+      mandate:  mandate.projectRef || mandate.id,
+      corridor: corridor,
+      version:  'v1.0',
+      shared:   mandate.company || mandate.name || 'Private',
+      status:   'draft',
+      date:     mandate.date,
+      size:     '—',
+      _user:    true
+    };
+    var cdeList = [];
+    try { cdeList = JSON.parse(localStorage.getItem('cde_user_files') || '[]'); } catch(e) {}
+    cdeList.unshift(cdeDoc);
+    if (cdeList.length > 100) cdeList = cdeList.slice(0, 100);
+    localStorage.setItem('cde_user_files', JSON.stringify(cdeList));
+  }
+
   window.location.href = url + (url.indexOf('?') > -1 ? '&' : '?') + 'view=docs';
 }
 
@@ -933,6 +979,9 @@ function applyAIParsed(d) {
 
 // ── SUBMIT ───────────────────────────────────────────────
 function submitOrder() {
+  var projName = (document.getElementById('project-name').value || '').trim();
+  if (!projName) { shake('project-name'); document.getElementById('project-name').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  state.projectName = projName;
   if (!state.product) { pulse(document.querySelector('.prod-grid')); document.querySelector('.prod-grid').scrollIntoView({behavior:'smooth',block:'center'}); return; }
   var qty = document.getElementById('qty').value;
   if (!qty || parseFloat(qty) <= 0) { shake('qty'); document.getElementById('qty').scrollIntoView({behavior:'smooth',block:'center'}); return; }

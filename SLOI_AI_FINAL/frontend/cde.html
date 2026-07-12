@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>SLOI AI — Common Data Environment</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Inter:wght@400;500;600&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:#050509; --surface:#0c0c14; --surface2:#10101a;
+      --border:#1a1a2a; --border2:#222234;
+      --indigo:#5b5fef; --violet:#8b8ff8; --indigo-dim:rgba(91,95,239,0.12);
+      --muted:#8888a8; --text:#c8c6e0; --white:#f0eff8;
+      --gold:#e8a94a; --teal:#2dd4bf; --green:#22c55e; --red:#ef4444; --blue:#3b82f6;
+      --green-dim:rgba(34,197,94,.1); --red-dim:rgba(239,68,68,.1);
+      --gold-dim:rgba(232,169,74,.1); --teal-dim:rgba(45,212,191,.1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;font-family:"Inter",system-ui,sans-serif;font-size:13px;color:var(--text);background:var(--bg);overflow:hidden}
+
+    /* ── SHELL ── */
+    .shell{display:flex;flex-direction:column;height:100vh}
+
+    /* ── TOPBAR ── */
+    .topbar{display:flex;align-items:center;gap:0;height:50px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;padding:0 18px 0 20px}
+    .tb-logo{font-family:"Fraunces",serif;font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-right:10px;white-space:nowrap;text-decoration:none}
+    .tb-logo em{color:var(--indigo);font-style:italic}
+    .tb-sub{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-right:auto;white-space:nowrap}
+    .tb-right{display:flex;align-items:center;gap:8px;margin-left:24px}
+    .tb-btn{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:5px 12px;border:1px solid var(--border2);border-radius:4px;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;text-decoration:none;white-space:nowrap;display:inline-block}
+    .tb-btn:hover{border-color:var(--indigo);color:var(--violet)}
+    .tb-mandate{background:var(--indigo);border-color:var(--indigo);color:var(--white)!important;font-weight:600}
+    .tb-mandate:hover{background:var(--violet);border-color:var(--violet)}
+
+    /* ── BODY ── */
+    .body-area{display:flex;flex:1;overflow:hidden}
+
+    /* ── LEFT PANEL ── */
+    .left-panel{width:264px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+    .ps{border-bottom:1px solid var(--border);padding:14px 16px}
+    .ps:last-child{border-bottom:none}
+    .plabel{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:10px}
+
+    .ci-name{font-family:"Fraunces",serif;font-size:17px;font-weight:900;color:var(--white);margin-bottom:4px;line-height:1.25}
+    .ci-desc{font-size:12px;color:var(--muted);line-height:1.55}
+    .ci-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+    .ci-stat{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px}
+    .ci-stat-val{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600;color:var(--white)}
+    .ci-stat-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+
+    .dtype-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}
+    .dtype-row:last-child{border-bottom:none}
+    .dtype-lbl{font-size:12px;color:var(--text)}
+    .dtype-val{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--white);font-weight:600}
+
+    .panel-cta{display:block;text-align:center;padding:10px 0;background:var(--indigo);color:var(--white);font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;letter-spacing:.06em;border-radius:6px;text-decoration:none;margin-top:2px;transition:background .15s}
+    .panel-cta:hover{background:var(--violet)}
+
+    /* ── CDE MAIN ── */
+    .cde-main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+
+    /* Toolbar */
+    .dv-topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
+    .dv-search{flex:1;min-width:180px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:6px 12px;font-size:12px;color:var(--text);font-family:"IBM Plex Mono",monospace;outline:none}
+    .dv-search:focus{border-color:var(--indigo)}
+    .dv-search::placeholder{color:var(--muted)}
+    .fbtn{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:4px 10px;border:1px solid var(--border2);border-radius:4px;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+    .fbtn:hover{background:var(--indigo-dim);color:var(--text)}
+    .fbtn.on{background:var(--indigo-dim);border-color:var(--indigo);color:var(--violet)}
+    .upload-btn{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:var(--indigo);border:none;border-radius:4px;color:#fff;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;cursor:pointer;transition:opacity .15s;white-space:nowrap}
+    .upload-btn:hover{opacity:.85}
+
+    /* CDE body: folder sidebar + table */
+    .cde-body{display:flex;flex:1;overflow:hidden}
+
+    .cde-sidebar{width:200px;flex-shrink:0;border-right:1px solid var(--border);overflow-y:auto;padding:8px 0;background:var(--surface)}
+    .cde-folder{display:flex;align-items:center;justify-content:space-between;padding:7px 14px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .12s;gap:7px;border-right:2px solid transparent}
+    .cde-folder:hover{background:var(--indigo-dim);color:var(--text)}
+    .cde-folder.active{background:var(--indigo-dim);color:var(--violet);border-right-color:var(--indigo)}
+    .cde-folder-count{font-family:"IBM Plex Mono",monospace;font-size:10px;background:var(--surface2);border:1px solid var(--border2);padding:1px 6px;border-radius:10px;flex-shrink:0}
+
+    .cde-table-wrap{flex:1;overflow-y:auto}
+    table.dtable{width:100%;border-collapse:collapse;font-size:12px}
+    table.dtable th{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 14px;background:var(--surface);position:sticky;top:0;border-bottom:1px solid var(--border)}
+    table.dtable td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+    table.dtable tr:hover td{background:var(--surface2)}
+    .dname{font-weight:500;color:var(--white);font-size:12px}
+    .dbadge{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;padding:2px 7px;border-radius:3px;font-weight:600;white-space:nowrap}
+    .db-loi{background:rgba(91,95,239,.12);color:var(--violet)}
+    .db-nda{background:rgba(45,212,191,.1);color:var(--teal)}
+    .db-spa{background:rgba(232,169,74,.1);color:var(--gold)}
+    .db-lc{background:rgba(34,197,94,.1);color:var(--green)}
+    .db-tc{background:rgba(139,143,248,.1);color:#a78bfa}
+    .db-fr{background:rgba(59,130,246,.1);color:var(--blue)}
+    .db-hs{background:rgba(136,136,168,.1);color:var(--muted)}
+    .cde-sbadge{font-family:"IBM Plex Mono",monospace;font-size:10px;padding:2px 7px;border-radius:3px}
+    .cds-verified{background:var(--green-dim);color:var(--green)}
+    .cds-pending{background:var(--gold-dim);color:var(--gold)}
+    .cds-draft{background:rgba(136,136,168,.08);color:var(--muted);border:1px solid var(--border2)}
+    .cds-signed{background:var(--indigo-dim);color:var(--violet)}
+    .cds-current{background:var(--teal-dim);color:var(--teal)}
+    .dact{font-family:"IBM Plex Mono",monospace;font-size:10px;padding:3px 8px;border:1px solid var(--border2);border-radius:3px;background:transparent;color:var(--muted);cursor:pointer;text-decoration:none;margin-right:4px;display:inline-block;transition:all .12s}
+    .dact:hover{border-color:var(--indigo);color:var(--violet)}
+
+    /* Scrollbar */
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+    /* Upload modal */
+    .upload-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
+    .upload-overlay.open{display:flex}
+    .upload-modal{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:28px;width:420px;max-width:calc(100vw - 32px)}
+    .upload-modal h2{font-family:"Fraunces",serif;font-size:18px;font-weight:900;color:var(--white);margin-bottom:6px}
+    .upload-modal p{font-size:12px;color:var(--muted);margin-bottom:20px;font-family:"IBM Plex Mono",monospace}
+    .upload-drop{border:1.5px dashed var(--border2);border-radius:8px;padding:32px;text-align:center;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:12px;margin-bottom:16px;transition:border-color .15s;cursor:pointer}
+    .upload-drop:hover{border-color:var(--indigo);color:var(--violet)}
+    .upload-drop-icon{font-size:28px;margin-bottom:8px}
+    .upload-close{width:100%;padding:9px;background:transparent;border:1px solid var(--border2);border-radius:5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:11px;cursor:pointer;transition:all .15s;margin-top:4px}
+    .upload-close:hover{border-color:var(--indigo);color:var(--violet)}
+
+    @media(max-width:768px){
+      .cde-sidebar{display:none}
+      .left-panel{display:none}
+      .dv-topbar{gap:6px}
+      .dv-search{min-width:100%;order:-1}
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ── TOPBAR ── -->
+  <header class="topbar">
+    <a href="sloiai-home.html" class="tb-logo" style="text-decoration:none">SLOI <em>AI</em></a>
+    <div class="tb-sub">Common Data Environment</div>
+    <div class="tb-right">
+      <a href="profile.html" class="tb-btn">Profile</a>
+      <a href="sloiai-platform.html" class="tb-btn">Trade Hub</a>
+      <a href="sloiai-platform.html?view=docs" class="tb-btn">📁 Projects</a>
+      <a href="agent-mandate.html" class="tb-btn tb-mandate">Set Mandate →</a>
+      <button class="tb-btn" onclick="window.location.href='login.html'">Sign out</button>
+    </div>
+  </header>
+
+  <!-- ── BODY ── -->
+  <div class="body-area">
+
+    <!-- ── LEFT PANEL ── -->
+    <aside class="left-panel">
+      <div class="ps" id="panel-stats"></div>
+      <div class="ps">
+        <div class="plabel" id="plbl-types">// By Type</div>
+        <div id="panel-types"></div>
+      </div>
+      <div class="ps">
+        <div class="plabel" id="plbl-status">// By Status</div>
+        <div id="panel-status"></div>
+      </div>
+      <div class="ps" style="border-bottom:none">
+        <a href="agent-mandate.html" class="panel-cta">Upload &amp; Share Documents →</a>
+      </div>
+    </aside>
+
+    <!-- ── CDE MAIN ── -->
+    <div class="cde-main">
+      <!-- Toolbar -->
+      <div class="dv-topbar">
+        <span class="plabel" style="margin-bottom:0;white-space:nowrap">// COMMON DATA ENVIRONMENT</span>
+        <input type="text" class="dv-search" id="cde-search" placeholder="Search files, mandates, counterparties…" oninput="renderFiles()"/>
+        <div style="display:flex;gap:4px;flex-wrap:wrap" id="type-filters">
+          <button class="fbtn on" data-ctype="All"          onclick="setTypeFilter('All')">All</button>
+          <button class="fbtn"    data-ctype="MTC"          onclick="setTypeFilter('MTC')">🔬 MTC</button>
+          <button class="fbtn"    data-ctype="LOI"          onclick="setTypeFilter('LOI')">📄 LOI</button>
+          <button class="fbtn"    data-ctype="SPA"          onclick="setTypeFilter('SPA')">📋 SPA</button>
+          <button class="fbtn"    data-ctype="Compliance"   onclick="setTypeFilter('Compliance')">🛡️ Compliance</button>
+          <button class="fbtn"    data-ctype="KYC"          onclick="setTypeFilter('KYC')">👤 KYC</button>
+        </div>
+        <button class="upload-btn" onclick="openUpload()">＋ Upload File</button>
+      </div>
+
+      <!-- Folder sidebar + table -->
+      <div class="cde-body">
+        <div class="cde-sidebar" id="cde-sidebar"></div>
+        <div class="cde-table-wrap">
+          <table class="dtable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Document</th>
+                <th>Type</th>
+                <th>Mandate</th>
+                <th>Shared With</th>
+                <th>Ver.</th>
+                <th>Date</th>
+                <th>Size</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="cde-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /body-area -->
+</div><!-- /shell -->
+
+<!-- ── UPLOAD MODAL ── -->
+<div class="upload-overlay" id="upload-overlay" onclick="if(event.target===this)closeUpload()">
+  <div class="upload-modal">
+    <h2>Upload to CDE</h2>
+    <p>Drag &amp; drop or browse to add MTCs, compliance docs, LOIs, and KYC packages.</p>
+    <div class="upload-drop" onclick="alert('File picker would open here in production.')">
+      <div class="upload-drop-icon">📎</div>
+      Drop files here or click to browse<br>
+      <span style="font-size:10px;margin-top:6px;display:block">PDF, XLSX, DOCX · max 50 MB per file</span>
+    </div>
+    <button class="upload-close" onclick="closeUpload()">✕ Cancel</button>
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────────
+   DATA
+───────────────────────────────────────────────────────────────── */
+let folderFilter = 'all';
+let typeFilter   = 'All';
+
+const FOLDERS = [
+  { id:'all',  label:'All Files',         icon:'🗂️' },
+  { id:'us',   label:'IMEC Corridor',     icon:'🌐' },
+  { id:'gaza', label:'Gaza Recon.',       icon:'🇵🇸' },
+  { id:'ua',   label:'Ukraine',           icon:'🇺🇦' },
+  { id:'tmed', label:'Trans-Med',         icon:'🌊' },
+  { id:'cfs',  label:'Saudi Vision 2030', icon:'🇸🇦' },
+];
+
+const FILES = [
+  { id:'CDE-001', name:'JSW Steel MTC — Batch MU-441',           type:'MTC',          mandate:'US-441', corridor:'us',   version:'v1.0', shared:'JSW Steel · IL Customs',     status:'verified', date:'2026-07-10', size:'1.2 MB' },
+  { id:'CDE-002', name:'Yilmaz CFS AISI S240 Cert — YC-2291',   type:'Compliance',   mandate:'GZ-07',  corridor:'cfs',  version:'v1.0', shared:'COGAT · UN WFP',             status:'verified', date:'2026-07-09', size:'840 KB' },
+  { id:'CDE-003', name:'OFAC SDN Screen — Q3 2026',             type:'Compliance',   mandate:'ALL',    corridor:'us',   version:'v2.1', shared:'Internal',                   status:'current',  date:'2026-07-08', size:'560 KB' },
+  { id:'CDE-004', name:'Piraeus Port Congestion Report',         type:'Freight Adv.', mandate:'US-388', corridor:'us',   version:'v1.0', shared:'JSW Steel',                  status:'pending',  date:'2026-07-07', size:'320 KB' },
+  { id:'CDE-005', name:'Gaza Humanitarian Coord. Auth. v3',      type:'Authorization',mandate:'GZ-07',  corridor:'gaza', version:'v3.0', shared:'UN OCHA · COGAT',            status:'verified', date:'2026-07-06', size:'1.8 MB' },
+  { id:'CDE-006', name:'LOI — Steel Rebar G60 · US-441',        type:'LOI',          mandate:'US-441', corridor:'us',   version:'v1.0', shared:'JSW Steel Ltd.',             status:'signed',   date:'2026-07-05', size:'420 KB' },
+  { id:'CDE-007', name:'SPA Draft — OPC Cement ASTM C150',      type:'SPA',          mandate:'US-388', corridor:'us',   version:'v2.0', shared:'Suez Cement Co.',            status:'draft',    date:'2026-07-04', size:'890 KB' },
+  { id:'CDE-008', name:'Ukraine Black Sea War Risk Cert.',       type:'Insurance',    mandate:'UA-19',  corridor:'ua',   version:'v1.0', shared:"Lloyd's Syndicate 4711",     status:'pending',  date:'2026-07-03', size:'650 KB' },
+  { id:'CDE-009', name:'Constanta Customs Release — UA-15',     type:'Customs',      mandate:'UA-15',  corridor:'ua',   version:'v1.0', shared:'Romanian Customs Auth.',      status:'verified', date:'2026-07-02', size:'280 KB' },
+  { id:'CDE-010', name:'Annaba Rebar MTC — AN-2247',            type:'MTC',          mandate:'TM-03',  corridor:'tmed', version:'v1.0', shared:'Port of Savannah · SGS',     status:'verified', date:'2026-07-01', size:'740 KB' },
+  { id:'CDE-011', name:'Al Arish Terminal Slot Booking',        type:'Logistics',    mandate:'GZ-05',  corridor:'gaza', version:'v1.0', shared:'Al Arish Port Auth.',        status:'current',  date:'2026-06-30', size:'190 KB' },
+  { id:'CDE-012', name:'KYC Pack — Izmir Steel Suppliers (TR)', type:'KYC',          mandate:'UA-19',  corridor:'ua',   version:'v2.0', shared:'Internal',                   status:'verified', date:'2026-06-28', size:'2.1 MB' },
+  { id:'CDE-013', name:'CFS Panel IL Assembly Plant Coord.',    type:'Logistics',    mandate:'GZ-07',  corridor:'cfs',  version:'v1.1', shared:'IL Assembly · COGAT',         status:'current',  date:'2026-06-27', size:'340 KB' },
+  { id:'CDE-014', name:'Aqaba–Haifa Rail Status Report Q3',     type:'Freight Adv.', mandate:'US-441', corridor:'us',   version:'v1.0', shared:'JSW Steel · JTF',            status:'pending',  date:'2026-06-26', size:'510 KB' },
+];
+
+const TYPE_CLS = {
+  'MTC':'db-lc','LOI':'db-loi','SPA':'db-spa','Compliance':'db-nda',
+  'KYC':'db-fr','Insurance':'db-tc','Customs':'db-hs','Logistics':'db-fr',
+  'Authorization':'db-lc','Freight Adv.':'db-fr'
+};
+const STATUS_CLS = { verified:'cds-verified', pending:'cds-pending', draft:'cds-draft', signed:'cds-signed', current:'cds-current' };
+const STATUS_LBL = { verified:'VERIFIED', pending:'PENDING', draft:'DRAFT', signed:'SIGNED', current:'CURRENT' };
+const STATUS_ICON = { verified:'✅ Verified', current:'🟢 Current', signed:'🔏 Signed', pending:'⏳ Pending', draft:'📝 Draft' };
+
+/* ─────────────────────────────────────────────────────────────────
+   LEFT PANEL
+───────────────────────────────────────────────────────────────── */
+function getUserFiles() {
+  try { return JSON.parse(localStorage.getItem('cde_user_files') || '[]'); } catch(e) { return []; }
+}
+
+function allFiles() {
+  return [...getUserFiles(), ...FILES];
+}
+
+function renderLeftPanel() {
+  const all      = allFiles();
+  const total    = all.length;
+  const verified = all.filter(f => f.status === 'verified').length;
+  const pending  = all.filter(f => f.status === 'pending').length;
+  const shared   = all.filter(f => f.shared !== 'Internal').length;
+
+  document.getElementById('panel-stats').innerHTML = `
+    <div class="plabel" style="margin-bottom:10px">// CDE Overview</div>
+    <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:900;color:var(--white);margin-bottom:4px">Common Data Environment</div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.55;margin-bottom:10px">Centralized document workspace shared across all trade corridors, mandates, and counterparties.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:var(--white)">${total}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Total Files</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:var(--green)">${verified}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Verified</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:var(--gold)">${pending}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Pending</div>
+      </div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:var(--teal)">${shared}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Shared</div>
+      </div>
+    </div>`;
+
+  const types = {};
+  all.forEach(f => { types[f.type] = (types[f.type] || 0) + 1; });
+  document.getElementById('panel-types').innerHTML = Object.entries(types)
+    .map(([t, n]) => `<div class="dtype-row"><div class="dtype-lbl">${t}</div><div class="dtype-val">${n}</div></div>`)
+    .join('');
+
+  const sCounts = {};
+  all.forEach(f => { sCounts[f.status] = (sCounts[f.status] || 0) + 1; });
+  document.getElementById('panel-status').innerHTML = Object.entries(sCounts)
+    .map(([s, n]) => `<div class="dtype-row"><div class="dtype-lbl">${STATUS_ICON[s] || s}</div><div class="dtype-val">${n}</div></div>`)
+    .join('');
+}
+
+// Inject dtype-row styles needed by left panel
+const style = document.createElement('style');
+style.textContent = `.dtype-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)}.dtype-row:last-child{border-bottom:none}.dtype-lbl{font-size:12px;color:var(--text)}.dtype-val{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--white);font-weight:600}`;
+document.head.appendChild(style);
+
+/* ─────────────────────────────────────────────────────────────────
+   FOLDER SIDEBAR
+───────────────────────────────────────────────────────────────── */
+function renderSidebar() {
+  const all = allFiles();
+  const counts = {};
+  all.forEach(f => { counts[f.corridor] = (counts[f.corridor] || 0) + 1; });
+  document.getElementById('cde-sidebar').innerHTML = FOLDERS.map(f => {
+    const n = f.id === 'all' ? all.length : (counts[f.id] || 0);
+    return `<div class="cde-folder${folderFilter === f.id ? ' active' : ''}" onclick="setFolder('${f.id}')">
+      <span>${f.icon} ${f.label}</span>
+      <span class="cde-folder-count">${n}</span>
+    </div>`;
+  }).join('');
+}
+
+function setFolder(id) {
+  folderFilter = id;
+  renderSidebar();
+  renderFiles();
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   TYPE FILTER
+───────────────────────────────────────────────────────────────── */
+function setTypeFilter(type) {
+  typeFilter = type;
+  document.querySelectorAll('#type-filters .fbtn').forEach(b => b.classList.toggle('on', b.dataset.ctype === type));
+  renderFiles();
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   TABLE
+───────────────────────────────────────────────────────────────── */
+function renderFiles() {
+  const q = (document.getElementById('cde-search').value || '').toLowerCase();
+  const rows = allFiles().filter(f => {
+    const fOk = folderFilter === 'all' || f.corridor === folderFilter;
+    const tOk = typeFilter === 'All'   || f.type === typeFilter;
+    const qOk = !q || [f.name, f.type, f.mandate, f.shared, f.id].some(v => v.toLowerCase().includes(q));
+    return fOk && tOk && qOk;
+  });
+  document.getElementById('cde-tbody').innerHTML = rows.length
+    ? rows.map(f => `<tr>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted)">${f.id}</td>
+        <td><div class="dname">${f.name}</div></td>
+        <td><span class="dbadge ${TYPE_CLS[f.type] || 'db-hs'}">${f.type}</span></td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--indigo)">#${f.mandate}</td>
+        <td style="font-size:11px;color:var(--muted)">${f.shared}</td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)">${f.version}</td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)">${f.date}</td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)">${f.size}</td>
+        <td><span class="cde-sbadge ${STATUS_CLS[f.status]}">${STATUS_LBL[f.status]}</span></td>
+        <td style="white-space:nowrap">
+          <a href="loi-preview.html" class="dact">View</a>
+          <button class="dact" onclick="navigator.clipboard&&navigator.clipboard.writeText('${f.id}')">Share</button>
+        </td>
+      </tr>`).join('')
+    : `<tr><td colspan="10" style="text-align:center;padding:40px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:12px">No files match the current filters.</td></tr>`;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   UPLOAD MODAL
+───────────────────────────────────────────────────────────────── */
+function openUpload()  { document.getElementById('upload-overlay').classList.add('open'); }
+function closeUpload() { document.getElementById('upload-overlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeUpload(); });
+
+/* ─────────────────────────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  renderLeftPanel();
+  renderSidebar();
+  renderFiles();
+
+  // Pre-filter from URL param: cde.html?corridor=ua
+  const param = new URLSearchParams(window.location.search).get('corridor');
+  if (param && FOLDERS.some(f => f.id === param)) setFolder(param);
+});
+</script>
+</body>
+</html>

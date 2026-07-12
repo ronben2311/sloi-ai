@@ -119,10 +119,10 @@
 
     /* ── MAP ── */
     .map-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-    #map{flex:1;min-height:0}
+    #map{height:210px;flex-shrink:0;min-height:0}
 
     /* ── COST TRACKER ── */
-    .cost-tracker{height:340px;flex-shrink:0;border-top:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
+    .cost-tracker{flex:1;min-height:0;border-top:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column}
     .ct-header{display:flex;align-items:center;justify-content:space-between;padding:9px 16px 7px;border-bottom:1px solid var(--border);flex-shrink:0}
     .ct-upd{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted)}
     .ct-wrap{flex:1;overflow-y:auto}
@@ -144,6 +144,7 @@
     .dot-low{background:var(--green)}
     .dot-med{background:var(--gold)}
     .dot-high{background:var(--red)}
+    .ct-divider td{padding:5px 14px 4px;background:var(--surface2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
 
     /* Leaflet overrides */
     .leaflet-popup-content-wrapper{background:var(--surface)!important;border:1px solid var(--border2)!important;border-radius:6px!important;box-shadow:0 4px 24px rgba(0,0,0,.6)!important}
@@ -176,6 +177,7 @@
       .dv-topbar{gap:6px}
       .dv-search{min-width:100%;order:-1}
       #type-filters,.dv-topbar>div{overflow-x:auto;scrollbar-width:none}
+      .gen-grid{grid-template-columns:repeat(4,1fr);gap:5px;padding:10px 12px}
     }
 
     /* Scrollbar */
@@ -193,6 +195,12 @@
     .fbtn{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:4px 10px;border:1px solid var(--border2);border-radius:4px;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
     .fbtn:hover{background:var(--indigo-dim);color:var(--text)}
     .fbtn.on{background:var(--indigo-dim);border-color:var(--indigo);color:var(--violet)}
+    .gen-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0}
+    .gen-tile{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 6px;background:var(--surface);border:1px solid var(--border2);border-radius:7px;text-decoration:none;color:var(--text);font-family:"IBM Plex Mono",monospace;transition:all .15s;text-align:center}
+    .gen-tile:hover{background:var(--indigo-dim);border-color:var(--indigo);color:var(--violet)}
+    .gen-tile-icon{font-size:20px}
+    .gen-tile-name{font-size:11px;font-weight:600;line-height:1.3;color:var(--white)}
+    .gen-tile-desc{font-size:10px;color:var(--muted);line-height:1.3}
     .dv-wrap{flex:1;overflow-y:auto}
     table.dtable{width:100%;border-collapse:collapse;font-size:12px}
     table.dtable th{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 14px;background:var(--surface);position:sticky;top:0;border-bottom:1px solid var(--border)}
@@ -245,14 +253,16 @@
     <a href="sloiai-home.html" class="tb-logo" style="text-decoration:none">SLOI <em>AI</em></a>
     <div class="tb-sub">Trade Command Center</div>
     <div class="corridor-tabs">
-      <button class="ctab active" id="ctab-us" onclick="setCorridor('us')">🇺🇸 US Infrastructure</button>
+      <button class="ctab active" id="ctab-us" onclick="setCorridor('us')">🌐 IMEC Corridor</button>
       <button class="ctab" id="ctab-gaza" onclick="setCorridor('gaza')">🇵🇸 Gaza Reconstruction</button>
       <button class="ctab" id="ctab-ua"   onclick="setCorridor('ua')">🇺🇦 Ukraine Reconstruction</button>
       <button class="ctab" id="ctab-tmed" onclick="setCorridor('tmed')">🌊 Trans-Med Industrial</button>
+      <button class="ctab" id="ctab-cfs"  onclick="setCorridor('cfs')">🇸🇦 Saudi Vision 2030</button>
     </div>
     <div class="tb-right">
       <a href="profile.html" class="tb-btn">Profile</a>
       <a href="#" id="ctab-docs" class="tb-btn" onclick="setCorridor('docs');return false">📁 Projects</a>
+      <a href="cde.html" class="tb-btn">🗂️ CDE</a>
       <a href="agent-mandate.html" class="tb-btn tb-newproj">＋ New Project</a>
       <a href="agent-mandate.html" class="tb-btn tb-mandate">Set Mandate →</a>
       <button class="tb-btn" onclick="window.location.href='login.html'">Sign out</button>
@@ -309,7 +319,7 @@
               <tr>
                 <th>Product</th>
                 <th>Origin Port</th>
-                <th>FOB</th>
+                <th id="th-fob">FOB</th>
                 <th id="th-freight">Freight</th>
                 <th>Duty</th>
                 <th id="th-landed">Landed</th>
@@ -345,6 +355,7 @@
             <button class="fbtn"    data-corr="tmed" onclick="setCorrFilter('tmed')">🌊 Trans-Med</button>
           </div>
         </div>
+        <div id="gen-grid" class="gen-grid"></div>
         <div class="dv-wrap">
           <table class="dtable">
             <thead>
@@ -377,61 +388,65 @@
 const CORRIDORS = {
 
   us: {
-    name: '🇺🇸 US Infrastructure',
-    desc: 'IIJA & CHIPS Act procurement — ASTM-spec materials from Gulf &amp; Mediterranean origins to US East Coast and Gulf ports.',
+    name: '🌐 IMEC Corridor',
+    desc: 'India–Middle East–Europe Economic Corridor — JNPT Mumbai &amp; Mundra → Jebel Ali / Fujairah → Aqaba → Haifa land bridge → Piraeus / Genoa / Trieste / Hamburg. Rail-sea multimodal across 6 transit nations. OFAC-cleared counterparties at every node.',
     stats: [
-      { val:'$1.2T', lbl:'IIJA Pipeline' },
-      { val:'4',     lbl:'Active Routes' },
-      { val:'7',     lbl:'Open Mandates' },
-      { val:'$580',  lbl:'Rebar Landed/MT' },
+      { val:'$3T',   lbl:'Corridor Trade Est.'   },
+      { val:'4',     lbl:'Active Routes'          },
+      { val:'4',     lbl:'Open Mandates'          },
+      { val:'$630',  lbl:'Steel Landed/MT (EU)'  },
     ],
-    mapCenter:[20, -30], mapZoom:3,
+    mapCenter:[30, 42], mapZoom:3,
     routes:[
-      { path:[[38.4,27.1],[37.5,15],[36.1,-5.4],[32,-35],[29.8,-95.4]], name:'Izmir → Houston',       color:'#2dd4bf', product:'Steel Rebar G60 · ASTM A615' },
-      { path:[[27.0,49.7],[24,44],[22,38],[28,32.5],[33,15],[36,-5.4],[38,-40],[39.3,-76.6]], name:'Jubail → Baltimore',    color:'#5b5fef', product:'OPC Cement · ASTM C150' },
-      { path:[[24.1,52.7],[23,46],[20,38],[28,32.5],[34,14],[36,-5.4],[35,-45],[32.1,-81.1]], name:'Ruwais → Savannah',    color:'#8b8ff8', product:'Aluminum 6061-T6' },
-      { path:[[25.0,55.1],[22,46],[20,38],[28,32.5],[34,14],[35.5,-5.4],[33,-55],[29.9,-90.1]], name:'Jebel Ali → New Orleans', color:'#e8a94a', product:'Bitumen PG 64-22' },
+      { path:[[18.9,72.9],[20,67],[22,60],[25.1,55.1],[29.5,35.0],[32.8,34.9],[37.9,23.6],[53.5,10.0]], name:'JNPT → Jebel Ali → Haifa → Hamburg', color:'#2dd4bf', product:'Indian Steel HR Coil · ASTM A36 equiv.' },
+      { path:[[22.8,69.7],[23,65],[25.1,56.3],[29.5,35.0],[32.8,34.9],[44.4,8.9]],                      name:'Mundra → Fujairah → Haifa → Genoa',  color:'#5b5fef', product:'OPC Cement 42.5N · ASTM C150'           },
+      { path:[[27.0,49.7],[28,45],[29.5,35.0],[32.8,34.9],[45.6,13.8]],                                 name:'Jubail → Aqaba → Haifa → Trieste',   color:'#8b8ff8', product:'Base Oil SN150 / Petrochemicals'         },
+      { path:[[26.4,50.1],[27,45],[29.5,35.0],[32.8,34.9],[37.9,23.6]],                                 name:'Dammam → Aqaba → Haifa → Piraeus',   color:'#e8a94a', product:'Building Materials · OPC / Rebar'        },
     ],
     ports:{
       origins:[
-        { pos:[38.4,27.1], name:'Port of Izmir',              country:'Turkey'       },
-        { pos:[27.0,49.7], name:'King Fahad Industrial Port', country:'Saudi Arabia' },
-        { pos:[24.1,52.7], name:'Ruwais Industrial Port',     country:'UAE'          },
-        { pos:[25.0,55.1], name:'Jebel Ali',                  country:'UAE'          },
+        { pos:[18.9,72.9], name:'JNPT Mumbai',                    country:'India'        },
+        { pos:[22.8,69.7], name:'Mundra Port',                    country:'India'        },
+        { pos:[27.0,49.7], name:'King Fahad Industrial Port',     country:'Saudi Arabia' },
+        { pos:[26.4,50.1], name:'Port of Dammam',                 country:'Saudi Arabia' },
+        { pos:[25.1,55.1], name:'Jebel Ali',                      country:'UAE'          },
+        { pos:[25.1,56.3], name:'Port of Fujairah',               country:'UAE'          },
+        { pos:[29.5,35.0], name:'Port of Aqaba',                  country:'Jordan'       },
+        { pos:[32.8,34.9], name:'Haifa (IL Land Bridge)',         country:'Israel'       },
       ],
       dests:[
-        { pos:[29.8,-95.4], name:'Port of Houston',     country:'USA' },
-        { pos:[39.3,-76.6], name:'Port of Baltimore',   country:'USA' },
-        { pos:[32.1,-81.1], name:'Port of Savannah',    country:'USA' },
-        { pos:[29.9,-90.1], name:'Port of New Orleans', country:'USA' },
+        { pos:[37.9,23.6], name:'Port of Piraeus', country:'Greece'  },
+        { pos:[44.4,8.9],  name:'Port of Genoa',   country:'Italy'   },
+        { pos:[45.6,13.8], name:'Port of Trieste', country:'Italy'   },
+        { pos:[53.5,10.0], name:'Port of Hamburg', country:'Germany' },
       ],
     },
     costs:[
-      { prod:'Steel Rebar G60',      spec:'ASTM A615 / Grade 60',   origin:'Izmir, TR',    fob:'$527/MT',    fr:'$48/MT',  duty:'$0',      land:'$580/MT',    ch:-2.1, risk:'med', email:'steel@portizmir.com.tr',   wa:'905321234567' },
-      { prod:'OPC Cement',           spec:'ASTM C150 Type I',        origin:'Jubail, SA',   fob:'$57/MT',     fr:'$38/MT',  duty:'$3/MT',   land:'$102/MT',    ch:+0.8, risk:'low', email:'cement@jubailport.com.sa', wa:'966501234567' },
-      { prod:'Aluminum Extrusions',  spec:'6061-T6 / AA Standard',   origin:'Ruwais, AE',   fob:'$2,840/MT',  fr:'$85/MT',  duty:'$114/MT', land:'$3,067/MT',  ch:+1.2, risk:'med', email:'alum@borouge.ae',          wa:'971501234567' },
-      { prod:'Bitumen',              spec:'PG 64-22 / AASHTO M-320', origin:'Ruwais, AE',   fob:'$318/MT',    fr:'$42/MT',  duty:'$0',      land:'$363/MT',    ch:-0.4, risk:'low', email:'bitumen@taqa.ae',          wa:'971502345678' },
-      { prod:'Diesel EN590',         spec:'Ultra Low Sulphur 10ppm', origin:'Ras Laffan, QA',fob:'$682/MT',   fr:'$35/MT',  duty:'$0',      land:'$724/MT',    ch:-0.6, risk:'low', email:'diesel@qp.com.qa',         wa:'97444567890'  },
+      { prod:'Indian Steel HR Coil', spec:'IS 2062 / ASTM A36 equiv. · hot-rolled coil',  origin:'JNPT Mumbai, IN', fob:'$520/MT',   fr:'$95/MT',  duty:'$15/MT', land:'$630/MT',   ch:-2.4, risk:'med',  email:'steel@jswsteel.in',        wa:'912212345678' },
+      { prod:'OPC Cement 42.5N',     spec:'ASTM C150 / IS 8112 · Gulf origin · bulk',      origin:'Jubail, SA',      fob:'$57/MT',    fr:'$42/MT',  duty:'$5/MT',  land:'$108/MT',   ch:+0.4, risk:'low',  email:'cement@jubailport.com.sa', wa:'966501234567' },
+      { prod:'Aluminum Billet 6063', spec:'EN AW-6063 · UAE smelter · LME-linked',          origin:'Jebel Ali, AE',   fob:'$2,720/MT', fr:'$98/MT',  duty:'$86/MT', land:'$2,942/MT', ch:+1.1, risk:'med',  email:'alum@emal.ae',             wa:'971501234567' },
+      { prod:'Base Oil SN150',       spec:'API Group I · Saudi Aramco Lubricants',           origin:'Jubail, SA',      fob:'$820/MT',   fr:'$55/MT',  duty:'$0',     land:'$882/MT',   ch:-0.3, risk:'low',  email:'baseoil@aramco.com.sa',    wa:'966502345678' },
+      { prod:'Steel Rebar G60',      spec:'ASTM A615 / IS 1786 · Indian mill origin',        origin:'Mundra, IN',      fob:'$498/MT',   fr:'$88/MT',  duty:'$12/MT', land:'$601/MT',   ch:-1.8, risk:'med',  email:'rebar@tatasteelltd.com',   wa:'912212345679' },
     ],
     alerts:[
-      { icon:'📉', title:'Rebar Houston landed cost down $18/MT vs 7-day avg',               tag:'t-info',  lbl:'COST',  time:'2h ago' },
-      { icon:'✅', title:'Mandate #US-441 authorized — Steel G60 2,500 MT → Houston',        tag:'t-clear', lbl:'DONE',  time:'4h ago' },
-      { icon:'⚠️', title:'Baltimore port congestion · +3 day ETA on OPC Cement batch',        tag:'t-warn',  lbl:'DELAY', time:'6h ago' },
-      { icon:'🔄', title:'Orchestration live: 4 bids on Aluminum 6061-T6 → Savannah',        tag:'t-info',  lbl:'LIVE',  time:'8h ago' },
+      { icon:'🌐', title:'IMEC Phase 1 active — 3 vessels in corridor transit · Haifa land bridge operating',  tag:'t-clear', lbl:'LIVE',  time:'1h ago'  },
+      { icon:'🚂', title:'Aqaba–Haifa rail link: JTF construction 82% complete — ETA Q1 2027',                  tag:'t-info',  lbl:'INFRA', time:'3h ago'  },
+      { icon:'✅', title:'Indian Steel HR Coil batch MU-441 MTC verified — IS 2062 / ASTM A36 PASS',           tag:'t-clear', lbl:'MTC',   time:'5h ago'  },
+      { icon:'⚠️', title:'Piraeus congestion: +1.5 day wait — Baltic feeder to Hamburg rescheduled',            tag:'t-warn',  lbl:'PORT',  time:'7h ago'  },
     ],
     vault:[
-      { name:'OFAC SDN Screen',       st:'vs-clear',   lbl:'CLEAR'  },
-      { name:'EU Consolidated List',  st:'vs-clear',   lbl:'CLEAR'  },
-      { name:'KYC — Izmir Supplier',  st:'vs-clear',   lbl:'VALID'  },
-      { name:'KYC — Jubail Supplier', st:'vs-clear',   lbl:'VALID'  },
-      { name:'Country Risk (Turkey)', st:'vs-active',  lbl:'MEDIUM' },
-      { name:'Audit Trail',           st:'vs-clear',   lbl:'ON'     },
+      { name:'OFAC SDN Screen',          st:'vs-clear',   lbl:'CLEAR'  },
+      { name:'EU Import Compliance',     st:'vs-clear',   lbl:'CLEAR'  },
+      { name:'KYC — JSW Steel (IN)',    st:'vs-clear',   lbl:'VALID'  },
+      { name:'Haifa Port Customs (IL)', st:'vs-active',  lbl:'ACTIVE' },
+      { name:'Aqaba–Haifa Rail Status', st:'vs-pending', lbl:'82%'    },
+      { name:'Audit Trail',             st:'vs-clear',   lbl:'ON'     },
     ],
     risks:[
-      { lbl:'Steel Rebar G60',  score:42, color:'#22c55e' },
-      { lbl:'Aluminum (LME)',   score:62, color:'#e8a94a' },
-      { lbl:'Cement Supply',    score:28, color:'#22c55e' },
-      { lbl:'Route (Atlantic)', score:35, color:'#22c55e' },
+      { lbl:'Haifa Port (Geopolitics)', score:55, color:'#e8a94a' },
+      { lbl:'Aqaba Rail (Incomplete)',  score:68, color:'#e8a94a' },
+      { lbl:'Indian Supply Quality',    score:32, color:'#22c55e' },
+      { lbl:'EU Import Duties (Steel)', score:44, color:'#22c55e' },
     ],
   },
 
@@ -444,7 +459,7 @@ const CORRIDORS = {
       { val:'5',     lbl:'Open Mandates'   },
       { val:'$112',  lbl:'Cement Landed/MT'},
     ],
-    mapCenter:[31.3, 33.9], mapZoom:8,
+    mapCenter:[30, 34], mapZoom:6,
     routes:[
       { path:[[31.1,33.8],[31.2,34.0],[31.35,34.2],[31.5,34.45]], name:'Al Arish → Gaza (Truck)',        color:'#2dd4bf', product:'OPC Cement 42.5N · via Kerem Shalom' },
       { path:[[31.2,32.3],[31.15,33.0],[31.1,33.8]],              name:'Port Said → Al Arish (Coastal)', color:'#e8a94a', product:'Steel Rebar · sea feed via Port Said'  },
@@ -461,11 +476,13 @@ const CORRIDORS = {
       ],
     },
     costs:[
-      { prod:'OPC Cement 42.5N',   spec:'ASTM C150 / EN 197-1 · bulk',   origin:'Al Arish, EG',  fob:'$54/MT',    fr:'$38/MT',   duty:'$0', land:'$112/MT',   ch:-0.8, risk:'high', email:'cement@suezcement.eg',      wa:'201001234567' },
-      { prod:'Steel Rebar G60',    spec:'ASTM A615 / Grade 60',           origin:'Jubail, SA',    fob:'$519/MT',   fr:'$48/MT',   duty:'$0', land:'$572/MT',   ch:-1.6, risk:'high', email:'rebar@jubailport.com.sa',   wa:'966501234567' },
-      { prod:'Diesel Generators',  spec:'100–500 kVA / Tier 4 · UN-spec', origin:'Jebel Ali, AE', fob:'$44,000/u', fr:'$1,800/u', duty:'$0', land:'$46,200/u', ch:+2.1, risk:'med',  email:'generators@aggreko.ae',     wa:'971504567890' },
-      { prod:'HDPE Pipe DN200',    spec:'EN 12201 / PN10 · water/sewer',  origin:'Izmir, TR',     fob:'$1,220/MT', fr:'$32/MT',   duty:'$0', land:'$1,260/MT', ch:-1.2, risk:'med',  email:'hdpe@plastimet.com.tr',     wa:'905325678901' },
-      { prod:'Aggregate (Crushed)', spec:'20mm / ASTM C33 · road base',   origin:'Al Arish, EG',  fob:'$22/MT',    fr:'$12/MT',   duty:'$0', land:'$38/MT',    ch:+0.4, risk:'low',  email:'aggregate@alarish-port.eg', wa:'201002345678' },
+      { prod:'OPC Cement 42.5N',        spec:'ASTM C150 / EN 197-1 · bulk',                              origin:'Al Arish, EG',         fob:'$54/MT',      fr:'$38/MT',      duty:'$0',     land:'$112/MT',      ch:-0.8, risk:'high', email:'cement@suezcement.eg',      wa:'201001234567', cat:'Bulk Commodities' },
+      { prod:'Steel Rebar G60',         spec:'ASTM A615 / Grade 60',                                     origin:'Jubail, SA',           fob:'$519/MT',     fr:'$48/MT',      duty:'$0',     land:'$572/MT',      ch:-1.6, risk:'high', email:'rebar@jubailport.com.sa',   wa:'966501234567', cat:'Bulk Commodities' },
+      { prod:'Diesel Generators',       spec:'100–500 kVA / Tier 4 · UN-spec',                           origin:'Jebel Ali, AE',        fob:'$44,000/u',   fr:'$1,800/u',    duty:'$0',     land:'$46,200/u',    ch:+2.1, risk:'med',  email:'generators@aggreko.ae',     wa:'971504567890', cat:'Bulk Commodities' },
+      { prod:'HDPE Pipe DN200',         spec:'EN 12201 / PN10 · water/sewer',                            origin:'Izmir, TR',            fob:'$1,220/MT',   fr:'$32/MT',      duty:'$0',     land:'$1,260/MT',    ch:-1.2, risk:'med',  email:'hdpe@plastimet.com.tr',     wa:'905325678901', cat:'Bulk Commodities' },
+      { prod:'Aggregate (Crushed)',     spec:'20mm / ASTM C33 · road base',                              origin:'Al Arish, EG',         fob:'$22/MT',      fr:'$12/MT',      duty:'$0',     land:'$38/MT',       ch:+0.4, risk:'low',  email:'aggregate@alarish-port.eg', wa:'201002345678', cat:'Bulk Commodities' },
+      { prod:'CFS Infill Panel Kit',    spec:'AISI S240 / ASTM A653 · flat-pack KD bundles · DDP site', origin:'Izmir → IL Assembly',  fob:'$6.80/Sq.Ft', fr:'$5.70/Sq.Ft', duty:'$0 DDP', land:'$12.50/Sq.Ft', ch:-1.4, risk:'med',  email:'cfs@yilmazcelik.com.tr',    wa:'905321111111', cat:'CFS Mid-Rise' },
+      { prod:'Pre-eng Wall Frame Kit',  spec:'ASTM A653 SS50 · Knock-Down · IL border coord.',          origin:'Al Arish → IL Border', fob:'$5.20/Sq.Ft', fr:'$4.60/Sq.Ft', duty:'$0 DDP', land:'$9.80/Sq.Ft',  ch:+0.6, risk:'high', email:'cfs@alarish-steel.eg',      wa:'201001111111', cat:'CFS Mid-Rise' },
     ],
     alerts:[
       { icon:'🚛', title:'Kerem Shalom crossing: 340 trucks cleared today — cement &amp; rebar priority', tag:'t-clear', lbl:'ENTRY', time:'1h ago'  },
@@ -498,7 +515,7 @@ const CORRIDORS = {
       { val:'5',     lbl:'Open Mandates' },
       { val:'$550',  lbl:'Rebar Landed/MT' },
     ],
-    mapCenter:[40, 32], mapZoom:5,
+    mapCenter:[36, 40], mapZoom:4,
     routes:[
       { path:[[38.4,27.1],[40.5,28.6],[41.8,30.2],[46.5,30.7]], name:'Izmir → Odessa',     color:'#2dd4bf', product:'Steel Rebar · DSTU 3760 A500' },
       { path:[[27.0,49.7],[24,44],[20,38],[28,32.5],[34,30],[41,29],[44.2,28.7]],           name:'Jubail → Constanta',  color:'#5b5fef', product:'OPC Cement 42.5N' },
@@ -518,11 +535,14 @@ const CORRIDORS = {
       ],
     },
     costs:[
-      { prod:'Steel Rebar',        spec:'DSTU 3760 / Grade A500',  origin:'Izmir, TR',    fob:'$527/MT',     fr:'$18/MT',   duty:'$0', land:'$550/MT',    ch:-3.2, risk:'high', email:'rebar@izmir-steel.com.tr', wa:'905323456789' },
-      { prod:'OPC Cement 42.5N',   spec:'DSTU EN 197-1',           origin:'Jubail, SA',   fob:'$57/MT',      fr:'$32/MT',   duty:'$0', land:'$93/MT',     ch:+0.3, risk:'med',  email:'cement@jubailport.com.sa', wa:'966501234567' },
-      { prod:'Float Glass',        spec:'4–6 mm clear / EN 572',   origin:'Istanbul, TR', fob:'$8.40/m²',    fr:'$1.20/m²', duty:'$0', land:'$10.20/m²',  ch:+1.1, risk:'med',  email:'glass@sisecam.com.tr',     wa:'902121234567' },
-      { prod:'Diesel Generators',  spec:'100–500 kVA / Tier 4',    origin:'Jebel Ali, AE',fob:'$45,000/u',   fr:'$1,200/u', duty:'$0', land:'$46,700/u',  ch:-0.8, risk:'med',  email:'generators@aggreko.ae',    wa:'971504567890' },
-      { prod:'HDPE Pipe DN200',    spec:'EN 12201 / PN10',          origin:'Izmir, TR',    fob:'$1,240/MT',   fr:'$28/MT',   duty:'$0', land:'$1,275/MT',  ch:-1.6, risk:'high', email:'hdpe@plastimet.com.tr',    wa:'905325678901' },
+      { prod:'Steel Rebar',           spec:'DSTU 3760 / Grade A500',                               origin:'Izmir, TR',         fob:'$527/MT',     fr:'$18/MT',      duty:'$0', land:'$550/MT',      ch:-3.2, risk:'high', email:'rebar@izmir-steel.com.tr', wa:'905323456789', cat:'Bulk Commodities' },
+      { prod:'OPC Cement 42.5N',      spec:'DSTU EN 197-1',                                        origin:'Jubail, SA',        fob:'$57/MT',      fr:'$32/MT',      duty:'$0', land:'$93/MT',       ch:+0.3, risk:'med',  email:'cement@jubailport.com.sa', wa:'966501234567', cat:'Bulk Commodities' },
+      { prod:'Float Glass',           spec:'4–6 mm clear / EN 572',                                origin:'Istanbul, TR',      fob:'$8.40/m²',    fr:'$1.20/m²',    duty:'$0', land:'$10.20/m²',    ch:+1.1, risk:'med',  email:'glass@sisecam.com.tr',     wa:'902121234567', cat:'Bulk Commodities' },
+      { prod:'Diesel Generators',     spec:'100–500 kVA / Tier 4',                                 origin:'Jebel Ali, AE',    fob:'$45,000/u',   fr:'$1,200/u',    duty:'$0', land:'$46,700/u',    ch:-0.8, risk:'med',  email:'generators@aggreko.ae',    wa:'971504567890', cat:'Bulk Commodities' },
+      { prod:'HDPE Pipe DN200',       spec:'EN 12201 / PN10',                                      origin:'Izmir, TR',         fob:'$1,240/MT',   fr:'$28/MT',      duty:'$0', land:'$1,275/MT',    ch:-1.6, risk:'high', email:'hdpe@plastimet.com.tr',    wa:'905325678901', cat:'Bulk Commodities' },
+      { prod:'CFS Infill Panel Kit',  spec:'AISI S240 / ASTM A653 · flat-pack KD · Black Sea log', origin:'Izmir → Odessa',    fob:'$6.80/Sq.Ft', fr:'$3.20/Sq.Ft', duty:'$0', land:'$11.80/Sq.Ft', ch:-1.4, risk:'high', email:'cfs@yilmazcelik.com.tr',   wa:'905321111111', cat:'CFS Mid-Rise' },
+      { prod:'LGS Flat-Pack Bundle',  spec:'AISI S240 / 4-story equiv. · JIT delivery',           origin:'Istanbul → Odessa', fob:'$1,280/MT',   fr:'$580/MT',     duty:'$0', land:'$1,860/MT',    ch:-0.8, risk:'high', email:'lgs@yilmazcelik.com.tr',   wa:'905321111112', cat:'CFS Mid-Rise' },
+      { prod:'CFS Roof Truss Kit',    spec:'AISI S100 / ASCE 7 engineered · flat-pack bundles',   origin:'Izmir → Constanta', fob:'$6.10/Sq.Ft', fr:'$4.50/Sq.Ft', duty:'$0', land:'$10.60/Sq.Ft', ch:-2.1, risk:'high', email:'truss@yilmazcelik.com.tr', wa:'905321111113', cat:'CFS Mid-Rise' },
     ],
     alerts:[
       { icon:'🚨', title:'Ukraine corridor risk index +12 pts — Black Sea war premium updated',  tag:'t-risk',  lbl:'RISK', time:'30m ago' },
@@ -605,6 +625,72 @@ const CORRIDORS = {
     ],
   },
 
+  cfs: {
+    name: '🇸🇦 Saudi Vision 2030',
+    desc: 'Saudi Arabia mega-project procurement corridor — international suppliers into Jeddah Islamic Port, Yanbu &amp; Dammam, then domestic distribution to NEOM, Red Sea Project, Qiddiya, SPARK &amp; Diriyah Gate. SASO-certified, ZATCA-cleared, Aramco-approved counterparties.',
+    stats: [
+      { val:'$1.3T', lbl:'Vision 2030 Budget'   },
+      { val:'5',     lbl:'Active Routes'         },
+      { val:'6',     lbl:'Open Mandates'         },
+      { val:'$618',  lbl:'Steel Landed/MT NEOM'  },
+    ],
+    mapCenter:[30, 51], mapZoom:4,
+    routes:[
+      { path:[[38.4,27.1],[35,28],[32,31],[30.0,32.5],[27,37],[21.5,39.2],[24,38],[28.5,35.5]], name:'Izmir → Jeddah → NEOM (The Line)',         color:'#2dd4bf', product:'Steel Rebar A500 · ASTM A615 Gr.60 · SASO'      },
+      { path:[[27.0,49.7],[27.2,49.5],[26,48],[24.7,46.7]],                                     name:'Jubail → SPARK → Qiddiya (Domestic)',       color:'#5b5fef', product:'Structural Steel A572 · Jubail mill · domestic'  },
+      { path:[[41.0,29.0],[38,28],[32,31],[30.0,32.5],[26,36],[24.1,38.1],[25.0,37.3]],         name:'Istanbul → Yanbu → Red Sea Project',        color:'#8b8ff8', product:'Aluminum Curtain Wall Profile · EN AW-6063 T6'   },
+      { path:[[18.9,72.9],[22,65],[25.1,55.1],[26.4,50.1],[25.5,48],[24.8,46.0]],               name:'JNPT Mumbai → Dammam → Qiddiya',            color:'#e8a94a', product:'OPC Cement 52.5R · ASTM C150 Type III'           },
+      { path:[[21.5,39.2],[22,42],[24,44],[24.7,46.7],[24.7,46.6]],                             name:'Jeddah → Riyadh → Diriyah Gate (Domestic)', color:'#22c55e', product:'Float Glass 8–12mm · NEOM Smart Facade Spec'     },
+    ],
+    ports:{
+      origins:[
+        { pos:[38.4,27.1], name:'Port of Izmir',          country:'Turkey'       },
+        { pos:[41.0,29.0], name:'Istanbul / Haydarpaşa',  country:'Turkey'       },
+        { pos:[18.9,72.9], name:'JNPT Mumbai',            country:'India'        },
+        { pos:[25.1,55.1], name:'Jebel Ali',              country:'UAE'          },
+        { pos:[21.5,39.2], name:'Jeddah Islamic Port',    country:'Saudi Arabia' },
+        { pos:[24.1,38.1], name:'Yanbu Industrial Port',  country:'Saudi Arabia' },
+        { pos:[26.4,50.1], name:'Port of Dammam',         country:'Saudi Arabia' },
+        { pos:[27.0,49.7], name:'Jubail Industrial City', country:'Saudi Arabia' },
+      ],
+      dests:[
+        { pos:[28.5,35.5], name:'NEOM / The Line',                   country:'Saudi Arabia' },
+        { pos:[25.0,37.3], name:'Red Sea Project (Umluj)',            country:'Saudi Arabia' },
+        { pos:[24.8,46.0], name:'Qiddiya Entertainment City',         country:'Saudi Arabia' },
+        { pos:[27.2,49.5], name:'SPARK — King Salman Energy Park',    country:'Saudi Arabia' },
+        { pos:[24.7,46.6], name:'Diriyah Gate',                       country:'Saudi Arabia' },
+      ],
+    },
+    costs:[
+      { prod:'Steel Rebar A500',             spec:'ASTM A615 Gr.60 · SASO certified · Aramco-approved',  origin:'Izmir, TR → Jeddah',     fob:'$527/MT',   fr:'$64/MT',    duty:'$27/MT',    land:'$618/MT',   ch:-1.8, risk:'low', email:'rebar@izmir-steel.com.tr', wa:'905323456789' },
+      { prod:'OPC Cement 52.5R',             spec:'ASTM C150 Type III · Vision 2030 approved · bulk',     origin:'JNPT Mumbai, IN',        fob:'$58/MT',    fr:'$44/MT',    duty:'$3/MT',     land:'$108/MT',   ch:+0.4, risk:'low', email:'cement@jswcement.in',       wa:'912212345680' },
+      { prod:'Aluminum Curtain Wall Profile', spec:'EN AW-6063 T6 · NEOM facade spec · extruded',         origin:'Istanbul, TR → Yanbu',   fob:'$2,840/MT', fr:'$95/MT',    duty:'$143/MT',   land:'$3,078/MT', ch:+1.2, risk:'med', email:'alum@alumil.com.tr',        wa:'902121234568' },
+      { prod:'Structural Steel A572',         spec:'ASTM A572 Grade 50 · Jubail mill · domestic delivery', origin:'Jubail, SA (domestic)',  fob:'$540/MT',   fr:'$28/MT',    duty:'$0',        land:'$568/MT',   ch:-2.1, risk:'low', email:'steel@sabic.com.sa',        wa:'966501234568' },
+      { prod:'Float Glass 8–12mm',            spec:'EN 572 / NEOM smart facade · low-iron tempered',      origin:'Istanbul, TR → Jeddah',  fob:'$9.80/m²', fr:'$1.40/m²', duty:'$0.55/m²', land:'$11.75/m²', ch:+0.8, risk:'med', email:'glass@sisecam.com.tr',      wa:'902121234567' },
+      { prod:'Copper Cable 6mm²',             spec:'IEC 60228 · NEOM smart city infra · ZATCA cleared',   origin:'Jebel Ali, AE → Dammam', fob:'$4,850/MT', fr:'$72/MT',    duty:'$243/MT',   land:'$5,165/MT', ch:+1.6, risk:'low', email:'cable@ducab.com.ae',        wa:'971501234568' },
+    ],
+    alerts:[
+      { icon:'🇸🇦', title:'NEOM tender round 14 active — Steel Rebar 45,000 MT · batch pricing live · SAR denomination available', tag:'t-clear', lbl:'TENDER', time:'1h ago' },
+      { icon:'✅',  title:'Izmir Rebar batch IZ-8821 SASO cert PASS — Aramco-approved supplier list confirmed',                       tag:'t-clear', lbl:'SASO',   time:'3h ago' },
+      { icon:'🚛',  title:'Jeddah → NEOM King Salman Road: 380km corridor · 4.5h avg transit confirmed · trucks cleared',            tag:'t-info',  lbl:'ROUTE',  time:'5h ago' },
+      { icon:'⚠️', title:'Jeddah Islamic Port: +1.8 day bulk terminal wait — Yanbu alternative slot available',                       tag:'t-warn',  lbl:'PORT',   time:'7h ago' },
+    ],
+    vault:[
+      { name:'SASO Product Certification',   st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'OFAC SDN Screen',              st:'vs-clear',   lbl:'CLEAR'    },
+      { name:'KYC — Izmir Steel Mill (TR)',  st:'vs-clear',   lbl:'VALID'    },
+      { name:'Saudi Customs (ZATCA)',        st:'vs-active',  lbl:'ACTIVE'   },
+      { name:'Aramco Approved Supplier',     st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'Vision 2030 Procurement Auth.',st:'vs-active',  lbl:'ACTIVE'   },
+    ],
+    risks:[
+      { lbl:'NEOM Schedule Risk',     score:48, color:'#22c55e' },
+      { lbl:'Jeddah Port Congestion', score:52, color:'#e8a94a' },
+      { lbl:'FX Risk (SAR peg)',      score:18, color:'#22c55e' },
+      { lbl:'SASO Compliance',        score:35, color:'#22c55e' },
+    ],
+  },
+
 };
 
 /* ─────────────────────────────────────────────────────────────────
@@ -612,6 +698,7 @@ const CORRIDORS = {
 ───────────────────────────────────────────────────────────────── */
 let map, layers = [];
 let _contacts = [];
+let _activeCorridor = '';
 
 function initMap() {
   map = L.map('map', {
@@ -653,16 +740,16 @@ function shipIcon(color) {
 function drawCorridor(key) {
   const c = CORRIDORS[key];
   clearLayers();
-  map.setView(c.mapCenter, c.mapZoom);
+
+  // Auto-fit bounds from all route points so every route is fully visible
+  const allPts = c.routes.flatMap(r => r.path).map(p => [p[0], p[1]]);
+  map.fitBounds(L.latLngBounds(allPts), { padding:[32, 48], maxZoom:8, animate:false });
 
   c.routes.forEach(r => {
-    // glow
-    const glow = L.polyline(r.path, { color:r.color, weight:5, opacity:.12 }).addTo(map);
+    const glow = L.polyline(r.path, { color:r.color, weight:6, opacity:.15 }).addTo(map);
     layers.push(glow);
-    // dashed route
-    const line = L.polyline(r.path, { color:r.color, weight:1.5, opacity:.75, dashArray:'5 7' }).addTo(map);
+    const line = L.polyline(r.path, { color:r.color, weight:1.8, opacity:.8, dashArray:'5 7' }).addTo(map);
     layers.push(line);
-    // animated ship at path midpoint
     const mid = r.path[Math.floor(r.path.length / 2)];
     const ship = L.marker(mid, { icon:shipIcon(r.color) })
       .bindPopup(`<div class="pp-title">⚓ ${r.name}</div><div class="pp-row">Product: <span class="pp-hi">${r.product}</span></div>`)
@@ -726,13 +813,24 @@ function renderRisks(key) {
 
 function renderCosts(key) {
   const isGaza = key === 'gaza';
+  document.getElementById('th-fob').textContent     = 'FOB';
   document.getElementById('th-freight').textContent = isGaza ? 'Logistics' : 'Freight';
   document.getElementById('th-landed').textContent  = isGaza ? 'Gate Price' : 'Landed';
-  _contacts = CORRIDORS[key].costs.map(r => ({ email:r.email, wa:r.wa, prod:r.prod, spec:r.spec }));
-  document.getElementById('cost-tbody').innerHTML = CORRIDORS[key].costs.map((row, i) => {
+  const rows = CORRIDORS[key].costs;
+  _activeCorridor = key;
+  _contacts = rows.map(r => ({ email:r.email, wa:r.wa, prod:r.prod, spec:r.spec, origin:r.origin||'', fob:r.fob||'' }));
+  const hasCats = rows.some(r => r.cat);
+  let html = '';
+  let lastCat = null;
+  rows.forEach((row, i) => {
+    if (hasCats && row.cat !== lastCat) {
+      const isCFSCat = row.cat === 'CFS Mid-Rise';
+      html += `<tr class="ct-divider"><td colspan="9"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:${isCFSCat ? 'var(--teal)' : 'var(--muted)'}">${isCFSCat ? '🏗️' : '📦'} ${row.cat}</span></td></tr>`;
+      lastCat = row.cat;
+    }
     const up = row.ch > 0;
     const dotCls = row.risk === 'high' ? 'dot-high' : row.risk === 'med' ? 'dot-med' : 'dot-low';
-    return `<tr>
+    html += `<tr>
       <td><div class="tc-prod">${row.prod}</div><div class="tc-spec">${row.spec}</div></td>
       <td class="tc-origin">${row.origin}</td>
       <td class="tc-price">${row.fob}</td>
@@ -746,7 +844,8 @@ function renderCosts(key) {
         <button class="dact" onclick="openAIModal(${i})">AI Tools</button>
       </td>
     </tr>`;
-  }).join('');
+  });
+  document.getElementById('cost-tbody').innerHTML = html;
 }
 
 function showContact(btn, i) {
@@ -767,6 +866,23 @@ function openAIModal(i) {
   const c = _contacts[i];
   document.getElementById('ai-prod').textContent = c.prod;
   document.getElementById('ai-spec').textContent = c.spec;
+
+  const fobMatch = String(c.fob).replace(/,/g,'').match(/\$?([\d.]+)\s*\/\s*([A-Za-z.]+)/);
+  const price = fobMatch ? fobMatch[1] : '';
+  let   unit  = fobMatch ? fobMatch[2].toUpperCase() : 'MT';
+  if (unit === 'U') unit = 'Units';
+
+  const qs = 'product=' + encodeURIComponent(c.prod + (c.spec ? ' · ' + c.spec : ''))
+           + '&price='  + encodeURIComponent(price)
+           + '&unit='   + encodeURIComponent(unit)
+           + '&origin=' + encodeURIComponent(c.origin)
+           + '&email='  + encodeURIComponent(c.email);
+
+  document.getElementById('ai-link-loi').href = 'loi-contracts.html?' + qs + '&tool=loi';
+  document.getElementById('ai-link-nda').href = 'loi-contracts.html?' + qs + '&tool=nda';
+  document.getElementById('ai-link-spa').href = 'loi-contracts.html?' + qs + '&tool=spa';
+  document.getElementById('ai-link-lca').href = 'loi-contracts.html?' + qs + '&tool=lca';
+
   document.getElementById('ai-overlay').classList.add('open');
 }
 
@@ -779,13 +895,13 @@ function closeAIModal() {
    DOCUMENTS DATA
 ───────────────────────────────────────────────────────────────── */
 const DOCS = [
-  { id:'DOC-001', type:'LOI',              icon:'📄', cls:'db-loi', product:'Steel Rebar G60',       dest:'Houston, TX',      mandate:'US-441', corridor:'us',   corr:'🇺🇸 US',  date:'2026-07-08', status:'done',    spec:'ICC 522'        },
-  { id:'DOC-002', type:'SPA',              icon:'📋', cls:'db-spa', product:'OPC Cement ASTM C150',  dest:'Baltimore, MD',    mandate:'US-388', corridor:'us',   corr:'🇺🇸 US',  date:'2026-07-07', status:'done',    spec:'GAFTA/ICC'      },
-  { id:'DOC-003', type:'NDA',              icon:'🔒', cls:'db-nda', product:'Aluminum 6061-T6',      dest:'Ruwais Supplier',  mandate:'US-392', corridor:'us',   corr:'🇺🇸 US',  date:'2026-07-06', status:'done',    spec:'Bilateral'      },
-  { id:'DOC-004', type:'LC App',           icon:'🏦', cls:'db-lc',  product:'Bitumen PG 64-22',      dest:'New Orleans, LA',  mandate:'US-401', corridor:'us',   corr:'🇺🇸 US',  date:'2026-07-05', status:'pending', spec:'UCP 600'        },
+  { id:'DOC-001', type:'LOI',              icon:'📄', cls:'db-loi', product:'Steel Rebar G60',       dest:'Houston, TX',      mandate:'US-441', corridor:'us',   corr:'🌐 IMEC',  date:'2026-07-08', status:'done',    spec:'ICC 522'        },
+  { id:'DOC-002', type:'SPA',              icon:'📋', cls:'db-spa', product:'OPC Cement ASTM C150',  dest:'Baltimore, MD',    mandate:'US-388', corridor:'us',   corr:'🌐 IMEC',  date:'2026-07-07', status:'done',    spec:'GAFTA/ICC'      },
+  { id:'DOC-003', type:'NDA',              icon:'🔒', cls:'db-nda', product:'Aluminum 6061-T6',      dest:'Ruwais Supplier',  mandate:'US-392', corridor:'us',   corr:'🌐 IMEC',  date:'2026-07-06', status:'done',    spec:'Bilateral'      },
+  { id:'DOC-004', type:'LC App',           icon:'🏦', cls:'db-lc',  product:'Bitumen PG 64-22',      dest:'New Orleans, LA',  mandate:'US-401', corridor:'us',   corr:'🌐 IMEC',  date:'2026-07-05', status:'pending', spec:'UCP 600'        },
   { id:'DOC-005', type:'Trade Contract',   icon:'📜', cls:'db-tc',  product:'Steel Rebar A500',      dest:'Odessa, UA',       mandate:'UA-19',  corridor:'ua',   corr:'🇺🇦 UA',  date:'2026-07-04', status:'draft',   spec:'Incoterms 2020' },
   { id:'DOC-006', type:'Freight Advisory', icon:'🚢', cls:'db-fr',  product:'OPC Cement 42.5N',      dest:'Gaza City, PS',    mandate:'GZ-07',  corridor:'gaza', corr:'🇵🇸 Gaza', date:'2026-07-03', status:'done',    spec:'SLOI AI'        },
-  { id:'DOC-007', type:'HS Code Report',   icon:'🔢', cls:'db-hs',  product:'OPC Cement ASTM C150',  dest:'Baltimore, MD',    mandate:'US-388', corridor:'us',   corr:'🇺🇸 US',  date:'2026-07-02', status:'done',    spec:'HTS 2523.29'    },
+  { id:'DOC-007', type:'HS Code Report',   icon:'🔢', cls:'db-hs',  product:'OPC Cement ASTM C150',  dest:'Baltimore, MD',    mandate:'US-388', corridor:'us',   corr:'🌐 IMEC',  date:'2026-07-02', status:'done',    spec:'HTS 2523.29'    },
   { id:'DOC-008', type:'LOI',              icon:'📄', cls:'db-loi', product:'Steel Rebar G60',        dest:'Gaza City, PS',    mandate:'GZ-05',  corridor:'gaza', corr:'🇵🇸 Gaza', date:'2026-07-01', status:'done',    spec:'ICC 522'        },
   { id:'DOC-009', type:'LOI',              icon:'📄', cls:'db-loi', product:'Float Glass 4–6mm',     dest:'Reni, UA',         mandate:'UA-12',  corridor:'ua',   corr:'🇺🇦 UA',  date:'2026-06-30', status:'done',    spec:'ICC 522'        },
   { id:'DOC-010', type:'SPA',              icon:'📋', cls:'db-spa', product:'Steel Rebar A500',      dest:'Constanta, RO',    mandate:'UA-15',  corridor:'ua',   corr:'🇺🇦 UA',  date:'2026-06-28', status:'done',    spec:'GAFTA/ICC'      },
@@ -806,12 +922,12 @@ function loadUserMandates() {
     cls:      'db-loi',
     product:  m.product  || 'Commodity',
     dest:     m.country  || '—',
-    mandate:  m.projectRef || m.id || ('MAN-' + (i + 1)),
+    mandate:  m.projectName || m.projectRef || m.id || ('MAN-' + (i + 1)),
     corridor: 'user',
     corr:     '📋 My Mandate',
     date:     m.date     || '—',
     status:   'draft',
-    spec:     m.incoterms || 'Pending',
+    spec:     (m.projectName ? m.projectName + (m.incoterms ? ' · ' + m.incoterms : '') : (m.incoterms || 'Pending')),
     _user:    true
   }));
 }
@@ -860,16 +976,61 @@ function renderDocsList() {
     : `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:12px">No documents match the current filters.</td></tr>`;
 }
 
+const GEN_TOOLS = [
+  { tool:'loi',     icon:'📄', name:'LOI',            desc:'Letter of Intent' },
+  { tool:'nda',     icon:'🔏', name:'NDA',             desc:'Bilateral · Unilateral' },
+  { tool:'spa',     icon:'⚖️', name:'Trade Contract',  desc:'GAFTA / ICC · SPA' },
+  { tool:'lca',     icon:'💳', name:'LC Application',  desc:'UCP 600 · bank-ready' },
+  { tool:'po',      icon:'📋', name:'Purchase Order',  desc:'Line items · terms' },
+  { tool:'freight', icon:'🚢', name:'Freight Adv.',    desc:'Route · rate · ETA' },
+  { tool:'hs',      icon:'🛃', name:'HS Code',         desc:'Customs classification' },
+];
+
+function renderGenGrid() {
+  const el = document.getElementById('gen-grid');
+  if (!el) return;
+  let mandate = null;
+  try { const list = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); mandate = list[0] || null; } catch(e) {}
+
+  let qs = '';
+  if (mandate) {
+    const prod   = mandate.productLabel || (mandate.product + (mandate.detail ? ' · ' + mandate.detail : ''));
+    const unit   = mandate.unit || 'MT';
+    const bMatch = String(mandate.budget || '').replace(/,/g,'').match(/\$?([\d.]+)/);
+    const price  = bMatch ? bMatch[1] : '';
+    qs = '&product=' + encodeURIComponent(prod)
+       + '&unit='    + encodeURIComponent(unit)
+       + (price ? '&price=' + encodeURIComponent(price) : '')
+       + (mandate.incoterms ? '&incoterm=' + encodeURIComponent(mandate.incoterms) : '');
+  }
+
+  el.innerHTML = GEN_TOOLS.map(g =>
+    `<a href="loi-contracts.html?tool=${g.tool}${qs}" class="gen-tile">
+      <span class="gen-tile-icon">${g.icon}</span>
+      <span class="gen-tile-name">${g.name}</span>
+      <span class="gen-tile-desc">${g.desc}</span>
+    </a>`
+  ).join('');
+}
+
 function renderDocsPanel() {
+  renderGenGrid();
   const allDocs = [...loadUserMandates(), ...DOCS];
   const total = allDocs.length;
   const done  = allDocs.filter(d => d.status === 'done').length;
   const pend  = allDocs.filter(d => d.status === 'pending').length;
   const draft = allDocs.filter(d => d.status === 'draft').length;
 
+  let userSaved = [];
+  try { userSaved = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); } catch(e) {}
+  const latestProject = userSaved.length ? userSaved[0] : null;
+  const projName = latestProject && latestProject.projectName ? latestProject.projectName : null;
+
   document.getElementById('panel-corridor').innerHTML = `
-    <div class="ci-name">📄 Documents</div>
-    <div class="ci-desc">All generated documents across active mandates and trade corridors.</div>
+    <div class="ci-name" style="font-size:${projName ? '15px' : '17px'}">${projName || '📁 Projects'}</div>
+    <div class="ci-desc">${projName
+      ? `${latestProject.product || 'Commodity sourcing'} · ${latestProject.country || ''} · <span style="color:var(--teal)">Active</span>`
+      : 'All generated documents across active mandates and trade corridors.'}</div>
     <div class="ci-stats">
       <div class="ci-stat"><div class="ci-stat-val">${total}</div><div class="ci-stat-lbl">Total</div></div>
       <div class="ci-stat"><div class="ci-stat-val" style="color:var(--green)">${done}</div><div class="ci-stat-lbl">Done</div></div>
@@ -884,9 +1045,9 @@ function renderDocsPanel() {
     `<div class="dtype-row"><div class="dtype-lbl">${t}</div><div class="dtype-val">${n}</div></div>`
   ).join('');
 
-  const corrs = { '🇺🇸 US Infrastructure': 0, '🇵🇸 Gaza Reconstruction': 0, '🇺🇦 Ukraine': 0, '🌊 Trans-Med': 0, '📋 My Mandates': 0 };
+  const corrs = { '🌐 IMEC Corridor': 0, '🇵🇸 Gaza Reconstruction': 0, '🇺🇦 Ukraine': 0, '🌊 Trans-Med': 0, '📋 My Mandates': 0 };
   allDocs.forEach(d => {
-    if (d.corridor === 'us')        corrs['🇺🇸 US Infrastructure']++;
+    if (d.corridor === 'us')        corrs['🌐 IMEC Corridor']++;
     else if (d.corridor === 'gaza') corrs['🇵🇸 Gaza Reconstruction']++;
     else if (d.corridor === 'tmed') corrs['🌊 Trans-Med']++;
     else if (d.corridor === 'user') corrs['📋 My Mandates']++;
@@ -897,8 +1058,18 @@ function renderDocsPanel() {
     `<div class="dtype-row"><div class="dtype-lbl">${c}</div><div class="dtype-val">${n}</div></div>`
   ).join('');
 
-  document.getElementById('plbl-risk').textContent = '';
-  document.getElementById('panel-risk').innerHTML = '';
+  if (userSaved.length) {
+    document.getElementById('plbl-risk').textContent = '// My Projects';
+    document.getElementById('panel-risk').innerHTML = userSaved.slice(0, 6).map(m =>
+      `<div class="dtype-row" style="cursor:default">
+        <div class="dtype-lbl" style="font-size:11px;line-height:1.4">${m.projectName || m.projectRef || m.id}</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);flex-shrink:0;margin-left:8px">${m.date || ''}</div>
+      </div>`
+    ).join('');
+  } else {
+    document.getElementById('plbl-risk').textContent = '';
+    document.getElementById('panel-risk').innerHTML = '';
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────────
@@ -911,15 +1082,13 @@ function setCorridor(key) {
   document.getElementById('ctab-' + key).classList.add('active');
 
   const isDocs = key === 'docs';
-  document.getElementById('map').style.display = isDocs ? 'none' : '';
-  document.querySelector('.cost-tracker').style.display = isDocs ? 'none' : '';
+  const isMap  = !isDocs;
+  document.getElementById('map').style.display          = isMap ? '' : 'none';
+  document.querySelector('.cost-tracker').style.display = isMap ? '' : 'none';
+  if (isMap) setTimeout(() => map && map.invalidateSize(), 80);
   document.getElementById('docs-view').classList.toggle('dv-active', isDocs);
 
-  if (isDocs) {
-    renderDocsPanel();
-    renderDocsList();
-    return;
-  }
+  if (isDocs) { renderDocsPanel(); renderDocsList(); return; }
 
   // Restore left-panel labels when switching back to a corridor
   document.getElementById('plbl-alerts').textContent = '// AI Agent Alerts';
@@ -973,12 +1142,13 @@ document.addEventListener('DOMContentLoaded', () => {
     <div class="ai-modal-prod" id="ai-prod"></div>
     <div class="ai-modal-sub"  id="ai-spec"></div>
     <div class="ai-tools-grid">
-      <a href="agent-mandate.html" class="ai-tool">📄 Generate LOI</a>
-      <a href="agent-mandate.html" class="ai-tool">🔒 Draft NDA</a>
-      <a href="agent-mandate.html" class="ai-tool">📋 Draft SPA</a>
-      <a href="agent-mandate.html" class="ai-tool">🏦 Apply for LC</a>
+      <a id="ai-link-loi" href="loi-contracts.html?tool=loi" class="ai-tool">📄 Generate LOI</a>
+      <a id="ai-link-nda" href="loi-contracts.html?tool=nda" class="ai-tool">🔒 Draft NDA</a>
+      <a id="ai-link-spa" href="loi-contracts.html?tool=spa" class="ai-tool">📋 Draft SPA</a>
+      <a id="ai-link-lca" href="loi-contracts.html?tool=lca" class="ai-tool">🏦 Apply for LC</a>
       <a href="agent-mandate.html" class="ai-tool">🛡️ Compliance Check</a>
       <a href="negotiation-agent.html" class="ai-tool">🔄 Orchestrate Deal</a>
+      <a href="cde.html" class="ai-tool">🗂️ Add to CDE</a>
     </div>
     <button class="ai-close-btn" onclick="closeAIModal()">✕ Close</button>
   </div>
