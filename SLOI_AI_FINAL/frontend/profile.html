@@ -151,7 +151,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 <nav>
   <a href="sloiai-home.html" class="nav-logo">Sloi<em>AI</em></a>
   <div class="nav-links">
-    <a href="marketplace.html">Marketplace</a>
+    <a href="marketplace.html">Trade Hub</a>
     <a href="sloiai-home.html#us-infra" class="nav-us">🇺🇸 US Market</a>
     <a href="pricing.html">Pricing</a>
     <a href="open-network.html">MCP</a>
@@ -169,10 +169,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 
   <!-- IDENTITY + PLAN -->
   <div class="hero-card">
-    <div class="avatar">AH</div>
+    <div class="avatar" id="hero-avatar">AH</div>
     <div class="hero-info">
-      <div class="hero-name">Alex Hartmann</div>
-      <div class="hero-role">Head of Procurement · Meridian Infrastructure Group</div>
+      <div class="hero-name" id="hero-name-el">Alex Hartmann</div>
+      <div class="hero-role" id="hero-role-el">Head of Procurement · Meridian Infrastructure Group</div>
       <div class="hero-badges">
         <span class="badge badge-plan">⚡ Agentic Team</span>
         <span class="badge badge-kyc">✓ KYC Verified</span>
@@ -210,8 +210,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
       <div class="ssub">$599 / month · renews Aug 1, 2026</div>
       <div class="plan-list">
         <div><span>✓</span>350 credits / month</div>
-        <div><span>✓</span>9 AI tools unlocked</div>
-        <div><span>✓</span>All 3 trade corridors</div>
+        <div><span>✓</span>10 AI tools unlocked</div>
+        <div><span>✓</span>All 5 trade corridors</div>
         <div><span>✓</span>Priority support</div>
       </div>
     </div>
@@ -219,7 +219,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     <!-- Activity summary -->
     <div class="stat-card">
       <div class="slabel">// This Month</div>
-      <div class="mini-grid">
+      <div class="mini-grid" id="mini-stats-grid">
         <div>
           <div class="mini-stat-val">7</div>
           <div class="mini-stat-lbl">Active mandates</div>
@@ -230,11 +230,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
         </div>
         <div>
           <div class="mini-stat-val" style="color:var(--teal)">4</div>
-          <div class="mini-stat-lbl">🇺🇸 US mandates</div>
+          <div class="mini-stat-lbl">🌐 IMEC Corridor</div>
         </div>
         <div>
           <div class="mini-stat-val" style="color:var(--gold)">2 / 1</div>
-          <div class="mini-stat-lbl">🌍 IMEC / 🇺🇦 UA</div>
+          <div class="mini-stat-lbl">🇵🇸 Gaza / 🇺🇦 UA</div>
         </div>
       </div>
     </div>
@@ -244,7 +244,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   <!-- AI TOOLS -->
   <div class="card">
     <div class="card-head">
-      <div class="card-title">// AI Tools — Agentic Team Plan</div>
+      <div class="card-title">// AI Tools — Agentic Team Plan (10 tools)</div>
       <a href="pricing.html" class="card-link">View all plans</a>
     </div>
     <div class="tools-grid">
@@ -307,8 +307,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
       <div class="tool-tile">
         <div class="tool-icon">🔄</div>
         <div>
-          <div class="tool-name">Orchestrator</div>
+          <div class="tool-name">Trade Orchestrator</div>
           <div class="tool-status ts-gold">★ Agentic Team exclusive</div>
+        </div>
+      </div>
+      <div class="tool-tile">
+        <div class="tool-icon">📁</div>
+        <div>
+          <div class="tool-name">CDE</div>
+          <div class="tool-status ts-on">● Active · Document Environment</div>
         </div>
       </div>
     </div>
@@ -362,6 +369,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
       <div class="card-head">
         <div class="card-title">// Activity Log</div>
       </div>
+      <div id="activity-log">
       <div class="log-item">
         <div class="log-dot" style="background:var(--green)"></div>
         <div style="flex:1">
@@ -397,6 +405,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
           <div class="log-time">3 days ago</div>
         </div>
       </div>
+      </div><!-- /activity-log -->
     </div>
 
   </div>
@@ -418,12 +427,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
           <th>Status</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="mandates-tbody">
         <tr>
           <td class="m-id">#US-441</td>
           <td><div class="m-prod">Steel Rebar G60</div><div class="m-sub">ASTM A615 · 2,500 MT</div></td>
           <td style="font-size:13px">Houston, TX</td>
-          <td style="font-size:13px">🇺🇸 US</td>
+          <td style="font-size:13px">🌐 IMEC Corridor</td>
           <td style="font-family:'IBM Plex Mono',monospace;font-size:12px">2</td>
           <td><span class="mstatus ms-live">LIVE</span></td>
         </tr>
@@ -431,7 +440,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
           <td class="m-id">#US-392</td>
           <td><div class="m-prod">Aluminum 6061-T6</div><div class="m-sub">AA Standard · 800 MT</div></td>
           <td style="font-size:13px">Savannah, GA</td>
-          <td style="font-size:13px">🇺🇸 US</td>
+          <td style="font-size:13px">🌐 IMEC Corridor</td>
           <td style="font-family:'IBM Plex Mono',monospace;font-size:12px">1</td>
           <td><span class="mstatus ms-prog">IN PROGRESS</span></td>
         </tr>
@@ -439,23 +448,23 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
           <td class="m-id">#US-401</td>
           <td><div class="m-prod">Bitumen PG 64-22</div><div class="m-sub">AASHTO M-320 · 1,200 MT</div></td>
           <td style="font-size:13px">New Orleans, LA</td>
-          <td style="font-size:13px">🇺🇸 US</td>
+          <td style="font-size:13px">🌐 IMEC Corridor</td>
           <td style="font-family:'IBM Plex Mono',monospace;font-size:12px">1</td>
           <td><span class="mstatus ms-prog">IN PROGRESS</span></td>
         </tr>
         <tr>
-          <td class="m-id">#IM-88</td>
+          <td class="m-id">#SV-88</td>
           <td><div class="m-prod">OPC Cement 42.5N</div><div class="m-sub">EN 197-1 · 3,000 MT</div></td>
-          <td style="font-size:13px">Piraeus, GR</td>
-          <td style="font-size:13px">🌍 IMEC</td>
+          <td style="font-size:13px">Jeddah, SA</td>
+          <td style="font-size:13px">🇸🇦 Vision 2030</td>
           <td style="font-family:'IBM Plex Mono',monospace;font-size:12px">1</td>
           <td><span class="mstatus ms-live">LIVE</span></td>
         </tr>
         <tr>
-          <td class="m-id">#IM-44</td>
-          <td><div class="m-prod">Base Oil SN150</div><div class="m-sub">API Group II · 500 MT</div></td>
-          <td style="font-size:13px">Piraeus, GR</td>
-          <td style="font-size:13px">🌍 IMEC</td>
+          <td class="m-id">#WC-14</td>
+          <td><div class="m-prod">Structural Plywood</div><div class="m-sub">FSC · 850 MT</div></td>
+          <td style="font-size:13px">Reno, NV</td>
+          <td style="font-size:13px">🌲 Pacific West Coast</td>
           <td style="font-family:'IBM Plex Mono',monospace;font-size:12px">2</td>
           <td><span class="mstatus ms-done">DONE</span></td>
         </tr>
@@ -463,15 +472,15 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
           <td class="m-id">#UA-19</td>
           <td><div class="m-prod">Steel Rebar A500</div><div class="m-sub">DSTU 3760 · 1,200 MT</div></td>
           <td style="font-size:13px">Odessa, UA</td>
-          <td style="font-size:13px">🇺🇦 Ukraine</td>
+          <td style="font-size:13px">🇺🇦 UA Reconstruction</td>
           <td style="font-family:'IBM Plex Mono',monospace;font-size:12px">1</td>
           <td><span class="mstatus ms-auth">AUTH NEEDED</span></td>
         </tr>
         <tr>
-          <td class="m-id">#UA-12</td>
-          <td><div class="m-prod">Float Glass 4–6mm</div><div class="m-sub">EN 572 · 18,000 m²</div></td>
-          <td style="font-size:13px">Reni, UA</td>
-          <td style="font-size:13px">🇺🇦 Ukraine</td>
+          <td class="m-id">#GZ-07</td>
+          <td><div class="m-prod">OPC Cement 42.5N</div><div class="m-sub">UNRWA spec · 500 MT</div></td>
+          <td style="font-size:13px">Gaza City, PS</td>
+          <td style="font-size:13px">🇵🇸 Gaza Reconstruction</td>
           <td style="font-family:'IBM Plex Mono',monospace;font-size:12px">2</td>
           <td><span class="mstatus ms-done">DONE</span></td>
         </tr>
@@ -485,7 +494,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   <a href="sloiai-home.html" style="font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:var(--white);text-decoration:none;letter-spacing:-.02em">SLOI <em style="font-style:italic;color:var(--indigo)">AI</em></a>
   <div style="display:flex;gap:20px;flex-wrap:wrap">
     <a href="sloiai-home.html" style="color:var(--muted);text-decoration:none">Home</a>
-    <a href="marketplace.html" style="color:var(--muted);text-decoration:none">Marketplace</a>
+    <a href="marketplace.html" style="color:var(--muted);text-decoration:none">Trade Hub</a>
     <a href="pricing.html" style="color:var(--muted);text-decoration:none">Pricing</a>
     <a href="faq.html" style="color:var(--muted);text-decoration:none">FAQ</a>
     <a href="about.html" style="color:var(--muted);text-decoration:none">About</a>
@@ -495,5 +504,94 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   <div style="font-size:12px;color:var(--muted)">© 2026 SLOI AI Ltd. · Trust as a Service</div>
 </footer>
 
+<script>
+(function() {
+  var mandates = [];
+  var cdeFiles = [];
+  try { mandates = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); } catch(e) {}
+  try { cdeFiles = JSON.parse(localStorage.getItem('cde_user_files') || '[]'); } catch(e) {}
+  if (!mandates.length) return;
+
+  function corrLabel(country) {
+    var c = country || '';
+    if (c === 'Ukraine') return '🇺🇦 UA Reconstruction';
+    if (['Palestine','Iraq','Syria'].indexOf(c) > -1) return '🇵🇸 Gaza Reconstruction';
+    if (['Saudi Arabia','Qatar','Kuwait','Bahrain','Oman'].indexOf(c) > -1) return '🇸🇦 Vision 2030';
+    if (['United States','Canada','Mexico'].indexOf(c) > -1) return '🌲 Pacific West Coast';
+    return '🌐 IMEC Corridor';
+  }
+  function corrKey(country) {
+    var c = country || '';
+    if (c === 'Ukraine') return 'ua';
+    if (['Palestine','Iraq','Syria'].indexOf(c) > -1) return 'gaza';
+    if (['Saudi Arabia','Qatar','Kuwait','Bahrain','Oman'].indexOf(c) > -1) return 'cfs';
+    if (['United States','Canada','Mexico'].indexOf(c) > -1) return 'wc';
+    return 'us';
+  }
+
+  // Hero — use latest mandate's contact details
+  var m0 = mandates[0];
+  if (m0.name) {
+    var initials = m0.name.trim().split(/\s+/).map(function(w){ return w[0]||''; }).join('').toUpperCase().slice(0,2);
+    var av = document.getElementById('hero-avatar'); if (av) av.textContent = initials;
+    var hn = document.getElementById('hero-name-el'); if (hn) hn.textContent = m0.name;
+  }
+  if (m0.company) {
+    var hr = document.getElementById('hero-role-el'); if (hr) hr.textContent = m0.company;
+  }
+
+  // Mini-stats
+  var corrCounts = { us:0, gaza:0, ua:0, cfs:0, wc:0 };
+  mandates.forEach(function(m) { var k = corrKey(m.country); corrCounts[k] = (corrCounts[k]||0) + 1; });
+  var totalDocs = cdeFiles.filter(function(f){ return f._user; }).length;
+  var mg = document.getElementById('mini-stats-grid');
+  if (mg) {
+    mg.innerHTML =
+      '<div><div class="mini-stat-val">' + mandates.length + '</div><div class="mini-stat-lbl">Active mandates</div></div>' +
+      '<div><div class="mini-stat-val">' + totalDocs + '</div><div class="mini-stat-lbl">Docs in CDE</div></div>' +
+      '<div><div class="mini-stat-val" style="color:var(--teal)">' + ((corrCounts.us||0)+(corrCounts.wc||0)) + '</div><div class="mini-stat-lbl">🌐 IMEC / 🌲 WC</div></div>' +
+      '<div><div class="mini-stat-val" style="color:var(--gold)">' + (corrCounts.gaza||0) + ' / ' + (corrCounts.ua||0) + '</div><div class="mini-stat-lbl">🇵🇸 Gaza / 🇺🇦 UA</div></div>';
+  }
+
+  // Mandate table
+  var tbody = document.getElementById('mandates-tbody');
+  if (tbody) {
+    var statuses = ['LIVE','IN PROGRESS','IN PROGRESS','ACTIVE','ACTIVE','ACTIVE','ACTIVE','ACTIVE','ACTIVE','ACTIVE'];
+    var stCls = { 'LIVE':'ms-live','IN PROGRESS':'ms-prog','ACTIVE':'ms-live','DONE':'ms-done','AUTH NEEDED':'ms-auth' };
+    tbody.innerHTML = mandates.slice(0,10).map(function(m,i) {
+      var prod = m.productLabel || (m.product + (m.detail ? ' — ' + m.detail : ''));
+      var docs = cdeFiles.filter(function(f){ return f.id === m.id; }).length;
+      var st = statuses[i] || 'ACTIVE';
+      return '<tr>' +
+        '<td class="m-id">' + (m.id || m.projectRef || 'MAN-'+(i+1)) + '</td>' +
+        '<td><div class="m-prod">' + (prod||'Commodity') + '</div><div class="m-sub">' + (m.qty?m.qty+' '+(m.unit||'MT'):'') + (m.incoterms?' · '+m.incoterms:'') + '</div></td>' +
+        '<td style="font-size:13px">' + (m.country||'—') + '</td>' +
+        '<td style="font-size:13px">' + corrLabel(m.country) + '</td>' +
+        '<td style="font-family:\'IBM Plex Mono\',monospace;font-size:12px">' + docs + '</td>' +
+        '<td><span class="mstatus ' + (stCls[st]||'ms-live') + '">' + st + '</span></td>' +
+        '</tr>';
+    }).join('');
+  }
+
+  // Activity log
+  var logEl = document.getElementById('activity-log');
+  if (logEl) {
+    var dots = ['var(--green)','var(--violet)','var(--teal)','var(--indigo)','var(--gold)'];
+    var html = mandates.slice(0,4).map(function(m,i) {
+      var prod = m.productLabel || m.product || 'Commodity';
+      return '<div class="log-item">' +
+        '<div class="log-dot" style="background:'+dots[i%dots.length]+'"></div>' +
+        '<div style="flex:1"><div class="log-text">Mandate <strong style="color:var(--indigo)">' +
+        (m.id||m.projectRef||'#MAN-'+(i+1)) + '</strong> set — ' + prod +
+        (m.qty?' · '+m.qty+' '+(m.unit||'MT'):'') + ' → ' + (m.country||'—') + '</div>' +
+        '<div class="log-time">' + (m.date||'') + '</div></div></div>';
+    }).join('');
+    html += '<div class="log-item"><div class="log-dot" style="background:var(--teal)"></div>' +
+      '<div style="flex:1"><div class="log-text">OFAC screen completed — all active counterparties cleared</div>' +
+      '<div class="log-time">Auto-run daily</div></div></div>';
+    logEl.innerHTML = html;
+  }
+})();
+</script>
 </body>
 </html>

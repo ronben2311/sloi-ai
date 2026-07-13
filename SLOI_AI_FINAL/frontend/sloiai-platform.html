@@ -58,11 +58,11 @@
 
     /* ── LEFT PANEL ── */
     .left-panel{
-      width:272px;flex-shrink:0;
+      width:320px;flex-shrink:0;
       background:var(--surface);border-right:1px solid var(--border);
       display:flex;flex-direction:column;overflow-y:auto
     }
-    .ps{border-bottom:1px solid var(--border);padding:14px 16px}
+    .ps{border-bottom:1px solid var(--border);padding:16px 20px}
     .ps:last-child{border-bottom:none}
     .plabel{
       font-family:"IBM Plex Mono",monospace;font-size:10px;
@@ -146,6 +146,38 @@
     .dot-high{background:var(--red)}
     .ct-divider td{padding:5px 14px 4px;background:var(--surface2);border-top:1px solid var(--border2);border-bottom:1px solid var(--border2)}
 
+    /* ── SECTION BANNERS ── */
+    .cat-banner-inner{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;gap:10px}
+    .cat-banner-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+    .cat-banner-icon{font-size:15px;flex-shrink:0;line-height:1}
+    .cat-banner-name{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+    .cat-banner-count{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:1px 6px;white-space:nowrap;flex-shrink:0}
+    .cat-banner-tag{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);white-space:nowrap}
+    .cat-banner-right{display:flex;align-items:center;gap:5px;flex-shrink:0;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:700;letter-spacing:.04em}
+
+    /* ── SPEC CHIPS ── */
+    .spec-chips{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+    .spec-chip{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:3px;padding:1px 5px;white-space:nowrap}
+
+    /* ── PRODUCT DRAWER ── */
+    .cost-row-clickable{cursor:pointer}
+    .cost-row-clickable:hover td{background:rgba(91,95,239,.03)!important}
+    .cost-row-open td{background:rgba(91,95,239,.05)!important}
+    .cost-drawer-tr td{padding:0!important;border-bottom:1px solid var(--border)}
+    .cost-drawer-inner{display:flex;background:var(--surface2);border-top:2px solid var(--indigo-dim)}
+    .cost-drawer-diag{width:116px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:16px 10px;border-right:1px solid var(--border);text-align:center}
+    .cost-drawer-diag-icon{font-size:36px;line-height:1}
+    .cost-drawer-diag-origin{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--muted);line-height:1.5;margin-top:3px}
+    .cost-drawer-body{flex:1;min-width:0;padding:12px 16px}
+    .cost-drawer-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:8px}
+    .cost-drawer-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:11px}
+    .cost-drawer-tag{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--text);background:var(--surface);border:1px solid var(--border2);border-radius:4px;padding:3px 8px}
+    .cost-drawer-prices{display:flex;gap:18px;flex-wrap:wrap;padding:9px 12px;background:rgba(255,255,255,.02);border:1px solid var(--border2);border-radius:6px;margin-bottom:11px}
+    .cost-drawer-plbl{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+    .cost-drawer-pval{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600;color:var(--white);margin-top:2px}
+    .cost-drawer-pval.landed{color:var(--teal)}
+    .cost-drawer-acts{display:flex;gap:6px;flex-wrap:wrap}
+
     /* Leaflet overrides */
     .leaflet-popup-content-wrapper{background:var(--surface)!important;border:1px solid var(--border2)!important;border-radius:6px!important;box-shadow:0 4px 24px rgba(0,0,0,.6)!important}
     .leaflet-popup-tip{background:var(--surface)!important}
@@ -163,7 +195,7 @@
       .corridor-tabs{overflow-x:auto;gap:2px;scrollbar-width:none}
       .corridor-tabs::-webkit-scrollbar{display:none}
       .ctab{padding:5px 10px;font-size:10px;letter-spacing:.02em}
-      .tb-right .tb-btn:not(.tb-mandate){display:none}
+      .tb-right .tb-btn{display:none}
       .body-area{flex-direction:column}
       .left-panel{width:100%;flex-direction:row;overflow-x:auto;flex-shrink:0;max-height:160px;border-right:none;border-bottom:1px solid var(--border)}
       .left-panel .ps{border-bottom:none;border-right:1px solid var(--border);min-width:220px;flex-shrink:0}
@@ -201,6 +233,24 @@
     .gen-tile-icon{font-size:20px}
     .gen-tile-name{font-size:11px;font-weight:600;line-height:1.3;color:var(--white)}
     .gen-tile-desc{font-size:10px;color:var(--muted);line-height:1.3}
+    /* ── PROJECT CARDS ── */
+    .proj-cards-wrap{flex:1;overflow-y:auto;padding:14px 16px}
+    .proj-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;transition:border-color .15s}
+    .proj-card:hover{border-color:var(--border2)}
+    .proj-card-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;transition:background .15s;gap:12px}
+    .proj-card-hd:hover{background:rgba(255,255,255,.025)}
+    .proj-card-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px}
+    .proj-card-meta{font-size:12px;color:var(--muted);line-height:1.45}
+    .proj-corr-tag{font-size:10px;font-family:"IBM Plex Mono",monospace;color:var(--indigo);background:var(--indigo-dim);border:1px solid rgba(91,95,239,.22);border-radius:3px;padding:2px 7px;white-space:nowrap;flex-shrink:0}
+    .proj-chevron{color:var(--muted);flex-shrink:0;font-size:10px}
+    .proj-card-body{display:none;border-top:1px solid var(--border);padding:10px 16px 14px}
+    .proj-card-body.open{display:block}
+    .proj-doc-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+    .proj-doc-row:last-of-type{border-bottom:none}
+    .proj-gen-row{display:flex;gap:5px;flex-wrap:wrap;padding-top:10px;border-top:1px solid var(--border);margin-top:6px}
+    .proj-gen-btn{font-size:11px;color:var(--teal);background:rgba(45,212,191,.06);border:1px solid rgba(45,212,191,.2);border-radius:4px;padding:4px 10px;text-decoration:none;font-family:"IBM Plex Mono",monospace;transition:all .15s;white-space:nowrap}
+    .proj-gen-btn:hover{background:rgba(45,212,191,.14);border-color:rgba(45,212,191,.4)}
+    .proj-empty{font-size:12px;color:var(--muted);padding:4px 0 8px;font-style:italic}
     .dv-wrap{flex:1;overflow-y:auto}
     table.dtable{width:100%;border-collapse:collapse;font-size:12px}
     table.dtable th{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 14px;background:var(--surface);position:sticky;top:0;border-bottom:1px solid var(--border)}
@@ -243,6 +293,26 @@
     .ai-tool:hover{background:var(--indigo-dim);border-color:var(--indigo);color:var(--violet)}
     .ai-close-btn{width:100%;padding:8px;background:transparent;border:1px solid var(--border2);border-radius:5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:11px;cursor:pointer;transition:all .15s}
     .ai-close-btn:hover{border-color:var(--indigo);color:var(--violet)}
+
+    /* ── COMMAND BAR ── */
+    .cmd-overlay{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.72);display:none;align-items:flex-start;justify-content:center;padding-top:14vh;backdrop-filter:blur(6px)}
+    .cmd-overlay.open{display:flex}
+    .cmd-modal{width:560px;max-width:calc(100vw - 32px);background:var(--surface2);border:1px solid var(--border2);border-radius:10px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.85)}
+    .cmd-input-wrap{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--border)}
+    .cmd-prompt{font-family:"IBM Plex Mono",monospace;font-size:15px;color:var(--indigo);flex-shrink:0}
+    .cmd-input{flex:1;background:transparent;border:none;outline:none;font-size:14px;color:var(--white);font-family:"IBM Plex Mono",monospace;caret-color:var(--indigo)}
+    .cmd-input::placeholder{color:var(--muted)}
+    .cmd-esc{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--border2);border-radius:3px;padding:2px 6px;white-space:nowrap;flex-shrink:0}
+    .cmd-results{max-height:360px;overflow-y:auto;padding:6px}
+    .cmd-section{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;padding:8px 10px 3px}
+    .cmd-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;cursor:pointer;transition:background .1s}
+    .cmd-item:hover,.cmd-item.cmd-active{background:var(--indigo-dim)}
+    .cmd-item-icon{font-size:14px;width:22px;text-align:center;flex-shrink:0}
+    .cmd-item-label{font-size:13px;color:var(--white);font-weight:500;flex:1}
+    .cmd-item-desc{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);white-space:nowrap}
+    .cmd-empty{padding:24px;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--muted)}
+    .cmd-footer{border-top:1px solid var(--border);padding:7px 14px;display:flex;gap:14px}
+    .cmd-footer-hint{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted)}
   </style>
 </head>
 <body>
@@ -250,21 +320,21 @@
 
   <!-- ── TOPBAR ── -->
   <header class="topbar">
-    <a href="sloiai-home.html" class="tb-logo" style="text-decoration:none">SLOI <em>AI</em></a>
-    <div class="tb-sub">Trade Command Center</div>
+    <a href="#" class="tb-logo" style="text-decoration:none" onclick="setCorridor('us');return false">SLOI <em>AI</em></a>
+    <div class="tb-sub" style="cursor:pointer" onclick="setCorridor('us')">Trade Command Center</div>
     <div class="corridor-tabs">
       <button class="ctab active" id="ctab-us" onclick="setCorridor('us')">🌐 IMEC Corridor</button>
       <button class="ctab" id="ctab-gaza" onclick="setCorridor('gaza')">🇵🇸 Gaza Reconstruction</button>
       <button class="ctab" id="ctab-ua"   onclick="setCorridor('ua')">🇺🇦 Ukraine Reconstruction</button>
-      <button class="ctab" id="ctab-tmed" onclick="setCorridor('tmed')">🌊 Trans-Med Industrial</button>
-      <button class="ctab" id="ctab-cfs"  onclick="setCorridor('cfs')">🇸🇦 Saudi Vision 2030</button>
+<button class="ctab" id="ctab-cfs"  onclick="setCorridor('cfs')">🇸🇦 Saudi Vision 2030</button>
+      <button class="ctab" id="ctab-wc"   onclick="setCorridor('wc')">🌲 Pacific West Coast</button>
     </div>
     <div class="tb-right">
+      <button class="tb-btn" onclick="openCmd()" title="Command bar (Ctrl+K)" style="font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;color:var(--violet);border-color:rgba(91,95,239,.35)">⌘K</button>
       <a href="profile.html" class="tb-btn">Profile</a>
       <a href="#" id="ctab-docs" class="tb-btn" onclick="setCorridor('docs');return false">📁 Projects</a>
       <a href="cde.html" class="tb-btn">🗂️ CDE</a>
       <a href="agent-mandate.html" class="tb-btn tb-newproj">＋ New Project</a>
-      <a href="agent-mandate.html" class="tb-btn tb-mandate">Set Mandate →</a>
       <button class="tb-btn" onclick="window.location.href='login.html'">Sign out</button>
     </div>
   </header>
@@ -335,8 +405,8 @@
       <!-- Documents View -->
       <div id="docs-view">
         <div class="dv-topbar">
-          <span class="plabel" style="margin-bottom:0;white-space:nowrap">// GENERATED DOCUMENTS</span>
-          <input type="text" class="dv-search" id="doc-search" placeholder="Search product, destination, mandate…" oninput="renderDocsList()"/>
+          <span class="plabel" style="margin-bottom:0;white-space:nowrap">// PROJECTS</span>
+          <input type="text" class="dv-search" id="doc-search" placeholder="Search project, product, destination…" oninput="renderProjectCards()"/>
           <div style="display:flex;gap:4px;flex-wrap:wrap" id="type-filters">
             <button class="fbtn on" data-type="All"              onclick="setTypeFilter('All')">All</button>
             <button class="fbtn"    data-type="LOI"              onclick="setTypeFilter('LOI')">📄 LOI</button>
@@ -352,28 +422,10 @@
             <button class="fbtn"    data-corr="us"   onclick="setCorrFilter('us')">🇺🇸 US</button>
             <button class="fbtn"    data-corr="gaza" onclick="setCorrFilter('gaza')">🇵🇸 Gaza</button>
             <button class="fbtn"    data-corr="ua"   onclick="setCorrFilter('ua')">🇺🇦 Ukraine</button>
-            <button class="fbtn"    data-corr="tmed" onclick="setCorrFilter('tmed')">🌊 Trans-Med</button>
           </div>
         </div>
         <div id="gen-grid" class="gen-grid"></div>
-        <div class="dv-wrap">
-          <table class="dtable">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Type</th>
-                <th>Document / Spec</th>
-                <th>Destination</th>
-                <th>Mandate</th>
-                <th>Corridor</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="docs-tbody"></tbody>
-          </table>
-        </div>
+        <div id="proj-cards" class="proj-cards-wrap"></div>
       </div>
     </div>
 
@@ -391,62 +443,77 @@ const CORRIDORS = {
     name: '🌐 IMEC Corridor',
     desc: 'India–Middle East–Europe Economic Corridor — JNPT Mumbai &amp; Mundra → Jebel Ali / Fujairah → Aqaba → Haifa land bridge → Piraeus / Genoa / Trieste / Hamburg. Rail-sea multimodal across 6 transit nations. OFAC-cleared counterparties at every node.',
     stats: [
-      { val:'$3T',   lbl:'Corridor Trade Est.'   },
-      { val:'4',     lbl:'Active Routes'          },
-      { val:'4',     lbl:'Open Mandates'          },
-      { val:'$630',  lbl:'Steel Landed/MT (EU)'  },
+      { val:'$3T',   lbl:'Corridor Trade Est.'    },
+      { val:'6',     lbl:'Active Routes'           },
+      { val:'4',     lbl:'Open Mandates'           },
+      { val:'$112',  lbl:'Cement Landed/MT (US)'  },
     ],
-    mapCenter:[30, 42], mapZoom:3,
+    mapCenter:[33, -5], mapZoom:2,
     routes:[
-      { path:[[18.9,72.9],[20,67],[22,60],[25.1,55.1],[29.5,35.0],[32.8,34.9],[37.9,23.6],[53.5,10.0]], name:'JNPT → Jebel Ali → Haifa → Hamburg', color:'#2dd4bf', product:'Indian Steel HR Coil · ASTM A36 equiv.' },
-      { path:[[22.8,69.7],[23,65],[25.1,56.3],[29.5,35.0],[32.8,34.9],[44.4,8.9]],                      name:'Mundra → Fujairah → Haifa → Genoa',  color:'#5b5fef', product:'OPC Cement 42.5N · ASTM C150'           },
-      { path:[[27.0,49.7],[28,45],[29.5,35.0],[32.8,34.9],[45.6,13.8]],                                 name:'Jubail → Aqaba → Haifa → Trieste',   color:'#8b8ff8', product:'Base Oil SN150 / Petrochemicals'         },
-      { path:[[26.4,50.1],[27,45],[29.5,35.0],[32.8,34.9],[37.9,23.6]],                                 name:'Dammam → Aqaba → Haifa → Piraeus',   color:'#e8a94a', product:'Building Materials · OPC / Rebar'        },
+      { path:[[18.9,72.9],[20,67],[22,60],[25.1,55.1],[29.5,35.0],[32.8,34.9],[37.9,23.6],[53.5,10.0]], name:'JNPT → Jebel Ali → Haifa → Hamburg',          color:'#2dd4bf', product:'Indian Steel HR Coil · ASTM A36 equiv.'    },
+      { path:[[22.8,69.7],[23,65],[25.1,56.3],[29.5,35.0],[32.8,34.9],[44.4,8.9]],                      name:'Mundra → Fujairah → Haifa → Genoa',            color:'#5b5fef', product:'OPC Cement 42.5N · ASTM C150'               },
+      { path:[[27.0,49.7],[28,45],[29.5,35.0],[32.8,34.9],[45.6,13.8]],                                 name:'Jubail → Aqaba → Haifa → Trieste',             color:'#8b8ff8', product:'Base Oil SN150 / Petrochemicals'             },
+      { path:[[26.4,50.1],[27,45],[29.5,35.0],[32.8,34.9],[37.9,23.6]],                                 name:'Dammam → Aqaba → Haifa → Piraeus',             color:'#e8a94a', product:'Building Materials · OPC / Rebar'            },
+      { path:[[35.9,-5.5],[37,-20],[38,-40],[38.5,-60],[39.3,-76.6]],                                    name:'Tanger Med → Baltimore (Trans-Atlantic)',       color:'#22c55e', product:'OPC Cement 42.5N · Moroccan Atlantic route'   },
+      { path:[[35.7,-0.6],[35.5,-5.0],[34,-22],[32,-42],[30,-65],[29.9,-90.0]],                          name:'Oran → New Orleans (Trans-Atlantic)',           color:'#ef4444', product:'Gypsum Rock · Algerian Gulf Coast route'       },
     ],
     ports:{
       origins:[
-        { pos:[18.9,72.9], name:'JNPT Mumbai',                    country:'India'        },
-        { pos:[22.8,69.7], name:'Mundra Port',                    country:'India'        },
-        { pos:[27.0,49.7], name:'King Fahad Industrial Port',     country:'Saudi Arabia' },
-        { pos:[26.4,50.1], name:'Port of Dammam',                 country:'Saudi Arabia' },
-        { pos:[25.1,55.1], name:'Jebel Ali',                      country:'UAE'          },
-        { pos:[25.1,56.3], name:'Port of Fujairah',               country:'UAE'          },
-        { pos:[29.5,35.0], name:'Port of Aqaba',                  country:'Jordan'       },
-        { pos:[32.8,34.9], name:'Haifa (IL Land Bridge)',         country:'Israel'       },
+        { pos:[18.9,72.9], name:'JNPT Mumbai',                country:'India'        },
+        { pos:[22.8,69.7], name:'Mundra Port',                country:'India'        },
+        { pos:[27.0,49.7], name:'King Fahad Industrial Port', country:'Saudi Arabia' },
+        { pos:[26.4,50.1], name:'Port of Dammam',             country:'Saudi Arabia' },
+        { pos:[25.1,55.1], name:'Jebel Ali',                  country:'UAE'          },
+        { pos:[25.1,56.3], name:'Port of Fujairah',           country:'UAE'          },
+        { pos:[29.5,35.0], name:'Port of Aqaba',              country:'Jordan'       },
+        { pos:[32.8,34.9], name:'Haifa (IL Land Bridge)',     country:'Israel'       },
+        { pos:[35.9,-5.5], name:'Tanger Med Port',            country:'Morocco'      },
+        { pos:[35.7,-0.6], name:'Port of Oran',               country:'Algeria'      },
       ],
       dests:[
-        { pos:[37.9,23.6], name:'Port of Piraeus', country:'Greece'  },
-        { pos:[44.4,8.9],  name:'Port of Genoa',   country:'Italy'   },
-        { pos:[45.6,13.8], name:'Port of Trieste', country:'Italy'   },
-        { pos:[53.5,10.0], name:'Port of Hamburg', country:'Germany' },
+        { pos:[37.9,23.6],  name:'Port of Piraeus',      country:'Greece'  },
+        { pos:[44.4,8.9],   name:'Port of Genoa',        country:'Italy'   },
+        { pos:[45.6,13.8],  name:'Port of Trieste',      country:'Italy'   },
+        { pos:[53.5,10.0],  name:'Port of Hamburg',      country:'Germany' },
+        { pos:[39.3,-76.6], name:'Port of Baltimore',    country:'USA'     },
+        { pos:[29.9,-90.0], name:'Port of New Orleans',  country:'USA'     },
       ],
     },
     costs:[
-      { prod:'Indian Steel HR Coil', spec:'IS 2062 / ASTM A36 equiv. · hot-rolled coil',  origin:'JNPT Mumbai, IN', fob:'$520/MT',   fr:'$95/MT',  duty:'$15/MT', land:'$630/MT',   ch:-2.4, risk:'med',  email:'steel@jswsteel.in',        wa:'912212345678' },
-      { prod:'OPC Cement 42.5N',     spec:'ASTM C150 / IS 8112 · Gulf origin · bulk',      origin:'Jubail, SA',      fob:'$57/MT',    fr:'$42/MT',  duty:'$5/MT',  land:'$108/MT',   ch:+0.4, risk:'low',  email:'cement@jubailport.com.sa', wa:'966501234567' },
-      { prod:'Aluminum Billet 6063', spec:'EN AW-6063 · UAE smelter · LME-linked',          origin:'Jebel Ali, AE',   fob:'$2,720/MT', fr:'$98/MT',  duty:'$86/MT', land:'$2,942/MT', ch:+1.1, risk:'med',  email:'alum@emal.ae',             wa:'971501234567' },
-      { prod:'Base Oil SN150',       spec:'API Group I · Saudi Aramco Lubricants',           origin:'Jubail, SA',      fob:'$820/MT',   fr:'$55/MT',  duty:'$0',     land:'$882/MT',   ch:-0.3, risk:'low',  email:'baseoil@aramco.com.sa',    wa:'966502345678' },
-      { prod:'Steel Rebar G60',      spec:'ASTM A615 / IS 1786 · Indian mill origin',        origin:'Mundra, IN',      fob:'$498/MT',   fr:'$88/MT',  duty:'$12/MT', land:'$601/MT',   ch:-1.8, risk:'med',  email:'rebar@tatasteelltd.com',   wa:'912212345679' },
+      { prod:'Indian Steel HR Coil', spec:'IS 2062 / ASTM A36 equiv. · hot-rolled coil',          origin:'JNPT Mumbai, IN',  fob:'$520/MT',   fr:'$95/MT',  duty:'$15/MT', land:'$630/MT',   ch:-2.4, risk:'med',  email:'steel@jswsteel.in',        wa:'912212345678' },
+      { prod:'OPC Cement 42.5N',     spec:'ASTM C150 / IS 8112 · Gulf origin · bulk',              origin:'Jubail, SA',       fob:'$57/MT',    fr:'$42/MT',  duty:'$5/MT',  land:'$108/MT',   ch:+0.4, risk:'low',  email:'cement@jubailport.com.sa', wa:'966501234567' },
+      { prod:'Aluminum Billet 6063', spec:'EN AW-6063 · UAE smelter · LME-linked',                  origin:'Jebel Ali, AE',    fob:'$2,720/MT', fr:'$98/MT',  duty:'$86/MT', land:'$2,942/MT', ch:+1.1, risk:'med',  email:'alum@emal.ae',             wa:'971501234567' },
+      { prod:'Base Oil SN150',       spec:'API Group I · Saudi Aramco Lubricants',                   origin:'Jubail, SA',       fob:'$820/MT',   fr:'$55/MT',  duty:'$0',     land:'$882/MT',   ch:-0.3, risk:'low',  email:'baseoil@aramco.com.sa',    wa:'966502345678' },
+      { prod:'Steel Rebar G60',      spec:'ASTM A615 / IS 1786 · Indian mill origin',                origin:'Mundra, IN',       fob:'$498/MT',   fr:'$88/MT',  duty:'$12/MT', land:'$601/MT',   ch:-1.8, risk:'med',  email:'rebar@tatasteelltd.com',   wa:'912212345679' },
+      { prod:'OPC Cement 42.5N',     spec:'EN 197-1 / ASTM C150 · Moroccan mill · bulk bags',       origin:'Tanger Med, MA',   fob:'$63/MT',    fr:'$44/MT',  duty:'$3/MT',  land:'$112/MT',   ch:-1.2, risk:'low',  email:'export@cimar.ma',          wa:'212522001122' },
+      { prod:'Gypsum Rock (Raw)',     spec:'CaSO4·2H2O · 90%+ purity · Saharan origin · bulk',      origin:'Oran, DZ',         fob:'$32/MT',    fr:'$52/MT',  duty:'$2/MT',  land:'$86/MT',    ch:+0.6, risk:'low',  email:'minerals@sonatrach.dz',    wa:'213551234567' },
     ],
     alerts:[
-      { icon:'🌐', title:'IMEC Phase 1 active — 3 vessels in corridor transit · Haifa land bridge operating',  tag:'t-clear', lbl:'LIVE',  time:'1h ago'  },
-      { icon:'🚂', title:'Aqaba–Haifa rail link: JTF construction 82% complete — ETA Q1 2027',                  tag:'t-info',  lbl:'INFRA', time:'3h ago'  },
-      { icon:'✅', title:'Indian Steel HR Coil batch MU-441 MTC verified — IS 2062 / ASTM A36 PASS',           tag:'t-clear', lbl:'MTC',   time:'5h ago'  },
-      { icon:'⚠️', title:'Piraeus congestion: +1.5 day wait — Baltic feeder to Hamburg rescheduled',            tag:'t-warn',  lbl:'PORT',  time:'7h ago'  },
+      { icon:'🌐', title:'IMEC Phase 1 active — 3 vessels in corridor transit · Haifa land bridge operating',       tag:'t-clear', lbl:'LIVE',    time:'1h ago'  },
+      { icon:'🚢', title:'Tanger Med → Baltimore: MV Casablanca Star departed — OPC Cement 8,400 MT · ETA 14 days', tag:'t-clear', lbl:'TRANSIT', time:'2h ago'  },
+      { icon:'🚂', title:'Aqaba–Haifa rail link: JTF construction 82% complete — ETA Q1 2027',                       tag:'t-info',  lbl:'INFRA',   time:'3h ago'  },
+      { icon:'⛽', title:'Oran terminal: Q3 Gypsum spot allocation open — SONATRACH counterparty OFAC-clear',        tag:'t-info',  lbl:'ALLOC',   time:'5h ago'  },
+      { icon:'✅', title:'Indian Steel HR Coil batch MU-441 MTC verified — IS 2062 / ASTM A36 PASS',                tag:'t-clear', lbl:'MTC',     time:'6h ago'  },
+      { icon:'⚠️', title:'Piraeus congestion: +1.5 day wait — Baltic feeder to Hamburg rescheduled',                 tag:'t-warn',  lbl:'PORT',    time:'8h ago'  },
     ],
     vault:[
-      { name:'OFAC SDN Screen',          st:'vs-clear',   lbl:'CLEAR'  },
-      { name:'EU Import Compliance',     st:'vs-clear',   lbl:'CLEAR'  },
-      { name:'KYC — JSW Steel (IN)',    st:'vs-clear',   lbl:'VALID'  },
-      { name:'Haifa Port Customs (IL)', st:'vs-active',  lbl:'ACTIVE' },
-      { name:'Aqaba–Haifa Rail Status', st:'vs-pending', lbl:'82%'    },
-      { name:'Audit Trail',             st:'vs-clear',   lbl:'ON'     },
+      { name:'OFAC SDN Screen',            st:'vs-clear',   lbl:'CLEAR'  },
+      { name:'EU Import Compliance',       st:'vs-clear',   lbl:'CLEAR'  },
+      { name:'KYC — JSW Steel (IN)',      st:'vs-clear',   lbl:'VALID'  },
+      { name:'KYC — CIMAR Morocco',       st:'vs-clear',   lbl:'VALID'  },
+      { name:'Morocco Export License',     st:'vs-clear',   lbl:'CLEAR'  },
+      { name:'Algeria Mineral Permit',     st:'vs-active',  lbl:'ACTIVE' },
+      { name:'Haifa Port Customs (IL)',   st:'vs-active',  lbl:'ACTIVE' },
+      { name:'Aqaba–Haifa Rail Status',   st:'vs-pending', lbl:'82%'    },
+      { name:'Audit Trail',               st:'vs-clear',   lbl:'ON'     },
     ],
     risks:[
-      { lbl:'Haifa Port (Geopolitics)', score:55, color:'#e8a94a' },
-      { lbl:'Aqaba Rail (Incomplete)',  score:68, color:'#e8a94a' },
-      { lbl:'Indian Supply Quality',    score:32, color:'#22c55e' },
-      { lbl:'EU Import Duties (Steel)', score:44, color:'#22c55e' },
+      { lbl:'Haifa Port (Geopolitics)',    score:55, color:'#e8a94a' },
+      { lbl:'Aqaba Rail (Incomplete)',     score:68, color:'#e8a94a' },
+      { lbl:'Indian Supply Quality',       score:32, color:'#22c55e' },
+      { lbl:'EU Import Duties (Steel)',    score:44, color:'#22c55e' },
+      { lbl:'Morocco Atlantic Transit',    score:24, color:'#22c55e' },
+      { lbl:'Algeria Export Permits',      score:38, color:'#22c55e' },
     ],
   },
 
@@ -483,6 +550,14 @@ const CORRIDORS = {
       { prod:'Aggregate (Crushed)',     spec:'20mm / ASTM C33 · road base',                              origin:'Al Arish, EG',         fob:'$22/MT',      fr:'$12/MT',      duty:'$0',     land:'$38/MT',       ch:+0.4, risk:'low',  email:'aggregate@alarish-port.eg', wa:'201002345678', cat:'Bulk Commodities' },
       { prod:'CFS Infill Panel Kit',    spec:'AISI S240 / ASTM A653 · flat-pack KD bundles · DDP site', origin:'Izmir → IL Assembly',  fob:'$6.80/Sq.Ft', fr:'$5.70/Sq.Ft', duty:'$0 DDP', land:'$12.50/Sq.Ft', ch:-1.4, risk:'med',  email:'cfs@yilmazcelik.com.tr',    wa:'905321111111', cat:'CFS Mid-Rise' },
       { prod:'Pre-eng Wall Frame Kit',  spec:'ASTM A653 SS50 · Knock-Down · IL border coord.',          origin:'Al Arish → IL Border', fob:'$5.20/Sq.Ft', fr:'$4.60/Sq.Ft', duty:'$0 DDP', land:'$9.80/Sq.Ft',  ch:+0.6, risk:'high', email:'cfs@alarish-steel.eg',      wa:'201001111111', cat:'CFS Mid-Rise' },
+      { prod:'Hollow Block 20×20×40cm', spec:'C6/C8 load-bearing · palletised · 100 blocks/plt',        origin:'Al Arish WH, EG',      fob:'Ex-WH $0.82/blk', fr:'$0.10/blk', duty:'$0', land:'$0.94/blk',    ch:-0.3, risk:'low',  email:'blocks@alarish-masonry.eg', wa:'201003456789', cat:'From Warehouse' },
+      { prod:'Bagged Cement 50 kg',     spec:'CEM I 42.5N · UN-cleared · 40-bag pallet',                origin:'Port Said WH, EG',     fob:'Ex-WH $5.60/bg',  fr:'$0.85/bg',  duty:'$0', land:'$6.50/bg',     ch:-0.5, risk:'low',  email:'cement@suezcement.eg',      wa:'201001234567', cat:'From Warehouse' },
+      { prod:'Washed Sand (Fine)',       spec:'Plaster &amp; masonry grade · Sinai quarry · 25 MT min',  origin:'Al Arish WH, EG',      fob:'Ex-WH $16/MT',    fr:'$8/MT',     duty:'$0', land:'$26/MT',       ch:+0.2, risk:'low',  email:'sand@sinaimineral.eg',      wa:'201004567890', cat:'From Warehouse' },
+      { prod:'Ceramic Floor Tile 40×40', spec:'Basic reconstruction grade · ISO 13006 · box/1.6m²',     origin:'Port Said WH, EG',     fob:'Ex-WH $2.90/m²',  fr:'$0.55/m²',  duty:'$0', land:'$3.50/m²',     ch:+0.4, risk:'low',  email:'tiles@arabceramic.eg',      wa:'201005678901', cat:'From Warehouse' },
+      { prod:'PVC Pipe DN63 PN10',       spec:'EN ISO 1452-2 · water supply · 6m lengths · 50 pcs min', origin:'Al Arish WH, EG',      fob:'Ex-WH $2.20/m',   fr:'$0.32/m',   duty:'$0', land:'$2.55/m',      ch:-0.1, risk:'low',  email:'pvc@nile-plastics.eg',      wa:'201006789012', cat:'From Warehouse' },
+      { prod:'HDPE Water Tank 2,000 L',  spec:'PE100 · rooftop / ground · UN-approved fittings',        origin:'Al Arish WH, EG',      fob:'Ex-WH $175/u',    fr:'$26/u',     duty:'$0', land:'$205/u',       ch:+1.2, risk:'low',  email:'tanks@alarish-poly.eg',     wa:'201007890123', cat:'From Warehouse' },
+      { prod:'Electrical Cable 2.5mm²',  spec:'NYM-J 3-core / IEC 60227 · 100m drum',                   origin:'Port Said WH, EG',     fob:'Ex-WH $0.88/m',   fr:'$0.07/m',   duty:'$0', land:'$0.97/m',      ch:+0.6, risk:'low',  email:'cables@cairo-wire.eg',      wa:'201008901234', cat:'From Warehouse' },
+      { prod:'Plywood 18mm (1220×2440)', spec:'Formwork grade / FSC · film-faced · 50-sheet min',       origin:'Port Said WH, EG',     fob:'Ex-WH $19/sht',   fr:'$3.20/sht', duty:'$0', land:'$23/sht',      ch:-0.8, risk:'low',  email:'plywood@medwood.eg',        wa:'201009012345', cat:'From Warehouse' },
     ],
     alerts:[
       { icon:'🚛', title:'Kerem Shalom crossing: 340 trucks cleared today — cement &amp; rebar priority', tag:'t-clear', lbl:'ENTRY', time:'1h ago'  },
@@ -543,6 +618,14 @@ const CORRIDORS = {
       { prod:'CFS Infill Panel Kit',  spec:'AISI S240 / ASTM A653 · flat-pack KD · Black Sea log', origin:'Izmir → Odessa',    fob:'$6.80/Sq.Ft', fr:'$3.20/Sq.Ft', duty:'$0', land:'$11.80/Sq.Ft', ch:-1.4, risk:'high', email:'cfs@yilmazcelik.com.tr',   wa:'905321111111', cat:'CFS Mid-Rise' },
       { prod:'LGS Flat-Pack Bundle',  spec:'AISI S240 / 4-story equiv. · JIT delivery',           origin:'Istanbul → Odessa', fob:'$1,280/MT',   fr:'$580/MT',     duty:'$0', land:'$1,860/MT',    ch:-0.8, risk:'high', email:'lgs@yilmazcelik.com.tr',   wa:'905321111112', cat:'CFS Mid-Rise' },
       { prod:'CFS Roof Truss Kit',    spec:'AISI S100 / ASCE 7 engineered · flat-pack bundles',   origin:'Izmir → Constanta', fob:'$6.10/Sq.Ft', fr:'$4.50/Sq.Ft', duty:'$0', land:'$10.60/Sq.Ft', ch:-2.1, risk:'high', email:'truss@yilmazcelik.com.tr', wa:'905321111113', cat:'CFS Mid-Rise' },
+      { prod:'AAC Block 20×20×60cm',   spec:'Autoclaved aerated concrete · B4/600 · pallet 40 blk',  origin:'Constanta WH, RO',  fob:'Ex-WH $1.85/blk', fr:'$0.18/blk',  duty:'$0', land:'$2.05/blk',    ch:-0.4, risk:'low',  email:'aac@rombloc.ro',            wa:'40721234567',  cat:'From Warehouse' },
+      { prod:'Bagged Cement 50 kg',    spec:'CEM I 42.5R · DSTU EN 197-1 · 40-bag pallet',           origin:'Constanta WH, RO',  fob:'Ex-WH $6.20/bg',  fr:'$0.90/bg',   duty:'$0', land:'$7.15/bg',     ch:+0.3, risk:'low',  email:'cement@lafarge.ro',         wa:'40722345678',  cat:'From Warehouse' },
+      { prod:'Washed Sand (Fine)',      spec:'Plaster &amp; masonry grade · Danube quarry · 25 MT min', origin:'Constanta WH, RO',  fob:'Ex-WH $14/MT',    fr:'$9/MT',      duty:'$0', land:'$25/MT',       ch:-0.2, risk:'low',  email:'sand@danubemineral.ro',     wa:'40723456789',  cat:'From Warehouse' },
+      { prod:'Float Glass 4mm Clear',  spec:'EN 572-2 · 3210×2250 jumbo · crated pallet',            origin:'Izmir WH, TR',      fob:'Ex-WH $7.20/m²',  fr:'$1.10/m²',   duty:'$0', land:'$8.40/m²',     ch:+0.9, risk:'med',  email:'glass@sisecam.com.tr',      wa:'902121234567', cat:'From Warehouse' },
+      { prod:'Ceramic Floor Tile 40×40',spec:'Basic reconstruction grade · ISO 13006 · box/1.6m²',   origin:'Constanta WH, RO',  fob:'Ex-WH $3.40/m²',  fr:'$0.60/m²',   duty:'$0', land:'$4.05/m²',     ch:+0.5, risk:'low',  email:'tiles@faiantatrans.ro',     wa:'40724567890',  cat:'From Warehouse' },
+      { prod:'PVC Pipe DN63 PN10',     spec:'EN ISO 1452-2 · water supply · 6m lengths · 50 pcs min', origin:'Izmir WH, TR',      fob:'Ex-WH $2.35/m',   fr:'$0.40/m',    duty:'$0', land:'$2.78/m',      ch:-0.1, risk:'low',  email:'pvc@nile-plastics.eg',      wa:'905325678901', cat:'From Warehouse' },
+      { prod:'Plywood 18mm (1220×2440)',spec:'Formwork grade · film-faced · FSC · 50-sheet min',     origin:'Constanta WH, RO',  fob:'Ex-WH $22/sht',   fr:'$3.80/sht',  duty:'$0', land:'$26.50/sht',   ch:-1.1, risk:'low',  email:'plywood@transylvania-wood.ro', wa:'40725678901', cat:'From Warehouse' },
+      { prod:'Electrical Cable 2.5mm²', spec:'NYM-J 3-core · IEC 60227 · 100m drum',                origin:'Constanta WH, RO',  fob:'Ex-WH $0.92/m',   fr:'$0.08/m',    duty:'$0', land:'$1.02/m',      ch:+0.7, risk:'low',  email:'cables@electro-ro.ro',      wa:'40726789012',  cat:'From Warehouse' },
     ],
     alerts:[
       { icon:'🚨', title:'Ukraine corridor risk index +12 pts — Black Sea war premium updated',  tag:'t-risk',  lbl:'RISK', time:'30m ago' },
@@ -563,65 +646,6 @@ const CORRIDORS = {
       { lbl:'Logistics Disruption',  score:78, color:'#ef4444' },
       { lbl:'Steel Rebar Supply',    score:72, color:'#e8a94a' },
       { lbl:'Counterparty (TR)',     score:44, color:'#22c55e' },
-    ],
-  },
-
-  tmed: {
-    name: '🌊 Trans-Med Industrial',
-    desc: 'North African bulk import corridor — Egypt (Port Said, Al Arish) &amp; Algeria (Oran, Annaba) supplying heavy industrial raw materials to US manufacturing plants. Mill Test Certificate (MTC) tracking &amp; multi-port congestion analytics active.',
-    stats: [
-      { val:'$2.1T',  lbl:'US Mfg Demand'   },
-      { val:'4',      lbl:'Active Routes'    },
-      { val:'6',      lbl:'Open Mandates'    },
-      { val:'$96',    lbl:'Cement Landed/MT' },
-    ],
-    mapCenter:[28, 8], mapZoom:3,
-    routes:[
-      { path:[[31.2,32.3],[30,28],[28,20],[36,-5.4],[33,-35],[29.8,-95.4]],   name:'Port Said → Houston',  color:'#2dd4bf', product:'OPC Cement 42.5N · ASTM C150'  },
-      { path:[[31.1,33.8],[30,28],[28,20],[36,-5.4],[36,-40],[39.3,-76.6]],   name:'Al Arish → Baltimore', color:'#5b5fef', product:'Clinker 52.5R · EN 197-1'       },
-      { path:[[36.9,7.8],[36.5,5],[36,-5.4],[34,-30],[32.1,-81.1]],           name:'Annaba → Savannah',    color:'#8b8ff8', product:'Steel Rebar G60 · ASTM A615'    },
-      { path:[[35.7,-0.6],[36,-5.4],[33,-50],[29.9,-90.1]],                   name:'Oran → New Orleans',   color:'#e8a94a', product:'Urea Fertilizer 46% N'          },
-    ],
-    ports:{
-      origins:[
-        { pos:[31.2,32.3], name:'Port Said',        country:'Egypt'   },
-        { pos:[31.1,33.8], name:'Al Arish Terminal', country:'Egypt'   },
-        { pos:[36.9,7.8],  name:'Annaba Port',       country:'Algeria' },
-        { pos:[35.7,-0.6], name:'Oran Port',         country:'Algeria' },
-      ],
-      dests:[
-        { pos:[29.8,-95.4], name:'Port of Houston',     country:'USA' },
-        { pos:[39.3,-76.6], name:'Port of Baltimore',   country:'USA' },
-        { pos:[32.1,-81.1], name:'Port of Savannah',    country:'USA' },
-        { pos:[29.9,-90.1], name:'Port of New Orleans', country:'USA' },
-      ],
-    },
-    costs:[
-      { prod:'OPC Cement 42.5N',  spec:'ASTM C150 Type I / EN 197-1',  origin:'Port Said, EG',  fob:'$54/MT',   fr:'$36/MT',  duty:'$3/MT',  land:'$96/MT',   ch:-1.2, risk:'low', email:'cement@suezcement.eg',     wa:'201001234567' },
-      { prod:'Clinker 52.5R',     spec:'EN 197-1 / CEM I 52.5R',       origin:'Al Arish, EG',   fob:'$38/MT',   fr:'$34/MT',  duty:'$2/MT',  land:'$77/MT',   ch:+0.6, risk:'low', email:'clinker@alarish-port.eg',  wa:'201002345678' },
-      { prod:'Steel Rebar G60',   spec:'ASTM A615 / Grade 60',          origin:'Annaba, DZ',     fob:'$519/MT',  fr:'$44/MT',  duty:'$0',     land:'$568/MT',  ch:-2.4, risk:'med', email:'rebar@sider.dz',           wa:'21321234567'  },
-      { prod:'Urea Fertilizer',   spec:'Granular 46% N / SGS-certified',origin:'Oran, DZ',       fob:'$298/MT',  fr:'$38/MT',  duty:'$0',     land:'$339/MT',  ch:+1.5, risk:'low', email:'urea@sonatrach.dz',        wa:'21331234567'  },
-      { prod:'Portland Clinker',  spec:'ASTM C150-compatible / bulk',   origin:'Port Said, EG',  fob:'$42/MT',   fr:'$36/MT',  duty:'$2/MT',  land:'$83/MT',   ch:-0.8, risk:'low', email:'clinker@portofportsaid.eg',wa:'201003456789' },
-    ],
-    alerts:[
-      { icon:'⚓', title:'Port Said bulk terminal: 2.1-day avg wait — congestion index MEDIUM',   tag:'t-warn',  lbl:'PORT',  time:'45m ago' },
-      { icon:'✅', title:'MTC verified: Annaba Rebar batch AN-2247 — ASTM A615 Grade 60 PASS',    tag:'t-clear', lbl:'MTC',   time:'2h ago'  },
-      { icon:'📊', title:'OPC Cement Houston landed -$7/MT — Port Said slot rate eased this week',tag:'t-info',  lbl:'COST',  time:'4h ago'  },
-      { icon:'⚠️', title:'Al Arish terminal: vessel queue +1 day — Clinker ETA revised to +36h',  tag:'t-warn',  lbl:'DELAY', time:'6h ago'  },
-    ],
-    vault:[
-      { name:'OFAC SDN Screen',              st:'vs-clear',   lbl:'CLEAR'    },
-      { name:'EU Consolidated List',         st:'vs-clear',   lbl:'CLEAR'    },
-      { name:'MTC — Annaba Rebar AN-2247',   st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'MTC — Port Said Cement PS-91', st:'vs-active',  lbl:'PENDING'  },
-      { name:'KYC — Sonatrach (DZ)',         st:'vs-clear',   lbl:'VALID'    },
-      { name:'Port Said Congestion Monitor', st:'vs-pending', lbl:'MEDIUM'   },
-    ],
-    risks:[
-      { lbl:'Port Said Congestion', score:55, color:'#e8a94a' },
-      { lbl:'Al Arish Terminal',    score:48, color:'#22c55e' },
-      { lbl:'Rebar Supply (DZ)',    score:38, color:'#22c55e' },
-      { lbl:'Suez Canal Slot',      score:62, color:'#e8a94a' },
     ],
   },
 
@@ -662,12 +686,18 @@ const CORRIDORS = {
       ],
     },
     costs:[
-      { prod:'Steel Rebar A500',             spec:'ASTM A615 Gr.60 · SASO certified · Aramco-approved',  origin:'Izmir, TR → Jeddah',     fob:'$527/MT',   fr:'$64/MT',    duty:'$27/MT',    land:'$618/MT',   ch:-1.8, risk:'low', email:'rebar@izmir-steel.com.tr', wa:'905323456789' },
-      { prod:'OPC Cement 52.5R',             spec:'ASTM C150 Type III · Vision 2030 approved · bulk',     origin:'JNPT Mumbai, IN',        fob:'$58/MT',    fr:'$44/MT',    duty:'$3/MT',     land:'$108/MT',   ch:+0.4, risk:'low', email:'cement@jswcement.in',       wa:'912212345680' },
-      { prod:'Aluminum Curtain Wall Profile', spec:'EN AW-6063 T6 · NEOM facade spec · extruded',         origin:'Istanbul, TR → Yanbu',   fob:'$2,840/MT', fr:'$95/MT',    duty:'$143/MT',   land:'$3,078/MT', ch:+1.2, risk:'med', email:'alum@alumil.com.tr',        wa:'902121234568' },
-      { prod:'Structural Steel A572',         spec:'ASTM A572 Grade 50 · Jubail mill · domestic delivery', origin:'Jubail, SA (domestic)',  fob:'$540/MT',   fr:'$28/MT',    duty:'$0',        land:'$568/MT',   ch:-2.1, risk:'low', email:'steel@sabic.com.sa',        wa:'966501234568' },
-      { prod:'Float Glass 8–12mm',            spec:'EN 572 / NEOM smart facade · low-iron tempered',      origin:'Istanbul, TR → Jeddah',  fob:'$9.80/m²', fr:'$1.40/m²', duty:'$0.55/m²', land:'$11.75/m²', ch:+0.8, risk:'med', email:'glass@sisecam.com.tr',      wa:'902121234567' },
-      { prod:'Copper Cable 6mm²',             spec:'IEC 60228 · NEOM smart city infra · ZATCA cleared',   origin:'Jebel Ali, AE → Dammam', fob:'$4,850/MT', fr:'$72/MT',    duty:'$243/MT',   land:'$5,165/MT', ch:+1.6, risk:'low', email:'cable@ducab.com.ae',        wa:'971501234568' },
+      { prod:'Steel Rebar A500',              spec:'ASTM A615 Gr.60 · SASO certified · Aramco-approved',   origin:'Izmir, TR → Jeddah',     fob:'$527/MT',    fr:'$64/MT',    duty:'$27/MT',    land:'$618/MT',    ch:-1.8, risk:'low', email:'rebar@izmir-steel.com.tr',   wa:'905323456789', cat:'Mega-Project Supply' },
+      { prod:'OPC Cement 52.5R',              spec:'ASTM C150 Type III · Vision 2030 approved · bulk',      origin:'JNPT Mumbai, IN',        fob:'$58/MT',     fr:'$44/MT',    duty:'$3/MT',     land:'$108/MT',    ch:+0.4, risk:'low', email:'cement@jswcement.in',         wa:'912212345680', cat:'Mega-Project Supply' },
+      { prod:'Aluminum Curtain Wall Profile',  spec:'EN AW-6063 T6 · NEOM facade spec · extruded',          origin:'Istanbul, TR → Yanbu',   fob:'$2,840/MT',  fr:'$95/MT',    duty:'$143/MT',   land:'$3,078/MT',  ch:+1.2, risk:'med', email:'alum@alumil.com.tr',          wa:'902121234568', cat:'Mega-Project Supply' },
+      { prod:'Structural Steel A572',          spec:'ASTM A572 Grade 50 · Jubail mill · domestic delivery',  origin:'Jubail, SA (domestic)',  fob:'$540/MT',    fr:'$28/MT',    duty:'$0',        land:'$568/MT',    ch:-2.1, risk:'low', email:'steel@sabic.com.sa',          wa:'966501234568', cat:'Mega-Project Supply' },
+      { prod:'Float Glass 8–12mm',             spec:'EN 572 / NEOM smart facade · low-iron tempered',       origin:'Istanbul, TR → Jeddah',  fob:'$9.80/m²',  fr:'$1.40/m²', duty:'$0.55/m²', land:'$11.75/m²',  ch:+0.8, risk:'med', email:'glass@sisecam.com.tr',        wa:'902121234567', cat:'Mega-Project Supply' },
+      { prod:'Copper Cable 6mm²',              spec:'IEC 60228 · NEOM smart city infra · ZATCA cleared',    origin:'Jebel Ali, AE → Dammam', fob:'$4,850/MT',  fr:'$72/MT',    duty:'$243/MT',   land:'$5,165/MT',  ch:+1.6, risk:'low', email:'cable@ducab.com.ae',          wa:'971501234568', cat:'Mega-Project Supply' },
+      { prod:'Raised Access Floor Panel',      spec:'600×600mm · steel stringer · 12kN SLL · HPL finish · IEC 62485', origin:'Tianjin, CN → Dammam',  fob:'$42/m²',     fr:'$8/m²',     duty:'$3/m²',     land:'$56/m²',     ch:+1.4, risk:'med', email:'floor@kingspan-cn.com',       wa:'862234567890', cat:'CFS Data Centre' },
+      { prod:'CFS Data Hall Partition Kit',    spec:'AISI S240 · 92mm stud · 1h fire-rated · flat-pack KD · NFPA 75', origin:'Izmir, TR → Jeddah',    fob:'$7.20/Sq.Ft', fr:'$2.80/Sq.Ft', duty:'$0.50/Sq.Ft', land:'$10.50/Sq.Ft', ch:-0.6, risk:'low', email:'cfs@yilmazcelik.com.tr',     wa:'905321111111', cat:'CFS Data Centre' },
+      { prod:'Hot-Dip Galv. Cable Ladder',     spec:'EN 61537 · 300mm W · 3m sections · 50kg/m SWL · ZATCA', origin:'Jebel Ali, AE → Dammam', fob:'$28/m',      fr:'$6/m',      duty:'$2/m',      land:'$36/m',      ch:+0.8, risk:'low', email:'cable@ducab.com.ae',          wa:'971501234568', cat:'CFS Data Centre' },
+      { prod:'CFS Generator Enclosure Panel',  spec:'AISI S240 · 40dB acoustic · marine-grade finish · flat-pack', origin:'Izmir, TR → Yanbu',     fob:'$8.40/Sq.Ft', fr:'$3.10/Sq.Ft', duty:'$0.42/Sq.Ft', land:'$12.00/Sq.Ft', ch:+0.3, risk:'low', email:'cfs@yilmazcelik.com.tr',     wa:'905321111111', cat:'CFS Data Centre' },
+      { prod:'Modular CFS UPS Room Kit',       spec:'Pre-fab · 4×6m cells · 2h fire-rated · DDP site · SASO', origin:'Shanghai, CN → Dammam',  fob:'$5.80/Sq.Ft', fr:'$2.40/Sq.Ft', duty:'$0.30/Sq.Ft', land:'$8.50/Sq.Ft',  ch:-1.2, risk:'med', email:'modular@sfabrication.cn',    wa:'862134567891', cat:'CFS Data Centre' },
+      { prod:'Fire-Rated Partition Wall 2h',   spec:'UL certified · NFPA 75/76 · CFS + mineral wool infill · KD', origin:'Izmir, TR → Jeddah',    fob:'$9.20/Sq.Ft', fr:'$3.50/Sq.Ft', duty:'$0.46/Sq.Ft', land:'$13.20/Sq.Ft', ch:+0.5, risk:'low', email:'cfs@yilmazcelik.com.tr',     wa:'905321111111', cat:'CFS Data Centre' },
     ],
     alerts:[
       { icon:'🇸🇦', title:'NEOM tender round 14 active — Steel Rebar 45,000 MT · batch pricing live · SAR denomination available', tag:'t-clear', lbl:'TENDER', time:'1h ago' },
@@ -688,6 +718,70 @@ const CORRIDORS = {
       { lbl:'Jeddah Port Congestion', score:52, color:'#e8a94a' },
       { lbl:'FX Risk (SAR peg)',      score:18, color:'#22c55e' },
       { lbl:'SASO Compliance',        score:35, color:'#22c55e' },
+    ],
+  },
+
+  wc: {
+    name: '🌲 Pacific West Coast',
+    desc: 'Trans-Pacific building materials corridor — Southeast Asia &amp; China → Port of Long Beach / Oakland → I-80 distribution hub in Reno, NV serving Western US construction markets. Structural plywood, insulation, and OSB for residential, commercial &amp; reconstruction projects. US CBP pre-clearance · FSC chain-of-custody · Section 301 compliance managed.',
+    stats: [
+      { val:'$8.4B',  lbl:'US Wood Panel Imports/yr' },
+      { val:'3',      lbl:'Active Routes'             },
+      { val:'2',      lbl:'Open Mandates'             },
+      { val:'$619',   lbl:'Plywood Landed/MT (Reno)'  },
+    ],
+    mapCenter:[37, -116], mapZoom:5,
+    routes:[
+      { path:[[33.77,-118.22],[34.5,-118.1],[36.0,-119.0],[37.5,-119.5],[38.5,-119.8],[39.53,-119.81]], name:'Long Beach → I-5 / I-80 → Reno, NV',        color:'#2dd4bf', product:'Structural Plywood PS 1-09 · Malaysian origin' },
+      { path:[[37.8,-122.3],[38.0,-121.3],[38.5,-120.5],[39.0,-120.0],[39.53,-119.81]],                 name:'Oakland → I-80 → Reno, NV',                  color:'#5b5fef', product:'Mineral Wool Insulation R-30 · Chinese origin'  },
+      { path:[[33.77,-118.22],[34.0,-117.5],[35.5,-116.5],[36.2,-115.2],[40.7,-111.9]],                 name:'Long Beach → I-15 → Las Vegas / Salt Lake City', color:'#e8a94a', product:'OSB 7/16" PS 2-16 · Secondary West Coast dist.' },
+    ],
+    ports:{
+      origins:[
+        { pos:[3.0,  101.4], name:'Port Klang (Pelabuhan Klang)', country:'Malaysia'  },
+        { pos:[31.2, 121.5], name:'Port of Shanghai',             country:'China'     },
+        { pos:[-6.1, 106.9], name:'Tanjung Priok (Jakarta)',      country:'Indonesia' },
+      ],
+      dests:[
+        { pos:[33.77, -118.22], name:'Port of Long Beach',        country:'California, USA' },
+        { pos:[37.8,  -122.30], name:'Port of Oakland',           country:'California, USA' },
+        { pos:[39.53, -119.81], name:'Reno Distribution Hub',     country:'Nevada, USA'     },
+        { pos:[36.2,  -115.20], name:'Las Vegas (Secondary)',      country:'Nevada, USA'     },
+        { pos:[40.7,  -111.90], name:'Salt Lake City (Tertiary)', country:'Utah, USA'       },
+      ],
+    },
+    costs:[
+      { prod:'Structural Plywood PS 1-09',  spec:'PS 1-09 / APA-rated · 4×8 · 19/32" · FSC-certified · treated',    origin:'Port Klang, MY', fob:'$420/MT', fr:'$185/MT', duty:'$14/MT', land:'$619/MT', ch:-1.4, risk:'low', email:'plywood@timbergroup.com.my', wa:'60322345678',  cat:'Import (Trans-Pacific)' },
+      { prod:'Mineral Wool Insulation R-30',spec:'ASTM C665 · R-30 · unfaced batt · 16"×48" · fire-rated Class A',   origin:'Shanghai, CN',   fob:'$280/MT', fr:'$165/MT', duty:'$42/MT', land:'$487/MT', ch:+0.8, risk:'med', email:'insulation@taishanfiber.cn',  wa:'862134567890', cat:'Import (Trans-Pacific)' },
+      { prod:'OSB 7/16" Oriented Strand Board',spec:'PS 2-16 / APA Exposure 1 · 4×8 sheets · tongue-and-groove edges', origin:'Port Klang, MY', fob:'$360/MT', fr:'$185/MT', duty:'$0',     land:'$545/MT', ch:-2.1, risk:'low', email:'osb@sarawaktimber.com.my',   wa:'60329876543',  cat:'Import (Trans-Pacific)' },
+      { prod:'Plywood PS 1-09 · Long Beach',    spec:'CBP-cleared · import yard · same-day pickup · min 1 truck (22 MT)',  origin:'Long Beach, CA', fob:'Ex-Yard $628/MT', fr:'$24/MT', duty:'$0', land:'$652/MT', ch:-1.4, risk:'low', email:'plywood@timbergroup.com.my', wa:'60322345678',  cat:'By Location' },
+      { prod:'OSB 7/16" · Long Beach',          spec:'APA Exposure 1 · import yard · same-day pickup · min 22 MT',        origin:'Long Beach, CA', fob:'Ex-Yard $556/MT', fr:'$24/MT', duty:'$0', land:'$580/MT', ch:-2.1, risk:'low', email:'osb@sarawaktimber.com.my',   wa:'60329876543',  cat:'By Location' },
+      { prod:'Mineral Wool R-30 · Oakland',     spec:'ASTM C665 · Oakland import yard · next-day NorCal delivery',        origin:'Oakland, CA',    fob:'Ex-Yard $492/MT', fr:'$28/MT', duty:'$0', land:'$522/MT', ch:+0.8, risk:'low', email:'insulation@taishanfiber.cn',  wa:'862134567890', cat:'By Location' },
+      { prod:'Plywood PS 1-09 · Reno Hub',      spec:'I-80 distribution center · NV/UT/AZ · 2–3 day transit · min 22 MT', origin:'Reno, NV',       fob:'Ex-Hub $619/MT',  fr:'$32/MT', duty:'$0', land:'$651/MT', ch:-1.4, risk:'low', email:'plywood@timbergroup.com.my', wa:'60322345678',  cat:'By Location' },
+      { prod:'Mineral Wool R-30 · Reno Hub',    spec:'I-80 hub · full Western US reach · split shipments available',      origin:'Reno, NV',       fob:'Ex-Hub $487/MT',  fr:'$32/MT', duty:'$0', land:'$519/MT', ch:+0.8, risk:'low', email:'insulation@taishanfiber.cn',  wa:'862134567890', cat:'By Location' },
+      { prod:'OSB 7/16" · Las Vegas',           spec:'I-15 distribution yard · NV/AZ delivery · min 22 MT',              origin:'Las Vegas, NV',  fob:'Ex-Hub $565/MT',  fr:'$36/MT', duty:'$0', land:'$601/MT', ch:-2.1, risk:'low', email:'osb@sarawaktimber.com.my',   wa:'60329876543',  cat:'By Location' },
+      { prod:'OSB 7/16" · Salt Lake City',      spec:'I-15/I-80 interchange hub · UT/ID/WY delivery · min 22 MT',        origin:'Salt Lake City, UT', fob:'Ex-Hub $572/MT', fr:'$40/MT', duty:'$0', land:'$612/MT', ch:-2.1, risk:'low', email:'osb@sarawaktimber.com.my', wa:'60329876543',  cat:'By Location' },
+      { prod:'Plywood PS 1-09 · Phoenix',       spec:'I-10 distribution yard · AZ/NM/NV delivery · min 22 MT',           origin:'Phoenix, AZ',    fob:'Ex-Hub $638/MT',  fr:'$42/MT', duty:'$0', land:'$680/MT', ch:-1.4, risk:'low', email:'plywood@timbergroup.com.my', wa:'60322345678',  cat:'By Location' },
+    ],
+    alerts:[
+      { icon:'🚢', title:'Port of Long Beach: container dwell time 2.1 days — plywood/panel imports clearing ahead of schedule',         tag:'t-clear', lbl:'PORT',   time:'2h ago' },
+      { icon:'🌲', title:'Timber Group (MY) FSC batch KL-2291 — PS 1-09 APA stamp confirmed · US CBP pre-clearance PASS',               tag:'t-clear', lbl:'MTC',    time:'4h ago' },
+      { icon:'🏗️', title:'Reno residential starts +18% YoY — plywood allocation tightening, Q3 delivery window closing',                tag:'t-warn',  lbl:'SUPPLY', time:'6h ago' },
+      { icon:'🛣️', title:'I-80 Donner Pass corridor clear — no weather delays · Reno delivery ETA on schedule · chain law lifted',      tag:'t-clear', lbl:'ROUTE',  time:'8h ago' },
+    ],
+    vault:[
+      { name:'OFAC SDN Screen',               st:'vs-clear',   lbl:'CLEAR'   },
+      { name:'US CBP Import Compliance',       st:'vs-clear',   lbl:'CLEAR'   },
+      { name:'KYC — Timber Group (MY)',       st:'vs-clear',   lbl:'VALID'   },
+      { name:'FSC Chain-of-Custody (MY)',     st:'vs-clear',   lbl:'VERIFIED'},
+      { name:'Section 301 Duty Check (CN)',   st:'vs-active',  lbl:'WATCH'   },
+      { name:'Audit Trail',                   st:'vs-clear',   lbl:'ON'      },
+    ],
+    risks:[
+      { lbl:'Section 301 Tariffs (CN Insulation)', score:52, color:'#e8a94a' },
+      { lbl:'I-80 Winter Weather (Donner Pass)',    score:44, color:'#22c55e' },
+      { lbl:'Long Beach Port Congestion',           score:32, color:'#22c55e' },
+      { lbl:'MY Plywood Lead Time (6–8 wks)',       score:38, color:'#22c55e' },
     ],
   },
 
@@ -812,6 +906,7 @@ function renderRisks(key) {
 }
 
 function renderCosts(key) {
+  _openDrawerData = null;
   const isGaza = key === 'gaza';
   document.getElementById('th-fob').textContent     = 'FOB';
   document.getElementById('th-freight').textContent = isGaza ? 'Logistics' : 'Freight';
@@ -820,18 +915,61 @@ function renderCosts(key) {
   _activeCorridor = key;
   _contacts = rows.map(r => ({ email:r.email, wa:r.wa, prod:r.prod, spec:r.spec, origin:r.origin||'', fob:r.fob||'' }));
   const hasCats = rows.some(r => r.cat);
+
+  // Pre-compute per-category stats for banners
+  const catGroups = {};
+  if (hasCats) {
+    rows.forEach(r => {
+      if (!catGroups[r.cat]) catGroups[r.cat] = { count:0, risks:{high:0,med:0,low:0} };
+      catGroups[r.cat].count++;
+      if (r.risk) catGroups[r.cat].risks[r.risk] = (catGroups[r.cat].risks[r.risk]||0) + 1;
+    });
+  }
+
   let html = '';
   let lastCat = null;
   rows.forEach((row, i) => {
     if (hasCats && row.cat !== lastCat) {
-      const isCFSCat = row.cat === 'CFS Mid-Rise';
-      html += `<tr class="ct-divider"><td colspan="9"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:${isCFSCat ? 'var(--teal)' : 'var(--muted)'}">${isCFSCat ? '🏗️' : '📦'} ${row.cat}</span></td></tr>`;
+      const isCFSCat   = row.cat === 'CFS Mid-Rise';
+      const isCFSDCCat = row.cat === 'CFS Data Centre';
+      const isWHCat    = row.cat === 'From Warehouse';
+      const isByLocCat = row.cat === 'By Location';
+      const catColor = isCFSCat ? 'var(--teal)' : isCFSDCCat ? 'var(--violet)' : isWHCat ? 'var(--green)' : isByLocCat ? 'var(--blue)' : 'var(--muted)';
+      const catBg    = isCFSCat ? 'rgba(45,212,191,.06)' : isCFSDCCat ? 'rgba(139,143,248,.06)' : isWHCat ? 'rgba(34,197,94,.06)' : isByLocCat ? 'rgba(59,130,246,.06)' : 'rgba(136,136,168,.04)';
+      const catIcon  = isCFSCat ? '🏗️' : isCFSDCCat ? '🖥️' : isWHCat ? '🏪' : isByLocCat ? '📍' : '📦';
+      const catTag   = isCFSCat    ? 'Cold-formed steel structural systems'
+                     : isCFSDCCat  ? 'NFPA 75/76 · SASO-certified · hyperscale DC spec'
+                     : isWHCat     ? 'Pre-positioned stock · 24–48h dispatch'
+                     : isByLocCat  ? 'Ex-yard / ex-hub · CBP-cleared · local delivery'
+                     : row.cat === 'Mega-Project Supply'      ? 'Vision 2030 mega-project sourcing'
+                     : row.cat === 'Import (Trans-Pacific)'   ? 'Trans-Pacific ocean freight · CBP-cleared'
+                     : row.cat === 'Bulk Commodities'         ? 'Bulk commodity imports & domestic supply'
+                     : '';
+      const grp   = catGroups[row.cat];
+      const risks = grp.risks;
+      const riskParts = [
+        risks.high ? `<span style="color:var(--red)">${risks.high} HIGH</span>` : '',
+        risks.med  ? `<span style="color:var(--gold)">${risks.med} MED</span>`  : '',
+        risks.low  ? `<span style="color:var(--green)">${risks.low} LOW</span>` : '',
+      ].filter(Boolean).join('<span style="color:var(--border2);margin:0 4px">·</span>');
+      html += `<tr><td colspan="9" style="padding:0;border-bottom:1px solid var(--border)">
+        <div class="cat-banner-inner" style="border-left:3px solid ${catColor};background:${catBg}">
+          <div class="cat-banner-left">
+            <span class="cat-banner-icon">${catIcon}</span>
+            <span class="cat-banner-name" style="color:${catColor}">${row.cat}</span>
+            <span class="cat-banner-count">${grp.count} item${grp.count!==1?'s':''}</span>
+            <span class="cat-banner-tag">${catTag}</span>
+          </div>
+          <div class="cat-banner-right">${riskParts}</div>
+        </div>
+      </td></tr>`;
       lastCat = row.cat;
     }
     const up = row.ch > 0;
     const dotCls = row.risk === 'high' ? 'dot-high' : row.risk === 'med' ? 'dot-med' : 'dot-low';
-    html += `<tr>
-      <td><div class="tc-prod">${row.prod}</div><div class="tc-spec">${row.spec}</div></td>
+    const specChips = row.spec.split(' · ').map(s => `<span class="spec-chip">${s}</span>`).join('');
+    html += `<tr class="cost-row-clickable" onclick="toggleCostRow(this,${i})">
+      <td><div class="tc-prod">${row.prod}</div><div class="spec-chips">${specChips}</div></td>
       <td class="tc-origin">${row.origin}</td>
       <td class="tc-price">${row.fob}</td>
       <td class="tc-price">${row.fr}</td>
@@ -839,13 +977,94 @@ function renderCosts(key) {
       <td class="tc-price">${row.land}</td>
       <td class="${up ? 'tc-up' : 'tc-dn'}">${up ? '▲' : '▼'} ${Math.abs(row.ch)}%</td>
       <td><span class="dot ${dotCls}" title="${row.risk} risk"></span></td>
-      <td style="white-space:nowrap">
+      <td style="white-space:nowrap" onclick="event.stopPropagation()">
         <button class="dact" onclick="showContact(this,${i})">Contact</button>
         <button class="dact" onclick="openAIModal(${i})">AI Tools</button>
       </td>
     </tr>`;
   });
   document.getElementById('cost-tbody').innerHTML = html;
+}
+
+/* ── PRODUCT DRAWER ── */
+let _openDrawerData = null;
+
+function toggleCostRow(tr, i) {
+  const wasOpen = _openDrawerData && _openDrawerData.tr === tr;
+  if (_openDrawerData) {
+    _openDrawerData.drawerTr.remove();
+    _openDrawerData.tr.classList.remove('cost-row-open');
+    _openDrawerData = null;
+  }
+  if (wasOpen) return;
+
+  const c = CORRIDORS[_activeCorridor].costs[i];
+  const up = c.ch > 0;
+
+  const p = c.prod.toLowerCase();
+  const diagIcon = p.includes('floor panel')     ? '🔲'
+                 : p.includes('partition')        ? '🧱'
+                 : p.includes('fire-rated') || p.includes('fire rated') ? '🔥'
+                 : p.includes('wall frame') || p.includes('wall kit')   ? '🧱'
+                 : p.includes('cable ladder')     ? '🔌'
+                 : p.includes('enclosure')        ? '⚙️'
+                 : p.includes('ups')              ? '🔋'
+                 : p.includes('rebar')            ? '🔩'
+                 : p.includes('structural steel') ? '🏗️'
+                 : p.includes('cement')           ? '🏗️'
+                 : p.includes('plywood')          ? '🪵'
+                 : p.includes('osb')              ? '🪵'
+                 : p.includes('insulation')       ? '🧊'
+                 : p.includes('glass')            ? '🪟'
+                 : p.includes('curtain wall')     ? '🪟'
+                 : p.includes('hollow block') || p.includes('aac block') ? '🧱'
+                 : p.includes('pipe')             ? '🔧'
+                 : p.includes('tank')             ? '🪣'
+                 : p.includes('cable')            ? '⚡'
+                 : p.includes('tile')             ? '🔲'
+                 : p.includes('generator')        ? '⚡'
+                 : p.includes('aggregate') || p.includes('sand') ? '⛏️'
+                 : p.includes('aluminum')         ? '🏛️'
+                 : '📦';
+
+  const tags = c.spec.split(' · ').map(s => `<span class="cost-drawer-tag">${s}</span>`).join('');
+  const fobMatch = String(c.fob).replace(/,/g,'').match(/\$?([\d.]+)\s*\/\s*([A-Za-z.]+)/);
+  const price = fobMatch ? fobMatch[1] : '';
+  const unit  = fobMatch ? fobMatch[2].toUpperCase() : 'MT';
+  const loiQs = `product=${encodeURIComponent(c.prod)}&price=${price}&unit=${encodeURIComponent(unit)}&origin=${encodeURIComponent(c.origin)}&tool=loi`;
+  const frQs  = `product=${encodeURIComponent(c.prod)}&origin=${encodeURIComponent(c.origin)}&tool=freight`;
+
+  const drawerTr = document.createElement('tr');
+  drawerTr.className = 'cost-drawer-tr';
+  drawerTr.innerHTML = `<td colspan="9" style="padding:0!important">
+    <div class="cost-drawer-inner">
+      <div class="cost-drawer-diag">
+        <div class="cost-drawer-diag-icon">${diagIcon}</div>
+        <div class="cost-drawer-diag-origin">${c.origin}</div>
+      </div>
+      <div class="cost-drawer-body">
+        <div class="cost-drawer-name">${c.prod}</div>
+        <div class="cost-drawer-tags">${tags}</div>
+        <div class="cost-drawer-prices">
+          <div><div class="cost-drawer-plbl">FOB / Ex-WH</div><div class="cost-drawer-pval">${c.fob}</div></div>
+          <div><div class="cost-drawer-plbl">Freight</div><div class="cost-drawer-pval">${c.fr}</div></div>
+          <div><div class="cost-drawer-plbl">Duty</div><div class="cost-drawer-pval">${c.duty}</div></div>
+          <div><div class="cost-drawer-plbl">Landed</div><div class="cost-drawer-pval landed">${c.land}</div></div>
+          <div><div class="cost-drawer-plbl">7d Δ</div><div class="cost-drawer-pval" style="color:${up?'var(--red)':'var(--green)'}">${up?'▲':'▼'} ${Math.abs(c.ch)}%</div></div>
+        </div>
+        <div class="cost-drawer-acts">
+          <button class="dact" onclick="event.stopPropagation();showContact(this,${i})">📧 Contact</button>
+          <button class="dact" onclick="event.stopPropagation();openAIModal(${i})">🤖 AI Tools</button>
+          <a class="dact" href="loi-contracts.html?${loiQs}" onclick="event.stopPropagation()" style="text-decoration:none">📄 Generate LOI →</a>
+          <a class="dact" href="loi-contracts.html?${frQs}" onclick="event.stopPropagation()" style="text-decoration:none">🚢 Freight Adv. →</a>
+        </div>
+      </div>
+    </div>
+  </td>`;
+
+  tr.classList.add('cost-row-open');
+  tr.insertAdjacentElement('afterend', drawerTr);
+  _openDrawerData = { tr, drawerTr };
 }
 
 function showContact(btn, i) {
@@ -935,45 +1154,244 @@ function loadUserMandates() {
 function setTypeFilter(type) {
   docTypeFilter = type;
   document.querySelectorAll('#type-filters .fbtn').forEach(b => b.classList.toggle('on', b.dataset.type === type));
-  renderDocsList();
+  renderProjectCards();
 }
 
 function setCorrFilter(corr) {
   docCorrFilter = corr;
   document.querySelectorAll('#corr-filters .fbtn').forEach(b => b.classList.toggle('on', b.dataset.corr === corr));
-  renderDocsList();
+  renderProjectCards();
 }
 
-function renderDocsList() {
-  const q = (document.getElementById('doc-search').value || '').toLowerCase();
-  const stCls = { done:'dstat-done', pending:'dstat-pending', draft:'dstat-draft' };
-  const stLbl = { done:'DONE', pending:'PENDING', draft:'DRAFT' };
-  const allDocs = [...loadUserMandates(), ...DOCS];
+function renderProjectCards() {
+  const q       = (document.getElementById('doc-search').value || '').toLowerCase();
+  const stCls   = { done:'dstat-done', pending:'dstat-pending', draft:'dstat-draft' };
+  const stLbl   = { done:'✓ DONE', pending:'PENDING', draft:'DRAFT' };
+  let userSaved = [];
+  try { userSaved = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); } catch(e) {}
 
-  const rows = allDocs.filter(d => {
-    const tOk = docTypeFilter === 'All' || d.type === docTypeFilter;
-    const cOk = docCorrFilter === 'all' || d.corridor === docCorrFilter;
-    const qOk = !q || [d.product, d.dest, d.mandate, d.type, d.spec].some(v => v.toLowerCase().includes(q));
-    return tOk && cOk && qOk;
+  // Group static DOCS by mandate ref
+  const groups = {};
+  DOCS.forEach(d => {
+    if (!groups[d.mandate]) groups[d.mandate] = { key:d.mandate, corr:d.corr, corridor:d.corridor, docs:[] };
+    groups[d.mandate].docs.push(d);
   });
 
-  document.getElementById('docs-tbody').innerHTML = rows.length
-    ? rows.map(d => `<tr>
-        <td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted)">${d.id}</td>
-        <td><span class="dbadge ${d.cls}">${d.icon} ${d.type}</span></td>
-        <td><div class="dname">${d.product}</div><div class="dspec">${d.spec}</div></td>
-        <td style="font-size:12px">${d.dest}</td>
-        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--indigo)">#${d.mandate}</td>
-        <td style="font-size:12px">${d.corr}</td>
-        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)">${d.date}</td>
-        <td><span class="dstat ${stCls[d.status]}">${stLbl[d.status]}</span></td>
-        <td>
+  let cards = '';
+
+  // ── User mandate cards (always first)
+  userSaved.forEach(m => {
+    const prodLabel = m.productLabel || (m.product + (m.detail ? ' · ' + m.detail : ''));
+    const projName  = m.projectName || m.id;
+    if (q && ![projName, prodLabel, m.country, m.product].some(v => v && v.toLowerCase().includes(q))) return;
+    const bMatch = String(m.budget || '').replace(/,/g,'').match(/\$?([\d.]+)/);
+    const price  = bMatch ? bMatch[1] : '';
+    const qs = 'product=' + encodeURIComponent(prodLabel)
+             + '&unit='   + encodeURIComponent(m.unit || 'MT')
+             + (m.incoterms ? '&incoterm=' + encodeURIComponent(m.incoterms) : '')
+             + (price ? '&price=' + encodeURIComponent(price) : '');
+    const genRow = GEN_TOOLS.map(g =>
+      `<a href="loi-contracts.html?tool=${g.tool}&${qs}" class="proj-gen-btn">${g.icon} ${g.name}</a>`
+    ).join('');
+    cards += `
+    <div class="proj-card">
+      <div class="proj-card-hd" onclick="toggleProjCard(this)">
+        <div style="min-width:0">
+          <div class="proj-card-name">${projName}</div>
+          <div class="proj-card-meta">${prodLabel}${m.qty ? ' · ' + m.qty + ' ' + (m.unit || 'MT') : ''}${m.country ? ' → ' + m.country : ''}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <span class="proj-corr-tag">📋 My Project</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted)">${m.date || ''}</span>
+          <span class="dstat dstat-draft">ACTIVE</span>
+          <span class="proj-chevron">▾</span>
+        </div>
+      </div>
+      <div class="proj-card-body open">
+        <div class="proj-empty">No documents generated yet — click a generator below.</div>
+        <div class="proj-gen-row">${genRow}</div>
+      </div>
+    </div>`;
+  });
+
+  // ── Static DOCS grouped by mandate
+  Object.values(groups).forEach(g => {
+    if (docCorrFilter !== 'all' && g.corridor !== docCorrFilter) return;
+    const filtDocs = g.docs.filter(d => {
+      const tOk = docTypeFilter === 'All' || d.type === docTypeFilter;
+      const qOk = !q || [d.product, d.dest, d.mandate, d.type, d.spec].some(v => v.toLowerCase().includes(q));
+      return tOk && qOk;
+    });
+    if (q && !filtDocs.length) return;
+    const dispDocs = filtDocs.length ? filtDocs : g.docs;
+    const pendCount = g.docs.filter(d => d.status === 'pending').length;
+    const doneCount = g.docs.filter(d => d.status === 'done').length;
+    const summaryBadge = pendCount > 0
+      ? `<span class="dstat dstat-pending">${pendCount} PENDING</span>`
+      : `<span class="dstat dstat-done">✓ ${doneCount} DONE</span>`;
+    const docsHtml = dispDocs.map(d =>
+      `<div class="proj-doc-row">
+        <span class="dbadge ${d.cls}" style="flex-shrink:0">${d.icon} ${d.type}</span>
+        <div style="flex:1;min-width:0">
+          <div class="dname">${d.product}</div>
+          <div class="dspec">${d.spec} · ${d.dest}</div>
+        </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);flex-shrink:0">${d.date}</span>
+        <span class="dstat ${stCls[d.status]}" style="flex-shrink:0">${stLbl[d.status]}</span>
+        <div style="display:flex;gap:4px;flex-shrink:0">
           <a href="loi-preview.html" class="dact">View</a>
           <a href="loi-preview.html" class="dact">PDF</a>
-          <button class="dact" onclick="navigator.clipboard&&navigator.clipboard.writeText(window.location.href+'?doc=${d.id}')">Share</button>
-        </td>
-      </tr>`).join('')
-    : `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:12px">No documents match the current filters.</td></tr>`;
+        </div>
+      </div>`).join('');
+    cards += `
+    <div class="proj-card">
+      <div class="proj-card-hd" onclick="toggleProjCard(this)">
+        <div style="min-width:0">
+          <div class="proj-card-name">#${g.key}</div>
+          <div class="proj-card-meta">${g.docs[0].product} · ${g.docs[0].dest}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+          <span class="proj-corr-tag">${g.corr}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted)">${g.docs[0].date}</span>
+          <span style="font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace">${g.docs.length} doc${g.docs.length !== 1 ? 's' : ''}</span>
+          ${summaryBadge}
+          <span class="proj-chevron">▾</span>
+        </div>
+      </div>
+      <div class="proj-card-body open">${docsHtml}</div>
+    </div>`;
+  });
+
+  const el = document.getElementById('proj-cards');
+  if (el) el.innerHTML = cards ||
+    `<div style="text-align:center;padding:60px 20px;color:var(--muted);font-family:'IBM Plex Mono',monospace;font-size:12px">No projects match the current filters.</div>`;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   COMMAND BAR
+───────────────────────────────────────────────────────────────── */
+const CMD_LIST = [
+  { section:'Navigate', icon:'🌐', label:'IMEC Corridor',          desc:'India → Middle East → Europe',        action:()=>setCorridor('us')                              },
+  { section:'Navigate', icon:'🇵🇸', label:'Gaza Reconstruction',   desc:'Humanitarian trade corridor',          action:()=>setCorridor('gaza')                            },
+  { section:'Navigate', icon:'🇺🇦', label:'Ukraine Reconstruction',desc:'Post-war supply chains',               action:()=>setCorridor('ua')                              },
+  { section:'Navigate', icon:'🇸🇦', label:'Saudi Vision 2030',     desc:'KSA mega-project sourcing',            action:()=>setCorridor('cfs')                             },
+  { section:'Navigate', icon:'🌲', label:'Pacific West Coast',      desc:'US West Coast logistics corridor',     action:()=>setCorridor('wc')                              },
+  { section:'Navigate', icon:'📁', label:'Projects',                desc:'All documents & mandates',             action:()=>setCorridor('docs')                            },
+  { section:'Generate', icon:'📄', label:'Generate LOI',            desc:'Letter of Intent · auto-filled',       action:()=>goToolCmd('loi')                               },
+  { section:'Generate', icon:'🔒', label:'Draft NDA',               desc:'Bilateral / unilateral NDA',           action:()=>goToolCmd('nda')                               },
+  { section:'Generate', icon:'⚖️', label:'Draft SPA',              desc:'Sale & Purchase Agreement · ICC',      action:()=>goToolCmd('spa')                               },
+  { section:'Generate', icon:'🏦', label:'LC Application',          desc:'UCP 600 letter of credit form',        action:()=>goToolCmd('lca')                               },
+  { section:'Generate', icon:'📦', label:'Purchase Order',          desc:'Line items & trade terms',             action:()=>goToolCmd('po')                                },
+  { section:'Generate', icon:'🚢', label:'Freight Advisory',        desc:'Route, rate & ETA estimate',           action:()=>goToolCmd('freight')                           },
+  { section:'Generate', icon:'🛃', label:'HS Code Classifier',      desc:'Customs tariff classification',        action:()=>goToolCmd('hs')                                },
+  { section:'Platform', icon:'🛡️', label:'Set New Mandate',        desc:'Define sourcing parameters',           action:()=>{ window.location.href='agent-mandate.html'; } },
+  { section:'Platform', icon:'🔄', label:'Negotiation Agent',       desc:'AI-powered deal orchestration',        action:()=>{ window.location.href='negotiation-agent.html'; } },
+  { section:'Platform', icon:'🗂️', label:'Open CDE',               desc:'Common Data Environment',              action:()=>{ window.location.href='cde.html'; }           },
+  { section:'Platform', icon:'👤', label:'Profile',                 desc:'Account & mandate overview',           action:()=>{ window.location.href='profile.html'; }       },
+];
+
+let _cmdIdx = -1;
+
+function openCmd() {
+  document.getElementById('cmd-overlay').classList.add('open');
+  const inp = document.getElementById('cmd-input');
+  inp.value = '';
+  _cmdIdx = -1;
+  filterCmd();
+  setTimeout(() => inp.focus(), 40);
+}
+
+function closeCmd() {
+  document.getElementById('cmd-overlay').classList.remove('open');
+}
+
+function goToolCmd(key) {
+  let qs = '';
+  try {
+    const list = JSON.parse(localStorage.getItem('sloi_mandates') || '[]');
+    const m = list[0];
+    if (m) {
+      const prod = m.productLabel || (m.product + (m.detail ? ' · ' + m.detail : ''));
+      const bMatch = String(m.budget || '').replace(/,/g,'').match(/\$?([\d.]+)/);
+      qs = '&product=' + encodeURIComponent(prod)
+         + '&unit='    + encodeURIComponent(m.unit || 'MT')
+         + (bMatch ? '&price=' + encodeURIComponent(bMatch[1]) : '')
+         + (m.incoterms ? '&incoterm=' + encodeURIComponent(m.incoterms) : '');
+    }
+  } catch(e) {}
+  window.location.href = 'loi-contracts.html?tool=' + key + qs;
+}
+
+function filterCmd() {
+  const q = (document.getElementById('cmd-input').value || '').trim().toLowerCase();
+  const items = q ? CMD_LIST.filter(c =>
+    c.label.toLowerCase().includes(q) ||
+    c.desc.toLowerCase().includes(q)  ||
+    c.section.toLowerCase().includes(q)
+  ) : CMD_LIST;
+
+  _cmdIdx = -1;
+  if (!items.length) {
+    document.getElementById('cmd-results').innerHTML =
+      `<div class="cmd-empty">No results for "${q}"</div>`;
+    document.getElementById('cmd-results')._items = [];
+    return;
+  }
+
+  const sections = {};
+  items.forEach(c => (sections[c.section] = sections[c.section] || []).push(c));
+
+  let html = '';
+  Object.entries(sections).forEach(([sec, cmds]) => {
+    html += `<div class="cmd-section">${sec}</div>`;
+    cmds.forEach(c => {
+      const idx = items.indexOf(c);
+      html += `<div class="cmd-item" data-idx="${idx}" onclick="runCmd(${idx})">
+        <span class="cmd-item-icon">${c.icon}</span>
+        <span class="cmd-item-label">${c.label}</span>
+        <span class="cmd-item-desc">${c.desc}</span>
+      </div>`;
+    });
+  });
+
+  const el = document.getElementById('cmd-results');
+  el.innerHTML = html;
+  el._items = items;
+}
+
+function cmdKeyNav(e) {
+  const el = document.getElementById('cmd-results');
+  const rows = el.querySelectorAll('.cmd-item');
+  if (!rows.length) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    _cmdIdx = Math.min(_cmdIdx + 1, rows.length - 1);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    _cmdIdx = Math.max(_cmdIdx - 1, 0);
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    const active = _cmdIdx >= 0 ? _cmdIdx : (rows.length === 1 ? 0 : -1);
+    if (active >= 0) runCmd(parseInt(rows[active].dataset.idx));
+    return;
+  } else { return; }
+  rows.forEach((r, i) => r.classList.toggle('cmd-active', i === _cmdIdx));
+  if (rows[_cmdIdx]) rows[_cmdIdx].scrollIntoView({ block:'nearest' });
+}
+
+function runCmd(idx) {
+  const items = (document.getElementById('cmd-results')._items) || CMD_LIST;
+  const cmd = items[idx];
+  if (!cmd) return;
+  closeCmd();
+  cmd.action();
+}
+
+function toggleProjCard(hd) {
+  const body = hd.nextElementSibling;
+  const chev = hd.querySelector('.proj-chevron');
+  const open = body.classList.toggle('open');
+  if (chev) chev.textContent = open ? '▾' : '▸';
 }
 
 const GEN_TOOLS = [
@@ -1045,11 +1463,10 @@ function renderDocsPanel() {
     `<div class="dtype-row"><div class="dtype-lbl">${t}</div><div class="dtype-val">${n}</div></div>`
   ).join('');
 
-  const corrs = { '🌐 IMEC Corridor': 0, '🇵🇸 Gaza Reconstruction': 0, '🇺🇦 Ukraine': 0, '🌊 Trans-Med': 0, '📋 My Mandates': 0 };
+  const corrs = { '🌐 IMEC Corridor': 0, '🇵🇸 Gaza Reconstruction': 0, '🇺🇦 Ukraine': 0, '📋 My Mandates': 0 };
   allDocs.forEach(d => {
     if (d.corridor === 'us')        corrs['🌐 IMEC Corridor']++;
     else if (d.corridor === 'gaza') corrs['🇵🇸 Gaza Reconstruction']++;
-    else if (d.corridor === 'tmed') corrs['🌊 Trans-Med']++;
     else if (d.corridor === 'user') corrs['📋 My Mandates']++;
     else                            corrs['🇺🇦 Ukraine']++;
   });
@@ -1088,7 +1505,7 @@ function setCorridor(key) {
   if (isMap) setTimeout(() => map && map.invalidateSize(), 80);
   document.getElementById('docs-view').classList.toggle('dv-active', isDocs);
 
-  if (isDocs) { renderDocsPanel(); renderDocsList(); return; }
+  if (isDocs) { renderDocsPanel(); renderProjectCards(); return; }
 
   // Restore left-panel labels when switching back to a corridor
   document.getElementById('plbl-alerts').textContent = '// AI Agent Alerts';
@@ -1108,8 +1525,10 @@ function setCorridor(key) {
 ───────────────────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   initMap();
-  const _startView = new URLSearchParams(window.location.search).get('view');
-  setCorridor(_startView === 'docs' ? 'docs' : 'us');
+  const _params    = new URLSearchParams(window.location.search);
+  const _startView = _params.get('view');
+  const _startCorr = _params.get('corridor');
+  setCorridor(_startView === 'docs' ? 'docs' : (_startCorr || 'us'));
 
   // Cost time ticker
   let mins = 0;
@@ -1125,10 +1544,30 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('contact-pop').style.display = 'none';
     }
   });
-  // ESC closes overlays
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAIModal(); });
+  // ESC + Ctrl/Cmd+K
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openCmd(); return; }
+    if (e.key === 'Escape') { closeCmd(); closeAIModal(); }
+  });
 });
 </script>
+
+<!-- Command Bar (Ctrl+K) -->
+<div class="cmd-overlay" id="cmd-overlay" onclick="if(event.target===this)closeCmd()">
+  <div class="cmd-modal">
+    <div class="cmd-input-wrap">
+      <span class="cmd-prompt">›_</span>
+      <input class="cmd-input" id="cmd-input" placeholder="Search corridors, generate docs, navigate…" oninput="filterCmd()" onkeydown="cmdKeyNav(event)" autocomplete="off" spellcheck="false"/>
+      <span class="cmd-esc">ESC</span>
+    </div>
+    <div class="cmd-results" id="cmd-results"></div>
+    <div class="cmd-footer">
+      <span class="cmd-footer-hint">↑↓ navigate</span>
+      <span class="cmd-footer-hint">↵ select</span>
+      <span class="cmd-footer-hint">ESC close</span>
+    </div>
+  </div>
+</div>
 
 <!-- Contact popup -->
 <div class="contact-pop" id="contact-pop">
