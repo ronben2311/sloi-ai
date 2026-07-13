@@ -58,7 +58,7 @@
 
     /* ── LEFT PANEL ── */
     .left-panel{
-      width:320px;flex-shrink:0;
+      width:400px;flex-shrink:0;
       background:var(--surface);border-right:1px solid var(--border);
       display:flex;flex-direction:column;overflow-y:auto
     }
@@ -285,12 +285,33 @@
     /* ── AI TOOLS MODAL ── */
     .ai-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
     .ai-overlay.open{display:flex}
-    .ai-modal{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:24px;width:380px;max-width:calc(100vw - 32px)}
+    .ai-modal{background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:0;width:560px;max-width:calc(100vw - 32px);display:flex;flex-direction:column;max-height:92vh;overflow:hidden}
+    .ai-modal-head{padding:20px 22px 16px;border-bottom:1px solid var(--border)}
     .ai-modal-prod{font-family:"Fraunces",serif;font-size:17px;font-weight:900;color:var(--white);margin-bottom:3px}
-    .ai-modal-sub{font-size:11px;color:var(--muted);margin-bottom:18px;font-family:"IBM Plex Mono",monospace}
-    .ai-tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
-    .ai-tool{display:flex;align-items:center;gap:7px;padding:10px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:12px;text-decoration:none;transition:all .15s;cursor:pointer;font-family:"IBM Plex Mono",monospace}
+    .ai-modal-sub{font-size:11px;color:var(--muted);font-family:"IBM Plex Mono",monospace}
+    .ai-modal-body{padding:16px 22px;overflow-y:auto}
+    .ai-scope-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+    .ai-scope-tag{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:3px;border:1px solid;white-space:nowrap}
+    .ai-tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px}
+    .ai-tool{display:flex;align-items:center;gap:7px;padding:9px 12px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:12px;text-decoration:none;transition:all .15s;cursor:pointer;font-family:"IBM Plex Mono",monospace}
     .ai-tool:hover{background:var(--indigo-dim);border-color:var(--indigo);color:var(--violet)}
+    /* AI CHAT PANEL */
+    .ai-chat-panel{border-top:1px solid var(--border);padding:14px 22px 18px}
+    .ai-chat-label{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:700;letter-spacing:.12em;color:var(--violet);text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+    .ai-chat-label::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--violet);display:inline-block;animation:blink 2s infinite}
+    .ai-chat-history{min-height:32px;max-height:220px;overflow-y:auto;margin-bottom:10px;display:flex;flex-direction:column;gap:8px}
+    .ai-msg{font-size:12px;line-height:1.7;padding:9px 12px;border-radius:6px;white-space:pre-wrap}
+    .ai-msg-user{background:rgba(91,95,239,.1);border:1px solid rgba(91,95,239,.2);color:var(--white);align-self:flex-end;max-width:90%;text-align:right}
+    .ai-msg-ai{background:var(--surface2);border:1px solid var(--border2);color:var(--text);align-self:flex-start;max-width:100%}
+    .ai-msg-ai b{color:var(--teal)}
+    .ai-chat-input-row{display:flex;gap:7px;align-items:flex-end}
+    .ai-chat-textarea{flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;padding:9px 11px;color:var(--white);font-size:12px;font-family:"IBM Plex Mono",monospace;resize:none;outline:none;line-height:1.5;min-height:38px;max-height:90px;transition:border-color .15s}
+    .ai-chat-textarea:focus{border-color:var(--indigo)}
+    .ai-chat-textarea::placeholder{color:var(--muted)}
+    .ai-chat-send{background:var(--indigo);border:none;border-radius:6px;color:#fff;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;padding:9px 13px;cursor:pointer;transition:opacity .15s;white-space:nowrap;height:38px;flex-shrink:0}
+    .ai-chat-send:hover{opacity:.85}
+    .ai-chat-send:disabled{opacity:.4;cursor:default}
+    .ai-modal-foot{padding:10px 22px 14px;border-top:1px solid var(--border)}
     .ai-close-btn{width:100%;padding:8px;background:transparent;border:1px solid var(--border2);border-radius:5px;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:11px;cursor:pointer;transition:all .15s}
     .ai-close-btn:hover{border-color:var(--indigo);color:var(--violet)}
 
@@ -1081,10 +1102,50 @@ function showContact(btn, i) {
   pop.style.display = pop.style.display === 'block' ? 'none' : 'block';
 }
 
+/* ─────────────────────────────────────────────────────────────────
+   AI SYSTEM PROMPT — Communication, Tone & Operational Scope
+───────────────────────────────────────────────────────────────── */
+const SLOI_AI_SYSTEM = `You are SLOI AI — an institutional trade intelligence engine operating within a live commodity procurement platform.
+
+COMMUNICATION & TONE:
+- Direct, pragmatic, analytical, authoritative. Speak the native language of international commercial logistics and procurement.
+- Rely on hard data, metric-driven insights, clear risk assessments, and actionable next steps.
+- Never use marketing buzzwords, hyperbole, or vague generalities.
+- Prioritize scannability: structured bullet points, clear metric breakdowns, explicit status markers.
+
+CORE CAPABILITIES:
+1. Landed Cost Optimization — Calculate and assess FOB pricing, maritime/inland freight variances, import tariffs, customs duties, and 7-day corridor risk indices.
+2. Document Orchestration — Assist in generating, auditing, and executing LOIs, NDAs, SPAs, and LC applications.
+3. Risk & Compliance Verification — Flag supply anomalies, port congestion, geopolitical/route risks, and verify supplier compliance vaults against international trade standards.
+
+OPERATIONAL RULES:
+- Never sacrifice commercial accuracy for conversational padding.
+- Treat every transaction with strict confidentiality and professional legal-commercial rigor.
+- When a user inputs a corridor, port, or material spec: immediately evaluate landed cost components and highlight active risk variables.
+- Responses must be concise and scannable. Use bullet points and metric breakdowns. Maximum 4–6 bullet points per response unless more detail is explicitly requested.`;
+
+let _aiChatContext = null; // { prod, spec, fob, fr, duty, land, origin, risk, corridor }
+let _aiChatHistory = [];   // [{role, content}]
+
 function openAIModal(i) {
   const c = _contacts[i];
   document.getElementById('ai-prod').textContent = c.prod;
   document.getElementById('ai-spec').textContent = c.spec;
+
+  // Store product context for AI chat
+  _aiChatContext = c;
+  _aiChatHistory = [];
+  document.getElementById('ai-chat-history').innerHTML = '';
+
+  // Corridor tag
+  const corrData = CORRIDORS[_activeCorridor];
+  const corrTag = document.getElementById('ai-corridor-tag');
+  if (corrData && corrTag) {
+    corrTag.textContent = corrData.name;
+    corrTag.style.display = '';
+  } else if (corrTag) {
+    corrTag.style.display = 'none';
+  }
 
   const fobMatch = String(c.fob).replace(/,/g,'').match(/\$?([\d.]+)\s*\/\s*([A-Za-z.]+)/);
   const price = fobMatch ? fobMatch[1] : '';
@@ -1103,7 +1164,83 @@ function openAIModal(i) {
   document.getElementById('ai-link-lca').href = 'loi-contracts.html?' + qs + '&tool=lca';
 
   document.getElementById('ai-overlay').classList.add('open');
+
+  // Focus chat input
+  setTimeout(() => {
+    const inp = document.getElementById('ai-chat-input');
+    if (inp) inp.focus();
+  }, 120);
 }
+
+async function sendAIChat() {
+  const inp  = document.getElementById('ai-chat-input');
+  const send = document.getElementById('ai-chat-send');
+  const hist = document.getElementById('ai-chat-history');
+  const q    = inp.value.trim();
+  if (!q || send.disabled) return;
+
+  // Append user bubble
+  const userDiv = document.createElement('div');
+  userDiv.className = 'ai-msg ai-msg-user';
+  userDiv.textContent = q;
+  hist.appendChild(userDiv);
+  hist.scrollTop = hist.scrollHeight;
+
+  inp.value = '';
+  send.disabled = true;
+  send.textContent = '…';
+
+  // Build context-aware user message
+  const ctx = _aiChatContext;
+  const corrData = CORRIDORS[_activeCorridor];
+  const contextBlock = ctx ? [
+    `ACTIVE PRODUCT CONTEXT:`,
+    `  Product: ${ctx.prod}`,
+    `  Spec: ${ctx.spec}`,
+    `  Origin: ${ctx.origin}`,
+    `  FOB: ${ctx.fob} | Freight: ${ctx.fr} | Duty: ${ctx.duty} | Landed: ${ctx.land}`,
+    `  7d Change: ${ctx.ch > 0 ? '+' : ''}${ctx.ch}%`,
+    `  Risk Level: ${ctx.risk ? ctx.risk.toUpperCase() : '—'}`,
+    corrData ? `  Corridor: ${corrData.name}` : '',
+  ].filter(Boolean).join('\n') : '';
+
+  _aiChatHistory.push({ role: 'user', content: contextBlock ? contextBlock + '\n\nQUERY: ' + q : q });
+
+  // Loading bubble
+  const loadDiv = document.createElement('div');
+  loadDiv.className = 'ai-msg ai-msg-ai';
+  loadDiv.innerHTML = '<span style="color:var(--muted);font-size:11px;font-family:\'IBM Plex Mono\',monospace">Analyzing…</span>';
+  hist.appendChild(loadDiv);
+  hist.scrollTop = hist.scrollHeight;
+
+  try {
+    const res = await fetch((window.SLOI_API_BASE || '') + '/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: _aiChatHistory, system: SLOI_AI_SYSTEM, max_tokens: 600 }),
+    });
+    const data = await res.json();
+    const reply = (res.ok && data.text) ? data.text : (data.error ? '⚠ ' + data.error : '⚠ No response from API.');
+    _aiChatHistory.push({ role: 'assistant', content: reply });
+    loadDiv.textContent = reply;
+  } catch (err) {
+    loadDiv.textContent = '⚠ Network error — check API connection.';
+  }
+
+  hist.scrollTop = hist.scrollHeight;
+  send.disabled = false;
+  send.textContent = 'Send ↵';
+  inp.focus();
+}
+
+// Allow Enter (without Shift) to send in AI chat
+document.addEventListener('keydown', e => {
+  const inp = document.getElementById('ai-chat-input');
+  if (e.target === inp && e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendAIChat();
+  }
+});
 
 function closeAIModal() {
   document.getElementById('ai-overlay').classList.remove('open');
@@ -1578,18 +1715,54 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- AI Tools modal -->
 <div class="ai-overlay" id="ai-overlay" onclick="if(event.target===this)closeAIModal()">
   <div class="ai-modal">
-    <div class="ai-modal-prod" id="ai-prod"></div>
-    <div class="ai-modal-sub"  id="ai-spec"></div>
-    <div class="ai-tools-grid">
-      <a id="ai-link-loi" href="loi-contracts.html?tool=loi" class="ai-tool">📄 Generate LOI</a>
-      <a id="ai-link-nda" href="loi-contracts.html?tool=nda" class="ai-tool">🔒 Draft NDA</a>
-      <a id="ai-link-spa" href="loi-contracts.html?tool=spa" class="ai-tool">📋 Draft SPA</a>
-      <a id="ai-link-lca" href="loi-contracts.html?tool=lca" class="ai-tool">🏦 Apply for LC</a>
-      <a href="agent-mandate.html" class="ai-tool">🛡️ Compliance Check</a>
-      <a href="negotiation-agent.html" class="ai-tool">🔄 Orchestrate Deal</a>
-      <a href="cde.html" class="ai-tool">🗂️ Add to CDE</a>
+
+    <!-- HEADER -->
+    <div class="ai-modal-head">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div>
+          <div class="ai-modal-prod" id="ai-prod"></div>
+          <div class="ai-modal-sub"  id="ai-spec"></div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--violet);font-weight:700;letter-spacing:.08em;white-space:nowrap;padding-top:3px">🤖 SLOI AI</div>
+      </div>
+      <!-- CAPABILITY SCOPE TAGS -->
+      <div class="ai-scope-bar" style="margin-top:10px">
+        <span class="ai-scope-tag" style="color:var(--teal);border-color:rgba(45,212,191,.25);background:rgba(45,212,191,.06)">📦 Landed Cost</span>
+        <span class="ai-scope-tag" style="color:var(--violet);border-color:rgba(139,143,248,.25);background:rgba(139,143,248,.06)">📄 Doc Orchestration</span>
+        <span class="ai-scope-tag" style="color:var(--gold);border-color:rgba(232,169,74,.25);background:rgba(232,169,74,.06)">⚠️ Risk & Compliance</span>
+        <span class="ai-scope-tag" style="color:var(--muted);border-color:var(--border2);background:rgba(255,255,255,.02)" id="ai-corridor-tag"></span>
+      </div>
     </div>
-    <button class="ai-close-btn" onclick="closeAIModal()">✕ Close</button>
+
+    <!-- BODY: TOOLS + CHAT -->
+    <div class="ai-modal-body">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px">// Document &amp; Action Tools</div>
+      <div class="ai-tools-grid">
+        <a id="ai-link-loi" href="loi-contracts.html?tool=loi" class="ai-tool">📄 Generate LOI</a>
+        <a id="ai-link-nda" href="loi-contracts.html?tool=nda" class="ai-tool">🔒 Draft NDA</a>
+        <a id="ai-link-spa" href="loi-contracts.html?tool=spa" class="ai-tool">📋 Draft SPA</a>
+        <a id="ai-link-lca" href="loi-contracts.html?tool=lca" class="ai-tool">🏦 Apply for LC</a>
+        <a href="agent-mandate.html" class="ai-tool">🛡️ Compliance Check</a>
+        <a href="negotiation-agent.html" class="ai-tool">🔄 Orchestrate Deal</a>
+        <a href="cde.html" class="ai-tool">🗂️ Add to CDE</a>
+      </div>
+    </div>
+
+    <!-- INLINE AI CHAT -->
+    <div class="ai-chat-panel">
+      <div class="ai-chat-label">Ask SLOI AI — product &amp; corridor analysis</div>
+      <div class="ai-chat-history" id="ai-chat-history"></div>
+      <div class="ai-chat-input-row">
+        <textarea class="ai-chat-textarea" id="ai-chat-input" rows="1" placeholder="e.g. What are the key risk variables on this product? / Break down the landed cost components. / Suggest alternative origins."></textarea>
+        <button class="ai-chat-send" id="ai-chat-send" onclick="sendAIChat()">Send ↵</button>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="ai-modal-foot">
+      <button class="ai-close-btn" onclick="closeAIModal()">✕ Close</button>
+    </div>
+
   </div>
 </div>
 </body>

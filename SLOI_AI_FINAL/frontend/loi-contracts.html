@@ -289,7 +289,7 @@ textarea.inp{resize:vertical;min-height:72px;line-height:1.6}
       <div class="rh-title" id="rh-title">Letter of Intent</div>
       <div class="rh-sub" id="rh-sub">AI-generated · ICC-referenced · ready to sign</div>
     </div>
-    <a href="sloiai-platform.html" class="exit-link">← Back to platform</a>
+    <a href="javascript:history.back()" class="exit-link">← Back</a>
   </div>
 
   <div class="right-body">
@@ -912,6 +912,32 @@ function setNdaType(t) {
   renderHistory();
 })();
 
+// ── SLOI AI LEGAL ORCHESTRATOR — SYSTEM PROMPT ──────────
+const SLOI_LEGAL_SYSTEM = `You are SLOI AI — Senior Trade Finance & Commercial Legal Orchestrator.
+
+TARGET AUDIENCE: VPs of Procurement, Directors of Supply Chain, and Legal/Finance Teams at U.S. Construction, Real Estate Development, and Heavy Industrial Firms.
+
+CORE OBJECTIVE: Generate immutable, audit-ready commercial instruments (LOIs, SPAs, NDAs, LC Applications, POs, and Compliance Reports) tailored strictly to U.S. commercial law, Uniform Commercial Code (UCC) standards, and international trade frameworks (Incoterms 2020, UCP 600). Eliminate all conversational fluff and ambiguous legal phrasing.
+
+TONE & STYLE:
+- Authoritative, precise, pragmatic, and legally rigorous.
+- Use explicit corporate terminology: Landed Cost, FOB/CIF, Usance, Inspection Certificates, Performance Bonds, Mill Test Certificates, Force Majeure, Incoterms 2020.
+- Zero generic or consumer-grade phrasing. Every clause must address risk mitigation, payment security, and fulfillment certainty.
+- No introductory sentences, preambles, or explanatory commentary outside the document body.
+
+JURISDICTION & COMPLIANCE DEFAULTS:
+- Governing Law Priority: New York or Texas commercial law as primary; Delaware for corporate instruments; ICC Arbitration (Rules 2021, seat: Dubai/London/New York) for cross-border disputes; DIFC-LCIA where Gulf counter-party origin requires it.
+- Material Standards: Specify ASTM grade and type explicitly in every product and quality clause (e.g., ASTM A615 Gr. 60, ASTM C150 Type I/II, ASTM A36).
+- Trade Finance: UCP 600 for all documentary credit instruments. Incoterms 2020 definitions governing all delivery and title-transfer clauses.
+- UCC Article 2 governs domestic sale-of-goods provisions where applicable.
+
+OUTPUT RULES:
+- Return ONLY the document text. No preamble, no explanations, no markdown, no asterisks, no code fences.
+- Use numbered sections and formal legal clause structure throughout.
+- Every quantitative field (price, weight, volume, dates) must appear exactly as provided — never estimate, round, or substitute.
+- Include fully formatted execution blocks (signature line, printed name, title, date, entity name) for every party.
+- Documents must be ready for immediate legal review and execution without modification.`;
+
 // ── CLAUDE API ───────────────────────────────────────────
 async function claude(prompt) {
   var key = document.getElementById('api-key').value.trim();
@@ -925,8 +951,9 @@ async function claude(prompt) {
       'anthropic-dangerous-direct-browser-access':'true'
     },
     body: JSON.stringify({
-      model:'claude-haiku-4-5-20251001',
-      max_tokens:2048,
+      model:'claude-sonnet-4-6',
+      max_tokens:3000,
+      system: SLOI_LEGAL_SYSTEM,
       messages:[{ role:'user', content:prompt }]
     })
   });
@@ -983,26 +1010,34 @@ async function genLOI() {
   setBusy('loi', true);
   try {
     var prompt =
-      'Generate a formal Letter of Intent (LOI) for an international commodity trade deal. ' +
-      'Format it as a professional legal-grade trade document with proper numbered sections, ' +
-      'ICC standard references, Incoterms 2020 references, and formal language.\n\n' +
-      'BUYER: '+(f.buyerName?f.buyerName+', ':'')+f.buyerCo+(f.buyerSite?' · Site: '+f.buyerSite:'')+(f.buyerCountry?' · '+f.buyerCountry:'')+'\n'+
-      'SUPPLIER: '+f.supCo+(f.supCountry?', '+f.supCountry:'')+(f.supContact?' · Contact: '+f.supContact:'')+(f.supRef?' · Ref: '+f.supRef:'')+'\n'+
-      'PRODUCT: '+f.product+'\n'+
-      'QUANTITY: '+f.qty+' '+f.unit+'\n'+
-      'UNIT PRICE: '+f.currency+' '+f.price+' / '+f.unit+'\n'+
-      'TOTAL VALUE: '+f.currency+' '+f.total+'\n'+
-      'INCOTERM: '+f.incoterm+' (Incoterms 2020)\n'+
-      'PAYMENT: '+f.payment+'\n'+
-      'DELIVERY: '+f.delivery+'\n'+
-      'LOI VALIDITY: '+f.validity+'\n'+
-      'STANDARDS: '+stdLabel+'\n'+
-      (f.conditions?'SPECIAL CONDITIONS: '+f.conditions+'\n':'')+
-      '\nInclude: LOI reference number: '+loiRef+', date, recitals, ' +
-      'product specifications clause, quantity and delivery clause, pricing and payment clause, ' +
-      'quality and inspection clause, force majeure clause, confidentiality clause, ' +
-      'governing law (ICC Arbitration), signature blocks for both parties with date lines. ' +
-      'Return only the document text, no explanations or markdown.';
+      'Generate a formal, non-binding Letter of Intent (LOI) for an international commodity procurement transaction. ' +
+      'This document is addressed to senior procurement and legal reviewers at a U.S. construction or heavy industrial firm. ' +
+      'Structured per ICC best practice with explicit Incoterms 2020 delivery terms and UCC Article 2 awareness.\n\n' +
+      'LOI REFERENCE: ' + loiRef + '\n' +
+      'STANDARDS FRAMEWORK: ' + stdLabel + '\n\n' +
+      'BUYER: ' + (f.buyerName ? f.buyerName + ', ' : '') + f.buyerCo + (f.buyerSite ? ' — Delivery Site: ' + f.buyerSite : '') + (f.buyerCountry ? ', ' + f.buyerCountry : '') + '\n' +
+      'SUPPLIER: ' + f.supCo + (f.supCountry ? ', ' + f.supCountry : '') + (f.supContact ? ' — Contact: ' + f.supContact : '') + (f.supRef ? ' — Supplier Ref: ' + f.supRef : '') + '\n\n' +
+      'COMMODITY: ' + f.product + '\n' +
+      'QUANTITY: ' + f.qty + ' ' + f.unit + '\n' +
+      'TARGET FOB UNIT PRICE: ' + f.currency + ' ' + f.price + ' / ' + f.unit + '\n' +
+      'ESTIMATED TOTAL TRANSACTION VALUE: ' + f.currency + ' ' + f.total + '\n' +
+      'INCOTERM: ' + f.incoterm + ' (Incoterms 2020) — risk transfer and cost allocation per ICC definitions\n' +
+      'PAYMENT STRUCTURE: ' + f.payment + '\n' +
+      'FIRM DELIVERY WINDOW: ' + f.delivery + '\n' +
+      'LOI VALIDITY: ' + f.validity + '\n' +
+      (f.conditions ? 'COMMERCIAL CONDITIONS: ' + f.conditions + '\n' : '') +
+      '\nRequired document structure:\n' +
+      '1. Header block (LOI Ref, Date, Parties)\n' +
+      '2. Recitals — commercial intent and deal background\n' +
+      '3. Commodity Description & Technical Specifications (cite applicable ASTM/EN standard for the material)\n' +
+      '4. Quantity, Delivery Schedule & Port / Site Details\n' +
+      '5. Pricing, Payment Structure & Banking Conditions\n' +
+      '6. Quality Assurance — Mill Test Certificate / Third-Party Inspection (SGS or BV at port of loading)\n' +
+      '7. Non-Binding Status & Exclusivity (if any)\n' +
+      '8. Confidentiality Undertaking\n' +
+      '9. Force Majeure (reference ICC Force Majeure Clause 2020)\n' +
+      '10. Governing Law & Dispute Resolution (ICC Arbitration)\n' +
+      '11. Execution Block — both parties: signature, printed name, title, company, date';
     var text = await claude(prompt);
     showResult('loi', text);
     saveDoc('loi', (f.product||'LOI')+' · '+(f.buyerCo||'Buyer'), text);
@@ -1047,20 +1082,31 @@ async function genPO() {
   setBusy('po', true);
   try {
     var prompt =
-      'Generate a formal Purchase Order document for an international commodity trade. ' +
-      'Format as a professional trade document with proper sections.\n\n' +
-      'PO NUMBER: '+f.num+'\nDATE: '+f.date+'\nCURRENCY: '+f.cur+'\n\n'+
-      'BUYER: '+f.buyerCo+(f.buyerAd?', '+f.buyerAd:'')+(f.buyerCt?' · Attn: '+f.buyerCt:'')+(f.buyerEm?' · '+f.buyerEm:'')+'\n'+
-      'SUPPLIER: '+f.supCo+(f.supAd?', '+f.supAd:'')+'\n\n'+
-      'LINE ITEMS:\n'+itemLines+'\n\n'+
-      'INCOTERM: '+f.incot+' (Incoterms 2020)\n'+
-      'PAYMENT TERMS: '+f.payment+'\n'+
-      'DELIVERY DATE: '+f.deliv+'\n'+
-      (f.port?'PORT OF DESTINATION: '+f.port+'\n':'')+
-      (f.notes?'SPECIAL INSTRUCTIONS: '+f.notes+'\n':'')+
-      '\nInclude: PO header, buyer and supplier details, itemized goods table with totals, ' +
-      'delivery and payment terms, quality/acceptance conditions, cancellation clause, ' +
-      'signature blocks. Return only the document, no explanations or markdown.';
+      'Generate a formal Purchase Order (PO) compliant with UCC Article 2 (Sale of Goods) for an international commodity procurement transaction. ' +
+      'Document is addressed to a verified supplier for immediate processing by the buyer\'s procurement and finance teams.\n\n' +
+      'PO NUMBER: ' + f.num + '\n' +
+      'ISSUE DATE: ' + f.date + '\n' +
+      'CURRENCY: ' + f.cur + '\n\n' +
+      'BUYER (PURCHASER):\n' + f.buyerCo + (f.buyerAd ? '\n' + f.buyerAd : '') + (f.buyerCt ? '\nAttn: ' + f.buyerCt : '') + (f.buyerEm ? '\n' + f.buyerEm : '') + '\n\n' +
+      'SUPPLIER (VENDOR):\n' + f.supCo + (f.supAd ? '\n' + f.supAd : '') + '\n\n' +
+      'LINE ITEMS (cite applicable ASTM/ISO standard per line where material-specific):\n' + itemLines + '\n\n' +
+      'INCOTERM: ' + f.incot + ' (Incoterms 2020) — risk and cost allocation per ICC rules\n' +
+      'PAYMENT TERMS: ' + f.payment + '\n' +
+      'REQUIRED DELIVERY DATE: ' + f.deliv + '\n' +
+      (f.port ? 'PORT / DELIVERY DESTINATION: ' + f.port + '\n' : '') +
+      (f.notes ? 'PROCUREMENT INSTRUCTIONS: ' + f.notes + '\n' : '') +
+      '\nRequired document structure:\n' +
+      '1. PO Header (PO Number, Date, Buyer Entity, Supplier Entity)\n' +
+      '2. Itemized Goods Schedule — description, ASTM/ISO specification, quantity, unit price, line total\n' +
+      '3. Total PO Value with currency\n' +
+      '4. Delivery Terms, Required Port/Site, and Delivery Deadline\n' +
+      '5. Payment Terms and Banking Instructions Reference\n' +
+      '6. Quality & Acceptance Conditions — Mill Test Certificate, third-party inspection rights, rejection procedure per UCC §2-601\n' +
+      '7. Late Delivery Remedies — liquidated damages clause\n' +
+      '8. Cancellation & Termination for Cause\n' +
+      '9. Force Majeure (ICC Clause 2020)\n' +
+      '10. Governing Law: [Buyer\'s state] / UCC Article 2\n' +
+      '11. PO Acceptance Block — supplier signature confirming terms, printed name, title, date';
     var text = await claude(prompt);
     showResult('po', text);
     saveDoc('po', (f.num||'PO')+' · '+(f.buyerCo||'Buyer'), text);
@@ -1103,19 +1149,28 @@ async function genNDA() {
   setBusy('nda', true);
   try {
     var prompt =
-      'Generate a formal '+f.type+' Non-Disclosure Agreement (NDA) for an international commodity trade context. ' +
-      'Format as a professional legal document with numbered clauses.\n\n'+
-      'EFFECTIVE DATE: '+f.date+'\nTYPE: '+f.type+'\n\n'+
-      'PARTY A: '+f.aName+(f.aAd?', '+f.aAd:'')+(f.aCo?', '+f.aCo:'')+(f.aSig?' · Signatory: '+f.aSig:'')+'\n'+
-      'PARTY B: '+f.bName+(f.bAd?', '+f.bAd:'')+(f.bCo?', '+f.bCo:'')+(f.bSig?' · Signatory: '+f.bSig:'')+'\n\n'+
-      'PURPOSE: '+(f.purpose||'Commodity trade discussions and sourcing negotiations')+'\n'+
-      'DURATION: '+f.dur+'\n'+
-      'GOVERNING LAW: '+f.law+'\n'+
-      (f.scope?'CONFIDENTIAL INFORMATION SCOPE: '+f.scope+'\n':'')+
-      '\nInclude: recitals, definition of confidential information, mutual obligations (or one-way), ' +
-      'permitted disclosures, return of materials clause, term and termination, remedies and injunctive relief, ' +
-      'entire agreement clause, signature blocks with date lines for both parties. ' +
-      'Return only the document text, no explanations or markdown.';
+      'Generate a formal ' + f.type + ' Non-Disclosure Agreement (NDA) for a confidential commercial trade and procurement context. ' +
+      'This agreement safeguards proprietary supplier data, trade corridor intelligence, pricing structures, and deal-specific sourcing strategies. ' +
+      'Governed under U.S. commercial law with trade secret protections per the Defend Trade Secrets Act (DTSA, 18 U.S.C. § 1836).\n\n' +
+      'EFFECTIVE DATE: ' + f.date + '\n' +
+      'AGREEMENT TYPE: ' + f.type + '\n\n' +
+      'DISCLOSING PARTY:\n' + f.aName + (f.aAd ? '\n' + f.aAd : '') + (f.aCo ? ', ' + f.aCo : '') + (f.aSig ? '\nAuthorized Signatory: ' + f.aSig : '') + '\n\n' +
+      'RECEIVING PARTY:\n' + f.bName + (f.bAd ? '\n' + f.bAd : '') + (f.bCo ? ', ' + f.bCo : '') + (f.bSig ? '\nAuthorized Signatory: ' + f.bSig : '') + '\n\n' +
+      'COMMERCIAL PURPOSE: ' + (f.purpose || 'Evaluation of a commodity procurement transaction and related trade corridor intelligence') + '\n' +
+      'CONFIDENTIALITY TERM: ' + f.dur + '\n' +
+      'GOVERNING LAW: ' + f.law + '\n' +
+      (f.scope ? 'CONFIDENTIAL INFORMATION SCOPE: ' + f.scope + '\n' : '') +
+      '\nRequired document structure:\n' +
+      '1. Recitals — commercial context and purpose of disclosure\n' +
+      '2. Definitions — Confidential Information (broad commercial and technical scope including pricing, supplier identities, route intelligence, specifications, financial terms), Trade Secrets per DTSA\n' +
+      '3. Confidentiality Obligations — standard of care, non-use, need-to-know restriction\n' +
+      '4. Permitted Disclosures — legal compulsion carve-out, pre-existing knowledge, publicly available information\n' +
+      '5. Return or Destruction of Materials — 5-business-day cure period post-termination\n' +
+      '6. No License Grant — acknowledgment that no IP rights are transferred\n' +
+      '7. Term, Survival, and Termination\n' +
+      '8. Remedies — specific performance and injunctive relief without bond; waiver of jury trial\n' +
+      '9. Entire Agreement, Severability, Waiver\n' +
+      '10. Execution Block — both parties: signature, printed name, title, company, date';
     var text = await claude(prompt);
     showResult('nda', text);
     saveDoc('nda', (f.aName||'Party A')+' ↔ '+(f.bName||'Party B'), text);
@@ -1239,27 +1294,31 @@ async function genLCA() {
   setBusy('lca', true);
   try {
     var prompt =
-      'Generate a formal Letter of Credit Application (Documentary Credit) compliant with UCP 600, structured in SWIFT MT700 field format. ' +
-      'Format as a professional bank submission document.\n\n' +
-      'APPLICANT: ' + f.appCo + (f.appCountry ? ', ' + f.appCountry : '') + '\n' +
-      'ISSUING BANK: ' + (f.appBank || '[Bank Name]') + (f.appSwift ? ' · SWIFT: ' + f.appSwift : '') + '\n' +
-      'BENEFICIARY: ' + f.benCo + (f.benCountry ? ', ' + f.benCountry : '') + '\n' +
-      'ADVISING BANK: ' + (f.benBank || '[Advising Bank]') + (f.benSwift ? ' · SWIFT: ' + f.benSwift : '') + '\n\n' +
-      'LC TYPE: ' + f.type + '\n' +
-      'AMOUNT: ' + f.currency + ' ' + f.amount + '\n' +
-      'EXPIRY DATE: ' + f.expiry + (f.expiryPlace ? ' — Place of Expiry: ' + f.expiryPlace : '') + '\n' +
-      'LATEST SHIPMENT DATE: ' + f.shipDate + '\n' +
-      'COMMODITY: ' + f.product + '\n' +
-      'PORT OF LOADING: ' + (f.pol || 'As per Bill of Lading') + '\n' +
-      'PORT OF DISCHARGE: ' + (f.pod || 'As per Bill of Lading') + '\n' +
-      'INCOTERM: ' + f.incoterm + ' (Incoterms 2020)\n' +
-      'PARTIAL SHIPMENTS: ' + f.partial + '\n' +
-      'TRANSHIPMENT: Not Allowed\n' +
-      'PRESENTATION PERIOD: Documents to be presented within 21 days after shipment date but within LC validity\n\n' +
-      'REQUIRED DOCUMENTS:\n' + docList.map(function(d,i){ return (i+1)+'. '+d; }).join('\n') +
-      (f.conditions ? '\n\nSPECIAL CONDITIONS:\n' + f.conditions : '') +
-      '\n\nInclude: full UCP 600 field structure (40A through 79), applicant declaration, bank charges clause (each bank covers own charges), ' +
-      'confirmation instructions, and applicant signature/authorization block. Return only the document, no markdown.';
+      'Generate a bank-ready Letter of Credit Application (Documentary Credit) fully compliant with UCP 600 (ICC Publication No. 600). ' +
+      'Structured in SWIFT MT700 field sequence for immediate handoff to the applicant\'s trade finance or letter of credit desk. ' +
+      'Language must be precise, unambiguous, and compliant with ISBP 821 (International Standard Banking Practice).\n\n' +
+      'APPLICANT (BUYER):\n' + f.appCo + (f.appCountry ? ', ' + f.appCountry : '') + '\n' +
+      'ISSUING BANK: ' + (f.appBank || '[Issuing Bank — to be confirmed]') + (f.appSwift ? ' | SWIFT BIC: ' + f.appSwift : '') + '\n' +
+      'BENEFICIARY (SELLER/SUPPLIER):\n' + f.benCo + (f.benCountry ? ', ' + f.benCountry : '') + '\n' +
+      'ADVISING / CONFIRMING BANK: ' + (f.benBank || '[Advising Bank — at beneficiary\'s country]') + (f.benSwift ? ' | SWIFT BIC: ' + f.benSwift : '') + '\n\n' +
+      'FIELD 40A — FORM OF DOCUMENTARY CREDIT: ' + f.type + '\n' +
+      'FIELD 32B — CURRENCY & AMOUNT: ' + f.currency + ' ' + f.amount + '\n' +
+      'FIELD 31D — EXPIRY DATE & PLACE: ' + f.expiry + (f.expiryPlace ? ' — ' + f.expiryPlace : '') + '\n' +
+      'FIELD 44C — LATEST SHIPMENT DATE: ' + f.shipDate + '\n' +
+      'FIELD 45A — DESCRIPTION OF GOODS: ' + f.product + '\n' +
+      'FIELD 44E — PORT OF LOADING: ' + (f.pol || 'As per Bill of Lading') + '\n' +
+      'FIELD 44F — PORT OF DISCHARGE: ' + (f.pod || 'As per Bill of Lading') + '\n' +
+      'FIELD 43P — PARTIAL SHIPMENTS: ' + f.partial + '\n' +
+      'FIELD 43T — TRANSHIPMENT: Not Allowed\n' +
+      'INCOTERM (Incoterms 2020): ' + f.incoterm + '\n' +
+      'FIELD 48 — PRESENTATION PERIOD: 21 calendar days from B/L date, but within LC validity\n\n' +
+      'FIELD 46A — REQUIRED DOCUMENTS:\n' + docList.map(function(d,i){ return (i+1)+'. '+d; }).join('\n') +
+      (f.conditions ? '\n\nFIELD 47A — SPECIAL CONDITIONS:\n' + f.conditions : '') +
+      '\n\nAdditional required clauses:\n' +
+      '- Field 71B — Bank Charges: Each bank\'s charges are for the account of the party instructing that bank.\n' +
+      '- Discrepancy fee disclosure per ISBP 821\n' +
+      '- Field 49 — Confirmation Instructions: As instructed\n' +
+      '- Applicant\'s authorization and declaration block with signature, title, date, and authorized seal/stamp notation';
     var text = await claude(prompt);
     showResult('lca', text);
     saveDoc('lca', (f.product || 'LC') + ' · ' + (f.appCo || 'Applicant'), text);
@@ -1296,25 +1355,40 @@ async function genSPA() {
   setBusy('spa', true);
   try {
     var prompt =
-      'Generate a formal Sales and Purchase Agreement (SPA / Trade Contract) for an international commodity trade, ' +
-      'ICC and Incoterms 2020 referenced, with numbered clauses in professional legal language.\n\n' +
-      'SELLER: ' + f.selCo + (f.selAddr ? ', ' + f.selAddr : '') + (f.selCountry ? ', ' + f.selCountry : '') + (f.selSig ? ' · Signatory: ' + f.selSig : '') + '\n' +
-      'BUYER: ' + f.buyCo + (f.buyAddr ? ', ' + f.buyAddr : '') + (f.buyCountry ? ', ' + f.buyCountry : '') + (f.buySig ? ' · Signatory: ' + f.buySig : '') + '\n\n' +
+      'Generate a binding Sales and Purchase Agreement (SPA / Trade Contract) for an international commodity transaction. ' +
+      'This is a bilateral commercial instrument with full legal enforceability under the specified governing law. ' +
+      'Structured per ICC best practice, Incoterms 2020, and UCC Article 2 where applicable. ' +
+      'Designed for immediate review by legal counsel and procurement leadership at a U.S. commercial firm.\n\n' +
+      'SELLER:\n' + f.selCo + (f.selAddr ? '\n' + f.selAddr : '') + (f.selCountry ? ', ' + f.selCountry : '') + (f.selSig ? '\nAuthorized Signatory: ' + f.selSig : '') + '\n\n' +
+      'BUYER:\n' + f.buyCo + (f.buyAddr ? '\n' + f.buyAddr : '') + (f.buyCountry ? ', ' + f.buyCountry : '') + (f.buySig ? '\nAuthorized Signatory: ' + f.buySig : '') + '\n\n' +
       'COMMODITY: ' + f.product + '\n' +
-      'QUANTITY: ' + f.qty + ' ' + f.unit + '\n' +
+      'CONTRACT QUANTITY: ' + f.qty + ' ' + f.unit + '\n' +
       'UNIT PRICE: ' + f.currency + ' ' + f.price + ' / ' + f.unit + '\n' +
       (total ? 'TOTAL CONTRACT VALUE: ' + f.currency + ' ' + total.toLocaleString(undefined,{maximumFractionDigits:2}) + '\n' : '') +
-      'INCOTERM: ' + f.incoterm + ' (Incoterms 2020)\n' +
+      'DELIVERY TERM: ' + f.incoterm + ' (Incoterms 2020) — full ICC cost and risk allocation applies\n' +
       'PAYMENT TERMS: ' + f.payment + '\n' +
       (f.pol ? 'PORT OF LOADING: ' + f.pol + '\n' : '') +
-      (f.pod ? 'PORT OF DISCHARGE: ' + f.pod + '\n' : '') +
-      'DELIVERY DATE: ' + f.delivery + '\n' +
+      (f.pod ? 'PORT OF DISCHARGE / DESTINATION: ' + f.pod + '\n' : '') +
+      'DELIVERY DEADLINE: ' + f.delivery + '\n' +
       'GOVERNING LAW & ARBITRATION: ' + f.law + '\n' +
-      (f.quality ? 'QUALITY & INSPECTION: ' + f.quality + '\n' : '') +
-      '\nInclude numbered clauses: 1. Definitions  2. Sale and Purchase  3. Price and Payment  4. Delivery and Risk  ' +
-      '5. Quality and Inspection  6. Documents  7. Title Transfer  8. Force Majeure  9. Warranties  ' +
-      '10. Default and Remedies  11. Confidentiality  12. Governing Law and Arbitration  13. Entire Agreement  ' +
-      '14. Signature Blocks with date lines for both parties. Return only the document, no markdown.';
+      (f.quality ? 'QUALITY SPECIFICATIONS & INSPECTION PROTOCOL: ' + f.quality + '\n' : '') +
+      '\nRequired numbered clause structure:\n' +
+      '1. Definitions (Commodity, Contract Quantity, Contract Price, Delivery Term, Incoterms 2020)\n' +
+      '2. Sale and Purchase Obligation — firm and binding commitment\n' +
+      '3. Contract Price, Total Value, and Currency\n' +
+      '4. Payment Terms, Instruments, and Security (LC/TT/DP/DA as specified)\n' +
+      '5. Delivery, Shipment, and Port Logistics — Incoterms 2020 risk transfer point explicit\n' +
+      '6. Quality & Technical Specifications — cite ASTM/EN/ISO standard by grade and type; Mill Test Certificate requirement\n' +
+      '7. Third-Party Inspection Rights (SGS / Bureau Veritas at port of loading); rejection procedure\n' +
+      '8. Documents Required for Payment — Commercial Invoice, B/L, Packing List, CoO, MTC\n' +
+      '9. Title Transfer — passes at Incoterms risk transfer point\n' +
+      '10. Force Majeure — ICC Force Majeure Clause 2020; notice and mitigation obligations\n' +
+      '11. Seller Warranties — conforming goods, good title, no encumbrances\n' +
+      '12. Default & Remedies — buyer right to reject (UCC §2-601), seller liability cap, liquidated damages\n' +
+      '13. Confidentiality — trade terms and counterparty identity\n' +
+      '14. Governing Law, Jurisdiction, and Arbitration — ICC Rules 2021, seat and language specified\n' +
+      '15. Entire Agreement, Severability, Amendment (written only)\n' +
+      '16. Execution Block — both parties: signature, printed name, title, entity name, date';
     var text = await claude(prompt);
     showResult('spa', text);
     saveDoc('spa', (f.product || 'SPA') + ' · ' + (f.selCo || 'Seller') + ' ↔ ' + (f.buyCo || 'Buyer'), text);
@@ -1340,23 +1414,29 @@ async function genFreight() {
   setBusy('freight', true);
   try {
     var prompt =
-      'Generate a professional Freight Advisory document for an international commodity shipment. ' +
-      'Include route analysis, estimated transit time, rate guidance, recommended shipping terms, ' +
-      'required documents, and operational recommendations. Use a structured report format.\n\n' +
+      'Generate a professional Freight & Logistics Advisory for an international commodity shipment. ' +
+      'This report is addressed to a Director of Supply Chain or VP of Procurement at a U.S. industrial firm. ' +
+      'Provide metric-driven, operationally precise guidance — no generic statements. ' +
+      'Reference actual port names, current freight market conditions, and specific transit windows.\n\n' +
       'COMMODITY: ' + f.product + '\n' +
-      (f.weight ? 'GROSS WEIGHT: ' + f.weight + ' MT\n' : '') +
+      (f.weight ? 'GROSS WEIGHT / VOLUME: ' + f.weight + ' MT\n' : '') +
       'CARGO TYPE: ' + f.type + '\n' +
-      'HAZARDOUS: ' + f.haz + '\n' +
-      'INCOTERM: ' + f.incoterm + ' (Incoterms 2020)\n' +
+      'HAZARDOUS CLASSIFICATION: ' + f.haz + '\n' +
+      'INCOTERM: ' + f.incoterm + ' (Incoterms 2020) — determines freight and insurance cost responsibility\n' +
       'PORT OF LOADING: ' + f.pol + '\n' +
       'PORT OF DISCHARGE: ' + f.pod + '\n' +
       (f.delivery ? 'REQUIRED DELIVERY DATE: ' + f.delivery + '\n' : '') +
-      (f.carrier ? 'PREFERRED CARRIER: ' + f.carrier + '\n' : 'CARRIER: Open to competitive quotes\n') +
-      (f.notes ? 'SPECIAL REQUIREMENTS: ' + f.notes + '\n' : '') +
-      '\nInclude sections: 1. Route Summary & Key Ports  2. Estimated Transit Time & Schedule  ' +
-      '3. Freight Rate Guidance (range estimate, based on current market)  4. Recommended Shipping Terms  ' +
-      '5. Required Documentation  6. Insurance Recommendation  7. Key Risks & Mitigants  ' +
-      '8. Operational Recommendations. Be specific with port names, transit days, and rate ranges. Return only the advisory document, no markdown.';
+      (f.carrier ? 'NOMINATED CARRIER: ' + f.carrier + '\n' : 'CARRIER SELECTION: Open — competitive multi-carrier tender recommended\n') +
+      (f.notes ? 'OPERATIONAL CONSTRAINTS: ' + f.notes + '\n' : '') +
+      '\nRequired report structure:\n' +
+      '1. Route Summary — origin port to discharge port; key transit hubs; total nautical miles\n' +
+      '2. Transit Time & Loading Schedule — estimated days by mode (sea/rail/truck); recommended cut-off dates\n' +
+      '3. Freight Rate Intelligence — current market range (USD/MT or USD/TEU); bunker surcharge status; rate trend (7-day Δ)\n' +
+      '4. Delivery Term Analysis — Incoterms 2020 cost/risk split; recommended term given route risk profile\n' +
+      '5. Required Shipping Documentation — B/L type, Certificate of Origin, Packing List, MTC, customs entry\n' +
+      '6. Cargo Insurance Recommendation — minimum 110% CIF value; war risk endorsement if applicable; key exclusion flags\n' +
+      '7. Risk Matrix — port congestion, weather seasonality, geopolitical alerts, sanction screening status\n' +
+      '8. Operational Recommendations — priority actions, alternative routing, consolidation opportunities';
     var text = await claude(prompt);
     showResult('freight', text);
     saveDoc('freight', (f.product || 'Freight') + ' · ' + f.pol + ' → ' + f.pod, text);
@@ -1380,21 +1460,29 @@ async function genHS() {
   setBusy('hs', true);
   try {
     var prompt =
-      'Generate a professional HS Code & Import Duty Report for an international commodity shipment. ' +
-      'Use the Harmonized System (HS) 2022 nomenclature. Provide accurate, actionable trade compliance information.\n\n' +
-      'PRODUCT: ' + f.product + '\n' +
-      (f.specs ? 'SPECIFICATIONS: ' + f.specs + '\n' : '') +
-      (f.qty ? 'QUANTITY: ' + f.qty + ' ' + f.unit + '\n' : '') +
-      (f.value ? 'ESTIMATED VALUE: USD ' + f.value + '\n' : '') +
-      (f.use ? 'INTENDED USE: ' + f.use + '\n' : '') +
+      'Generate a formal HS Code Classification & Import Duty Compliance Report for an international commodity shipment. ' +
+      'Use Harmonized System (HS) 2022 nomenclature. If the destination is the United States, apply the U.S. Harmonized Tariff Schedule (HTS) with Schedule B export codes where applicable. ' +
+      'This report is designed for the legal and compliance team of a U.S. construction or industrial procurement firm. Provide specific, actionable duty figures — no ranges or vague estimates.\n\n' +
+      'COMMODITY: ' + f.product + '\n' +
+      (f.specs ? 'TECHNICAL SPECIFICATIONS: ' + f.specs + '\n' : '') +
+      (f.qty ? 'TRANSACTION QUANTITY: ' + f.qty + ' ' + f.unit + '\n' : '') +
+      (f.value ? 'DECLARED CUSTOMS VALUE: USD ' + f.value + '\n' : '') +
+      (f.use ? 'INTENDED END USE: ' + f.use + '\n' : '') +
       'COUNTRY OF ORIGIN: ' + f.origin + '\n' +
-      'COUNTRY OF DESTINATION: ' + f.dest + '\n' +
-      '\nInclude: 1. HS Code Classification (6-digit HS code + country-specific extension where applicable)  ' +
-      '2. Product Description as per HS  3. Import Duty Rate (MFN rate)  4. Preferential Duty Rates (FTA/bilateral agreements)  ' +
-      '5. VAT / GST on Import  6. Anti-Dumping or Countervailing Duties (if applicable)  ' +
-      '7. Required Import Permits or Licenses  8. Prohibited/Restricted Goods Check  ' +
-      '9. Customs Valuation Method  10. Estimated Total Landed Cost Summary  ' +
-      '11. Compliance Notes & Recommendations. Be specific with actual duty percentages. Return only the report, no markdown.';
+      'COUNTRY OF DESTINATION / IMPORT MARKET: ' + f.dest + '\n' +
+      '\nRequired report structure:\n' +
+      '1. HS Code Classification — 6-digit HS 2022 code, full tariff heading description, and country-specific 8/10-digit extension\n' +
+      '2. Product Description per HTS — as it must appear on customs entry\n' +
+      '3. MFN (Most Favored Nation) Duty Rate — exact percentage\n' +
+      '4. Preferential / FTA Duty Rates — applicable free trade agreements (e.g., USMCA, GCC, EU GSP); rate differential vs. MFN\n' +
+      '5. Section 301 Tariff Exposure (China-origin goods) — current rate and exclusion status\n' +
+      '6. Anti-Dumping (ADD) & Countervailing Duties (CVD) — active orders, case number, rate range\n' +
+      '7. VAT / GST / Import Excise — rate at destination\n' +
+      '8. Required Import Permits, Licenses, or Certificates — ASTM conformity, EPA, DOT, USDA as applicable\n' +
+      '9. Prohibited & Restricted Goods Screen — OFAC, BIS, entity list check flag\n' +
+      '10. Customs Valuation Method — Transaction Value per WTO Customs Valuation Agreement\n' +
+      '11. Estimated Landed Cost Summary — FOB value + freight estimate + duty + ADD/CVD + VAT = total landed cost per unit\n' +
+      '12. Compliance Risk Assessment — key exposure flags and recommended mitigation steps';
     var text = await claude(prompt);
     showResult('hs', text);
     saveDoc('hs', (f.product || 'HS Report') + ' · ' + f.origin + ' → ' + f.dest, text);

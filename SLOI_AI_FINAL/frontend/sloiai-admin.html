@@ -212,6 +212,35 @@ select.inp option{background:var(--surface)}
 .aac-name{font-size:14px;font-weight:700;color:var(--white);line-height:1.2}
 .aac-desc{font-size:12px;color:var(--muted);line-height:1.6;flex:1}
 .aac-foot{margin-top:2px}
+
+/* ── CORRIDOR COMMAND CARDS ── */
+.corr-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.corr-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid;border-radius:6px;padding:12px;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;gap:8px;text-decoration:none}
+.corr-card:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,0,0,.5)}
+.corr-card-top{display:flex;align-items:center;gap:6px}
+.corr-icon{font-size:16px;flex-shrink:0;line-height:1}
+.corr-name{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;flex:1;line-height:1.35}
+.corr-risk-pip{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.corr-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.corr-stat{text-align:center;background:var(--surface2);border-radius:4px;padding:5px 3px}
+.corr-stat-val{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--white);display:block;line-height:1}
+.corr-stat-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:block;margin-top:2px}
+.corr-alert{font-size:10px;color:var(--muted);line-height:1.5;border-top:1px solid var(--border);padding-top:6px;font-family:'IBM Plex Mono',monospace}
+.corr-open{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);text-align:right}
+
+/* ── MANDATE PIPELINE ── */
+.mnd-kanban{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.mnd-col{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px;min-height:160px;display:flex;flex-direction:column;gap:5px}
+.mnd-col-head{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 6px;border-bottom:1px solid var(--border);margin-bottom:2px}
+.mnd-col-name{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.mnd-col-count{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);background:var(--border2);padding:1px 5px;border-radius:3px}
+.mnd-card{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:8px;cursor:pointer;transition:border-color .15s}
+.mnd-card:hover{border-color:rgba(91,95,239,.4)}
+.mnd-card-corr{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:1px 5px;border-radius:3px;display:inline-block;margin-bottom:4px}
+.mnd-card-prod{font-size:11px;font-weight:600;color:var(--white);line-height:1.35;margin-bottom:3px}
+.mnd-card-meta{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace}
+.mnd-empty{font-size:10px;color:var(--muted);text-align:center;padding:16px 4px;font-family:'IBM Plex Mono',monospace;opacity:.5;flex:1;display:flex;align-items:center;justify-content:center}
+
 @media(max-width:768px){
   html,body{overflow-x:clip}
   .ham-btn{display:flex;align-items:center;justify-content:center;width:36px;height:36px;background:none;border:1px solid var(--border2);border-radius:4px;color:var(--text);font-size:20px;cursor:pointer;flex-shrink:0;margin-right:6px}
@@ -306,22 +335,25 @@ select.inp option{background:var(--surface)}
   <!-- WAR ROOM -->
   <div id="view-warroom" class="view active">
 
+    <!-- CORRIDOR COMMAND ROW -->
+    <div class="corr-grid" id="corr-grid" style="margin-bottom:14px"></div>
+
     <!-- KPI STATS ROW -->
     <div class="g4" style="margin-bottom:14px">
       <div class="stat">
-        <div class="stat-top">Active Negotiations</div>
+        <div class="stat-top">Active Mandates</div>
         <div class="stat-val" id="wr-stat-active" style="color:var(--green)">—</div>
-        <div class="stat-sub" id="wr-stat-active-sub">Live sessions</div>
+        <div class="stat-sub" id="wr-stat-active-sub">Across all corridors</div>
       </div>
       <div class="stat">
-        <div class="stat-top">Awaiting Boss</div>
+        <div class="stat-top">Awaiting Approval</div>
         <div class="stat-val" id="wr-stat-pending" style="color:var(--gold)">—</div>
-        <div class="stat-sub warn" id="wr-stat-pending-sub">Approval needed</div>
+        <div class="stat-sub warn" id="wr-stat-pending-sub">LOIs pending</div>
       </div>
       <div class="stat">
-        <div class="stat-top">LOIs Signed Today</div>
+        <div class="stat-top">LOIs Generated</div>
         <div class="stat-val" id="wr-stat-lois" style="color:var(--violet)">—</div>
-        <div class="stat-sub up" id="wr-stat-lois-sub">Revenue earned</div>
+        <div class="stat-sub up" id="wr-stat-lois-sub">MTD</div>
       </div>
       <div class="stat">
         <div class="stat-top">Revenue MTD</div>
@@ -340,6 +372,18 @@ select.inp option{background:var(--surface)}
         </div>
       </div>
       <div id="alerts-list"><div style="padding:12px;text-align:center;color:var(--muted);font-size:14px">Loading…</div></div>
+    </div>
+
+    <!-- MANDATE PIPELINE -->
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title">// MANDATE PIPELINE
+        <div style="display:flex;align-items:center;gap:8px">
+          <span id="mnd-total" style="font-size:12px;color:var(--muted);font-weight:400"></span>
+          <a href="agent-mandate.html" class="btn btn-xs btn-p" style="font-size:11px;text-decoration:none">＋ New Mandate</a>
+          <a href="sloiai-platform.html" class="btn btn-xs" style="font-size:11px;text-decoration:none">↗ Platform</a>
+        </div>
+      </div>
+      <div class="mnd-kanban" id="mnd-kanban"></div>
     </div>
 
     <!-- PIPELINE → DAILY BRIEFING REDIRECT -->
@@ -6584,6 +6628,110 @@ renderAlerts = function(negs, lois) {
 wrStartCountdown();
 wrRenderPending();
 wrRenderActivity();
+
+// ── CORRIDOR COMMAND ROW ───────────────────────────────────────────────────────
+var ADMIN_CORRIDORS = [
+  { key:'us',   icon:'🌐', name:'IMEC Corridor',          color:'#2dd4bf', rgb:'45,212,191',  routes:6, products:8,  risk:'LOW',  alert:'Tanger Med batch cleared · OPC Cement 42.5N' },
+  { key:'gaza', icon:'🇵🇸', name:'Gaza Reconstruction',    color:'#ef4444', rgb:'239,68,68',   routes:2, products:16, risk:'HIGH', alert:'Kerem Shalom: 340 trucks cleared today' },
+  { key:'ua',   icon:'🇺🇦', name:'Ukraine Reconstruction', color:'#e8a94a', rgb:'232,169,74',  routes:3, products:15, risk:'HIGH', alert:'Black Sea risk index +12pts · war premium updated' },
+  { key:'cfs',  icon:'🇸🇦', name:'Saudi Vision 2030',      color:'#8b8ff8', rgb:'139,143,248', routes:5, products:12, risk:'LOW',  alert:'NEOM tender round 14 active · Rebar 45,000 MT' },
+  { key:'wc',   icon:'🌲', name:'Pacific West Coast',      color:'#22c55e', rgb:'34,197,94',   routes:3, products:11, risk:'LOW',  alert:'I-80 Donner Pass clear · Reno delivery on schedule' },
+];
+
+var RISK_COLOR = { HIGH:'#ef4444', MED:'#e8a94a', LOW:'#22c55e' };
+
+function renderCorridorCards() {
+  var grid = document.getElementById('corr-grid');
+  if (!grid) return;
+  var mandates = [];
+  try { mandates = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); } catch(e) {}
+  grid.innerHTML = ADMIN_CORRIDORS.map(function(c) {
+    var mCount = mandates.filter(function(m){ return m.corridor === c.key; }).length;
+    return '<a class="corr-card" href="sloiai-platform.html?corridor=' + c.key + '" style="border-left-color:' + c.color + '">' +
+      '<div class="corr-card-top">' +
+        '<span style="font-size:18px;line-height:1">' + c.icon + '</span>' +
+        '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.06em;flex:1;line-height:1.3">' + c.name + '</span>' +
+        '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(' + c.rgb + ',.12);color:' + RISK_COLOR[c.risk] + '">' + c.risk + '</span>' +
+      '</div>' +
+      '<div class="corr-stats">' +
+        '<div><span class="corr-stat-val">' + c.routes + '</span><span style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:var(--muted)">Routes</span></div>' +
+        '<div><span class="corr-stat-val">' + c.products + '</span><span style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:var(--muted)">Products</span></div>' +
+        '<div><span class="corr-stat-val" style="color:' + c.color + '">' + mCount + '</span><span style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:var(--muted)">Mandates</span></div>' +
+      '</div>' +
+      '<div class="corr-alert">' + c.alert + '</div>' +
+      '<div class="corr-open">Open corridor ↗</div>' +
+    '</a>';
+  }).join('');
+}
+
+// ── MANDATE PIPELINE KANBAN ────────────────────────────────────────────────────
+var MND_STAGES = ['New', 'Negotiating', 'LOI Sent', 'Signed', 'Filed'];
+
+var CORR_TAGS = {
+  us:   { label:'IMEC',    color:'#2dd4bf', rgb:'45,212,191'  },
+  gaza: { label:'GAZA',    color:'#ef4444', rgb:'239,68,68'   },
+  ua:   { label:'UA',      color:'#e8a94a', rgb:'232,169,74'  },
+  cfs:  { label:'SA',      color:'#8b8ff8', rgb:'139,143,248' },
+  wc:   { label:'W.COAST', color:'#22c55e', rgb:'34,197,94'   },
+};
+
+var MND_DEMO = [
+  { stage:'New',         corridor:'gaza', productLabel:'OPC Cement 42.5N',         company:'Al-Aqsa Rebuild Co.',    qty:'1,200 MT',   budget:'$148,000' },
+  { stage:'New',         corridor:'ua',   productLabel:'Structural Steel Rebar',    company:'Kyiv Build Holdings',    qty:'800 MT',     budget:'$512,000' },
+  { stage:'Negotiating', corridor:'cfs',  productLabel:'Raised Access Floor Panel', company:'NEOM Infrastructure',    qty:'3,500 m²',   budget:'$245,000' },
+  { stage:'Negotiating', corridor:'us',   productLabel:'Portland Cement Type I/II', company:'Maghreb Logistics LLC',  qty:'2,000 MT',   budget:'$190,000' },
+  { stage:'LOI Sent',    corridor:'wc',   productLabel:'Reno NV — Copper Tubing',   company:'Nevada Mech Supply',     qty:'400 coils',  budget:'$62,000'  },
+  { stage:'LOI Sent',    corridor:'gaza', productLabel:'Hollow Concrete Block',     company:'Cairo Trading Est.',     qty:'50,000 pcs', budget:'$38,500'  },
+  { stage:'Signed',      corridor:'cfs',  productLabel:'Hot-Dip Galv. Cable Ladder',company:'Riyadh Data Infra',      qty:'2,200 m',    budget:'$44,000'  },
+  { stage:'Filed',       corridor:'ua',   productLabel:'Float Glass 4mm',           company:'Lviv Glazing Co.',       qty:'6,000 m²',   budget:'$58,200'  },
+];
+
+function renderMandateKanban() {
+  var kanban = document.getElementById('mnd-kanban');
+  if (!kanban) return;
+  var mandates = [];
+  try { mandates = JSON.parse(localStorage.getItem('sloi_mandates') || '[]'); } catch(e) {}
+  var cards = mandates.length ? mandates.map(function(m) {
+    var stage = m.urgency === 'urgent' ? 'New' : (m.urgency === 'standard' ? 'Negotiating' : 'Filed');
+    return { stage: stage, corridor: m.corridor || 'us',
+             productLabel: m.productLabel || m.product, company: m.company,
+             qty: m.qty + ' ' + (m.unit || ''), budget: m.budget ? '$' + Number(m.budget).toLocaleString() : '' };
+  }) : MND_DEMO;
+  var tot = document.getElementById('mnd-total');
+  if (tot) tot.textContent = cards.length + ' mandate' + (cards.length !== 1 ? 's' : '');
+  kanban.innerHTML = MND_STAGES.map(function(stage) {
+    var stageCards = cards.filter(function(c){ return c.stage === stage; });
+    var col = '<div class="mnd-col">' +
+      '<div class="mnd-col-head">' +
+        '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.08em">' + stage + '</span>' +
+        '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:3px;padding:0 5px;line-height:1.8">' + stageCards.length + '</span>' +
+      '</div>';
+    if (!stageCards.length) {
+      col += '<div class="mnd-empty">No mandates</div>';
+    } else {
+      stageCards.forEach(function(c) {
+        var tag = CORR_TAGS[c.corridor] || { label:(c.corridor||'?').toUpperCase(), color:'var(--muted)', rgb:'120,120,120' };
+        col += '<div class="mnd-card" style="border-color:rgba(' + tag.rgb + ',.3)" onclick="showMandateDetail(this)">' +
+          '<span class="mnd-card-corr" style="background:rgba(' + tag.rgb + ',.12);color:' + tag.color + '">' + tag.label + '</span>' +
+          '<div style="font-size:11px;color:var(--white);font-weight:600;line-height:1.3;margin-bottom:5px">' + (c.productLabel || '—') + '</div>' +
+          '<div style="font-size:10px;color:var(--muted);font-family:\'IBM Plex Mono\',monospace;line-height:1.6">' + (c.company || '—') + '<br>' +
+            '<span style="color:var(--teal)">' + (c.qty || '') + '</span>' +
+            (c.budget ? ' · <span style="color:var(--green)">' + c.budget + '</span>' : '') +
+          '</div>' +
+        '</div>';
+      });
+    }
+    return col + '</div>';
+  }).join('');
+}
+
+function showMandateDetail(el) {
+  el.style.borderColor = 'var(--indigo)';
+  setTimeout(function(){ el.style.borderColor = ''; }, 800);
+}
+
+renderCorridorCards();
+renderMandateKanban();
 
 // ── BOSS APPROVAL QUICK ACTIONS ───────────────────────────────────────────────
 

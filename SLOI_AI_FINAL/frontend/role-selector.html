@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -11,27 +11,45 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
 
-/* GRID BG */
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;opacity:.3;pointer-events:none;z-index:0}
 
-.shell{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 20px}
+.shell{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:32px 20px 24px;overflow-y:auto}
 
 /* HEADER */
-.header{text-align:center;margin-bottom:52px;animation:fadeUp .6s ease both}
+.header{text-align:center;margin-bottom:28px;animation:fadeUp .6s ease both}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.logo{font-family:'Fraunces',serif;font-size:52px;font-weight:900;color:var(--white);letter-spacing:-.04em;line-height:1}
+.logo{font-family:'Fraunces',serif;font-size:48px;font-weight:900;color:var(--white);letter-spacing:-.04em;line-height:1}
 .logo em{font-style:italic;color:var(--indigo)}
-.tagline{font-size:14px;color:var(--muted);letter-spacing:.1em;margin-top:10px}
-.live-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green);font-size:12px;padding:4px 14px;border-radius:20px;margin-top:12px;letter-spacing:.06em}
-.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+.tagline{font-size:13px;color:var(--muted);letter-spacing:.1em;margin-top:8px}
+
+/* LIVE STAT BAR */
+.stat-bar{display:flex;align-items:center;gap:0;margin-top:14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;animation:fadeUp .5s .05s ease both}
+.stat-bar-item{display:flex;flex-direction:column;align-items:center;padding:10px 22px;border-right:1px solid var(--border);gap:2px}
+.stat-bar-item:last-child{border-right:none}
+.stat-bar-val{font-family:'Fraunces',serif;font-size:19px;font-weight:700;color:var(--white);line-height:1}
+.stat-bar-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite;display:inline-block;margin-right:5px;vertical-align:middle}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ROLE GRID */
-.roles{display:grid;grid-template-columns:repeat(3,280px);gap:14px;animation:fadeUp .6s .1s ease both}
+/* CORRIDOR STRIP */
+.corridor-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;width:100%;max-width:960px;margin-bottom:20px;animation:fadeUp .6s .1s ease both}
+.corr-tile{background:var(--surface);border:1px solid var(--border);border-top:2px solid;border-radius:7px;padding:10px 12px;text-decoration:none;display:flex;flex-direction:column;gap:5px;transition:all .18s;position:relative;overflow:hidden}
+.corr-tile:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.corr-tile-head{display:flex;align-items:center;justify-content:space-between;gap:5px}
+.corr-tile-name{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.08em;line-height:1.3;flex:1}
+.corr-tile-risk{font-family:'IBM Plex Mono',monospace;font-size:8px;font-weight:700;padding:1px 4px;border-radius:2px}
+.corr-tile-kv{display:flex;gap:8px;flex-wrap:wrap}
+.corr-kv{display:flex;flex-direction:column;gap:1px}
+.corr-kv-val{font-family:'Fraunces',serif;font-size:13px;font-weight:700;color:var(--white);line-height:1}
+.corr-kv-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--muted)}
+.corr-tile-alert{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);line-height:1.4;border-top:1px solid var(--border);padding-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-.role-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px 24px;cursor:pointer;text-decoration:none;display:flex;flex-direction:column;transition:all .2s;position:relative;overflow:hidden}
+/* ROLE GRID */
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:960px;animation:fadeUp .6s .15s ease both}
+
+.role-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:22px 20px;cursor:pointer;text-decoration:none;display:flex;flex-direction:column;transition:all .2s;position:relative;overflow:hidden}
 .role-card::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;opacity:0;transition:opacity .2s}
-.role-card:hover{transform:translateY(-4px);border-color:var(--border2)}
+.role-card:hover{transform:translateY(-3px);border-color:var(--border2)}
 .role-card:hover::after{opacity:1}
 
 .rc-indigo::after{background:var(--indigo)}
@@ -48,41 +66,53 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .rc-violet:hover{box-shadow:0 8px 32px rgba(139,143,248,.12)}
 .rc-red:hover{box-shadow:0 8px 32px rgba(239,68,68,.1)}
 
-.role-icon{font-size:32px;margin-bottom:16px}
-.role-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:6px;letter-spacing:-.01em}
-.role-sub{font-size:12px;letter-spacing:.08em;margin-bottom:10px;font-weight:600}
-.role-desc{font-size:13px;color:var(--muted);line-height:1.7;flex:1}
-.role-arrow{margin-top:16px;font-size:13px;display:flex;align-items:center;gap:6px;opacity:0;transition:opacity .2s}
+.role-icon{font-size:26px;margin-bottom:10px}
+.role-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--white);margin-bottom:4px;letter-spacing:-.01em}
+.role-sub{font-size:10px;letter-spacing:.1em;margin-bottom:8px;font-weight:700;text-transform:uppercase}
+.role-desc{font-size:12px;color:var(--muted);line-height:1.7;flex:1}
+
+/* ROLE STATS PILLS */
+.role-stats{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}
+.role-stat{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);background:rgba(255,255,255,.03);border:1px solid var(--border2);border-radius:3px;padding:2px 6px;white-space:nowrap}
+.role-stat b{color:var(--white)}
+
+.role-arrow{margin-top:10px;font-size:12px;display:flex;align-items:center;gap:6px;opacity:0;transition:opacity .2s}
 .role-card:hover .role-arrow{opacity:1}
 
 /* PUBLIC ROW */
-.public-row{display:flex;gap:14px;margin-top:14px;animation:fadeUp .6s .2s ease both}
-.pub-card{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px 20px;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:14px;transition:all .2s}
+.public-row{display:flex;gap:10px;margin-top:0;width:100%;max-width:960px;animation:fadeUp .6s .25s ease both}
+.pub-card{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:13px 16px;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:12px;transition:all .2s}
 .pub-card:hover{border-color:var(--border2);transform:translateY(-2px)}
-.pub-icon{font-size:22px;flex-shrink:0}
-.pub-title{font-size:15px;font-weight:600;color:var(--white);margin-bottom:3px}
-.pub-desc{font-size:12px;color:var(--muted)}
+.pub-icon{font-size:20px;flex-shrink:0}
+.pub-title{font-size:13px;font-weight:600;color:var(--white);margin-bottom:2px}
+.pub-desc{font-size:11px;color:var(--muted)}
 
 /* DIVIDER */
-.divider-label{display:flex;align-items:center;gap:14px;margin:24px 0 0;width:100%;max-width:882px;animation:fadeUp .6s .15s ease both}
+.divider-label{display:flex;align-items:center;gap:14px;margin:16px 0;width:100%;max-width:960px;animation:fadeUp .6s .2s ease both}
 .divider-line{flex:1;height:1px;background:var(--border)}
-.divider-text{font-size:12px;color:var(--muted);letter-spacing:.1em;white-space:nowrap}
+.divider-text{font-size:11px;color:var(--muted);letter-spacing:.1em;white-space:nowrap;font-family:'IBM Plex Mono',monospace}
 
 /* FOOTER */
-.footer{margin-top:36px;font-size:12px;color:var(--muted);text-align:center;animation:fadeUp .6s .3s ease both}
+.footer{margin-top:16px;font-size:11px;color:var(--muted);text-align:center;animation:fadeUp .6s .3s ease both}
 .footer a{color:var(--muted);text-decoration:none}
 .footer span{color:var(--indigo)}
 
 /* RESPONSIVE */
 @media(max-width:960px){
-  .roles{grid-template-columns:repeat(2,1fr);max-width:580px}
+  .roles{grid-template-columns:repeat(2,1fr);max-width:600px}
+  .corridor-strip{grid-template-columns:repeat(3,1fr);max-width:600px}
+  .public-row{max-width:600px}
+  .divider-label,.footer{max-width:600px}
+  .stat-bar{flex-wrap:wrap}
   .logo{font-size:38px}
 }
 @media(max-width:620px){
-  .roles{grid-template-columns:1fr;max-width:320px}
-  .public-row{flex-direction:column;max-width:320px}
-  .shell{overflow-y:auto;justify-content:flex-start;padding-top:60px}
+  .roles{grid-template-columns:1fr;max-width:340px}
+  .corridor-strip{grid-template-columns:repeat(2,1fr);max-width:340px}
+  .public-row{flex-direction:column;max-width:340px}
+  .shell{overflow-y:auto;justify-content:flex-start;padding-top:48px}
   html,body{overflow:auto}
+  .stat-bar{max-width:340px}
 }
 </style>
 <link rel="stylesheet" href="/main.css"/>
@@ -90,10 +120,107 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <body>
 <div class="shell">
 
+  <!-- HEADER -->
   <div class="header">
     <div class="logo">SLOI <em>AI</em><span style="font-size:11px;color:var(--muted);display:block;font-weight:400;letter-spacing:.04em;font-style:normal">Smart negotiation · LOI generation</span></div>
     <div class="tagline">MERCHANT TO MACHINE · COMMODITY TRADE PROTOCOL</div>
-    <div class="live-pill"><div class="live-dot"></div>ALL SYSTEMS ONLINE · SLOI AI v2.1</div>
+    <!-- LIVE STAT BAR -->
+    <div class="stat-bar">
+      <div class="stat-bar-item">
+        <div class="stat-bar-val"><span class="live-dot"></span>LIVE</div>
+        <div class="stat-bar-lbl">ALL SYSTEMS</div>
+      </div>
+      <div class="stat-bar-item">
+        <div class="stat-bar-val">5</div>
+        <div class="stat-bar-lbl">Trade Corridors</div>
+      </div>
+      <div class="stat-bar-item">
+        <div class="stat-bar-val">19</div>
+        <div class="stat-bar-lbl">Active Routes</div>
+      </div>
+      <div class="stat-bar-item">
+        <div class="stat-bar-val">62</div>
+        <div class="stat-bar-lbl">Products Priced</div>
+      </div>
+      <div class="stat-bar-item">
+        <div class="stat-bar-val">23</div>
+        <div class="stat-bar-lbl">Open Mandates</div>
+      </div>
+      <div class="stat-bar-item">
+        <div class="stat-bar-val" style="color:var(--teal)">v2.1</div>
+        <div class="stat-bar-lbl">Platform</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CORRIDOR STRIP -->
+  <div class="corridor-strip">
+
+    <a href="sloiai-platform.html?corridor=us" class="corr-tile" style="border-top-color:#2dd4bf">
+      <div class="corr-tile-head">
+        <span class="corr-tile-name">🌐 IMEC Corridor</span>
+        <span class="corr-tile-risk" style="background:rgba(34,197,94,.12);color:#22c55e">LOW</span>
+      </div>
+      <div class="corr-tile-kv">
+        <div class="corr-kv"><span class="corr-kv-val" style="color:#2dd4bf">$3T</span><span class="corr-kv-lbl">Trade Est.</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">6</span><span class="corr-kv-lbl">Routes</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">$108</span><span class="corr-kv-lbl">Cement/MT</span></div>
+      </div>
+      <div class="corr-tile-alert">Tanger Med → Baltimore: MV Casablanca Star departed</div>
+    </a>
+
+    <a href="sloiai-platform.html?corridor=gaza" class="corr-tile" style="border-top-color:#ef4444">
+      <div class="corr-tile-head">
+        <span class="corr-tile-name">🇵🇸 Gaza Reconstruction</span>
+        <span class="corr-tile-risk" style="background:rgba(239,68,68,.12);color:#ef4444">HIGH</span>
+      </div>
+      <div class="corr-tile-kv">
+        <div class="corr-kv"><span class="corr-kv-val" style="color:#ef4444">$50B+</span><span class="corr-kv-lbl">Rebuild Est.</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">16</span><span class="corr-kv-lbl">Products</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">$112</span><span class="corr-kv-lbl">Cement/MT</span></div>
+      </div>
+      <div class="corr-tile-alert">Kerem Shalom: 340 trucks cleared today</div>
+    </a>
+
+    <a href="sloiai-platform.html?corridor=ua" class="corr-tile" style="border-top-color:#e8a94a">
+      <div class="corr-tile-head">
+        <span class="corr-tile-name">🇺🇦 Ukraine Reconstruction</span>
+        <span class="corr-tile-risk" style="background:rgba(232,169,74,.12);color:#e8a94a">HIGH</span>
+      </div>
+      <div class="corr-tile-kv">
+        <div class="corr-kv"><span class="corr-kv-val" style="color:#e8a94a">$1.5T</span><span class="corr-kv-lbl">Rebuild Est.</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">3</span><span class="corr-kv-lbl">Routes</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">$550</span><span class="corr-kv-lbl">Rebar/MT</span></div>
+      </div>
+      <div class="corr-tile-alert">Black Sea risk index +12pts · war premium updated</div>
+    </a>
+
+    <a href="sloiai-platform.html?corridor=cfs" class="corr-tile" style="border-top-color:#8b8ff8">
+      <div class="corr-tile-head">
+        <span class="corr-tile-name">🇸🇦 Saudi Vision 2030</span>
+        <span class="corr-tile-risk" style="background:rgba(139,143,248,.12);color:#8b8ff8">LOW</span>
+      </div>
+      <div class="corr-tile-kv">
+        <div class="corr-kv"><span class="corr-kv-val" style="color:#8b8ff8">$1.3T</span><span class="corr-kv-lbl">Budget</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">5</span><span class="corr-kv-lbl">Routes</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">$618</span><span class="corr-kv-lbl">Steel/MT NEOM</span></div>
+      </div>
+      <div class="corr-tile-alert">NEOM tender round 14 active · Rebar 45,000 MT</div>
+    </a>
+
+    <a href="sloiai-platform.html?corridor=wc" class="corr-tile" style="border-top-color:#22c55e">
+      <div class="corr-tile-head">
+        <span class="corr-tile-name">🌲 Pacific West Coast</span>
+        <span class="corr-tile-risk" style="background:rgba(34,197,94,.12);color:#22c55e">LOW</span>
+      </div>
+      <div class="corr-tile-kv">
+        <div class="corr-kv"><span class="corr-kv-val" style="color:#22c55e">$8.4B</span><span class="corr-kv-lbl">US Imports/yr</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">3</span><span class="corr-kv-lbl">Routes</span></div>
+        <div class="corr-kv"><span class="corr-kv-val">$619</span><span class="corr-kv-lbl">Plywood/MT Reno</span></div>
+      </div>
+      <div class="corr-tile-alert">I-80 Donner Pass clear · Reno delivery on schedule</div>
+    </a>
+
   </div>
 
   <!-- MAIN ROLES -->
@@ -103,7 +230,13 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="role-icon">📊</div>
       <div class="role-title">Buyer</div>
       <div class="role-sub" style="color:var(--violet)">TRADE PLATFORM</div>
-      <div class="role-desc">Negotiate deals, deploy AI agents, manage wallet, approve transactions. Multi-commodity across all sectors.</div>
+      <div class="role-desc">Negotiate deals across 5 live corridors. Deploy AI agents, manage mandates, approve LOIs. Landed cost tracker across 62 priced products.</div>
+      <div class="role-stats">
+        <span class="role-stat"><b>5</b> corridors</span>
+        <span class="role-stat"><b>19</b> routes</span>
+        <span class="role-stat"><b>62</b> products</span>
+        <span class="role-stat"><b>⌘K</b> command bar</span>
+      </div>
       <div class="role-arrow" style="color:var(--violet)">Enter platform <span>→</span></div>
     </a>
 
@@ -111,7 +244,12 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="role-icon">🏭</div>
       <div class="role-title">Supplier</div>
       <div class="role-sub" style="color:var(--green)">SUPPLIER PORTAL</div>
-      <div class="role-desc">Manage your catalogue, update prices & stock, upload certifications, receive orders and payment via SLOI AI.</div>
+      <div class="role-desc">Manage your catalogue, update prices & stock, upload certifications. Receive mandate alerts from Gaza, Ukraine, NEOM & IMEC buyers. SASO · OFAC · MTC ready.</div>
+      <div class="role-stats">
+        <span class="role-stat"><b>23</b> open mandates</span>
+        <span class="role-stat"><b>SASO</b> certified</span>
+        <span class="role-stat"><b>OFAC</b> cleared</span>
+      </div>
       <div class="role-arrow" style="color:var(--green)">Enter portal <span>→</span></div>
     </a>
 
@@ -119,15 +257,23 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="role-icon">🤝</div>
       <div class="role-title">Trader</div>
       <div class="role-sub" style="color:var(--gold)">BROKER DASHBOARD</div>
-      <div class="role-desc">Commission tracking, sub-trader network, territory management. Earn 5% on every deal in your region.</div>
+      <div class="role-desc">Commission tracking across reconstruction and mega-project corridors. Earn 5% on every closed deal. Gaza, Ukraine, NEOM & IMEC deal flow in one view.</div>
+      <div class="role-stats">
+        <span class="role-stat"><b>5%</b> commission</span>
+        <span class="role-stat"><b>$3.8T+</b> total addressable</span>
+      </div>
       <div class="role-arrow" style="color:var(--gold)">Enter dashboard <span>→</span></div>
     </a>
 
     <a href="payments.html" class="role-card rc-teal">
       <div class="role-icon">💳</div>
       <div class="role-title">Merchant</div>
-      <div class="role-sub" style="color:var(--teal)">direct payment OPERATOR</div>
-      <div class="role-desc">Control direct payment accounts, authorize SWIFT releases, manage LC, multi-currency. AED · SAR · USD.</div>
+      <div class="role-sub" style="color:var(--teal)">DIRECT PAYMENT OPERATOR</div>
+      <div class="role-desc">Control direct payment accounts for IMEC, Gaza & Saudi corridor flows. Authorize SWIFT releases, manage LC. Multi-currency: AED · SAR · USD · EUR.</div>
+      <div class="role-stats">
+        <span class="role-stat"><b>AED · SAR · USD</b></span>
+        <span class="role-stat"><b>LC</b> · SWIFT · DDP</span>
+      </div>
       <div class="role-arrow" style="color:var(--teal)">Enter direct payment <span>→</span></div>
     </a>
 
@@ -135,7 +281,12 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="role-icon">⚙️</div>
       <div class="role-title">Admin</div>
       <div class="role-sub" style="color:var(--violet)">CONTROL PANEL</div>
-      <div class="role-desc">Platform oversight, user management, agent review, revenue dashboard, fee management, AI product agent.</div>
+      <div class="role-desc">Corridor command row, mandate pipeline Kanban, approval queue. Platform oversight across IMEC, Gaza, Ukraine, Saudi & West Coast corridors.</div>
+      <div class="role-stats">
+        <span class="role-stat"><b>5</b> corridor cards</span>
+        <span class="role-stat"><b>Kanban</b> pipeline</span>
+        <span class="role-stat"><b>War room</b></span>
+      </div>
       <div class="role-arrow" style="color:var(--violet)">Enter admin <span>→</span></div>
     </a>
 
@@ -143,7 +294,12 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="role-icon">🤖</div>
       <div class="role-title">AI Agent</div>
       <div class="role-sub" style="color:#ef4444">SLOI AI</div>
-      <div class="role-desc">The front page of agent commerce. Browse suppliers, query prices, submit LOIs autonomously via skill.md.</div>
+      <div class="role-desc">Agent commerce feed. Negotiate rebar from Izmir, cement from Al Arish, access floors for NEOM — autonomously. Submit LOIs via skill.md protocol.</div>
+      <div class="role-stats">
+        <span class="role-stat"><b>skill.md</b> protocol</span>
+        <span class="role-stat"><b>LOI</b> auto-generation</span>
+        <span class="role-stat"><b>M2M</b> trading</span>
+      </div>
       <div class="role-arrow" style="color:#ef4444">Enter agent feed <span>→</span></div>
     </a>
 
