@@ -322,6 +322,12 @@ select.inp option{background:var(--surface)}
       <button class="nav" id="tb-users" onclick="show('users',this)">👤 Users &amp; CRM</button>
     </div>
   </div>
+  <div id="demo-bar" style="display:flex;align-items:center;gap:8px;padding:5px 20px;background:rgba(232,169,74,.07);border-bottom:1px solid rgba(232,169,74,.18);font-size:11px;font-family:'IBM Plex Mono',monospace;color:rgba(232,169,74,.8);flex-shrink:0;position:relative;z-index:50">
+    <span style="width:5px;height:5px;border-radius:50%;background:#e8a94a;flex-shrink:0;animation:demopulse 2s ease-in-out infinite;display:inline-block"></span>
+    Demo environment &nbsp;·&nbsp; Market data, alerts and compliance statuses are simulated &nbsp;·&nbsp; Not for live procurement decisions
+    <button onclick="document.getElementById('demo-bar').style.display='none'" style="margin-left:auto;background:none;border:none;color:rgba(232,169,74,.45);cursor:pointer;font-size:13px;padding:0 2px;line-height:1;flex-shrink:0" title="Dismiss">✕</button>
+  </div>
+  <style>@keyframes demopulse{0%,100%{opacity:1}50%{opacity:.35}}</style>
 
   <div class="content">
 
@@ -808,12 +814,13 @@ select.inp option{background:var(--surface)}
       <table>
         <thead><tr><th>Time</th><th>Verdict</th><th>Buyer</th><th>Country</th><th>Action</th></tr></thead>
         <tbody>
-          <tr><td style="color:var(--muted)">14:35</td><td><span class="badge bg">CLEARED</span></td><td>Gulf Cement LLC</td><td>UAE</td><td style="color:var(--muted);font-size:14px">Standard</td></tr>
-          <tr><td style="color:var(--muted)">13:22</td><td><span class="badge bg">CLEARED</span></td><td>Atlas Trading</td><td>Germany</td><td style="color:var(--muted);font-size:14px">Standard</td></tr>
+          <tr><td style="color:var(--muted)">14:35</td><td><span class="badge bg">CLEARED<sup style="font-size:8px;opacity:.6;margin-left:1px">*</sup></span></td><td>Gulf Cement LLC</td><td>UAE</td><td style="color:var(--muted);font-size:14px">Standard</td></tr>
+          <tr><td style="color:var(--muted)">13:22</td><td><span class="badge bg">CLEARED<sup style="font-size:8px;opacity:.6;margin-left:1px">*</sup></span></td><td>Atlas Trading</td><td>Germany</td><td style="color:var(--muted);font-size:14px">Standard</td></tr>
           <tr><td style="color:var(--muted)">12:10</td><td><span class="badge ba">REVIEW</span></td><td>Al-Rashid Group</td><td>Iraq</td><td><button class="btn btn-xs btn-g" onclick="alert('Boss approved — deal proceeds with enhanced KYC.')">Approve</button></td></tr>
           <tr><td style="color:var(--muted)">11:05</td><td><span class="badge br">BLOCKED</span></td><td>Unknown Buyer</td><td>Iran</td><td style="color:var(--red);font-size:14px">OFAC listed</td></tr>
         </tbody>
       </table>
+      <div style="font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;padding:6px 0;opacity:.65">* CLEARED statuses shown are simulated demo data — not the result of a live compliance check</div>
     </div>
     <div class="g2">
       <div class="card" style="margin-bottom:0">

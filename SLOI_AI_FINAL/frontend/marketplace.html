@@ -71,6 +71,29 @@ h1 em{font-style:italic;background:linear-gradient(135deg,var(--indigo) 0%,var(-
 .result-count{margin-left:auto;font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace;white-space:nowrap}
 .result-count strong{color:var(--white)}
 
+/* CORRIDOR CARDS */
+.corridor-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:14px}
+.corr-mkt-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:all .2s}
+.corr-mkt-card:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(0,0,0,.5)}
+.corr-mkt-top{height:3px;flex-shrink:0}
+.corr-mkt-body{padding:18px 20px 14px;display:flex;flex-direction:column;gap:12px}
+.corr-mkt-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.corr-mkt-name{font-family:'Fraunces',serif;font-size:18px;font-weight:900;color:var(--white);margin-bottom:3px;line-height:1.2}
+.corr-mkt-desc{font-size:12px;color:var(--muted);line-height:1.65;max-width:680px}
+.corr-mkt-stats{display:flex;gap:20px;flex-wrap:wrap}
+.corr-mkt-stat{display:flex;flex-direction:column;gap:2px}
+.corr-mkt-stat-val{font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white);line-height:1}
+.corr-mkt-stat-lbl{font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;letter-spacing:.06em}
+.corr-mkt-routes{display:flex;flex-direction:column;gap:4px}
+.corr-mkt-route{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text)}
+.corr-mkt-route-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.corr-mkt-prods{display:flex;flex-wrap:wrap;gap:5px}
+.corr-mkt-prod{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;border:1px solid;white-space:nowrap}
+.corr-mkt-alert{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:5px;font-size:11px;font-family:'IBM Plex Mono',monospace;background:rgba(255,255,255,.02);border:1px solid var(--border2)}
+.corr-mkt-alert-tag{font-size:9px;font-weight:700;letter-spacing:.08em;padding:2px 6px;border-radius:2px;white-space:nowrap;flex-shrink:0}
+.corr-mkt-footer{padding:12px 20px;border-top:1px solid var(--border);background:rgba(0,0,0,.12);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.corr-mkt-risk{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px}
+
 /* TRADER CARDS */
 .trader-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .t-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:all .2s;text-decoration:none;color:inherit}
@@ -178,6 +201,12 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
     <a href="agent-mandate.html" class="btn-cta-nav">Set Mandate →</a>
   </div>
 </nav>
+<div id="demo-bar" style="display:flex;align-items:center;gap:8px;padding:6px 40px;background:rgba(232,169,74,.07);border-bottom:1px solid rgba(232,169,74,.18);font-size:11px;font-family:'IBM Plex Mono',monospace;color:rgba(232,169,74,.8);position:relative;z-index:90">
+  <span style="width:5px;height:5px;border-radius:50%;background:#e8a94a;flex-shrink:0;animation:demopulse 2s ease-in-out infinite;display:inline-block"></span>
+  Demo environment &nbsp;·&nbsp; Market data, alerts and compliance statuses are simulated &nbsp;·&nbsp; Not for live procurement decisions
+  <button onclick="document.getElementById('demo-bar').style.display='none'" style="margin-left:auto;background:none;border:none;color:rgba(232,169,74,.45);cursor:pointer;font-size:13px;padding:0 2px;line-height:1;flex-shrink:0" title="Dismiss">✕</button>
+</div>
+<style>@keyframes demopulse{0%,100%{opacity:1}50%{opacity:.35}}</style>
 
 <!-- HERO -->
 <div class="hero">
@@ -191,6 +220,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   <div class="view-tabs">
     <button class="view-tab active" id="tab-products" onclick="switchTab('products')">📦 Products</button>
     <button class="view-tab" id="tab-traders" onclick="switchTab('traders')">🤝 Traders</button>
+    <button class="view-tab" id="tab-corridors" onclick="switchTab('corridors')">🗺️ Corridors</button>
   </div>
   <div class="search-wrap">
     <span class="search-icon">⌕</span>
@@ -212,6 +242,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
   </div>
   <div id="trader-section" style="display:none">
     <div class="trader-grid" id="trader-grid"></div>
+  </div>
+  <div id="corridor-section" style="display:none">
+    <div class="corridor-grid" id="corridor-grid"></div>
   </div>
 </div>
 
@@ -324,16 +357,159 @@ var SECTOR_STYLE = {
   energy:       { bg:'rgba(232,169,74,.12)',  border:'rgba(232,169,74,.3)',  color:'var(--gold)',   label:'🛢 Energy' }
 };
 
+// ── CORRIDORS DATA (from sloiai-platform.html CORRIDORS object) ──────────────
+var CORRIDORS_MKT = [
+  {
+    key:'us', icon:'🌐', name:'IMEC Corridor', color:'#2dd4bf', rgb:'45,212,191', risk:'LOW',
+    tradeEst:'$3T', routes:6, products:7, mandates:4,
+    desc:'India–Middle East–Europe Economic Corridor — JNPT Mumbai & Mundra → Jebel Ali / Fujairah → Aqaba → Haifa land bridge → Piraeus / Genoa / Trieste / Hamburg. Rail-sea multimodal across 6 transit nations. OFAC-cleared counterparties at every node.',
+    topRoutes:[
+      'JNPT → Jebel Ali → Haifa → Hamburg',
+      'Mundra → Fujairah → Haifa → Genoa',
+      'Tanger Med → Baltimore (Trans-Atlantic)',
+    ],
+    topProducts:['Indian Steel HR Coil · IS 2062','OPC Cement 42.5N · ASTM C150','Aluminum Billet 6063 · EN AW-6063','Base Oil SN150 · API Group I','Steel Rebar G60 · ASTM A615','Gypsum Rock · Saharan origin'],
+    alert:'Tanger Med → Baltimore: MV Casablanca Star departed — OPC Cement 8,400 MT · ETA 14 days',
+    alertTag:'TRANSIT', alertColor:'rgba(45,212,191,.15)', alertTagColor:'#2dd4bf',
+    landedRef:'$108/MT cement',
+  },
+  {
+    key:'gaza', icon:'🇵🇸', name:'Gaza Reconstruction', color:'#ef4444', rgb:'239,68,68', risk:'HIGH',
+    tradeEst:'$50B+', routes:2, products:15, mandates:5,
+    desc:'Humanitarian reconstruction corridor — MENA & Mediterranean → Port Said → Al Arish → Gaza Strip via Kerem Shalom & Rafah border crossings. Truck-based last-mile logistics with UN/COGAT-coordinated entry. From-warehouse stock at Al Arish & Port Said for 24–48h dispatch.',
+    topRoutes:[
+      'Al Arish → Gaza via Kerem Shalom (Truck)',
+      'Port Said → Al Arish (Coastal sea feed)',
+    ],
+    topProducts:['OPC Cement 42.5N · Bulk','Steel Rebar G60 · ASTM A615','Hollow Concrete Block 20×20×40cm','Bagged Cement 50 kg · CEM I 42.5N','HDPE Water Tank 2,000 L · PE100','Plywood 18mm · Formwork grade'],
+    alert:'Kerem Shalom crossing: 340 trucks cleared today — cement & rebar priority',
+    alertTag:'ENTRY', alertColor:'rgba(239,68,68,.1)', alertTagColor:'#ef4444',
+    landedRef:'$112/MT cement',
+  },
+  {
+    key:'ua', icon:'🇺🇦', name:'Ukraine Reconstruction', color:'#e8a94a', rgb:'232,169,74', risk:'HIGH',
+    tradeEst:'$1.5T', routes:3, products:15, mandates:5,
+    desc:'Black Sea rebuild corridor — Turkey & MENA → Odessa, Constanta, Reni. Steel, cement, generators & float glass for infrastructure rebuild. From-warehouse stock at Constanta (Romania) and Izmir (Turkey) for rapid dispatch.',
+    topRoutes:[
+      'Izmir → Odessa (Steel Rebar · DSTU 3760 A500)',
+      'Jubail → Constanta (OPC Cement 42.5N)',
+      'Jebel Ali → Reni (Float Glass 4–6mm)',
+    ],
+    topProducts:['Steel Rebar · DSTU 3760 A500','OPC Cement 42.5N · DSTU EN 197-1','Float Glass 4mm · EN 572-2','Diesel Generators · 100–500 kVA','AAC Block 20×20×60cm','CFS Infill Panel Kit · AISI S240'],
+    alert:'Ukraine corridor risk index +12 pts — Black Sea war premium updated',
+    alertTag:'RISK', alertColor:'rgba(232,169,74,.1)', alertTagColor:'#e8a94a',
+    landedRef:'$550/MT rebar',
+  },
+  {
+    key:'cfs', icon:'🇸🇦', name:'Saudi Vision 2030', color:'#8b8ff8', rgb:'139,143,248', risk:'LOW',
+    tradeEst:'$1.3T', routes:5, products:12, mandates:6,
+    desc:'Saudi Arabia mega-project procurement corridor — international suppliers into Jeddah Islamic Port, Yanbu & Dammam, then domestic distribution to NEOM, Red Sea Project, Qiddiya, SPARK & Diriyah Gate. SASO-certified, ZATCA-cleared, Aramco-approved counterparties.',
+    topRoutes:[
+      'Izmir → Jeddah → NEOM / The Line',
+      'Jubail → SPARK → Qiddiya (Domestic)',
+      'Istanbul → Yanbu → Red Sea Project',
+      'JNPT Mumbai → Dammam → Qiddiya',
+    ],
+    topProducts:['Steel Rebar A500 · SASO · ASTM A615 Gr.60','OPC Cement 52.5R · ASTM C150 Type III','Aluminum Curtain Wall · EN AW-6063 T6','Raised Access Floor Panel · IEC 62485','CFS Data Hall Partition Kit · NFPA 75','Fire-Rated Partition Wall 2h · UL'],
+    alert:'NEOM tender round 14 active — Steel Rebar 45,000 MT · batch pricing live · SAR denomination available',
+    alertTag:'TENDER', alertColor:'rgba(139,143,248,.1)', alertTagColor:'#8b8ff8',
+    landedRef:'$618/MT steel NEOM',
+  },
+  {
+    key:'wc', icon:'🌲', name:'Pacific West Coast', color:'#22c55e', rgb:'34,197,94', risk:'LOW',
+    tradeEst:'$8.4B/yr', routes:3, products:11, mandates:2,
+    desc:'Trans-Pacific building materials corridor — Southeast Asia & China → Port of Long Beach / Oakland → I-80 distribution hub in Reno, NV serving Western US construction markets. CBP pre-cleared · FSC chain-of-custody · Section 301 compliance managed. By-location ex-yard stock at Long Beach, Oakland, Reno, Las Vegas, Salt Lake City & Phoenix.',
+    topRoutes:[
+      'Long Beach → I-5 / I-80 → Reno, NV',
+      'Oakland → I-80 → Reno, NV',
+      'Long Beach → I-15 → Las Vegas / Salt Lake City',
+    ],
+    topProducts:['Structural Plywood PS 1-09 · APA-rated · FSC','Mineral Wool Insulation R-30 · ASTM C665','OSB 7/16" PS 2-16 · APA Exposure 1','Plywood · Long Beach ex-yard','OSB · Reno Hub ex-hub','Mineral Wool · Oakland import yard'],
+    alert:'I-80 Donner Pass corridor clear — no weather delays · Reno delivery ETA on schedule · chain law lifted',
+    alertTag:'ROUTE', alertColor:'rgba(34,197,94,.1)', alertTagColor:'#22c55e',
+    landedRef:'$619/MT plywood Reno',
+  },
+];
+
+var RISK_BADGE = {
+  HIGH:{ bg:'rgba(239,68,68,.12)', color:'#ef4444' },
+  LOW: { bg:'rgba(34,197,94,.12)',  color:'#22c55e' },
+  MED: { bg:'rgba(232,169,74,.12)', color:'#e8a94a' },
+};
+
+function renderCorridors() {
+  var q = (document.getElementById('search-inp').value || '').toLowerCase().trim();
+  var list = CORRIDORS_MKT.filter(function(c) {
+    if (!q) return true;
+    return c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q)
+      || c.topProducts.some(function(p){ return p.toLowerCase().includes(q); })
+      || c.topRoutes.some(function(r){ return r.toLowerCase().includes(q); });
+  });
+  document.getElementById('result-count').innerHTML = '<strong>' + list.length + '</strong> corridor' + (list.length !== 1 ? 's' : '');
+  var rb = RISK_BADGE;
+  document.getElementById('corridor-grid').innerHTML = list.map(function(c) {
+    var risk = rb[c.risk] || rb.MED;
+    var routeItems = c.topRoutes.map(function(r) {
+      return '<div class="corr-mkt-route"><div class="corr-mkt-route-dot" style="background:' + c.color + '"></div><span>' + r + '</span></div>';
+    }).join('');
+    var prodChips = c.topProducts.map(function(p) {
+      return '<span class="corr-mkt-prod" style="color:' + c.color + ';border-color:rgba(' + c.rgb + ',.25);background:rgba(' + c.rgb + ',.06)">' + p + '</span>';
+    }).join('');
+    return '<div class="corr-mkt-card">'
+      + '<div class="corr-mkt-top" style="background:' + c.color + ';height:4px"></div>'
+      + '<div class="corr-mkt-body">'
+      + '<div class="corr-mkt-head">'
+      + '<div>'
+      + '<div style="font-size:28px;line-height:1;margin-bottom:8px">' + c.icon + '</div>'
+      + '<div class="corr-mkt-name">' + c.name + '</div>'
+      + '</div>'
+      + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0">'
+      + '<span class="corr-mkt-risk" style="background:' + risk.bg + ';color:' + risk.color + '">' + c.risk + ' RISK</span>'
+      + '<span style="font-family:\'IBM Plex Mono\',monospace;font-size:10px;color:var(--muted)">Landed ref: <b style="color:var(--white)">' + c.landedRef + '</b></span>'
+      + '</div>'
+      + '</div>'
+      + '<div class="corr-mkt-desc">' + c.desc + '</div>'
+      + '<div class="corr-mkt-stats">'
+      + '<div class="corr-mkt-stat"><div class="corr-mkt-stat-val" style="color:' + c.color + '">' + c.tradeEst + '</div><div class="corr-mkt-stat-lbl">Market Size</div></div>'
+      + '<div class="corr-mkt-stat"><div class="corr-mkt-stat-val">' + c.routes + '</div><div class="corr-mkt-stat-lbl">Active Routes</div></div>'
+      + '<div class="corr-mkt-stat"><div class="corr-mkt-stat-val">' + c.products + '</div><div class="corr-mkt-stat-lbl">Products Priced</div></div>'
+      + '<div class="corr-mkt-stat"><div class="corr-mkt-stat-val" style="color:' + c.color + '">' + c.mandates + '</div><div class="corr-mkt-stat-lbl">Open Mandates</div></div>'
+      + '</div>'
+      + '<div>'
+      + '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">// Active Routes</div>'
+      + '<div class="corr-mkt-routes">' + routeItems + '</div>'
+      + '</div>'
+      + '<div>'
+      + '<div style="font-family:\'IBM Plex Mono\',monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px">// Products Available</div>'
+      + '<div class="corr-mkt-prods">' + prodChips + '</div>'
+      + '</div>'
+      + '<div class="corr-mkt-alert" style="background:' + c.alertColor + ';border-color:rgba(' + c.rgb + ',.2)">'
+      + '<span class="corr-mkt-alert-tag" style="background:rgba(' + c.rgb + ',.15);color:' + c.color + '">' + c.alertTag + '</span>'
+      + '<span style="color:var(--text)">' + c.alert + '</span>'
+      + '</div>'
+      + '</div>'
+      + '<div class="corr-mkt-footer">'
+      + '<span style="font-size:12px;color:var(--muted);font-family:\'IBM Plex Mono\',monospace">sloiai-platform.html → ' + c.key + '</span>'
+      + '<a href="sloiai-platform.html?corridor=' + c.key + '" class="p-btn" style="background:rgba(' + c.rgb + ',.1);color:' + c.color + ';border:1px solid rgba(' + c.rgb + ',.3);padding:8px 20px;width:auto;display:inline-block;text-decoration:none;font-family:\'IBM Plex Mono\',monospace;font-size:12px;font-weight:700;border-radius:5px">Open Corridor →</a>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
 function switchTab(tab) {
   activeTab = tab;
-  document.getElementById('tab-products').classList.toggle('active', tab === 'products');
-  document.getElementById('tab-traders').classList.toggle('active', tab === 'traders');
-  document.getElementById('product-section').style.display = tab === 'products' ? '' : 'none';
-  document.getElementById('trader-section').style.display  = tab === 'traders'  ? '' : 'none';
+  ['products','traders','corridors'].forEach(function(t) {
+    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+  });
+  document.getElementById('product-section').style.display  = tab === 'products'  ? '' : 'none';
+  document.getElementById('trader-section').style.display   = tab === 'traders'   ? '' : 'none';
+  document.getElementById('corridor-section').style.display = tab === 'corridors' ? '' : 'none';
   document.getElementById('filter-pills-wrap').style.display = tab === 'products' ? 'flex' : 'none';
-  document.getElementById('search-inp').placeholder = tab === 'products' ? 'Search products…' : 'Search traders…';
+  var placeholders = { products:'Search products…', traders:'Search traders…', corridors:'Search corridors…' };
+  document.getElementById('search-inp').placeholder = placeholders[tab] || 'Search…';
   document.getElementById('search-inp').value = '';
   if (tab === 'traders') renderTraders();
+  else if (tab === 'corridors') renderCorridors();
   else filterProducts();
 }
 

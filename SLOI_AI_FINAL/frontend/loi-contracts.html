@@ -1629,5 +1629,53 @@ function vaultExportCsv() {
   a.click();
 }
 </script>
+
+<!-- LEGAL DISCLAIMER MODAL -->
+<div id="legal-ack-modal" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(5,5,9,.88);backdrop-filter:blur(6px);align-items:center;justify-content:center">
+  <div style="background:#0d0d1a;border:1px solid rgba(232,169,74,.35);border-radius:12px;padding:36px 40px;max-width:520px;width:90%;font-family:'Inter',sans-serif">
+    <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#e8a94a;font-family:'IBM Plex Mono',monospace;margin-bottom:14px">⚠ Before you generate</div>
+    <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:900;color:#f0eff8;letter-spacing:-.02em;margin-bottom:16px;line-height:1.15">AI-generated legal draft</div>
+    <div style="font-size:14px;color:#c8c6e0;line-height:1.85;margin-bottom:20px">
+      This document is produced by an AI model and is provided as a <strong style="color:#f0eff8">starting draft only</strong>. It has not been reviewed by a licensed attorney and does not constitute legal advice.
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+      <div style="display:flex;gap:10px;font-size:13px;color:#c8c6e0;background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.15);border-radius:6px;padding:10px 14px">
+        <span>📋</span><span>Review all terms with qualified trade counsel before signing, executing, or dispatching to any counterparty.</span>
+      </div>
+      <div style="display:flex;gap:10px;font-size:13px;color:#c8c6e0;background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.15);border-radius:6px;padding:10px 14px">
+        <span>🏦</span><span>For LC Applications — confirm all MT700 fields with your bank's trade desk before submission.</span>
+      </div>
+      <div style="display:flex;gap:10px;font-size:13px;color:#c8c6e0;background:rgba(232,169,74,.06);border:1px solid rgba(232,169,74,.15);border-radius:6px;padding:10px 14px">
+        <span>⚖️</span><span>SLOI AI bears no liability for errors, omissions, or losses arising from use of generated documents.</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="document.getElementById('legal-ack-modal').style.display='none'" style="padding:10px 20px;border-radius:6px;background:none;border:1px solid #222234;color:#8888a8;font-size:13px;cursor:pointer;font-family:'IBM Plex Mono',monospace">Cancel</button>
+      <button id="legal-ack-btn" style="padding:10px 24px;border-radius:6px;background:#5b5fef;border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'IBM Plex Mono',monospace">I understand — generate document</button>
+    </div>
+    <div style="font-size:10px;color:#8888a8;font-family:'IBM Plex Mono',monospace;text-align:center;margin-top:14px;opacity:.6">This notice appears once per session</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var _ackd = false;
+  var fns = ['genLOI','genPO','genNDA','genLCA','genSPA','genFreight','genHS'];
+  fns.forEach(function(name){
+    var orig = window[name];
+    if(typeof orig !== 'function') return;
+    window[name] = function(){
+      if(_ackd){ orig(); return; }
+      var modal = document.getElementById('legal-ack-modal');
+      modal.style.display = 'flex';
+      document.getElementById('legal-ack-btn').onclick = function(){
+        _ackd = true;
+        modal.style.display = 'none';
+        orig();
+      };
+    };
+  });
+})();
+</script>
 </body>
 </html>

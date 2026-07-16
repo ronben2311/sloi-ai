@@ -91,6 +91,44 @@ h1 em{font-style:italic;background:linear-gradient(135deg,var(--indigo),var(--vi
 .tc-name{font-size:14px;font-weight:600;color:var(--white)}
 .tc-meta{font-size:12px;color:var(--muted);margin-top:2px}
 
+/* MARKETPLACE TABS */
+.mkt-tabs-wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:72px 32px}
+.mkt-tab-bar{display:flex;gap:0;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:3px;margin-bottom:28px;width:fit-content}
+.mkt-tab{padding:7px 22px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--muted);font-family:'IBM Plex Mono',monospace;transition:all .15s;white-space:nowrap}
+.mkt-tab.active{background:var(--indigo);color:#fff}
+.mkt-prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.mkt-p-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;text-decoration:none;display:flex;flex-direction:column;transition:all .18s}
+.mkt-p-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.4)}
+.mkt-p-top{height:3px;flex-shrink:0}
+.mkt-p-body{padding:14px 16px 12px;flex:1;display:flex;flex-direction:column;gap:6px}
+.mkt-p-icon{font-size:18px;line-height:1}
+.mkt-p-name{font-size:13px;font-weight:700;color:var(--white);line-height:1.3}
+.mkt-p-spec{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.05em}
+.mkt-p-foot{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border)}
+.mkt-p-price{font-family:'Fraunces',serif;font-size:14px;font-weight:900;line-height:1}
+.mkt-p-badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:2px;letter-spacing:.04em}
+.mkt-trader-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.mkt-t-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;transition:border-color .18s}
+.mkt-t-card:hover{border-color:rgba(91,95,239,.3)}
+.mkt-t-flag{font-size:24px;flex-shrink:0;line-height:1;margin-top:2px}
+.mkt-t-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+.mkt-t-meta{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;line-height:1.5}
+.mkt-corr-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:10px}
+.mkt-c-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;text-decoration:none;display:flex;align-items:stretch;transition:all .18s}
+.mkt-c-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.4)}
+.mkt-c-accent{width:4px;flex-shrink:0}
+.mkt-c-body{padding:14px 18px;flex:1;display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.mkt-c-name{font-family:'Fraunces',serif;font-size:15px;font-weight:900;color:var(--white);line-height:1.2;min-width:160px}
+.mkt-c-stats{display:flex;gap:16px;flex-wrap:wrap}
+.mkt-c-stat-val{font-family:'Fraunces',serif;font-size:16px;font-weight:900;color:var(--white);line-height:1}
+.mkt-c-stat-lbl{font-size:9px;color:var(--muted);font-family:'IBM Plex Mono',monospace;letter-spacing:.06em}
+.mkt-c-prods{display:flex;flex-wrap:wrap;gap:4px;flex:1}
+.mkt-c-chip{font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 6px;border-radius:2px;border:1px solid;white-space:nowrap}
+.mkt-c-alert{font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;border-top:1px solid var(--border);padding-top:8px;width:100%;margin-top:4px}
+.mkt-view-all{display:flex;justify-content:center;margin-top:20px}
+.mkt-view-all a{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--violet);text-decoration:none;border:1px solid rgba(139,143,248,.25);background:rgba(139,143,248,.06);padding:8px 24px;border-radius:5px;transition:all .15s}
+.mkt-view-all a:hover{background:rgba(139,143,248,.14);border-color:rgba(139,143,248,.5)}
+
 /* PILLARS */
 .ab-pillars{display:flex;flex-direction:column;gap:10px;margin-top:36px}
 .ab-pillar{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:border-color .2s}
@@ -178,6 +216,10 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
   .cta-inner{padding:32px 20px}
   .stats-bar{grid-template-columns:1fr 1fr;margin:0 16px 48px}
   .tech-grid,.traders-grid{grid-template-columns:1fr}
+  .mkt-prod-grid{grid-template-columns:repeat(2,1fr)}
+  .mkt-trader-grid{grid-template-columns:1fr}
+  .mkt-c-body{flex-direction:column}
+  .mkt-tabs-wrap{padding:48px 16px}
   .plan-grid{grid-template-columns:1fr 1fr}
   .connect-grid{grid-template-columns:1fr}
   .sec-divider{margin:0 16px}
@@ -219,7 +261,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <!-- STATS -->
 <div class="stats-bar">
   <div class="sb-item">
-    <div class="sb-val" style="color:var(--indigo)">3</div>
+    <div class="sb-val" style="color:var(--indigo)">5</div>
     <div class="sb-label">Trade corridors live</div>
   </div>
   <div class="sb-item">
@@ -231,7 +273,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
     <div class="sb-label">OFAC/KYC screened counterparties</div>
   </div>
   <div class="sb-item">
-    <div class="sb-val" style="color:var(--green)">$5.7T+</div>
+    <div class="sb-val" style="color:var(--green)">$5.8T+</div>
     <div class="sb-label">Addressable corridor market</div>
   </div>
 </div>
@@ -401,6 +443,32 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 
 <div class="sec-divider"></div>
 
+<!-- MARKETPLACE PREVIEW -->
+<div class="mkt-tabs-wrap">
+  <div class="section-eyebrow">The marketplace</div>
+  <div class="section-title" style="text-align:center;margin-bottom:10px">Browse what's<br/><em>on platform.</em></div>
+  <div class="section-sub" style="margin-bottom:28px">62 products · 12 verified traders · 5 active corridors — all OFAC-screened and Incoterms 2020 ready.</div>
+  <div class="mkt-tab-bar">
+    <button class="mkt-tab active" id="abt-tab-products" onclick="abtSwitchTab('products')">📦 Products</button>
+    <button class="mkt-tab" id="abt-tab-traders" onclick="abtSwitchTab('traders')">🤝 Traders</button>
+    <button class="mkt-tab" id="abt-tab-corridors" onclick="abtSwitchTab('corridors')">🗺️ Corridors</button>
+  </div>
+  <div id="abt-products-section">
+    <div class="mkt-prod-grid" id="abt-prod-grid"></div>
+  </div>
+  <div id="abt-traders-section" style="display:none">
+    <div class="mkt-trader-grid" id="abt-trader-grid"></div>
+  </div>
+  <div id="abt-corridors-section" style="display:none">
+    <div class="mkt-corr-grid" id="abt-corr-grid"></div>
+  </div>
+  <div class="mkt-view-all">
+    <a href="marketplace.html">View full marketplace →</a>
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
 <!-- TRADER NETWORK -->
 <div class="section">
   <div class="section-eyebrow">Global trader network</div>
@@ -542,6 +610,110 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:24
 <script>
 function toggleNav(){document.getElementById('mob-nav').classList.toggle('nav-open')}
 document.addEventListener('click',function(e){if(!e.target.closest('nav'))document.getElementById('mob-nav').classList.remove('nav-open')});
+
+/* ── MARKETPLACE PREVIEW DATA ── */
+var ABT_PRODUCTS = [
+  { icon:'🪨', name:'OPC Cement 42.5N', spec:'ASTM C150 Type I · Bulk bags', price:'$78/MT', color:'#2dd4bf', corridor:'IMEC Corridor', risk:'LOW' },
+  { icon:'🔩', name:'Rebar BS4449 B500B', spec:'12mm · Cut lengths available', price:'$540/MT', color:'#2dd4bf', corridor:'IMEC Corridor', risk:'LOW' },
+  { icon:'🌾', name:'Wheat Flour 72% Ext', spec:'Protein 11.5% min · 50kg bags', price:'$380/MT', color:'#ef4444', corridor:'Gaza Reconstruction', risk:'HIGH' },
+  { icon:'💊', name:'Paracetamol API USP', spec:'GMP cert · WHO-PQ pending', price:'$4,200/MT', color:'#ef4444', corridor:'Gaza Reconstruction', risk:'HIGH' },
+  { icon:'⚡', name:'Solar Panels 550W', spec:'Mono PERC · IEC 61215 cert', price:'$0.18/W', color:'#e8a94a', corridor:'Ukraine Reconstruction', risk:'HIGH' },
+  { icon:'🏗️', name:'Prefab Housing Units', spec:'Steel frame · 40m² module', price:'$22,000/unit', color:'#e8a94a', corridor:'Ukraine Reconstruction', risk:'HIGH' },
+  { icon:'🔩', name:'Rebar HRB400 32mm', spec:'SABIC-certified · coiled', price:'$560/MT', color:'#8b8ff8', corridor:'Saudi Vision 2030', risk:'LOW' },
+  { icon:'🌲', name:'Douglas Fir 2x6 KD', spec:'WCLB graded · 12ft lengths', price:'$680/MBF', color:'#22c55e', corridor:'Pacific West Coast', risk:'LOW' },
+  { icon:'🔋', name:'LFP Battery Cells 280Ah', spec:'Grade A · CATL equiv. spec', price:'$68/cell', color:'#22c55e', corridor:'Pacific West Coast', risk:'LOW' },
+];
+var ABT_TRADERS = [
+  { flag:'🇺🇸', name:'Imec Trade & Logistics LLC', role:'Logistics & commodity trade', location:'United States', corridors:'IMEC · Gaza' },
+  { flag:'🇸🇦', name:'Kirocem', role:'Cement & building materials', location:'Saudi Arabia', corridors:'IMEC · Saudi Vision' },
+  { flag:'🇮🇱', name:'Tzenergy Systems', role:'Solar & energy components', location:'Israel', corridors:'IMEC · Ukraine' },
+  { flag:'🇵🇱', name:'Warsaw Steel Group', role:'Structural steel · rebar', location:'Poland', corridors:'Ukraine Reconstruction' },
+  { flag:'🇦🇪', name:'Al Futtaim FAMCO', role:'Heavy equipment & logistics', location:'UAE', corridors:'Saudi Vision 2030' },
+  { flag:'🇨🇳', name:'Zhongyuan Construction', role:'Prefab · Building systems', location:'China', corridors:'Gaza · Ukraine' },
+  { flag:'🇨🇦', name:'Pacific Lumber Co.', role:'Softwood & engineered wood', location:'Canada', corridors:'Pacific West Coast' },
+  { flag:'🇩🇪', name:'Thyssenkrupp Trade', role:'Steel · industrial materials', location:'Germany', corridors:'IMEC · Saudi Vision' },
+];
+var ABT_CORRIDORS = [
+  { key:'us', icon:'🌐', name:'IMEC Corridor', desc:'India–Middle East–Europe multimodal corridor linking Tanger Med to Haifa, Piraeus & Rotterdam.', color:'#2dd4bf', rgb:'45,212,191', risk:'LOW', tradeEst:'$3T', routes:6, products:8, mandates:12, topRoutes:['Tanger Med → Haifa Port','Piraeus → Rotterdam','Chennai → Dubai Jebel Ali'], topProducts:['OPC Cement 42.5N','Rebar BS4449','Portland Clinker','Crushed Aggregate'], alert:'Tanger Med batch cleared · OPC Cement 42.5N' },
+  { key:'gaza', icon:'🇵🇸', name:'Gaza Reconstruction', desc:'Humanitarian commodity pipeline coordinating reconstruction materials from international staging hubs.', color:'#ef4444', rgb:'239,68,68', risk:'HIGH', tradeEst:'$50B', routes:2, products:16, mandates:5, topRoutes:['Kerem Shalom Crossing','Ashdod Port → Gaza'], topProducts:['Wheat Flour 72%','Paracetamol API','Rebar 12mm','Prefab Panels'], alert:'Kerem Shalom: 340 trucks cleared today' },
+  { key:'ua', icon:'🇺🇦', name:'Ukraine Reconstruction', desc:'Post-conflict reconstruction pipeline for building materials, energy components and infrastructure.', color:'#e8a94a', rgb:'232,169,74', risk:'HIGH', tradeEst:'$1.5T', routes:3, products:15, mandates:7, topRoutes:['Gdańsk → Kyiv Rail','Constanța → Odesa','Berlin → Lviv Road'], topProducts:['Solar Panels 550W','Prefab Housing Units','Rebar HRB400','LFP Batteries'], alert:'Black Sea risk index +12pts · war premium updated' },
+  { key:'cfs', icon:'🇸🇦', name:'Saudi Vision 2030', desc:'NEOM and giga-project supply chain covering infrastructure steel, cement, and building systems.', color:'#8b8ff8', rgb:'139,143,248', risk:'LOW', tradeEst:'$1.3T', routes:5, products:12, mandates:9, topRoutes:['Jeddah Islamic Port → NEOM','Dammam → Riyadh Rail','Dubai → KAEC'], topProducts:['Rebar HRB400 32mm','OPC Cement 52.5N','HDPE Pipe DN600','Steel I-Beams'], alert:'NEOM tender round 14 active · Rebar 45,000 MT' },
+  { key:'wc', icon:'🌲', name:'Pacific West Coast', desc:'US West Coast lumber, engineered wood, and battery materials via I-80 and I-5 distribution hubs.', color:'#22c55e', rgb:'34,197,94', risk:'LOW', tradeEst:'$8.4B', routes:3, products:11, mandates:6, topRoutes:['Port of Seattle → Reno DC','Port of Oakland → Phoenix','Vancouver → Portland Rail'], topProducts:['Douglas Fir 2x6 KD','LFP Battery Cells 280Ah','Glulam Beams 6x14','OSB 23/32'], alert:'I-80 Donner Pass clear · Reno delivery on schedule' },
+];
+var ABT_RISK_COLORS = { LOW:'#22c55e', MED:'#e8a94a', HIGH:'#ef4444' };
+
+function abtSwitchTab(tab){
+  ['products','traders','corridors'].forEach(function(t){
+    document.getElementById('abt-'+t+'-section').style.display = t===tab ? '' : 'none';
+    var btn = document.getElementById('abt-tab-'+t);
+    if(btn){ btn.classList.toggle('active', t===tab); }
+  });
+}
+
+function abtRenderProducts(){
+  var g = document.getElementById('abt-prod-grid');
+  if(!g) return;
+  g.innerHTML = ABT_PRODUCTS.map(function(p){
+    var rc = ABT_RISK_COLORS[p.risk];
+    return '<a href="marketplace.html" class="mkt-p-card">'
+      +'<div class="mkt-p-top" style="background:'+p.color+'"></div>'
+      +'<div class="mkt-p-body">'
+        +'<div class="mkt-p-icon">'+p.icon+'</div>'
+        +'<div class="mkt-p-name">'+p.name+'</div>'
+        +'<div class="mkt-p-spec">'+p.spec+'</div>'
+        +'<div class="mkt-p-foot">'
+          +'<span class="mkt-p-price" style="color:'+p.color+'">'+p.price+'</span>'
+          +'<span class="mkt-p-badge" style="background:'+rc+'22;color:'+rc+';border:1px solid '+rc+'44">'+p.risk+'</span>'
+        +'</div>'
+      +'</div>'
+    +'</a>';
+  }).join('');
+}
+
+function abtRenderTraders(){
+  var g = document.getElementById('abt-trader-grid');
+  if(!g) return;
+  g.innerHTML = ABT_TRADERS.map(function(t){
+    return '<div class="mkt-t-card">'
+      +'<div class="mkt-t-flag">'+t.flag+'</div>'
+      +'<div>'
+        +'<div class="mkt-t-name">'+t.name+'</div>'
+        +'<div class="mkt-t-meta">'+t.role+'<br/>'+t.location+' · '+t.corridors+'</div>'
+      +'</div>'
+    +'</div>';
+  }).join('');
+}
+
+function abtRenderCorridors(){
+  var g = document.getElementById('abt-corr-grid');
+  if(!g) return;
+  g.innerHTML = ABT_CORRIDORS.map(function(c){
+    var rc = ABT_RISK_COLORS[c.risk];
+    var chips = c.topProducts.map(function(p){
+      return '<span class="mkt-c-chip" style="color:'+c.color+';border-color:'+c.color+'44;background:rgba('+c.rgb+',.06)">'+p+'</span>';
+    }).join('');
+    return '<a href="sloiai-platform.html?corridor='+c.key+'" class="mkt-c-card">'
+      +'<div class="mkt-c-accent" style="background:'+c.color+'"></div>'
+      +'<div class="mkt-c-body">'
+        +'<div style="min-width:160px"><div style="font-size:18px;margin-bottom:4px">'+c.icon+' <span style="font-size:12px;font-family:\'IBM Plex Mono\',monospace;color:var(--muted)">'+c.risk+' RISK</span></div>'
+        +'<div class="mkt-c-name">'+c.name+'</div>'
+        +'<div style="font-size:11px;color:var(--muted);margin-top:4px;max-width:200px;line-height:1.5">'+c.desc+'</div></div>'
+        +'<div class="mkt-c-stats">'
+          +'<div><div class="mkt-c-stat-val" style="color:'+c.color+'">'+c.tradeEst+'</div><div class="mkt-c-stat-lbl">TRADE EST</div></div>'
+          +'<div><div class="mkt-c-stat-val">'+c.routes+'</div><div class="mkt-c-stat-lbl">ROUTES</div></div>'
+          +'<div><div class="mkt-c-stat-val">'+c.products+'</div><div class="mkt-c-stat-lbl">PRODUCTS</div></div>'
+          +'<div><div class="mkt-c-stat-val">'+c.mandates+'</div><div class="mkt-c-stat-lbl">MANDATES</div></div>'
+        +'</div>'
+        +'<div class="mkt-c-prods">'+chips+'</div>'
+        +'<div class="mkt-c-alert">⚡ '+c.alert+'</div>'
+      +'</div>'
+    +'</a>';
+  }).join('');
+}
+
+abtRenderProducts();
+abtRenderTraders();
+abtRenderCorridors();
 </script>
 </body>
 </html>
