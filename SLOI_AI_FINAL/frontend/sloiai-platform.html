@@ -78,17 +78,17 @@
 
     /* Corridor info */
     .ci-name{font-family:"Fraunces",serif;font-size:17px;font-weight:900;color:var(--white);margin-bottom:4px;line-height:1.25}
-    .ci-desc{font-size:12px;color:var(--muted);line-height:1.55}
+    .ci-desc{font-size:14px;color:var(--muted);line-height:1.55}
     .ci-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
     .ci-stat{background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px}
-    .ci-stat-val{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600;color:var(--white)}
-    .ci-stat-lbl{font-size:11px;color:var(--muted);margin-top:2px}
+    .ci-stat-val{font-family:"IBM Plex Mono",monospace;font-size:17px;font-weight:600;color:var(--white)}
+    .ci-stat-lbl{font-size:12px;color:var(--muted);margin-top:2px}
 
     /* Alerts */
     .alert-item{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--border)}
     .alert-item:last-child{border-bottom:none}
     .alert-icon{font-size:14px;flex-shrink:0;margin-top:1px}
-    .alert-title{font-size:12px;color:var(--text);font-weight:500;line-height:1.4}
+    .alert-title{font-size:14px;color:var(--text);font-weight:500;line-height:1.4}
     .alert-meta{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);margin-top:2px}
     .atag{
       display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:9px;
@@ -133,20 +133,21 @@
     .ct-header{display:flex;align-items:center;justify-content:space-between;padding:9px 16px 7px;border-bottom:1px solid var(--border);flex-shrink:0}
     .ct-upd{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted)}
     .ct-wrap{flex:1;overflow-y:auto}
-    table.cttable{width:100%;border-collapse:collapse;font-size:12px}
+    table.cttable{width:100%;border-collapse:collapse;font-size:13px}
     table.cttable th{
       font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;
       color:var(--muted);text-align:left;padding:6px 14px;
       background:var(--surface);position:sticky;top:0;border-bottom:1px solid var(--border)
     }
-    table.cttable td{padding:7px 14px;border-bottom:1px solid var(--border);color:var(--text)}
+    table.cttable td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text)}
     table.cttable tr:hover td{background:var(--surface2)}
-    .tc-prod{font-weight:500;color:var(--white);font-size:12px}
+    .tc-prod{font-weight:600;color:var(--white);font-size:14px}
     .tc-spec{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted)}
-    .tc-price{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--white);font-weight:500}
-    .tc-origin{font-size:11px;color:var(--muted)}
-    .tc-up{color:var(--red);font-family:"IBM Plex Mono",monospace;font-size:11px}
-    .tc-dn{color:var(--green);font-family:"IBM Plex Mono",monospace;font-size:11px}
+    .tc-spec-hint{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}
+    .tc-price{font-family:"IBM Plex Mono",monospace;font-size:14px;color:var(--white);font-weight:500}
+    .tc-origin{font-size:13px;color:var(--muted)}
+    .tc-up{color:var(--red);font-family:"IBM Plex Mono",monospace;font-size:12px}
+    .tc-dn{color:var(--green);font-family:"IBM Plex Mono",monospace;font-size:12px}
     .dot{display:inline-block;width:8px;height:8px;border-radius:50%}
     .dot-low{background:var(--green)}
     .dot-med{background:var(--gold)}
@@ -427,8 +428,6 @@
                 <th>Product</th>
                 <th>Origin Port</th>
                 <th id="th-fob">FOB</th>
-                <th id="th-freight">Freight</th>
-                <th>Duty</th>
                 <th id="th-landed">Landed</th>
                 <th>7d Δ</th>
                 <th>Risk</th>
@@ -500,10 +499,10 @@ const CORRIDORS = {
       { path:[[48.4,-89.2],[47.5,-87.5],[41.9,-87.6]],                name:'Thunder Bay → Duluth → Chicago (CA)',      color:'#06b6d4', product:'MOP 60% Potash · Nutrien Saskatchewan',            country:'ca' },
       { path:[[44.6,-63.6],[42.4,-71.1],[40.7,-74.0]],                name:'Halifax → Boston → New York (CA)',         color:'#0891b2', product:'Nickel Sulfate · Cobalt Hydroxide · Glencore',     country:'ca' },
       { path:[[45.5,-73.6],[43.0,-79.0],[40.7,-74.0]],                name:'Montreal → Toronto → Buffalo → NY (CA)',   color:'#0e7490', product:'Lithium Carbonate · Frontier Lithium ON',          country:'ca' },
-      { path:[[53.9,-122.8],[54.3,-130.3],[58.4,-134.0],[61.2,-150.0]],name:'Prince George → Prince Rupert → AK (CA)',color:'#155e75', product:'Douglas Fir · Spruce · Interior BC mills',          country:'ca' },
-      { path:[[36.9,7.8],[36.7,5.0],[36.1,-5.4],[35.5,-10.0],[39.0,-30.0],[40.5,-55.0],[39.3,-76.6]],     name:'Annaba → Baltimore (DZ rebar)',          color:'#22c55e', product:'Steel Rebar A615 Gr.60 equiv. · ArcelorMittal Annaba',   country:'dz' },
-      { path:[[35.7,-0.6],[36.1,-5.4],[35.0,-15.0],[30.0,-45.0],[25.0,-75.0],[29.8,-95.4]],               name:'Oran → Houston (DZ cement)',             color:'#86efac', product:'OPC Cement 42.5N · GICA LafargeHolcim Algeria',          country:'dz' },
-      { path:[[33.6,-7.6],[33.0,-15.0],[35.0,-30.0],[38.0,-50.0],[39.0,-65.0],[39.3,-76.6]],             name:'Casablanca → Baltimore (MA)',             color:'#f97316', product:'Steel Rebar A615 · Sonasid Nador mill · OCP DAP',         country:'ma' },
+      { path:[[53.9,-122.8],[54.3,-130.3],[58.4,-134.0],[61.2,-150.0]],name:'Prince George → Prince Rupert → AK (CA)',color:'#155e75', product:'Douglas Fir · Spruce · Interior BC mills',          country:'ca' },
+      { path:[[36.9,7.8],[36.7,5.0],[36.1,-5.4],[35.5,-10.0],[39.0,-30.0],[40.5,-55.0],[39.3,-76.6]],     name:'Annaba → Baltimore (DZ rebar)',          color:'#22c55e', product:'Steel Rebar A615 Gr.60 equiv. · ArcelorMittal Annaba',   country:'dz' },
+      { path:[[35.7,-0.6],[36.1,-5.4],[35.0,-15.0],[30.0,-45.0],[25.0,-75.0],[29.8,-95.4]],               name:'Oran → Houston (DZ cement)',             color:'#86efac', product:'OPC Cement 42.5N · GICA LafargeHolcim Algeria',          country:'dz' },
+      { path:[[33.6,-7.6],[33.0,-15.0],[35.0,-30.0],[38.0,-50.0],[39.0,-65.0],[39.3,-76.6]],             name:'Casablanca → Baltimore (MA)',             color:'#f97316', product:'Steel Rebar A615 · Sonasid Nador mill · OCP DAP',         country:'ma' },
       { path:[[35.9,-5.5],[35.5,-10.0],[36.0,-25.0],[38.5,-45.0],[40.0,-65.0],[39.9,-75.1]],             name:'Tanger Med → Philadelphia (MA DAP)',      color:'#fb923c', product:'DAP 18-46-0 · OCP Group · Jorf Lasfar complex',          country:'ma' },
     ],
     ports:{
@@ -525,10 +524,10 @@ const CORRIDORS = {
         { pos:[48.4,-89.2],  name:'Thunder Bay (Great Lakes)',      country:'Canada' },
         { pos:[44.6,-63.6],  name:'Port of Halifax',                country:'Canada' },
         { pos:[45.5,-73.6],  name:'Port of Montreal',               country:'Canada' },
-        { pos:[46.5,-80.9],  name:'Sudbury — Nickel Hub',           country:'Canada' },
-        { pos:[36.9,7.8],  name:'Port of Annaba (ArcelorMittal)', country:'Algeria' },
-        { pos:[35.7,-0.6], name:'Port of Oran',                   country:'Algeria' },
-        { pos:[33.6,-7.6], name:'Port of Casablanca',             country:'Morocco' },
+        { pos:[46.5,-80.9],  name:'Sudbury — Nickel Hub',           country:'Canada' },
+        { pos:[36.9,7.8],  name:'Port of Annaba (ArcelorMittal)', country:'Algeria' },
+        { pos:[35.7,-0.6], name:'Port of Oran',                   country:'Algeria' },
+        { pos:[33.6,-7.6], name:'Port of Casablanca',             country:'Morocco' },
         { pos:[35.9,-5.5], name:'Tanger Med Port',                country:'Morocco' },
       ],
       dests:[
@@ -543,7 +542,7 @@ const CORRIDORS = {
         { pos:[33.4,-112.1], name:'Phoenix Distribution',          country:'USA' },
         { pos:[34.1,-118.2], name:'Port of Los Angeles',           country:'USA' },
         { pos:[42.4,-71.1],  name:'Port of Boston',               country:'USA' },
-        { pos:[32.7,-97.3],  name:'Dallas–Fort Worth Hub',         country:'USA' },
+        { pos:[32.7,-97.3],  name:'Dallas–Fort Worth Hub',         country:'USA' },
         { pos:[39.9,-75.1], name:'Port of Philadelphia', country:'USA' },
       ],
     },
@@ -564,12 +563,12 @@ const CORRIDORS = {
       { prod:'Potash MOP 60% Granular', spec:'KCl 60% · Nutrien Saskatchewan · CFIA certified',               origin:'Thunder Bay, CA',   fob:'$290/MT',   fr:'$32/MT',  duty:'$0 USMCA', land:'$326/MT',    ch:+0.9, risk:'low', email:'exports@nutrien.com',     wa:'13062345678',  country:'ca' },
       { prod:'Nickel Sulfate NiSO₄',    spec:'Battery grade · 22% Ni · Glencore Sudbury · LME-linked',       origin:'Halifax, CA',       fob:'$4,200/MT', fr:'$120/MT', duty:'$0 USMCA', land:'$4,340/MT',  ch:+1.4, risk:'low', email:'metals@glencore.ca',      wa:'14165678901',  country:'ca' },
       { prod:'Lithium Carbonate 99.5%', spec:'Battery grade · IRA-qualified · Frontier Lithium ON',           origin:'Montreal, CA',      fob:'$13,500/MT',fr:'$180/MT', duty:'$0 USMCA', land:'$13,700/MT', ch:-4.8, risk:'med', email:'supply@frontierli.ca',    wa:'17056789012',  country:'ca' },
-      { prod:'Cobalt Hydroxide 30% Co', spec:'Co(OH)₂ · IRA battery material · First Cobalt Ontario',        origin:'Halifax, CA',       fob:'$28,000/MT',fr:'$220/MT', duty:'$0 USMCA', land:'$28,250/MT', ch:+2.1, risk:'med', email:'trade@firstcobalt.ca',    wa:'16132345678',  country:'ca' },
-      { prod:'Steel Rebar G60 (DZ)',        spec:'ASTM A615 Gr.60 equiv. · heat-treated · AD/CVD CBP review active',   origin:'Annaba, DZ',       fob:'$478/MT',    fr:'$68/MT',    duty:'$32/MT',      land:'$578/MT',    ch:-1.2, risk:'med',  email:'export@arcelormittal-dz.com', wa:'213661234567', cat:'Bulk Commodities', country:'dz' },
-      { prod:'OPC Cement 42.5N (DZ)',       spec:'ASTM C150 Type I · bulk cargo · GICA LafargeHolcim Algeria',          origin:'Oran, DZ',         fob:'$52/MT',     fr:'$48/MT',    duty:'$0',          land:'$108/MT',    ch:-0.6, risk:'low',  email:'trade@gica.dz',               wa:'213551234567', cat:'Bulk Commodities', country:'dz' },
-      { prod:'DAP Fertilizer 18-46-0 (DZ)', spec:'Diammonium phosphate · Fertialgerie · bulk · IFC Equator Principles', origin:'Algiers, DZ',      fob:'$585/MT',    fr:'$52/MT',    duty:'$0',          land:'$648/MT',    ch:+1.8, risk:'low',  email:'export@fertialgerie.dz',      wa:'213218901234', cat:'Agri-Minerals',    country:'dz' },
-      { prod:'Steel Rebar A615 (MA)',        spec:'ASTM A615 Gr.60 / BS 4449 500B · Sonasid Nador mill · CBP cleared',  origin:'Casablanca, MA',   fob:'$465/MT',    fr:'$62/MT',    duty:'$0',          land:'$534/MT',    ch:-1.8, risk:'low',  email:'export@sonasid.ma',           wa:'212522123456', cat:'Bulk Commodities', country:'ma' },
-      { prod:'OPC Cement 52.5R (MA)',        spec:'EN 197-1 Type I 52.5R · LafargeHolcim Morocco · bulk cargo',         origin:'Casablanca, MA',   fob:'$55/MT',     fr:'$46/MT',    duty:'$0',          land:'$108/MT',    ch:-0.4, risk:'low',  email:'trade@lafargeholcim.ma',      wa:'212522234567', cat:'Bulk Commodities', country:'ma' },
+      { prod:'Cobalt Hydroxide 30% Co', spec:'Co(OH)₂ · IRA battery material · First Cobalt Ontario',        origin:'Halifax, CA',       fob:'$28,000/MT',fr:'$220/MT', duty:'$0 USMCA', land:'$28,250/MT', ch:+2.1, risk:'med', email:'trade@firstcobalt.ca',    wa:'16132345678',  country:'ca' },
+      { prod:'Steel Rebar G60 (DZ)',        spec:'ASTM A615 Gr.60 equiv. · heat-treated · AD/CVD CBP review active',   origin:'Annaba, DZ',       fob:'$478/MT',    fr:'$68/MT',    duty:'$32/MT',      land:'$578/MT',    ch:-1.2, risk:'med',  email:'export@arcelormittal-dz.com', wa:'213661234567', cat:'Bulk Commodities', country:'dz' },
+      { prod:'OPC Cement 42.5N (DZ)',       spec:'ASTM C150 Type I · bulk cargo · GICA LafargeHolcim Algeria',          origin:'Oran, DZ',         fob:'$52/MT',     fr:'$48/MT',    duty:'$0',          land:'$108/MT',    ch:-0.6, risk:'low',  email:'trade@gica.dz',               wa:'213551234567', cat:'Bulk Commodities', country:'dz' },
+      { prod:'DAP Fertilizer 18-46-0 (DZ)', spec:'Diammonium phosphate · Fertialgerie · bulk · IFC Equator Principles', origin:'Algiers, DZ',      fob:'$585/MT',    fr:'$52/MT',    duty:'$0',          land:'$648/MT',    ch:+1.8, risk:'low',  email:'export@fertialgerie.dz',      wa:'213218901234', cat:'Agri-Minerals',    country:'dz' },
+      { prod:'Steel Rebar A615 (MA)',        spec:'ASTM A615 Gr.60 / BS 4449 500B · Sonasid Nador mill · CBP cleared',  origin:'Casablanca, MA',   fob:'$465/MT',    fr:'$62/MT',    duty:'$0',          land:'$534/MT',    ch:-1.8, risk:'low',  email:'export@sonasid.ma',           wa:'212522123456', cat:'Bulk Commodities', country:'ma' },
+      { prod:'OPC Cement 52.5R (MA)',        spec:'EN 197-1 Type I 52.5R · LafargeHolcim Morocco · bulk cargo',         origin:'Casablanca, MA',   fob:'$55/MT',     fr:'$46/MT',    duty:'$0',          land:'$108/MT',    ch:-0.4, risk:'low',  email:'trade@lafargeholcim.ma',      wa:'212522234567', cat:'Bulk Commodities', country:'ma' },
       { prod:'DAP 18-46-0 (MA)',             spec:'Diammonium phosphate · OCP Group Jorf Lasfar · world No.1 exporter',  origin:'Casablanca, MA',   fob:'$558/MT',    fr:'$44/MT',    duty:'$0',          land:'$618/MT',    ch:-2.4, risk:'low',  email:'trade@ocpgroup.ma',           wa:'212523234567', cat:'Agri-Minerals',    country:'ma' },
     ],
     alerts:[
@@ -584,10 +583,10 @@ const CORRIDORS = {
       { icon:'⚡', title:'IRA critical mineral ruling: Canadian lithium &amp; nickel fully qualified — 45X credit (CA)',          tag:'t-clear', lbl:'IRA',       time:'3h ago',  country:'ca'   },
       { icon:'📋', title:'USMCA origin certification updated — CBP Form 434 templates live · applies MX &amp; CA',               tag:'t-info',  lbl:'DOCS',      time:'5h ago',  country:'both' },
       { icon:'⚠️', title:'Nuevo Laredo crossing: 45-min delay — CBP secondary inspection surge (MX)',                            tag:'t-warn',  lbl:'MX BORDER', time:'6h ago',  country:'mx'   },
-      { icon:'⚠️', title:'Lithium carbonate spot: -4.8% this week — IRA demand pull vs. oversupply pressure (CA)',               tag:'t-warn',  lbl:'CA PRICE',  time:'8h ago',  country:'ca'   },
-      { icon:'🇩🇿', title:'ArcelorMittal Annaba Q3 rebar batch — 14,000 MT · A615 equiv. · AD/CVD CBP review active',    tag:'t-warn',  lbl:'DZ BATCH',  time:'2h ago',  country:'dz' },
-      { icon:'✅',  title:'Fertialgerie DAP shipment EPA cleared — 8,500 MT bulk · ETA Houston 18 days',                   tag:'t-clear', lbl:'DZ CLEAR',  time:'5h ago',  country:'dz' },
-      { icon:'🇲🇦', title:'OCP Group DAP tender open — 50,000 MT · FOB Casablanca · price -8% vs N. America spot',        tag:'t-clear', lbl:'MA TENDER', time:'1h ago',  country:'ma' },
+      { icon:'⚠️', title:'Lithium carbonate spot: -4.8% this week — IRA demand pull vs. oversupply pressure (CA)',               tag:'t-warn',  lbl:'CA PRICE',  time:'8h ago',  country:'ca'   },
+      { icon:'🇩🇿', title:'ArcelorMittal Annaba Q3 rebar batch — 14,000 MT · A615 equiv. · AD/CVD CBP review active',    tag:'t-warn',  lbl:'DZ BATCH',  time:'2h ago',  country:'dz' },
+      { icon:'✅',  title:'Fertialgerie DAP shipment EPA cleared — 8,500 MT bulk · ETA Houston 18 days',                   tag:'t-clear', lbl:'DZ CLEAR',  time:'5h ago',  country:'dz' },
+      { icon:'🇲🇦', title:'OCP Group DAP tender open — 50,000 MT · FOB Casablanca · price -8% vs N. America spot',        tag:'t-clear', lbl:'MA TENDER', time:'1h ago',  country:'ma' },
       { icon:'✅',  title:'Sonasid rebar MTC certified — A615 Gr.60 equiv. · CBP entry Baltimore cleared · mandate US-512',tag:'t-clear', lbl:'MA CLEAR',  time:'4h ago',  country:'ma' },
     ],
     vault:[
@@ -605,10 +604,10 @@ const CORRIDORS = {
       { name:'KYC — Glencore Canada',       st:'vs-clear',   lbl:'VALID'    },
       { name:'45X Manufacturing Credit',    st:'vs-active',  lbl:'ACTIVE'   },
       { name:'Buy America / USMCA Review',  st:'vs-pending', lbl:'REVIEW'   },
-      { name:'CBP AD/CVD Review (DZ Steel)',   st:'vs-pending', lbl:'REVIEW'   },
-      { name:'EPA Import Cert (DZ Fertilizer)', st:'vs-clear',   lbl:'CLEAR'    },
-      { name:'CBP Entry — Sonasid (MA Steel)', st:'vs-clear',   lbl:'VALID'    },
-      { name:'OCP Origin Certificate (MA)',    st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'CBP AD/CVD Review (DZ Steel)',   st:'vs-pending', lbl:'REVIEW'   },
+      { name:'EPA Import Cert (DZ Fertilizer)', st:'vs-clear',   lbl:'CLEAR'    },
+      { name:'CBP Entry — Sonasid (MA Steel)', st:'vs-clear',   lbl:'VALID'    },
+      { name:'OCP Origin Certificate (MA)',    st:'vs-clear',   lbl:'VERIFIED' },
       { name:'Audit Trail',                  st:'vs-clear',   lbl:'ON'       },
     ],
     risks:[
@@ -623,21 +622,21 @@ const CORRIDORS = {
       { lbl:'Cobalt Price Volatility (CA)',     score:52, color:'#e8a94a' },
       { lbl:'BC Wildfire / Lumber Supply (CA)', score:48, color:'#22c55e' },
       { lbl:'CBP Inspection Surge (MX)',        score:44, color:'#22c55e' },
-      { lbl:'Peso FX Volatility (MX)',          score:32, color:'#22c55e' },
-      { lbl:'AD/CVD Steel Risk (DZ)',         score:62, color:'#e8a94a' },
-      { lbl:'Transatlantic Freight Rate',     score:48, color:'#22c55e' },
-      { lbl:'DAP Price Volatility (MA/DZ)',   score:42, color:'#22c55e' },
+      { lbl:'Peso FX Volatility (MX)',          score:32, color:'#22c55e' },
+      { lbl:'AD/CVD Steel Risk (DZ)',         score:62, color:'#e8a94a' },
+      { lbl:'Transatlantic Freight Rate',     score:48, color:'#22c55e' },
+      { lbl:'DAP Price Volatility (MA/DZ)',   score:42, color:'#22c55e' },
       { lbl:'Casablanca Port Congestion',     score:35, color:'#22c55e' },
     ],
   },
 
   epc: {
     name: '⚙️ EPC Supply Hub',
-    desc: 'Multi-theater EPC procurement — Gaza humanitarian rebuild (Al Arish → Kerem Shalom / Rafah), Ukraine post-war reconstruction (Izmir / Jubail → Odessa / Constanta / Reni) and Saudi Arabia Vision 2030 mega-projects (NEOM · Red Sea Project · SPARK · Diriyah Gate). Cement, rebar, CFS framing, generators, curtain wall &amp; finishing materials. OFAC-screened · SASO-certified · ZATCA-cleared · war risk managed.',
+    desc: 'Multi-theater EPC procurement — Gaza humanitarian rebuild (Al Arish → Kerem Shalom / Rafah), Ukraine post-war reconstruction (Izmir / Jubail → Odessa / Constanta / Reni) and Saudi Arabia Vision 2030 mega-projects (NEOM · Red Sea Project · SPARK · Diriyah Gate). Cement, rebar, CFS framing, insulation (mineral wool · EPS · PIR · XPS · Rockwool), plywood &amp; shuttering (formwork grade · marine WBP · structural birch), generators, curtain wall &amp; finishing materials. OFAC-screened · SASO-certified · ZATCA-cleared · war risk managed.',
     stats: [
       { val:'$2.8T+', lbl:'Combined EPC Est.'    },
-      { val:'10',     lbl:'Active Routes'          },
-      { val:'13',     lbl:'Open Mandates'          },
+      { val:'22',     lbl:'Active Routes'          },
+      { val:'16',     lbl:'Open Mandates'          },
       { val:'$618',   lbl:'Steel Landed/MT (KSA)' },
     ],
     mapCenter:[32, 40], mapZoom:3,
@@ -652,6 +651,14 @@ const CORRIDORS = {
       { path:[[41.0,29.0],[38,28],[32,31],[30.0,32.5],[26,36],[24.1,38.1],[25.0,37.3]],                 name:'Istanbul → Yanbu → Red Sea Project',        color:'#8b8ff8', product:'Aluminum Curtain Wall Profile · EN AW-6063 T6',  theater:'sa' },
       { path:[[18.9,72.9],[22,65],[25.1,55.1],[26.4,50.1],[25.5,48],[24.8,46.0]],                       name:'JNPT Mumbai → Dammam → Qiddiya',            color:'#e8a94a', product:'OPC Cement 52.5R · ASTM C150 Type III',           theater:'sa' },
       { path:[[21.5,39.2],[22,42],[24,44],[24.7,46.7],[24.7,46.6]],                                     name:'Jeddah → Riyadh → Diriyah Gate (Domestic)', color:'#22c55e', product:'Float Glass 8-12mm · NEOM Smart Facade Spec',    theater:'sa' },
+
+      { path:[[38.4,27.1],[35.5,26.0],[33,31],[31.2,32.3],[31.1,33.8]],                            name:'Izmir → Port Said → Al Arish (Insulation/Plywood GZ)',      color:'#60a5fa', product:'Mineral Wool 50mm · EPS 50mm · Shuttering Plywood 18mm', theater:'gz' },
+
+      { path:[[44.2,28.7],[45.0,29.2],[46.5,30.7]],                                                 name:'Constanta WH → Odessa (Insulation/Plywood UA)',                  color:'#93c5fd', product:'Mineral Wool 100mm · PIR Roof Board 80mm · Structural Ply 15mm', theater:'ua' },
+
+      { path:[[41.0,29.0],[38,28],[32,31],[30.0,32.5],[26,36],[24.1,38.1],[28.5,35.5]],             name:'Istanbul → Yanbu → NEOM (Insulation/Plywood SA)',             color:'#a78bfa', product:'Rockwool CONLIT · XPS 100mm SASO · Marine Plywood 19mm',  theater:'sa' },
+
+      { path:[[25.0,55.1],[25.4,56.3],[26.4,50.1]],                                                 name:'Jebel Ali → Dammam (XPS Insulation SA)',                          color:'#c084fc', product:'XPS Extruded Polystyrene 100mm · SASO 2095 · thermal spec', theater:'sa' },
     ],
     ports:{
       origins:[
@@ -705,6 +712,26 @@ const CORRIDORS = {
       { prod:'CFS Generator Enclosure',      spec:'AISI S240 · 40dB acoustic · marine-grade finish · flat-pack',     origin:'Izmir, TR → Yanbu',     fob:'$8.40/Sq.Ft',  fr:'$3.10/Sq.Ft',  duty:'$0.42/Sq.Ft', land:'$12.00/Sq.Ft',  ch:+0.3, risk:'low',  email:'cfs@yilmazcelik.com.tr',       wa:'905321111111', cat:'CFS Data Centre',     theater:'sa' },
       { prod:'Modular CFS UPS Room Kit',     spec:'Pre-fab · 4×6m cells · 2h fire-rated · DDP site · SASO',         origin:'Shanghai → Dammam',     fob:'$5.80/Sq.Ft',  fr:'$2.40/Sq.Ft',  duty:'$0.30/Sq.Ft', land:'$8.50/Sq.Ft',   ch:-1.2, risk:'med',  email:'modular@sfabrication.cn',      wa:'862134567891', cat:'CFS Data Centre',     theater:'sa' },
       { prod:'Fire-Rated Partition 2h',      spec:'UL certified · NFPA 75/76 · CFS + mineral wool infill · KD',     origin:'Izmir, TR → Jeddah',    fob:'$9.20/Sq.Ft',  fr:'$3.50/Sq.Ft',  duty:'$0.46/Sq.Ft', land:'$13.20/Sq.Ft',  ch:+0.5, risk:'low',  email:'cfs@yilmazcelik.com.tr',       wa:'905321111111', cat:'CFS Data Centre',     theater:'sa' },
+
+      { prod:'Mineral Wool Slab 50mm (GZ)',    spec:'EN 13162 · λ 0.035 W/mK · UN-cleared · Knauf TR · pallet 20 slabs · DDP Al Arish', origin:'Izmir, TR → Al Arish', fob:'$14.80/m²', fr:'$6.20/m²', duty:'$0', land:'$21.20/m²', ch:-0.4, risk:'high', email:'insulation@knaufinsulation.com.tr', wa:'902122345678', cat:'Insulation', theater:'gz' },
+
+      { prod:'EPS Board 50mm (GZ)',             spec:'EN 13163 · 1200×600mm · basic thermal envelope · UN logistics · humanitarian rebuild', origin:'Al Arish WH, EG',        fob:'Ex-WH $4.20/m²', fr:'$0.80/m²', duty:'$0', land:'$5.10/m²', ch:-0.2, risk:'low',  email:'eps@alarish-materials.eg',           wa:'201004567890', cat:'From Warehouse', theater:'gz' },
+
+      { prod:'Shuttering Plywood 18mm (GZ)',   spec:'1220×2440 · WPB phenolic glue · formwork grade · UN cleared · Al Arish WH stock',       origin:'Al Arish WH, EG',        fob:'Ex-WH $21/sht',     fr:'$3.50/sht',    duty:'$0', land:'$25.00/sht', ch:-0.8, risk:'low',  email:'plywood@alarish-materials.eg',       wa:'201005678901', cat:'From Warehouse', theater:'gz' },
+
+      { prod:'Mineral Wool 100mm (UA)',         spec:'EN 13162 · DSTU adopted · λ 0.036 W/mK · pallet 8 slabs · Constanta WH ready',       origin:'Constanta WH, RO',       fob:'Ex-WH $18.40/m²',fr:'$2.20/m²',  duty:'$0', land:'$21.00/m²',ch:-0.6, risk:'low',  email:'insulation@romtherm.ro',             wa:'40721345678',  cat:'From Warehouse', theater:'ua' },
+
+      { prod:'PIR Roof Board 80mm (UA)',        spec:'EN 13165 · λ 0.023 W/mK · foil-faced both sides · reconstruction roofing · DSTU EN',  origin:'Constanta WH, RO',       fob:'Ex-WH $24.60/m²',fr:'$2.40/m²',  duty:'$0', land:'$27.20/m²',ch:+0.4, risk:'low',  email:'pir@polyiso-ro.ro',                  wa:'40722456789',  cat:'From Warehouse', theater:'ua' },
+
+      { prod:'Structural Plywood 15mm (UA)',    spec:'EN 636-3 · exterior · 5-ply birch · 1220×2440mm · Constanta WH · structural apps', origin:'Constanta WH, RO',       fob:'Ex-WH $19.80/sht',  fr:'$3.20/sht',    duty:'$0', land:'$23.20/sht', ch:-1.0, risk:'low',  email:'plywood@transylvania-wood.ro',       wa:'40725678901',  cat:'From Warehouse', theater:'ua' },
+
+      { prod:'Rockwool CONLIT 150U (SA)',       spec:'SASO 2094 · acoustic + fire-rated 2h · NEOM data centre spec · ZATCA cleared',                origin:'Jebel Ali, AE',          fob:'$28.40/m²', fr:'$4.80/m²',  duty:'$1.40/m²', land:'$34.60/m²',ch:+0.6, risk:'low',  email:'insulation@rockwool-me.ae',          wa:'971504567891', cat:'Mega-Project Supply', theater:'sa' },
+
+      { prod:'XPS Board 100mm (SA)',            spec:'EN 13164 · SASO 2095 · λ 0.034 W/mK · desert thermal bridge-free · NEOM envelope', origin:'Istanbul, TR → Jeddah', fob:'$22.80/m²',fr:'$5.60/m²',  duty:'$1.14/m²',land:'$29.54/m²',ch:+0.4, risk:'low',  email:'xps@basf-insulation.com.tr',         wa:'902121345678', cat:'Mega-Project Supply', theater:'sa' },
+
+      { prod:'Marine Plywood 19mm (SA)',        spec:'BS 1088 · WBP phenolic · 1220×2440mm · SASO · NEOM interior joinery spec · ZATCA', origin:'Istanbul, TR → Yanbu', fob:'$54.80/sht', fr:'$8.40/sht', duty:'$2.74/sht', land:'$65.94/sht',ch:-0.6, risk:'low',  email:'plywood@karsan-wood.com.tr',         wa:'902122345679', cat:'Mega-Project Supply', theater:'sa' },
+
+      { prod:'Film-Faced Shutter Ply 18mm (SA)', spec:'1220×2440 · phenolic film 220g/m² · SASO certified · NEOM site formwork · ZATCA', origin:'Tianjin, CN → Dammam', fob:'$18.60/sht',fr:'$6.20/sht', duty:'$0.93/sht', land:'$25.73/sht',ch:-1.2, risk:'med', email:'plywood@chinawood-export.cn',         wa:'862134567892', cat:'Mega-Project Supply', theater:'sa' },
     ],
     alerts:[
       { icon:'🚛', title:'Kerem Shalom crossing: 340 trucks cleared — cement &amp; rebar priority · GZ theater',                     tag:'t-clear', lbl:'GZ ENTRY', time:'1h ago',  theater:'gz'   },
@@ -717,6 +744,12 @@ const CORRIDORS = {
       { icon:'✅',  title:'Izmir Rebar batch IZ-8821 SASO cert PASS — Aramco-approved supplier list confirmed',                       tag:'t-clear', lbl:'SASO',     time:'3h ago',  theater:'sa'   },
       { icon:'🚛',  title:'Jeddah → NEOM King Salman Road: 380km corridor · 4.5h avg transit confirmed · trucks cleared',            tag:'t-info',  lbl:'ROUTE',    time:'5h ago',  theater:'sa'   },
       { icon:'⚠️', title:'Jeddah Islamic Port: +1.8 day bulk terminal wait — Yanbu alternative slot available',                       tag:'t-warn',  lbl:'PORT',     time:'7h ago',  theater:'sa'   },
+      { icon:'✅',      title:'Al Arish WH: Mineral Wool 50mm pallet stock 8,400 m² confirmed UN-cleared — mandate GZ-09 ready to dispatch',       tag:'t-clear', lbl:'GZ CLEAR',  time:'2h ago',  theater:'gz'   },
+      { icon:'📦', title:'Shuttering Plywood 18mm GZ: 900 sheets Al Arish WH — formwork grade · UN logistics cleared · site delivery active', tag:'t-clear', lbl:'GZ STOCK',  time:'5h ago',  theater:'gz'   },
+      { icon:'✅',      title:'Constanta WH: Mineral Wool 100mm batch RO-4421 EN 13162 PASS — DSTU adopted · Odessa crossing cleared',               tag:'t-clear', lbl:'UA CERT',   time:'3h ago',  theater:'ua'   },
+      { icon:'⚠️', title:'PIR Roof Board 80mm lead time +6 weeks — post-war residential rebuild demand spike UA theater',                          tag:'t-warn',  lbl:'UA SUPPLY', time:'6h ago',  theater:'ua'   },
+      { icon:'✅',      title:'Rockwool CONLIT 150U SASO 2094 PASS — NEOM data centre acoustic spec approved · ZATCA cleared · batch RW-KSA-11',  tag:'t-clear', lbl:'SASO',      time:'2h ago',  theater:'sa'   },
+      { icon:'🇸🇦', title:'NEOM Marine Plywood 19mm tender: 42,000 sheets — SASO WBP BS 1088 spec · Istanbul supplier shortlisted',    tag:'t-info',  lbl:'TENDER',    time:'4h ago',  theater:'sa'   },
     ],
     vault:[
       { name:'OFAC SDN Screen',               st:'vs-active',  lbl:'RUNNING'  },
@@ -730,6 +763,14 @@ const CORRIDORS = {
       { name:'Saudi Customs (ZATCA)',         st:'vs-active',  lbl:'ACTIVE'   },
       { name:'Aramco Approved Supplier',      st:'vs-clear',   lbl:'VERIFIED' },
       { name:'Vision 2030 Procurement Auth.', st:'vs-active',  lbl:'ACTIVE'   },
+      { name:'EN 13162/13163 Insulation Cert', st:'vs-clear',  lbl:'VERIFIED' },
+
+      { name:'SASO 2094/2095 Insulation (SA)', st:'vs-clear',  lbl:'VERIFIED' },
+
+      { name:'KYC — Knauf Insulation TR',     st:'vs-clear',  lbl:'VALID'    },
+
+      { name:'KYC — Rockwool Middle East',    st:'vs-clear',  lbl:'VALID'    },
+
       { name:'Audit Trail',                   st:'vs-clear',   lbl:'ON'       },
     ],
     risks:[
@@ -743,16 +784,22 @@ const CORRIDORS = {
       { lbl:'CFS Supply Lead Time',         score:42, color:'#22c55e' },
       { lbl:'SASO Compliance',              score:35, color:'#22c55e' },
       { lbl:'FX Risk (SAR peg)',            score:18, color:'#22c55e' },
+
+      { lbl:'Insulation Supply (UA Theater)',  score:55, color:'#e8a94a' },
+
+      { lbl:'XPS/PIR Lead Times (SA)',         score:45, color:'#22c55e' },
+
+      { lbl:'Plywood Supply Disruption',       score:38, color:'#22c55e' },
     ],
   },
 
   gc: {
     name: '🏢 GC Supply Hub',
-    desc: 'Domestic US general contractor supply — Sun Belt high-volume commodity materials (Atlanta, Dallas–Fort Worth, Phoenix, Miami, Charlotte) and Pacific West Coast green building (California Title 24, mass timber CLT/GLT, FSC lumber, recycled-content rebar). Filter by ☀️ Sun Belt for SE/SW fast-track supply or 🌲 Pacific West for eco-spec &amp; sustainability compliance.',
+    desc: 'Domestic US general contractor supply — Sun Belt high-volume commodity materials (Atlanta, Dallas–Fort Worth, Phoenix, Miami, Charlotte) and Pacific West Coast green building (California Title 24, mass timber CLT/GLT, FSC lumber, recycled-content rebar). Expanded with insulation systems (OC · Rockwool · Knauf · MemBrain), plywood &amp; sheathing (APA PS1-19 · Douglas Fir), fiber cement boards (James Hardie HardiePlank/Panel · Nichiha rainscreen) and CFS Mid-Rise panelized systems (ClarkDietrich · SCAFCO · AISI S240 5-over-1 podium). Filter by ☀️ Sun Belt or 🌲 Pacific West.',
     stats: [
       { val:'$1.8T+', lbl:'GC Build Market (US)'  },
-      { val:'10',     lbl:'Active Routes'          },
-      { val:'4',      lbl:'Open Mandates'          },
+      { val:'18',     lbl:'Active Routes'          },
+      { val:'9',      lbl:'Open Mandates'          },
       { val:'$36',    lbl:'CLT 3-ply FOB/sq.ft'   },
     ],
     mapCenter:[38, -108], mapZoom:3,
@@ -767,6 +814,22 @@ const CORRIDORS = {
       { path:[[47.6,-122.3],[45.5,-122.7],[37.8,-122.3],[34.1,-118.2]],  name:'Seattle → Portland → Bay Area → LA (Insulation)',      color:'#0ea5e9', product:'OC EcoTouch R-38 · Title 24 Part 6 · ASTM C665',    region:'wc' },
       { path:[[47.3,-122.5],[45.5,-122.7],[37.8,-122.3]],               name:'Nucor Seattle WA → Portland → Bay Area (Green Steel)',  color:'#6366f1', product:'Recycled Rebar ≥95% RC · SCS certified',             region:'wc' },
       { path:[[49.3,-123.1],[47.6,-122.3],[45.5,-122.7],[37.8,-122.3]], name:'Vancouver BC → Seattle → Portland → Bay Area (FSC)',    color:'#84cc16', product:'FSC SPF 2×6 KD · no-added-urea-formaldehyde',        region:'wc' },
+
+      { path:[[36.0,-80.2],[33.8,-84.4],[32.9,-97.0],[33.5,-112.0]],              name:'OC Statesville NC → Atlanta → Dallas → Phoenix (Insulation)', color:'#f59e0b', product:'R-21 Kraft Batt · ASTM C665 · GreenGuard Gold · CFS cavity',      region:'sb' },
+
+      { path:[[34.2,-77.9],[33.8,-84.4],[35.2,-80.8]],                             name:'James Hardie Wilmington NC → Atlanta → Charlotte (FCB)',             color:'#8b5cf6', product:'HardiePlank LP · HardiePanel · HardieBacker · ASTM C1186',     region:'sb' },
+
+      { path:[[39.4,-84.5],[33.8,-84.4],[32.9,-97.0],[33.5,-112.0]],              name:'ClarkDietrich Hamilton OH → Atlanta → Dallas → Phoenix (CFS)',   color:'#ec4899', product:'CFS Pre-Panelized Wall 6" 18ga · AISI S240 · 5-over-1 podium',  region:'sb' },
+
+      { path:[[36.1,-83.9],[33.8,-84.4],[35.2,-80.8]],                             name:'Weyerhaeuser Kingsport TN → Atlanta → Charlotte (Plywood)',           color:'#a3e635', product:'CDX 3/4" Plywood PS1-19 · Structural I · APA rated',            region:'sb' },
+
+      { path:[[47.7,-117.4],[45.5,-122.7],[37.8,-122.3],[34.1,-118.2]],            name:'SCAFCO Spokane WA → Portland → Bay Area → LA (CFS)',             color:'#d946ef', product:'CFS Load-Bearing Panel 6" 16ga · AISI S240 · Seismic Zone D',   region:'wc' },
+
+      { path:[[47.3,-122.4],[45.5,-122.7],[37.8,-122.3],[34.1,-118.2]],            name:'James Hardie Tacoma WA → Portland → Bay Area → LA (FCB)',        color:'#7c3aed', product:'HardiePlank Smooth · HardiePanel V-Grooved · Title 24',         region:'wc' },
+
+      { path:[[43.2,-124.2],[38.6,-121.5],[34.1,-118.2]],                          name:'Roseburg Forest OR → Sacramento → LA (Plywood)',                      color:'#65a30d', product:'AC Douglas Fir 3/4" Plywood PS1-19 · sanded · APA rated',      region:'wc' },
+
+      { path:[[45.6,-122.7],[38.6,-121.5],[34.1,-118.2]],                          name:'CertainTeed Portland OR → Sacramento → LA (Insulation)',               color:'#38bdf8', product:'MemBrain Smart Vapor Retarder · ASTM E96 · Title 24 Part 6',   region:'wc' },
     ],
     ports:{
       origins:[
@@ -780,6 +843,18 @@ const CORRIDORS = {
         { pos:[47.3,-122.5], name:'Nucor Seattle (Renton) WA',       country:'USA'    },
         { pos:[49.3,-123.1], name:'Port of Vancouver (FSC Lumber)',  country:'Canada' },
         { pos:[47.6,-122.3], name:'Seattle Distribution Hub',        country:'USA'    },
+
+        { pos:[36.0,-80.2],  name:'OC Statesville NC (Insulation)',      country:'USA' },
+
+        { pos:[34.2,-77.9],  name:'James Hardie Wilmington NC (FCB)',    country:'USA' },
+
+        { pos:[39.4,-84.5],  name:'ClarkDietrich Hamilton OH (CFS)',     country:'USA' },
+
+        { pos:[36.1,-83.9],  name:'Weyerhaeuser Kingsport TN (Plywood)', country:'USA' },
+
+        { pos:[47.7,-117.4], name:'SCAFCO Steel Spokane WA (CFS)',       country:'USA' },
+
+        { pos:[43.2,-124.2], name:'Roseburg Forest Products OR (Ply)',   country:'USA' },
       ],
       dests:[
         { pos:[33.8,-84.4],  name:'Atlanta Metro Hub',              country:'USA' },
@@ -812,6 +887,40 @@ const CORRIDORS = {
       { prod:'FSC SPF 2×6 KD S4S',         spec:'NLGA · no-added-urea-formaldehyde · FSC CoC · CalGreen Ch.4',      origin:'Vancouver, CA',   fob:'$680/MBF',   fr:'$58/MBF',     duty:'$0 USMCA',land:'$748/MBF',     ch:-2.8, risk:'low', email:'export@westfraser.com',         wa:'16042345678',  region:'wc' },
       { prod:'Recycled Rebar ≥95% RC',     spec:'ASTM A615 Gr.60 · SCS recycled content cert. · Nucor Seattle',     origin:'Renton, WA',      fob:'$688/MT',    fr:'$28/MT',      duty:'$0',      land:'$716/MT',      ch:-0.4, risk:'low', email:'sales@nucor.com',               wa:'17045749200',  region:'wc' },
       { prod:'Low-VOC Exterior Coating',   spec:'VOC <50g/L · SCAQMD Rule 1113 · GreenGuard Gold · 5-gal',          origin:'Los Angeles, CA', fob:'$41/gal',    fr:'$3/gal',      duty:'$0',      land:'$44/gal',      ch:+0.9, risk:'low', email:'contractor@sherwin-williams.com',wa:'18002214795',  region:'wc' },
+
+      { prod:'OC R-21 Kraft Batt (SB)',         spec:'ASTM C665 · 6" CFS cavity · 15"×93" · GreenGuard Gold · Buy America', origin:'Statesville, NC',  fob:'$0.92/sq.ft', fr:'$0.05/sq.ft', duty:'$0', land:'$0.98/sq.ft', ch:+0.6, risk:'low', email:'contractor@owenscorning.com', wa:'14192486000', cat:'Insulation',         region:'sb' },
+
+      { prod:'Mineral Wool SAFB Sound (SB)',     spec:'ASTM C1363 · STC 52 · CFS party wall · 3.5" semi-rigid · non-combustible', origin:'Boca Raton, FL',   fob:'$1.18/sq.ft', fr:'$0.06/sq.ft', duty:'$0', land:'$1.25/sq.ft', ch:+0.4, risk:'low', email:'contractor@thermafiber.com',  wa:'18005221839', cat:'Insulation',         region:'sb' },
+
+      { prod:'CertainTeed MemBrain (WC)',        spec:'ASTM E96 · smart vapor retarder · Title 24 · R-value neutral · 8ft roll',   origin:'Portland, OR',     fob:'$0.34/sq.ft', fr:'$0.02/sq.ft', duty:'$0', land:'$0.36/sq.ft', ch:+0.2, risk:'low', email:'contractor@certainteed.com',  wa:'18004827452', cat:'Insulation',         region:'wc' },
+
+      { prod:'Knauf EcoBatt R-30 (WC)',          spec:'ASTM C665 · formaldehyde-free · GreenGuard Gold · 16" · Title 24 Part 6',  origin:'Shelbyville, IN',  fob:'$1.44/sq.ft', fr:'$0.08/sq.ft', duty:'$0', land:'$1.52/sq.ft', ch:+0.3, risk:'low', email:'sales@knaufinsulation.com',   wa:'18008256364', cat:'Insulation',         region:'wc' },
+
+      { prod:'CDX 3/4" Plywood Shtg (SB)',     spec:'PS1-19 · APA Structural I · Exposure 1 · 4×8 · Weyerhaeuser KY mills',  origin:'Kingsport, TN',    fob:'$48.60/sht',  fr:'$2.20/sht',   duty:'$0', land:'$51.00/sht',  ch:-1.4, risk:'low', email:'sales@weyerhaeuser.com',      wa:'12533244000', cat:'Plywood & Sheathing', region:'sb' },
+
+      { prod:'5/8" Plywood Roof Shtg (SB)',    spec:'PS1-19 · Exposure 1 · H-Clip · APA rated · LP Building SE mills',           origin:'Atlanta, GA',      fob:'$36.80/sht',  fr:'$1.80/sht',   duty:'$0', land:'$38.80/sht',  ch:-0.8, risk:'low', email:'lpcorp.com',                  wa:'18887437400', cat:'Plywood & Sheathing', region:'sb' },
+
+      { prod:'AC Douglas Fir 3/4" Ply (WC)',   spec:'PS1-19 · sanded face · APA · exterior glue · Roseburg Forest OR',           origin:'Roseburg, OR',     fob:'$54.20/sht',  fr:'$2.40/sht',   duty:'$0', land:'$57.00/sht',  ch:-1.0, risk:'low', email:'sales@roseburg.com',          wa:'15413494000', cat:'Plywood & Sheathing', region:'wc' },
+
+      { prod:'1/2" Marine Birch Ply (WC)',     spec:'BS 1088 · 9-ply void-free · CARB P2 · exterior glue · Pacific WC',          origin:'Vancouver, BC',    fob:'$78.40/sht',  fr:'$5.20/sht',   duty:'$0 USMCA', land:'$83.80/sht', ch:+0.4, risk:'low', email:'export@westernforest.com', wa:'16044846321', cat:'Plywood & Sheathing', region:'wc' },
+
+      { prod:'HardiePlank 7.25" LP (SB)',      spec:'ASTM C1186 · HZ10 hurricane zone · fire-resistant · pre-primed · 12ft',     origin:'Wilmington, NC',   fob:'$0.88/lf',    fr:'$0.04/lf',    duty:'$0', land:'$0.93/lf',    ch:-0.2, risk:'low', email:'contractor@jameshardie.com',  wa:'18887427463', cat:'Fiber Cement',        region:'sb' },
+
+      { prod:'HardiePanel 4×8 Vertical (SB)', spec:'ASTM C1186 · smooth/cedarmill · 5/16" · pre-primed · James Hardie SE',   origin:'Wilmington, NC',   fob:'$38.40/sht',  fr:'$2.20/sht',   duty:'$0', land:'$40.80/sht',  ch:+0.2, risk:'low', email:'contractor@jameshardie.com',  wa:'18887427463', cat:'Fiber Cement',        region:'sb' },
+
+      { prod:'HardieBacker 3/8" Tile (SB)',    spec:'ASTM C1325 · 36"×60" · mold &amp; moisture resistant · TCNA approved',    origin:'Charlotte, NC',    fob:'$16.80/sht',  fr:'$1.20/sht',   duty:'$0', land:'$18.20/sht',  ch:+0.4, risk:'low', email:'contractor@jameshardie.com',  wa:'18887427463', cat:'Fiber Cement',        region:'sb' },
+
+      { prod:'HardiePlank 6.25" Smooth (WC)',  spec:'ASTM C1186 · HZ10 · Title 24 · pre-primed · 12ft · James Hardie Tacoma', origin:'Tacoma, WA',       fob:'$0.92/lf',    fr:'$0.06/lf',    duty:'$0', land:'$0.99/lf',    ch:-0.3, risk:'low', email:'contractor@jameshardie.com',  wa:'18887427463', cat:'Fiber Cement',        region:'wc' },
+
+      { prod:'Nichiha FCB Rainscreen (WC)',      spec:'ASTM C1186 · rainscreen drainage · 16"×144" · BBA certified · stucco', origin:'Macon, GA → CA', fob:'$4.20/sq.ft', fr:'$0.38/sq.ft', duty:'$0', land:'$4.62/sq.ft', ch:+0.6, risk:'low', email:'info@nichiha.com',          wa:'14046975070', cat:'Fiber Cement',        region:'wc' },
+
+      { prod:'CFS Wall Panel 6" 18ga (SB)',    spec:'AISI S240 · 5-over-1 podium · pre-panelized · CFS-MF guide · 10ft height',  origin:'Hamilton, OH',     fob:'$8.40/sq.ft', fr:'$0.60/sq.ft', duty:'$0', land:'$9.10/sq.ft', ch:-0.4, risk:'low', email:'sales@clarkdietrich.com',     wa:'18003254717', cat:'CFS Mid-Rise',        region:'sb' },
+
+      { prod:'CFS Floor Truss 24" Deep (SB)',  spec:'AISI S240 · 24ft span · 30psf LL · L/480 deflection · 24" OC · galv.',  origin:'Charlotte, NC',    fob:'$6.80/sq.ft', fr:'$0.40/sq.ft', duty:'$0', land:'$7.30/sq.ft', ch:+0.2, risk:'low', email:'sales@clarkdietrich.com',     wa:'18003254717', cat:'CFS Mid-Rise',        region:'sb' },
+
+      { prod:'CFS LB Panel 6" 16ga (WC)',      spec:'AISI S240 · 6-story · IBC 2021 · SEAOC · seismic zone D · SCAFCO',      origin:'Spokane, WA',      fob:'$9.20/sq.ft', fr:'$0.65/sq.ft', duty:'$0', land:'$9.90/sq.ft', ch:-0.2, risk:'low', email:'sales@scafco.com',            wa:'15094825000', cat:'CFS Mid-Rise',        region:'wc' },
+
+      { prod:'CFS Shear Wall Panel (WC)',        spec:'OSHPD preapproved · IBC 2021 · 7/16" OSB sheathing · AISI S400 · seis. D', origin:'Spokane, WA',      fob:'$11.40/sq.ft',fr:'$0.80/sq.ft', duty:'$0', land:'$12.30/sq.ft',ch:+0.2, risk:'low', email:'sales@scafco.com',            wa:'15094825000', cat:'CFS Mid-Rise',        region:'wc' },
     ],
     alerts:[
       { icon:'📈', title:'Sun Belt housing starts +22% YoY — Dallas, Phoenix, Charlotte driving rebar &amp; framing demand',            tag:'t-warn',  lbl:'DEMAND',   time:'1h ago',  region:'sb' },
@@ -824,6 +933,22 @@ const CORRIDORS = {
       { icon:'⚡', title:'IRA Section 45L: mass timber qualifies — $2,500/unit new residential · applicable to CA CLT mandates',        tag:'t-clear', lbl:'IRA 45L',  time:'5h ago',  region:'wc' },
       { icon:'📋', title:'CalGreen 2025 Ch.4: ≥10% recycled content aggregate required in structural concrete — review active mandates', tag:'t-info',  lbl:'CALGREEN', time:'7h ago',  region:'wc' },
       { icon:'⚠️', title:'CLT lead time extended to 14–18 weeks — OR mill capacity constrained by commercial mass timber demand',        tag:'t-warn',  lbl:'SUPPLY',   time:'9h ago',  region:'wc' },
+
+      { icon:'📈', title:'5-over-1 CFS podium starts +34% YoY Sun Belt — Dallas, Phoenix, Charlotte driving panel demand spike Q3 2026',        tag:'t-warn',  lbl:'DEMAND',   time:'1h ago',  region:'sb' },
+
+      { icon:'✅',      title:'OC R-21 batt batch OC-5521 GreenGuard Gold PASS — 6" CFS cavity · Buy America compliant Sun Belt mandates',       tag:'t-clear', lbl:'CERT',     time:'3h ago',  region:'sb' },
+
+      { icon:'✅',      title:'James Hardie Wilmington: HardiePlank LP batch JH-8821 ASTM C1186 PASS — HZ10 hurricane zone certified · SE region', tag:'t-clear', lbl:'JH CERT',  time:'5h ago',  region:'sb' },
+
+      { icon:'✅',      title:'Weyerhaeuser Kingsport: CDX 3/4" batch WY-7721 APA PS1-19 PASS — Buy America cert · IIJA structural eligible',    tag:'t-clear', lbl:'APA CERT', time:'7h ago',  region:'sb' },
+
+      { icon:'✅',      title:'SCAFCO Spokane: CFS shear wall OSHPD preapproval renewed — seismic zone D · applicable CA/WA projects 2026',       tag:'t-clear', lbl:'OSHPD',    time:'2h ago',  region:'wc' },
+
+      { icon:'🏗️', title:'Nichiha rainscreen system approved for CA Title 24 drainage plane spec — 40+ projects queued Pacific West',       tag:'t-info',  lbl:'APPROVED', time:'4h ago',  region:'wc' },
+
+      { icon:'📋', title:'CA Title 24 2025 Nonres: R-25 min. continuous insulation mandatory for CFS walls in Climate Zones 12–15 from Jan 2026', tag:'t-warn',  lbl:'TITLE 24', time:'6h ago',  region:'wc' },
+
+      { icon:'📈', title:'Pacific NW plywood spot -5.8% — mill restarts adding capacity Q3 2026 · lock prices before Q4 demand uptick',       tag:'t-clear', lbl:'PRICE',    time:'8h ago',  region:'wc' },
     ],
     vault:[
       { name:'Buy America Certification',  st:'vs-clear',   lbl:'VERIFIED' },
@@ -840,6 +965,22 @@ const CORRIDORS = {
       { name:'KYC — Freres Lumber OR',     st:'vs-clear',   lbl:'VALID'    },
       { name:'SCS Recycled Content Cert.', st:'vs-clear',   lbl:'VERIFIED' },
       { name:'LEED Documentation',         st:'vs-active',  lbl:'ACTIVE'   },
+      { name:'KYC — James Hardie Industries', st:'vs-clear',  lbl:'VALID'    },
+
+      { name:'KYC — ClarkDietrich Corp.',      st:'vs-clear',  lbl:'VALID'    },
+
+      { name:'KYC — SCAFCO Corporation',       st:'vs-clear',  lbl:'VALID'    },
+
+      { name:'KYC — Weyerhaeuser Co.',          st:'vs-clear',  lbl:'VALID'    },
+
+      { name:'ASTM C1186 FCB Certification',        st:'vs-clear',  lbl:'VERIFIED' },
+
+      { name:'AISI S240 CFS Engineering Stamp',     st:'vs-active', lbl:'ACTIVE'   },
+
+      { name:'APA PS1-19 Plywood Certification',    st:'vs-clear',  lbl:'VERIFIED' },
+
+      { name:'HZ10 Hurricane Zone Certification',   st:'vs-clear',  lbl:'VERIFIED' },
+
       { name:'Audit Trail',                st:'vs-clear',   lbl:'ON'       },
     ],
     risks:[
@@ -853,6 +994,14 @@ const CORRIDORS = {
       { lbl:'Hurricane Season (FL/TX)',      score:38, color:'#22c55e' },
       { lbl:'IRA Credit Eligibility Risk',  score:35, color:'#22c55e' },
       { lbl:'CA SCAQMD VOC Compliance',     score:28, color:'#22c55e' },
+
+      { lbl:'CFS Panel Lead Times (SB)',    score:52, color:'#e8a94a' },
+
+      { lbl:'Plywood Price Volatility',      score:45, color:'#22c55e' },
+
+      { lbl:'FCB Supply (JH Lead Times)',    score:42, color:'#22c55e' },
+
+      { lbl:'OSHPD Seismic Approval Lag',   score:38, color:'#22c55e' },
     ],
   },
 
@@ -992,7 +1141,6 @@ function renderCosts(key) {
   _openDrawerData = null;
   const isEPC = key === 'epc';
   document.getElementById('th-fob').textContent     = 'FOB';
-  document.getElementById('th-freight').textContent = isEPC ? 'Logistics' : 'Freight';
   document.getElementById('th-landed').textContent  = isEPC ? 'Gate Price' : 'Landed';
   const allRows = CORRIDORS[key].costs;
   _activeCorridor = key;
@@ -1007,30 +1155,40 @@ function renderCosts(key) {
   const catGroups = {};
   if (hasCats) {
     rows.forEach(r => {
+      if (!r.cat) return;
       if (!catGroups[r.cat]) catGroups[r.cat] = { count:0, risks:{high:0,med:0,low:0} };
       catGroups[r.cat].count++;
       if (r.risk) catGroups[r.cat].risks[r.risk] = (catGroups[r.cat].risks[r.risk]||0) + 1;
     });
   }
 
+  _collapsedCats = new Set();
   let html = '';
   let lastCat = null;
   rows.forEach((row, i) => {
-    if (hasCats && row.cat !== lastCat) {
+    if (hasCats && row.cat && row.cat !== lastCat) {
       const isCFSCat   = row.cat === 'CFS Mid-Rise';
       const isCFSDCCat = row.cat === 'CFS Data Centre';
       const isWHCat    = row.cat === 'From Warehouse';
       const isByLocCat = row.cat === 'By Location';
-      const catColor = isCFSCat ? 'var(--teal)' : isCFSDCCat ? 'var(--violet)' : isWHCat ? 'var(--green)' : isByLocCat ? 'var(--blue)' : 'var(--muted)';
-      const catBg    = isCFSCat ? 'rgba(45,212,191,.06)' : isCFSDCCat ? 'rgba(139,143,248,.06)' : isWHCat ? 'rgba(34,197,94,.06)' : isByLocCat ? 'rgba(59,130,246,.06)' : 'rgba(136,136,168,.04)';
-      const catIcon  = isCFSCat ? '🏗️' : isCFSDCCat ? '🖥️' : isWHCat ? '🏪' : isByLocCat ? '📍' : '📦';
+      const isInsulCat = row.cat === 'Insulation';
+      const isPlysCat  = row.cat === 'Plywood & Sheathing';
+      const isFCBCat   = row.cat === 'Fiber Cement';
+      const isMegaCat  = row.cat === 'Mega-Project Supply';
+      const isBulkCat  = row.cat === 'Bulk Commodities';
+      const catColor = isCFSCat ? 'var(--teal)' : isCFSDCCat ? 'var(--violet)' : isWHCat ? 'var(--green)' : isByLocCat ? 'var(--blue)' : isInsulCat ? '#38bdf8' : isPlysCat ? '#a3e635' : isFCBCat ? '#8b5cf6' : isMegaCat ? 'var(--gold)' : isBulkCat ? 'var(--teal)' : 'var(--muted)';
+      const catBg    = isCFSCat ? 'rgba(45,212,191,.06)' : isCFSDCCat ? 'rgba(139,143,248,.06)' : isWHCat ? 'rgba(34,197,94,.06)' : isByLocCat ? 'rgba(59,130,246,.06)' : isInsulCat ? 'rgba(56,189,248,.06)' : isPlysCat ? 'rgba(163,230,53,.06)' : isFCBCat ? 'rgba(139,92,246,.06)' : isMegaCat ? 'rgba(232,169,74,.06)' : isBulkCat ? 'rgba(45,212,191,.06)' : 'rgba(136,136,168,.04)';
+      const catIcon  = isCFSCat ? '🏗️' : isCFSDCCat ? '🖥️' : isWHCat ? '🏪' : isByLocCat ? '📍' : isInsulCat ? '🧊' : isPlysCat ? '🪵' : isFCBCat ? '🏠' : isMegaCat ? '🏆' : '📦';
       const catTag   = isCFSCat    ? 'Cold-formed steel structural systems'
                      : isCFSDCCat  ? 'NFPA 75/76 · SASO-certified · hyperscale DC spec'
                      : isWHCat     ? 'Pre-positioned stock · 24–48h dispatch'
                      : isByLocCat  ? 'Ex-yard / ex-hub · CBP-cleared · local delivery'
-                     : row.cat === 'Mega-Project Supply'      ? 'Vision 2030 mega-project sourcing'
+                     : isInsulCat  ? 'Thermal · acoustic · fire-rated systems'
+                     : isPlysCat   ? 'APA-rated · structural · marine grade'
+                     : isFCBCat    ? 'ASTM C1186 · hurricane-zone certified'
+                     : isMegaCat   ? 'Vision 2030 mega-project sourcing'
                      : row.cat === 'Import (Trans-Pacific)'   ? 'Trans-Pacific ocean freight · CBP-cleared'
-                     : row.cat === 'Bulk Commodities'         ? 'Bulk commodity imports & domestic supply'
+                     : isBulkCat   ? 'Bulk commodity imports & domestic supply'
                      : '';
       const grp   = catGroups[row.cat];
       const risks = grp.risks;
@@ -1039,28 +1197,29 @@ function renderCosts(key) {
         risks.med  ? `<span style="color:var(--gold)">${risks.med} MED</span>`  : '',
         risks.low  ? `<span style="color:var(--green)">${risks.low} LOW</span>` : '',
       ].filter(Boolean).join('<span style="color:var(--border2);margin:0 4px">·</span>');
-      html += `<tr><td colspan="9" style="padding:0;border-bottom:1px solid var(--border)">
-        <div class="cat-banner-inner" style="border-left:3px solid ${catColor};background:${catBg}">
-          <div class="cat-banner-left">
-            <span class="cat-banner-icon">${catIcon}</span>
-            <span class="cat-banner-name" style="color:${catColor}">${row.cat}</span>
-            <span class="cat-banner-count">${grp.count} item${grp.count!==1?'s':''}</span>
-            <span class="cat-banner-tag">${catTag}</span>
+      html += `<tr class="cat-banner-tr" data-banner-cat="${row.cat}" onclick="toggleCat(this.dataset.bannerCat)" style="cursor:pointer">
+        <td colspan="7" style="padding:0;border-bottom:1px solid var(--border)">
+          <div class="cat-banner-inner" style="border-left:3px solid ${catColor};background:${catBg}">
+            <div class="cat-banner-left">
+              <span class="cat-banner-icon">${catIcon}</span>
+              <span class="cat-banner-name" style="color:${catColor}">${row.cat}</span>
+              <span class="cat-banner-count">${grp.count} item${grp.count!==1?'s':''}</span>
+              <span class="cat-banner-tag">${catTag}</span>
+            </div>
+            <div class="cat-banner-right">${riskParts}<span class="cat-toggle-arrow" style="margin-left:12px;color:var(--muted);font-size:10px">▼</span></div>
           </div>
-          <div class="cat-banner-right">${riskParts}</div>
-        </div>
-      </td></tr>`;
+        </td>
+      </tr>`;
       lastCat = row.cat;
     }
     const up = row.ch > 0;
     const dotCls = row.risk === 'high' ? 'dot-high' : row.risk === 'med' ? 'dot-med' : 'dot-low';
-    const specChips = row.spec.split(' · ').map(s => `<span class="spec-chip">${s}</span>`).join('');
-    html += `<tr class="cost-row-clickable" onclick="toggleCostRow(this,${i})">
-      <td><div class="tc-prod">${row.prod}</div><div class="spec-chips">${specChips}</div></td>
+    const specHint = row.spec ? row.spec.split(' \xb7 ').slice(0,2).join(' \xb7 ') : '';
+    const catAttr  = row.cat ? ` data-cat="${row.cat}"` : '';
+    html += `<tr class="cost-row-clickable"${catAttr} onclick="toggleCostRow(this,${i})">
+      <td><div class="tc-prod">${row.prod}</div>${specHint ? `<div class="tc-spec-hint">${specHint}</div>` : ''}</td>
       <td class="tc-origin">${row.origin}</td>
       <td class="tc-price">${row.fob}</td>
-      <td class="tc-price">${row.fr}</td>
-      <td class="tc-price">${row.duty}</td>
       <td class="tc-price">${row.land}</td>
       <td class="${up ? 'tc-up' : 'tc-dn'}">${up ? '▲' : '▼'} ${Math.abs(row.ch)}%</td>
       <td><span class="dot ${dotCls}" title="${row.risk} risk"></span></td>
@@ -1075,6 +1234,7 @@ function renderCosts(key) {
 
 /* ── PRODUCT DRAWER ── */
 let _openDrawerData = null;
+let _collapsedCats = new Set();
 
 function toggleCostRow(tr, i) {
   const wasOpen = _openDrawerData && _openDrawerData.tr === tr;
@@ -1123,7 +1283,7 @@ function toggleCostRow(tr, i) {
 
   const drawerTr = document.createElement('tr');
   drawerTr.className = 'cost-drawer-tr';
-  drawerTr.innerHTML = `<td colspan="9" style="padding:0!important">
+  drawerTr.innerHTML = `<td colspan="7" style="padding:0!important">
     <div class="cost-drawer-inner">
       <div class="cost-drawer-diag">
         <div class="cost-drawer-diag-icon">${diagIcon}</div>
@@ -1154,6 +1314,31 @@ function toggleCostRow(tr, i) {
   _openDrawerData = { tr, drawerTr };
 }
 
+
+function toggleCat(cat) {
+  const isNowCollapsed = !_collapsedCats.has(cat);
+  if (isNowCollapsed) { _collapsedCats.add(cat); } else { _collapsedCats.delete(cat); }
+  // Show/hide rows belonging to this category
+  document.querySelectorAll('#cost-tbody tr[data-cat]').forEach(tr => {
+    if (tr.dataset.cat === cat) tr.style.display = isNowCollapsed ? 'none' : '';
+  });
+  // Close the open drawer if it's inside the now-collapsed category
+  if (_openDrawerData) {
+    const openRow = _openDrawerData.tr;
+    if (openRow.dataset && openRow.dataset.cat === cat && isNowCollapsed) {
+      _openDrawerData.drawerTr.remove();
+      openRow.classList.remove('cost-row-open');
+      _openDrawerData = null;
+    }
+  }
+  // Flip the arrow on the banner row
+  document.querySelectorAll('#cost-tbody .cat-banner-tr').forEach(tr => {
+    if (tr.dataset.bannerCat === cat) {
+      const arrow = tr.querySelector('.cat-toggle-arrow');
+      if (arrow) arrow.textContent = isNowCollapsed ? '▶' : '▼';
+    }
+  });
+}
 function showContact(btn, i) {
   const c = _contacts[i];
   const pop = document.getElementById('contact-pop');
@@ -1775,26 +1960,24 @@ function setCorridor(key) {
 
   // Sub-filter pill-bar (EPC theater / USMCA country)
   if (key === 'epc' || key === 'us' || key === 'gc') {
-    _subFilter[key] = 'all';
+    const _sfDefaults = { epc:'gz', us:'mx', gc:'sb' };
+    _subFilter[key] = _sfDefaults[key] || 'gz';
     const sfBar = document.getElementById('sub-filter-bar');
     sfBar.style.display = 'flex';
     if (key === 'epc') {
       sfBar.innerHTML = '<span class="sfpill-label">Theater</span>'
-        + '<button class="sfpill active" data-val="all" onclick="setSubFilter(\'epc\',\'all\')">🌐 All</button>'
-        + '<button class="sfpill" data-val="gz" onclick="setSubFilter(\'epc\',\'gz\')">🇵🇸 Gaza</button>'
-        + '<button class="sfpill" data-val="ua" onclick="setSubFilter(\'epc\',\'ua\')">🇺🇦 Ukraine</button>';
+        + '<button class="sfpill active" data-val="gz" onclick="setSubFilter(\'epc\',\'gz\')">🇵🇸 Gaza</button>'
+        + '<button class="sfpill" data-val="ua" onclick="setSubFilter(\'epc\',\'ua\')">🇺🇦 Ukraine</button>'
         + '<button class="sfpill" data-val="sa" onclick="setSubFilter(\'epc\',\'sa\')">🇸🇦 Saudi</button>';
     } else if (key === 'us') {
       sfBar.innerHTML = '<span class="sfpill-label">Origin</span>'
-        + '<button class="sfpill active" data-val="all" onclick="setSubFilter(\'us\',\'all\')">🌐 All</button>'
-        + '<button class="sfpill" data-val="mx" onclick="setSubFilter(\'us\',\'mx\')">🇲🇽 Mexico</button>'
-        + '<button class="sfpill" data-val="ca" onclick="setSubFilter(\'us\',\'ca\')">🇨🇦 Canada</button>'
-        + '<button class="sfpill" data-val="dz" onclick="setSubFilter(\'us\',\'dz\')">🇩🇿 Algeria</button>'
+        + '<button class="sfpill active" data-val="mx" onclick="setSubFilter(\'us\',\'mx\')">🇲🇽 Mexico</button>'
+        + '<button class="sfpill" data-val="ca" onclick="setSubFilter(\'us\',\'ca\')">🇨🇦 Canada</button>'
+        + '<button class="sfpill" data-val="dz" onclick="setSubFilter(\'us\',\'dz\')">🇩🇿 Algeria</button>'
         + '<button class="sfpill" data-val="ma" onclick="setSubFilter(\'us\',\'ma\')">🇲🇦 Morocco</button>';
     } else {
       sfBar.innerHTML = '<span class="sfpill-label">Region</span>'
-        + '<button class="sfpill active" data-val="all" onclick="setSubFilter(\'gc\',\'all\')">🌐 All</button>'
-        + '<button class="sfpill" data-val="sb" onclick="setSubFilter(\'gc\',\'sb\')">☀️ Sun Belt</button>'
+        + '<button class="sfpill active" data-val="sb" onclick="setSubFilter(\'gc\',\'sb\')">☀️ Sun Belt</button>'
         + '<button class="sfpill" data-val="wc" onclick="setSubFilter(\'gc\',\'wc\')">🌲 Pacific West</button>';
     }
   } else {
