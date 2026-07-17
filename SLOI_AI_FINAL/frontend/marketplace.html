@@ -210,9 +210,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:28
 
 <!-- HERO -->
 <div class="hero">
-  <div class="eyebrow">Gulf · MENA · Ukraine · US-ready · OFAC screened</div>
+  <div class="eyebrow">EPC · GC Supply Hub · US Infrastructure · USMCA · N. Africa · OFAC screened</div>
   <h1>All products.<br/>One platform.<br/><em>LOI in 72h.</em></h1>
-  <p class="hero-sub">29 commodities across construction, metals &amp; minerals, and energy. Mill-direct and refinery-direct pricing. AI-negotiated, OFAC-screened, spec-referenced LOI in 72 hours.</p>
+  <p class="hero-sub">29 commodities across 3 supply corridors — EPC reconstruction (Gaza · Ukraine · Saudi), GC building materials (Sun Belt · Pacific West), and US Infrastructure (Buy America · USMCA · N. Africa). Mill-direct pricing. AI-negotiated, OFAC-screened LOI in 72 hours.</p>
 </div>
 
 <!-- FILTER BAR -->
@@ -357,76 +357,82 @@ var SECTOR_STYLE = {
   energy:       { bg:'rgba(232,169,74,.12)',  border:'rgba(232,169,74,.3)',  color:'var(--gold)',   label:'🛢 Energy' }
 };
 
-// ── CORRIDORS DATA (from sloiai-platform.html CORRIDORS object) ──────────────
+// ── CORRIDORS DATA (mirrors sloiai-platform.html CORRIDORS object) ───────────
 var CORRIDORS_MKT = [
   {
-    key:'us', icon:'🌐', name:'IMEC Corridor', color:'#2dd4bf', rgb:'45,212,191', risk:'LOW',
-    tradeEst:'$3T', routes:6, products:7, mandates:4,
-    desc:'India–Middle East–Europe Economic Corridor — JNPT Mumbai & Mundra → Jebel Ali / Fujairah → Aqaba → Haifa land bridge → Piraeus / Genoa / Trieste / Hamburg. Rail-sea multimodal across 6 transit nations. OFAC-cleared counterparties at every node.',
+    key:'us', icon:'🇺🇸', name:'US Infrastructure Hub', color:'#3b82f6', rgb:'59,130,246', risk:'LOW',
+    tradeEst:'$2.9T', routes:19, products:23, mandates:4,
+    desc:'IIJA + USMCA supply hub across four origin corridors — US Buy America certified mills (Nucor · US Steel · Holcim · Martin Marietta), Mexico USMCA near-shore (Monterrey · Guadalajara · Veracruz), Canada critical minerals &amp; lumber (BC · Ontario · Saskatchewan), and North Africa transatlantic imports (Algeria ArcelorMittal · Morocco OCP/Sonasid). Every counterparty OFAC-screened, every document US bank LC-ready on authorization.',
     topRoutes:[
-      'JNPT → Jebel Ali → Haifa → Hamburg',
-      'Mundra → Fujairah → Haifa → Genoa',
-      'Tanger Med → Baltimore (Trans-Atlantic)',
+      'Nucor Jewett TX → Austin → Houston (Buy America Rebar G60)',
+      'Monterrey → Laredo → Houston (MX Steel & Cement · USMCA)',
+      'Vancouver → Seattle → Portland (CA SPF Lumber · NLGA)',
+      'Annaba → Baltimore (DZ Rebar · ArcelorMittal · AD/CVD review)',
+      'Casablanca → Baltimore (MA Rebar · Sonasid · CBP cleared)',
+      'Tanger Med → Philadelphia (MA DAP 18-46-0 · OCP Group)',
     ],
-    topProducts:['Indian Steel HR Coil · IS 2062','OPC Cement 42.5N · ASTM C150','Aluminum Billet 6063 · EN AW-6063','Base Oil SN150 · API Group I','Steel Rebar G60 · ASTM A615','Gypsum Rock · Saharan origin'],
-    alert:'Tanger Med → Baltimore: MV Casablanca Star departed — OPC Cement 8,400 MT · ETA 14 days',
-    alertTag:'TRANSIT', alertColor:'rgba(45,212,191,.15)', alertTagColor:'#2dd4bf',
-    landedRef:'$108/MT cement',
+    topProducts:['Rebar G60 · Buy America · Nucor TX · $682/MT landed','Steel Rebar G60 · USMCA · Ternium MX · $552/MT landed','SPF 2×6 KD S4S · NLGA · West Fraser BC · $680/MBF','Potash MOP 60% Granular · Nutrien Saskatchewan','Lithium Carbonate 99.5% · IRA-qualified · Frontier Li ON','Rebar A615 · Sonasid Nador · CBP cleared · $534/MT landed'],
+    alert:'IIJA Bridge Formula Program — Q3 award round open · $5.8B available · Buy America certification mandatory',
+    alertTag:'IIJA', alertColor:'rgba(59,130,246,.1)', alertTagColor:'#3b82f6',
+    landedRef:'$682/MT rebar Buy Am.',
   },
   {
-    key:'gaza', icon:'🇵🇸', name:'Gaza Reconstruction', color:'#ef4444', rgb:'239,68,68', risk:'HIGH',
-    tradeEst:'$50B+', routes:2, products:15, mandates:5,
-    desc:'Humanitarian reconstruction corridor — MENA & Mediterranean → Port Said → Al Arish → Gaza Strip via Kerem Shalom & Rafah border crossings. Truck-based last-mile logistics with UN/COGAT-coordinated entry. From-warehouse stock at Al Arish & Port Said for 24–48h dispatch.',
+    key:'epc', icon:'🇵🇸', name:'Gaza Reconstruction', color:'#ef4444', rgb:'239,68,68', risk:'HIGH',
+    tradeEst:'$50B+', routes:6, products:18, mandates:5,
+    desc:'Humanitarian reconstruction corridor — MENA & Mediterranean → Port Said → Al Arish → Gaza Strip via Kerem Shalom & Rafah crossings. Truck-based last-mile with UN/COGAT-coordinated entry. From-warehouse stock at Al Arish & Port Said for 24–48h dispatch. Now includes thermal insulation (Mineral Wool 50mm · EPS Board 50mm) and shuttering plywood for residential rebuild mandates.',
     topRoutes:[
       'Al Arish → Gaza via Kerem Shalom (Truck)',
       'Port Said → Al Arish (Coastal sea feed)',
+      'Izmir → Port Said → Al Arish (Insulation/Plywood GZ)',
     ],
-    topProducts:['OPC Cement 42.5N · Bulk','Steel Rebar G60 · ASTM A615','Hollow Concrete Block 20×20×40cm','Bagged Cement 50 kg · CEM I 42.5N','HDPE Water Tank 2,000 L · PE100','Plywood 18mm · Formwork grade'],
-    alert:'Kerem Shalom crossing: 340 trucks cleared today — cement & rebar priority',
-    alertTag:'ENTRY', alertColor:'rgba(239,68,68,.1)', alertTagColor:'#ef4444',
-    landedRef:'$112/MT cement',
+    topProducts:['OPC Cement 42.5N · Bulk · UN logistics','Steel Rebar G60 · ASTM A615 · UN cleared','Mineral Wool Slab 50mm · EN 13162 · λ 0.035 · UN-cleared','EPS Board 50mm · EN 13163 · Al Arish WH stock','Shuttering Plywood 18mm · WBP phenolic · UN cleared · Al Arish WH','Hollow Concrete Block 20×20×40cm'],
+    alert:'Al Arish WH: Mineral Wool 50mm pallet stock 8,400 m² confirmed UN-cleared — mandate GZ-09 ready to dispatch',
+    alertTag:'GZ CLEAR', alertColor:'rgba(239,68,68,.1)', alertTagColor:'#ef4444',
+    landedRef:'$21.20/m² mineral wool',
   },
   {
-    key:'ua', icon:'🇺🇦', name:'Ukraine Reconstruction', color:'#e8a94a', rgb:'232,169,74', risk:'HIGH',
-    tradeEst:'$1.5T', routes:3, products:15, mandates:5,
-    desc:'Black Sea rebuild corridor — Turkey & MENA → Odessa, Constanta, Reni. Steel, cement, generators & float glass for infrastructure rebuild. From-warehouse stock at Constanta (Romania) and Izmir (Turkey) for rapid dispatch.',
+    key:'epc', icon:'🇺🇦', name:'Ukraine Reconstruction', color:'#e8a94a', rgb:'232,169,74', risk:'HIGH',
+    tradeEst:'$1.5T', routes:5, products:18, mandates:5,
+    desc:'Black Sea rebuild corridor — Turkey & MENA → Odessa, Constanta, Reni. Steel, cement, generators & float glass for infrastructure rebuild. From-warehouse stock at Constanta (Romania) and Izmir (Turkey) for rapid dispatch. Now includes reconstruction insulation (Mineral Wool 100mm · PIR Roof Board 80mm EN 13165) and structural birch plywood for war-damaged residential recovery.',
     topRoutes:[
       'Izmir → Odessa (Steel Rebar · DSTU 3760 A500)',
       'Jubail → Constanta (OPC Cement 42.5N)',
+      'Constanta WH → Odessa (Insulation/Plywood UA)',
       'Jebel Ali → Reni (Float Glass 4–6mm)',
     ],
-    topProducts:['Steel Rebar · DSTU 3760 A500','OPC Cement 42.5N · DSTU EN 197-1','Float Glass 4mm · EN 572-2','Diesel Generators · 100–500 kVA','AAC Block 20×20×60cm','CFS Infill Panel Kit · AISI S240'],
-    alert:'Ukraine corridor risk index +12 pts — Black Sea war premium updated',
-    alertTag:'RISK', alertColor:'rgba(232,169,74,.1)', alertTagColor:'#e8a94a',
-    landedRef:'$550/MT rebar',
+    topProducts:['Steel Rebar · DSTU 3760 A500','OPC Cement 42.5N · DSTU EN 197-1','Mineral Wool 100mm · EN 13162 · DSTU · Constanta WH ready','PIR Roof Board 80mm · EN 13165 · λ 0.023 · foil-faced','Structural Plywood 15mm · EN 636-3 · 5-ply birch · Constanta WH','Float Glass 4mm · EN 572-2'],
+    alert:'Constanta WH: Mineral Wool 100mm batch RO-4421 PASS EN 13162 — DSTU adopted · Odessa crossing cleared',
+    alertTag:'UA CERT', alertColor:'rgba(232,169,74,.1)', alertTagColor:'#e8a94a',
+    landedRef:'$21/m² mineral wool UA',
   },
   {
-    key:'cfs', icon:'🇸🇦', name:'Saudi Vision 2030', color:'#8b8ff8', rgb:'139,143,248', risk:'LOW',
-    tradeEst:'$1.3T', routes:5, products:12, mandates:6,
-    desc:'Saudi Arabia mega-project procurement corridor — international suppliers into Jeddah Islamic Port, Yanbu & Dammam, then domestic distribution to NEOM, Red Sea Project, Qiddiya, SPARK & Diriyah Gate. SASO-certified, ZATCA-cleared, Aramco-approved counterparties.',
+    key:'epc', icon:'🇸🇦', name:'Saudi Vision 2030', color:'#8b8ff8', rgb:'139,143,248', risk:'LOW',
+    tradeEst:'$1.3T', routes:8, products:16, mandates:6,
+    desc:'Saudi Arabia mega-project procurement corridor — international suppliers into Jeddah Islamic Port, Yanbu & Dammam, then domestic distribution to NEOM, Red Sea Project, Qiddiya, SPARK & Diriyah Gate. SASO-certified, ZATCA-cleared, Aramco-approved counterparties. Now includes NEOM-spec insulation (Rockwool CONLIT 150U SASO 2094 · XPS 100mm SASO 2095) and marine plywood.',
     topRoutes:[
       'Izmir → Jeddah → NEOM / The Line',
+      'Istanbul → Yanbu → NEOM (Insulation/Plywood SA)',
+      'Jebel Ali → Dammam (XPS Insulation · SASO 2095)',
       'Jubail → SPARK → Qiddiya (Domestic)',
-      'Istanbul → Yanbu → Red Sea Project',
-      'JNPT Mumbai → Dammam → Qiddiya',
     ],
-    topProducts:['Steel Rebar A500 · SASO · ASTM A615 Gr.60','OPC Cement 52.5R · ASTM C150 Type III','Aluminum Curtain Wall · EN AW-6063 T6','Raised Access Floor Panel · IEC 62485','CFS Data Hall Partition Kit · NFPA 75','Fire-Rated Partition Wall 2h · UL'],
-    alert:'NEOM tender round 14 active — Steel Rebar 45,000 MT · batch pricing live · SAR denomination available',
+    topProducts:['Steel Rebar A500 · SASO · ASTM A615 Gr.60','OPC Cement 52.5R · ASTM C150 Type III','Rockwool CONLIT 150U · SASO 2094 · fire 2h · NEOM DC spec','XPS Board 100mm · EN 13164 · SASO 2095 · desert thermal','Marine Plywood 19mm · BS 1088 · WBP · SASO · NEOM joinery','CFS Data Hall Partition Kit · NFPA 75'],
+    alert:'NEOM Marine Plywood 19mm tender: 42,000 sheets — SASO WBP BS 1088 spec · Istanbul supplier shortlisted',
     alertTag:'TENDER', alertColor:'rgba(139,143,248,.1)', alertTagColor:'#8b8ff8',
-    landedRef:'$618/MT steel NEOM',
+    landedRef:'$34.60/m² Rockwool NEOM',
   },
   {
-    key:'wc', icon:'🌲', name:'Pacific West Coast', color:'#22c55e', rgb:'34,197,94', risk:'LOW',
-    tradeEst:'$8.4B/yr', routes:3, products:11, mandates:2,
-    desc:'Trans-Pacific building materials corridor — Southeast Asia & China → Port of Long Beach / Oakland → I-80 distribution hub in Reno, NV serving Western US construction markets. CBP pre-cleared · FSC chain-of-custody · Section 301 compliance managed. By-location ex-yard stock at Long Beach, Oakland, Reno, Las Vegas, Salt Lake City & Phoenix.',
+    key:'gc', icon:'🏢', name:'GC Supply Hub', color:'#22c55e', rgb:'34,197,94', risk:'LOW',
+    tradeEst:'$8.4B/yr', routes:18, products:17, mandates:9,
+    desc:'General contractor building materials hub — Trans-Pacific (SE Asia · China) → Port of Long Beach / Oakland → I-80 Reno distribution serving Pacific West, plus Sun Belt direct (TX · FL · AZ · SC). CBP pre-cleared · FSC chain-of-custody · Section 301 compliance. Now includes Fiber Cement Boards (ASTM C1186 · hurricane-zone certified), CFS Mid-Rise systems (up to 8 storeys), and expanded insulation & plywood product lines.',
     topRoutes:[
-      'Long Beach → I-5 / I-80 → Reno, NV',
-      'Oakland → I-80 → Reno, NV',
-      'Long Beach → I-15 → Las Vegas / Salt Lake City',
+      'Long Beach → I-5/I-80 → Reno, NV (Pacific West)',
+      'Oakland → I-80 → Reno, NV (Pacific West)',
+      'Tianjin → Long Beach (Plywood · OSB · FCB)',
+      'Houston → Dallas → Atlanta (Sun Belt CFS Mid-Rise)',
     ],
-    topProducts:['Structural Plywood PS 1-09 · APA-rated · FSC','Mineral Wool Insulation R-30 · ASTM C665','OSB 7/16" PS 2-16 · APA Exposure 1','Plywood · Long Beach ex-yard','OSB · Reno Hub ex-hub','Mineral Wool · Oakland import yard'],
-    alert:'I-80 Donner Pass corridor clear — no weather delays · Reno delivery ETA on schedule · chain law lifted',
-    alertTag:'ROUTE', alertColor:'rgba(34,197,94,.1)', alertTagColor:'#22c55e',
+    topProducts:['Structural Plywood PS 1-09 · APA-rated · FSC','Mineral Wool Insulation R-30 · ASTM C665','Fiber Cement Board 8mm · ASTM C1186 · hurricane certified','OSB 7/16" PS 2-16 · APA Exposure 1','CFS 600S162-54 · AISI S240 · Sun Belt framing','CFS Mid-Rise 800S250-97 · AISC · 8-storey structural'],
+    alert:'Sun Belt CFS Mid-Rise mandate SB-014 active — 8-storey structural package · TX site · I-80 Donner clear · Reno ETA on schedule',
+    alertTag:'SB ACTIVE', alertColor:'rgba(34,197,94,.1)', alertTagColor:'#22c55e',
     landedRef:'$619/MT plywood Reno',
   },
 ];
