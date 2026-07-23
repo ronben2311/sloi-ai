@@ -253,6 +253,45 @@
     }
     #lp-toggle-btn:hover{background:var(--indigo-dim);color:var(--violet);border-color:rgba(91,95,239,.4)}
 
+    /* ── HIW TABS ── */
+    .hiw-tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);flex-shrink:0;padding:0 24px}
+    .hiw-tab-btn{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;padding:10px 18px;border:none;border-bottom:2px solid transparent;background:none;color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.05em;margin-bottom:-1px}
+    .hiw-tab-btn:hover{color:var(--text)}
+    .hiw-tab-btn.active{color:var(--violet);border-bottom-color:var(--indigo)}
+    .hiw-panel{display:none;flex-direction:column;gap:20px}
+    .hiw-panel.open{display:flex}
+    /* Pricing cards */
+    .hiw-pricing-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .hiw-plan{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+    .hiw-plan.featured{border-color:var(--indigo);background:rgba(91,95,239,.06)}
+    .hiw-plan-badge{font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--violet);background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);border-radius:3px;padding:2px 7px;align-self:flex-start}
+    .hiw-plan-name{font-family:"Fraunces",serif;font-size:17px;font-weight:900;color:var(--white);line-height:1}
+    .hiw-plan-price{font-family:"IBM Plex Mono",monospace;font-size:24px;font-weight:600;color:var(--white);line-height:1}
+    .hiw-plan-price span{font-size:11px;color:var(--muted);font-weight:400}
+    .hiw-plan-desc{font-size:11px;color:var(--muted);line-height:1.55;font-family:"IBM Plex Mono",monospace}
+    .hiw-plan-rule{height:1px;background:var(--border);margin:2px 0}
+    .hiw-plan-feat{display:flex;flex-direction:column;gap:5px;flex:1}
+    .hiw-plan-feat li{display:flex;align-items:flex-start;gap:6px;list-style:none;font-size:11px;color:var(--text);line-height:1.45}
+    .hiw-plan-feat li::before{content:'✓';color:var(--green);font-size:10px;flex-shrink:0;margin-top:1px;font-weight:700}
+    .hiw-plan-feat li.off{color:var(--muted)}
+    .hiw-plan-feat li.off::before{content:'—';color:var(--border2)}
+    .hiw-plan-cta{display:block;text-align:center;padding:8px 0;border-radius:5px;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-decoration:none;transition:all .15s;border:1px solid var(--border2);color:var(--muted);cursor:pointer;background:transparent;margin-top:4px}
+    .hiw-plan-cta:hover{border-color:var(--indigo);color:var(--violet)}
+    .hiw-plan.featured .hiw-plan-cta{background:var(--indigo);border-color:var(--indigo);color:#fff}
+    .hiw-plan.featured .hiw-plan-cta:hover{background:var(--violet);border-color:var(--violet)}
+    .hiw-note{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);text-align:center;line-height:1.6}
+    /* Phase cards */
+    .hiw-phase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .hiw-phase{background:var(--surface2);border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+    .hiw-phase-head{padding:14px 16px 12px;border-bottom:1px solid var(--border)}
+    .hiw-phase-num{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:7px}
+    .hiw-phase-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:5px}
+    .hiw-phase-desc{font-size:11px;color:var(--muted);line-height:1.6}
+    .hiw-phase-body{padding:10px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+    .hiw-phase-feat{font-size:11px;color:var(--text);display:flex;align-items:flex-start;gap:6px;line-height:1.4}
+    .hiw-phase-feat::before{content:'✓';color:var(--green);font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px}
+    .hiw-phase-foot{padding:8px 16px;border-top:1px solid var(--border);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:700}
+
     /* ── DOCS VIEW ── */
     #docs-view{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--bg)}
     #docs-view.dv-active{display:flex}
@@ -686,6 +725,12 @@ const CORRIDORS = {
       { prod:'Steel Rebar A615 (MA)',        spec:'ASTM A615 Gr.60 / BS 4449 500B · Sonasid Nador mill · CBP cleared',  origin:'Casablanca, MA',   fob:'$465/MT',    fr:'$62/MT',    duty:'$0',          land:'$534/MT',    ch:-1.8, risk:'low',  email:'export@sonasid.ma',           wa:'212522123456', cat:'Bulk Commodities', country:'ma' },
       { prod:'OPC Cement 52.5R (MA)',        spec:'EN 197-1 Type I 52.5R · LafargeHolcim Morocco · bulk cargo',         origin:'Casablanca, MA',   fob:'$55/MT',     fr:'$46/MT',    duty:'$0',          land:'$108/MT',    ch:-0.4, risk:'low',  email:'trade@lafargeholcim.ma',      wa:'212522234567', cat:'Bulk Commodities', country:'ma' },
       { prod:'DAP 18-46-0 (MA)',             spec:'Diammonium phosphate · OCP Group Jorf Lasfar · world No.1 exporter',  origin:'Casablanca, MA',   fob:'$558/MT',    fr:'$44/MT',    duty:'$0',          land:'$618/MT',    ch:-2.4, risk:'low',  email:'trade@ocpgroup.ma',           wa:'212523234567', cat:'Agri-Minerals',    country:'ma' },
+      { prod:'Copper Wire AWG 12 THHN (MX)',      spec:'UL 83 · 600V · 12 AWG solid · 500ft spool · Condumex Monterrey · USMCA origin cert · CBP Form 434',      origin:'Monterrey, MX',   fob:'$182/spool', fr:'$18/spool',  duty:'$0 USMCA', land:'$202/spool', ch:+2.1, risk:'low', email:'export@condumex.com.mx',      wa:'528112234567', country:'mx' },
+      { prod:'PVC Conduit SCH40 3/4" (MX)',       spec:'UL 651 · Schedule 40 · grey · 10ft sticks · 50/bundle · Amanco Wavin Mexico · USMCA cert · CBP-cleared', origin:'Guadalajara, MX', fob:'$0.48/ft',   fr:'$0.05/ft',   duty:'$0 USMCA', land:'$0.54/ft',   ch:-0.4, risk:'low', email:'export@wavin.com.mx',         wa:'523312456789', country:'mx' },
+      { prod:'Aluminum Extrusion 6063-T5 (MX)',   spec:'ASTM B221 · 6063-T5 · 20ft random length · anodize-ready · Cuprum Monterrey · USMCA origin cert',        origin:'Monterrey, MX',   fob:'$2,180/MT',  fr:'$64/MT',     duty:'$0 USMCA', land:'$2,248/MT',  ch:+0.8, risk:'low', email:'export@cuprum.com.mx',        wa:'528113456789', country:'mx' },
+      { prod:'Graphite Flake 95% C (CA)',          spec:'Battery-grade · natural flake +80 mesh · IRA-qualified · Northern Graphite Ontario · LME-indexed',       origin:'Thunder Bay, CA', fob:'$900/MT',    fr:'$42/MT',     duty:'$0 USMCA', land:'$948/MT',    ch:-2.4, risk:'med', email:'supply@northerngraphite.com', wa:'16139678901',  country:'ca' },
+      { prod:'Zinc Concentrate 52% Zn (CA)',       spec:'LME SHG grade · HudBay Minerals Manitoba · 25MT supersacks · IRA critical mineral · smelter contract',   origin:'Thunder Bay, CA', fob:'$2,180/MT',  fr:'$58/MT',     duty:'$0 USMCA', land:'$2,244/MT',  ch:+1.6, risk:'med', email:'metals@hudbay.com',           wa:'14162313600',  country:'ca' },
+      { prod:'Manganese Sulfate MnSO₄ (CA)',       spec:'Battery grade · 32% Mn · cathode precursor · IRA 45X eligible · First Element MN Ontario · ISO 9001',   origin:'Montreal, CA',    fob:'$1,650/MT',  fr:'$48/MT',     duty:'$0 USMCA', land:'$1,702/MT',  ch:-1.8, risk:'med', email:'supply@firstelement.ca',      wa:'15149012345',  country:'ca' },
     ],
     alerts:[
       { icon:'🏗️', title:'IIJA Bridge Formula Program — Q3 award round open · $5.8B available · Buy America mandatory',     tag:'t-clear', lbl:'IIJA',    time:'1h ago'  },
@@ -890,6 +935,23 @@ const CORRIDORS = {
       { prod:'Marine Plywood 19mm (SA)',        spec:'BS 1088 · WBP phenolic · 1220×2440mm · SASO · NEOM interior joinery spec · ZATCA', origin:'Istanbul, TR → Yanbu', fob:'$54.80/sht', fr:'$8.40/sht', duty:'$2.74/sht', land:'$65.94/sht',ch:-0.6, risk:'low',  email:'plywood@karsan-wood.com.tr',         wa:'902122345679', cat:'Mega-Project Supply', theater:'sa' },
 
       { prod:'Film-Faced Shutter Ply 18mm (SA)', spec:'1220×2440 · phenolic film 220g/m² · SASO certified · NEOM site formwork · ZATCA', origin:'Tianjin, CN → Dammam', fob:'$18.60/sht',fr:'$6.20/sht', duty:'$0.93/sht', land:'$25.73/sht',ch:-1.2, risk:'med', email:'plywood@chinawood-export.cn',         wa:'862134567892', cat:'Mega-Project Supply', theater:'sa' },
+
+      { prod:'Welded Wire Mesh A393 (GZ)',        spec:'BS 4483 / MS equiv. · 4.8mm wire · 200×200mm grid · UN-cleared · 10 panels/pallet · DDP Al Arish', origin:'Izmir, TR → Al Arish',   fob:'$340/MT',        fr:'$58/MT',       duty:'$0',           land:'$408/MT',       ch:-0.6, risk:'high', email:'mesh@izmir-steel.com.tr',          wa:'905324567890', cat:'Bulk Commodities',    theater:'gz' },
+      { prod:'Corrugated GI Sheet 0.5mm (GZ)',    spec:'DX51D+Z275 · galv. 275g/m² · 1830mm length · 48-sheet bundle · UN rapid shelter spec · Al Arish WH', origin:'Al Arish WH, EG',        fob:'Ex-WH $6.20/m²', fr:'$0.80/m²',     duty:'$0',           land:'$7.10/m²',      ch:-0.3, risk:'low',  email:'gi@alarish-materials.eg',          wa:'201006789012', cat:'From Warehouse',      theater:'gz' },
+      { prod:'UPVC Window 1200×1200mm (GZ)',       spec:'PVC-U · 5-chamber 70mm profile · 4mm clear glass · double-sealed · UN rebuild spec · palletised', origin:'Izmir, TR → Al Arish',   fob:'$88/u',          fr:'$14/u',        duty:'$0',           land:'$104/u',        ch:-1.2, risk:'high', email:'windows@pimapen.com.tr',           wa:'902122345679', cat:'Bulk Commodities',    theater:'gz' },
+      { prod:'HDPE Water Tank 5,000L (GZ)',        spec:'PE100 · vertical · potable water UN-spec · flat-palletised · 1.8m dia × 2.3m H · DDP site',      origin:'Al Arish WH, EG',        fob:'Ex-WH $310/u',   fr:'$40/u',        duty:'$0',           land:'$358/u',        ch:+0.2, risk:'low',  email:'tanks@alarish-water.eg',           wa:'201007890123', cat:'From Warehouse',      theater:'gz' },
+      { prod:'Sanitary Ware Set (GZ)',             spec:'WC close-coupled + 600mm basin + chrome mixer · 1 apt set · humanitarian UN spec · Al Arish WH',   origin:'Al Arish WH, EG',        fob:'Ex-WH $68/set',  fr:'$8/set',       duty:'$0',           land:'$78/set',       ch:-0.4, risk:'low',  email:'sanitary@alarish-materials.eg',    wa:'201008901234', cat:'From Warehouse',      theater:'gz' },
+
+      { prod:'Ceramic Floor Tile 60×60cm (UA)',    spec:'EN 14411 · ISO 13006 · 10mm · matt R9 · rectified · DSTU adopted · Constanta WH · 12 tiles/m²',   origin:'Constanta WH, RO',       fob:'Ex-WH $8.40/m²', fr:'$1.20/m²',     duty:'$0',           land:'$9.80/m²',      ch:-0.6, risk:'low',  email:'tiles@romceramica.ro',             wa:'40723456789',  cat:'From Warehouse',      theater:'ua' },
+      { prod:'EPDM Roofing Membrane 1.5mm (UA)',   spec:'EN 13956 · 1.5mm unfaced · Firestone RubberGard · 30m² roll · Constanta WH · flat roof rebuild',  origin:'Constanta WH, RO',       fob:'Ex-WH $6.80/m²', fr:'$0.80/m²',     duty:'$0',           land:'$7.70/m²',      ch:+0.4, risk:'low',  email:'roofing@proroofing-ro.ro',         wa:'40724567890',  cat:'From Warehouse',      theater:'ua' },
+      { prod:'Gypsum Plasterboard 12.5mm (UA)',    spec:'EN 520 Type A · 1200×2600mm · Knauf GKB · pallet 50 boards · DSTU EN 520 adopted · Constanta WH', origin:'Constanta WH, RO',       fob:'Ex-WH $3.40/sht',fr:'$0.50/sht',    duty:'$0',           land:'$3.96/sht',     ch:-0.4, risk:'low',  email:'drywall@knauf.ro',                 wa:'40725678902',  cat:'From Warehouse',      theater:'ua' },
+      { prod:'Sanitary Ware Set (UA)',             spec:'WC ceramic close-coupled + 600mm basin + thermostatic mixer · Cersanit/Roca · Constanta WH',        origin:'Constanta WH, RO',       fob:'Ex-WH $72/set',  fr:'$9/set',       duty:'$0',           land:'$83/set',       ch:-0.2, risk:'low',  email:'sanitary@cersanit-ro.ro',          wa:'40726789013',  cat:'From Warehouse',      theater:'ua' },
+      { prod:'Interior Door 900×2100mm (UA)',      spec:'HDF hollow-core · 45mm · pre-hung · pre-primed · FSC certified · 5 doors/pallet · Constanta WH',   origin:'Constanta WH, RO',       fob:'Ex-WH $48/u',    fr:'$6/u',         duty:'$0',           land:'$55/u',         ch:-0.8, risk:'low',  email:'doors@romproduct.ro',              wa:'40727890124',  cat:'From Warehouse',      theater:'ua' },
+
+      { prod:'VRF HVAC System 20HP (SA)',          spec:'Daikin VRV IV · R-32 · 20HP outdoor + 8 indoor FCUs · SASO 2702 · ZATCA cleared · NEOM MEP spec', origin:'Jebel Ali, AE',          fob:'$14,800/u',      fr:'$420/u',       duty:'$740/u',       land:'$15,960/u',     ch:+1.4, risk:'low',  email:'hvac@daikin-me.ae',                wa:'971502345679', cat:'Mega-Project Supply', theater:'sa' },
+      { prod:'Acoustic Ceiling Tile 600×600 (SA)', spec:'Armstrong Ultima Board · NRC 0.90 · Class A fire · 15mm · SASO · NEOM data centre + office spec',  origin:'Istanbul, TR → Jeddah',  fob:'$18.40/m²',      fr:'$3.60/m²',     duty:'$1.10/m²',     land:'$23.10/m²',     ch:+0.6, risk:'low',  email:'ceilings@armstrong-me.com',        wa:'966502345679', cat:'Mega-Project Supply', theater:'sa' },
+      { prod:'FM-200 Fire Suppression System (SA)', spec:'HFC-227ea · 180kg cylinder pack · NFPA 2001 · SASO 2920 · ZATCA cleared · clean agent DC spec', origin:'Jebel Ali, AE',          fob:'$8,200/u',       fr:'$280/u',       duty:'$410/u',       land:'$8,890/u',      ch:+0.8, risk:'low',  email:'fire@ansul-me.ae',                 wa:'971503456790', cat:'CFS Data Centre',     theater:'sa' },
+      { prod:'Prefab Bathroom Pod (SA)',           spec:'GRP shell · 2.2×1.6×2.4m · sanitaryware complete · pre-tiled · DDP site · NEOM hospitality spec',  origin:'Tianjin, CN → Dammam',  fob:'$4,200/u',       fr:'$680/u',       duty:'$210/u',       land:'$5,090/u',      ch:-1.0, risk:'med', email:'pods@modpods-cn.com',              wa:'862135678903', cat:'Mega-Project Supply', theater:'sa' },
     ],
     alerts:[
       { icon:'🚛', title:'Kerem Shalom crossing: 340 trucks cleared — cement &amp; rebar priority · GZ theater',                     tag:'t-clear', lbl:'GZ ENTRY', time:'1h ago',  theater:'gz'   },
@@ -1104,6 +1166,16 @@ const CORRIDORS = {
       { prod:'CFS LB Panel 6" 16ga (WC)',      spec:'AISI S240 · 6-story · IBC 2021 · SEAOC · seismic zone D · SCAFCO',      origin:'Spokane, WA',      fob:'$9.20/sq.ft', fr:'$0.65/sq.ft', duty:'$0', land:'$9.90/sq.ft', ch:-0.2, risk:'low', email:'sales@scafco.com',            wa:'15094825000', cat:'CFS Mid-Rise',        region:'wc' },
 
       { prod:'CFS Shear Wall Panel (WC)',        spec:'OSHPD preapproved · IBC 2021 · 7/16" OSB sheathing · AISI S400 · seis. D', origin:'Spokane, WA',      fob:'$11.40/sq.ft',fr:'$0.80/sq.ft', duty:'$0', land:'$12.30/sq.ft',ch:+0.2, risk:'low', email:'sales@scafco.com',            wa:'15094825000', cat:'CFS Mid-Rise',        region:'wc' },
+
+      { prod:'Spray Foam 2lb Closed-Cell (SB)',  spec:'ASTM C1289 · R-6.9/in · 2lb polyurethane · Class II VB · GreenGuard Gold · 600 bdft kit',             origin:'Houston, TX',      fob:'$0.84/sq.ft',  fr:'$0.05/sq.ft',  duty:'$0', land:'$0.90/sq.ft',  ch:+1.2, risk:'low', email:'foam@lapolla.com',              wa:'18553633366', cat:'Insulation',          region:'sb' },
+      { prod:'Tyvek HomeWrap (SB)',              spec:'ASTM E1677 Type I · 9ft×100ft roll · 4-month UV stable · DuPont Tyvek · water-resistive barrier',      origin:'Wilmington, DE',   fob:'$0.10/sq.ft',  fr:'$0.01/sq.ft',  duty:'$0', land:'$0.11/sq.ft',  ch:+0.2, risk:'low', email:'building@dupont.com',           wa:'18009316413', cat:'Insulation',          region:'sb' },
+      { prod:'Vinyl Window DH 3040 (SB)',        spec:'AAMA 101 HS-R10 · STC 28 · SHGC 0.25 · U-0.30 · double LoE2 Argon · Jeld-Wen / PGT Sun Belt',        origin:'Macon, GA',        fob:'$188/u',       fr:'$12/u',        duty:'$0', land:'$204/u',       ch:+0.4, risk:'low', email:'windows@jeld-wen.com',         wa:'18004437339', cat:'By Location',         region:'sb' },
+      { prod:'Prefab Roof Truss 32ft (SB)',      spec:'TPI-1 · 5/12 slope · 32ft span · 24" OC · MiTek 20ga plates · treated bot. chord · regional mill',    origin:'Dallas, TX',       fob:'$4.20/sq.ft',  fr:'$0.30/sq.ft',  duty:'$0', land:'$4.60/sq.ft',  ch:-0.6, risk:'low', email:'trusses@mccleaning.com',        wa:'18002489262', cat:'By Location',         region:'sb' },
+
+      { prod:'SIP Panel 4.5" R-21 (WC)',         spec:'SIPA rated · EPS core · OSB faces · 4.5" · R-21 · 4×8 std · CARB P2 · Title 24 CZ1-16 · CalFire',    origin:'Vacaville, CA',    fob:'$9.80/sq.ft',  fr:'$0.50/sq.ft',  duty:'$0', land:'$10.40/sq.ft', ch:-0.4, risk:'low', email:'sips@premier-sips.com',        wa:'18009612276', cat:'By Location',         region:'wc' },
+      { prod:'Triple-Pane Window (WC)',           spec:'NFRC · U-0.18 · SHGC 0.22 · krypton-filled · fiberglass frame · Title 24 CZ12-15 · Pella 350',       origin:'Portland, OR',     fob:'$420/u',       fr:'$28/u',        duty:'$0', land:'$452/u',       ch:+0.8, risk:'low', email:'windows@pella.com',            wa:'18004726783', cat:'By Location',         region:'wc' },
+      { prod:'Strong-Tie SDWH 3/8"×6" Screw (WC)', spec:'ASTM F1554 · NDS · ICC-ESR 1082 · 200/box · CLT + GLT mass timber connection · SEAOC approved',    origin:'Pleasanton, CA',   fob:'$0.68/ea',     fr:'$0.04/ea',     duty:'$0', land:'$0.74/ea',     ch:-0.2, risk:'low', email:'masstimber@strongtie.com',     wa:'18002999111', cat:'By Location',         region:'wc' },
+      { prod:'R-Guard FastFlash Air Barrier (WC)', spec:'ASTM E2357 · perm <0.1 · PROSOCO liquid-applied · 5-gal pail · LEED v4 MRc3 · Title 24 comply',    origin:'Sacramento, CA',   fob:'$0.42/sq.ft',  fr:'$0.03/sq.ft',  duty:'$0', land:'$0.46/sq.ft',  ch:+0.4, risk:'low', email:'prosoco@prosoco.com',          wa:'18009226633', cat:'Insulation',          region:'wc' },
     ],
     alerts:[
       { icon:'📈', title:'Sun Belt housing starts +22% YoY — Dallas, Phoenix, Charlotte driving rebar &amp; framing demand',            tag:'t-warn',  lbl:'DEMAND',   time:'1h ago',  region:'sb' },
@@ -1939,7 +2011,14 @@ function setDocsTab(tab) {
   if (!isDoc) cde.style.display = 'flex'; else cde.style.display = 'none';
 }
 
+function setHIWTab(tab) {
+  ['how','pricing','mandate'].forEach(t => {
+    document.getElementById('hiw-panel-' + t).classList.toggle('open', t === tab);
+    document.getElementById('hiw-tbtn-' + t).classList.toggle('active', t === tab);
+  });
+}
 function openHIW() {
+  setHIWTab('how');
   document.getElementById('hiw-overlay').classList.add('open');
 }
 function closeHIW() {
@@ -2324,34 +2403,81 @@ document.addEventListener('keydown', function(e) {
       </div>
       <button class="hiw-close" onclick="closeHIW()">✕</button>
     </div>
-    <div class="hiw-body">
+    <div class="hiw-tab-bar">
+      <button class="hiw-tab-btn active" id="hiw-tbtn-how"      onclick="setHIWTab('how')">? How it works</button>
+      <button class="hiw-tab-btn"        id="hiw-tbtn-pricing"  onclick="setHIWTab('pricing')">$ Pricing</button>
+      <button class="hiw-tab-btn"        id="hiw-tbtn-mandate"  onclick="setHIWTab('mandate')">⚡ Mandate</button>
+    </div>
+    <div class="hiw-body hiw-panel open" id="hiw-panel-how">
 
-      <!-- Steps -->
-      <div class="hiw-step">
-        <div class="hiw-num" style="color:var(--indigo)">01</div>
-        <div class="hiw-step-body">
-          <div class="hiw-step-title">Pick a corridor &amp; set your mandate</div>
-          <div class="hiw-step-desc">Choose a corridor tab above, then filter by theater, region, or origin using the sub-filter pills. Click <strong style="color:var(--white)">Contact</strong> on any product row to reach the supplier directly, or <strong style="color:var(--white)">Deal Desk</strong> to open the AI negotiation engine with that product pre-loaded.</div>
-          <span class="hiw-step-tag" style="background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);color:var(--violet)">You · takes 3 minutes</span>
-        </div>
+      <!-- Intro -->
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px">// Three steps · two are yours · full audit trail</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.65">Every deal follows the same protected sequence — from mandate to signed documents — with your authorization required at every key decision point. Nothing moves without you.</div>
       </div>
 
-      <div class="hiw-step">
-        <div class="hiw-num" style="color:var(--teal)">02</div>
-        <div class="hiw-step-body">
-          <div class="hiw-step-title">AI Orchestration Engine negotiates</div>
-          <div class="hiw-step-desc">Up to 7 negotiation stages with a KYC-cleared, OFAC-screened counterparty — all within your private price ceiling. Your mandate is never exposed. The engine monitors corridor alerts, risk scores, and live price deltas (▲▼) in real time and stops the moment your ceiling is hit.</div>
-          <span class="hiw-step-tag" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)">Orchestrator · 10–48 h</span>
+      <!-- Phase cards -->
+      <div class="hiw-phase-grid">
+
+        <div class="hiw-phase" style="border-top:2px solid var(--teal)">
+          <div class="hiw-phase-head">
+            <div class="hiw-phase-num" style="color:var(--teal)">01 · before mandate reaches anyone</div>
+            <div class="hiw-phase-title">🛡️ Counterparty Screening</div>
+            <div class="hiw-phase-desc">Every counterparty is KYC-cleared and OFAC-screened before your mandate is sent. SDN, EU, and UN sanctions lists — run automatically on every deal.</div>
+          </div>
+          <div class="hiw-phase-body">
+            <div class="hiw-phase-feat">OFAC SDN list</div>
+            <div class="hiw-phase-feat">EU consolidated sanctions</div>
+            <div class="hiw-phase-feat">UN sanctions list</div>
+            <div class="hiw-phase-feat">KYC documents on file</div>
+            <div class="hiw-phase-feat">Full audit trail per deal</div>
+          </div>
+          <div class="hiw-phase-foot" style="color:var(--teal)">Always on · included in every session</div>
         </div>
+
+        <div class="hiw-phase" style="border-top:2px solid var(--violet)">
+          <div class="hiw-phase-head">
+            <div class="hiw-phase-num" style="color:var(--violet)">02 · 10–48 hours · you monitor live</div>
+            <div class="hiw-phase-title">🔄 Protected Orchestration</div>
+            <div class="hiw-phase-desc">Up to 7 negotiation stages within your private ceiling. You see every round. The counterparty never sees your target price.</div>
+          </div>
+          <div class="hiw-phase-body">
+            <div class="hiw-phase-feat">Up to 7 negotiation stages</div>
+            <div class="hiw-phase-feat">Price ceiling stays private</div>
+            <div class="hiw-phase-feat">Counterparty fully anonymized</div>
+            <div class="hiw-phase-feat">Live stage monitoring</div>
+            <div class="hiw-phase-feat">Stops · waits for your authorization</div>
+          </div>
+          <div class="hiw-phase-foot" style="color:var(--violet)">10–20 credits / orchestration session</div>
+        </div>
+
+        <div class="hiw-phase" style="border-top:2px solid var(--gold)">
+          <div class="hiw-phase-head">
+            <div class="hiw-phase-num" style="color:var(--gold)">03 · one click · instant dispatch</div>
+            <div class="hiw-phase-title">📄 7-Document Suite</div>
+            <div class="hiw-phase-desc">You authorize — 7 legal documents generate instantly and dispatch to all parties. No templates, no legal team required.</div>
+          </div>
+          <div class="hiw-phase-body">
+            <div class="hiw-phase-feat">LOI · ICC-referenced</div>
+            <div class="hiw-phase-feat">NDA · Bilateral or Unilateral</div>
+            <div class="hiw-phase-feat">SPA · GAFTA / ICC</div>
+            <div class="hiw-phase-feat">LC Application · UCP 600</div>
+            <div class="hiw-phase-feat">Trade Contract · Incoterms 2020</div>
+            <div class="hiw-phase-feat">Freight Advisory + HS Code Report</div>
+          </div>
+          <div class="hiw-phase-foot" style="color:var(--gold)">5 cr / LOI · 5 cr / SPA · 3 cr / NDA · 5 cr / LC</div>
+        </div>
+
       </div>
 
-      <div class="hiw-step">
-        <div class="hiw-num" style="color:var(--green)">03</div>
-        <div class="hiw-step-body">
-          <div class="hiw-step-title">You authorize — full paperwork issues instantly</div>
-          <div class="hiw-step-desc">One click generates 7 legal documents — LOI, NDA, SPA, LC Application (UCP 600), Trade Contract (Incoterms 2020), HS Code &amp; Duty Report, and Freight Advisory — dispatched to all parties. Nothing moves without your authorization.</div>
-          <span class="hiw-step-tag" style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green)">You · always in control</span>
+      <!-- Mandate banner -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--indigo);border-radius:6px;padding:12px 16px;display:flex;align-items:center;gap:14px">
+        <div style="font-family:'Fraunces',serif;font-size:30px;font-weight:900;color:var(--indigo);flex-shrink:0;line-height:1">00</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px">Start: pick a corridor &amp; set your mandate</div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.6">Choose EPC · GC · US Infrastructure above. Filter by theater or region. Click <strong style="color:var(--text)">Deal Desk</strong> on any product to pre-load it into the negotiation engine — or <strong style="color:var(--text)">Contact</strong> to reach the supplier directly.</div>
         </div>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 8px;border-radius:3px;background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);color:var(--violet);white-space:nowrap;flex-shrink:0">≈ 3 minutes</span>
       </div>
 
       <div class="hiw-divider"></div>
@@ -2382,7 +2508,244 @@ document.addEventListener('keydown', function(e) {
         </div>
       </div>
 
-    </div>
+    </div><!-- /hiw-panel-how -->
+
+    <!-- ── PRICING PANEL ── -->
+    <div class="hiw-body hiw-panel" id="hiw-panel-pricing">
+
+      <!-- Header -->
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white);margin-bottom:4px">Transparent, usage-based pricing</div>
+        <div style="font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace">Pay as you go · or subscribe · Open Network API always free to read</div>
+      </div>
+
+      <!-- SaaS Credits (2 col) -->
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px">// SaaS Credits — pay as you go</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+
+          <div class="hiw-plan">
+            <div class="hiw-plan-name" style="font-size:15px">Starter Pack</div>
+            <div class="hiw-plan-price">$99 <span>· 100 credits</span></div>
+            <div class="hiw-plan-desc">~10 orchestration sessions or ~20 LOIs</div>
+            <div class="hiw-plan-rule"></div>
+            <ul class="hiw-plan-feat">
+              <li>Orchestration session · 10–20 cr</li>
+              <li>LOI document · 5 cr</li>
+              <li>SPA document · 5 cr</li>
+              <li>NDA · 3 cr · LC Application · 5 cr</li>
+              <li>Credits never expire</li>
+            </ul>
+            <a href="pricing.html" class="hiw-plan-cta">Buy Starter →</a>
+          </div>
+
+          <div class="hiw-plan featured">
+            <div class="hiw-plan-badge">SAVE 14%</div>
+            <div class="hiw-plan-name" style="font-size:15px">Team Pack</div>
+            <div class="hiw-plan-price">$299 <span>· 350 credits</span></div>
+            <div class="hiw-plan-desc">~35 sessions or ~70 LOIs — best per-credit rate</div>
+            <div class="hiw-plan-rule"></div>
+            <ul class="hiw-plan-feat">
+              <li>Everything in Starter</li>
+              <li>35+ orchestration sessions</li>
+              <li>Shareable across your team</li>
+              <li>Priority counterparty screening</li>
+              <li>Full compliance vault access</li>
+            </ul>
+            <a href="pricing.html" class="hiw-plan-cta">Buy Team Pack →</a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Subscription row (2 col) -->
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px">// Subscriptions — unlimited sessions</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+
+          <div class="hiw-plan">
+            <div class="hiw-plan-name" style="font-size:15px">Agentic Team</div>
+            <div class="hiw-plan-price">$599 <span>/ month</span></div>
+            <div class="hiw-plan-desc">Unlimited sessions · 5 seats · MCP install · data stays on your servers</div>
+            <div class="hiw-plan-rule"></div>
+            <ul class="hiw-plan-feat">
+              <li>Unlimited orchestration sessions</li>
+              <li>5 team seats included</li>
+              <li>MCP server install (local)</li>
+              <li>Data stays on your servers</li>
+              <li>All 7 auto-documents</li>
+              <li>Full compliance vault</li>
+            </ul>
+            <a href="pricing.html" class="hiw-plan-cta">Start Agentic Team →</a>
+          </div>
+
+          <div class="hiw-plan">
+            <div class="hiw-plan-name" style="font-size:15px">Enterprise Setup</div>
+            <div class="hiw-plan-price" style="font-size:16px">$999 <span style="font-size:10px">one-time setup</span></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--violet);margin-bottom:4px">then $599 / month</div>
+            <div class="hiw-plan-desc">White-label · unlimited users · 48h onboarding</div>
+            <div class="hiw-plan-rule"></div>
+            <ul class="hiw-plan-feat">
+              <li>Everything in Agentic Team</li>
+              <li>White-label deployment</li>
+              <li>Unlimited users</li>
+              <li>48h dedicated onboarding</li>
+              <li>Custom corridor config</li>
+              <li>SLA + priority support</li>
+            </ul>
+            <a href="pricing.html" class="hiw-plan-cta">Contact us →</a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Open Network API -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--teal);border-radius:6px;padding:12px 16px">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--teal);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px">// Open Network API</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px">Read Tier</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;color:var(--teal);margin-bottom:5px">Free · instant</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.55">Access live corridor prices, risk scores &amp; alerts via REST. No auth required. Read-only.</div>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px">Transact Tier</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;color:var(--gold);margin-bottom:5px">1% commission / signed LOI</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.55">Trigger mandates &amp; collect signed LOIs via API. 5-day review. Settlement in USDC on Base.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hiw-note">OFAC screening on every counterparty · Nothing moves without your authorization · <a href="pricing.html" style="color:var(--violet);text-decoration:none">Full pricing page →</a></div>
+
+    </div><!-- /hiw-panel-pricing -->
+
+    <!-- ── MANDATE PANEL ── -->
+    <div class="hiw-body hiw-panel" id="hiw-panel-mandate">
+
+      <!-- Header -->
+      <div>
+        <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white);margin-bottom:4px">The Mandate Process</div>
+        <div style="font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace">From corridor product to signed document — every step you control</div>
+      </div>
+
+      <!-- 5-step flow -->
+      <div style="display:flex;flex-direction:column;gap:0">
+
+        <!-- Step 1 -->
+        <div style="display:flex;gap:14px;align-items:stretch">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--indigo);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">01</div>
+            <div style="width:1px;flex:1;background:var(--border);margin:4px 0"></div>
+          </div>
+          <div style="padding-bottom:18px;flex:1">
+            <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">Select your product</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">Click <strong style="color:var(--text)">Deal Desk</strong> on any product row — the commodity, unit, spec, and origin port pre-load automatically. Or enter a custom commodity if it's not listed.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border2);color:var(--text)">Commodity name</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border2);color:var(--text)">Spec / grade</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border2);color:var(--text)">Origin port</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border2);color:var(--text)">Unit (MT / m² / u)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div style="display:flex;gap:14px;align-items:stretch">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--surface2);border:1px solid var(--indigo);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--violet);flex-shrink:0">02</div>
+            <div style="width:1px;flex:1;background:var(--border);margin:4px 0"></div>
+          </div>
+          <div style="padding-bottom:18px;flex:1">
+            <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">Set your trade terms</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">Define the mandate parameters. Your <strong style="color:var(--text)">price ceiling is never shared</strong> with the counterparty — only the engine sees it.</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.1em">Volume</div>
+                <div style="font-size:12px;color:var(--text)">500 MT · 10 000 m² · 200 u</div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.1em">Price ceiling (private)</div>
+                <div style="font-size:12px;color:var(--text)">$XXX / MT — only you see this</div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.1em">Incoterm</div>
+                <div style="font-size:12px;color:var(--text)">EXW · FOB · CFR · CIF · DAP</div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:8px 10px">
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:.1em">Destination port</div>
+                <div style="font-size:12px;color:var(--text)">Al Arish · Constanta · Jeddah …</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div style="display:flex;gap:14px;align-items:stretch">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--surface2);border:1px solid var(--teal);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--teal);flex-shrink:0">03</div>
+            <div style="width:1px;flex:1;background:var(--border);margin:4px 0"></div>
+          </div>
+          <div style="padding-bottom:18px;flex:1">
+            <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">Auto counterparty screening <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--teal);font-weight:400">(always on)</span></div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">Before your mandate reaches anyone, every matched counterparty is screened automatically. The engine only proceeds to negotiation on a clean result.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);color:var(--teal)">✓ OFAC SDN</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);color:var(--teal)">✓ EU consolidated list</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);color:var(--teal)">✓ UN sanctions</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.2);color:var(--teal)">✓ KYC on file</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div style="display:flex;gap:14px;align-items:stretch">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--surface2);border:1px solid var(--violet);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:var(--violet);flex-shrink:0">04</div>
+            <div style="width:1px;flex:1;background:var(--border);margin:4px 0"></div>
+          </div>
+          <div style="padding-bottom:18px;flex:1">
+            <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">Live orchestration — you monitor every stage</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">The engine runs up to 7 negotiation rounds, bidding within your ceiling. You see every round in real time. The moment a deal crosses your ceiling, the engine <strong style="color:var(--text)">stops and waits for you</strong> — it never commits without your authorization.</div>
+            <div style="background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);line-height:1.8">
+              <span style="color:var(--violet)">Stage 1</span> → Initial offer sent · <span style="color:var(--muted)">waiting response</span><br>
+              <span style="color:var(--violet)">Stage 2</span> → Counter received $142/MT · <span style="color:var(--green)">within ceiling ✓</span><br>
+              <span style="color:var(--violet)">Stage 3</span> → Revised offer $138/MT · <span style="color:var(--green)">within ceiling ✓</span><br>
+              <span style="color:var(--gold)">Stage 4</span> → Deal at $135/MT · <span style="color:var(--gold)">⚡ awaiting your authorization</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div style="display:flex;gap:14px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0">
+            <div style="width:32px;height:32px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">05</div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:700;color:var(--white);margin-bottom:4px">Authorize → 7 documents issued instantly</div>
+            <div style="font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px">One click. All 7 legal documents generate and dispatch to all parties simultaneously. Nothing was sent before this moment.</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)">LOI</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)">NDA</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)">SPA</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)">LC Application</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)">Trade Contract</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)">Freight Advisory</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:3px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)">HS Code Report</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /5-step flow -->
+
+      <!-- CTA -->
+      <div style="display:flex;gap:8px">
+        <a href="agent-mandate.html" style="flex:1;display:block;text-align:center;padding:10px 0;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;text-decoration:none;background:var(--indigo);border:1px solid var(--indigo);color:#fff;transition:all .15s" onmouseover="this.style.background='var(--violet)'" onmouseout="this.style.background='var(--indigo)'">Open Mandate Desk →</a>
+        <button onclick="setHIWTab('how')" style="padding:10px 18px;border-radius:5px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.06em;background:transparent;border:1px solid var(--border2);color:var(--muted);cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--border)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--muted)'">← How it works</button>
+      </div>
+
+    </div><!-- /hiw-panel-mandate -->
+
     <div class="hiw-foot">
       <span class="hiw-foot-note">Every counterparty KYC-cleared &amp; OFAC-screened before your mandate reaches them</span>
       <a href="agent-mandate.html" style="padding:8px 18px;border-radius:5px;font-size:12px;font-weight:700;font-family:'IBM Plex Mono',monospace;text-decoration:none;background:var(--indigo);color:#fff;letter-spacing:.04em;white-space:nowrap">Set mandate →</a>
