@@ -31,8 +31,24 @@
     .tb-logo{font-family:"Fraunces",serif;font-size:16px;font-weight:900;color:var(--white);letter-spacing:-.02em;margin-right:10px;white-space:nowrap}
     .tb-logo em{color:var(--indigo);font-style:italic}
     .tb-sub{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-right:28px;white-space:nowrap}
-    .corridor-tabs{display:flex;gap:3px;flex:1;overflow-x:auto;scrollbar-width:none}
-    .corridor-tabs::-webkit-scrollbar{display:none}
+    .corridor-tabs{display:none} /* moved to corridor-bar */
+
+    /* ── CORRIDOR BAR (full-width sub-nav) ── */
+    .corridor-bar{
+      display:flex;align-items:stretch;justify-content:center;
+      background:var(--surface2);border-bottom:1px solid var(--border);
+      flex-shrink:0;padding:0 20px;gap:2px
+    }
+    .corridor-bar .ctab{
+      flex:0 1 220px;text-align:center;padding:9px 20px;
+      border-radius:0;border:none;border-bottom:2px solid transparent;
+      font-size:11px;letter-spacing:.05em
+    }
+    .corridor-bar .ctab.active{
+      color:var(--violet);border-bottom-color:var(--indigo);
+      background:rgba(91,95,239,.06)
+    }
+    .corridor-bar .ctab:hover:not(.active){background:rgba(255,255,255,.03);color:var(--text)}
     .ctab-divider{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--muted);opacity:.55;padding:0 8px;align-self:center;white-space:nowrap;border-left:1px solid var(--border2);border-right:1px solid var(--border2);line-height:1;letter-spacing:.1em;text-transform:uppercase;margin:0 4px;flex-shrink:0;pointer-events:none;user-select:none}
     .sfpill-label{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;opacity:.6;white-space:nowrap}
     .sfpill,.ptab{font-family:"IBM Plex Mono",monospace;font-size:10px;padding:3px 10px;border:1px solid var(--border2);border-radius:12px;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.04em;white-space:nowrap}
@@ -200,8 +216,8 @@
     /* ── MOBILE ── */
     @media(max-width:768px){
       .tb-sub{display:none}
-      .corridor-tabs{overflow-x:auto;gap:2px;scrollbar-width:none}
-      .corridor-tabs::-webkit-scrollbar{display:none}
+      .corridor-bar{padding:0 10px;gap:1px}
+      .corridor-bar .ctab{flex:1;padding:8px 8px;font-size:10px;letter-spacing:.02em}
       .ctab{padding:5px 10px;font-size:10px;letter-spacing:.02em}
       .tb-right .tb-btn{display:none}
       .body-area{flex-direction:column}
@@ -215,8 +231,7 @@
       table.cttable td:nth-child(4),table.cttable td:nth-child(5){display:none}
       .dv-topbar{gap:6px}
       .dv-search{min-width:100%;order:-1}
-      #type-filters,.dv-topbar>div{overflow-x:auto;scrollbar-width:none}
-      .gen-grid{grid-template-columns:repeat(4,1fr);gap:5px;padding:10px 12px}
+      .dv-topbar>div{overflow-x:auto;scrollbar-width:none}
     }
 
     /* Scrollbar */
@@ -224,9 +239,36 @@
     ::-webkit-scrollbar-track{background:transparent}
     ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 
+    /* ── LEFT PANEL COLLAPSE ── */
+    .left-panel{transition:width .22s cubic-bezier(.4,0,.2,1)}
+    .left-panel.lp-collapsed{width:0!important;border-right:none;overflow:hidden}
+    #lp-toggle-btn{
+      position:fixed;top:50%;left:400px;transform:translateY(-50%);z-index:200;
+      width:16px;height:44px;
+      background:var(--surface2);border:1px solid var(--border2);border-left:none;
+      border-radius:0 5px 5px 0;color:var(--muted);cursor:pointer;
+      font-size:9px;display:flex;align-items:center;justify-content:center;
+      transition:left .22s cubic-bezier(.4,0,.2,1),background .15s,color .15s,border-color .15s;
+      padding:0;line-height:1
+    }
+    #lp-toggle-btn:hover{background:var(--indigo-dim);color:var(--violet);border-color:rgba(91,95,239,.4)}
+
     /* ── DOCS VIEW ── */
     #docs-view{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--bg)}
     #docs-view.dv-active{display:flex}
+    .dv-tab-bar{display:flex;gap:0;background:var(--surface2);border-bottom:1px solid var(--border);flex-shrink:0}
+    .dv-tab{font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;padding:9px 18px;border:none;border-right:1px solid var(--border);border-bottom:2px solid transparent;background:none;color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.04em;white-space:nowrap}
+    .dv-tab:hover{color:var(--text);background:rgba(255,255,255,.03)}
+    .dv-tab.active{color:var(--violet);border-bottom-color:var(--indigo);background:var(--surface)}
+    .dv-cde-panel{display:none;flex:1;overflow-y:auto;padding:28px 32px;display:none;flex-direction:column;gap:20px}
+    .dv-cde-panel.open{display:flex}
+    .cde-card{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:16px 18px}
+    .cde-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:4px}
+    .cde-stat{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px;text-align:center}
+    .cde-stat-val{font-family:"Fraunces",serif;font-size:18px;font-weight:900;color:var(--white);line-height:1}
+    .cde-stat-lbl{font-size:10px;color:var(--muted);margin-top:3px;font-family:"IBM Plex Mono",monospace;letter-spacing:.06em}
+    .cde-folder-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+    .cde-folder-row:last-child{border-bottom:none}
     .dv-topbar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;flex-wrap:wrap}
     .dv-search{flex:1;min-width:160px;background:var(--surface2);border:1px solid var(--border2);border-radius:5px;padding:6px 12px;font-size:12px;color:var(--text);font-family:"IBM Plex Mono",monospace;outline:none}
     .dv-search:focus{border-color:var(--indigo)}
@@ -234,12 +276,6 @@
     .fbtn{font-family:"IBM Plex Mono",monospace;font-size:11px;padding:4px 10px;border:1px solid var(--border2);border-radius:4px;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
     .fbtn:hover{background:var(--indigo-dim);color:var(--text)}
     .fbtn.on{background:var(--indigo-dim);border-color:var(--indigo);color:var(--violet)}
-    .gen-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface2);flex-shrink:0}
-    .gen-tile{display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 6px;background:var(--surface);border:1px solid var(--border2);border-radius:7px;text-decoration:none;color:var(--text);font-family:"IBM Plex Mono",monospace;transition:all .15s;text-align:center}
-    .gen-tile:hover{background:var(--indigo-dim);border-color:var(--indigo);color:var(--violet)}
-    .gen-tile-icon{font-size:20px}
-    .gen-tile-name{font-size:11px;font-weight:600;line-height:1.3;color:var(--white)}
-    .gen-tile-desc{font-size:10px;color:var(--muted);line-height:1.3}
     /* ── PROJECT CARDS ── */
     .proj-cards-wrap{flex:1;overflow-y:auto;padding:14px 16px}
     .proj-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px;transition:border-color .15s}
@@ -288,6 +324,31 @@
     .contact-pop{position:fixed;z-index:1500;background:var(--surface2);border:1px solid var(--border2);border-radius:7px;padding:5px;min-width:194px;box-shadow:0 8px 32px rgba(0,0,0,.7);display:none}
     .cp-opt{display:flex;align-items:center;gap:9px;padding:8px 11px;border-radius:5px;color:var(--text);font-size:12px;text-decoration:none;font-family:"IBM Plex Mono",monospace;transition:background .12s;white-space:nowrap}
     .cp-opt:hover{background:var(--indigo-dim);color:var(--violet)}
+
+    /* ── HOW IT WORKS MODAL ── */
+    .hiw-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+    .hiw-overlay.open{display:flex}
+    .hiw-modal{background:var(--surface);border:1px solid var(--border2);border-radius:12px;width:600px;max-width:calc(100vw - 32px);max-height:90vh;overflow:hidden;display:flex;flex-direction:column}
+    .hiw-head{padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .hiw-title{font-family:"Fraunces",serif;font-size:22px;font-weight:900;color:var(--white);letter-spacing:-.02em;line-height:1.1}
+    .hiw-sub{font-size:12px;color:var(--muted);margin-top:4px;font-family:"IBM Plex Mono",monospace}
+    .hiw-close{background:none;border:1px solid var(--border2);color:var(--muted);width:28px;height:28px;border-radius:5px;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+    .hiw-close:hover{border-color:var(--indigo);color:var(--violet)}
+    .hiw-body{padding:22px 24px;overflow-y:auto;display:flex;flex-direction:column;gap:20px}
+    .hiw-step{display:flex;gap:16px;align-items:flex-start}
+    .hiw-num{font-family:"Fraunces",serif;font-size:32px;font-weight:900;line-height:1;letter-spacing:-.04em;flex-shrink:0;width:36px}
+    .hiw-step-body{}
+    .hiw-step-title{font-size:15px;font-weight:700;color:var(--white);margin-bottom:5px}
+    .hiw-step-desc{font-size:13px;color:var(--muted);line-height:1.65}
+    .hiw-step-tag{display:inline-flex;align-items:center;gap:5px;margin-top:7px;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.05em;text-transform:uppercase}
+    .hiw-divider{height:1px;background:var(--border);margin:2px 0}
+    .hiw-corridors{display:flex;flex-direction:column;gap:8px}
+    .hiw-corr{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:7px;background:var(--surface2);border:1px solid var(--border2)}
+    .hiw-corr-icon{font-size:18px;line-height:1;flex-shrink:0;margin-top:1px}
+    .hiw-corr-name{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px}
+    .hiw-corr-desc{font-size:11px;color:var(--muted);line-height:1.55;font-family:"IBM Plex Mono",monospace}
+    .hiw-foot{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .hiw-foot-note{font-size:11px;color:var(--muted);font-family:"IBM Plex Mono",monospace}
 
     /* ── AI TOOLS MODAL ── */
     .ai-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px)}
@@ -352,26 +413,28 @@
   <header class="topbar">
     <a href="#" class="tb-logo" style="text-decoration:none" onclick="setCorridor('us');return false">SLOI <em>AI</em></a>
     <div class="tb-sub" style="cursor:pointer" onclick="setCorridor('us')">Trade Command Center</div>
-    <div class="corridor-tabs">
-      <button class="ctab" id="ctab-epc"   onclick="setCorridor('epc')">⚙️ EPC Supply Hub</button>
-      <button class="ctab" id="ctab-gc"    onclick="setCorridor('gc')">🏢 GC Supply Hub</button>
-      <button class="ctab active" id="ctab-us" onclick="setCorridor('us')">🏗️ US Infrastructure</button>
-    </div>
     <div class="tb-right">
+      <button class="tb-btn" onclick="openHIW()" title="How it works" style="font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;color:var(--muted);gap:5px">? How it works</button>
       <button class="tb-btn" onclick="openCmd()" title="Command bar (Ctrl+K)" style="font-family:'IBM Plex Mono',monospace;letter-spacing:.06em;color:var(--violet);border-color:rgba(91,95,239,.35)">⌘K</button>
       <a href="profile.html" class="tb-btn">Profile</a>
       <a href="#" id="ctab-docs" class="tb-btn" onclick="setCorridor('docs');return false">📁 Projects</a>
-      <a href="cde.html" class="tb-btn">🗂️ CDE</a>
       <a href="agent-mandate.html" class="tb-btn tb-newproj">＋ New Project</a>
       <button class="tb-btn" onclick="window.location.href='login.html'">Sign out</button>
     </div>
   </header>
-  <div id="demo-bar" style="display:flex;align-items:center;gap:8px;padding:5px 20px;background:rgba(232,169,74,.07);border-bottom:1px solid rgba(232,169,74,.18);font-size:11px;font-family:'IBM Plex Mono',monospace;color:rgba(232,169,74,.8);flex-shrink:0;position:relative;z-index:50">
+  <div id="demo-bar" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:5px 20px;background:rgba(232,169,74,.07);border-bottom:1px solid rgba(232,169,74,.18);font-size:11px;font-family:'IBM Plex Mono',monospace;color:rgba(232,169,74,.8);flex-shrink:0;position:relative;z-index:50">
     <span style="width:5px;height:5px;border-radius:50%;background:#e8a94a;flex-shrink:0;animation:demopulse 2s ease-in-out infinite;display:inline-block"></span>
     Demo environment &nbsp;·&nbsp; Market data, alerts and compliance statuses are simulated &nbsp;·&nbsp; Not for live procurement decisions
-    <button onclick="document.getElementById('demo-bar').style.display='none'" style="margin-left:auto;background:none;border:none;color:rgba(232,169,74,.45);cursor:pointer;font-size:13px;padding:0 2px;line-height:1;flex-shrink:0" title="Dismiss">✕</button>
+    <button onclick="document.getElementById('demo-bar').style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(232,169,74,.45);cursor:pointer;font-size:13px;padding:0 2px;line-height:1" title="Dismiss">✕</button>
   </div>
   <style>@keyframes demopulse{0%,100%{opacity:1}50%{opacity:.35}}</style>
+
+  <!-- ── CORRIDOR BAR ── -->
+  <div class="corridor-bar">
+    <button class="ctab" id="ctab-epc" onclick="setCorridor('epc')">⚙️ EPC Supply Hub</button>
+    <button class="ctab" id="ctab-gc"  onclick="setCorridor('gc')">🏢 GC Supply Hub</button>
+    <button class="ctab active" id="ctab-us" onclick="setCorridor('us')">🏗️ US Infrastructure</button>
+  </div>
 
   <!-- ── BODY ── -->
   <div class="body-area">
@@ -440,32 +503,85 @@
       </div>
       <!-- Documents View -->
       <div id="docs-view">
-        <div class="dv-topbar">
-          <span class="plabel" style="margin-bottom:0;white-space:nowrap">// PROJECTS</span>
-          <input type="text" class="dv-search" id="doc-search" placeholder="Search project, product, destination…" oninput="renderProjectCards()"/>
-          <div style="display:flex;gap:4px;flex-wrap:wrap" id="type-filters">
-            <button class="fbtn on" data-type="All"              onclick="setTypeFilter('All')">All</button>
-            <button class="fbtn"    data-type="LOI"              onclick="setTypeFilter('LOI')">📄 LOI</button>
-            <button class="fbtn"    data-type="NDA"              onclick="setTypeFilter('NDA')">🔒 NDA</button>
-            <button class="fbtn"    data-type="SPA"              onclick="setTypeFilter('SPA')">📋 SPA</button>
-            <button class="fbtn"    data-type="LC App"           onclick="setTypeFilter('LC App')">🏦 LC App</button>
-            <button class="fbtn"    data-type="Trade Contract"   onclick="setTypeFilter('Trade Contract')">📜 Trade Contract</button>
-            <button class="fbtn"    data-type="Freight Advisory" onclick="setTypeFilter('Freight Advisory')">🚢 Freight</button>
-            <button class="fbtn"    data-type="HS Code Report"   onclick="setTypeFilter('HS Code Report')">🔢 HS Code</button>
+        <!-- Tab bar -->
+        <div class="dv-tab-bar">
+          <button class="dv-tab active" id="dvtab-docs" onclick="setDocsTab('docs')">📁 Documents</button>
+          <button class="dv-tab" id="dvtab-cde" onclick="setDocsTab('cde')">🗂️ CDE</button>
+        </div>
+
+        <!-- Documents panel -->
+        <div id="dv-docs-content" style="display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0">
+          <div class="dv-topbar">
+            <input type="text" class="dv-search" id="doc-search" placeholder="Search project, product, destination…" oninput="renderProjectCards()"/>
+            <div style="display:flex;gap:4px;flex-shrink:0" id="corr-filters">
+              <button class="fbtn on" data-corr="all"  onclick="setCorrFilter('all')">All corridors</button>
+              <button class="fbtn"    data-corr="us"   onclick="setCorrFilter('us')">🇺🇸 US</button>
+              <button class="fbtn"    data-corr="epc"  onclick="setCorrFilter('epc')">⚙️ EPC</button>
+              <button class="fbtn"    data-corr="gc"   onclick="setCorrFilter('gc')">🏢 GC</button>
+            </div>
           </div>
-          <div style="display:flex;gap:4px" id="corr-filters">
-            <button class="fbtn on" data-corr="all"  onclick="setCorrFilter('all')">All corridors</button>
-            <button class="fbtn"    data-corr="us"   onclick="setCorrFilter('us')">🇺🇸 US</button>
-            <button class="fbtn"    data-corr="epc"  onclick="setCorrFilter('epc')">⚙️ EPC Supply Hub</button>
+          <div id="proj-cards" class="proj-cards-wrap"></div>
+        </div>
+
+        <!-- CDE panel -->
+        <div class="dv-cde-panel" id="dv-cde-content">
+          <div>
+            <div style="font-family:'Fraunces',serif;font-size:20px;font-weight:900;color:var(--white);margin-bottom:4px">Common Data Environment</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;max-width:540px">Centralised document store for all project files, drawings, specifications, compliance records and correspondence — linked to your active trade mandates.</div>
+          </div>
+          <div class="cde-stat-row">
+            <div class="cde-stat"><div class="cde-stat-val" style="color:var(--teal)">4</div><div class="cde-stat-lbl">Projects</div></div>
+            <div class="cde-stat"><div class="cde-stat-val">38</div><div class="cde-stat-lbl">Files</div></div>
+            <div class="cde-stat"><div class="cde-stat-val" style="color:var(--gold)">3</div><div class="cde-stat-lbl">Pending review</div></div>
+            <div class="cde-stat"><div class="cde-stat-val" style="color:var(--green)">✓</div><div class="cde-stat-lbl">Audit trail on</div></div>
+          </div>
+          <div class="cde-card">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">// Recent folders</div>
+            <div class="cde-folder-row">
+              <span style="font-size:16px">📂</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;color:var(--white);font-weight:600">NEOM Phase 2 — CFS Framing Package</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px">14 files · Last modified 2 days ago · EPC / Saudi</div>
+              </div>
+              <a href="cde.html" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--violet);text-decoration:none;font-weight:600;white-space:nowrap">Open →</a>
+            </div>
+            <div class="cde-folder-row">
+              <span style="font-size:16px">📂</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;color:var(--white);font-weight:600">Gaza Reconstruction — Insulation &amp; Plywood</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px">9 files · Last modified 4 days ago · EPC / Gaza</div>
+              </div>
+              <a href="cde.html" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--violet);text-decoration:none;font-weight:600;white-space:nowrap">Open →</a>
+            </div>
+            <div class="cde-folder-row">
+              <span style="font-size:16px">📂</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;color:var(--white);font-weight:600">Houston Hub — Buy America Rebar G60</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px">7 files · Last modified 1 week ago · US Infrastructure</div>
+              </div>
+              <a href="cde.html" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--violet);text-decoration:none;font-weight:600;white-space:nowrap">Open →</a>
+            </div>
+            <div class="cde-folder-row">
+              <span style="font-size:16px">📂</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;color:var(--white);font-weight:600">Sun Belt CFS Mid-Rise — Mandate SB-014</div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px">8 files · Last modified 3 days ago · GC / Sun Belt</div>
+              </div>
+              <a href="cde.html" style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--violet);text-decoration:none;font-weight:600;white-space:nowrap">Open →</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a href="cde.html" style="padding:10px 22px;border-radius:6px;font-size:13px;font-weight:700;font-family:'IBM Plex Mono',monospace;text-decoration:none;background:var(--indigo);color:#fff;letter-spacing:.04em;display:inline-flex;align-items:center;gap:6px">Open full CDE →</a>
+            <a href="agent-mandate.html" style="padding:10px 22px;border-radius:6px;font-size:13px;font-weight:600;font-family:'IBM Plex Mono',monospace;text-decoration:none;background:none;border:1px solid var(--border2);color:var(--text);display:inline-flex;align-items:center;gap:6px">New project →</a>
           </div>
         </div>
-        <div id="gen-grid" class="gen-grid"></div>
-        <div id="proj-cards" class="proj-cards-wrap"></div>
+
       </div>
     </div>
 
   </div><!-- /body-area -->
 </div><!-- /shell -->
+<button id="lp-toggle-btn" onclick="toggleLP()" title="Collapse panel (T)">◀</button>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
@@ -590,44 +706,86 @@ const CORRIDORS = {
       { icon:'✅',  title:'Sonasid rebar MTC certified — A615 Gr.60 equiv. · CBP entry Baltimore cleared · mandate US-512',tag:'t-clear', lbl:'MA CLEAR',  time:'4h ago',  country:'ma' },
     ],
     vault:[
-      { name:'Buy America Certification',    st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'IIJA Compliance Status',       st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'KYC — Nucor Corporation',      st:'vs-clear',   lbl:'VALID'    },
-      { name:'KYC — US Steel Corporation',   st:'vs-clear',   lbl:'VALID'    },
-      { name:'KYC — Holcim US Inc.',         st:'vs-clear',   lbl:'VALID'    },
-      { name:'Davis-Bacon Compliance',       st:'vs-active',  lbl:'ACTIVE'   },
-      { name:'DBE Utilization (12%)',        st:'vs-active',  lbl:'ACTIVE'   },
-      { name:'USMCA Origin Certification',  st:'vs-clear',   lbl:'VALID'    },
-      { name:'IRA Critical Mineral Status', st:'vs-clear',   lbl:'CLEAR'    },
-      { name:'KYC — Ternium Mexico',        st:'vs-clear',   lbl:'VALID'    },
-      { name:'KYC — West Fraser / Nutrien', st:'vs-clear',   lbl:'VALID'    },
-      { name:'KYC — Glencore Canada',       st:'vs-clear',   lbl:'VALID'    },
-      { name:'45X Manufacturing Credit',    st:'vs-active',  lbl:'ACTIVE'   },
-      { name:'Buy America / USMCA Review',  st:'vs-pending', lbl:'REVIEW'   },
-      { name:'CBP AD/CVD Review (DZ Steel)',   st:'vs-pending', lbl:'REVIEW'   },
-      { name:'EPA Import Cert (DZ Fertilizer)', st:'vs-clear',   lbl:'CLEAR'    },
-      { name:'CBP Entry — Sonasid (MA Steel)', st:'vs-clear',   lbl:'VALID'    },
-      { name:'OCP Origin Certificate (MA)',    st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'Audit Trail',                  st:'vs-clear',   lbl:'ON'       },
+      { name:'Buy America Certification',       st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'IIJA Compliance Status',          st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'KYC — Nucor Corporation',         st:'vs-clear',   lbl:'VALID'    },
+      { name:'KYC — US Steel Corporation',      st:'vs-clear',   lbl:'VALID'    },
+      { name:'KYC — Holcim US Inc.',            st:'vs-clear',   lbl:'VALID'    },
+      { name:'Davis-Bacon Compliance',          st:'vs-active',  lbl:'ACTIVE'   },
+      { name:'DBE Utilization (12%)',           st:'vs-active',  lbl:'ACTIVE'   },
+      { name:'USMCA Origin Certification',      st:'vs-clear',   lbl:'VALID'    },
+      { name:'IRA Critical Mineral Status',     st:'vs-clear',   lbl:'CLEAR',    country:'ca' },
+      { name:'KYC — Ternium Mexico',            st:'vs-clear',   lbl:'VALID',    country:'mx' },
+      { name:'KYC — West Fraser / Nutrien',     st:'vs-clear',   lbl:'VALID',    country:'ca' },
+      { name:'KYC — Glencore Canada',           st:'vs-clear',   lbl:'VALID',    country:'ca' },
+      { name:'45X Manufacturing Credit',        st:'vs-active',  lbl:'ACTIVE',   country:'ca' },
+      { name:'Buy America / USMCA Review',      st:'vs-pending', lbl:'REVIEW',   country:'mx' },
+      { name:'CBP AD/CVD Review (DZ Steel)',    st:'vs-pending', lbl:'REVIEW',   country:'dz' },
+      { name:'EPA Import Cert (DZ Fertilizer)', st:'vs-clear',   lbl:'CLEAR',    country:'dz' },
+      { name:'CBP Entry — Sonasid (MA Steel)',  st:'vs-clear',   lbl:'VALID',    country:'ma' },
+      { name:'OCP Origin Certificate (MA)',     st:'vs-clear',   lbl:'VERIFIED', country:'ma' },
+      { name:'Audit Trail',                     st:'vs-clear',   lbl:'ON'       },
     ],
     risks:[
-      { lbl:'Structural Steel Lead Times',   score:52, color:'#e8a94a' },
-      { lbl:'IIJA Funding Release Timing',   score:38, color:'#22c55e' },
-      { lbl:'Buy America Waiver Risk',       score:28, color:'#22c55e' },
-      { lbl:'Mill Capacity Constraints',     score:44, color:'#22c55e' },
-      { lbl:'Davis-Bacon Compliance',        score:22, color:'#22c55e' },
-      { lbl:'DBE Subcontract Availability',  score:35, color:'#22c55e' },
-      { lbl:'Lithium Price Volatility (CA)',   score:58, color:'#e8a94a' },
-      { lbl:'Buy America Waiver / IIJA (MX)',  score:55, color:'#e8a94a' },
-      { lbl:'Cobalt Price Volatility (CA)',     score:52, color:'#e8a94a' },
-      { lbl:'BC Wildfire / Lumber Supply (CA)', score:48, color:'#22c55e' },
-      { lbl:'CBP Inspection Surge (MX)',        score:44, color:'#22c55e' },
-      { lbl:'Peso FX Volatility (MX)',          score:32, color:'#22c55e' },
-      { lbl:'AD/CVD Steel Risk (DZ)',         score:62, color:'#e8a94a' },
-      { lbl:'Transatlantic Freight Rate',     score:48, color:'#22c55e' },
-      { lbl:'DAP Price Volatility (MA/DZ)',   score:42, color:'#22c55e' },
-      { lbl:'Casablanca Port Congestion',     score:35, color:'#22c55e' },
+      { lbl:'Structural Steel Lead Times',      score:52, color:'#e8a94a' },
+      { lbl:'IIJA Funding Release Timing',      score:38, color:'#22c55e' },
+      { lbl:'Buy America Waiver Risk',          score:28, color:'#22c55e' },
+      { lbl:'Mill Capacity Constraints',        score:44, color:'#22c55e' },
+      { lbl:'Davis-Bacon Compliance',           score:22, color:'#22c55e' },
+      { lbl:'DBE Subcontract Availability',     score:35, color:'#22c55e' },
+      { lbl:'Lithium Price Volatility (CA)',    score:58, color:'#e8a94a', country:'ca' },
+      { lbl:'Buy America Waiver / IIJA (MX)',   score:55, color:'#e8a94a', country:'mx' },
+      { lbl:'Cobalt Price Volatility (CA)',     score:52, color:'#e8a94a', country:'ca' },
+      { lbl:'BC Wildfire / Lumber Supply (CA)', score:48, color:'#22c55e', country:'ca' },
+      { lbl:'CBP Inspection Surge (MX)',        score:44, color:'#22c55e', country:'mx' },
+      { lbl:'Peso FX Volatility (MX)',          score:32, color:'#22c55e', country:'mx' },
+      { lbl:'AD/CVD Steel Risk (DZ)',           score:62, color:'#e8a94a', country:'dz' },
+      { lbl:'Transatlantic Freight Rate',       score:48, color:'#22c55e' },
+      { lbl:'DAP Price Volatility (MA/DZ)',     score:42, color:'#22c55e' },
+      { lbl:'Casablanca Port Congestion',       score:35, color:'#22c55e', country:'ma' },
     ],
+    subInfo: {
+      mx: {
+        name: '🇲🇽 Mexico / USMCA',
+        desc: 'Near-shore manufacturing corridor · Monterrey → Laredo → Houston · USMCA duty-free · Ternium rebar · CEMEX cement · AHMSA HR coil · Mexichem HDPE · CBP Form 434 origin cert. Priority routes: Laredo-Colombia Bridge, Otay Mesa, Nogales.',
+        stats: [
+          { val:'$552',  lbl:'Rebar G60 USMCA Landed/MT' },
+          { val:'$0',    lbl:'Duty (USMCA)'               },
+          { val:'6',     lbl:'Active MX Routes'            },
+          { val:'$58',   lbl:'OPC Cement FOB/MT'           },
+        ]
+      },
+      ca: {
+        name: '🇨🇦 Canada / USMCA',
+        desc: 'Canadian supply corridor · BC coastal lumber (West Fraser, Structurlam) · Saskatchewan potash (Nutrien) · Ontario critical minerals (Glencore Sudbury, Frontier Lithium) · IRA-qualified battery materials · USMCA duty-free · IRA 45X manufacturing credit eligible.',
+        stats: [
+          { val:'$680',    lbl:'SPF 2×6 Landed/MBF'    },
+          { val:'$326',    lbl:'Potash MOP Landed/MT'   },
+          { val:'$4,340',  lbl:'Nickel Sulfate Landed/MT'},
+          { val:'IRA ✓',   lbl:'Critical mineral status' },
+        ]
+      },
+      dz: {
+        name: '🇩🇿 Algeria',
+        desc: 'Transatlantic import corridor · ArcelorMittal Annaba rebar · GICA LafargeHolcim cement · Fertialgerie DAP fertilizer · CBP AD/CVD review active on steel · EPA-cleared fertilizer imports · 18–22 day transit to US East Coast.',
+        stats: [
+          { val:'$578',   lbl:'Rebar G60 Landed/MT'  },
+          { val:'$108',   lbl:'OPC Cement Landed/MT'  },
+          { val:'$648',   lbl:'DAP Fertilizer Landed/MT'},
+          { val:'REVIEW', lbl:'AD/CVD Status'           },
+        ]
+      },
+      ma: {
+        name: '🇲🇦 Morocco',
+        desc: 'North Africa import corridor · Sonasid Nador rebar (CBP cleared) · LafargeHolcim Morocco cement · OCP Group DAP phosphate (world #1 exporter) · Tanger Med + Casablanca port access · 14–16 day transit to US East Coast · OFAC-screened.',
+        stats: [
+          { val:'$534',  lbl:'Rebar A615 Landed/MT'   },
+          { val:'$618',  lbl:'DAP 18-46-0 Landed/MT'  },
+          { val:'$108',  lbl:'OPC Cement Landed/MT'    },
+          { val:'CLEAR', lbl:'CBP Entry Status'         },
+        ]
+      },
+    },
   },
 
   epc: {
@@ -752,45 +910,70 @@ const CORRIDORS = {
       { icon:'🇸🇦', title:'NEOM Marine Plywood 19mm tender: 42,000 sheets — SASO WBP BS 1088 spec · Istanbul supplier shortlisted',    tag:'t-info',  lbl:'TENDER',    time:'4h ago',  theater:'sa'   },
     ],
     vault:[
-      { name:'OFAC SDN Screen',               st:'vs-active',  lbl:'RUNNING'  },
-      { name:'UN Humanitarian Coord. (GZ)',   st:'vs-clear',   lbl:'ACTIVE'   },
-      { name:'COGAT Entry Auth. (GZ)',        st:'vs-active',  lbl:'PENDING'  },
-      { name:'EU Consolidated List (UA)',     st:'vs-clear',   lbl:'CLEAR'    },
-      { name:'KYC — Izmir Supplier (TR)',     st:'vs-clear',   lbl:'VALID'    },
-      { name:'Country Risk — Multi-Theater',  st:'vs-high',    lbl:'HIGH'     },
-      { name:'War Risk Insurance',            st:'vs-pending', lbl:'REQUIRED' },
-      { name:'SASO Product Certification',    st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'Saudi Customs (ZATCA)',         st:'vs-active',  lbl:'ACTIVE'   },
-      { name:'Aramco Approved Supplier',      st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'Vision 2030 Procurement Auth.', st:'vs-active',  lbl:'ACTIVE'   },
-      { name:'EN 13162/13163 Insulation Cert', st:'vs-clear',  lbl:'VERIFIED' },
-
-      { name:'SASO 2094/2095 Insulation (SA)', st:'vs-clear',  lbl:'VERIFIED' },
-
-      { name:'KYC — Knauf Insulation TR',     st:'vs-clear',  lbl:'VALID'    },
-
-      { name:'KYC — Rockwool Middle East',    st:'vs-clear',  lbl:'VALID'    },
-
-      { name:'Audit Trail',                   st:'vs-clear',   lbl:'ON'       },
+      { name:'OFAC SDN Screen',                st:'vs-active',  lbl:'RUNNING'  },
+      { name:'UN Humanitarian Coord. (GZ)',    st:'vs-clear',   lbl:'ACTIVE',   theater:'gz' },
+      { name:'COGAT Entry Auth. (GZ)',         st:'vs-active',  lbl:'PENDING',  theater:'gz' },
+      { name:'EU Consolidated List (UA)',      st:'vs-clear',   lbl:'CLEAR',    theater:'ua' },
+      { name:'KYC — Izmir Supplier (TR)',      st:'vs-clear',   lbl:'VALID'    },
+      { name:'Country Risk — Multi-Theater',   st:'vs-high',    lbl:'HIGH'     },
+      { name:'War Risk Insurance',             st:'vs-pending', lbl:'REQUIRED' },
+      { name:'SASO Product Certification',     st:'vs-clear',   lbl:'VERIFIED', theater:'sa' },
+      { name:'Saudi Customs (ZATCA)',          st:'vs-active',  lbl:'ACTIVE',   theater:'sa' },
+      { name:'Aramco Approved Supplier',       st:'vs-clear',   lbl:'VERIFIED', theater:'sa' },
+      { name:'Vision 2030 Procurement Auth.',  st:'vs-active',  lbl:'ACTIVE',   theater:'sa' },
+      { name:'EN 13162/13163 Insulation Cert', st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'SASO 2094/2095 Insulation (SA)', st:'vs-clear',   lbl:'VERIFIED', theater:'sa' },
+      { name:'KYC — Knauf Insulation TR',      st:'vs-clear',   lbl:'VALID',    theater:'gz' },
+      { name:'KYC — Rockwool Middle East',     st:'vs-clear',   lbl:'VALID',    theater:'sa' },
+      { name:'Audit Trail',                    st:'vs-clear',   lbl:'ON'       },
     ],
     risks:[
-      { lbl:'Black Sea Route (UA)',         score:85, color:'#ef4444' },
-      { lbl:'Gaza Border Access (GZ)',      score:80, color:'#ef4444' },
-      { lbl:'Logistics Disruption',         score:78, color:'#ef4444' },
-      { lbl:'War Risk Premium',             score:72, color:'#e8a94a' },
-      { lbl:'Jeddah Port Congestion',       score:52, color:'#e8a94a' },
-      { lbl:'NEOM Schedule Risk',           score:48, color:'#22c55e' },
-      { lbl:'OFAC Counterparty Screen',     score:44, color:'#22c55e' },
-      { lbl:'CFS Supply Lead Time',         score:42, color:'#22c55e' },
-      { lbl:'SASO Compliance',              score:35, color:'#22c55e' },
-      { lbl:'FX Risk (SAR peg)',            score:18, color:'#22c55e' },
-
-      { lbl:'Insulation Supply (UA Theater)',  score:55, color:'#e8a94a' },
-
-      { lbl:'XPS/PIR Lead Times (SA)',         score:45, color:'#22c55e' },
-
-      { lbl:'Plywood Supply Disruption',       score:38, color:'#22c55e' },
+      { lbl:'Black Sea Route (UA)',          score:85, color:'#ef4444', theater:'ua' },
+      { lbl:'Gaza Border Access (GZ)',       score:80, color:'#ef4444', theater:'gz' },
+      { lbl:'Logistics Disruption',          score:78, color:'#ef4444' },
+      { lbl:'War Risk Premium',              score:72, color:'#e8a94a' },
+      { lbl:'Jeddah Port Congestion',        score:52, color:'#e8a94a', theater:'sa' },
+      { lbl:'NEOM Schedule Risk',            score:48, color:'#22c55e', theater:'sa' },
+      { lbl:'OFAC Counterparty Screen',      score:44, color:'#22c55e' },
+      { lbl:'CFS Supply Lead Time',          score:42, color:'#22c55e' },
+      { lbl:'SASO Compliance',               score:35, color:'#22c55e', theater:'sa' },
+      { lbl:'FX Risk (SAR peg)',             score:18, color:'#22c55e', theater:'sa' },
+      { lbl:'Insulation Supply (UA Theater)', score:55, color:'#e8a94a', theater:'ua' },
+      { lbl:'XPS/PIR Lead Times (SA)',        score:45, color:'#22c55e', theater:'sa' },
+      { lbl:'Plywood Supply Disruption',      score:38, color:'#22c55e' },
     ],
+    subInfo: {
+      gz: {
+        name: '🇵🇸 Gaza Reconstruction',
+        desc: 'UN-mandated humanitarian rebuild · Al Arish staging terminal · Kerem Shalom / Rafah crossing logistics · COGAT coordination · OFAC/BIS-screened counterparties. Priority materials: OPC cement, rebar, CFS framing, mineral wool insulation, shuttering plywood, hollow block. UN logistics clearing · DDP site delivery.',
+        stats: [
+          { val:'5,000 MT', lbl:'Cement mandate GZ-07' },
+          { val:'$112',     lbl:'OPC Cement Landed/MT'  },
+          { val:'$21.20',   lbl:'Min. Wool Landed/m²'   },
+          { val:'HIGH',     lbl:'Logistics Risk'         },
+        ]
+      },
+      ua: {
+        name: '🇺🇦 Ukraine Reconstruction',
+        desc: 'Post-war reconstruction via Black Sea corridor · Izmir origin for rebar & CFS · Constanta WH (Romania) pre-positioned stock · Reni crossing logistics · DSTU-standard materials · war risk insurance active · OFAC + EU consolidated list screening.',
+        stats: [
+          { val:'$550',   lbl:'Rebar DSTU Landed/MT'  },
+          { val:'22+',    lbl:'Items Ex-Constanta WH'  },
+          { val:'$21.00', lbl:'Min. Wool Landed/m²'    },
+          { val:'HIGH',   lbl:'Black Sea Risk'          },
+        ]
+      },
+      sa: {
+        name: '🇸🇦 Saudi Vision 2030',
+        desc: 'Vision 2030 mega-project procurement — NEOM · The Line · Red Sea Project · SPARK King Salman Energy Park · Qiddiya · Diriyah Gate. SASO-certified, ZATCA-cleared, Aramco-approved. Rebar (Izmir → Jeddah), aluminum curtain wall, CFS data hall partitions, Rockwool CONLIT, XPS insulation, marine plywood.',
+        stats: [
+          { val:'$2.8T+', lbl:'Vision 2030 Pipeline'  },
+          { val:'$618',   lbl:'Rebar A500 Landed/MT'  },
+          { val:'16',     lbl:'Open SA Mandates'       },
+          { val:'SASO ✓', lbl:'Cert. status'           },
+        ]
+      },
+    },
   },
 
   gc: {
@@ -951,58 +1134,69 @@ const CORRIDORS = {
       { icon:'📈', title:'Pacific NW plywood spot -5.8% — mill restarts adding capacity Q3 2026 · lock prices before Q4 demand uptick',       tag:'t-clear', lbl:'PRICE',    time:'8h ago',  region:'wc' },
     ],
     vault:[
-      { name:'Buy America Certification',  st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'IIJA Eligibility Check',     st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'KYC — Nucor Corporation',    st:'vs-clear',   lbl:'VALID'    },
-      { name:'KYC — USG Corporation',      st:'vs-clear',   lbl:'VALID'    },
-      { name:'KYC — Martin Marietta',      st:'vs-clear',   lbl:'VALID'    },
-      { name:'KYC — Holcim US Inc.',       st:'vs-clear',   lbl:'VALID'    },
-      { name:'Davis-Bacon Compliance',     st:'vs-active',  lbl:'ACTIVE'   },
-      { name:'California Title 24 Part 6', st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'CalGreen Chapter 4',         st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'FSC Chain-of-Custody',       st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'GreenGuard Gold (Insul.)',   st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'KYC — Freres Lumber OR',     st:'vs-clear',   lbl:'VALID'    },
-      { name:'SCS Recycled Content Cert.', st:'vs-clear',   lbl:'VERIFIED' },
-      { name:'LEED Documentation',         st:'vs-active',  lbl:'ACTIVE'   },
-      { name:'KYC — James Hardie Industries', st:'vs-clear',  lbl:'VALID'    },
-
-      { name:'KYC — ClarkDietrich Corp.',      st:'vs-clear',  lbl:'VALID'    },
-
-      { name:'KYC — SCAFCO Corporation',       st:'vs-clear',  lbl:'VALID'    },
-
-      { name:'KYC — Weyerhaeuser Co.',          st:'vs-clear',  lbl:'VALID'    },
-
-      { name:'ASTM C1186 FCB Certification',        st:'vs-clear',  lbl:'VERIFIED' },
-
-      { name:'AISI S240 CFS Engineering Stamp',     st:'vs-active', lbl:'ACTIVE'   },
-
-      { name:'APA PS1-19 Plywood Certification',    st:'vs-clear',  lbl:'VERIFIED' },
-
-      { name:'HZ10 Hurricane Zone Certification',   st:'vs-clear',  lbl:'VERIFIED' },
-
-      { name:'Audit Trail',                st:'vs-clear',   lbl:'ON'       },
+      { name:'Buy America Certification',       st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'IIJA Eligibility Check',          st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'KYC — Nucor Corporation',         st:'vs-clear',   lbl:'VALID'    },
+      { name:'KYC — USG Corporation',           st:'vs-clear',   lbl:'VALID',    region:'sb' },
+      { name:'KYC — Martin Marietta',           st:'vs-clear',   lbl:'VALID',    region:'sb' },
+      { name:'KYC — Holcim US Inc.',            st:'vs-clear',   lbl:'VALID',    region:'sb' },
+      { name:'Davis-Bacon Compliance',          st:'vs-active',  lbl:'ACTIVE'   },
+      { name:'California Title 24 Part 6',      st:'vs-clear',   lbl:'VERIFIED', region:'wc' },
+      { name:'CalGreen Chapter 4',              st:'vs-clear',   lbl:'VERIFIED', region:'wc' },
+      { name:'FSC Chain-of-Custody',            st:'vs-clear',   lbl:'VERIFIED', region:'wc' },
+      { name:'GreenGuard Gold (Insul.)',         st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'KYC — Freres Lumber OR',          st:'vs-clear',   lbl:'VALID',    region:'wc' },
+      { name:'SCS Recycled Content Cert.',      st:'vs-clear',   lbl:'VERIFIED', region:'wc' },
+      { name:'LEED Documentation',              st:'vs-active',  lbl:'ACTIVE',   region:'wc' },
+      { name:'KYC — James Hardie Industries',   st:'vs-clear',   lbl:'VALID'    },
+      { name:'KYC — ClarkDietrich Corp.',       st:'vs-clear',   lbl:'VALID',    region:'sb' },
+      { name:'KYC — SCAFCO Corporation',        st:'vs-clear',   lbl:'VALID',    region:'wc' },
+      { name:'KYC — Weyerhaeuser Co.',           st:'vs-clear',   lbl:'VALID',    region:'sb' },
+      { name:'ASTM C1186 FCB Certification',    st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'AISI S240 CFS Engineering Stamp', st:'vs-active',  lbl:'ACTIVE'   },
+      { name:'APA PS1-19 Plywood Certification',st:'vs-clear',   lbl:'VERIFIED' },
+      { name:'HZ10 Hurricane Zone Certification',st:'vs-clear',  lbl:'VERIFIED', region:'sb' },
+      { name:'OSHPD Seismic Preapproval',       st:'vs-clear',   lbl:'VERIFIED', region:'wc' },
+      { name:'Audit Trail',                     st:'vs-clear',   lbl:'ON'       },
     ],
     risks:[
-      { lbl:'Cement Supply (SW Surge)',     score:55, color:'#e8a94a' },
-      { lbl:'Labor Availability Sun Belt',  score:52, color:'#e8a94a' },
-      { lbl:'CLT Lead Times (14–18 wks)',   score:52, color:'#e8a94a' },
-      { lbl:'BC Wildfire / FSC Supply',     score:48, color:'#22c55e' },
-      { lbl:'Lumber Price Volatility',      score:48, color:'#22c55e' },
-      { lbl:'Drywall Lead Times',           score:42, color:'#22c55e' },
-      { lbl:'Title 24 Regulatory Updates',  score:38, color:'#22c55e' },
-      { lbl:'Hurricane Season (FL/TX)',      score:38, color:'#22c55e' },
-      { lbl:'IRA Credit Eligibility Risk',  score:35, color:'#22c55e' },
-      { lbl:'CA SCAQMD VOC Compliance',     score:28, color:'#22c55e' },
-
-      { lbl:'CFS Panel Lead Times (SB)',    score:52, color:'#e8a94a' },
-
+      { lbl:'Cement Supply (SW Surge)',      score:55, color:'#e8a94a', region:'sb' },
+      { lbl:'Labor Availability Sun Belt',   score:52, color:'#e8a94a', region:'sb' },
+      { lbl:'CLT Lead Times (14–18 wks)',    score:52, color:'#e8a94a', region:'wc' },
+      { lbl:'BC Wildfire / FSC Supply',      score:48, color:'#22c55e', region:'wc' },
+      { lbl:'Lumber Price Volatility',       score:48, color:'#22c55e' },
+      { lbl:'Drywall Lead Times',            score:42, color:'#22c55e', region:'sb' },
+      { lbl:'Title 24 Regulatory Updates',   score:38, color:'#22c55e', region:'wc' },
+      { lbl:'Hurricane Season (FL/TX)',       score:38, color:'#22c55e', region:'sb' },
+      { lbl:'IRA Credit Eligibility Risk',   score:35, color:'#22c55e' },
+      { lbl:'CA SCAQMD VOC Compliance',      score:28, color:'#22c55e', region:'wc' },
+      { lbl:'CFS Panel Lead Times (SB)',     score:52, color:'#e8a94a', region:'sb' },
       { lbl:'Plywood Price Volatility',      score:45, color:'#22c55e' },
-
       { lbl:'FCB Supply (JH Lead Times)',    score:42, color:'#22c55e' },
-
-      { lbl:'OSHPD Seismic Approval Lag',   score:38, color:'#22c55e' },
+      { lbl:'OSHPD Seismic Approval Lag',   score:38, color:'#22c55e', region:'wc' },
     ],
+    subInfo: {
+      sb: {
+        name: '☀️ Sun Belt Supply',
+        desc: 'High-volume commodity supply for Sun Belt markets — Atlanta · Dallas–Fort Worth · Phoenix · Miami · Charlotte. Nucor rebar, Martin Marietta aggregates, USG drywall, ClarkDietrich CFS panelized systems, James Hardie fiber cement, Weyerhaeuser plywood. Fast domestic delivery · Buy America where applicable.',
+        stats: [
+          { val:'$695',  lbl:'Rebar G60 Buy Am./MT'  },
+          { val:'6',     lbl:'Open SB Mandates'       },
+          { val:'$1.46', lbl:'Metal Stud CFS/LF'      },
+          { val:'48h',   lbl:'Avg. local delivery'     },
+        ]
+      },
+      wc: {
+        name: '🌲 Pacific West Supply',
+        desc: 'California Title 24 compliant materials · Mass timber CLT/GLT (Freres OR, Structurlam BC) · FSC-certified SPF lumber (West Fraser BC) · Recycled-content rebar (Nucor Seattle) · OC EcoTouch & Rockwool insulation · CertainTeed MemBrain · SCAFCO CFS seismic systems · James Hardie fiber cement panels.',
+        stats: [
+          { val:'$38.50', lbl:'CLT 3-ply Landed/sq.ft' },
+          { val:'$748',   lbl:'FSC SPF Landed/MBF'     },
+          { val:'3',      lbl:'Open WC Mandates'        },
+          { val:'Title 24', lbl:'Compliance standard'   },
+        ]
+      },
+    },
   },
 
 };
@@ -1094,16 +1288,23 @@ function drawCorridor(key) {
    PANELS
 ───────────────────────────────────────────────────────────────── */
 function renderInfo(key) {
-  const c = CORRIDORS[key];
-  const stats = c.stats.map(s => `<div class="ci-stat"><div class="ci-stat-val">${s.val}</div><div class="ci-stat-lbl">${s.lbl}</div></div>`).join('');
+  const c  = CORRIDORS[key];
+  const sf = _subFilter[key];
+  const sub = (sf && sf !== 'all' && c.subInfo && c.subInfo[sf]) ? c.subInfo[sf] : null;
+  const name  = sub ? sub.name  : c.name;
+  const desc  = sub ? sub.desc  : c.desc;
+  const stats = (sub ? sub.stats : c.stats).map(s =>
+    `<div class="ci-stat"><div class="ci-stat-val">${s.val}</div><div class="ci-stat-lbl">${s.lbl}</div></div>`
+  ).join('');
   document.getElementById('panel-corridor').innerHTML =
-    `<div class="ci-name">${c.name}</div><div class="ci-desc">${c.desc}</div><div class="ci-stats">${stats}</div>`;
+    `<div class="ci-name">${name}</div><div class="ci-desc">${desc}</div><div class="ci-stats">${stats}</div>`;
 }
 
 function _sfField(key) { return key === 'epc' ? 'theater' : key === 'us' ? 'country' : key === 'gc' ? 'region' : null; }
 function _sfApply(key, arr) {
   const f = _sfField(key), v = _subFilter[key];
-  return (f && v !== 'all') ? arr.filter(x => x[f] === v || x[f] === 'both') : arr;
+  if (!f || v === 'all') return arr;
+  return arr.filter(x => x[f] === undefined || x[f] === v || x[f] === 'both');
 }
 
 function renderAlerts(key) {
@@ -1121,7 +1322,7 @@ function renderAlerts(key) {
 function renderVault(key) {
   const simLabels = new Set(['CLEAR','VALID','VERIFIED']);
   document.getElementById('panel-vault').innerHTML =
-    CORRIDORS[key].vault.map(v => {
+    _sfApply(key, CORRIDORS[key].vault).map(v => {
       const lbl = simLabels.has(v.lbl) ? v.lbl + '<sup style="font-size:8px;opacity:.6;margin-left:1px">*</sup>' : v.lbl;
       return `<div class="vault-row"><div class="vault-name">${v.name}</div><div class="vstatus ${v.st}">${lbl}</div></div>`;
     }).join('')
@@ -1129,7 +1330,7 @@ function renderVault(key) {
 }
 
 function renderRisks(key) {
-  document.getElementById('panel-risk').innerHTML = CORRIDORS[key].risks.map(r =>
+  document.getElementById('panel-risk').innerHTML = _sfApply(key, CORRIDORS[key].risks).map(r =>
     `<div class="rbar-wrap">
       <div class="rbar-lbl"><span>${r.lbl}</span><span style="color:${r.color}">${r.score}/100</span></div>
       <div class="rbar"><div class="rfill" style="width:${r.score}%;background:${r.color}"></div></div>
@@ -1722,11 +1923,28 @@ const CMD_LIST = [
   { section:'Generate', icon:'🛃', label:'HS Code Classifier',      desc:'Customs tariff classification',        action:()=>goToolCmd('hs')                                },
   { section:'Platform', icon:'🛡️', label:'Set New Mandate',        desc:'Define sourcing parameters',           action:()=>{ window.location.href='agent-mandate.html'; } },
   { section:'Platform', icon:'🔄', label:'Negotiation Agent',       desc:'AI-powered deal orchestration',        action:()=>{ window.location.href='negotiation-agent.html'; } },
-  { section:'Platform', icon:'🗂️', label:'Open CDE',               desc:'Common Data Environment',              action:()=>{ window.location.href='cde.html'; }           },
+  { section:'Platform', icon:'🗂️', label:'Open CDE',               desc:'Common Data Environment',              action:()=>{ setCorridor('docs'); setTimeout(()=>setDocsTab('cde'),50); } },
   { section:'Platform', icon:'👤', label:'Profile',                 desc:'Account & mandate overview',           action:()=>{ window.location.href='profile.html'; }       },
 ];
 
 let _cmdIdx = -1;
+
+function setDocsTab(tab) {
+  const isDoc = tab === 'docs';
+  document.getElementById('dvtab-docs').classList.toggle('active', isDoc);
+  document.getElementById('dvtab-cde').classList.toggle('active', !isDoc);
+  document.getElementById('dv-docs-content').style.display = isDoc ? 'flex' : 'none';
+  const cde = document.getElementById('dv-cde-content');
+  cde.classList.toggle('open', !isDoc);
+  if (!isDoc) cde.style.display = 'flex'; else cde.style.display = 'none';
+}
+
+function openHIW() {
+  document.getElementById('hiw-overlay').classList.add('open');
+}
+function closeHIW() {
+  document.getElementById('hiw-overlay').classList.remove('open');
+}
 
 function openCmd() {
   document.getElementById('cmd-overlay').classList.add('open');
@@ -1941,16 +2159,27 @@ function setCorridor(key) {
   document.getElementById('docs-view').classList.toggle('dv-active', isDocs);
 
   if (isDocs) {
-    // Docs mode: hide tab bar, show all 3 wraps + their labels
+    // Docs mode: collapse sidebar, hide toggle button
+    document.querySelector('.left-panel').classList.add('lp-collapsed');
+    const _btn = document.getElementById('lp-toggle-btn');
+    if (_btn) _btn.style.display = 'none';
+    // Hide tab bar, show all 3 wraps + their labels
     document.getElementById('ptab-bar').style.display = 'none';
     ['alerts','vault','risk'].forEach(t => {
       document.getElementById('panel-' + t + '-wrap').style.display = '';
       document.getElementById('plbl-' + t).style.display = '';
     });
+    setDocsTab('docs');
     renderDocsPanel(); renderProjectCards(); return;
   }
 
-  // Corridor mode: restore labels (for next docs visit), hide plabels, show tab bar
+  // Corridor mode: restore sidebar to saved preference, show toggle button
+  const _lpSaved = localStorage.getItem('lp_collapsed') === '1';
+  document.querySelector('.left-panel').classList.toggle('lp-collapsed', _lpSaved);
+  const _btn2 = document.getElementById('lp-toggle-btn');
+  if (_btn2) { _btn2.style.display = ''; _setLPBtn(_lpSaved); }
+
+  // Restore labels (for next docs visit), hide plabels, show tab bar
   document.getElementById('plbl-alerts').textContent = '// AI Agent Alerts';
   document.getElementById('plbl-vault').textContent  = '// Compliance Vault';
   document.getElementById('plbl-risk').textContent   = '// Corridor Risk Index';
@@ -1997,7 +2226,10 @@ function setSubFilter(key, val) {
   document.querySelectorAll('#sub-filter-bar .sfpill').forEach(p => {
     p.classList.toggle('active', p.dataset.val === val);
   });
+  renderInfo(key);
   renderAlerts(key);
+  renderVault(key);
+  renderRisks(key);
   renderCosts(key);
   drawCorridor(key);
 }
@@ -2036,8 +2268,32 @@ document.addEventListener('DOMContentLoaded', () => {
   // ESC + Ctrl/Cmd+K
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); openCmd(); return; }
-    if (e.key === 'Escape') { closeCmd(); closeAIModal(); }
+    if (e.key === 'Escape') { closeCmd(); closeAIModal(); closeHIW(); }
   });
+});
+
+/* ─── LEFT PANEL TOGGLE ───────────────────────────────────────── */
+function toggleLP() {
+  const lp = document.querySelector('.left-panel');
+  const collapsed = lp.classList.toggle('lp-collapsed');
+  _setLPBtn(collapsed);
+  try { localStorage.setItem('lp_collapsed', collapsed ? '1' : '0'); } catch(e) {}
+}
+function _setLPBtn(collapsed) {
+  const btn = document.getElementById('lp-toggle-btn');
+  if (!btn) return;
+  btn.textContent = collapsed ? '▶' : '◀';
+  btn.style.left  = collapsed ? '0px' : '400px';
+  btn.title = (collapsed ? 'Expand panel' : 'Collapse panel') + ' (T)';
+}
+(function() {
+  const saved = localStorage.getItem('lp_collapsed') === '1';
+  if (saved) document.querySelector('.left-panel').classList.add('lp-collapsed');
+  _setLPBtn(saved);
+})();
+document.addEventListener('keydown', function(e) {
+  const tag = (document.activeElement || {}).tagName || '';
+  if (e.key === 'T' && !e.ctrlKey && !e.metaKey && !['INPUT','TEXTAREA','SELECT'].includes(tag)) toggleLP();
 });
 </script>
 
@@ -2054,6 +2310,82 @@ document.addEventListener('DOMContentLoaded', () => {
       <span class="cmd-footer-hint">↑↓ navigate</span>
       <span class="cmd-footer-hint">↵ select</span>
       <span class="cmd-footer-hint">ESC close</span>
+    </div>
+  </div>
+</div>
+
+<!-- How it works modal -->
+<div class="hiw-overlay" id="hiw-overlay" onclick="if(event.target===this)closeHIW()">
+  <div class="hiw-modal">
+    <div class="hiw-head">
+      <div>
+        <div class="hiw-title">How SLOI AI works</div>
+        <div class="hiw-sub">Three steps · Two are yours · Full audit trail</div>
+      </div>
+      <button class="hiw-close" onclick="closeHIW()">✕</button>
+    </div>
+    <div class="hiw-body">
+
+      <!-- Steps -->
+      <div class="hiw-step">
+        <div class="hiw-num" style="color:var(--indigo)">01</div>
+        <div class="hiw-step-body">
+          <div class="hiw-step-title">Pick a corridor &amp; set your mandate</div>
+          <div class="hiw-step-desc">Choose a corridor tab above, then filter by theater, region, or origin using the sub-filter pills. Click <strong style="color:var(--white)">Contact</strong> on any product row to reach the supplier directly, or <strong style="color:var(--white)">Deal Desk</strong> to open the AI negotiation engine with that product pre-loaded.</div>
+          <span class="hiw-step-tag" style="background:var(--indigo-dim);border:1px solid rgba(91,95,239,.25);color:var(--violet)">You · takes 3 minutes</span>
+        </div>
+      </div>
+
+      <div class="hiw-step">
+        <div class="hiw-num" style="color:var(--teal)">02</div>
+        <div class="hiw-step-body">
+          <div class="hiw-step-title">AI Orchestration Engine negotiates</div>
+          <div class="hiw-step-desc">Up to 7 negotiation stages with a KYC-cleared, OFAC-screened counterparty — all within your private price ceiling. Your mandate is never exposed. The engine monitors corridor alerts, risk scores, and live price deltas (▲▼) in real time and stops the moment your ceiling is hit.</div>
+          <span class="hiw-step-tag" style="background:rgba(45,212,191,.08);border:1px solid rgba(45,212,191,.25);color:var(--teal)">Orchestrator · 10–48 h</span>
+        </div>
+      </div>
+
+      <div class="hiw-step">
+        <div class="hiw-num" style="color:var(--green)">03</div>
+        <div class="hiw-step-body">
+          <div class="hiw-step-title">You authorize — full paperwork issues instantly</div>
+          <div class="hiw-step-desc">One click generates 7 legal documents — LOI, NDA, SPA, LC Application (UCP 600), Trade Contract (Incoterms 2020), HS Code &amp; Duty Report, and Freight Advisory — dispatched to all parties. Nothing moves without your authorization.</div>
+          <span class="hiw-step-tag" style="background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green)">You · always in control</span>
+        </div>
+      </div>
+
+      <div class="hiw-divider"></div>
+
+      <!-- Corridor guide -->
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px">// The three corridors</div>
+      <div class="hiw-corridors">
+        <div class="hiw-corr" style="border-color:rgba(91,95,239,.2);cursor:pointer" onclick="closeHIW();setCorridor('epc')">
+          <div class="hiw-corr-icon">⚙️</div>
+          <div>
+            <div class="hiw-corr-name">EPC Supply Hub</div>
+            <div class="hiw-corr-desc">Reconstruction &amp; mega-project supply · Filter by 🇵🇸 Gaza · 🇺🇦 Ukraine · 🇸🇦 Saudi · Insulation · Plywood · CFS · Cement · Rebar</div>
+          </div>
+        </div>
+        <div class="hiw-corr" style="border-color:rgba(45,212,191,.2);cursor:pointer" onclick="closeHIW();setCorridor('gc')">
+          <div class="hiw-corr-icon">🏢</div>
+          <div>
+            <div class="hiw-corr-name">GC Supply Hub</div>
+            <div class="hiw-corr-desc">General contractor building materials · Filter by ☀️ Sun Belt · 🌲 Pacific West · Plywood · OSB · Insulation · Fiber Cement · CFS Mid-Rise</div>
+          </div>
+        </div>
+        <div class="hiw-corr" style="border-color:rgba(59,130,246,.2);cursor:pointer" onclick="closeHIW();setCorridor('us')">
+          <div class="hiw-corr-icon">🏗️</div>
+          <div>
+            <div class="hiw-corr-name">US Infrastructure</div>
+            <div class="hiw-corr-desc">IIJA Buy America + USMCA + N. Africa · Filter by 🇲🇽 Mexico · 🇨🇦 Canada · 🇩🇿 Algeria · 🇲🇦 Morocco · 19 active routes</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="hiw-foot">
+      <span class="hiw-foot-note">Every counterparty KYC-cleared &amp; OFAC-screened before your mandate reaches them</span>
+      <a href="agent-mandate.html" style="padding:8px 18px;border-radius:5px;font-size:12px;font-weight:700;font-family:'IBM Plex Mono',monospace;text-decoration:none;background:var(--indigo);color:#fff;letter-spacing:.04em;white-space:nowrap">Set mandate →</a>
     </div>
   </div>
 </div>
